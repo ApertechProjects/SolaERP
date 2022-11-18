@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SolaERP.Infrastructure.Entities.Vendors
+{
+    public class VendorEvaluationForm : BaseEntity
+    {
+        public int VendorEvaluationFormId { get; set; }
+        public int VendorId { get; set; }
+        public int ContextOfTheOrganization1 { get; set; }
+        public int ContextOfTheOrganization2 { get; set; }
+        public int ContextOfTheOrganization3 { get; set; }
+        public DateTime ExpirationDate { get; set; }
+        public int Leadership1 { get; set; }
+        public int Leadership2 { get; set; }
+        public int Planning1 { get; set; }
+        public int Planning2 { get; set; }
+        public int Planning3 { get; set; }
+    }
+}
