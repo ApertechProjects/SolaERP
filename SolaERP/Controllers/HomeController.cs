@@ -16,14 +16,14 @@ namespace SolaERP.Controllers
             {
                 DataTable table = new DataTable();
                 connection.Open();
-                using (SqlCommand cmd = new SqlCommand("Select * from Config.AppUser", connection))
+                using (SqlCommand cmd = new SqlCommand("Select * from Config.ApproveStagesMain", connection))   
                 {
                     SqlDataAdapter dp = new SqlDataAdapter();
                     dp.SelectCommand = cmd;
                     dp.Fill(table);
                 }
 
-                return table.GetDataTableColumNames(@"C:\\Users\\HP\\Desktop");
+                return table.GetDataTableColumNames(@"C:\\Users\\User\\Desktop");
             }
         }
     }
