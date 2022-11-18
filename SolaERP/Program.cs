@@ -10,17 +10,19 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddTransient<IUnitOfWork, SqlUnitOfWork>();
 builder.Services.AddTransient<UserService, UserService>();
 builder.Services.AddTransient<IUserRepository, SqlUserRepository>();
 builder.Services.AddAutoMapper(typeof(MapProfile));
 
-builder.Services.AddSingleton(() =>
+
+builder.Services.AddTransient((t) =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DevelopmentConnectionString");
-    return ConnectionFactory.GetDbConnection(connectionString);
-
+    return ConnectionFactory.CreateSqlConnection(connectionString);
 });
 
 builder.Services.AddSwaggerGen(c =>

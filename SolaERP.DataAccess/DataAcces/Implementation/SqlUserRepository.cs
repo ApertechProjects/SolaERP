@@ -52,7 +52,7 @@ namespace SolaERP.DataAccess.DataAcces.Implementation
             using (var command = _unitOfWork.CreateCommand())
             {
                 command.CommandText = "Select * from Config.AppUser";
-                var reader = command.ExecuteReader();
+                using var reader = command.ExecuteReader();
 
                 List<User> users = new List<User>();
                 while (reader.Read())

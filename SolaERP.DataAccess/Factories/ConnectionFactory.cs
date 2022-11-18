@@ -5,9 +5,9 @@ namespace SolaERP.DataAccess.Factories
 {
     public static class ConnectionFactory
     {
-        public static IDbConnection GetDbConnection(string connectionString)
+        public static IDbConnection CreateSqlConnection(string connectionString)
         {
-            return new SqlConnection(connectionString);
+            return new SqlConnection(connectionString) as IDbConnection;
         }
     }
 }
