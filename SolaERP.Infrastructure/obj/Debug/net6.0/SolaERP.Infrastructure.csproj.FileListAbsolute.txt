@@ -1,0 +1,12 @@
+C:\Users\HP\source\repos\SolaERP\SolaERP.Infrastructure\bin\Debug\net6.0\SolaERP.Infrastructure.deps.json
+C:\Users\HP\source\repos\SolaERP\SolaERP.Infrastructure\bin\Debug\net6.0\SolaERP.Infrastructure.dll
+C:\Users\HP\source\repos\SolaERP\SolaERP.Infrastructure\bin\Debug\net6.0\SolaERP.Infrastructure.pdb
+C:\Users\HP\source\repos\SolaERP\SolaERP.Infrastructure\obj\Debug\net6.0\SolaERP.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\HP\source\repos\SolaERP\SolaERP.Infrastructure\obj\Debug\net6.0\SolaERP.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\HP\source\repos\SolaERP\SolaERP.Infrastructure\obj\Debug\net6.0\SolaERP.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\HP\source\repos\SolaERP\SolaERP.Infrastructure\obj\Debug\net6.0\SolaERP.Infrastructure.AssemblyInfo.cs
+C:\Users\HP\source\repos\SolaERP\SolaERP.Infrastructure\obj\Debug\net6.0\SolaERP.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\HP\source\repos\SolaERP\SolaERP.Infrastructure\obj\Debug\net6.0\SolaERP.Infrastructure.dll
+C:\Users\HP\source\repos\SolaERP\SolaERP.Infrastructure\obj\Debug\net6.0\refint\SolaERP.Infrastructure.dll
+C:\Users\HP\source\repos\SolaERP\SolaERP.Infrastructure\obj\Debug\net6.0\SolaERP.Infrastructure.pdb
+C:\Users\HP\source\repos\SolaERP\SolaERP.Infrastructure\obj\Debug\net6.0\ref\SolaERP.Infrastructure.dll
