@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Repositories;
 using SolaERP.Infrastructure.Services;
 
@@ -18,9 +19,12 @@ namespace SolaERP.Application.Services
             _mapper = mapper;
         }
 
-        public ApiResponse<UserDto> Register(UserDto model)
+        public ApiResponse<bool> Register(UserDto model)
         {
-            throw new NotImplementedException();
+            var user = _mapper.Map<User>(model);
+            var result = _userRepository.Add(user);
+
+            return ApiResponse<bool>.Success(200);
         }
 
         public ApiResponse<List<UserDto>> GetAll()

@@ -20,5 +20,12 @@ namespace SolaERP.Controllers
         {
             return _userService.GetAll();
         }
+
+        [HttpPost]
+        public ApiResponse<bool> AddUser(UserDto dto)
+        {
+            return _userService.Register(dto);
+        }
+
     }
 }

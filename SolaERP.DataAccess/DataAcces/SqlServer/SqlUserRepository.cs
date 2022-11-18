@@ -2,7 +2,6 @@
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Repositories;
 using System.Data;
-using System.Text;
 
 namespace SolaERP.DataAccess.DataAcces.SqlServer
 {
@@ -18,31 +17,20 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public bool Add(User entity)
         {
-            var props = typeof(User).GetProperties();
-            string[] parameters = new string[]{"@RowIndex,","@FullName,","@NotificationEmail,",
-                                              "@ChangePassword,","@StatusId,","@Theme,","@ExpirationDate,","@Sessions,",
-                                              "@LastActivity,","@Photo,","@ReturnMessage,","@CreatedOn,","@CreatedBy,",
-                                              "@UpdatedOn,","@UpdatedBy,","@UserName,","@NormalizedUserName,","@Email,","@NormalizedEmail,",
-                                              "@EmailConfirmed,","@PasswordHash,","@SecurityStamp,","@ConcurrencyStamp,",
-                                              "@PhoneNumber,","@PhoneNumberConfirmed,","@TwoFactorEnabled,","@LockoutEnd,","@LockoutEnabled",
-                                              "@AccessFailedCount,","@SyteLineUserCode,","@UserTypeId,","@CompanyId,","@Position,","@VendorId,","@UserToken "};
+            string query = @"INSERT INTO Config.AppUser (RowIndex,FullName,NotificationEmail,ChangePassword,StatusId,Theme,ExpirationDate,Sessions,
+                             LastActivity,Photo,ReturnMessage,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy,UserName,NormalizedUserName,Email,EmailConfirmed,
+                             PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,
+                             AccessFailedCount,SyteLineUserCode,UserTypeId,CompanyId,Position,VendorId,UserToken)
+                             VALUES (@RowIndex,@FullName,@NotificationEmail,@ChangePassword,@StatusId,@Theme,@ExpirationDate,@Sessions,
+                             @LastActivity,@Photo,@ReturnMessage,@CreatedOn,@CreatedBy,@UpdatedOn,@UpdatedBy,@UserName,@NormalizedUserName,@Email,@EmailConfirmed,
+                             @PasswordHash,@SecurityStamp,@ConcurrencyStamp,@PhoneNumber,@PhoneNumberConfirmed,@TwoFactorEnabled,@LockoutEnd,@LockoutEnabled,
+                             @AccessFailedCount,@SyteLineUserCode,@UserTypeId,@CompanyId,@Position,@VendorId,@UserToken)";
 
             using (var command = _unitOfWork.CreateCommand())
             {
-                StringBuilder queryBuilder = new StringBuilder("exec SP_USER_INSERT ");
+                command.Parameters.AddWithValue(command, "@RowIndex", entity.RowIndex);
 
-                var properties = entity.GetType().GetProperties();
-                for (int i = 0; i < parameters.Length; i++)
-                {
-                    queryBuilder.Append(parameters[i]);
-                    IDbDataParameter dbDataParameter = command.CreateParameter();
-                    dbDataParameter.ParameterName = parameters[i];
-                    dbDataParameter.Value = properties[i].GetValue(entity);
-
-                    command.Parameters.Add(dbDataParameter);
-                }
-
-                command.CommandText = queryBuilder.ToString();
+                command.CommandText = query;
                 return command.ExecuteNonQuery() == 0 ? false : true;
             }
         }
