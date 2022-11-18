@@ -6,4 +6,13 @@
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SolaERP.DataAccess\SolaERP.DataAccess.csproj" />
+    <ProjectReference Include="..\SolaERP.Infrastructure\SolaERP.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+  </ItemGroup>
+
 </Project>
