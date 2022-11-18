@@ -1,6 +1,8 @@
 ﻿using SolaERP.DataAccess.Abstract;
 using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Entities.Auth;
+using System.Data;
+using System.Text;
 
 namespace SolaERP.DataAccess.DataAcces.Implementation
 {
@@ -14,9 +16,35 @@ namespace SolaERP.DataAccess.DataAcces.Implementation
         }
 
 
-        public Task AddAsync(User entity)
+        public bool Add(User entity)
         {
-            throw new NotImplementedException();
+            var props = typeof(User).GetProperties();
+            string[] parameters = new string[]{"@RowIndex,","@FullName,","@NotificationEmail,",
+                                              "@ChangePassword,","@StatusId,","@Theme,","@ExpirationDate,","@Sessions,",
+                                              "@LastActivity,","@Photo,","@ReturnMessage,","@CreatedOn,","@CreatedBy,",
+                                              "@UpdatedOn,","@UpdatedBy,","@UserName,","@NormalizedUserName,","@Email,","@NormalizedEmail,",
+                                              "@EmailConfirmed,","@PasswordHash,","@SecurityStamp,","@ConcurrencyStamp,",
+                                              "@PhoneNumber,","@PhoneNumberConfirmed,","@TwoFactorEnabled,","@LockoutEnd,","@LockoutEnabled",
+                                              "@AccessFailedCount,","@SyteLineUserCode,","@UserTypeId,","@CompanyId,","@Position,","@VendorId,","@UserToken "};
+
+            using (var command = _unitOfWork.CreateCommand())
+            {
+                StringBuilder queryBuilder = new StringBuilder("exec SP_USER_INSERT ");
+
+                var properties = entity.GetType().GetProperties();
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    queryBuilder.Append(parameters[i]);
+                    IDbDataParameter dbDataParameter = command.CreateParameter();
+                    dbDataParameter.ParameterName = parameters[i];
+                    dbDataParameter.Value = properties[i].GetValue(entity);
+
+                    command.Parameters.Add(dbDataParameter);
+                }
+
+                command.CommandText = queryBuilder.ToString();
+                return command.ExecuteNonQuery() == 0 ? false : true;
+            }
         }
 
         public List<User> GetAllAsync()
@@ -40,9 +68,27 @@ namespace SolaERP.DataAccess.DataAcces.Implementation
             throw new NotImplementedException();
         }
 
-        public Task<User> GetById(int id)
+        public async Task<User> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            User user = null;
+            return await Task.Run(() =>
+            {
+                using (var command = _unitOfWork.CreateCommand())
+                {
+                    command.CommandText = "EXEC SP_GETUSER_BY_NAME_OR_ID NULL,@Id";
+                    IDbDataParameter dbDataParameter = command.CreateParameter();
+                    dbDataParameter.ParameterName = "@Id";
+                    dbDataParameter.Value = id;
+                    command.Parameters.Add(dbDataParameter);
+
+                    var reader = command.ExecuteReader();
+
+                    if (reader.Read())
+                        user = reader.GetByEntityStructure<User>();
+
+                    return user;
+                }
+            });
         }
 
         public User GetByUserName(string userName)

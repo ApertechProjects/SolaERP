@@ -6,6 +6,5 @@ namespace SolaERP.DataAccess.Abstract
     {
         User GetByUserName(string userName);
         User GetByEmail(string email);
-
     }
 }
