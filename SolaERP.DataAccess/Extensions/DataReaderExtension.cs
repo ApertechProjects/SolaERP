@@ -1,6 +1,8 @@
 ﻿using SolaERP.Infrastructure.Attributes;
 using SolaERP.Infrastructure.Entities;
+using System;
 using System.Data;
+using System.Linq;
 
 namespace SolaERP.DataAccess.Extensions
 {
