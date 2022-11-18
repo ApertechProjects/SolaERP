@@ -1,42 +1,44 @@
 ﻿namespace SolaERP.Infrastructure.Entities.Auth
 {
-    public class User
+    public class User : BaseEntity
     {
-        public System.Int32 Id { get; set; }
-        public System.Int32 RowIndex { get; set; }
-        public System.String FullName { get; set; }
-        public System.String NotificationEmail { get; set; }
-        public System.Boolean ChangePassword { get; set; }
-        public System.Int32 StatusId { get; set; }
-        public System.String Theme { get; set; }
-        public System.DateTime ExpirationDate { get; set; }
-        public System.Int32 Sessions { get; set; }
-        public System.DateTime LastActivity { get; set; }
-        public System.Byte[] Photo { get; set; }
-        public System.String ReturnMessage { get; set; }
-        public System.DateTime CreatedOn { get; set; }
-        public System.Int32 CreatedBy { get; set; }
-        public System.DateTime UpdatedOn { get; set; }
-        public System.Int32 UpdatedBy { get; set; }
-        public System.String UserName { get; set; }
-        public System.String NormalizedUserName { get; set; }
-        public System.String Email { get; set; }
-        public System.String NormalizedEmail { get; set; }
-        public System.Boolean EmailConfirmed { get; set; }
-        public System.String PasswordHash { get; set; }
-        public System.String SecurityStamp { get; set; }
-        public System.String ConcurrencyStamp { get; set; }
-        public System.String PhoneNumber { get; set; }
-        public System.Boolean PhoneNumberConfirmed { get; set; }
-        public System.Boolean TwoFactorEnabled { get; set; }
-        public System.DateTimeOffset LockoutEnd { get; set; }
-        public System.Boolean LockoutEnabled { get; set; }
-        public System.Int32 AccessFailedCount { get; set; }
-        public System.String SyteLineUserCode { get; set; }
-        public System.Int32 UserTypeId { get; set; }
-        public System.Int32 CompanyId { get; set; }
-        public System.String Position { get; set; }
-        public System.Int32 VendorId { get; set; }
-        public System.Guid UserToken { get; set; }
+        private DateTime createdOn;
+
+        public int Id { get; set; }
+        public int RowIndex { get; set; }
+        public string FullName { get; set; }
+        public string NotificationEmail { get; set; }
+        public bool ChangePassword { get; set; }
+        public int StatusId { get; set; }
+        public string Theme { get; set; }
+        public DateTime ExpirationDate { get; set; }
+        public int Sessions { get; set; }
+        public DateTime LastActivity { get; set; }
+        public byte[] Photo { get; set; }
+        public string ReturnMessage { get; set; }
+        public DateTime CreatedOn { get => createdOn; set => createdOn = value; }
+        public int CreatedBy { get; set; }
+        public DateTime UpdatedOn { get; set; }
+        public int UpdatedBy { get; set; }
+        public string UserName { get; set; }
+        public string NormalizedUserName { get; set; }
+        public string Email { get; set; }
+        public string NormalizedEmail { get; set; }
+        public bool EmailConfirmed { get; set; }
+        public string PasswordHash { get; set; }
+        public string SecurityStamp { get; set; }
+        public string ConcurrencyStamp { get; set; }
+        public string PhoneNumber { get; set; }
+        public bool PhoneNumberConfirmed { get; set; }
+        public bool TwoFactorEnabled { get; set; }
+        public DateTimeOffset LockoutEnd { get; set; }
+        public bool LockoutEnabled { get; set; }
+        public int AccessFailedCount { get; set; }
+        public string SyteLineUserCode { get; set; }
+        public int UserTypeId { get; set; }
+        public int CompanyId { get; set; }
+        public string Position { get; set; }
+        public int VendorId { get; set; }
+        public Guid UserToken { get; set; }
     }
 }

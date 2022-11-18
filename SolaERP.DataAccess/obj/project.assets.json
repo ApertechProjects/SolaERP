@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net6.0": {}
+    "net6.0": {
+      "SolaERP.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/SolaERP.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/SolaERP.Infrastructure.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "SolaERP.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../SolaERP.Infrastructure/SolaERP.Infrastructure.csproj",
+      "msbuildProject": "../SolaERP.Infrastructure/SolaERP.Infrastructure.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net6.0": []
+    "net6.0": [
+      "SolaERP.Infrastructure >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\HP\\.nuget\\packages\\": {},
@@ -43,7 +62,11 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\HP\\source\\repos\\SolaERP\\SolaERP.Infrastructure\\SolaERP.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\HP\\source\\repos\\SolaERP\\SolaERP.Infrastructure\\SolaERP.Infrastructure.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
