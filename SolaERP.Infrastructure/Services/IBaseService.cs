@@ -1,6 +1,6 @@
 ﻿using SolaERP.Infrastructure.Dtos;
 
-namespace SolaERP.Application.Abstract
+namespace SolaERP.Infrastructure.Services
 {
     public interface IBaseService<T>
     {

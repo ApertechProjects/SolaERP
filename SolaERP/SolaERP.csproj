@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SolaERP.Application\SolaERP.Application.csproj" />
-    <ProjectReference Include="..\SolaERP.Infrastructure\SolaERP.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

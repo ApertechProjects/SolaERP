@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SolaERP.DataAccess\SolaERP.DataAccess.csproj" />
-    <ProjectReference Include="..\SolaERP.Infrastructure\SolaERP.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

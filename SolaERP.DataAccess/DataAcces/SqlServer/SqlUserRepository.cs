@@ -1,10 +1,10 @@
-﻿using SolaERP.DataAccess.Abstract;
-using SolaERP.DataAccess.Extensions;
+﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Repositories;
 using System.Data;
 using System.Text;
 
-namespace SolaERP.DataAccess.DataAcces.Implementation
+namespace SolaERP.DataAccess.DataAcces.SqlServer
 {
     public class SqlUserRepository : IUserRepository
     {
@@ -12,7 +12,7 @@ namespace SolaERP.DataAccess.DataAcces.Implementation
 
         public SqlUserRepository(IUnitOfWork unitOfWork)
         {
-            this._unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;
         }
 
 

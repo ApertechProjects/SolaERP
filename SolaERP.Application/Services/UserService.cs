@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using SolaERP.Application.Abstract;
-using SolaERP.DataAccess.Abstract;
 using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Repositories;
+using SolaERP.Infrastructure.Services;
 
 namespace SolaERP.Application.Services
 {

@@ -1,9 +1,9 @@
 using Microsoft.OpenApi.Models;
 using SolaERP.Application.Mappers;
 using SolaERP.Application.Services;
-using SolaERP.DataAccess.Abstract;
-using SolaERP.DataAccess.DataAcces.Implementation;
+using SolaERP.DataAccess.DataAcces.SqlServer;
 using SolaERP.DataAccess.Factories;
+using SolaERP.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
