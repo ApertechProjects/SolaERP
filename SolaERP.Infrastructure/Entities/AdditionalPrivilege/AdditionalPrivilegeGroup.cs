@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Infrastructure.Entities.AdditionalPrivilege
 {
-    public  class AdditionalPrivilegeGroup
+    public class AdditionalPrivilegeGroup : BaseEntity
     {
         public int GroupAdditionalPrivilegeId { get; set; }
         public int GroupId { get; set; }

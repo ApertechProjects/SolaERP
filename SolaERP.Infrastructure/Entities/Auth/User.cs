@@ -1,6 +1,6 @@
 ﻿namespace SolaERP.Infrastructure.Entities.Auth
 {
-    public class User
+    public class User : BaseEntity
     {
         public int Id { get; set; }
         public int RowIndex { get; set; }
