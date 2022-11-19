@@ -1,8 +1,6 @@
 ﻿using SolaERP.Infrastructure.Attributes;
 using SolaERP.Infrastructure.Entities;
-using System;
 using System.Data;
-using System.Linq;
 
 namespace SolaERP.DataAccess.Extensions
 {
@@ -22,8 +20,7 @@ namespace SolaERP.DataAccess.Extensions
         public static T GetByEntityStructure<T>(this IDataReader reader) where T : BaseEntity, new()
         {
             var obj = new T();
-            var type = typeof(T);
-            var properties = type.GetProperties();
+            var properties = typeof(T).GetProperties();
             foreach (var item in properties)
             {
                 var itemAttribute = item.GetCustomAttributes(typeof(DbIgnoreAttribute), true);
