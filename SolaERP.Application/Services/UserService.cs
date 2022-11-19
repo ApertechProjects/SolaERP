@@ -6,7 +6,7 @@ using SolaERP.Infrastructure.Services;
 
 namespace SolaERP.Application.Services
 {
-    public class UserService : IBaseService<UserDto>
+    public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -23,6 +23,7 @@ namespace SolaERP.Application.Services
         {
             var user = _mapper.Map<User>(model);
             var result = _userRepository.Add(user);
+            _unitOfWork.SaveChanges();
 
             return ApiResponse<bool>.Success(200);
         }
