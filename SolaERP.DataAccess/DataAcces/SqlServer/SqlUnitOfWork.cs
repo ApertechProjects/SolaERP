@@ -1,4 +1,4 @@
-﻿using SolaERP.Infrastructure.Repositories;
+﻿using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 
 namespace SolaERP.DataAccess.DataAcces.SqlServer

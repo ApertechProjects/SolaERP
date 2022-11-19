@@ -3,10 +3,11 @@ using SolaERP.Infrastructure.Dtos;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Repositories;
 using SolaERP.Infrastructure.Services;
+using SolaERP.Infrastructure.UnitOfWork;
 
 namespace SolaERP.Application.Services
 {
-    public class UserService : IBaseService<UserDto>
+    public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -24,6 +25,7 @@ namespace SolaERP.Application.Services
             var user = _mapper.Map<User>(model);
             var result = _userRepository.Add(user);
 
+            _unitOfWork.SaveChanges();
             return ApiResponse<bool>.Success(200);
         }
 
@@ -35,12 +37,14 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<UserDto>>.Success(dto, 200);
         }
 
-        public ApiResponse<bool> UpdateUser(UserDto model)
+        public async Task<ApiResponse<bool>> UpdateUser(UserDto model)
         {
-            User user = _userRepository.GetByUserName(model.UserName);
+            User user = await _userRepository.GetByUserNameAsync(model.UserName);
 
             var result = _mapper.Map<User>(user);
             _userRepository.Update(result);
+
+            await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }
 
@@ -48,6 +52,8 @@ namespace SolaERP.Application.Services
         {
             var user = _mapper.Map<User>(model);
             _userRepository.Remove(user);
+
+            _unitOfWork.SaveChanges();
             return ApiResponse<bool>.Success(200);
         }
 

@@ -23,6 +23,12 @@ namespace SolaERP.Controllers
             return _userService.GetAll();
         }
 
+        //[HttpGet]
+        //public ApiResponse<Token> Login(UserDto dto)
+        //{
+
+        //}
+
         [HttpPost]
         public ApiResponse<bool> AddUser(UserDto dto)
         {
@@ -30,9 +36,9 @@ namespace SolaERP.Controllers
         }
 
         [HttpPut]
-        public ApiResponse<bool> UpdateUser(UserDto dto)
+        public async Task<ApiResponse<bool>> UpdateUser(UserDto dto)
         {
-            return _userService.UpdateUser(dto);
+            return await _userService.UpdateUser(dto);
         }
 
         [HttpDelete]

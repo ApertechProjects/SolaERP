@@ -4,6 +4,7 @@ using SolaERP.Application.Services;
 using SolaERP.DataAccess.DataAcces.SqlServer;
 using SolaERP.DataAccess.Factories;
 using SolaERP.Infrastructure.Repositories;
+using SolaERP.Infrastructure.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,8 +1,8 @@
-﻿using SolaERP.Infrastructure.Entities.Auth;
+﻿using SolaERP.Infrastructure.Dtos;
 
 namespace SolaERP.Infrastructure.Services
 {
-    public interface IUserService : IBaseService<User>
+    public interface IUserService : IBaseService<UserDto>
     {
     }
 }

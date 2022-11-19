@@ -2,7 +2,6 @@
 {
     public class User : BaseEntity
     {
-
         public User()
         {
             this.CreatedOn = DateTime.Now;

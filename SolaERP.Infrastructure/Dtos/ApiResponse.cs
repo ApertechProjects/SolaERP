@@ -24,6 +24,5 @@ namespace SolaERP.Infrastructure.Dtos
         {
             return new ApiResponse<T> { Errors = new List<string> { error }, StatusCode = statusCode };
         }
-
     }
 }

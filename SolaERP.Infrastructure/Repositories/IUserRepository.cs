@@ -4,7 +4,7 @@ namespace SolaERP.Infrastructure.Repositories
 {
     public interface IUserRepository : ICrudOperations<User>
     {
-        User GetByUserName(string userName);
+        Task<User> GetByUserNameAsync(string userName);
         User GetByEmail(string email);
     }
 }
