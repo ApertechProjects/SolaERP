@@ -1,10 +1,14 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SolaERP.Application.Identity_Server;
 using SolaERP.Application.Mappers;
 using SolaERP.Application.Services;
-using SolaERP.DataAccess.DataAcces.SqlServer;
-using SolaERP.DataAccess.Factories;
-using SolaERP.Infrastructure.Repositories;
-using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Extensions;
+using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Services;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,19 +16,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-
+builder.Services.AddTransient<ITokenHandler, JwtTokenHandler>();
+builder.Services.AddTransient<IUserStore<User>, UserStore>();
+builder.Services.AddTransient<IRoleStore<Role>, RoleStore>();
+builder.Services.AddTransient<IPasswordHasher<User>, CustomPasswordHasher>();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddTransient<IUnitOfWork, SqlUnitOfWork>();
-builder.Services.AddTransient<UserService, UserService>();
-builder.Services.AddTransient<IUserRepository, SqlUserRepository>();
+builder.UseSqlDataAccessServices();
 builder.Services.AddAutoMapper(typeof(MapProfile));
-
-
-builder.Services.AddTransient((t) =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("DevelopmentConnectionString");
-    return ConnectionFactory.CreateSqlConnection(connectionString);
-});
+builder.Services.AddIdentity<User, Role>().AddDefaultTokenProviders();
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -36,6 +35,21 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+ .AddJwtBearer(options =>
+ {
+     options.TokenValidationParameters = new()
+     {
+         ValidateAudience = true,
+         ValidateIssuer = true,
+         ValidateLifetime = true,
+         ValidateIssuerSigningKey = true,
+         ValidAudience = builder.Configuration["Token:Audience"],
+         ValidIssuer = builder.Configuration["Token:Issuer"],
+         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"]))
+     };
+ });
+
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -45,6 +59,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

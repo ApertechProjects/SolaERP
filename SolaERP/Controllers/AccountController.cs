@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Services;
-using SolaERP.DataAccess.DataAcces.SqlServer;
 using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Dtos.Auth;
 
 namespace SolaERP.Controllers
 {
@@ -10,7 +10,6 @@ namespace SolaERP.Controllers
     public class AccountController : ControllerBase
     {
         private readonly UserService _userService;
-        private readonly SqlUserRepository _sqlUserRepository;
         public AccountController(UserService userService)
         {
             _userService = userService;
@@ -23,11 +22,11 @@ namespace SolaERP.Controllers
             return _userService.GetAll();
         }
 
-        //[HttpGet]
-        //public ApiResponse<Token> Login(UserDto dto)
-        //{
-
-        //}
+        [HttpGet]
+        public async Task<ApiResponse<Token>> Login([FromQuery] LoginRequestDto dto)
+        {
+            return await _userService.LoginAsync(dto);
+        }
 
         [HttpPost]
         public ApiResponse<bool> AddUser(UserDto dto)
