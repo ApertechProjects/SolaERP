@@ -34,5 +34,20 @@ namespace SolaERP.Application.Services
 
             return ApiResponse<List<UserDto>>.Success(dto, 200);
         }
+
+        public ApiResponse<bool> UpdateUser(UserDto model)
+        {
+            var user = _mapper.Map<User>(model);
+            _userRepository.Update(user);
+            return ApiResponse<bool>.Success(200);
+        }
+
+        public ApiResponse<bool> RemoveUser(UserDto model)
+        {
+            var user = _mapper.Map<User>(model);
+            _userRepository.Remove(user);
+            return ApiResponse<bool>.Success(200);
+        }
+
     }
 }

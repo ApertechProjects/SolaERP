@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Services;
+using SolaERP.DataAccess.DataAcces.SqlServer;
 using SolaERP.Infrastructure.Dtos;
 
 namespace SolaERP.Controllers
@@ -9,6 +10,7 @@ namespace SolaERP.Controllers
     public class AccountController : ControllerBase
     {
         private readonly UserService _userService;
+        private readonly SqlUserRepository _sqlUserRepository;
         public AccountController(UserService userService)
         {
             _userService = userService;
@@ -27,5 +29,16 @@ namespace SolaERP.Controllers
             return _userService.Register(dto);
         }
 
+        [HttpPut]
+        public ApiResponse<bool> UpdateUser(UserDto dto)
+        {
+            return _userService.UpdateUser(dto);
+        }
+
+        [HttpDelete]
+        public ApiResponse<bool> RemoveUser(UserDto dto)
+        {
+            return _userService.RemoveUser(dto);
+        }
     }
 }

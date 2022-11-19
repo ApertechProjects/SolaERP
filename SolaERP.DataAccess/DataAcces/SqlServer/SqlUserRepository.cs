@@ -29,7 +29,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             using (var command = _unitOfWork.CreateCommand())
             {
                 command.Parameters.AddWithValue(command, "@RowIndex", entity.RowIndex);
-
                 command.CommandText = query;
                 return command.ExecuteNonQuery() == 0 ? false : true;
             }
@@ -53,7 +52,22 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public User GetByEmail(string email)
         {
-            throw new NotImplementedException();
+            User user = new User();
+            using (var command = _unitOfWork.CreateCommand())
+            {
+                command.CommandText = "EXEC SP_GETUSER_BY_EMAIL @Email";
+                IDbDataParameter dbDataParameter = command.CreateParameter();
+                dbDataParameter.ParameterName = "@Email";
+                dbDataParameter.Value = email;
+                command.Parameters.Add(dbDataParameter);
+
+                var reader = command.ExecuteReader();
+
+                if (reader.Read())
+                    user = reader.GetByEntityStructure<User>();
+
+                return user;
+            }
         }
 
         public async Task<User> GetByIdAsync(int id)
@@ -63,7 +77,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             {
                 using (var command = _unitOfWork.CreateCommand())
                 {
-                    command.CommandText = "EXEC SP_GETUSER_BY_NAME_OR_ID NULL,@Id";
+                    command.CommandText = "EXEC SP_GETUSER_BY_NAME_OR_ID @Id";
                     IDbDataParameter dbDataParameter = command.CreateParameter();
                     dbDataParameter.ParameterName = "@Id";
                     dbDataParameter.Value = id;
@@ -81,17 +95,52 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public User GetByUserName(string userName)
         {
-            throw new NotImplementedException();
+            User user = null;
+            using (var command = _unitOfWork.CreateCommand())
+            {
+                command.CommandText = "EXEC SP_GETUSER_BY_NAME_OR_ID @UserName";
+                IDbDataParameter dbDataParameter = command.CreateParameter();
+                dbDataParameter.ParameterName = "@UserName";
+                dbDataParameter.Value = userName;
+                command.Parameters.Add(dbDataParameter);
+
+                var reader = command.ExecuteReader();
+
+                if (reader.Read())
+                    user = reader.GetByEntityStructure<User>();
+
+                return user;
+            }
         }
 
         public void Remove(User entity)
         {
-            throw new NotImplementedException();
+            using (var command = _unitOfWork.CreateCommand())
+            {
+                command.CommandText = "Delete from Config.AppUser Where Id = @Id";
+                IDbDataParameter dbDataParameter = command.CreateParameter();
+                dbDataParameter.ParameterName = "@Id";
+                dbDataParameter.Value = entity.Id;
+                command.Parameters.Add(dbDataParameter);
+
+                command.ExecuteNonQuery();
+            }
         }
 
         public void Update(User entity)
         {
-            throw new NotImplementedException();
+            string query = "Exec [dbo].[SP_UserData_U] @UserId,@FullName,@Position,@PhoneNumber,@Photo";
+            using (var command = _unitOfWork.CreateCommand())
+            {
+                command.Parameters.AddWithValue(command, "@UserId", entity.Id);
+                command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
+                command.Parameters.AddWithValue(command, "@Position", entity.Position);
+                command.Parameters.AddWithValue(command, "@PhoneNumber", entity.PhoneNumber);
+                command.Parameters.AddWithValue(command, "@Photo", entity.Photo);
+                command.CommandText = query;
+                command.ExecuteNonQuery();
+            }
         }
+
     }
 }
