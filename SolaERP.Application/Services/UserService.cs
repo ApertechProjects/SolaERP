@@ -14,18 +14,21 @@ namespace SolaERP.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly SignInManager<UserDto> _signInManager;
-        private readonly UserManager<UserDto> _userManager;
+        private readonly ITokenHandler _tokenHandler;
+        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
 
         public UserService(IUserRepository userRepository,
                            IUnitOfWork unitOfWork,
                            IMapper mapper,
-                           UserManager<UserDto> userManager,
-                           SignInManager<UserDto> signInManager)
+                           ITokenHandler tokenHandler,
+                           UserManager<User> userManager,
+                           SignInManager<User> signInManager)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _tokenHandler = tokenHandler;
             _userManager = userManager;
             _signInManager = signInManager;
         }
@@ -72,11 +75,12 @@ namespace SolaERP.Application.Services
             var user = await _userManager.FindByNameAsync(loginRequest.Email);
             if (user == null) return ApiResponse<Token>.Fail("User not found", 404);
 
-            var signInResult = await _signInManager.PasswordSignInAsync(user, user.Password, true, false);
+            var signInResult = await _signInManager.PasswordSignInAsync(user, loginRequest.Password, true, false);
 
+            if (signInResult.Succeeded)
+                return ApiResponse<Token>.Success(await _tokenHandler.GenerateJwtTokenAsync(2), 200);
 
-
-            throw new NotImplementedException("a");
+            return ApiResponse<Token>.Fail("User Cant Signed in", 403);
         }
     }
 }

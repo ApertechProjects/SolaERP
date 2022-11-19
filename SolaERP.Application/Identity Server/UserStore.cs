@@ -26,7 +26,6 @@ namespace SolaERP.Application.Identity_Server
 
         public void Dispose()
         {
-            throw new NotImplementedException();
         }
 
         public async Task<User> FindByIdAsync(string userId, CancellationToken cancellationToken)
