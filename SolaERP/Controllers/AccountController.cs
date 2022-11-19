@@ -5,7 +5,7 @@ using SolaERP.Infrastructure.Dtos;
 
 namespace SolaERP.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
