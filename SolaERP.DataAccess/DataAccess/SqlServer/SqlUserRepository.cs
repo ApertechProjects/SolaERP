@@ -60,7 +60,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 dbDataParameter.Value = email;
                 command.Parameters.Add(dbDataParameter);
 
-                var reader = command.ExecuteReader();
+                using var reader = command.ExecuteReader();
 
                 if (reader.Read())
                     user = reader.GetByEntityStructure<User>();
@@ -81,7 +81,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     dbDataParameter.Value = id;
                     command.Parameters.Add(dbDataParameter);
 
-                    var reader = command.ExecuteReader();
+                    using var reader = command.ExecuteReader();
 
                     if (reader.Read())
                         user = reader.GetByEntityStructure<User>();
@@ -103,7 +103,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     dbDataParameter.Value = userName;
                     command.Parameters.Add(dbDataParameter);
 
-                    var reader = command.ExecuteReader();
+                    using var reader = command.ExecuteReader();
 
                     if (reader.Read())
                         user = reader.GetByEntityStructure<User>();

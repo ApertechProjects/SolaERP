@@ -4,7 +4,8 @@ using SolaERP.Infrastructure.Repositories;
 
 namespace SolaERP.Application.Identity_Server
 {
-    public class UserStore : IUserStore<User>
+    public class UserStore : IUserStore<User>,
+                             IUserPasswordStore<User>
     {
         private readonly IUserRepository _userRepository;
         public UserStore(IUserRepository userRepository)
@@ -45,6 +46,11 @@ namespace SolaERP.Application.Identity_Server
             return await Task.Run(() => { return user.NormalizedUserName; });
         }
 
+        public async Task<string> GetPasswordHashAsync(User user, CancellationToken cancellationToken)
+        {
+            return await Task.Run(() => { return user.PasswordHash; });
+        }
+
         public async Task<string> GetUserIdAsync(User user, CancellationToken cancellationToken)
         {
             return await Task.Run(() => { return user.Id.ToString(); });
@@ -66,6 +72,24 @@ namespace SolaERP.Application.Identity_Server
         }
 
         public Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region IUserPassworkStore Implementation
+
+        public Task SetPasswordHashAsync(User user, string passwordHash, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> HasPasswordAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string HashPassword(User user, string password)
         {
             throw new NotImplementedException();
         }
