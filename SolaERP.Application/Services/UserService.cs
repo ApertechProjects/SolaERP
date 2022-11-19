@@ -37,8 +37,10 @@ namespace SolaERP.Application.Services
 
         public ApiResponse<bool> UpdateUser(UserDto model)
         {
-            var user = _mapper.Map<User>(model);
-            _userRepository.Update(user);
+            User user = _userRepository.GetByUserName(model.UserName);
+
+            var result = _mapper.Map<User>(user);
+            _userRepository.Update(result);
             return ApiResponse<bool>.Success(200);
         }
 

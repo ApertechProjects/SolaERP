@@ -98,7 +98,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             User user = null;
             using (var command = _unitOfWork.CreateCommand())
             {
-                command.CommandText = "EXEC SP_GETUSER_BY_NAME_OR_ID @UserName";
+                command.CommandText = "EXEC SP_GETUSER_BY_NAME_OR_ID NULL,@UserName";
                 IDbDataParameter dbDataParameter = command.CreateParameter();
                 dbDataParameter.ParameterName = "@UserName";
                 dbDataParameter.Value = userName;
