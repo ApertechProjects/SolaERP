@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Repositories;
 using SolaERP.Infrastructure.Services;
@@ -12,12 +14,20 @@ namespace SolaERP.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly SignInManager<UserDto> _signInManager;
+        private readonly UserManager<UserDto> _userManager;
 
-        public UserService(IUserRepository userRepository, IUnitOfWork unitOfWork, IMapper mapper)
+        public UserService(IUserRepository userRepository,
+                           IUnitOfWork unitOfWork,
+                           IMapper mapper,
+                           UserManager<UserDto> userManager,
+                           SignInManager<UserDto> signInManager)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         public ApiResponse<bool> Register(UserDto model)
@@ -57,5 +67,16 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(200);
         }
 
+        public async Task<ApiResponse<Token>> LoginAsync(LoginRequestDto loginRequest)
+        {
+            var user = await _userManager.FindByNameAsync(loginRequest.Email);
+            if (user == null) return ApiResponse<Token>.Fail("User not found", 404);
+
+            var signInResult = await _signInManager.PasswordSignInAsync(user, user.Password, true, false);
+
+
+
+            throw new NotImplementedException("a");
+        }
     }
 }
