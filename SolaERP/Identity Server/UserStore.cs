@@ -121,7 +121,6 @@ namespace SolaERP.Application.Identity_Server
 
         public void Dispose()
         {
-            throw new NotImplementedException();
         }
         #endregion
 

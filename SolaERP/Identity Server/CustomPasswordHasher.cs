@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Entities.Auth;
 
