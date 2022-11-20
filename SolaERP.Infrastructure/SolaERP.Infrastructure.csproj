@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\ApproveStage\" />
+    <Compile Remove="Entities\ApproveStage\**" />
+    <EmbeddedResource Remove="Entities\ApproveStage\**" />
+    <None Remove="Entities\ApproveStage\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Enums\" />
     <Folder Include="Extensions\" />
   </ItemGroup>
