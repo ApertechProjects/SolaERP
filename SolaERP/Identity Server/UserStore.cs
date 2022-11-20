@@ -7,6 +7,7 @@ namespace SolaERP.Application.Identity_Server
     public class UserStore : IUserStore<User>,
                              IUserRoleStore<User>,
                              IUserPasswordStore<User>
+
     {
         private readonly IUserRepository _userRepository;
         public UserStore(IUserRepository userRepository)
@@ -14,7 +15,7 @@ namespace SolaERP.Application.Identity_Server
             _userRepository = userRepository;
         }
 
-        #region Indentity For Core 
+
         #region UserStore Implementation
         public Task<IdentityResult> CreateAsync(User user, CancellationToken cancellationToken)
         {
@@ -73,7 +74,7 @@ namespace SolaERP.Application.Identity_Server
             throw new NotImplementedException();
         }
         #endregion
-
+        //
         #region IUserPasswordStore Implementation
 
         public Task SetPasswordHashAsync(User user, string passwordHash, CancellationToken cancellationToken)
@@ -122,7 +123,7 @@ namespace SolaERP.Application.Identity_Server
         public void Dispose()
         {
         }
-        #endregion
+
 
         #endregion
     }
