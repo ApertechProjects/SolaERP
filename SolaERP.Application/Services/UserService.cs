@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using SolaERP.Infrastructure.Dtos;
-using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Repositories;
 using SolaERP.Infrastructure.Services;
@@ -15,22 +13,16 @@ namespace SolaERP.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ITokenHandler _tokenHandler;
-        private readonly SignInManager<User> _signInManager;
-        private readonly UserManager<User> _userManager;
 
         public UserService(IUserRepository userRepository,
                            IUnitOfWork unitOfWork,
                            IMapper mapper,
-                           ITokenHandler tokenHandler,
-                           UserManager<User> userManager,
-                           SignInManager<User> signInManager)
+                           ITokenHandler tokenHandler)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _tokenHandler = tokenHandler;
-            _userManager = userManager;
-            _signInManager = signInManager;
         }
 
         public ApiResponse<bool> Register(UserDto model)
@@ -70,17 +62,5 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(200);
         }
 
-        public async Task<ApiResponse<Token>> LoginAsync(LoginRequestDto loginRequest)
-        {
-            var user = await _userManager.FindByNameAsync(loginRequest.Email);
-            if (user == null) return ApiResponse<Token>.Fail("User not found", 404);
-
-            var signInResult = await _signInManager.PasswordSignInAsync(user, loginRequest.Password, true, false);
-
-            if (signInResult.Succeeded)
-                return ApiResponse<Token>.Success(await _tokenHandler.GenerateJwtTokenAsync(2), 200);
-
-            return ApiResponse<Token>.Fail("User Cant Signed in", 403);
-        }
     }
 }

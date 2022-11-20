@@ -8,6 +8,8 @@ namespace SolaERP.Application.Identity_Server
 
 
         #region RoleStore Implementation
+
+        #endregion
         public Task<IdentityResult> CreateAsync(Role role, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -20,6 +22,7 @@ namespace SolaERP.Application.Identity_Server
 
         public void Dispose()
         {
+            throw new NotImplementedException();
         }
 
         public Task<Role> FindByIdAsync(string roleId, CancellationToken cancellationToken)
@@ -61,7 +64,5 @@ namespace SolaERP.Application.Identity_Server
         {
             throw new NotImplementedException();
         }
-        #endregion
-
     }
 }

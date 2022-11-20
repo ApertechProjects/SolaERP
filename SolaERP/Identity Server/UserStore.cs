@@ -5,6 +5,7 @@ using SolaERP.Infrastructure.Repositories;
 namespace SolaERP.Application.Identity_Server
 {
     public class UserStore : IUserStore<User>,
+                             IUserRoleStore<User>,
                              IUserPasswordStore<User>
     {
         private readonly IUserRepository _userRepository;
@@ -13,7 +14,7 @@ namespace SolaERP.Application.Identity_Server
             _userRepository = userRepository;
         }
 
-
+        #region Indentity For Core 
         #region UserStore Implementation
         public Task<IdentityResult> CreateAsync(User user, CancellationToken cancellationToken)
         {
@@ -23,10 +24,6 @@ namespace SolaERP.Application.Identity_Server
         public Task<IdentityResult> DeleteAsync(User user, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
-        }
-
-        public void Dispose()
-        {
         }
 
         public async Task<User> FindByIdAsync(string userId, CancellationToken cancellationToken)
@@ -77,7 +74,7 @@ namespace SolaERP.Application.Identity_Server
         }
         #endregion
 
-        #region IUserPassworkStore Implementation
+        #region IUserPasswordStore Implementation
 
         public Task SetPasswordHashAsync(User user, string passwordHash, CancellationToken cancellationToken)
         {
@@ -93,6 +90,41 @@ namespace SolaERP.Application.Identity_Server
         {
             throw new NotImplementedException();
         }
+        #endregion
+
+        #region IUserRoleStroe Implementation
+        public Task AddToRoleAsync(User user, string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveFromRoleAsync(User user, string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IList<string>> GetRolesAsync(User user, CancellationToken cancellationToken)
+        {
+            List<string> roles = new List<string>() { "SA", "A" };
+            return await Task.FromResult(roles);
+        }
+
+        public Task<bool> IsInRoleAsync(User user, string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<User>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
         #endregion
     }
 }

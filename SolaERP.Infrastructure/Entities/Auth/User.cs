@@ -1,4 +1,5 @@
-﻿namespace SolaERP.Infrastructure.Entities.Auth
+﻿
+namespace SolaERP.Infrastructure.Entities.Auth
 {
     public class User : BaseEntity
     {

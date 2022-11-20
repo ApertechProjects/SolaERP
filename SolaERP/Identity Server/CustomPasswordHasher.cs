@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using SolaERP.Application.Utils;
+﻿
+using Microsoft.AspNetCore.Identity;
 using SolaERP.Infrastructure.Entities.Auth;
 
 namespace SolaERP.Application.Identity_Server
@@ -15,13 +15,9 @@ namespace SolaERP.Application.Identity_Server
 
         public PasswordVerificationResult VerifyHashedPassword(User user, string hashedPassword, string providedPassword)
         {
-            var providedPasswordHash = SecurityUtil.ComputeSha256Hash(providedPassword);
-
-            if (hashedPassword == providedPasswordHash)
-                return PasswordVerificationResult.Success;
-
-            return PasswordVerificationResult.Failed;
+            throw new NotImplementedException();
         }
+
         #endregion
     }
 }
