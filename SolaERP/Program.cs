@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using SolaERP.Application.Identity_Server;
 using SolaERP.Application.Mappers;
 using SolaERP.Application.Services;
+using SolaERP.Business.Models;
 using SolaERP.Extensions;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Services;
@@ -61,7 +62,7 @@ builder.Services.AddSwaggerGen(c =>
         Description = "Our test swagger client",
     });
 });
-
+builder.Services.AddSingleton<ConfHelper>(new ConfHelper { DevelopmentUrl = builder.Configuration.GetConnectionString("DevelopmentConnectionString") });
 
 
 var app = builder.Build();
@@ -87,9 +88,9 @@ var app = builder.Build();
     //{
     //   { jwtSecurityScheme, Array.Empty<string>() }
     //});
-});
+//});
 
-var app = builder.Build();
+//var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
