@@ -1,3 +1,13 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.OpenApi.Models;
+using SolaERP.Application.Identity_Server;
+using SolaERP.Application.Mappers;
+using SolaERP.Application.Services;
+using SolaERP.Business.Models;
+using SolaERP.Extensions;
+using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,10 +15,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.Configure<KeyManagementOptions>(options =>
-{
-    options.XmlEncryptor = null;
-});
 
 builder.Services.AddIdentity<User, Role>().AddDefaultTokenProviders();
 builder.Services.AddTransient<ITokenHandler, JwtTokenHandler>();
