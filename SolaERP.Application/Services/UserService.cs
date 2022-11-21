@@ -29,7 +29,7 @@ namespace SolaERP.Application.Services
         {
             model.PasswordHash = Utils.SecurityUtil.ComputeSha256Hash(model.PasswordHash);
             var user = _mapper.Map<User>(model);
-            System.Guid guid = System.Guid.NewGuid();
+            Guid guid = Guid.NewGuid();
             user.UserToken = guid;
             user.EmailConfirmed = true;
             user.PhoneNumberConfirmed = true;

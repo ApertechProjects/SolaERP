@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SolaERP.Business.CommonLogic;
 using SolaERP.Business.CommonLogic;
 using SolaERP.Business.Models;
 
@@ -8,6 +7,7 @@ namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class ApprovalController : ControllerBase
     {
         public ApprovalController(ConfHelper confHelper)
@@ -64,8 +64,6 @@ namespace SolaERP.Controllers
         {
             return await new EntityLogic(ConfHelper).SaveApprovalStage(token, saveApprovalStageWrapper);
         }
-
-
 
     }
 }

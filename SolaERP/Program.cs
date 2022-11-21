@@ -66,30 +66,6 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-
-//app.Run(
-//{
-//    using (SqlConnection connection = new SqlConnection("Server=88.198.193.132;Database=SolaERP;User Id=SLUser;Password=Sluser2020;"))
-//    {
-//        DataTable table = new DataTable();
-//        connection.Open();
-//        using (SqlCommand cmd = new SqlCommand("Select * from Config.AppUser", connection))
-//        {
-//            SqlDataAdapter dp = new SqlDataAdapter();
-//            dp.SelectCommand = cmd;
-//            dp.Fill(table);
-//        }
-//        table.GetDataTableColumNames(@"C:\\Users\\HP\\Desktop");
-//    }
-
-    //c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
-    //c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    //{
-    //   { jwtSecurityScheme, Array.Empty<string>() }
-    //});
-});
-
-var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

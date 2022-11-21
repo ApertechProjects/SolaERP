@@ -13,10 +13,10 @@ namespace SolaERP.Extensions
     {
         public static void UseSqlDataAccessServices(this WebApplicationBuilder builder)
         {
-            builder.Services.AddTransient<IUnitOfWork, SqlUnitOfWork>();
-            builder.Services.AddTransient<UserService, UserService>();
-            builder.Services.AddTransient<IUserRepository, SqlUserRepository>();
-            builder.Services.AddTransient((t) =>
+            builder.Services.AddSingleton<IUnitOfWork, SqlUnitOfWork>();
+            builder.Services.AddSingleton<UserService, UserService>();
+            builder.Services.AddSingleton<IUserRepository, SqlUserRepository>();
+            builder.Services.AddSingleton((t) =>
             {
                 var connectionString = builder.Configuration.GetConnectionString("DevelopmentConnectionString");
                 return ConnectionFactory.CreateSqlConnection(connectionString);
