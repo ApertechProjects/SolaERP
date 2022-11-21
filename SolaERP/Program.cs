@@ -1,4 +1,6 @@
 using Microsoft.OpenApi.Models;
+using SolaERP.Business.CommonLogic;
+using SolaERP.Business.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +18,7 @@ builder.Services.AddSwaggerGen(c =>
         Description = "Our test swagger client",
     });
 });
-
+builder.Services.AddSingleton<ConfHelper>(new ConfHelper { DevelopmentUrl = builder.Configuration.GetConnectionString("DevelopmentConnectionString") });
 
 
 var app = builder.Build();
