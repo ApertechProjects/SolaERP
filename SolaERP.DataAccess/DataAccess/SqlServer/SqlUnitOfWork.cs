@@ -1,7 +1,7 @@
-﻿using SolaERP.DataAccess.Abstract;
+﻿using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 
-namespace SolaERP.DataAccess.DataAcces.Implementation
+namespace SolaERP.DataAccess.DataAcces.SqlServer
 {
     public class SqlUnitOfWork : IUnitOfWork
     {
@@ -10,8 +10,10 @@ namespace SolaERP.DataAccess.DataAcces.Implementation
 
         public SqlUnitOfWork(IDbConnection connection)
         {
-            this._connection = connection;
-            this._transaction = _connection.BeginTransaction();
+            _connection = connection;
+
+            _connection.Open();
+            _transaction = _connection.BeginTransaction();
         }
 
         public IDbCommand CreateCommand()
@@ -24,13 +26,13 @@ namespace SolaERP.DataAccess.DataAcces.Implementation
 
         public void Dispose()
         {
-            if (this._transaction != null)
+            if (_transaction != null)
             {
                 _transaction.Rollback();
                 _transaction = null;
             }
 
-            if (this._connection != null)
+            if (_connection != null)
             {
                 _connection.Close();
                 _connection = null;
