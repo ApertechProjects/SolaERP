@@ -1,13 +1,3 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.OpenApi.Models;
-using SolaERP.Application.Identity_Server;
-using SolaERP.Application.Mappers;
-using SolaERP.Application.Services;
-using SolaERP.Extensions;
-using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -61,7 +51,7 @@ builder.Services.AddSwaggerGen(c =>
         Description = "Our test swagger client",
     });
 });
-
+builder.Services.AddSingleton<ConfHelper>(new ConfHelper { DevelopmentUrl = builder.Configuration.GetConnectionString("DevelopmentConnectionString") });
 
 
 var app = builder.Build();
