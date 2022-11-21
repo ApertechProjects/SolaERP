@@ -18,18 +18,60 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public bool Add(User entity)
         {
-            string query = @"INSERT INTO Config.AppUser (RowIndex,FullName,NotificationEmail,ChangePassword,StatusId,Theme,ExpirationDate,Sessions,
-                             LastActivity,Photo,ReturnMessage,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy,UserName,NormalizedUserName,Email,EmailConfirmed,
-                             PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,
-                             AccessFailedCount,SyteLineUserCode,UserTypeId,CompanyId,Position,VendorId,UserToken)
-                             VALUES (@RowIndex,@FullName,@NotificationEmail,@ChangePassword,@StatusId,@Theme,@ExpirationDate,@Sessions,
-                             @LastActivity,@Photo,@ReturnMessage,@CreatedOn,@CreatedBy,@UpdatedOn,@UpdatedBy,@UserName,@NormalizedUserName,@Email,@EmailConfirmed,
-                             @PasswordHash,@SecurityStamp,@ConcurrencyStamp,@PhoneNumber,@PhoneNumberConfirmed,@TwoFactorEnabled,@LockoutEnd,@LockoutEnabled,
-                             @AccessFailedCount,@SyteLineUserCode,@UserTypeId,@CompanyId,@Position,@VendorId,@UserToken)";
+
+            string query = @"INSERT INTO Config.AppUser (RowIndex,FullName,NotificationEmail,ChangePassword,
+                                                         StatusId,Theme,ExpirationDate,Sessions,
+                                                         LastActivity,Photo,ReturnMessage,CreatedOn,
+                                                         CreatedBy,UpdatedOn,UpdatedBy,UserName,NormalizedUserName,
+                                                         Email,EmailConfirmed,PasswordHash,SecurityStamp,                                                          ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,
+                                                         TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount,
+                                                         SyteLineUserCode,UserTypeId,CompanyId,Position,VendorId,UserToken)
+                                                VALUES (@RowIndex,@FullName,@NotificationEmail,@ChangePassword,
+                                                        @StatusId,@Theme,@ExpirationDate,@Sessions,
+                                                        @LastActivity,@Photo,@ReturnMessage,@CreatedOn,
+                                                        @CreatedBy,@UpdatedOn,@UpdatedBy,@UserName,@NormalizedUserName,
+                                                        @Email,@EmailConfirmed,@PasswordHash,@SecurityStamp,
+                                                        @ConcurrencyStamp,@PhoneNumber,@PhoneNumberConfirmed,
+                                                        @TwoFactorEnabled,@LockoutEnd,@LockoutEnabled,@AccessFailedCount,
+                                                        @SyteLineUserCode,@UserTypeId,@CompanyId,@Position,@VendorId,@UserToken)";
 
             using (var command = _unitOfWork.CreateCommand())
             {
+
                 command.Parameters.AddWithValue(command, "@RowIndex", entity.RowIndex);
+                command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
+                command.Parameters.AddWithValue(command, "@NotificationEmail", entity.NotificationEmail);
+                command.Parameters.AddWithValue(command, "@ChangePassword", entity.ChangePassword);
+                command.Parameters.AddWithValue(command, "@StatusId", entity.StatusId);
+                command.Parameters.AddWithValue(command, "@Theme", entity.Theme);
+                command.Parameters.AddWithValue(command, "@Sessions", entity.Sessions);
+                command.Parameters.AddWithValue(command, "@ExpirationDate", entity.ExpirationDate);
+                command.Parameters.AddWithValue(command, "@LastActivity", entity.LastActivity);
+                command.Parameters.AddWithValue(command, "@Photo", entity.Photo);
+                command.Parameters.AddWithValue(command, "@ReturnMessage", entity.ReturnMessage);
+                command.Parameters.AddWithValue(command, "@CreatedOn", entity.CreatedOn);
+                command.Parameters.AddWithValue(command, "@CreatedBy", entity.CreatedBy);
+                command.Parameters.AddWithValue(command, "@UpdatedOn", entity.UpdatedOn);
+                command.Parameters.AddWithValue(command, "@UpdatedBy", entity.UpdatedBy);
+                command.Parameters.AddWithValue(command, "@UserName", entity.UserName);
+                command.Parameters.AddWithValue(command, "@NormalizedUserName", entity.NormalizedUserName);
+                command.Parameters.AddWithValue(command, "@Email", entity.Email);
+                command.Parameters.AddWithValue(command, "@EmailConfirmed", entity.EmailConfirmed);
+                command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
+                command.Parameters.AddWithValue(command, "@SecurityStamp", entity.SecurityStamp);
+                command.Parameters.AddWithValue(command, "@ConcurrencyStamp", entity.ConcurrencyStamp);
+                command.Parameters.AddWithValue(command, "@PhoneNumber", entity.PhoneNumber);
+                command.Parameters.AddWithValue(command, "@PhoneNumberConfirmed", entity.PhoneNumberConfirmed);
+                command.Parameters.AddWithValue(command, "@TwoFactorEnabled", entity.TwoFactorEnabled);
+                command.Parameters.AddWithValue(command, "@LockoutEnd", entity.LockoutEnd);
+                command.Parameters.AddWithValue(command, "@LockoutEnabled", entity.LockoutEnabled);
+                command.Parameters.AddWithValue(command, "@AccessFailedCount", entity.AccessFailedCount);
+                command.Parameters.AddWithValue(command, "@SyteLineUserCode", entity.SyteLineUserCode);
+                command.Parameters.AddWithValue(command, "@UserTypeId", entity.UserTypeId);
+                command.Parameters.AddWithValue(command, "@CompanyId", entity.CompanyId);
+                command.Parameters.AddWithValue(command, "@Position", entity.Position);
+                command.Parameters.AddWithValue(command, "@VendorId", entity.VendorId);
+                command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken);
                 command.CommandText = query;
                 return command.ExecuteNonQuery() == 0 ? false : true;
             }
