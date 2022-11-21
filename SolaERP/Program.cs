@@ -1,3 +1,14 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.OpenApi.Models;
+using SolaERP.Application.Identity_Server;
+using SolaERP.Application.Mappers;
+using SolaERP.Application.Services;
+using SolaERP.Business.Models;
+using SolaERP.Extensions;
+using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
