@@ -32,6 +32,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
                 command.Parameters.AddWithValue(command, "@UserTypeId", entity.UserTypeId);
                 command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken);
+
                 return command.ExecuteNonQuery() == 0 ? false : true;
             }
         }
