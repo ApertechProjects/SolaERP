@@ -24,7 +24,16 @@ builder.Services.AddSingleton<IPasswordHasher<User>, CustomPasswordHasher>();
 builder.Services.AddEndpointsApiExplorer();
 builder.UseSqlDataAccessServices();
 builder.Services.AddAutoMapper(typeof(MapProfile));
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy",
+        builder => builder
 
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowAnyOrigin()
+        .Build());
+});
 
 builder.Services.AddAuthentication(x =>
 {
@@ -90,7 +99,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
