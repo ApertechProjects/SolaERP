@@ -13,14 +13,16 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             _connection = connection;
             _connection.Open();
 
-            _transaction = _connection.BeginTransaction();
         }
 
         public IDbCommand CreateCommand()
         {
             var command = _connection.CreateCommand();
-            command.Transaction = _transaction;
 
+            if (_transaction == null)
+                _transaction = _connection.BeginTransaction();
+
+            command.Transaction = _transaction;
             return command;
         }
 

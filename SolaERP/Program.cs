@@ -27,9 +27,7 @@ builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
-        builder => builder
-
-        .AllowAnyMethod()
+        builder => builder.WithOrigins("http://localhost:3001")
         .AllowAnyHeader()
         .AllowAnyOrigin()
         .Build());
