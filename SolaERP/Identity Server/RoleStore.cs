@@ -5,11 +5,6 @@ namespace SolaERP.Application.Identity_Server
 {
     public class RoleStore : IRoleStore<Role>
     {
-
-
-        #region RoleStore Implementation
-
-        #endregion
         public Task<IdentityResult> CreateAsync(Role role, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();

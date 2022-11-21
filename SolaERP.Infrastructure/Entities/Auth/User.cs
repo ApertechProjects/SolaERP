@@ -1,4 +1,6 @@
 ﻿
+using SolaERP.Infrastructure.Attributes;
+
 namespace SolaERP.Infrastructure.Entities.Auth
 {
     public class User : BaseEntity
@@ -22,7 +24,7 @@ namespace SolaERP.Infrastructure.Entities.Auth
         public DateTime ExpirationDate { get; set; }
         public int Sessions { get; set; }
         public DateTime LastActivity { get; set; } = DateTime.Now;
-        public byte Photo { get; set; }
+        public byte[] Photo { get; set; }
         public string ReturnMessage { get; set; }
         public DateTime CreatedOn { get; set; } = DateTime.Now;
         public int CreatedBy { get; set; }
@@ -39,6 +41,7 @@ namespace SolaERP.Infrastructure.Entities.Auth
         public string PhoneNumber { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
         public bool TwoFactorEnabled { get; set; }
+        [DbIgnore]
         public DateTime LockoutEnd { get; set; }
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
