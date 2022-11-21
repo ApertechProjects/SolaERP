@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SolaERP.Business.CommonLogic;
-using SolaERP.Business.Dtos.GeneralDtos;
 using SolaERP.Business.Dtos.Wrappers;
 using SolaERP.Business.Models;
 
@@ -18,9 +17,9 @@ namespace SolaERP.Controllers
         public ConfHelper ConfHelper { get; }
 
         [HttpGet]
-        public async Task<ApiResult> GetBUList([FromHeader] string token )
+        public async Task<ApiResult> GetBUList([FromHeader] string token)
         {
-            return await new EntityLogic(ConfHelper).GetBUList(token );
+            return await new EntityLogic(ConfHelper).GetBUList(token);
         }
 
         [HttpGet("{groupId}")]
@@ -29,11 +28,11 @@ namespace SolaERP.Controllers
             return await new EntityLogic(ConfHelper).GetBUListForGroup(token, groupId);
         }
 
-       
+
         [HttpGet]
-        public async Task<ApiResult> GetUserMenu_Load([FromHeader] string token )
+        public async Task<ApiResult> GetUserMenu_Load([FromHeader] string token)
         {
-            return await new EntityLogic(ConfHelper).GetUserMenu_Load(token );
+            return await new EntityLogic(ConfHelper).GetUserMenu_Load(token);
         }
 
         [HttpGet("{groupId}")]
@@ -78,6 +77,6 @@ namespace SolaERP.Controllers
             return await new EntityLogic(ConfHelper).GetGroupAdditionalPrivileges(token, groupId);
         }
 
-       
+
     }
 }
