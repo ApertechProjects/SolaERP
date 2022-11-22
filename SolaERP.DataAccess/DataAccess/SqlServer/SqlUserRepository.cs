@@ -33,7 +33,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken);
 
                 var result = command.ExecuteNonQuery() == 0 ? false : true;
-                command.Connection.Close();
                 return result;
             }
         }
@@ -49,7 +48,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 {
                     users.Add(reader.GetByEntityStructure<User>());
                 }
-                command.Connection.Close();
                 return users;
             }
         }
@@ -69,7 +67,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 if (reader.Read())
                     user = reader.GetByEntityStructure<User>();
 
-                command.Connection.Close();
                 return user;
             }
         }
@@ -91,7 +88,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     if (reader.Read())
                         user = reader.GetByEntityStructure<User>();
 
-                    command.Connection.Close();
                     return user;
                 }
             });
@@ -114,7 +110,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     if (reader.Read())
                         user = reader.GetByEntityStructure<User>();
 
-                    command.Connection.Close();
                     return user;
                 }
 
@@ -131,7 +126,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.Add(dbDataParameter);
 
                 command.ExecuteNonQuery();
-                command.Connection.Close();
             }
         }
         public void Update(User entity)
@@ -147,7 +141,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.CommandText = query;
 
                 command.ExecuteNonQuery();
-                command.Connection.Close();
             }
         }
 
