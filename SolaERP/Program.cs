@@ -9,6 +9,7 @@ using SolaERP.Business.Models;
 using SolaERP.Extensions;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Services;
+using SolaERP.Middlewares;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -101,5 +102,6 @@ app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseGlobalExceptionHandlerMiddleware();
 app.MapControllers();
 app.Run();
