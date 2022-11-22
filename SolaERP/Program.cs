@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddIdentity<User, Role>().AddDefaultTokenProviders();
 builder.Services.AddTransient<ITokenHandler, JwtTokenHandler>();
-builder.Services.AddSingleton<IUserStore<User>, UserStore>();
+builder.Services.AddScoped<IUserStore<User>, UserStore>();
 builder.Services.AddSingleton<IRoleStore<Role>, RoleStore>();
 builder.Services.AddSingleton<IPasswordHasher<User>, CustomPasswordHasher>();
 builder.Services.AddEndpointsApiExplorer();
