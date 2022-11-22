@@ -39,13 +39,13 @@ namespace SolaERP.Controllers
         public async Task<ApiResponse<Token>> Login(LoginRequestDto dto)
         {
             var user = await _userManager.FindByNameAsync(dto.Email);
-            //
+
             if (user == null)
                 return ApiResponse<Token>.Fail("User not found", 404);
 
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, true, false);
             if (signInResult.Succeeded)
-                return ApiResponse<Token>.Success(await _tokenHandler.GenerateJwtTokenAsync(2), 200);
+                return ApiResponse<Token>.Success(await _tokenHandler.GenerateJwtTokenAsync(1), 200);
 
             return ApiResponse<Token>.Fail("User cant sign in", 403);
         }
