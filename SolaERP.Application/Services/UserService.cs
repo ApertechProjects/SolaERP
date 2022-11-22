@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Repositories;
 using SolaERP.Infrastructure.Services;
 using SolaERP.Infrastructure.UnitOfWork;
+using System.Data;
 
 namespace SolaERP.Application.Services
 {
@@ -13,16 +15,18 @@ namespace SolaERP.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ITokenHandler _tokenHandler;
-
+        private readonly IDbConnection _connection;
         public UserService(IUserRepository userRepository,
                            IUnitOfWork unitOfWork,
                            IMapper mapper,
-                           ITokenHandler tokenHandler)
+                           ITokenHandler tokenHandler,
+                           IDbConnection connection)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _tokenHandler = tokenHandler;
+            _connection = connection;
         }
 
         public ApiResponse<bool> Register(UserDto model)
@@ -36,6 +40,7 @@ namespace SolaERP.Application.Services
             var result = _userRepository.Add(user);
 
             _unitOfWork.SaveChanges();
+
             return ApiResponse<bool>.Success(200);
         }
 

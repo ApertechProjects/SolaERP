@@ -1,7 +1,4 @@
-﻿using SolaERP.Infrastructure.UnitOfWork;
-using System.Data;
-
-namespace SolaERP.DataAccess.DataAcces.SqlServer
+﻿namespace SolaERP.DataAccess.DataAcces.SqlServer
 {
     public class SqlUnitOfWork : IUnitOfWork
     {

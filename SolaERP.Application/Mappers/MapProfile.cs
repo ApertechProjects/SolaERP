@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
-using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Dtos.BusinessUnit;
+using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Entities.BusinessUnits;
 
 namespace SolaERP.Application.Mappers
 {
@@ -9,6 +11,7 @@ namespace SolaERP.Application.Mappers
         public MapProfile()
         {
             CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<BusinessUnits, BusinessUnitsDto>().ReverseMap();
         }
     }
 }
