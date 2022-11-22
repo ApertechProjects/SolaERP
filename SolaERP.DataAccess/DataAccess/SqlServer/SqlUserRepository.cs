@@ -20,20 +20,28 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
             string query = @"Exec [dbo].[SP_User_insert] @FullName,@StatusId,@UserName,@Email ,@EmailConfirmed ,@PasswordHash,@UserTypeId,@UserToken";
 
-            using (var command = _unitOfWork.CreateCommand())
+            try
             {
-                command.CommandText = query;
-                command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
-                command.Parameters.AddWithValue(command, "@StatusId", entity.StatusId);
-                command.Parameters.AddWithValue(command, "@UserName", entity.UserName);
-                command.Parameters.AddWithValue(command, "@Email", entity.Email);
-                command.Parameters.AddWithValue(command, "@EmailConfirmed", entity.EmailConfirmed);
-                command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
-                command.Parameters.AddWithValue(command, "@UserTypeId", entity.UserTypeId);
-                command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken);
+                using (var command = _unitOfWork.CreateCommand())
+                {
+                    command.CommandText = query;
+                    command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
+                    command.Parameters.AddWithValue(command, "@StatusId", entity.StatusId);
+                    command.Parameters.AddWithValue(command, "@UserName", entity.UserName);
+                    command.Parameters.AddWithValue(command, "@Email", entity.Email);
+                    command.Parameters.AddWithValue(command, "@EmailConfirmed", entity.EmailConfirmed);
+                    command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
+                    command.Parameters.AddWithValue(command, "@UserTypeId", entity.UserTypeId);
+                    command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken);
 
-                var result = command.ExecuteNonQuery() == 0 ? false : true;
-                return result;
+                    var result = command.ExecuteNonQuery() == 0 ? false : true;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                _unitOfWork.Dispose();
+                return false;   
             }
         }
         public List<User> GetAllAsync()
