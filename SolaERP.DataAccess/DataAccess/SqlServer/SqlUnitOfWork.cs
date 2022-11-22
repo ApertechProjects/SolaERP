@@ -48,6 +48,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 throw new InvalidOperationException("Transaction have already been commited. Check your Transaction handling.");
             _transaction.Commit();
             _transaction = null;
+            _connection.Close();
         }
 
         public async Task SaveChangesAsync()
