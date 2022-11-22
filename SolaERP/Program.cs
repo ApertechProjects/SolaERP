@@ -22,6 +22,7 @@ builder.Services.AddSingleton<IPasswordHasher<User>, CustomPasswordHasher>();
 builder.Services.AddEndpointsApiExplorer();
 builder.UseSqlDataAccessServices();
 builder.Services.AddAutoMapper(typeof(MapProfile));
+builder.Services.Configure<ApiBehaviorOptions>(config => { config.SuppressModelStateInvalidFilter = true; });
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
