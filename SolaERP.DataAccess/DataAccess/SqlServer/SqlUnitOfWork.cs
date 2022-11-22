@@ -20,8 +20,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             if(_connection.State == ConnectionState.Closed)
                 _connection.Open();
 
-            _transaction = _connection.BeginTransaction();
-
             if (_transaction == null)
                 _transaction = _connection.BeginTransaction();
 
