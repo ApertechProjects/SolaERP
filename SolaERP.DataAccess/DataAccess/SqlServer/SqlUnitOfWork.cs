@@ -11,19 +11,16 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         public SqlUnitOfWork(IDbConnection connection)
         {
             _connection = connection;
+
             _connection.Open();
+            _transaction = _connection.BeginTransaction();
         }
 
         public IDbCommand CreateCommand()
         {
             var command = _connection.CreateCommand();
-            if(_connection.State == ConnectionState.Closed)
-                _connection.Open();
-
-            if (_transaction == null)
-                _transaction = _connection.BeginTransaction();
-
             command.Transaction = _transaction;
+
             return command;
         }
 
@@ -44,11 +41,11 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public void SaveChanges()
         {
-            if (_transaction == null)
-                throw new InvalidOperationException("Transaction have already been commited. Check your Transaction handling.");
-            _transaction.Commit();
-            _transaction = null;
-            _connection.Close();
+            if (_transaction != null)
+            {
+                _transaction.Commit();
+                _transaction = null;
+            }
         }
 
         public async Task SaveChangesAsync()

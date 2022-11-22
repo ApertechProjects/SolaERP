@@ -9,6 +9,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
     public class SqlUserRepository : IUserRepository
     {
         private readonly IUnitOfWork _unitOfWork;
+
         public SqlUserRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -31,8 +32,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@UserTypeId", entity.UserTypeId);
                 command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken);
 
-                var result = command.ExecuteNonQuery() == 0 ? false : true;
-                return result;
+                return command.ExecuteNonQuery() == 0 ? false : true;
             }
         }
         public List<User> GetAllAsync()

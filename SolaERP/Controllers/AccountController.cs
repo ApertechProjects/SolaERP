@@ -51,7 +51,7 @@ namespace SolaERP.Controllers
         }
 
         [HttpPost]
-        public async Task<ApiResponse<bool>> AddUserAsync(UserDto dto)
+        public async Task<ApiResponse<Token>> Register(UserDto dto)
         {
             return await _userService.AddAsync(dto);
         }

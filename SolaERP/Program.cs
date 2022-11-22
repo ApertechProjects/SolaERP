@@ -20,13 +20,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddIdentity<User, Role>().AddDefaultTokenProviders();
-builder.Services.AddScoped<ITokenHandler, JwtTokenHandler>();
-builder.Services.AddSingleton<IUserStore<User>, UserStore>();
+builder.Services.AddTransient<ITokenHandler, JwtTokenHandler>();
+builder.Services.AddScoped<IUserStore<User>, UserStore>();
 builder.Services.AddSingleton<IRoleStore<Role>, RoleStore>();
 builder.Services.AddSingleton<IPasswordHasher<User>, CustomPasswordHasher>();
 builder.Services.AddEndpointsApiExplorer();
 builder.UseSqlDataAccessServices();
 builder.Services.AddAutoMapper(typeof(MapProfile));
+builder.Services.Configure<ApiBehaviorOptions>(config => { config.SuppressModelStateInvalidFilter = true; });
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",

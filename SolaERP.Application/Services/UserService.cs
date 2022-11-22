@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Repositories;
@@ -45,9 +46,7 @@ namespace SolaERP.Application.Services
                 var result = _userRepository.Add(user);
                 return ApiResponse<bool>.Success(200);
 
-            });
-            await  _unitOfWork.SaveChangesAsync();
-            return response;
+            return ApiResponse<bool>.Success(200);
         }
 
         public ApiResponse<List<UserDto>> GetAll()
