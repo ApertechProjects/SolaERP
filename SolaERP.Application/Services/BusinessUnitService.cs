@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.BusinessUnit;
 using SolaERP.Infrastructure.Entities.BusinessUnits;
 using SolaERP.Infrastructure.Repositories;
@@ -23,7 +24,7 @@ namespace SolaERP.Application.Services
             _mapper = mapper;
         }
 
-        public Task<ApiResponse<bool>> AddAsync(BusinessUnitsDto model)
+        public Task<ApiResponse<Token>> AddAsync(BusinessUnitsDto model)
         {
             throw new NotImplementedException();
         }

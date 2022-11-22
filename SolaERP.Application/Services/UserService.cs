@@ -30,10 +30,13 @@ namespace SolaERP.Application.Services
             _connection = connection;
         }
 
-        public async Task<ApiResponse<bool>> AddAsync(UserDto model)
+        public async Task<ApiResponse<Token>> AddAsync(UserDto model)
         {
+            if (model.PasswordHash != model.ConfirmPasswordHash)
+                throw new InvalidOperationException("Password doesn't match with confirm password");
+
             var userExist = await _userRepository.GetByUserNameAsync(model.UserName);
-            var response = await Task.Run(() =>
+            return await Task.Run(async () =>
             {
                 model.PasswordHash = Utils.SecurityUtil.ComputeSha256Hash(model.PasswordHash);
                 var user = _mapper.Map<User>(model);
@@ -44,9 +47,9 @@ namespace SolaERP.Application.Services
                 user.PhoneNumberConfirmed = true;
 
                 var result = _userRepository.Add(user);
-                return ApiResponse<bool>.Success(200);
+                return ApiResponse<Token>.Success(await _tokenHandler.GenerateJwtTokenAsync(2), 200);
+            });
 
-            return ApiResponse<bool>.Success(200);
         }
 
         public ApiResponse<List<UserDto>> GetAll()
