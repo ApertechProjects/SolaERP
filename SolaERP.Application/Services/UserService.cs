@@ -29,19 +29,25 @@ namespace SolaERP.Application.Services
             _connection = connection;
         }
 
-        public ApiResponse<bool> Register(UserDto model)
+        public async Task<ApiResponse<bool>> AddAsync(UserDto model)
         {
-            model.PasswordHash = Utils.SecurityUtil.ComputeSha256Hash(model.PasswordHash);
-            var user = _mapper.Map<User>(model);
-            Guid guid = Guid.NewGuid();
-            user.UserToken = guid;
-            user.EmailConfirmed = true;
-            user.PhoneNumberConfirmed = true;
-            var result = _userRepository.Add(user);
+            var userExist = await _userRepository.GetByUserNameAsync(model.UserName);
+            var response = await Task.Run(() =>
+            {
+                model.PasswordHash = Utils.SecurityUtil.ComputeSha256Hash(model.PasswordHash);
+                var user = _mapper.Map<User>(model);
 
-            _unitOfWork.SaveChanges();
+                Guid guid = Guid.NewGuid();
+                user.UserToken = guid;
+                user.EmailConfirmed = true;
+                user.PhoneNumberConfirmed = true;
 
-            return ApiResponse<bool>.Success(200);
+                var result = _userRepository.Add(user);
+                return ApiResponse<bool>.Success(200);
+
+            });
+            await  _unitOfWork.SaveChangesAsync();
+            return response;
         }
 
         public ApiResponse<List<UserDto>> GetAll()

@@ -4,6 +4,11 @@ namespace SolaERP.Infrastructure.Dtos
 {
     public class ApiResponse<T>
     {
+        private ApiResponse()
+        {
+
+        }
+
         public T Data { get; set; }
         [JsonIgnore]
         public int StatusCode { get; set; }

@@ -51,9 +51,9 @@ namespace SolaERP.Controllers
         }
 
         [HttpPost]
-        public ApiResponse<bool> AddUser(UserDto dto)
+        public async Task<ApiResponse<bool>> AddUserAsync(UserDto dto)
         {
-            return _userService.Register(dto);
+            return await _userService.AddAsync(dto);
         }
 
         [HttpPut]
@@ -66,6 +66,13 @@ namespace SolaERP.Controllers
         public ApiResponse<bool> RemoveUser(UserDto dto)
         {
             return _userService.RemoveUser(dto);
+        }
+
+        [HttpPost]
+        public ApiResponse<bool> Logout()
+        {
+            _signInManager.SignOutAsync();
+            return ApiResponse<bool>.Success(true, 200);
         }
     }
 }

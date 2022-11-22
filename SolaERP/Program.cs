@@ -6,16 +6,21 @@ using SolaERP.Application.Identity_Server;
 using SolaERP.Application.Mappers;
 using SolaERP.Application.Services;
 using SolaERP.Business.Models;
+using SolaERP.DataAccess.DataAcces.SqlServer;
+using SolaERP.DataAccess.DataAccess.SqlServer;
 using SolaERP.Extensions;
 using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Entities.BusinessUnits;
+using SolaERP.Infrastructure.Repositories;
 using SolaERP.Infrastructure.Services;
+using SolaERP.Infrastructure.UnitOfWork;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddIdentity<User, Role>().AddDefaultTokenProviders();
-builder.Services.AddTransient<ITokenHandler, JwtTokenHandler>();
+builder.Services.AddScoped<ITokenHandler, JwtTokenHandler>();
 builder.Services.AddSingleton<IUserStore<User>, UserStore>();
 builder.Services.AddSingleton<IRoleStore<Role>, RoleStore>();
 builder.Services.AddSingleton<IPasswordHasher<User>, CustomPasswordHasher>();

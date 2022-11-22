@@ -2,9 +2,9 @@
 
 namespace SolaERP.Infrastructure.Services
 {
-    public interface IBaseService<T>
+    public interface ICrudService<T>
     {
         ApiResponse<List<T>> GetAll();
-        ApiResponse<bool> Register(T model);
+        Task<ApiResponse<bool>> AddAsync(T model);
     }
 }
