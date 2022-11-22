@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using SolaERP.Application.Identity_Server;
 using SolaERP.Application.Mappers;
@@ -12,10 +13,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-
 builder.Services.AddIdentity<User, Role>().AddDefaultTokenProviders();
 builder.Services.AddTransient<ITokenHandler, JwtTokenHandler>();
 builder.Services.AddSingleton<IUserStore<User>, UserStore>();
@@ -27,11 +25,12 @@ builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
-        builder => builder.WithOrigins("http://localhost:3001")
+        corsBuilder => corsBuilder.WithOrigins(builder.Configuration["Cors:Origins"])
         .AllowAnyHeader()
         .AllowAnyOrigin()
         .Build());
 });
+builder.Services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
 
 builder.Services.AddAuthentication(x =>
 {
