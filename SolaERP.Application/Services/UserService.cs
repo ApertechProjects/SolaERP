@@ -20,14 +20,12 @@ namespace SolaERP.Application.Services
         public UserService(IUserRepository userRepository,
                            IUnitOfWork unitOfWork,
                            IMapper mapper,
-                           ITokenHandler tokenHandler,
-                           IDbConnection connection)
+                           ITokenHandler tokenHandler)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _tokenHandler = tokenHandler;
-            _connection = connection;
         }
 
         public async Task<ApiResponse<Token>> AddAsync(UserDto model)
