@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Repositories;
@@ -29,7 +30,7 @@ namespace SolaERP.Application.Services
             _connection = connection;
         }
 
-        public ApiResponse<bool> Register(UserDto model)
+        public async Task<ApiResponse<Token>> AddAsync(UserDto model)
         {
             model.PasswordHash = Utils.SecurityUtil.ComputeSha256Hash(model.PasswordHash);
             var user = _mapper.Map<User>(model);
@@ -41,7 +42,7 @@ namespace SolaERP.Application.Services
 
             _unitOfWork.SaveChanges();
 
-            return ApiResponse<bool>.Success(200);
+            return ApiResponse<Token>.Success(await _tokenHandler.GenerateJwtTokenAsync(1), 200);
         }
 
         public ApiResponse<List<UserDto>> GetAll()
