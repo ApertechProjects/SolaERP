@@ -42,5 +42,6 @@ namespace SolaERP.Application.Services
                 return token;
             });
         }
+
     }
 }

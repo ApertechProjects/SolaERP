@@ -2,7 +2,7 @@
 
 namespace SolaERP.Infrastructure.Services
 {
-    public interface IUserService : IBaseService<UserDto>
+    public interface IUserService : ICrudService<UserDto>
     {
     }
 }

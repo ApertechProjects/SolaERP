@@ -67,5 +67,12 @@ namespace SolaERP.Controllers
         {
             return _userService.RemoveUser(dto);
         }
+
+        [HttpPost]
+        public ApiResponse<bool> Logout()
+        {
+            _signInManager.SignOutAsync();
+            return ApiResponse<bool>.Success(true, 200);
+        }
     }
 }

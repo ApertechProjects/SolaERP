@@ -18,7 +18,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public bool Add(User entity)
         {
-
             string query = @"Exec [dbo].[SP_User_insert] @FullName,@StatusId,@UserName,@Email ,@EmailConfirmed ,@PasswordHash,@UserTypeId,@UserToken";
 
             using (var command = _unitOfWork.CreateCommand())

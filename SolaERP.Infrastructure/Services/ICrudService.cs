@@ -3,7 +3,7 @@ using SolaERP.Infrastructure.Dtos.Auth;
 
 namespace SolaERP.Infrastructure.Services
 {
-    public interface IBaseService<T>
+    public interface ICrudService<T>
     {
         ApiResponse<List<T>> GetAll();
         Task<ApiResponse<Token>> AddAsync(T model);
