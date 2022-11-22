@@ -13,6 +13,7 @@ using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Entities.BusinessUnits;
 using SolaERP.Infrastructure.Repositories;
 using SolaERP.Infrastructure.Services;
+using SolaERP.Middlewares;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Text;
 
@@ -106,5 +107,6 @@ app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseGlobalExceptionHandlerMiddleware();
 app.MapControllers();
 app.Run();
