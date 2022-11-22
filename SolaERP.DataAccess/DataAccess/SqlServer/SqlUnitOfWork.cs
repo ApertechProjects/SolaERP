@@ -10,13 +10,15 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public SqlUnitOfWork(IDbConnection connection)
         {
-            _connection = connection;
-            _connection.Open();
+            _connection = connection;  
         }
 
         public IDbCommand CreateCommand()
         {
             var command = _connection.CreateCommand();
+            if(_connection.State == ConnectionState.Closed)
+                _connection.Open();
+
             _transaction = _connection.BeginTransaction();
             command.Transaction = _transaction;
 

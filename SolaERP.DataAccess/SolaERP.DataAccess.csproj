@@ -14,4 +14,8 @@
     <ProjectReference Include="..\SolaERP.Infrastructure\SolaERP.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DataAccess\EmailServer\" />
+  </ItemGroup>
+
 </Project>

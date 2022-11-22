@@ -1,6 +1,6 @@
 ﻿using SolaERP.Infrastructure.Enums;
 
-namespace SolaERP.Infrastructure.Dtos
+namespace SolaERP.Infrastructure.Dtos.UserDto
 {
     public class UserDto
     {

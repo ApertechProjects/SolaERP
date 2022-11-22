@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Services;
 using SolaERP.Infrastructure.Dtos;
 using SolaERP.Infrastructure.Dtos.Auth;
+using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Services;
 

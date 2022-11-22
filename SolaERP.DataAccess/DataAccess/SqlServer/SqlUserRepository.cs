@@ -9,7 +9,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
     public class SqlUserRepository : IUserRepository
     {
         private readonly IUnitOfWork _unitOfWork;
-
         public SqlUserRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -33,7 +32,9 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@UserTypeId", entity.UserTypeId);
                 command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken);
 
-                return command.ExecuteNonQuery() == 0 ? false : true;
+                var result = command.ExecuteNonQuery() == 0 ? false : true;
+                command.Connection.Close();
+                return result;
             }
         }
         public List<User> GetAllAsync()
@@ -48,6 +49,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 {
                     users.Add(reader.GetByEntityStructure<User>());
                 }
+                command.Connection.Close();
                 return users;
             }
         }
@@ -67,6 +69,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 if (reader.Read())
                     user = reader.GetByEntityStructure<User>();
 
+                command.Connection.Close();
                 return user;
             }
         }
@@ -88,6 +91,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     if (reader.Read())
                         user = reader.GetByEntityStructure<User>();
 
+                    command.Connection.Close();
                     return user;
                 }
             });
@@ -110,6 +114,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     if (reader.Read())
                         user = reader.GetByEntityStructure<User>();
 
+                    command.Connection.Close();
                     return user;
                 }
 
@@ -126,6 +131,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.Add(dbDataParameter);
 
                 command.ExecuteNonQuery();
+                command.Connection.Close();
             }
         }
         public void Update(User entity)
@@ -141,6 +147,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.CommandText = query;
 
                 command.ExecuteNonQuery();
+                command.Connection.Close();
             }
         }
 
