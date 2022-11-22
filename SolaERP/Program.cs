@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using SolaERP.Application.Identity_Server;
 using SolaERP.Application.Mappers;
@@ -12,10 +13,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-
 builder.Services.AddIdentity<User, Role>().AddDefaultTokenProviders();
 builder.Services.AddTransient<ITokenHandler, JwtTokenHandler>();
 builder.Services.AddSingleton<IUserStore<User>, UserStore>();
@@ -24,7 +22,15 @@ builder.Services.AddSingleton<IPasswordHasher<User>, CustomPasswordHasher>();
 builder.Services.AddEndpointsApiExplorer();
 builder.UseSqlDataAccessServices();
 builder.Services.AddAutoMapper(typeof(MapProfile));
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy",
+        corsBuilder => corsBuilder.WithOrigins(builder.Configuration["Cors:Origins"])
+        .AllowAnyHeader()
+        .AllowAnyOrigin()
+        .Build());
+});
+builder.Services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
 
 builder.Services.AddAuthentication(x =>
 {
@@ -56,6 +62,28 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Description = "Our test swagger client",
     });
+
+    var jwtSecurityScheme = new OpenApiSecurityScheme
+    {
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Name = "JWT Authentication",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
+
+        Reference = new OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+
+    c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+       { jwtSecurityScheme, Array.Empty<string>() }
+    });
 });
 builder.Services.AddSingleton<ConfHelper>(new ConfHelper { DevelopmentUrl = builder.Configuration.GetConnectionString("DevelopmentConnectionString") });
 
@@ -68,7 +96,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
