@@ -39,6 +39,7 @@ builder.Services.AddCors(options =>
 });
 builder.Services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
 
+
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -93,6 +94,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 builder.Services.AddSingleton<ConfHelper>(new ConfHelper { DevelopmentUrl = builder.Configuration.GetConnectionString("DevelopmentConnectionString") });
+builder.ValidationExtension();
 
 
 var app = builder.Build();

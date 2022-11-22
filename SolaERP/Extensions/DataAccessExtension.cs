@@ -1,10 +1,13 @@
-﻿using SolaERP.Application.Services;
+﻿using FluentValidation;
+using SolaERP.Application.Services;
 using SolaERP.Business.Dtos.EntityDtos.BU;
 using SolaERP.DataAccess.DataAcces.SqlServer;
 using SolaERP.DataAccess.DataAccess.SqlServer;
 using SolaERP.DataAccess.Factories;
 using SolaERP.Infrastructure.Repositories;
 using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Infrastructure.ValidationRules;
+using SolaERP.Infrastructure.ValidationRules.UserValidation;
 
 namespace SolaERP.Extensions
 {
@@ -26,6 +29,12 @@ namespace SolaERP.Extensions
                 var connectionString = builder.Configuration.GetConnectionString("DevelopmentConnectionString");
                 return ConnectionFactory.CreateSqlConnection(connectionString);
             });
+        }
+
+        public static void ValidationExtension(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddValidatorsFromAssemblyContaining<UserValidation>();
+            builder.Services.AddScoped<ValidationFilter>();
         }
     }
 }
