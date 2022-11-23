@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Services;
+using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Dtos;
 using SolaERP.Infrastructure.Dtos.BusinessUnit;
 
@@ -24,9 +25,9 @@ namespace SolaERP.Controllers
         }
 
         [HttpGet]
-        public ApiResponse<List<BusinessUnitsDto>> GetBusinessUnitListByUserId()
+        public async Task<ApiResponse<List<BusinessUnitsDto>>> GetBusinessUnitListByUserId()
         {
-            return _businessUnitService.GetBusinessUnitListByUserId();
+            return await _businessUnitService.GetBusinessUnitListByUserId(Kernel.CurrentUserId);
         }
     }
 }

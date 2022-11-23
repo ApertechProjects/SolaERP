@@ -37,10 +37,10 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<BusinessUnitsAllDto>>.Success(dto, 200);
         }
 
-        public ApiResponse<List<BusinessUnitsDto>> GetBusinessUnitListByUserId()
+        public async Task<ApiResponse<List<BusinessUnitsDto>>> GetBusinessUnitListByUserId(int userId)
         {
-            //var businessUnits = await _businessUnitRepository.GetAllAsync();
-            //var dto = _mapper.Map<List<BusinessUnitsDto>>(businessUnits);
+            var businessUnits = await _businessUnitRepository.GetBusinessUnitListByUserId(userId);
+            var dto = _mapper.Map<List<BusinessUnitsDto>>(businessUnits);
 
             return ApiResponse<List<BusinessUnitsDto>>.Success(null, 200);
         }

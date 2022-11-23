@@ -9,6 +9,6 @@ namespace SolaERP.Infrastructure.Repositories
 {
     public interface IBusinessUnitRepository :ICrudOperations<BusinessUnits>
     {
-
+        Task<List<BusinessUnits>> GetBusinessUnitListByUserId(int userId);
     }
 }

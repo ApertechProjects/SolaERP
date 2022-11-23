@@ -12,6 +12,6 @@ namespace SolaERP.Infrastructure.Services
 {
     public interface IBusinessUnitService : ICrudService<BusinessUnitsAllDto>
     {
-        ApiResponse<List<BusinessUnitsDto>> GetBusinessUnitListByUserId();
+        Task<ApiResponse<List<BusinessUnitsDto>>> GetBusinessUnitListByUserId(int userId);
     }
 }

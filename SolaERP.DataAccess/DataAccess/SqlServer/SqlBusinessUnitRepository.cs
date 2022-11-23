@@ -39,6 +39,27 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return result;
         }
 
+        public Task<List<BusinessUnits>> GetBusinessUnitListByUserId(int userId)
+        {
+            var result = Task.Run(() =>
+            {
+                using (var command = _unitOfWork.CreateCommand())
+                {
+                    command.CommandText = $"EXEC SP_BusinessUnitsList {userId}";
+                    using var reader = command.ExecuteReader();
+
+                    List<BusinessUnits> businessUnits = new List<BusinessUnits>();
+
+                    while (reader.Read())
+                    {
+                        businessUnits.Add(reader.GetByEntityStructure<BusinessUnits>());
+                    }
+                    return businessUnits;
+                }
+            });
+            return result;
+        }
+
         public Task<BusinessUnits> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
