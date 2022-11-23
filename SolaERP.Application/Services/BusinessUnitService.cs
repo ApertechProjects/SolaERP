@@ -11,14 +11,12 @@ namespace SolaERP.Application.Services
     public class BusinessUnitService : IBusinessUnitService
     {
         private readonly IBusinessUnitRepository _businessUnitRepository;
-        IHttpContextAccessor _httpContextAccessor;
         private IMapper _mapper;
 
         public BusinessUnitService(IBusinessUnitRepository businessUnitRepository,IMapper mapper)
         {
             _businessUnitRepository = businessUnitRepository;
             _mapper = mapper;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public Task<ApiResponse<Token>> AddAsync(BusinessUnitsAllDto model)
@@ -34,20 +32,35 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<BusinessUnitsAllDto>>.Success(dto, 200);
         }
 
-        public ApiResponse<List<BusinessUnitsDto>> GetBusinessUnitListByUserId()
+        public Task<ApiResponse<List<BusinessUnitsAllDto>>> GetAllAsync()
         {
-            var businessUnits = await _businessUnitRepository.GetAllAsync();
-            var dto = _mapper.Map<List<BusinessUnitsDto>>(businessUnits);
-
-            return ApiResponse<List<BusinessUnitsDto>>.Success(dto,200);
+            throw new NotImplementedException();
         }
+
+        //public ApiResponse<List<BusinessUnitsDto>> GetBusinessUnitListByUserId()
+        //{
+        //    var businessUnits = await _businessUnitRepository.GetAllAsync();
+        //    var dto = _mapper.Map<List<BusinessUnitsDto>>(businessUnits);
+
+        //    return ApiResponse<List<BusinessUnitsDto>>.Success(dto,200);
+        //}
 
         public Task<ApiResponse<bool>> RemoveAsync(BusinessUnitsDto model)
         {
             throw new NotImplementedException();
         }
 
+        public Task<ApiResponse<bool>> RemoveAsync(BusinessUnitsAllDto model)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<ApiResponse<bool>> UpdateAsync(BusinessUnitsDto model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApiResponse<bool>> UpdateAsync(BusinessUnitsAllDto model)
         {
             throw new NotImplementedException();
         }

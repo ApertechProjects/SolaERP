@@ -24,10 +24,10 @@ namespace SolaERP.Controllers
             return _businessUnitService.GetAll();
         }
 
-        [HttpGet]
-        public ApiResponse<List<BusinessUnitsDto>> GetBusinessUnitListByUserId()
-        {
-            return _businessUnitService.GetBusinessUnitListByUserId();
-        }
+        //[HttpGet]
+        //public ApiResponse<List<BusinessUnitsDto>> GetBusinessUnitListByUserId()
+        //{
+        //    return _businessUnitService.GetBusinessUnitListByUserId();
+        //}
     }
 }
