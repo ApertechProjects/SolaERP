@@ -19,9 +19,15 @@ namespace SolaERP.Controllers
         }
 
         [HttpGet]
-        public ApiResponse<List<BusinessUnitsDto>> GetBuList()
+        public ApiResponse<List<BusinessUnitsAllDto>> GetBusinessUnitList()
         {
             return _businessUnitService.GetAll();
+        }
+
+        [HttpGet]
+        public ApiResponse<List<BusinessUnitsDto>> GetBusinessUnitListByUserId()
+        {
+            return _businessUnitService.GetBusinessUnitListByUserId();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace SolaERP.Application.Mappers
         public MapProfile()
         {
             CreateMap<User, UserDto>().ReverseMap();
-            CreateMap<BusinessUnits, BusinessUnitsDto>().ReverseMap();
+            CreateMap<BusinessUnits, BusinessUnitsAllDto>().ReverseMap();
         }
     }
 }

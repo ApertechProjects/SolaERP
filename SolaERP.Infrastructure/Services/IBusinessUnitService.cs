@@ -1,4 +1,5 @@
-﻿using SolaERP.Infrastructure.Dtos.BusinessUnit;
+﻿using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Dtos.BusinessUnit;
 using SolaERP.Infrastructure.Entities.BusinessUnits;
 using SolaERP.Infrastructure.Repositories;
 using System;
@@ -9,7 +10,8 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Infrastructure.Services
 {
-    public interface IBusinessUnitService : ICrudService<BusinessUnitsDto>
+    public interface IBusinessUnitService : ICrudService<BusinessUnitsAllDto>
     {
+        ApiResponse<List<BusinessUnitsDto>> GetBusinessUnitListByUserId();
     }
 }

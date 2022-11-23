@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Services;
 using SolaERP.Infrastructure.Dtos;
@@ -6,6 +7,7 @@ using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Services;
+using System.Security.Claims;
 
 namespace SolaERP.Controllers
 {
@@ -17,15 +19,18 @@ namespace SolaERP.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ITokenHandler _tokenHandler;
+        private readonly IHttpContextAccessor _accessor;
         public AccountController(UserService userService,
                                  SignInManager<User> signInManager,
                                  UserManager<User> userManager,
-                                 ITokenHandler handler)
+                                 ITokenHandler handler,
+                                 IHttpContextAccessor accessor)
         {
             _userService = userService;
             _signInManager = signInManager;
             _userManager = userManager;
             _tokenHandler = handler;
+            _accessor = accessor;
         }
 
 
@@ -44,6 +49,7 @@ namespace SolaERP.Controllers
                 return ApiResponse<Token>.Fail("User not found", 404);
 
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, true, false);
+
             if (signInResult.Succeeded)
                 return ApiResponse<Token>.Success(await _tokenHandler.GenerateJwtTokenAsync(2), 200);
 

@@ -98,7 +98,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 builder.Services.AddSingleton<ConfHelper>(new ConfHelper { DevelopmentUrl = builder.Configuration.GetConnectionString("DevelopmentConnectionString") });
-
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

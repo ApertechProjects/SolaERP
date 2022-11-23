@@ -19,9 +19,9 @@ namespace SolaERP.Infrastructure.ValidationRules
         public void OnActionExecuting(ActionExecutingContext context)
         {
             var modelState = context.ModelState;
-            var errorText = modelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList()[0][0].ErrorMessage;
             if (!modelState.IsValid)
             {
+                var errorText = modelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList()[0][0].ErrorMessage;
                 context.Result = new ObjectResult(ApiResponse<bool>.Fail(errorText, 400));
             }
         }
