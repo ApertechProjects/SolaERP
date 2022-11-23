@@ -16,10 +16,12 @@ using SolaERP.Infrastructure.Services;
 using SolaERP.Middlewares;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Text;
+using SolaERP.Infrastructure.ValidationRules;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => { options.Filters.Add(new ValidationFilter()); }).Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddIdentity<User, Role>().AddDefaultTokenProviders();
 builder.Services.AddTransient<ITokenHandler, JwtTokenHandler>();
 builder.Services.AddScoped<IUserStore<User>, UserStore>();
@@ -27,6 +29,8 @@ builder.Services.AddSingleton<IRoleStore<Role>, RoleStore>();
 builder.Services.AddSingleton<IPasswordHasher<User>, CustomPasswordHasher>();
 builder.Services.AddEndpointsApiExplorer();
 builder.UseSqlDataAccessServices();
+builder.ValidationExtension();
+
 builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.Configure<ApiBehaviorOptions>(config => { config.SuppressModelStateInvalidFilter = true; });
 builder.Services.AddCors(options =>
@@ -94,7 +98,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 builder.Services.AddSingleton<ConfHelper>(new ConfHelper { DevelopmentUrl = builder.Configuration.GetConnectionString("DevelopmentConnectionString") });
-builder.ValidationExtension();
 
 
 var app = builder.Build();
