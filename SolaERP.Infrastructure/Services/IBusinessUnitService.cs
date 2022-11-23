@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Infrastructure.Services
 {
-    public interface IBusinessUnitService : ICrudService<BusinessUnitsAllDto>
+    public interface IBusinessUnitService : ICrudService<BaseBusinessUnitDto>
     {
-        //ApiResponse<List<BusinessUnitsDto>> GetBusinessUnitListByUserId();
+        ApiResponse<List<BaseBusinessUnitDto>> GetBusinessUnitListByUserId();
     }
 }

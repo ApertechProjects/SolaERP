@@ -37,13 +37,13 @@ namespace SolaERP.Application.Services
             throw new NotImplementedException();
         }
 
-        //public ApiResponse<List<BusinessUnitsDto>> GetBusinessUnitListByUserId()
-        //{
-        //    var businessUnits = await _businessUnitRepository.GetAllAsync();
-        //    var dto = _mapper.Map<List<BusinessUnitsDto>>(businessUnits);
+        public ApiResponse<List<BusinessUnitsDto>> GetBusinessUnitListByUserId()
+        {
+            var businessUnits = await _businessUnitRepository.GetAllAsync();
+            var dto = _mapper.Map<List<BusinessUnitsDto>>(businessUnits);
 
-        //    return ApiResponse<List<BusinessUnitsDto>>.Success(dto,200);
-        //}
+            return ApiResponse<List<BusinessUnitsDto>>.Success(dto, 200);
+        }
 
         public Task<ApiResponse<bool>> RemoveAsync(BusinessUnitsDto model)
         {

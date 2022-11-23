@@ -59,7 +59,9 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<ApiResponse<Token>> Register(UserDto dto)
         {
-            return await _userService.AddAsync(dto);
+            var result = await _userService.AddAsync(dto);
+
+            //return result ? ApiResponse<Token>.Success(_tokenHandler.GenerateJwtTokenAsync()):
         }
 
         [HttpPut]
