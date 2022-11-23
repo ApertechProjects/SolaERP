@@ -5,7 +5,9 @@ namespace SolaERP.Infrastructure.Services
 {
     public interface ICrudService<T>
     {
-        ApiResponse<List<T>> GetAll();
+        Task<ApiResponse<List<T>>> GetAllAsync();
         Task<ApiResponse<Token>> AddAsync(T model);
+        Task<ApiResponse<bool>> UpdateAsync(T model);
+        Task<ApiResponse<bool>> RemoveAsync(T model);
     }
 }

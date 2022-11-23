@@ -16,39 +16,46 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         }
 
 
-        public bool Add(User entity)
+        public async Task<bool> AddAsync(User entity)
         {
             string query = @"Exec [dbo].[SP_User_insert] @FullName,@StatusId,@UserName,@Email ,@EmailConfirmed ,@PasswordHash,@UserTypeId,@UserToken";
-
-            using (var command = _unitOfWork.CreateCommand())
+            var result = await Task.Run(() =>
             {
-                command.CommandText = query;
-                command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
-                command.Parameters.AddWithValue(command, "@StatusId", entity.StatusId);
-                command.Parameters.AddWithValue(command, "@UserName", entity.UserName);
-                command.Parameters.AddWithValue(command, "@Email", entity.Email);
-                command.Parameters.AddWithValue(command, "@EmailConfirmed", entity.EmailConfirmed);
-                command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
-                command.Parameters.AddWithValue(command, "@UserTypeId", entity.UserTypeId);
-                command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken);
-
-                return command.ExecuteNonQuery() == 0 ? false : true;
-            }
-        }
-        public List<User> GetAllAsync()
-        {
-            using (var command = _unitOfWork.CreateCommand())
-            {
-                command.CommandText = "Select * from Config.AppUser";
-                using var reader = command.ExecuteReader();
-
-                List<User> users = new List<User>();
-                while (reader.Read())
+                using (var command = _unitOfWork.CreateCommand())
                 {
-                    users.Add(reader.GetByEntityStructure<User>());
+                    command.CommandText = query;
+                    command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
+                    command.Parameters.AddWithValue(command, "@StatusId", entity.StatusId);
+                    command.Parameters.AddWithValue(command, "@UserName", entity.UserName);
+                    command.Parameters.AddWithValue(command, "@Email", entity.Email);
+                    command.Parameters.AddWithValue(command, "@EmailConfirmed", entity.EmailConfirmed);
+                    command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
+                    command.Parameters.AddWithValue(command, "@UserTypeId", entity.UserTypeId);
+                    command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken);
+
+                    return command.ExecuteNonQuery() == 0 ? false : true;
                 }
-                return users;
-            }
+            });
+            return result;
+        }
+        public async Task<List<User>> GetAllAsync()
+        {
+            var result = await Task.Run(() =>
+            {
+                using (var command = _unitOfWork.CreateCommand())
+                {
+                    command.CommandText = "Select * from Config.AppUser";
+                    using var reader = command.ExecuteReader();
+
+                    List<User> users = new List<User>();
+                    while (reader.Read())
+                    {
+                        users.Add(reader.GetByEntityStructure<User>());
+                    }
+                    return users;
+                }
+            });
+            return result;
         }
         public User GetByEmail(string email)
         {
@@ -71,8 +78,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         }
         public async Task<User> GetByIdAsync(int id)
         {
-            User user = null;
-            return await Task.Run(() =>
+            var result = await Task.Run(() =>
             {
                 using (var command = _unitOfWork.CreateCommand())
                 {
@@ -83,6 +89,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     command.Parameters.Add(dbDataParameter);
 
                     using var reader = command.ExecuteReader();
+                    User user = null;
 
                     if (reader.Read())
                         user = reader.GetByEntityStructure<User>();
@@ -90,12 +97,13 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     return user;
                 }
             });
+            return result;
         }
         public async Task<User> GetByUserNameAsync(string userName)
         {
-            User user = null;
-            return await Task.Run(() =>
+            var result = await Task.Run(() =>
             {
+                User user = null;
                 using (var command = _unitOfWork.CreateCommand())
                 {
                     command.CommandText = "EXEC SP_GETUSER_BY_NAME_OR_ID NULL,@UserName";
@@ -113,6 +121,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 }
 
             });
+            return result;
         }
         public void Remove(User entity)
         {

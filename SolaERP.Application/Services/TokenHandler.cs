@@ -16,7 +16,7 @@ namespace SolaERP.Application.Services
             _configuration = configuration;
         }
 
-        public async Task<Token> GenerateJwtTokenAsync(int days)
+        public async Task<Token> GenerateJwtTokenAsync(int minutes)
         {
             Token token = new Token();
             return await Task.Run(() =>
@@ -24,7 +24,7 @@ namespace SolaERP.Application.Services
                 SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:SecurityKey"]));
                 SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 
-                token.Expiration = DateTime.Now.AddDays(days);
+                token.Expiration = DateTime.Now.AddMinutes(minutes);
                 SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Audience = _configuration["Token:Audience"],

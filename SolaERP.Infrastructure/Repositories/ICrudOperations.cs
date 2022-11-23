@@ -4,9 +4,9 @@ namespace SolaERP.Infrastructure.Repositories
 {
     public interface ICrudOperations<Tentity> where Tentity : BaseEntity
     {
-        List<Tentity> GetAllAsync();
+        Task<List<Tentity>> GetAllAsync();
         Task<Tentity> GetByIdAsync(int id);
-        bool Add(Tentity entity);
+        Task<bool> AddAsync(Tentity entity);
         void Update(Tentity entity);
         void Remove(Tentity entity);
     }

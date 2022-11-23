@@ -15,9 +15,9 @@ namespace SolaERP.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly UserService _userService;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IUserService _userService;
         private readonly ITokenHandler _tokenHandler;
         private readonly IHttpContextAccessor _accessor;
         public AccountController(UserService userService,
@@ -35,23 +35,23 @@ namespace SolaERP.Controllers
 
 
         [HttpGet]
-        public ApiResponse<List<UserDto>> GetAllUsers()
+        public async Task<ApiResponse<List<UserDto>>> GetAllUsers()
         {
-            return _userService.GetAll();
+            return await _userService.GetAllAsync();
         }
 
         [HttpPost]
         public async Task<ApiResponse<Token>> Login(LoginRequestDto dto)
         {
             var user = await _userManager.FindByNameAsync(dto.Email);
-            //
+
             if (user == null)
                 return ApiResponse<Token>.Fail("User not found", 404);
 
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, true, false);
 
             if (signInResult.Succeeded)
-                return ApiResponse<Token>.Success(await _tokenHandler.GenerateJwtTokenAsync(2), 200);
+                return ApiResponse<Token>.Success(await _tokenHandler.GenerateJwtTokenAsync(1), 200);
 
             return ApiResponse<Token>.Fail("User cant sign in", 403);
         }
@@ -65,19 +65,19 @@ namespace SolaERP.Controllers
         [HttpPut]
         public async Task<ApiResponse<bool>> UpdateUser(UserDto dto)
         {
-            return await _userService.UpdateUser(dto);
+            return await _userService.UpdateAsync(dto);
         }
 
         [HttpDelete]
-        public ApiResponse<bool> RemoveUser(UserDto dto)
+        public async Task<ApiResponse<bool>> RemoveUser(UserDto dto)
         {
-            return _userService.RemoveUser(dto);
+            return await _userService.RemoveAsync(dto);
         }
 
         [HttpPost]
-        public ApiResponse<bool> Logout()
+        public async Task<ApiResponse<bool>> Logout()
         {
-            _signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
             return ApiResponse<bool>.Success(true, 200);
         }
     }
