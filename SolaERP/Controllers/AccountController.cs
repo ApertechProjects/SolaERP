@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Services;
@@ -20,18 +21,17 @@ namespace SolaERP.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly IUserService _userService;
         private readonly ITokenHandler _tokenHandler;
-        private readonly IHttpContextAccessor _accessor;
+        private readonly IMapper _mapper;
+
         public AccountController(UserService userService,
                                  SignInManager<User> signInManager,
                                  UserManager<User> userManager,
-                                 ITokenHandler handler,
-                                 IHttpContextAccessor accessor)
+                                 ITokenHandler handler)
         {
             _userService = userService;
             _signInManager = signInManager;
             _userManager = userManager;
             _tokenHandler = handler;
-            _accessor = accessor;
         }
 
 
@@ -42,29 +42,32 @@ namespace SolaERP.Controllers
         }
 
         [HttpPost]
-        public async Task<ApiResponse<Token>> Login(LoginRequestDto dto)
+        public async Task<ApiResponse<AccountResponseDto>> Login(LoginRequestDto dto)
         {
             var user = await _userManager.FindByNameAsync(dto.Email);
 
             if (user == null)
-                return ApiResponse<Token>.Fail("User not found", 404);
+                return ApiResponse<AccountResponseDto>.Fail("User not found", 404);
 
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, true, false);
 
             if (signInResult.Succeeded)
             {
                 Kernel.CurrentUserId = user.Id;
-                return ApiResponse<Token>.Success(await _tokenHandler.GenerateJwtTokenAsync(user, 1), 200);
+                return ApiResponse<AccountResponseDto>.Success(new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2), User = _mapper.Map<UserDto>(user) }, 200);
             }
-            return ApiResponse<Token>.Fail("User cant sign in", 403);
+            return ApiResponse<AccountResponseDto>.Fail("User cant sign in", 403);
         }
 
         [HttpPost]
-        public async Task<ApiResponse<Token>> Register(UserDto dto)
+        public async Task<ApiResponse<AccountResponseDto>> Register(UserDto dto)
         {
             var result = await _userService.AddAsync(dto);
+            if (result != null)
+                return ApiResponse<AccountResponseDto>.Success(new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2), User = result }, 200);
 
-            //return result ? ApiResponse<Token>.Success(_tokenHandler.GenerateJwtTokenAsync()):
+            return null;
+
         }
 
         [HttpPut]

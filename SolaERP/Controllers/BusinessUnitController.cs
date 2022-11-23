@@ -18,7 +18,7 @@ namespace SolaERP.Controllers
         }
 
         [HttpGet]
-        public ApiResponse<List<BusinessUnitsAllDto>> GetBusinessUnitList()
+        public async Task<ApiResponse<List<BusinessUnitsAllDto>>> GetBusinessUnitList()
         {
             return await _businessUnitService.GetAllAsync();
         }

@@ -8,7 +8,6 @@ namespace SolaERP.Infrastructure.Dtos.BusinessUnit
 {
     public class BusinessUnitsDto : BaseBusinessUnitDto
     {
-        public string BusinessUnitCode { get; set; }
-        public string BusinessUnitName { get; set; }
+    
     }
 }

@@ -13,7 +13,7 @@ namespace SolaERP.Application.Services
         private readonly IBusinessUnitRepository _businessUnitRepository;
         private IMapper _mapper;
 
-        public BusinessUnitService(IBusinessUnitRepository businessUnitRepository,IMapper mapper)
+        public BusinessUnitService(IBusinessUnitRepository businessUnitRepository, IMapper mapper)
         {
             _businessUnitRepository = businessUnitRepository;
             _mapper = mapper;
@@ -24,30 +24,25 @@ namespace SolaERP.Application.Services
             throw new NotImplementedException();
         }
 
-        public ApiResponse<List<BusinessUnitsAllDto>> GetAll()
+        public Task<BusinessUnitsDto> AddAsync(BusinessUnitsDto model)
         {
-            var businessUnits = _businessUnitRepository.GetAllAsync();
+            throw new NotImplementedException();
+        }
+
+        public async Task<ApiResponse<List<BusinessUnitsAllDto>>> GetAllAsync()
+        {
+            var businessUnits = await _businessUnitRepository.GetAllAsync();
             var dto = _mapper.Map<List<BusinessUnitsAllDto>>(businessUnits);
 
             return ApiResponse<List<BusinessUnitsAllDto>>.Success(dto, 200);
         }
 
-        public Task<ApiResponse<List<BusinessUnitsAllDto>>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
         public ApiResponse<List<BusinessUnitsDto>> GetBusinessUnitListByUserId()
         {
-            var businessUnits = await _businessUnitRepository.GetAllAsync();
-            var dto = _mapper.Map<List<BusinessUnitsDto>>(businessUnits);
+            //var businessUnits = await _businessUnitRepository.GetAllAsync();
+            //var dto = _mapper.Map<List<BusinessUnitsDto>>(businessUnits);
 
-            return ApiResponse<List<BusinessUnitsDto>>.Success(dto, 200);
-        }
-
-        public Task<ApiResponse<bool>> RemoveAsync(BusinessUnitsDto model)
-        {
-            throw new NotImplementedException();
+            return ApiResponse<List<BusinessUnitsDto>>.Success(null, 200);
         }
 
         public Task<ApiResponse<bool>> RemoveAsync(BusinessUnitsAllDto model)
@@ -55,14 +50,17 @@ namespace SolaERP.Application.Services
             throw new NotImplementedException();
         }
 
-        public Task<ApiResponse<bool>> UpdateAsync(BusinessUnitsDto model)
-        {
-            throw new NotImplementedException();
-        }
 
         public Task<ApiResponse<bool>> UpdateAsync(BusinessUnitsAllDto model)
         {
             throw new NotImplementedException();
         }
+
+        Task<BusinessUnitsAllDto> ICrudService<BusinessUnitsAllDto>.AddAsync(BusinessUnitsAllDto model)
+        {
+            throw new NotImplementedException();
+        }
+
+      
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using SolaERP.Infrastructure.Dtos.Auth;
+using System.Text.Json.Serialization;
 
 namespace SolaERP.Infrastructure.Dtos
 {
@@ -6,7 +7,6 @@ namespace SolaERP.Infrastructure.Dtos
     {
         private ApiResponse()
         {
-
         }
 
         public T Data { get; set; }

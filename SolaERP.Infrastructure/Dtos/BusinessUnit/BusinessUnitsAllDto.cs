@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Infrastructure.Dtos.BusinessUnit
 {
-    public class BusinessUnitsAllDto : BaseBusinessUnitDto
+    public class BusinessUnitsAllDto 
     {
-        public string BusinessUnitCode { get; set; }
-        public string BusinessUnitName { get; set; }
         public string TaxId { get; set; }
         public string Address { get; set; }
         public string CountryCode { get; set; }

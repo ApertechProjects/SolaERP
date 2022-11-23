@@ -27,7 +27,7 @@ namespace SolaERP.Application.Services
             _tokenHandler = tokenHandler;
         }
 
-        public async Task<ApiResponse<bool>> AddAsync(UserDto model)
+        public async Task<UserDto> AddAsync(UserDto model)
         {
             if (model.PasswordHash != model.ConfirmPasswordHash)
                 throw new InvalidOperationException("Password doesn't match with confirm password");
@@ -46,12 +46,12 @@ namespace SolaERP.Application.Services
             if (result)
             {
                 User test = await _userRepository.GetLastInsertedUserAsync();
+                UserDto userDto = _mapper.Map<UserDto>(test);
                 Kernel.CurrentUserId = test.Id;
-                return ApiResponse<Token>.Success(await _tokenHandler.GenerateJwtTokenAsync(test, 2), 200);
+                return userDto;
             }
-            return ApiResponse<Token>.Fail("User Cant added", 400);
+            return null;
         }
-
         public async Task<ApiResponse<List<UserDto>>> GetAllAsync()
         {
             var users = await _userRepository.GetAllAsync();
@@ -59,7 +59,6 @@ namespace SolaERP.Application.Services
 
             return ApiResponse<List<UserDto>>.Success(dto, 200);
         }
-
         public async Task<ApiResponse<bool>> UpdateAsync(UserDto model)
         {
             User user = await _userRepository.GetByUserNameAsync(model.UserName);
@@ -70,7 +69,6 @@ namespace SolaERP.Application.Services
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }
-
         public async Task<ApiResponse<bool>> RemoveAsync(UserDto model)
         {
             var user = _mapper.Map<User>(model);

@@ -6,7 +6,7 @@ namespace SolaERP.Infrastructure.Services
 {
     public interface ITokenHandler
     {
-        Task<Token> GenerateJwtTokenAsync(User dto, int days);
-        IEnumerable<Claim> GetClaims(User dto);
+        Task<Token> GenerateJwtTokenAsync(int days);
+
     }
 }

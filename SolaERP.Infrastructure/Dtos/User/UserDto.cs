@@ -1,4 +1,5 @@
-﻿using SolaERP.Infrastructure.Enums;
+﻿using SolaERP.Infrastructure.Dtos.Auth;
+using SolaERP.Infrastructure.Enums;
 
 namespace SolaERP.Infrastructure.Dtos.UserDto
 {
