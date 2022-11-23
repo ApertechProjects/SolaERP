@@ -1,5 +1,4 @@
 ﻿using SolaERP.Application.Services;
-using SolaERP.Business.Dtos.EntityDtos.BU;
 using SolaERP.DataAccess.DataAcces.SqlServer;
 using SolaERP.DataAccess.DataAccess.SqlServer;
 using SolaERP.DataAccess.Factories;
@@ -11,7 +10,7 @@ namespace SolaERP.Extensions
     /// <summary>
     /// This class is container for DataAcces Services 
     /// </summary>
-    public static class DataAccessExtension
+    public static class ServiceRegistrationsExtensions
     {
         public static void UseSqlDataAccessServices(this WebApplicationBuilder builder)
         {

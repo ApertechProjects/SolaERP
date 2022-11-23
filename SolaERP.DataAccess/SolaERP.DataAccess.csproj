@@ -7,15 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DataAccess\EmailServer\**" />
+    <EmbeddedResource Remove="DataAccess\EmailServer\**" />
+    <None Remove="DataAccess\EmailServer\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SolaERP.Infrastructure\SolaERP.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DataAccess\EmailServer\" />
   </ItemGroup>
 
 </Project>

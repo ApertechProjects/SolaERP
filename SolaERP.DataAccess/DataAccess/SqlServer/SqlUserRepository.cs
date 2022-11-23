@@ -123,6 +123,25 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             });
             return result;
         }
+        public async Task<User> GetLastInsertedUserAsync()
+        {
+            var result = await Task.Run(() =>
+            {
+                using (var command = _unitOfWork.CreateCommand())
+                {
+                    command.CommandText = "SELECT * FROM GET_LAST_INSERTED_USER";
+                    using var reader = command.ExecuteReader();
+
+                    User user = new User();
+                    if (reader.Read())
+                    {
+                        user = reader.GetByEntityStructure<User>();
+                    }
+                    return user;
+                }
+            });
+            return result;
+        }
         public void Remove(User entity)
         {
             using (var command = _unitOfWork.CreateCommand())

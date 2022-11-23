@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using SolaERP.Infrastructure.Dtos.Auth;
+using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Services;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
+
 
 namespace SolaERP.Application.Services
 {
@@ -16,7 +19,7 @@ namespace SolaERP.Application.Services
             _configuration = configuration;
         }
 
-        public async Task<Token> GenerateJwtTokenAsync(int minutes)
+        public async Task<Token> GenerateJwtTokenAsync(User user, int minutes)
         {
             Token token = new Token();
             return await Task.Run(() =>
@@ -32,6 +35,8 @@ namespace SolaERP.Application.Services
                     Expires = token.Expiration,
                     NotBefore = DateTime.UtcNow,
                     SigningCredentials = signingCredentials,
+                    Subject = new ClaimsIdentity(claims: GetClaims(user))
+
                 };
 
                 JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
@@ -43,5 +48,13 @@ namespace SolaERP.Application.Services
             });
         }
 
+        public IEnumerable<Claim> GetClaims(User user)
+        {
+            return new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
+                new Claim(ClaimTypes.Email,user.Email),
+            };
+        }
     }
 }
