@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Services;
 using SolaERP.Infrastructure.Dtos;
@@ -21,7 +20,7 @@ namespace SolaERP.Controllers
         [HttpGet]
         public ApiResponse<List<BusinessUnitsAllDto>> GetBusinessUnitList()
         {
-            return _businessUnitService.GetAll();
+            return await _businessUnitService.GetAllAsync();
         }
 
         [HttpGet]

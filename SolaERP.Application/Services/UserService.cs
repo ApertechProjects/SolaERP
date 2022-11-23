@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Dtos;
 using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.UserDto;
@@ -33,7 +34,7 @@ namespace SolaERP.Application.Services
 
             var userExist = await _userRepository.GetByUserNameAsync(model.UserName);
 
-            model.PasswordHash = Utils.SecurityUtil.ComputeSha256Hash(model.PasswordHash);
+            model.PasswordHash = SecurityUtil.ComputeSha256Hash(model.PasswordHash);
             var user = _mapper.Map<User>(model);
 
             Guid guid = Guid.NewGuid();
@@ -42,7 +43,13 @@ namespace SolaERP.Application.Services
             user.PhoneNumberConfirmed = true;
 
             var result = await _userRepository.AddAsync(user);
-            return ApiResponse<bool>.Success(await _tokenHandler.GenerateJwtTokenAsync(2), 200);
+            if (result)
+            {
+                User test = await _userRepository.GetLastInsertedUserAsync();
+                Kernel.CurrentUserId = test.Id;
+                return ApiResponse<Token>.Success(await _tokenHandler.GenerateJwtTokenAsync(test, 2), 200);
+            }
+            return ApiResponse<Token>.Fail("User Cant added", 400);
         }
 
         public async Task<ApiResponse<List<UserDto>>> GetAllAsync()

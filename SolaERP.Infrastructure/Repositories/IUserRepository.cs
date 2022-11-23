@@ -6,5 +6,6 @@ namespace SolaERP.Infrastructure.Repositories
     {
         Task<User> GetByUserNameAsync(string userName);
         User GetByEmail(string email);
+        Task<User> GetLastInsertedUserAsync();
     }
 }

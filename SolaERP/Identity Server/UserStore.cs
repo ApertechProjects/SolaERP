@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Repositories;
 
@@ -51,6 +52,7 @@ namespace SolaERP.Application.Identity_Server
 
         public async Task<string> GetUserIdAsync(User user, CancellationToken cancellationToken)
         {
+            Kernel.CurrentUserId = user.Id;
             return await Task.Run(() => { return user.Id.ToString(); });
         }
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Services;
+using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Dtos;
 using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.UserDto;
@@ -51,8 +52,10 @@ namespace SolaERP.Controllers
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, true, false);
 
             if (signInResult.Succeeded)
-                return ApiResponse<Token>.Success(await _tokenHandler.GenerateJwtTokenAsync(1), 200);
-
+            {
+                Kernel.CurrentUserId = user.Id;
+                return ApiResponse<Token>.Success(await _tokenHandler.GenerateJwtTokenAsync(user, 1), 200);
+            }
             return ApiResponse<Token>.Fail("User cant sign in", 403);
         }
 
