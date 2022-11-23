@@ -1,14 +1,7 @@
 ﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Dtos.BusinessUnit;
 using SolaERP.Infrastructure.Entities.BusinessUnits;
 using SolaERP.Infrastructure.Repositories;
-using SolaERP.Infrastructure.Services;
 using SolaERP.Infrastructure.UnitOfWork;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -20,26 +13,30 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public bool Add(BusinessUnits entity)
+        public Task<bool> AddAsync(BusinessUnits entity)
         {
             throw new NotImplementedException();
         }
 
-        public List<BusinessUnits> GetAllAsync()
+        public Task<List<BusinessUnits>> GetAllAsync()
         {
-            using(var command = _unitOfWork.CreateCommand())
+            var result = Task.Run(() =>
             {
-                command.CommandText = "Select * from dbo.VW_BusinessUnits_List";
-                using var reader = command.ExecuteReader();
-
-                List<BusinessUnits> businessUnits = new List<BusinessUnits>();
-
-                while (reader.Read())
+                using (var command = _unitOfWork.CreateCommand())
                 {
-                    businessUnits.Add(reader.GetByEntityStructure<BusinessUnits>());
+                    command.CommandText = "Select * from dbo.VW_BusinessUnits_List";
+                    using var reader = command.ExecuteReader();
+
+                    List<BusinessUnits> businessUnits = new List<BusinessUnits>();
+
+                    while (reader.Read())
+                    {
+                        businessUnits.Add(reader.GetByEntityStructure<BusinessUnits>());
+                    }
+                    return businessUnits;
                 }
-                return businessUnits;
-            }
+            });
+            return result;
         }
 
         public Task<BusinessUnits> GetByIdAsync(int id)

@@ -6,7 +6,6 @@ using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Repositories;
 using SolaERP.Infrastructure.Services;
 using SolaERP.Infrastructure.UnitOfWork;
-using System.Data;
 
 namespace SolaERP.Application.Services
 {
@@ -16,7 +15,6 @@ namespace SolaERP.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ITokenHandler _tokenHandler;
-        private readonly IDbConnection _connection;
         public UserService(IUserRepository userRepository,
                            IUnitOfWork unitOfWork,
                            IMapper mapper,
@@ -34,31 +32,28 @@ namespace SolaERP.Application.Services
                 throw new InvalidOperationException("Password doesn't match with confirm password");
 
             var userExist = await _userRepository.GetByUserNameAsync(model.UserName);
-            return await Task.Run(async () =>
-            {
-                model.PasswordHash = Utils.SecurityUtil.ComputeSha256Hash(model.PasswordHash);
-                var user = _mapper.Map<User>(model);
 
-                Guid guid = Guid.NewGuid();
-                user.UserToken = guid;
-                user.EmailConfirmed = true;
-                user.PhoneNumberConfirmed = true;
+            model.PasswordHash = Utils.SecurityUtil.ComputeSha256Hash(model.PasswordHash);
+            var user = _mapper.Map<User>(model);
 
-                var result = _userRepository.Add(user);
-                return ApiResponse<Token>.Success(await _tokenHandler.GenerateJwtTokenAsync(2), 200);
-            });
+            Guid guid = Guid.NewGuid();
+            user.UserToken = guid;
+            user.EmailConfirmed = true;
+            user.PhoneNumberConfirmed = true;
 
+            var result = await _userRepository.AddAsync(user);
+            return ApiResponse<Token>.Success(await _tokenHandler.GenerateJwtTokenAsync(2), 200);
         }
 
-        public ApiResponse<List<UserDto>> GetAll()
+        public async Task<ApiResponse<List<UserDto>>> GetAllAsync()
         {
-            var users = _userRepository.GetAllAsync();
+            var users = await _userRepository.GetAllAsync();
             var dto = _mapper.Map<List<UserDto>>(users);
 
             return ApiResponse<List<UserDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<bool>> UpdateUser(UserDto model)
+        public async Task<ApiResponse<bool>> UpdateAsync(UserDto model)
         {
             User user = await _userRepository.GetByUserNameAsync(model.UserName);
 
@@ -69,12 +64,12 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(200);
         }
 
-        public ApiResponse<bool> RemoveUser(UserDto model)
+        public async Task<ApiResponse<bool>> RemoveAsync(UserDto model)
         {
             var user = _mapper.Map<User>(model);
             _userRepository.Remove(user);
 
-            _unitOfWork.SaveChanges();
+            await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }
 

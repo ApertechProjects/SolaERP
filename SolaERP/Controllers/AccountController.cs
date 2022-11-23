@@ -13,9 +13,9 @@ namespace SolaERP.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly UserService _userService;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IUserService _userService;
         private readonly ITokenHandler _tokenHandler;
         public AccountController(UserService userService,
                                  SignInManager<User> signInManager,
@@ -30,9 +30,9 @@ namespace SolaERP.Controllers
 
 
         [HttpGet]
-        public ApiResponse<List<UserDto>> GetAllUsers()
+        public async Task<ApiResponse<List<UserDto>>> GetAllUsers()
         {
-            return _userService.GetAll();
+            return await _userService.GetAllAsync();
         }
 
         [HttpPost]
@@ -59,19 +59,19 @@ namespace SolaERP.Controllers
         [HttpPut]
         public async Task<ApiResponse<bool>> UpdateUser(UserDto dto)
         {
-            return await _userService.UpdateUser(dto);
+            return await _userService.UpdateAsync(dto);
         }
 
         [HttpDelete]
-        public ApiResponse<bool> RemoveUser(UserDto dto)
+        public async Task<ApiResponse<bool>> RemoveUser(UserDto dto)
         {
-            return _userService.RemoveUser(dto);
+            return await _userService.RemoveAsync(dto);
         }
 
         [HttpPost]
-        public ApiResponse<bool> Logout()
+        public async Task<ApiResponse<bool>> Logout()
         {
-            _signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
             return ApiResponse<bool>.Success(true, 200);
         }
     }

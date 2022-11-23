@@ -2,14 +2,8 @@
 using SolaERP.Infrastructure.Dtos;
 using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.BusinessUnit;
-using SolaERP.Infrastructure.Entities.BusinessUnits;
 using SolaERP.Infrastructure.Repositories;
 using SolaERP.Infrastructure.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.Application.Services
 {
@@ -18,7 +12,7 @@ namespace SolaERP.Application.Services
         private readonly IBusinessUnitRepository _businessUnitRepository;
         private IMapper _mapper;
 
-        public BusinessUnitService(IBusinessUnitRepository businessUnitRepository,IMapper mapper)
+        public BusinessUnitService(IBusinessUnitRepository businessUnitRepository, IMapper mapper)
         {
             _businessUnitRepository = businessUnitRepository;
             _mapper = mapper;
@@ -29,12 +23,22 @@ namespace SolaERP.Application.Services
             throw new NotImplementedException();
         }
 
-        public ApiResponse<List<BusinessUnitsDto>> GetAll()
+        public async Task<ApiResponse<List<BusinessUnitsDto>>> GetAllAsync()
         {
-            var businessUnits = _businessUnitRepository.GetAllAsync();
+            var businessUnits = await _businessUnitRepository.GetAllAsync();
             var dto = _mapper.Map<List<BusinessUnitsDto>>(businessUnits);
 
             return ApiResponse<List<BusinessUnitsDto>>.Success(dto, 200);
+        }
+
+        public Task<ApiResponse<bool>> RemoveAsync(BusinessUnitsDto model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApiResponse<bool>> UpdateAsync(BusinessUnitsDto model)
+        {
+            throw new NotImplementedException();
         }
     }
 }
