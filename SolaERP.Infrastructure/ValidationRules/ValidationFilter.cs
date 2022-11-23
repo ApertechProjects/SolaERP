@@ -23,6 +23,9 @@ namespace SolaERP.Infrastructure.ValidationRules
             {
                 var errorText = modelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList()[0][0].ErrorMessage;
                 context.Result = new ObjectResult(ApiResponse<bool>.Fail(errorText, 400));
+
+                //var errorText = modelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();
+
             }
         }
     }

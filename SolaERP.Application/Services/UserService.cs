@@ -32,6 +32,7 @@ namespace SolaERP.Application.Services
             if (model.PasswordHash != model.ConfirmPasswordHash)
                 throw new InvalidOperationException("Password doesn't match with confirm password");
 
+
             var userExist = await _userRepository.GetByUserNameAsync(model.UserName);
 
             model.PasswordHash = SecurityUtil.ComputeSha256Hash(model.PasswordHash);

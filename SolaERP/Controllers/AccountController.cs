@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -26,14 +27,23 @@ namespace SolaERP.Controllers
         public AccountController(UserService userService,
                                  SignInManager<User> signInManager,
                                  UserManager<User> userManager,
-                                 ITokenHandler handler)
+                                 ITokenHandler handler,
+                                 IMapper mapper)
         {
             _userService = userService;
             _signInManager = signInManager;
             _userManager = userManager;
             _tokenHandler = handler;
+            _mapper = mapper;
         }
 
+
+        [HttpGet]
+        [Authorize]
+        public int GetCurrentUserId()
+        {
+            return Kernel.CurrentUserId;
+        }
 
         [HttpGet]
         public async Task<ApiResponse<List<UserDto>>> GetAllUsers()
@@ -54,7 +64,8 @@ namespace SolaERP.Controllers
             if (signInResult.Succeeded)
             {
                 Kernel.CurrentUserId = user.Id;
-                return ApiResponse<AccountResponseDto>.Success(new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2), User = _mapper.Map<UserDto>(user) }, 200);
+                return ApiResponse<AccountResponseDto>.Success(
+                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2), AccountUser = _mapper.Map<UserDto>(user) }, 200);
             }
             return ApiResponse<AccountResponseDto>.Fail("User cant sign in", 403);
         }
@@ -64,7 +75,8 @@ namespace SolaERP.Controllers
         {
             var result = await _userService.AddAsync(dto);
             if (result != null)
-                return ApiResponse<AccountResponseDto>.Success(new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2), User = result }, 200);
+                return ApiResponse<AccountResponseDto>.Success(
+                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2), AccountUser = result }, 200);
 
             return null;
 
