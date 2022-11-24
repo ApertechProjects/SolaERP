@@ -24,18 +24,21 @@ namespace SolaERP.Controllers
         private readonly IUserService _userService;
         private readonly ITokenHandler _tokenHandler;
         private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
 
-        public AccountController(UserService userService,
+        public AccountController(UserManager<User> userManager,
                                  SignInManager<User> signInManager,
-                                 UserManager<User> userManager,
+                                 IUserService userService,
                                  ITokenHandler handler,
-                                 IMapper mapper)
+                                 IMapper mapper,
+                                 IEmailService emailService)
         {
             _userService = userService;
             _signInManager = signInManager;
             _userManager = userManager;
             _tokenHandler = handler;
             _mapper = mapper;
+            _emailService = emailService;
         }
 
 
@@ -75,6 +78,9 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<ApiResponse<AccountResponseDto>> Register(UserDto dto)
         {
+            bool isValid = _emailService.ValidateEmail(dto.Email);
+
+
             var result = await _userService.AddAsync(dto);
             if (result != null)
                 return ApiResponse<AccountResponseDto>.Success(
