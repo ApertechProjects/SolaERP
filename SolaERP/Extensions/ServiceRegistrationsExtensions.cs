@@ -20,6 +20,8 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IUnitOfWork, SqlUnitOfWork>();
             builder.Services.AddScoped<UserService, UserService>();
             builder.Services.AddScoped<IUserRepository, SqlUserRepository>();
+            builder.Services.AddScoped<IGroupRepository, SqlGroupRepository>();
+            builder.Services.AddScoped<GroupService, GroupService>();
 
             builder.Services.AddScoped<BusinessUnitService, BusinessUnitService>();
             builder.Services.AddScoped<IBusinessUnitRepository, SqlBusinessUnitRepository>();

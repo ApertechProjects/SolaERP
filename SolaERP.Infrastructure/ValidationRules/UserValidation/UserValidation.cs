@@ -16,7 +16,8 @@ namespace SolaERP.Infrastructure.ValidationRules.UserValidation
             RuleFor(x => x.FullName).NotEmpty().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.Email).NotEmpty().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.PasswordHash).NotEmpty().WithMessage("Please, enter {PropertyName}");
-            RuleFor(x => x.ConfirmPasswordHash).NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.ConfirmPasswordHash).NotEmpty().WithMessage("Please, enter {PropertyName}").MinimumLength(7);
+            RuleFor(x => x.PasswordHash).MinimumLength(7);
         }
     }
 }
