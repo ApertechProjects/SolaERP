@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SolaERP.Application.Exceptions;
 using SolaERP.Application.Services;
 using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Dtos;
@@ -57,7 +58,7 @@ namespace SolaERP.Controllers
             var user = await _userManager.FindByNameAsync(dto.Email);
 
             if (user == null)
-                return ApiResponse<AccountResponseDto>.Fail("User not found", 404);
+                throw new UserException($"User: {dto.Email} not found");
 
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, true, false);
 
@@ -67,7 +68,8 @@ namespace SolaERP.Controllers
                 return ApiResponse<AccountResponseDto>.Success(
                     new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2), AccountUser = _mapper.Map<UserDto>(user) }, 200);
             }
-            return ApiResponse<AccountResponseDto>.Fail("User cant sign in", 403);
+
+            throw new UserException("Email or password is incorrect");
         }
 
         [HttpPost]
