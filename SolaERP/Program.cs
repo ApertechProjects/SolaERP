@@ -1,3 +1,17 @@
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Models;
+using SolaERP.Application.Identity_Server;
+using SolaERP.Application.Mappers;
+using SolaERP.Application.Services;
+using SolaERP.Business.Models;
+using SolaERP.Extensions;
+using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Services;
+using SolaERP.Infrastructure.ValidationRules;
+using SolaERP.Middlewares;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +37,8 @@ builder.Services.AddCors(options =>
         .Build());
 });
 builder.Services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
-builder.Host.UseSerilog();
+
+
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
