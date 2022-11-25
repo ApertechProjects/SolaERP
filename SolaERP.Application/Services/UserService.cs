@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SolaERP.Application.Exceptions;
 using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Dtos;
 using SolaERP.Infrastructure.Dtos.Auth;
@@ -7,6 +8,8 @@ using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Repositories;
 using SolaERP.Infrastructure.Services;
 using SolaERP.Infrastructure.UnitOfWork;
+using System.Net.Sockets;
+using System.Net;
 
 namespace SolaERP.Application.Services
 {
@@ -29,9 +32,8 @@ namespace SolaERP.Application.Services
 
         public async Task<UserDto> AddAsync(UserDto model)
         {
-            if (model.PasswordHash != model.ConfirmPasswordHash)
-                throw new InvalidOperationException("Password doesn't match with confirm password");
-
+           if (model.PasswordHash != model.ConfirmPasswordHash)
+                throw new UserException("Password doesn't match with confirm password");
 
             var userExist = await _userRepository.GetByUserNameAsync(model.UserName);
 
