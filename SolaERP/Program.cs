@@ -36,7 +36,6 @@ builder.Services.AddCors(options =>
         .AllowAnyOrigin()
         .Build());
 });
-builder.Services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
 
 
 builder.Services.AddAuthentication(x =>
