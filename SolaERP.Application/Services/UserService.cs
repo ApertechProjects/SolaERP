@@ -32,7 +32,7 @@ namespace SolaERP.Application.Services
 
         public async Task<UserDto> AddAsync(UserDto model)
         {
-           if (model.PasswordHash != model.ConfirmPasswordHash)
+            if (model.PasswordHash != model.ConfirmPasswordHash)
                 throw new UserException("Password doesn't match with confirm password");
 
             var userExist = await _userRepository.GetByUserNameAsync(model.UserName);
@@ -81,5 +81,12 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(200);
         }
 
+        public async Task<UserDto> GetByUserId(int userId)
+        {
+            var userDatas = await _userRepository.GetByUserId(userId);
+            var userDto = _mapper.Map<UserDto>(userDatas);
+            return userDto;
+
+        }
     }
 }

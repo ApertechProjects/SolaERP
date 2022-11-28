@@ -29,7 +29,7 @@ namespace SolaERP.Application.Services
                         SocketType.Stream, ProtocolType.Tcp);
 
                 if (endPt != null)
-                    s.Connect(endPt);
+                    return true;
                 else
                     return false;
             }

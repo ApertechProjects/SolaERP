@@ -4,5 +4,6 @@ namespace SolaERP.Infrastructure.Services
 {
     public interface IUserService : ICrudService<UserDto>
     {
+        Task<UserDto> GetByUserId(int userId);
     }
 }
