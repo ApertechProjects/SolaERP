@@ -80,13 +80,14 @@ namespace SolaERP.Controllers
         {
             bool isValid = _emailService.ValidateEmail(dto.Email);
 
-
-            var result = await _userService.AddAsync(dto);
-            if (result != null)
-                return ApiResponse<AccountResponseDto>.Success(
-                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2), AccountUser = result }, 200);
-
-            return null;
+            if (isValid)
+            {
+                var result = await _userService.AddAsync(dto);
+                if (result != null)
+                    return ApiResponse<AccountResponseDto>.Success(
+                        new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2), AccountUser = result }, 200);
+            }
+            return ApiResponse<AccountResponseDto>.Fail("Email not found exception", 400);
 
         }
 
