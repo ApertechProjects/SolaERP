@@ -90,6 +90,12 @@ namespace SolaERP.Controllers
 
         }
 
+        [HttpGet]
+        public async Task<UserDto> GetByUserId()
+        {
+            return await _userService.GetByUserId(Kernel.CurrentUserId);
+        }
+
         [HttpPut]
         public async Task<ApiResponse<bool>> UpdateUser(UserDto dto)
         {

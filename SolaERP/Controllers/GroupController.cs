@@ -25,6 +25,10 @@ namespace SolaERP.Controllers
             return await _groupService.GetAllAsync();
         }
 
-        //[HttpDelete("{gr}")]
+        [HttpDelete]
+        public async Task<ApiResponse<bool>> DeleteGroups(GroupsDto groupsDto)
+        {
+            return await _groupService.RemoveAsync(groupsDto);
+        }
     }
 }

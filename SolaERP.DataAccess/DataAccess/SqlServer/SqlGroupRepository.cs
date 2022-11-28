@@ -51,7 +51,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public void Remove(Groups entity)
         {
-            throw new NotImplementedException();
+            using (var command = _unitOfWork.CreateCommand())
+            {
+                command.CommandText = "Delete from Config.AppUser Where Id = @Id";
+                IDbDataParameter dbDataParameter = command.CreateParameter();
+                dbDataParameter.ParameterName = "@Id";
+                dbDataParameter.Value = entity.GroupId;
+                command.Parameters.Add(dbDataParameter);
+
+                command.ExecuteNonQuery();
+            }
         }
 
         public void Update(Groups entity)
