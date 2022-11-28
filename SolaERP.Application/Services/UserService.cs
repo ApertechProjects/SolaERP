@@ -86,7 +86,6 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<bool>> UpdateUserAsync(UserUpdateDto userUpdateDto)
         {
-            //User user = await _userRepository.GetByIdAsync(userUpdateDto.Id);
             var result = _mapper.Map<User>(userUpdateDto);
             _userRepository.Update(result);
             await _unitOfWork.SaveChangesAsync();
