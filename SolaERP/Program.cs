@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +10,9 @@ using SolaERP.Business.Models;
 using SolaERP.Extensions;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Services;
+using SolaERP.Infrastructure.ValidationRules;
 using SolaERP.Middlewares;
 using System.Text;
-using SolaERP.Infrastructure.ValidationRules;
-using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,8 +60,6 @@ builder.Services.AddAuthentication(x =>
          LifetimeValidator = (notBefore, expires, securityToken, validationParametrs) => expires != null ? expires > DateTime.UtcNow : false
      };
  });
-
-
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc($"v1", new OpenApiInfo
@@ -98,7 +96,6 @@ builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
