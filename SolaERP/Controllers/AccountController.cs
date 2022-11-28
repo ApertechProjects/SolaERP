@@ -8,6 +8,7 @@ using SolaERP.Application.Services;
 using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Dtos;
 using SolaERP.Infrastructure.Dtos.Auth;
+using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Services;
@@ -98,9 +99,9 @@ namespace SolaERP.Controllers
         }
 
         [HttpPut]
-        public async Task<ApiResponse<bool>> UpdateUser(UserDto dto)
+        public async Task<ApiResponse<bool>> UpdateUser(UserUpdateDto dto)
         {
-            return await _userService.UpdateAsync(dto);
+            return await _userService.UpdateUserAsync(dto);
         }
 
         [HttpDelete]
