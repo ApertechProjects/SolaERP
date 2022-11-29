@@ -62,7 +62,7 @@ namespace SolaERP.Controllers
             var user = await _userManager.FindByNameAsync(dto.Email);
 
             if (user == null)
-                throw new UserException($"User: {dto.Email} not found");
+                return ApiResponse<AccountResponseDto>.Fail($"User: {dto.Email} not found", 400);
 
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, true, false);
 
@@ -73,7 +73,7 @@ namespace SolaERP.Controllers
                     new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2), AccountUser = _mapper.Map<UserDto>(user) }, 200);
             }
 
-            throw new UserException("Email or password is incorrect");
+            return ApiResponse<AccountResponseDto>.Fail("Email or password is incorrect", 400);
         }
 
         [HttpPost]
