@@ -1,16 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using SolaERP.Application.Exceptions;
-using SolaERP.Application.Utils;
-using SolaERP.Infrastructure.Dtos;
-using SolaERP.Infrastructure.Dtos.Auth;
-using SolaERP.Infrastructure.Dtos.UserDto;
-using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Services;
-
-namespace SolaERP.Controllers
+﻿namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -76,12 +64,21 @@ namespace SolaERP.Controllers
         {
             bool isValid = _emailService.ValidateEmail(dto.Email);
 
-            var result = await _userService.AddAsync(dto);
-            if (result != null)
-                return ApiResponse<AccountResponseDto>.Success(
-                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2), AccountUser = result }, 200);
+            if (isValid)
+            {
+                var result = await _userService.AddAsync(dto);
+                if (result != null)
+                    return ApiResponse<AccountResponseDto>.Success(
+                        new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2), AccountUser = result }, 200);
+            }
+            return ApiResponse<AccountResponseDto>.Fail("Email not found exception", 400);
 
-            return null;
+        }
+
+        [HttpGet]
+        public async Task<UserDto> GetByUserId()
+        {
+            return await _userService.GetByUserId(Kernel.CurrentUserId);
         }
 
         [HttpPut]

@@ -52,7 +52,6 @@ namespace SolaERP.Application.Identity_Server
 
         public async Task<string> GetUserIdAsync(User user, CancellationToken cancellationToken)
         {
-            Kernel.CurrentUserId = user.Id;
             return await Task.Run(() => { return user.Id.ToString(); });
         }
 

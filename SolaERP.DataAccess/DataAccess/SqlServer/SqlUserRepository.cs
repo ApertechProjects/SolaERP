@@ -38,6 +38,33 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             });
             return result;
         }
+
+        public async Task<User> GetByUserId(int userId)
+        {
+            var result = await Task.Run(() =>
+            {
+                using (var command = _unitOfWork.CreateCommand())
+                {
+                    command.CommandText = "Select * from Config.AppUser where Id = @Id";
+
+                    IDbDataParameter dbDataParameter = command.CreateParameter();
+                    dbDataParameter.ParameterName = "@Id";
+                    dbDataParameter.Value = userId;
+                    command.Parameters.Add(dbDataParameter);
+
+                    using var reader = command.ExecuteReader();
+
+                    User user = new User();
+                    while (reader.Read())
+                    {
+                        user = reader.GetByEntityStructure<User>();
+                    }
+                    return user;
+                }
+            });
+            return result;
+        }
+
         public async Task<List<User>> GetAllAsync()
         {
             var result = await Task.Run(() =>
