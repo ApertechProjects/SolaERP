@@ -10,6 +10,8 @@ using SolaERP.Infrastructure.Services;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Net.Sockets;
 using System.Net;
+using SolaERP.Infrastructure.Dtos.User;
+using System.Reflection;
 
 namespace SolaERP.Application.Services
 {
@@ -64,12 +66,6 @@ namespace SolaERP.Application.Services
         }
         public async Task<ApiResponse<bool>> UpdateAsync(UserDto model)
         {
-            User user = await _userRepository.GetByUserNameAsync(model.UserName);
-
-            var result = _mapper.Map<User>(user);
-            _userRepository.Update(result);
-
-            await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }
         public async Task<ApiResponse<bool>> RemoveAsync(UserDto model)
@@ -86,7 +82,14 @@ namespace SolaERP.Application.Services
             var userDatas = await _userRepository.GetByUserId(userId);
             var userDto = _mapper.Map<UserDto>(userDatas);
             return userDto;
+        }
 
+        public async Task<ApiResponse<bool>> UpdateUserAsync(UserUpdateDto userUpdateDto)
+        {
+            var result = _mapper.Map<User>(userUpdateDto);
+            _userRepository.Update(result);
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(200);
         }
     }
 }

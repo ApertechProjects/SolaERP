@@ -182,6 +182,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.ExecuteNonQuery();
             }
         }
+
         public void Update(User entity)
         {
             string query = "Exec [dbo].[SP_UserData_U] @UserId,@FullName,@Position,@PhoneNumber,@Photo";

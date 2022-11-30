@@ -1,16 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using SolaERP.Application.Exceptions;
-using SolaERP.Application.Utils;
-using SolaERP.Business.Dtos.EntityDtos.User;
-using SolaERP.Infrastructure.Dtos;
-using SolaERP.Infrastructure.Dtos.Auth;
-using SolaERP.Infrastructure.Dtos.UserDto;
-using SolaERP.Infrastructure.Services;
-
-namespace SolaERP.Controllers
+﻿namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -58,7 +46,7 @@ namespace SolaERP.Controllers
             var user = await _userManager.FindByNameAsync(dto.Email);
 
             if (user == null)
-                throw new UserException($"User: {dto.Email} not found");
+                return ApiResponse<AccountResponseDto>.Fail($"User: {dto.Email} not found", 400);
 
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, true, false);
 
@@ -68,7 +56,8 @@ namespace SolaERP.Controllers
                 return ApiResponse<AccountResponseDto>.Success(
                     new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2), AccountUser = _mapper.Map<UserDto>(user) }, 200);
             }
-            throw new UserException("Email or password is incorrect");
+
+            return ApiResponse<AccountResponseDto>.Fail("Email or password is incorrect", 400);
         }
 
         [HttpPost]
@@ -94,9 +83,9 @@ namespace SolaERP.Controllers
         }
 
         [HttpPut]
-        public async Task<ApiResponse<bool>> UpdateUser(UserDto dto)
+        public async Task<ApiResponse<bool>> UpdateUser(UserUpdateDto dto)
         {
-            return await _userService.UpdateAsync(dto);
+            return await _userService.UpdateUserAsync(dto);
         }
 
         [HttpDelete]
