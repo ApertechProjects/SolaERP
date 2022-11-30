@@ -34,7 +34,7 @@ namespace SolaERP.Extensions
             });
         }
 
-        public static void ValidationExtension(this WebApplicationBuilder builder)
+        public static void UseValidationExtension(this WebApplicationBuilder builder)
         {
             builder.Services.AddValidatorsFromAssemblyContaining<UserValidation>();
             builder.Services.AddScoped<ValidationFilter>();

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Core;
 using SolaERP.Application.Identity_Server;
 using SolaERP.Application.Mappers;
 using SolaERP.Application.Services;
@@ -12,6 +14,7 @@ using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Services;
 using SolaERP.Infrastructure.ValidationRules;
 using SolaERP.Middlewares;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,7 +27,17 @@ builder.Services.AddSingleton<IRoleStore<Role>, RoleStore>();
 builder.Services.AddSingleton<IPasswordHasher<User>, CustomPasswordHasher>();
 builder.Services.AddEndpointsApiExplorer();
 builder.UseSqlDataAccessServices();
-builder.ValidationExtension();
+builder.UseValidationExtension();
+
+Logger _log = new LoggerConfiguration()
+   .WriteTo.File(@"logs/log.txt")
+   .WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"), "Logs",
+   autoCreateSqlTable: true
+  )
+.MinimumLevel.Error()
+.CreateLogger();
+builder.Host.UseSerilog(_log);
+
 
 builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.Configure<ApiBehaviorOptions>(config => { config.SuppressModelStateInvalidFilter = true; });
@@ -36,7 +49,6 @@ builder.Services.AddCors(options =>
         .AllowAnyOrigin()
         .Build());
 });
-builder.Services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
 
 
 builder.Services.AddAuthentication(x =>
@@ -57,6 +69,7 @@ builder.Services.AddAuthentication(x =>
          ValidAudience = builder.Configuration["Token:Audience"],
          ValidIssuer = builder.Configuration["Token:Issuer"],
          IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
+         NameClaimType = ClaimTypes.NameIdentifier,
          LifetimeValidator = (notBefore, expires, securityToken, validationParametrs) => expires != null ? expires > DateTime.UtcNow : false
      };
  });

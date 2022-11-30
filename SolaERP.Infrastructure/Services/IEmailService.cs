@@ -1,7 +1,4 @@
-﻿using SolaERP.Infrastructure.Dtos;
-using SolaERP.Infrastructure.Dtos.User;
-using SolaERP.Infrastructure.Entities.Auth;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

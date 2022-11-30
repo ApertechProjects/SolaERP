@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SolaERP.Application.Exceptions;
-using SolaERP.Application.Services;
 using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Dtos;
 using SolaERP.Infrastructure.Dtos.Auth;
@@ -12,7 +9,6 @@ using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Services;
-using System.Security.Claims;
 
 namespace SolaERP.Controllers
 {
