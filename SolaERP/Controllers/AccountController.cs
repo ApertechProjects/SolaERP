@@ -1,4 +1,16 @@
-﻿namespace SolaERP.Controllers
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using SolaERP.Application.Exceptions;
+using SolaERP.Application.Utils;
+using SolaERP.Business.Dtos.EntityDtos.User;
+using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Dtos.Auth;
+using SolaERP.Infrastructure.Dtos.UserDto;
+using SolaERP.Infrastructure.Services;
+
+namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
