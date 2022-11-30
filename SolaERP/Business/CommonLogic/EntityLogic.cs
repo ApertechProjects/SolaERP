@@ -16,8 +16,6 @@ using SolaERP.Business.Dtos.EntityDtos.Vendor;
 using SolaERP.Business.Dtos.GeneralDtos;
 using SolaERP.Business.Dtos.Wrappers;
 using SolaERP.Business.Models;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
