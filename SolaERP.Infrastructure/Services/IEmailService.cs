@@ -1,4 +1,7 @@
-﻿using System;
+﻿using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Dtos.User;
+using SolaERP.Infrastructure.Entities.Auth;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +11,8 @@ namespace SolaERP.Infrastructure.Services
 {
     public interface IEmailService
     {
-        bool ValidateEmail(string email);
-
+        bool ValidateEmail(UserResetPasswordDto dto);
+        ApiResponse<bool> SendEmailForResetPassword(UserResetPasswordDto dto);
+        ApiResponse<bool> VerifyIncomingCodeFromMail(string verifyCode);
     }
 }

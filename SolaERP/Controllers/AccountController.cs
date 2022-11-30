@@ -79,15 +79,10 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<ApiResponse<AccountResponseDto>> Register(UserDto dto)
         {
-            bool isValid = _emailService.ValidateEmail(dto.Email);
-
-            if (isValid)
-            {
-                var result = await _userService.AddAsync(dto);
-                if (result != null)
-                    return ApiResponse<AccountResponseDto>.Success(
-                        new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2), AccountUser = result }, 200);
-            }
+            var result = await _userService.AddAsync(dto);
+            if (result != null)
+                return ApiResponse<AccountResponseDto>.Success(
+                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2), AccountUser = result }, 200);
             return ApiResponse<AccountResponseDto>.Fail("Email not found exception", 400);
 
         }
@@ -115,6 +110,18 @@ namespace SolaERP.Controllers
         {
             await _signInManager.SignOutAsync();
             return ApiResponse<bool>.Success(true, 200);
+        }
+
+        [HttpPost]
+        public ApiResponse<bool> SendEmailForResetPassword(UserResetPasswordDto dto)
+        {
+            return _emailService.SendEmailForResetPassword(dto);
+        }
+
+        [HttpPost]
+        public ApiResponse<bool> VerifyIncomingCodeFromMail(string verifyCode)
+        {
+            return _emailService.VerifyIncomingCodeFromMail(verifyCode);
         }
     }
 }
