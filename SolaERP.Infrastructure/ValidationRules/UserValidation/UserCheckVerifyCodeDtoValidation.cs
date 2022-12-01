@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Infrastructure.ValidationRules.UserValidation
 {
-    public class UserResetPasswordValidation:AbstractValidator<UserResetPasswordDto>
+    public class UserCheckVerifyCodeDtoValidation:AbstractValidator<UserCheckVerifyCodeDto>
     {
-        public UserResetPasswordValidation()
+        public UserCheckVerifyCodeDtoValidation()
         {
             RuleFor(x=>x.Email).NotEmpty().WithMessage("Please, enter {PropertyName}");
         }

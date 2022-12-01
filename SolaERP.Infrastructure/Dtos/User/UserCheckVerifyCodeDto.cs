@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Infrastructure.Dtos.User
 {
-    public class UserResetPasswordDto
+    public class UserCheckVerifyCodeDto
     {
         public string Email { get; set; }
+        public string VerifyCode { get; set; }
     }
 }

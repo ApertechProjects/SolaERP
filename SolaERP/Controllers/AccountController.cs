@@ -109,15 +109,13 @@ namespace SolaERP.Controllers
         }
 
         [HttpPost]
-        public ApiResponse<bool> SendEmailForResetPassword(UserResetPasswordDto dto)
+        public ApiResponse<bool> SendEmailForResetPassword(UserCheckVerifyCodeDto dto)
         {
+            _userManager.PasswordHasher.VerifyHashedPassword(null, dto.VerifyCode, dto.VerifyCode);
             return _emailService.SendEmailForResetPassword(dto);
         }
 
-        [HttpPost]
-        public ApiResponse<bool> VerifyIncomingCodeFromMail(string verifyCode)
-        {
-            return _emailService.VerifyIncomingCodeFromMail(verifyCode);
-        }
+
+      
     }
 }

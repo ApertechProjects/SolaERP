@@ -18,36 +18,46 @@ namespace SolaERP.Application.Services
 {
     public class EmailService : IEmailService
     {
-        public ApiResponse<bool> SendEmailForResetPassword(UserResetPasswordDto dto)
+        public ApiResponse<bool> SendEmailForResetPassword(UserCheckVerifyCodeDto dto)
         {
-            using (SmtpClient smtpClient = new SmtpClient())
+            if (!string.IsNullOrEmpty(dto.Email) && string.IsNullOrEmpty(dto.VerifyCode))
             {
-                var basicCredential = new NetworkCredential("username", "password");
-                using (MailMessage message = new MailMessage())
+                using (SmtpClient smtpClient = new SmtpClient())
                 {
-                    MailAddress fromAddress = new MailAddress("test@apertech.com");
+                    var basicCredential = new NetworkCredential("username", "password");
+                    using (MailMessage message = new MailMessage())
+                    {
+                        MailAddress fromAddress = new MailAddress("test@apertech.com");
 
-                    smtpClient.Host = "mail.apertech.net";
-                    smtpClient.Port = 587;
-                    smtpClient.EnableSsl = true;
-                    smtpClient.UseDefaultCredentials = false;
-                    smtpClient.Credentials = basicCredential;
+                        smtpClient.Host = "mail.apertech.net";
+                        smtpClient.Port = 587;
+                        smtpClient.EnableSsl = true;
+                        smtpClient.UseDefaultCredentials = false;
+                        smtpClient.Credentials = basicCredential;
 
-                    message.From = fromAddress;
-                    message.Subject = "Reset Password";
-                    message.IsBodyHtml = true;
-                    Random rand = new Random();
-                    int securityCode = rand.Next(100000, 999999);
-                    message.Body = securityCode.ToString();
-                    message.To.Add(dto.Email);
-                    smtpClient.Send(message);
-                    Kernel.PasswordForReset = securityCode.ToString();
-                    return ApiResponse<bool>.Success(200);
+                        message.From = fromAddress;
+                        message.Subject = "Reset Password";
+                        message.IsBodyHtml = true;
+                        Random rand = new Random();
+                        Kernel.PasswordForReset = rand.Next(100000, 999999).ToString();
+                        message.Body = Kernel.PasswordForReset;
+                        message.To.Add(dto.Email);
+                        smtpClient.Send(message);
+                    }
                 }
+                return ApiResponse<bool>.Success(200);
             }
+            if (!string.IsNullOrEmpty(dto.Email) && !string.IsNullOrEmpty(dto.VerifyCode))
+            {
+                dto.VerifyCode= dto.VerifyCode.Trim();
+                if (dto.VerifyCode == Kernel.PasswordForReset.ToString())
+                    return ApiResponse<bool>.Success(200);
+                return ApiResponse<bool>.Fail("Verify code is not correct", 400);
+            }
+            return ApiResponse<bool>.Success(200);
         }
 
-        public bool ValidateEmail(UserResetPasswordDto dto)
+        public bool ValidateEmail(UserCheckVerifyCodeDto dto)
         {
             if (string.IsNullOrEmpty(dto.Email))
                 return false;
@@ -71,12 +81,6 @@ namespace SolaERP.Application.Services
 
         }
 
-        public ApiResponse<bool> VerifyIncomingCodeFromMail(string verifyCode)
-        {
-            verifyCode = verifyCode.Trim();
-            if (verifyCode == Kernel.PasswordForReset)
-                return ApiResponse<bool>.Success(200);
-            return ApiResponse<bool>.Fail("Verify code is not correct", 400);
-        }
+
     }
 }

@@ -76,14 +76,12 @@ namespace SolaERP.Application.Services
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }
-
         public async Task<UserDto> GetByUserId(int userId)
         {
             var userDatas = await _userRepository.GetByUserId(userId);
             var userDto = _mapper.Map<UserDto>(userDatas);
             return userDto;
         }
-
         public async Task<ApiResponse<bool>> UpdateUserAsync(UserUpdateDto userUpdateDto)
         {
             var result = _mapper.Map<User>(userUpdateDto);
@@ -91,5 +89,17 @@ namespace SolaERP.Application.Services
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }
+        public Task<ApiResponse<bool>> UpdateUserPassword(UserUpdatePasswordDto userUpdatePasswordDto)
+        {
+            
+            if (userUpdatePasswordDto.PasswordHash != userUpdatePasswordDto.ConfirmPasswordHash)
+                throw new UserException("Password doesn't match with confirm password");
+
+            var result = _mapper.Map<User>(userUpdatePasswordDto);
+            _userRepository.Update
+        }
+
+
+
     }
 }
