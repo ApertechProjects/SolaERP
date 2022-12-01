@@ -12,8 +12,8 @@ namespace SolaERP.Infrastructure.ValidationRules.UserValidation
     {
         public UserUpdatePasswordValidation()
         {
-            RuleFor(x => x.Password).MinimumLength(7);
-            RuleFor(x => x.ConfirmPassword).MinimumLength(7);
+            RuleFor(x => x.PasswordHash).MinimumLength(7);
+            RuleFor(x => x.ConfirmPasswordHash).MinimumLength(7);
         }
     }
 }

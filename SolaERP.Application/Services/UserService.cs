@@ -89,14 +89,15 @@ namespace SolaERP.Application.Services
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }
-        public Task<ApiResponse<bool>> UpdateUserPassword(UserUpdatePasswordDto userUpdatePasswordDto)
+        public async Task<ApiResponse<bool>> UpdateUserPassword(UserUpdatePasswordDto userUpdatePasswordDto)
         {
-            
-            if (userUpdatePasswordDto.PasswordHash != userUpdatePasswordDto.ConfirmPasswordHash)
-                throw new UserException("Password doesn't match with confirm password");
 
-            var result = _mapper.Map<User>(userUpdatePasswordDto);
-            _userRepository.Update
+            //if (userUpdatePasswordDto.PasswordHash != userUpdatePasswordDto.ConfirmPasswordHash)
+            //    throw new UserException("Password doesn't match with confirm password");
+
+            //var result = _mapper.Map<User>(userUpdatePasswordDto);
+            //_userRepository.Update
+            return ApiResponse<bool>.Success(200);
         }
 
 
