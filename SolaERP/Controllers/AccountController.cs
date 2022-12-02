@@ -56,19 +56,17 @@ namespace SolaERP.Controllers
         public async Task<ApiResponse<AccountResponseDto>> Login(LoginRequestDto dto)
         {
             var user = await _userManager.FindByNameAsync(dto.Username);
-
             if (user == null)
                 return ApiResponse<AccountResponseDto>.Fail($"User: {dto.Username} not found", 400);
 
             var userdto = _mapper.Map<UserDto>(user);
-
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
 
             if (signInResult.Succeeded)
             {
                 Kernel.CurrentUserId = user.Id;
                 return ApiResponse<AccountResponseDto>.Success(
-                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2, userdto), AccountUser = _mapper.Map<UserDto>(user) }, 200);
+                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2, userdto), AccountUser = userdto }, 200);
             }
 
             return ApiResponse<AccountResponseDto>.Fail("Email or password is incorrect", 400);
@@ -115,12 +113,12 @@ namespace SolaERP.Controllers
             return ApiResponse<bool>.Success(true, 200);
         }
 
-        [HttpPost]
-        public ApiResponse<bool> SendEmailForResetPassword(UserCheckVerifyCodeDto dto)
-        {
-            _userManager.PasswordHasher.VerifyHashedPassword(null, dto.VerifyCode, dto.VerifyCode);
-            return _emailService.SendEmailForResetPassword(dto);
-        }
+        //[HttpPost]
+        //public ApiResponse<bool> SendEmailForResetPassword(UserCheckVerifyCodeDto dto)
+        //{
+        //    _userManager.PasswordHasher.VerifyHashedPassword(null, dto.VerifyCode, dto.VerifyCode);
+        //    return _emailService.SendEmailForResetPassword(dto);
+        //}
 
 
 
