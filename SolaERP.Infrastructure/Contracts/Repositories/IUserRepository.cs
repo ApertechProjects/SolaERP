@@ -1,6 +1,6 @@
 ﻿using SolaERP.Infrastructure.Entities.Auth;
 
-namespace SolaERP.Infrastructure.Repositories
+namespace SolaERP.Infrastructure.Contracts.Repositories
 {
     public interface IUserRepository : ICrudOperations<User>
     {

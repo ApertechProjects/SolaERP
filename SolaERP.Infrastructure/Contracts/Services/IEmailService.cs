@@ -1,12 +1,7 @@
-﻿using SolaERP.Infrastructure.Dtos;
+﻿using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.User;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Services
+namespace SolaERP.Infrastructure.Contracts.Services
 {
     public interface IEmailService
     {

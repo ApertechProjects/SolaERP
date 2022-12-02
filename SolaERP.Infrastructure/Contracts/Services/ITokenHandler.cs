@@ -2,7 +2,7 @@
 using SolaERP.Infrastructure.Dtos.UserDto;
 using System.Security.Claims;
 
-namespace SolaERP.Infrastructure.Services
+namespace SolaERP.Infrastructure.Contracts.Services
 {
     public interface ITokenHandler
     {

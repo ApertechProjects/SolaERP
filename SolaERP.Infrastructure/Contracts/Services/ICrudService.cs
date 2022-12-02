@@ -1,7 +1,6 @@
-﻿using SolaERP.Infrastructure.Dtos;
-using SolaERP.Infrastructure.Dtos.Auth;
+﻿using SolaERP.Infrastructure.Dtos.Shared;
 
-namespace SolaERP.Infrastructure.Services
+namespace SolaERP.Infrastructure.Contracts.Services
 {
     public interface ICrudService<T>
     {

@@ -5,11 +5,6 @@ namespace SolaERP.Infrastructure.Entities.Auth
 {
     public class User : BaseEntity
     {
-        public User()
-        {
-           
-        }
-
         public int Id { get; set; }
         public int RowIndex { get; set; }
         public string FullName { get; set; }
@@ -30,21 +25,21 @@ namespace SolaERP.Infrastructure.Entities.Auth
         public string NormalizedUserName { get; set; }
         public string Email { get; set; }
         public string NormalizedEmail { get; set; }
-        public bool EmailConfirmed { get; set; }
+        public bool EmailConfirmed { get; set; } = false;
         public string PasswordHash { get; set; }
         public string SecurityStamp { get; set; }
         public string ConcurrencyStamp { get; set; }
         public string PhoneNumber { get; set; }
-        public bool PhoneNumberConfirmed { get; set; } = true;
+        public bool PhoneNumberConfirmed { get; set; } = false;
         public bool TwoFactorEnabled { get; set; } = false;
         [DbIgnore]
         public DateTime LockoutEnd { get; set; }
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; } = 0;
-        public string SyteLineUserCode { get; set; } 
+        public string SyteLineUserCode { get; set; }
         public int UserTypeId { get; set; }
         public int CompanyId { get; set; }
-        public string Position { get; set; } 
+        public string Position { get; set; }
         public int VendorId { get; set; }
         public Guid UserToken { get; set; }
     }
