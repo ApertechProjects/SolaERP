@@ -84,24 +84,26 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             });
             return result;
         }
-        public User GetByEmail(string email)
+        public async Task<User> GetByEmailAsync(string email)
         {
-            User user = new User();
-            using (var command = _unitOfWork.CreateCommand())
+            var result = await Task.Run(() =>
             {
-                command.CommandText = "EXEC SP_GETUSER_BY_EMAIL @Email";
-                IDbDataParameter dbDataParameter = command.CreateParameter();
-                dbDataParameter.ParameterName = "@Email";
-                dbDataParameter.Value = email;
-                command.Parameters.Add(dbDataParameter);
+                User user = null;
+                using (var command = _unitOfWork.CreateCommand())
+                {
+                    command.CommandText = "EXEC SP_GET_USER_BY_EMAIL @Email";
+                    command.Parameters.AddWithValue(command, "@Email", email);
 
-                using var reader = command.ExecuteReader();
+                    using var reader = command.ExecuteReader();
 
-                if (reader.Read())
-                    user = reader.GetByEntityStructure<User>();
+                    if (reader.Read())
+                        user = reader.GetByEntityStructure<User>();
 
-                return user;
-            }
+                    return user;
+                }
+            });
+            return result;
+
         }
         public async Task<User> GetByIdAsync(int id)
         {
@@ -198,6 +200,5 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.ExecuteNonQuery();
             }
         }
-
     }
 }

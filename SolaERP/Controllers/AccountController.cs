@@ -60,13 +60,15 @@ namespace SolaERP.Controllers
             if (user == null)
                 return ApiResponse<AccountResponseDto>.Fail($"User: {dto.Email} not found", 400);
 
+            var userdto = _mapper.Map<UserDto>(user);
+
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
 
             if (signInResult.Succeeded)
             {
                 Kernel.CurrentUserId = user.Id;
                 return ApiResponse<AccountResponseDto>.Success(
-                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2, user), AccountUser = _mapper.Map<UserDto>(user) }, 200);
+                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2, userdto), AccountUser = _mapper.Map<UserDto>(user) }, 200);
             }
 
             return ApiResponse<AccountResponseDto>.Fail("Email or password is incorrect", 400);
@@ -77,14 +79,15 @@ namespace SolaERP.Controllers
         {
             var user = await _userManager.FindByEmailAsync(dto.Email);
 
-            if (user != null)
+            if (user is null)
             {
                 var result = await _userService.AddAsync(dto);
+
                 if (result != null)
                     return ApiResponse<AccountResponseDto>.Success(
-                        new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2, user), AccountUser = result }, 200);
+                        new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2, result), AccountUser = result }, 200);
             }
-            return ApiResponse<AccountResponseDto>.Fail("Email not found exception", 400);
+            return ApiResponse<AccountResponseDto>.Fail("This email is already exsist", 400);
         }
 
         [HttpGet]

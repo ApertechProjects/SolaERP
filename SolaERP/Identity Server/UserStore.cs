@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Repositories;
 
@@ -7,7 +6,8 @@ namespace SolaERP.Application.Identity_Server
 {
     public class UserStore : IUserStore<User>,
                              IUserRoleStore<User>,
-                             IUserPasswordStore<User>
+                             IUserPasswordStore<User>,
+                             IUserEmailStore<User>
 
     {
         private readonly IUserRepository _userRepository;
@@ -123,6 +123,46 @@ namespace SolaERP.Application.Identity_Server
 
         public void Dispose()
         {
+        }
+
+
+        #endregion
+
+        #region IUserEmailStore Implementation 
+        public Task SetEmailAsync(User user, string email, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetEmailAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> GetEmailConfirmedAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetEmailConfirmedAsync(User user, bool confirmed, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<User> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+        {
+            var user = await _userRepository.GetByEmailAsync(normalizedEmail);
+            return user;
+        }
+
+        public Task<string> GetNormalizedEmailAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetNormalizedEmailAsync(User user, string normalizedEmail, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
 
