@@ -26,17 +26,6 @@ builder.Services.AddSingleton<IPasswordHasher<User>, CustomPasswordHasher>();
 builder.Services.AddEndpointsApiExplorer();
 builder.UseSqlDataAccessServices();
 builder.UseValidationExtension();
-
-//Logger _log = new LoggerConfiguration()
-//   .WriteTo.File(@"logs/log.txt")
-//   .WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"), "Logs",
-//   autoCreateSqlTable: true
-//  )
-//.MinimumLevel.Error()
-//.CreateLogger();
-//builder.Host.UseSerilog(_log);
-
-
 builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.Configure<ApiBehaviorOptions>(config => { config.SuppressModelStateInvalidFilter = true; });
 builder.Services.AddCors(options =>

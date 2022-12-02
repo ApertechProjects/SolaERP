@@ -21,21 +21,18 @@ namespace SolaERP.Controllers
         private readonly IUserService _userService;
         private readonly ITokenHandler _tokenHandler;
         private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _accessor;
 
         public AccountController(UserManager<User> userManager,
                                  SignInManager<User> signInManager,
                                  IUserService userService,
                                  ITokenHandler handler,
-                                 IMapper mapper,
-                                 IHttpContextAccessor accessor)
+                                 IMapper mapper)
         {
             _userService = userService;
             _signInManager = signInManager;
             _userManager = userManager;
             _tokenHandler = handler;
             _mapper = mapper;
-            _accessor = accessor;
         }
 
 
@@ -119,8 +116,5 @@ namespace SolaERP.Controllers
         //    _userManager.PasswordHasher.VerifyHashedPassword(null, dto.VerifyCode, dto.VerifyCode);
         //    return _emailService.SendEmailForResetPassword(dto);
         //}
-
-
-
     }
 }
