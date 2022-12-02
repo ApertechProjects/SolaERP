@@ -4,6 +4,7 @@ using SolaERP.Application.Services;
 using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Dtos;
 using SolaERP.Infrastructure.Dtos.BusinessUnit;
+using SolaERP.Infrastructure.Services;
 
 namespace SolaERP.Controllers
 {
@@ -12,7 +13,7 @@ namespace SolaERP.Controllers
     [Authorize]
     public class BusinessUnitController : ControllerBase
     {
-        private readonly BusinessUnitService _businessUnitService;
+        private readonly IBusinessUnitService _businessUnitService;
         public BusinessUnitController(BusinessUnitService businessUnitService)
         {
             _businessUnitService = businessUnitService;

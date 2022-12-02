@@ -1,4 +1,9 @@
-﻿using SolaERP.Infrastructure.Services;
+﻿using AutoMapper.Execution;
+using SolaERP.Application.Utils;
+using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Dtos.User;
+using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,14 +18,53 @@ namespace SolaERP.Application.Services
 {
     public class EmailService : IEmailService
     {
-        public bool ValidateEmail(string email)
+        public ApiResponse<bool> SendEmailForResetPassword(UserCheckVerifyCodeDto dto)
         {
-            if (string.IsNullOrEmpty(email))
+            if (!string.IsNullOrEmpty(dto.Email) && string.IsNullOrEmpty(dto.VerifyCode))
+            {
+                using (SmtpClient smtpClient = new SmtpClient())
+                {
+                    var basicCredential = new NetworkCredential("username", "password");
+                    using (MailMessage message = new MailMessage())
+                    {
+                        MailAddress fromAddress = new MailAddress("test@apertech.com");
+
+                        smtpClient.Host = "mail.apertech.net";
+                        smtpClient.Port = 587;
+                        smtpClient.EnableSsl = true;
+                        smtpClient.UseDefaultCredentials = false;
+                        smtpClient.Credentials = basicCredential;
+
+                        message.From = fromAddress;
+                        message.Subject = "Reset Password";
+                        message.IsBodyHtml = true;
+                        Random rand = new Random();
+                        Kernel.PasswordForReset = rand.Next(100000, 999999).ToString();
+                        message.Body = Kernel.PasswordForReset;
+                        message.To.Add(dto.Email);
+                        smtpClient.Send(message);
+                    }
+                }
+                return ApiResponse<bool>.Success(200);
+            }
+            if (!string.IsNullOrEmpty(dto.Email) && !string.IsNullOrEmpty(dto.VerifyCode))
+            {
+                dto.VerifyCode= dto.VerifyCode.Trim();
+                if (dto.VerifyCode == Kernel.PasswordForReset.ToString())
+                    return ApiResponse<bool>.Success(200);
+                return ApiResponse<bool>.Fail("Verify code is not correct", 400);
+            }
+            return ApiResponse<bool>.Success(200);
+        }
+
+        public bool ValidateEmail(UserCheckVerifyCodeDto dto)
+        {
+            if (string.IsNullOrEmpty(dto.Email))
                 return false;
 
-            if (email.Contains("@"))
+            if (dto.Email.Contains("@"))
             {
-                string[] host = (email.Split('@'));
+                string[] host = (dto.Email.Split('@'));
                 string hostname = host[1];
 
                 IPHostEntry IPhst = Dns.GetHostEntry(hostname);
@@ -36,5 +80,7 @@ namespace SolaERP.Application.Services
             return false;
 
         }
+
+
     }
 }
