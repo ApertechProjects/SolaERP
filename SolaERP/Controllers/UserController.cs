@@ -1,31 +1,47 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SolaERP.Business.CommonLogic;
-using SolaERP.Business.Models;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using SolaERP.Application.Utils;
+using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Dtos.User;
+using SolaERP.Infrastructure.Dtos.UserDto;
 
 namespace SolaERP.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
-        public ConfHelper ConfHelper { get; }
-        public UserController(ConfHelper confHelper)
+        private readonly IUserService _userService;
+
+        public UserController(IUserService userService)
         {
-            ConfHelper = confHelper;
+            _userService = userService;
+        }
+
+
+        [HttpGet]
+        public async Task<UserDto> GetUserById()
+        {
+            return await _userService.GetByUserId(Kernel.CurrentUserId);
+        }
+
+        [HttpPut]
+        public async Task<ApiResponse<bool>> UpdateUser(UserUpdateDto dto)
+        {
+            return await _userService.UpdateUserAsync(dto);
+        }
+
+        [HttpDelete]
+        public async Task<ApiResponse<bool>> RemoveUser(UserDto dto)
+        {
+            return await _userService.RemoveAsync(dto);
         }
 
         [HttpGet]
-        public async Task<ApiResult> GetUsers([FromHeader] string token)
+        public async Task<ApiResponse<List<UserDto>>> GetAllUsers()
         {
-            return await new EntityLogic(ConfHelper).GetUserList(token );
+            return await _userService.GetAllAsync();
         }
 
-        [HttpGet("{groupId}")]
-        public async Task<ApiResult> GetUsersForGroup([FromHeader] string token, int groupId)
-        {
-            return await new EntityLogic(ConfHelper).GetUserListForGroup(token, groupId);
-        }
     }
 }

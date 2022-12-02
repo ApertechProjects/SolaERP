@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Services;
 using SolaERP.Application.Utils;
-using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.BusinessUnit;
-using SolaERP.Infrastructure.Services;
+using SolaERP.Infrastructure.Dtos.Shared;
 
 namespace SolaERP.Controllers
 {

@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Utils;
-using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Auth;
-using SolaERP.Infrastructure.Dtos.User;
+using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Services;
 
 namespace SolaERP.Controllers
 {
@@ -35,19 +33,6 @@ namespace SolaERP.Controllers
             _mapper = mapper;
         }
 
-
-        [HttpGet]
-        [Authorize]
-        public int GetCurrentUserId()
-        {
-            return Kernel.CurrentUserId;
-        }
-
-        [HttpGet]
-        public async Task<ApiResponse<List<UserDto>>> GetAllUsers()
-        {
-            return await _userService.GetAllAsync();
-        }
 
         [HttpPost]
         public async Task<ApiResponse<AccountResponseDto>> Login(LoginRequestDto dto)
@@ -85,24 +70,6 @@ namespace SolaERP.Controllers
             return ApiResponse<AccountResponseDto>.Fail("This email is already exsist", 400);
         }
 
-        [HttpGet]
-        public async Task<UserDto> GetByUserId()
-        {
-            return await _userService.GetByUserId(Kernel.CurrentUserId);
-        }
-
-        [HttpPut]
-        public async Task<ApiResponse<bool>> UpdateUser(UserUpdateDto dto)
-        {
-            return await _userService.UpdateUserAsync(dto);
-        }
-
-        [HttpDelete]
-        public async Task<ApiResponse<bool>> RemoveUser(UserDto dto)
-        {
-            return await _userService.RemoveAsync(dto);
-        }
-
         [HttpPost]
         public async Task<ApiResponse<bool>> Logout()
         {
@@ -110,11 +77,5 @@ namespace SolaERP.Controllers
             return ApiResponse<bool>.Success(true, 200);
         }
 
-        //[HttpPost]
-        //public ApiResponse<bool> SendEmailForResetPassword(UserCheckVerifyCodeDto dto)
-        //{
-        //    _userManager.PasswordHasher.VerifyHashedPassword(null, dto.VerifyCode, dto.VerifyCode);
-        //    return _emailService.SendEmailForResetPassword(dto);
-        //}
     }
 }

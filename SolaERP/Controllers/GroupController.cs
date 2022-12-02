@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Group;
-using SolaERP.Infrastructure.Services;
+using SolaERP.Infrastructure.Dtos.Shared;
 
 namespace SolaERP.Controllers
 {
