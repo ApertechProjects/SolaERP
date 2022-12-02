@@ -1,4 +1,14 @@
-﻿namespace SolaERP.Application.Services
+﻿using AutoMapper;
+using SolaERP.Application.Exceptions;
+using SolaERP.Application.Utils;
+using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Dtos.User;
+using SolaERP.Infrastructure.Dtos.UserDto;
+using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Repositories;
+using SolaERP.Infrastructure.Services;
+using SolaERP.Infrastructure.UnitOfWork;
+namespace SolaERP.Application.Services
 {
     public class UserService : IUserService
     {
