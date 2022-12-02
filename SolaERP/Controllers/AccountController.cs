@@ -21,21 +21,21 @@ namespace SolaERP.Controllers
         private readonly IUserService _userService;
         private readonly ITokenHandler _tokenHandler;
         private readonly IMapper _mapper;
-        private readonly IEmailService _emailService;
+        private readonly IHttpContextAccessor _accessor;
 
         public AccountController(UserManager<User> userManager,
                                  SignInManager<User> signInManager,
                                  IUserService userService,
                                  ITokenHandler handler,
                                  IMapper mapper,
-                                 IEmailService emailService)
+                                 IHttpContextAccessor accessor)
         {
             _userService = userService;
             _signInManager = signInManager;
             _userManager = userManager;
             _tokenHandler = handler;
             _mapper = mapper;
-            _emailService = emailService;
+            _accessor = accessor;
         }
 
 
@@ -60,13 +60,13 @@ namespace SolaERP.Controllers
             if (user == null)
                 return ApiResponse<AccountResponseDto>.Fail($"User: {dto.Email} not found", 400);
 
-            var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, true, false);
+            var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
 
             if (signInResult.Succeeded)
             {
                 Kernel.CurrentUserId = user.Id;
                 return ApiResponse<AccountResponseDto>.Success(
-                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2), AccountUser = _mapper.Map<UserDto>(user) }, 200);
+                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2, user), AccountUser = _mapper.Map<UserDto>(user) }, 200);
             }
 
             return ApiResponse<AccountResponseDto>.Fail("Email or password is incorrect", 400);
@@ -75,17 +75,16 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<ApiResponse<AccountResponseDto>> Register(UserDto dto)
         {
-            bool isValid = _emailService.ValidateEmail(dto.Email);
+            var user = await _userManager.FindByEmailAsync(dto.Email);
 
-            if (isValid)
+            if (user != null)
             {
                 var result = await _userService.AddAsync(dto);
                 if (result != null)
                     return ApiResponse<AccountResponseDto>.Success(
-                        new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2), AccountUser = result }, 200);
+                        new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2, user), AccountUser = result }, 200);
             }
             return ApiResponse<AccountResponseDto>.Fail("Email not found exception", 400);
-
         }
 
         [HttpGet]

@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
-using Serilog;
-using Serilog.Core;
 using SolaERP.Application.Identity_Server;
 using SolaERP.Application.Mappers;
 using SolaERP.Application.Services;
@@ -29,14 +27,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.UseSqlDataAccessServices();
 builder.UseValidationExtension();
 
-Logger _log = new LoggerConfiguration()
-   .WriteTo.File(@"logs/log.txt")
-   .WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"), "Logs",
-   autoCreateSqlTable: true
-  )
-.MinimumLevel.Error()
-.CreateLogger();
-builder.Host.UseSerilog(_log);
+//Logger _log = new LoggerConfiguration()
+//   .WriteTo.File(@"logs/log.txt")
+//   .WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"), "Logs",
+//   autoCreateSqlTable: true
+//  )
+//.MinimumLevel.Error()
+//.CreateLogger();
+//builder.Host.UseSerilog(_log);
 
 
 builder.Services.AddAutoMapper(typeof(MapProfile));

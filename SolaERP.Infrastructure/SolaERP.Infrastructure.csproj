@@ -15,6 +15,7 @@
   <ItemGroup>
     <Folder Include="Enums\" />
     <Folder Include="Extensions\" />
+    <Folder Include="Contracts\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -19,9 +19,9 @@ namespace SolaERP.Application.Services
             _configuration = configuration;
         }
 
-        public async Task<Token> GenerateJwtTokenAsync(int minutes)
+        public async Task<Token> GenerateJwtTokenAsync(int minutes, User user)
         {
-            Token result = await Task.Run(() =>
+            Token result = await Task.Run(async () =>
             {
                 Token token = new Token();
                 SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:SecurityKey"]));
@@ -34,6 +34,7 @@ namespace SolaERP.Application.Services
                     Issuer = _configuration["Token:Issuer"],
                     Expires = token.Expiration,
                     NotBefore = DateTime.UtcNow,
+                    Subject = new ClaimsIdentity(await GetUserClaimsAsync(user)),
                     SigningCredentials = signingCredentials
 
                 };
@@ -47,5 +48,23 @@ namespace SolaERP.Application.Services
             });
             return result;
         }
+
+        public async Task<List<Claim>> GetUserClaimsAsync(User user)
+        {
+            var claims = await Task.Run(() =>
+            {
+                var value = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name,user.Id.ToString()),
+                    new Claim(ClaimTypes.Email,user.Email),
+                    new Claim(ClaimTypes.NameIdentifier,user.Id.ToString())
+                };
+                return value;
+            });
+
+            return claims;
+        }
+
+
     }
 }
