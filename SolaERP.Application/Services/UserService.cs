@@ -1,15 +1,4 @@
-﻿using AutoMapper;
-using SolaERP.Application.Exceptions;
-using SolaERP.Application.Utils;
-using SolaERP.Infrastructure.Dtos;
-using SolaERP.Infrastructure.Dtos.User;
-using SolaERP.Infrastructure.Dtos.UserDto;
-using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Repositories;
-using SolaERP.Infrastructure.Services;
-using SolaERP.Infrastructure.UnitOfWork;
-
-namespace SolaERP.Application.Services
+﻿namespace SolaERP.Application.Services
 {
     public class UserService : IUserService
     {
@@ -33,7 +22,7 @@ namespace SolaERP.Application.Services
             if (model.PasswordHash != model.ConfirmPasswordHash)
                 throw new UserException("Password doesn't match with confirm password");
 
-            var userExist = await _userRepository.GetByUserNameAsync(model.UserName);
+            // var userExist = await _userRepository.GetByUserNameAsync(model.UserName);
 
             model.PasswordHash = SecurityUtil.ComputeSha256Hash(model.PasswordHash);
             var user = _mapper.Map<User>(model);
