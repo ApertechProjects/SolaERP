@@ -5,7 +5,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
 {
     public interface IEmailService
     {
-        bool ValidateEmail(UserCheckVerifyCodeDto dto);
         ApiResponse<bool> SendEmailForResetPassword(UserCheckVerifyCodeDto dto);
     }
 }

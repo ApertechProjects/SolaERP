@@ -71,6 +71,15 @@ namespace SolaERP.Controllers
         }
 
         [HttpPost]
+        public async Task<ApiResponse<bool>> ResetPassword(UserDto dto)
+        {
+
+
+            await _userService.UpdateAsync(dto);
+            return ApiResponse<bool>.Success(200);
+        }
+
+        [HttpPost]
         public async Task<ApiResponse<bool>> Logout()
         {
             await _signInManager.SignOutAsync();

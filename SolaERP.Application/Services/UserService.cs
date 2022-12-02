@@ -55,8 +55,16 @@ namespace SolaERP.Application.Services
 
             return ApiResponse<List<UserDto>>.Success(dto, 200);
         }
-        public async Task<ApiResponse<bool>> UpdateAsync(UserDto model)
+        public async Task<ApiResponse<bool>> UpdateAsync(UserDto userUpdateDto)
         {
+            if (userUpdateDto.Password != userUpdateDto.ConfirmPassword)
+                throw new UserException("Password doesn't match with confirm password");
+
+            var user = _mapper.Map<User>(userUpdateDto);
+            user.PasswordHash = SecurityUtil.ComputeSha256Hash(userUpdateDto.Password);
+            _userRepository.Update(user);
+
+            await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }
         public async Task<ApiResponse<bool>> RemoveAsync(int Id)
@@ -72,25 +80,6 @@ namespace SolaERP.Application.Services
             var userDto = _mapper.Map<UserDto>(userDatas);
             return userDto;
         }
-        public async Task<ApiResponse<bool>> UpdateUserAsync(UserUpdateDto userUpdateDto)
-        {
-            var result = _mapper.Map<User>(userUpdateDto);
-            _userRepository.Update(result);
-            await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<bool>.Success(200);
-        }
-        public async Task<ApiResponse<bool>> UpdateUserPassword(UserUpdatePasswordDto userUpdatePasswordDto)
-        {
-
-            //if (userUpdatePasswordDto.PasswordHash != userUpdatePasswordDto.ConfirmPasswordHash)
-            //    throw new UserException("Password doesn't match with confirm password");
-
-            //var result = _mapper.Map<User>(userUpdatePasswordDto);
-            //_userRepository.Update
-            return ApiResponse<bool>.Success(200);
-        }
-
-
-
+    
     }
 }
