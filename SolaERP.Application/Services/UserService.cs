@@ -2,16 +2,12 @@
 using SolaERP.Application.Exceptions;
 using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Dtos;
-using SolaERP.Infrastructure.Dtos.Auth;
+using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Repositories;
 using SolaERP.Infrastructure.Services;
 using SolaERP.Infrastructure.UnitOfWork;
-using System.Net.Sockets;
-using System.Net;
-using SolaERP.Infrastructure.Dtos.User;
-using System.Reflection;
 
 namespace SolaERP.Application.Services
 {
@@ -48,6 +44,8 @@ namespace SolaERP.Application.Services
             user.PhoneNumberConfirmed = true;
 
             var result = await _userRepository.AddAsync(user);
+            await _unitOfWork.SaveChangesAsync();
+
             if (result)
             {
                 User test = await _userRepository.GetLastInsertedUserAsync();

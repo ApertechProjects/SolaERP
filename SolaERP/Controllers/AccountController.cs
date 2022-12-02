@@ -55,10 +55,10 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<ApiResponse<AccountResponseDto>> Login(LoginRequestDto dto)
         {
-            var user = await _userManager.FindByNameAsync(dto.Email);
+            var user = await _userManager.FindByNameAsync(dto.Username);
 
             if (user == null)
-                return ApiResponse<AccountResponseDto>.Fail($"User: {dto.Email} not found", 400);
+                return ApiResponse<AccountResponseDto>.Fail($"User: {dto.Username} not found", 400);
 
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, true, false);
 
