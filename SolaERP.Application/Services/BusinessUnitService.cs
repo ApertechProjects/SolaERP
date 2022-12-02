@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.BusinessUnit;
-using SolaERP.Infrastructure.Repositories;
-using SolaERP.Infrastructure.Services;
+using SolaERP.Infrastructure.Dtos.Shared;
 
 namespace SolaERP.Application.Services
 {

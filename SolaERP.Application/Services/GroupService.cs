@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Group;
+using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Entities.Groups;
-using SolaERP.Infrastructure.Repositories;
-using SolaERP.Infrastructure.Services;
 using SolaERP.Infrastructure.UnitOfWork;
 using System;
 using System.Collections.Generic;

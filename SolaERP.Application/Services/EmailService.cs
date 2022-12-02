@@ -1,9 +1,9 @@
 ﻿using AutoMapper.Execution;
 using SolaERP.Application.Utils;
-using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;

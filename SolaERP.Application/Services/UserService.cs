@@ -1,4 +1,15 @@
-﻿namespace SolaERP.Application.Services
+﻿using AutoMapper;
+using SolaERP.Application.Exceptions;
+using SolaERP.Application.Utils;
+using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Dtos.User;
+using SolaERP.Infrastructure.Dtos.UserDto;
+using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.UnitOfWork;
+
+namespace SolaERP.Application.Services
 {
     public class UserService : IUserService
     {
@@ -19,27 +30,20 @@
 
         public async Task<UserDto> AddAsync(UserDto model)
         {
-            if (model.PasswordHash != model.ConfirmPasswordHash)
+            if (model.Password != model.ConfirmPassword)
                 throw new UserException("Password doesn't match with confirm password");
 
-            // var userExist = await _userRepository.GetByUserNameAsync(model.UserName);
-
-            model.PasswordHash = SecurityUtil.ComputeSha256Hash(model.PasswordHash);
             var user = _mapper.Map<User>(model);
-
-            Guid guid = Guid.NewGuid();
-            user.UserToken = guid;
-            user.EmailConfirmed = true;
-            user.PhoneNumberConfirmed = true;
+            user.PasswordHash = SecurityUtil.ComputeSha256Hash(model.Password);
 
             var result = await _userRepository.AddAsync(user);
             await _unitOfWork.SaveChangesAsync();
 
             if (result)
             {
-                User test = await _userRepository.GetLastInsertedUserAsync();
-                UserDto userDto = _mapper.Map<UserDto>(test);
-                Kernel.CurrentUserId = test.Id;
+                User lastInsertedUser = await _userRepository.GetLastInsertedUserAsync();
+                UserDto userDto = _mapper.Map<UserDto>(lastInsertedUser);
+                Kernel.CurrentUserId = lastInsertedUser.Id;
                 return userDto;
             }
             return null;
