@@ -1,16 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using SolaERP.Application.Utils;
-using SolaERP.Infrastructure.Dtos;
-using SolaERP.Infrastructure.Dtos.Auth;
-using SolaERP.Infrastructure.Dtos.User;
-using SolaERP.Infrastructure.Dtos.UserDto;
-using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Services;
-
-namespace SolaERP.Controllers
+﻿namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -55,10 +43,10 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<ApiResponse<AccountResponseDto>> Login(LoginRequestDto dto)
         {
-            var user = await _userManager.FindByNameAsync(dto.Email);
+            var user = await _userManager.FindByNameAsync(dto.Username);
 
             if (user == null)
-                return ApiResponse<AccountResponseDto>.Fail($"User: {dto.Email} not found", 400);
+                return ApiResponse<AccountResponseDto>.Fail($"User: {dto.Username} not found", 400);
 
             var userdto = _mapper.Map<UserDto>(user);
 
@@ -114,5 +102,15 @@ namespace SolaERP.Controllers
             await _signInManager.SignOutAsync();
             return ApiResponse<bool>.Success(true, 200);
         }
+
+        [HttpPost]
+        public ApiResponse<bool> SendEmailForResetPassword(UserCheckVerifyCodeDto dto)
+        {
+            _userManager.PasswordHasher.VerifyHashedPassword(null, dto.VerifyCode, dto.VerifyCode);
+            return _emailService.SendEmailForResetPassword(dto);
+        }
+
+
+
     }
 }

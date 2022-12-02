@@ -8,5 +8,7 @@ namespace SolaERP.Infrastructure.Services
     {
         Task<UserDto> GetByUserId(int userId);
         Task<ApiResponse<bool>> UpdateUserAsync(UserUpdateDto userUpdateDto);
+        Task<ApiResponse<bool>> UpdateUserPassword(UserUpdatePasswordDto userUpdatePasswordDto);
+
     }
 }

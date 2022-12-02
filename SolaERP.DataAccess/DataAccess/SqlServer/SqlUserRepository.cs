@@ -18,7 +18,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public async Task<bool> AddAsync(User entity)
         {
-            string query = @"Exec [dbo].[SP_User_insert] @FullName,@StatusId,@UserName,@Email ,@EmailConfirmed ,@PasswordHash,@UserTypeId,@UserToken";
+            string query = "Exec SP_User_insert @FullName,@StatusId,@UserName,@Email ,@EmailConfirmed ,@PasswordHash,@UserTypeId,@UserToken";
             var result = await Task.Run(() =>
             {
                 using (var command = _unitOfWork.CreateCommand())
@@ -31,8 +31,10 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     command.Parameters.AddWithValue(command, "@EmailConfirmed", entity.EmailConfirmed);
                     command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
                     command.Parameters.AddWithValue(command, "@UserTypeId", entity.UserTypeId);
-                    command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken);
+                    command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken.ToString());
 
+
+                    var value = command.ExecuteNonQuery();
                     return command.ExecuteNonQuery() == 0 ? false : true;
                 }
             });
