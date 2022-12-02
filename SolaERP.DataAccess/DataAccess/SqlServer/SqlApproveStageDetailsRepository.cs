@@ -1,5 +1,5 @@
-﻿using SolaERP.Infrastructure.Entities.ApproveStage;
-using SolaERP.Infrastructure.Repositories;
+﻿using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Entities.ApproveStage;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {

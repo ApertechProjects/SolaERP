@@ -1,6 +1,6 @@
 ﻿using SolaERP.DataAccess.Extensions;
+using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Repositories;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 
@@ -33,9 +33,8 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     command.Parameters.AddWithValue(command, "@UserTypeId", entity.UserTypeId);
                     command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken.ToString());
 
-
                     var value = command.ExecuteNonQuery();
-                    return command.ExecuteNonQuery() == 0 ? false : true;
+                    return value == 0 || value == -1 ? false : true;
                 }
             });
             return result;

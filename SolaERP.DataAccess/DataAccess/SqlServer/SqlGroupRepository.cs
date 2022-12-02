@@ -1,6 +1,6 @@
 ﻿using SolaERP.DataAccess.Extensions;
+using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Groups;
-using SolaERP.Infrastructure.Repositories;
 using SolaERP.Infrastructure.UnitOfWork;
 using System;
 using System.Collections.Generic;
