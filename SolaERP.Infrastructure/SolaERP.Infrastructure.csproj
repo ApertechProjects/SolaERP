@@ -7,15 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Contracts\**" />
     <Compile Remove="Entities\ApproveStage\**" />
+    <EmbeddedResource Remove="Contracts\**" />
     <EmbeddedResource Remove="Entities\ApproveStage\**" />
+    <None Remove="Contracts\**" />
     <None Remove="Entities\ApproveStage\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Enums\" />
     <Folder Include="Extensions\" />
-    <Folder Include="Contracts\" />
   </ItemGroup>
 
   <ItemGroup>
