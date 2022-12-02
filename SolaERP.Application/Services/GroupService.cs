@@ -3,13 +3,7 @@ using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Group;
 using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.UnitOfWork;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.Application.Services
 {
@@ -39,10 +33,9 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<GroupsDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<bool>> RemoveAsync(GroupsDto model)
+        public async Task<ApiResponse<bool>> RemoveAsync(int Id)
         {
-            var dto = _mapper.Map<Groups>(model);
-            _groupRepository.Remove(dto);
+            _groupRepository.Remove(Id);
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }

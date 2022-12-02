@@ -2,12 +2,7 @@
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.UnitOfWork;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -49,17 +44,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public void Remove(Groups entity)
+        public bool Remove(int Id)
         {
             using (var command = _unitOfWork.CreateCommand())
             {
                 command.CommandText = "Delete from Config.AppUser Where Id = @Id";
                 IDbDataParameter dbDataParameter = command.CreateParameter();
                 dbDataParameter.ParameterName = "@Id";
-                dbDataParameter.Value = entity.GroupId;
+                dbDataParameter.Value = Id;
                 command.Parameters.Add(dbDataParameter);
 
-                command.ExecuteNonQuery();
+                var value = command.ExecuteNonQuery();
+
+                return value == 0 || value == -1 ? false : true;
             }
         }
 

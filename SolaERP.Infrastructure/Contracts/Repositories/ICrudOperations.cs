@@ -8,6 +8,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<Tentity> GetByIdAsync(int id);
         Task<bool> AddAsync(Tentity entity);
         void Update(Tentity entity);
-        void Remove(Tentity entity);
+        bool Remove(int Id);
     }
 }

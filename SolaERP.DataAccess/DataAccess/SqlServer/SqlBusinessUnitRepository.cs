@@ -65,7 +65,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public void Remove(BusinessUnits entity)
+        public bool Remove(int Id)
         {
             throw new NotImplementedException();
         }

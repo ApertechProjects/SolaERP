@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SolaERP.Application.Utils;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.User;
@@ -7,8 +7,9 @@ using SolaERP.Infrastructure.Dtos.UserDto;
 
 namespace SolaERP.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -19,10 +20,10 @@ namespace SolaERP.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<UserDto> GetUserById()
+        [HttpGet("{id}")]
+        public async Task<UserDto> GetUserById(int id)
         {
-            return await _userService.GetByUserId(Kernel.CurrentUserId);
+            return await _userService.GetByUserId(id);
         }
 
         [HttpPut]
@@ -32,9 +33,9 @@ namespace SolaERP.Controllers
         }
 
         [HttpDelete]
-        public async Task<ApiResponse<bool>> RemoveUser(UserDto dto)
+        public async Task<ApiResponse<bool>> RemoveUser(int Id)
         {
-            return await _userService.RemoveAsync(dto);
+            return await _userService.RemoveAsync(Id);
         }
 
         [HttpGet]
@@ -42,6 +43,5 @@ namespace SolaERP.Controllers
         {
             return await _userService.GetAllAsync();
         }
-
     }
 }

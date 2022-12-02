@@ -2,19 +2,16 @@
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.UnitOfWork;
-using System.Data;
 
 namespace SolaERP.DataAccess.DataAcces.SqlServer
 {
     public class SqlUserRepository : IUserRepository
     {
         private readonly IUnitOfWork _unitOfWork;
-
         public SqlUserRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
-
 
         public async Task<bool> AddAsync(User entity)
         {
@@ -39,23 +36,17 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             });
             return result;
         }
-
         public async Task<User> GetByUserId(int userId)
         {
             var result = await Task.Run(() =>
             {
+                User user = null;
                 using (var command = _unitOfWork.CreateCommand())
                 {
                     command.CommandText = "Select * from Config.AppUser where Id = @Id";
-
-                    IDbDataParameter dbDataParameter = command.CreateParameter();
-                    dbDataParameter.ParameterName = "@Id";
-                    dbDataParameter.Value = userId;
-                    command.Parameters.Add(dbDataParameter);
+                    command.Parameters.AddWithValue(command, "@Id", userId);
 
                     using var reader = command.ExecuteReader();
-
-                    User user = new User();
                     while (reader.Read())
                     {
                         user = reader.GetByEntityStructure<User>();
@@ -65,14 +56,13 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             });
             return result;
         }
-
         public async Task<List<User>> GetAllAsync()
         {
             var result = await Task.Run(() =>
             {
                 using (var command = _unitOfWork.CreateCommand())
                 {
-                    command.CommandText = "Select * from Config.AppUser";
+                    command.CommandText = "Select * from Config.AppUser where IsDeleted = 0";
                     using var reader = command.ExecuteReader();
 
                     List<User> users = new List<User>();
@@ -110,16 +100,13 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         {
             var result = await Task.Run(() =>
             {
+                User user = null;
                 using (var command = _unitOfWork.CreateCommand())
                 {
                     command.CommandText = "EXEC SP_GETUSER_BY_NAME_OR_ID @Id";
-                    IDbDataParameter dbDataParameter = command.CreateParameter();
-                    dbDataParameter.ParameterName = "@Id";
-                    dbDataParameter.Value = id;
-                    command.Parameters.Add(dbDataParameter);
+                    command.Parameters.AddWithValue(command, "@Id", id);
 
                     using var reader = command.ExecuteReader();
-                    User user = null;
 
                     if (reader.Read())
                         user = reader.GetByEntityStructure<User>();
@@ -137,19 +124,14 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 using (var command = _unitOfWork.CreateCommand())
                 {
                     command.CommandText = "EXEC SP_GETUSER_BY_NAME_OR_ID NULL,@UserName";
-                    IDbDataParameter dbDataParameter = command.CreateParameter();
-                    dbDataParameter.ParameterName = "@UserName";
-                    dbDataParameter.Value = userName;
-                    command.Parameters.Add(dbDataParameter);
+                    command.Parameters.AddWithValue(command, "@UserName", userName);
 
                     using var reader = command.ExecuteReader();
-
                     if (reader.Read())
                         user = reader.GetByEntityStructure<User>();
 
                     return user;
                 }
-
             });
             return result;
         }
@@ -172,20 +154,17 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             });
             return result;
         }
-        public void Remove(User entity)
+        public bool Remove(int Id)
         {
             using (var command = _unitOfWork.CreateCommand())
             {
-                command.CommandText = "Delete from Config.AppUser Where Id = @Id";
-                IDbDataParameter dbDataParameter = command.CreateParameter();
-                dbDataParameter.ParameterName = "@Id";
-                dbDataParameter.Value = entity.Id;
-                command.Parameters.Add(dbDataParameter);
+                command.CommandText = "SP_DELETE_USER @Id";
+                command.Parameters.AddWithValue(command, "@Id", Id);
+                var value = command.ExecuteNonQuery();
 
-                command.ExecuteNonQuery();
+                return value == 0 || value == -1 ? false : true;
             }
         }
-
         public void Update(User entity)
         {
             string query = "Exec [dbo].[SP_UserData_U] @UserId,@FullName,@Position,@PhoneNumber,@Photo";

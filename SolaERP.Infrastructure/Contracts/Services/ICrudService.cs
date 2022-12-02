@@ -7,6 +7,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<List<T>>> GetAllAsync();
         Task<T> AddAsync(T model);
         Task<ApiResponse<bool>> UpdateAsync(T model);
-        Task<ApiResponse<bool>> RemoveAsync(T model);
+        Task<ApiResponse<bool>> RemoveAsync(int Id);
     }
 }

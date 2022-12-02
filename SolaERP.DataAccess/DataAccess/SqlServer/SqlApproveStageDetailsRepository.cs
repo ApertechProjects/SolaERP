@@ -20,7 +20,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public void Remove(ApproveStagesDetail entity)
+        public bool Remove(int id)
         {
             throw new NotImplementedException();
         }

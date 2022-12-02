@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Group;
@@ -26,9 +25,9 @@ namespace SolaERP.Controllers
         }
 
         [HttpDelete]
-        public async Task<ApiResponse<bool>> DeleteGroups(GroupsDto groupsDto)
+        public async Task<ApiResponse<bool>> DeleteGroups(int Id)
         {
-            return await _groupService.RemoveAsync(groupsDto);
+            return await _groupService.RemoveAsync(Id);
         }
     }
 }

@@ -59,10 +59,9 @@ namespace SolaERP.Application.Services
         {
             return ApiResponse<bool>.Success(200);
         }
-        public async Task<ApiResponse<bool>> RemoveAsync(UserDto model)
+        public async Task<ApiResponse<bool>> RemoveAsync(int Id)
         {
-            var user = _mapper.Map<User>(model);
-            _userRepository.Remove(user);
+            _userRepository.Remove(Id);
 
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);

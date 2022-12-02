@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Auth;
@@ -45,7 +44,7 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<BusinessUnitsDto>>.Success(null, 200);
         }
 
-        public Task<ApiResponse<bool>> RemoveAsync(BusinessUnitsAllDto model)
+        public Task<ApiResponse<bool>> RemoveAsync(int Id)
         {
             throw new NotImplementedException();
         }
@@ -61,6 +60,6 @@ namespace SolaERP.Application.Services
             throw new NotImplementedException();
         }
 
-      
+
     }
 }
