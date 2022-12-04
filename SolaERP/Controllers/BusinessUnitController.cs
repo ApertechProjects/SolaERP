@@ -10,11 +10,11 @@ namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class BusinessUnitController : ControllerBase
     {
         private readonly IBusinessUnitService _businessUnitService;
-        public BusinessUnitController(BusinessUnitService businessUnitService)
+        public BusinessUnitController(IBusinessUnitService businessUnitService)
         {
             _businessUnitService = businessUnitService;
         }

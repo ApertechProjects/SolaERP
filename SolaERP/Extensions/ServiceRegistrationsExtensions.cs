@@ -19,13 +19,19 @@ namespace SolaERP.Extensions
         public static void UseSqlDataAccessServices(this WebApplicationBuilder builder)
         {
             builder.Services.AddScoped<IUnitOfWork, SqlUnitOfWork>();
+
             builder.Services.AddScoped<IUserRepository, SqlUserRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
+
             builder.Services.AddScoped<IGroupService, GroupService>();
             builder.Services.AddScoped<IGroupRepository, SqlGroupRepository>();
 
             builder.Services.AddScoped<IBusinessUnitService, BusinessUnitService>();
             builder.Services.AddScoped<IBusinessUnitRepository, SqlBusinessUnitRepository>();
+
+            builder.Services.AddScoped<IApproveStageMainService, ApproveStageMainService>();
+            builder.Services.AddScoped<IApproveStageMainRepository, SqlApproveStageMainRepository>();
+
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped((t) =>
             {
