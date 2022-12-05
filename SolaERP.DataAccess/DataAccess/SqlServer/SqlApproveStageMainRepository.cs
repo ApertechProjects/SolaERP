@@ -84,5 +84,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             };
         }
+
     }
 }

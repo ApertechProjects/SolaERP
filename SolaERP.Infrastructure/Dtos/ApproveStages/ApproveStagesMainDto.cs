@@ -10,7 +10,6 @@ namespace SolaERP.Infrastructure.Dtos.ApproveStage
     public class ApproveStagesMainDto
     {
         public int ApproveStageMainId { get; set; }
-        public int ProcedureId { get; set; }
         public string ProcedureName { get; set; }
         public string ApproveStageName { get; set; }
     }
