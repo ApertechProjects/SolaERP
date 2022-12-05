@@ -36,17 +36,14 @@ namespace SolaERP.Application.Services
             var user = _mapper.Map<User>(model);
             user.PasswordHash = SecurityUtil.ComputeSha256Hash(model.Password);
 
-            var result = await _userRepository.AddAsync(user);
+            await _userRepository.AddAsync(user);
             await _unitOfWork.SaveChangesAsync();
 
-            if (result)
-            {
-                User lastInsertedUser = await _userRepository.GetLastInsertedUserAsync();
-                UserDto userDto = _mapper.Map<UserDto>(lastInsertedUser);
-                Kernel.CurrentUserId = lastInsertedUser.Id;
-                return userDto;
-            }
-            return null;
+
+            User lastInsertedUser = await _userRepository.GetLastInsertedUserAsync();
+            UserDto userDto = _mapper.Map<UserDto>(lastInsertedUser);
+            Kernel.CurrentUserId = lastInsertedUser.Id;
+            return userDto;
         }
         public async Task<ApiResponse<List<UserDto>>> GetAllAsync()
         {
