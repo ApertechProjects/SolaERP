@@ -8,7 +8,7 @@
         public System.String MenuName { get; set; }
         public System.Int32 CreateAccess { get; set; }
         public System.Int32 EditAccess { get; set; }
-        public System.Int32 DeleteAccess { get; set; }
+        public int DeleteAccess { get; set; }
         public System.Int32 ExportAccess { get; set; }
     }
 }

@@ -1,10 +1,10 @@
-﻿namespace SolaERP.Infrastructure.Dtos.Auth
+﻿namespace SolaERP.Infrastructure.Dtos.Menu
 {
-    public class MenuLoadDto
+    public class MenuWithPrivilagesDto
     {
         public int MenuId { get; set; }
         public string MenuName { get; set; }
-        public int? ParentId { get; set; }
+        public int ParentId { get; set; }
         public string Url { get; set; }
         public string Icon { get; set; }
         public string MenuCode { get; set; }

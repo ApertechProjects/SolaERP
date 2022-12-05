@@ -3,7 +3,6 @@ using SolaERP.Application.Exceptions;
 using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
@@ -84,14 +83,6 @@ namespace SolaERP.Application.Services
             //var result = _mapper.Map<User>(userUpdatePasswordDto);
             //_userRepository.Update
             return ApiResponse<bool>.Success(200);
-        }
-
-        public async Task<ApiResponse<List<MenuLoadDto>>> GetUserMenusAsync()
-        {
-            var userMenus = await _userRepository.GetUserMenusAsync(Kernel.CurrentUserId);
-            var menuLoadDto = _mapper.Map<List<MenuLoadDto>>(userMenus);
-
-            return ApiResponse<List<MenuLoadDto>>.Success(menuLoadDto, 200);
         }
     }
 }
