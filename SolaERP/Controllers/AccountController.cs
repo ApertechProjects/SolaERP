@@ -48,7 +48,7 @@ namespace SolaERP.Controllers
             {
                 Kernel.CurrentUserId = user.Id;
                 return ApiResponse<AccountResponseDto>.Success(
-                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2, userdto), AccountUser = userdto }, 200);
+                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, userdto), AccountUser = userdto }, 200);
             }
 
             return ApiResponse<AccountResponseDto>.Fail("Email or password is incorrect", 400);
@@ -65,7 +65,7 @@ namespace SolaERP.Controllers
 
                 if (result != null)
                     return ApiResponse<AccountResponseDto>.Success(
-                        new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2, result), AccountUser = result }, 200);
+                        new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, result), AccountUser = result }, 200);
             }
             return ApiResponse<AccountResponseDto>.Fail("This email is already exsist", 400);
         }
