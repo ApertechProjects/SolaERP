@@ -1,4 +1,5 @@
 ﻿using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Entities.Menu;
 
 namespace SolaERP.Infrastructure.Contracts.Repositories
 {
@@ -8,5 +9,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<User> GetByEmailAsync(string email);
         Task<User> GetLastInsertedUserAsync();
         Task<User> GetByUserId(int userId);
+        Task<List<MenuLoad>> GetUserMenusAsync(int userId);
     }
 }

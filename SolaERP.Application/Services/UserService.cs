@@ -3,6 +3,7 @@ using SolaERP.Application.Exceptions;
 using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
@@ -16,16 +17,13 @@ namespace SolaERP.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly ITokenHandler _tokenHandler;
         public UserService(IUserRepository userRepository,
                            IUnitOfWork unitOfWork,
-                           IMapper mapper,
-                           ITokenHandler tokenHandler)
+                           IMapper mapper)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _tokenHandler = tokenHandler;
         }
 
         public async Task<UserDto> AddAsync(UserDto model)
@@ -88,7 +86,12 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(200);
         }
 
+        public async Task<ApiResponse<List<MenuLoadDto>>> GetUserMenusAsync()
+        {
+            var userMenus = await _userRepository.GetUserMenusAsync(Kernel.CurrentUserId);
+            var menuLoadDto = _mapper.Map<List<MenuLoadDto>>(userMenus);
 
-
+            return ApiResponse<List<MenuLoadDto>>.Success(menuLoadDto, 200);
+        }
     }
 }
