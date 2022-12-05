@@ -14,10 +14,16 @@ using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Middlewares;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers(options => { options.Filters.Add(new ValidationFilter()); }).Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+builder.Services.AddControllers(options => { options.Filters.Add(new ValidationFilter()); }).AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.WriteIndented = true;
+}).
+Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddIdentity<User, Role>().AddDefaultTokenProviders();
 builder.Services.AddTransient<ITokenHandler, JwtTokenHandler>();
 builder.Services.AddScoped<IUserStore<User>, UserStore>();
