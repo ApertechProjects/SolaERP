@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SolaERP.Application.Services;
 using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.BusinessUnit;
@@ -14,7 +13,7 @@ namespace SolaERP.Controllers
     public class BusinessUnitController : ControllerBase
     {
         private readonly IBusinessUnitService _businessUnitService;
-        public BusinessUnitController(BusinessUnitService businessUnitService)
+        public BusinessUnitController(IBusinessUnitService businessUnitService)
         {
             _businessUnitService = businessUnitService;
         }
