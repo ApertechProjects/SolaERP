@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
 using SolaERP.Application.Services;
+using SolaERP.Application.Validations;
+using SolaERP.Application.Validations.UserValidation;
 using SolaERP.DataAccess.DataAcces.SqlServer;
 using SolaERP.DataAccess.DataAccess.SqlServer;
 using SolaERP.DataAccess.Factories;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.UnitOfWork;
-using SolaERP.Infrastructure.ValidationRules;
-using SolaERP.Infrastructure.ValidationRules.UserValidation;
 
 namespace SolaERP.Extensions
 {

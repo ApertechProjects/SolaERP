@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using SolaERP.Infrastructure.Dtos.UserDto;
 
-namespace SolaERP.Infrastructure.ValidationRules.UserValidation
+namespace SolaERP.Application.Validations.UserValidation
 {
     public class UserValidation : AbstractValidator<UserDto>
     {
