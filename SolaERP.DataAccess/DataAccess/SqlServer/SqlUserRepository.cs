@@ -1,7 +1,6 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Entities.Menu;
 using SolaERP.Infrastructure.UnitOfWork;
 
 namespace SolaERP.DataAccess.DataAcces.SqlServer
@@ -180,27 +179,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
                 command.ExecuteNonQuery();
             }
-        }
-
-        public async Task<List<MenuLoad>> GetUserMenusAsync(int userId)
-        {
-            var result = await Task.Run(() =>
-            {
-                List<MenuLoad> userMenus = new List<MenuLoad>();
-                using (var command = _unitOfWork.CreateCommand())
-                {
-                    command.CommandText = "EXEC dbo.SP_UserMenu_Load @userId";
-                    command.Parameters.AddWithValue(command, "@userId", userId);
-
-                    using var reader = command.ExecuteReader();
-
-                    while (reader.Read())
-                        userMenus.Add(reader.GetByEntityStructure<MenuLoad>());
-
-                    return userMenus;
-                }
-            });
-            return result;
         }
     }
 }

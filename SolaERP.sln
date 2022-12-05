@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolaERP", "SolaERP\SolaERP.csproj", "{9E1D639B-9689-4F00-B5AB-3EAA8E325BF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP", "SolaERP\SolaERP.csproj", "{9E1D639B-9689-4F00-B5AB-3EAA8E325BF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolaERP.Infrastructure", "SolaERP.Infrastructure\SolaERP.Infrastructure.csproj", "{2F345001-FDA9-4C29-8875-2F052C7B704F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.Infrastructure", "SolaERP.Infrastructure\SolaERP.Infrastructure.csproj", "{2F345001-FDA9-4C29-8875-2F052C7B704F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolaERP.DataAccess", "SolaERP.DataAccess\SolaERP.DataAccess.csproj", "{5658310C-0DAA-4F09-935E-7ABDD9EF0BB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.DataAccess", "SolaERP.DataAccess\SolaERP.DataAccess.csproj", "{5658310C-0DAA-4F09-935E-7ABDD9EF0BB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolaERP.Application", "SolaERP.Application\SolaERP.Application.csproj", "{C9CB4045-DAF3-49FD-B253-118F94C21BDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.Application", "SolaERP.Application\SolaERP.Application.csproj", "{C9CB4045-DAF3-49FD-B253-118F94C21BDA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

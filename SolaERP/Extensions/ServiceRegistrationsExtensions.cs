@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using SignalRChatExample.Hubs;
 using SolaERP.Application.Services;
 using SolaERP.Application.Validations;
 using SolaERP.Application.Validations.UserValidation;
@@ -38,6 +39,12 @@ namespace SolaERP.Extensions
         {
             builder.Services.AddValidatorsFromAssemblyContaining<UserValidation>();
             builder.Services.AddScoped<ValidationFilter>();
+        }
+
+        public static void MapHubs(this WebApplication app)
+        {
+            app.MapHub<ChatHub>("/chatHub")
+;
         }
     }
 }
