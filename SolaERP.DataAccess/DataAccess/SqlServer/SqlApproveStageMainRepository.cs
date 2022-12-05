@@ -4,6 +4,8 @@ using SolaERP.Infrastructure.Entities.ApproveStage;
 using SolaERP.Infrastructure.UnitOfWork;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,12 +31,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public Task<List<ApproveStagesMain>> GetByBusinessUnitId(int buId)
+        public async Task<List<ApproveStagesMain>> GetByBusinessUnitId(int buId)
         {
             //bu duz gelmir cunki,ApproveStageMainde meselen Id ler var, gelen prosedurda ise Id ye qarshiliq
             //gelen datalar bu shekilde duzgun oturmur,prosedura Id elave etsek bele, meselen
             //ProcedureId ApproveStageMainde var amma prosedurda yoxdu ona gore uygun datani set ede bilmir
-            var result = Task.Run(() =>
+            var result = await Task.Run(() =>
             {
                 List<ApproveStagesMain> approveStagesMain = new List<ApproveStagesMain>();
                 using (var command = _unitOfWork.CreateCommand())
@@ -45,7 +47,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     using var reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        approveStagesMain.Add(reader.GetByEntityStructure<ApproveStagesMain>());
+                        approveStagesMain.Add(GetFromReader(reader));
                     }
                     return approveStagesMain;
                 }
@@ -66,6 +68,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public void Update(ApproveStagesMain entity)
         {
             throw new NotImplementedException();
+        }
+
+        private ApproveStagesMain GetFromReader(IDataReader reader)
+        {
+            return new ApproveStagesMain
+            {
+                ApproveStageMainId = reader.Get<int>("ApproveStageMainId"),
+                ApproveStageName = reader.Get<string>("ApproveStageName"),
+                BusinessUnitId = reader.Get<int>("BusinessUnitId"),
+                ProcedureId = reader.Get<int>("ProcedureId")
+            };
         }
     }
 }
