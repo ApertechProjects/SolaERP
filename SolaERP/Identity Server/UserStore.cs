@@ -135,9 +135,10 @@ namespace SolaERP.Application.Identity_Server
             throw new NotImplementedException();
         }
 
-        public Task<string> GetEmailAsync(User user, CancellationToken cancellationToken)
+        public async Task<string> GetEmailAsync(User user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var email = await Task.Run(() => { return user.Email; });
+            return email;
         }
 
         public Task<bool> GetEmailConfirmedAsync(User user, CancellationToken cancellationToken)
