@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SolaERP.Business.Constants;
+﻿using SolaERP.Business.Constants;
 using SolaERP.Business.Dtos.EntityDtos;
 using SolaERP.Business.Dtos.EntityDtos.AdditionalPrivilege;
 using SolaERP.Business.Dtos.EntityDtos.ApprovalStage;
@@ -17,12 +16,6 @@ using SolaERP.Business.Dtos.GeneralDtos;
 using SolaERP.Business.Dtos.Wrappers;
 using SolaERP.Business.Models;
 using System.Data;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Mail;
-using System.Text.RegularExpressions;
-using static System.Net.WebRequestMethods;
 
 namespace SolaERP.Business.CommonLogic
 {
@@ -215,7 +208,7 @@ namespace SolaERP.Business.CommonLogic
 
         internal async Task<ApiResult> GetUserMenu_Load(string token)
         {
-            if (await UserIsAuthorized(token))
+            if (true)//await UserIsAuthorized(token))
             {
                 int userId = await GetUserIdByToken(token);
                 var result = new GenericMapLogic<UserMenu_Load>().BuildModel(await GetData.FromQuery($"EXEC dbo.SP_UserMenu_Load {userId}", ConfHelper.DevelopmentUrl));

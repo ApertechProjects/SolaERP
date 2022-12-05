@@ -54,6 +54,7 @@ namespace SolaERP.Application.Services
         }
         public async Task<ApiResponse<bool>> UpdateAsync(UserDto model)
         {
+            var res = await _userRepository.GetAllAsync();
             return ApiResponse<bool>.Success(200);
         }
         public async Task<ApiResponse<bool>> RemoveAsync(int Id)
