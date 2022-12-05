@@ -26,7 +26,7 @@ namespace SolaERP.Extensions
 
             builder.Services.AddScoped<IBusinessUnitService, BusinessUnitService>();
             builder.Services.AddScoped<IBusinessUnitRepository, SqlBusinessUnitRepository>();
-            builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<IMailService, MailService>();
             builder.Services.AddScoped((t) =>
             {
                 var connectionString = builder.Configuration.GetConnectionString("DevelopmentConnectionString");
