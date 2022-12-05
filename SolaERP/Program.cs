@@ -21,7 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers(options => { options.Filters.Add(new ValidationFilter()); }).AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-    options.JsonSerializerOptions.WriteIndented = true;
+    //This code ignores circular referanced object when they serialized to jsonfile 
 }).
 Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddIdentity<User, Role>().AddDefaultTokenProviders();
