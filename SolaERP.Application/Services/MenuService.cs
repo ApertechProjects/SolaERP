@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using SolaERP.Application.Utils;
+﻿using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Menu;
@@ -10,20 +9,16 @@ namespace SolaERP.Application.Services
     public class MenuService : IMenuService
     {
         private readonly IMenuRepository _menuRepository;
-        private readonly IMapper _mapper;
 
-        public MenuService(IMenuRepository menuRepository,
-                            IMapper mapper)
+        public MenuService(IMenuRepository menuRepository)
         {
             _menuRepository = menuRepository;
-            _mapper = mapper;
         }
 
         public async Task<ApiResponse<List<ParentMenuDto>>> GetUserMenusWithChildsAsync()
         {
-            var menusWithPrivvilages = await _menuRepository.GetUserMenuWithPrivillagesAsync(Kernel.CurrentUserId);
-            var menuDto = _mapper.Map<List<MenuWithPrivilagesDto>>(menusWithPrivvilages);
-            var parentMenusWithPrivilages = menuDto.Where(m => m.ParentId == 0).ToList();
+            var menusWithPrivilages = await _menuRepository.GetUserMenuWithPrivillagesAsync(Kernel.CurrentUserId);
+            var parentMenusWithPrivilages = menusWithPrivilages.Where(m => m.ParentId == 0).ToList();//For getting ParentMenus
 
             List<ParentMenuDto> menus = new List<ParentMenuDto>();
             foreach (var parent in parentMenusWithPrivilages)
@@ -37,7 +32,7 @@ namespace SolaERP.Application.Services
                     Url = parent.Url
                 };
 
-                var childMenus = menuDto.Where(m => m.ParentId == parent.MenuId).ToList();
+                var childMenus = menusWithPrivilages.Where(m => m.ParentId == parent.MenuId).ToList();
 
                 foreach (var child in childMenus)
                 {
@@ -54,7 +49,10 @@ namespace SolaERP.Application.Services
                 }
                 menus.Add(parentMenu);
             }
-            return ApiResponse<List<ParentMenuDto>>.Success(menus, 200);
+            if (menus.Count > 0)
+                return ApiResponse<List<ParentMenuDto>>.Success(menus, 200);
+
+            return ApiResponse<List<ParentMenuDto>>.Fail("BadRequest", 400);
         }
     }
 }
