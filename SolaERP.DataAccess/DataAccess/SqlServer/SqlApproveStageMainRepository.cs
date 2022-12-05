@@ -1,6 +1,7 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.ApproveStage;
+using SolaERP.Infrastructure.Entities.Procedure;
 using SolaERP.Infrastructure.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -33,21 +34,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<ApproveStagesMain>> GetByBusinessUnitId(int buId)
         {
-            //bu duz gelmir cunki,ApproveStageMainde meselen Id ler var, gelen prosedurda ise Id ye qarshiliq
-            //gelen datalar bu shekilde duzgun oturmur,prosedura Id elave etsek bele, meselen
-            //ProcedureId ApproveStageMainde var amma prosedurda yoxdu ona gore uygun datani set ede bilmir
             var result = await Task.Run(() =>
             {
                 List<ApproveStagesMain> approveStagesMain = new List<ApproveStagesMain>();
                 using (var command = _unitOfWork.CreateCommand())
                 {
-                    command.CommandText = "Exec dbo.SP_ApproveStageMain_Load @BuId";
+                    command.CommandText = "Exec dbo.SP_ApproveStageMain_Load_BY_BU @BuId";
                     command.Parameters.AddWithValue(command, "@BuId", buId);
 
                     using var reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        approveStagesMain.Add(GetFromReader(reader));
+                        approveStagesMain.Add(GetFromReader((SqlDataReader)reader));
                     }
                     return approveStagesMain;
                 }
@@ -70,14 +68,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        private ApproveStagesMain GetFromReader(IDataReader reader)
+        private ApproveStagesMain GetFromReader(SqlDataReader reader)
         {
             return new ApproveStagesMain
             {
                 ApproveStageMainId = reader.Get<int>("ApproveStageMainId"),
                 ApproveStageName = reader.Get<string>("ApproveStageName"),
                 BusinessUnitId = reader.Get<int>("BusinessUnitId"),
-                ProcedureId = reader.Get<int>("ProcedureId")
+                ProcedureId = reader.Get<int>("ProcedureId"),
+                Procedure = new Procedure
+                {
+                    ProcedueId = reader.Get<int>("ProcedureId"),
+                    ProcedureName = reader.Get<string>("ProcedureName")
+                }
+
             };
         }
     }
