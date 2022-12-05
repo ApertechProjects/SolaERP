@@ -20,7 +20,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             {
                 using (var command = _unitOfWork.CreateCommand())
                 {
-                    command.CommandText = query;
+                    command.CommandText = query;//@$"Exec SP_User_insert 'SHAFA',0,'SHAFA!','shafa@gmail.com',0,'15e2b0d3c33891ebb0f1ef609ec419420c20e320ce94c65fbc8c3312448eb225',0,'00000000-0000-0000-0000-000000000000'";
                     command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
                     command.Parameters.AddWithValue(command, "@StatusId", entity.StatusId);
                     command.Parameters.AddWithValue(command, "@UserName", entity.UserName);
