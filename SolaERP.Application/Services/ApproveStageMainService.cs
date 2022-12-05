@@ -33,6 +33,13 @@ namespace SolaERP.Application.Services
             throw new NotImplementedException();
         }
 
+        public async Task<ApiResponse<ApproveStagesMainDto>> GetApprovalStageHeaderLoad(int approvalStageMainId)
+        {
+            var approveStageHeader = await _approveStageMainRepository.GetApprovalStageHeaderLoad(approvalStageMainId);
+            var dto = _mapper.Map<ApproveStagesMainDto>(approveStageHeader);
+            return ApiResponse<ApproveStagesMainDto>.Success(dto, 200);
+        }
+
         public async Task<ApiResponse<List<ApproveStagesMainDto>>> GetByBusinessUnitId(int buId)
         {
             var approveStagesList = await _approveStageMainRepository.GetByBusinessUnitId(buId);

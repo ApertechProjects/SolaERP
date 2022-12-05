@@ -18,9 +18,15 @@ namespace SolaERP.Controllers
         }
 
         [HttpGet("{buId}")]
-        public async Task<ApiResponse<List<ApproveStagesMainDto>>> GetApproveStageMainByBusinessUnitId(int buId)
+        public async Task<ApiResponse<List<ApproveStagesMainDto>>> GetApproveStageMainByBuId(int buId)
         {
             return await _approveStageMainService.GetByBusinessUnitId(buId);
+        }
+
+        [HttpGet("{approvalStageMainId}")]
+        public async Task<ApiResponse<ApproveStagesMainDto>> GetApprovalStageHeaderLoad(int approvalStageMainId)
+        {
+            return await _approveStageMainService.GetApprovalStageHeaderLoad(approvalStageMainId);
         }
     }
 }

@@ -12,7 +12,6 @@ namespace SolaERP.Infrastructure.Entities.ApproveStage
         public int ApproveStageMainId { get; set; }
         public int ProcedureId { get; set; }
         public Procedure.Procedure Procedure { get; set; }
-        [DbIgnore]
         public int BusinessUnitId { get; set; }
         public string ApproveStageName { get; set; }
     }

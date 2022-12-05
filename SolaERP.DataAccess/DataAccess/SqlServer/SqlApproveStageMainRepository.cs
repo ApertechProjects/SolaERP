@@ -1,5 +1,6 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Dtos.ApproveStage;
 using SolaERP.Infrastructure.Entities.ApproveStage;
 using SolaERP.Infrastructure.Entities.Procedure;
 using SolaERP.Infrastructure.UnitOfWork;
@@ -32,6 +33,26 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
+        public async Task<ApproveStagesMain> GetApprovalStageHeaderLoad(int approvalStageMainId)
+        {
+            var result = await Task.Run(() =>
+            {
+                ApproveStagesMain approveStagesMain = new ApproveStagesMain();
+                using (var command = _unitOfWork.CreateCommand())
+                {
+                    command.CommandText = "EXEC dbo.SP_ApproveStageHeader_Load_BY_MainId @approvalStageMainId";
+                    command.Parameters.AddWithValue(command, "@approvalStageMainId", approvalStageMainId);
+                    using var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        approveStagesMain = GetFromReader(reader);
+                    }
+                    return approveStagesMain;
+                }
+            });
+            return result;
+        }
+
         public async Task<List<ApproveStagesMain>> GetByBusinessUnitId(int buId)
         {
             var result = await Task.Run(() =>
@@ -45,7 +66,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     using var reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        approveStagesMain.Add(GetFromReader((SqlDataReader)reader));
+                        approveStagesMain.Add(GetFromReader(reader));
                     }
                     return approveStagesMain;
                 }
@@ -68,7 +89,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        private ApproveStagesMain GetFromReader(SqlDataReader reader)
+        private ApproveStagesMain GetFromReader(IDataReader reader)
         {
             return new ApproveStagesMain
             {
