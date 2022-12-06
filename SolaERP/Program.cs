@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
+using SignalRChatExample.Hubs;
 using SolaERP.Application.Identity_Server;
 using SolaERP.Application.Mappers;
 using SolaERP.Application.Services;
@@ -93,6 +94,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddSingleton<ConfHelper>(new ConfHelper { DevelopmentUrl = builder.Configuration.GetConnectionString("DevelopmentConnectionString") });
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -102,10 +104,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors("CorsPolicy");
-app.MapHubs();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+//app.UseEndpoints(endpoints => endpoints.MapHub<ChatHub>("/chatHub"));
+app.MapHub<ChatHub>("/chatHub");
 app.UseGlobalExceptionHandlerMiddleware();
 app.MapControllers();
 app.Run();

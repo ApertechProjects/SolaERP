@@ -45,12 +45,12 @@ namespace SolaERP.Controllers
             return await _userService.GetAllAsync();
         }
 
-        [HttpGet]
-        [Authorize]
-        public async Task<ApiResponse<List<MenuLoadDto>>> GetUserMenus()
-        {
-            return await _userService.GetUserMenusAsync();
-        }
+        //[HttpGet]
+        //[Authorize]
+        //public async Task<ApiResponse<List<MenuLoadDto>>> GetUserMenus()
+        //{
+        //    //return await _userService.GetUserMenusAsync();
+        //}
 
     }
 }

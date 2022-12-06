@@ -86,12 +86,12 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(200);
         }
 
-        public async Task<ApiResponse<List<MenuLoadDto>>> GetUserMenusAsync()
-        {
-            var userMenus = await _userRepository.GetUserMenusAsync(Kernel.CurrentUserId);
-            var menuLoadDto = _mapper.Map<List<MenuLoadDto>>(userMenus);
+        //public async Task<ApiResponse<List<MenuLoadDto>>> GetUserMenusAsync()
+        //{
+        //    var userMenus = await _userRepository.GetUserMenusAsync(Kernel.CurrentUserId);
+        //    var menuLoadDto = _mapper.Map<List<MenuLoadDto>>(userMenus);
 
-            return ApiResponse<List<MenuLoadDto>>.Success(menuLoadDto, 200);
-        }
+        //    return ApiResponse<List<MenuLoadDto>>.Success(menuLoadDto, 200);
+        //}
     }
 }

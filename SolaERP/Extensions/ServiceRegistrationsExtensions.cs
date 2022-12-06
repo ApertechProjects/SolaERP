@@ -41,10 +41,6 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<ValidationFilter>();
         }
 
-        public static void MapHubs(this WebApplication app)
-        {
-            app.MapHub<ChatHub>("/chatHub")
-;
-        }
+
     }
 }
