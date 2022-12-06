@@ -1,31 +1,17 @@
-﻿using AutoMapper;
-using SolaERP.Application.Exceptions;
-using SolaERP.Application.Utils;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.User;
-using SolaERP.Infrastructure.Dtos.UserDto;
-using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.UnitOfWork;
-
-namespace SolaERP.Application.Services
+﻿namespace SolaERP.Application.Services
 {
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly ITokenHandler _tokenHandler;
         public UserService(IUserRepository userRepository,
                            IUnitOfWork unitOfWork,
-                           IMapper mapper,
-                           ITokenHandler tokenHandler)
+                           IMapper mapper)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _tokenHandler = tokenHandler;
         }
 
         public async Task<UserDto> AddAsync(UserDto model)
@@ -80,6 +66,25 @@ namespace SolaERP.Application.Services
             var userDto = _mapper.Map<UserDto>(userDatas);
             return userDto;
         }
-    
+        public async Task<ApiResponse<bool>> UpdateUserAsync(UserUpdateDto userUpdateDto)
+        {
+            var result = _mapper.Map<User>(userUpdateDto);
+            _userRepository.Update(result);
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(200);
+        }
+        public async Task<ApiResponse<bool>> UpdateUserPassword(UserUpdatePasswordDto userUpdatePasswordDto)
+        {
+
+            //if (userUpdatePasswordDto.PasswordHash != userUpdatePasswordDto.ConfirmPasswordHash)
+            //    throw new UserException("Password doesn't match with confirm password");
+
+            //var result = _mapper.Map<User>(userUpdatePasswordDto);
+            //_userRepository.Update
+            return ApiResponse<bool>.Success(200);
+        }
+
+
+
     }
 }

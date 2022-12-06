@@ -25,6 +25,8 @@ namespace SolaERP.Extensions
 
             builder.Services.AddScoped<IGroupService, GroupService>();
             builder.Services.AddScoped<IGroupRepository, SqlGroupRepository>();
+            builder.Services.AddScoped<IMenuService, MenuService>();
+            builder.Services.AddScoped<IMenuRepository, SqlMenuRepository>();
 
             builder.Services.AddScoped<IBusinessUnitService, BusinessUnitService>();
             builder.Services.AddScoped<IBusinessUnitRepository, SqlBusinessUnitRepository>();
@@ -45,5 +47,11 @@ namespace SolaERP.Extensions
             builder.Services.AddValidatorsFromAssemblyContaining<UserValidation>();
             builder.Services.AddScoped<ValidationFilter>();
         }
+
+        //        public static void MapHubs(this WebApplication app)
+        //        {
+        //            app.MapHub<ChatHub>("/chatHub")
+        //;
+        //        }
     }
 }
