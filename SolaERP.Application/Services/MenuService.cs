@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Utils;
+﻿using AutoMapper;
+using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Menu;
@@ -9,10 +10,12 @@ namespace SolaERP.Application.Services
     public class MenuService : IMenuService
     {
         private readonly IMenuRepository _menuRepository;
+        private readonly IMapper _mapper;
 
-        public MenuService(IMenuRepository menuRepository)
+        public MenuService(IMenuRepository menuRepository, IMapper mapper)
         {
             _menuRepository = menuRepository;
+            _mapper = mapper;
         }
 
         public async Task<ApiResponse<List<ParentMenuDto>>> GetUserMenusWithChildsAsync()
@@ -53,6 +56,17 @@ namespace SolaERP.Application.Services
                 return ApiResponse<List<ParentMenuDto>>.Success(menus, 200);
 
             return ApiResponse<List<ParentMenuDto>>.Fail("BadRequest", 400);
+        }
+
+        public async Task<ApiResponse<List<MenuWithPrivilagesDto>>> GetUserMenusWithPrivilagesAsync()
+        {
+            var menus = await _menuRepository.GetUserMenuWithPrivillagesAsync(Kernel.CurrentUserId);
+            var menusDto = _mapper.Map<List<MenuWithPrivilagesDto>>(menus);
+
+            if (menusDto != null)
+                return ApiResponse<List<MenuWithPrivilagesDto>>.Success(menusDto, 200);
+
+            return ApiResponse<List<MenuWithPrivilagesDto>>.Fail("BadRequest", 400);
         }
     }
 }
