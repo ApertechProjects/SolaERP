@@ -7,7 +7,7 @@ namespace SolaERP.Middlewares
 {
     public static class ExceptionHandlerMiddleware
     {
-        public static void UseGlobalExceptionHandlerMiddleware(this IApplicationBuilder app)
+        public static void UseGlobalExceptionHandlerMiddleware<T>(this IApplicationBuilder app,ILogger<T> _logger)
         {
             app.UseExceptionHandler(config =>
             {
@@ -22,6 +22,7 @@ namespace SolaERP.Middlewares
                         _ => 500
                     };
                     handler.Response.StatusCode = statusCode;
+                    _logger.LogError(errorFeatures.Error.Message);
                     var result = ApiResponse<NoContentDto>.Fail(errorFeatures.Error.Message, 200);
                     await handler.Response.WriteAsync(JsonSerializer.Serialize(result));
 

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using SolaERP.Application.Identity_Server;
 using SolaERP.Application.Mappers;
 using SolaERP.Application.Services;
@@ -36,7 +37,9 @@ builder.Services.AddCors(options =>
         .AllowAnyOrigin()
         .Build());
 });
+var logger = new LoggerConfiguration().WriteTo.File(Environment.SpecialFolder.MyDocuments + "log.txt").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
 
+builder.Host.UseSerilog(logger);
 
 builder.Services.AddAuthentication(x =>
 {
@@ -101,10 +104,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseHttpLogging();
 app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseGlobalExceptionHandlerMiddleware();
+app.UseGlobalExceptionHandlerMiddleware<Program>(app.Services.GetRequiredService<ILogger<Program>>());
 app.MapControllers();
 app.Run();
