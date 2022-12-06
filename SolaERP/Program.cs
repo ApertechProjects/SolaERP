@@ -15,10 +15,19 @@ using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Middlewares;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers(options => { options.Filters.Add(new ValidationFilter()); }).Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+builder.Services.AddControllers(options => { options.Filters.Add(new ValidationFilter()); })
+    .AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    //This code ignores circular referanced object when they serialized to jsonfile 
+}).Services
+    .AddFluentValidationAutoValidation()
+    .AddFluentValidationClientsideAdapters();
+
 builder.Services.AddIdentity<User, Role>().AddDefaultTokenProviders();
 builder.Services.AddTransient<ITokenHandler, JwtTokenHandler>();
 builder.Services.AddScoped<IUserStore<User>, UserStore>();
@@ -44,7 +53,7 @@ builder.Services.AddAuthentication(x =>
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
- .AddJwtBearer(options =>
+    .AddJwtBearer(options =>
  {
      options.RequireHttpsMetadata = false;
      options.SaveToken = true;

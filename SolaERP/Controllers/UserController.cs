@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
@@ -47,9 +46,9 @@ namespace SolaERP.Controllers
 
         //[HttpGet]
         //[Authorize]
-        //public async Task<ApiResponse<List<MenuLoadDto>>> GetUserMenus()
+        //public async Task<ApiResponse<List<MenuWithPrivilagesDto>>> GetUserMenus()
         //{
-        //    //return await _userService.GetUserMenusAsync();
+        //    return await _userService.GetUserMenusAsync();
         //}
 
     }

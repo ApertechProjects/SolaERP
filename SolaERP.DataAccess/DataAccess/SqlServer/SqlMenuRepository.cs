@@ -1,4 +1,5 @@
-﻿using SolaERP.DataAccess.Extensions;
+﻿using Microsoft.AspNetCore.Http;
+using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Menu;
 using SolaERP.Infrastructure.UnitOfWork;
@@ -9,7 +10,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public SqlMenuRepository(IUnitOfWork unitOfWork)
+        public SqlMenuRepository(IUnitOfWork unitOfWork, IHttpContextAccessor context)
         {
             _unitOfWork = unitOfWork;
         }
@@ -29,11 +30,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public async Task<List<MenuLoad>> GetUserMenusAsync(int userId)
+        public async Task<List<MenuWithPrivilages>> GetUserMenuWithPrivillagesAsync(int userId)
         {
             var result = await Task.Run(() =>
             {
-                List<MenuLoad> userMenus = new List<MenuLoad>();
+                List<MenuWithPrivilages> userMenus = new List<MenuWithPrivilages>();
                 using (var command = _unitOfWork.CreateCommand())
                 {
                     command.CommandText = "EXEC dbo.SP_UserMenu_Load @userId";
@@ -42,7 +43,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     using var reader = command.ExecuteReader();
 
                     while (reader.Read())
-                        userMenus.Add(reader.GetByEntityStructure<MenuLoad>());
+                        userMenus.Add(reader.GetByEntityStructure<MenuWithPrivilages>());
 
                     return userMenus;
                 }

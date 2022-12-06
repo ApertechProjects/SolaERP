@@ -1,28 +1,72 @@
-﻿using SolaERP.Application.Utils;
+﻿using AutoMapper;
+using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Entities.Menu;
+using SolaERP.Infrastructure.Dtos.Menu;
+using SolaERP.Infrastructure.Dtos.Shared;
 
 namespace SolaERP.Application.Services
 {
     public class MenuService : IMenuService
     {
-        private readonly IMenuRepository _repository;
+        private readonly IMenuRepository _menuRepository;
+        private readonly IMapper _mapper;
 
-        public MenuService(IMenuRepository repository)
+        public MenuService(IMenuRepository menuRepository, IMapper mapper)
         {
-            _repository = repository;
+            _menuRepository = menuRepository;
+            _mapper = mapper;
         }
 
-        public async Task<List<Menu>> GetUserMenusWithChildAsync()
+        public async Task<ApiResponse<List<ParentMenuDto>>> GetUserMenusWithChildsAsync()
         {
-            var menus = await _repository.GetUserMenusAsync(Kernel.CurrentUserId);
+            var menusWithPrivilages = await _menuRepository.GetUserMenuWithPrivillagesAsync(Kernel.CurrentUserId);
+            var parentMenusWithPrivilages = menusWithPrivilages.Where(m => m.ParentId == 0).ToList();//For getting ParentMenus
 
+            List<ParentMenuDto> menus = new List<ParentMenuDto>();
+            foreach (var parent in parentMenusWithPrivilages)
+            {
+                ParentMenuDto parentMenu = new ParentMenuDto()
+                {
+                    Id = parent.MenuId,
+                    ParentMenuName = parent.MenuName,
+                    Icon = parent.Icon,
+                    ReactIcon = parent.ReactIcon,
+                    Url = parent.Url
+                };
 
+                var childMenus = menusWithPrivilages.Where(m => m.ParentId == parent.MenuId).ToList();
 
-            throw new NotImplementedException();
+                foreach (var child in childMenus)
+                {
+                    parentMenu.Childs.Add(new()
+                    {
+                        Id = child.MenuId,
+                        ParentMenuId = child.ParentId,
+                        Icon = child.Icon,
+                        Url = child.Url,
+                        ReactIcon = child.ReactIcon,
+                        ChildMenuName = child.MenuName,
+                        ParentMenu = parentMenu
+                    });
+                }
+                menus.Add(parentMenu);
+            }
+            if (menus.Count > 0)
+                return ApiResponse<List<ParentMenuDto>>.Success(menus, 200);
 
+            return ApiResponse<List<ParentMenuDto>>.Fail("BadRequest", 400);
+        }
 
+        public async Task<ApiResponse<List<MenuWithPrivilagesDto>>> GetUserMenusWithPrivilagesAsync()
+        {
+            var menus = await _menuRepository.GetUserMenuWithPrivillagesAsync(Kernel.CurrentUserId);
+            var menusDto = _mapper.Map<List<MenuWithPrivilagesDto>>(menus);
+
+            if (menusDto != null)
+                return ApiResponse<List<MenuWithPrivilagesDto>>.Success(menusDto, 200);
+
+            return ApiResponse<List<MenuWithPrivilagesDto>>.Fail("BadRequest", 400);
         }
     }
 }
