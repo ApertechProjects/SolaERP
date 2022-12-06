@@ -37,7 +37,8 @@ builder.Services.AddCors(options =>
         .AllowAnyOrigin()
         .Build());
 });
-var logger = new LoggerConfiguration().WriteTo.File(Environment.SpecialFolder.MyDocuments + "log.txt").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
+var logger = new LoggerConfiguration().WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"),"logs").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
+    //File("logs.txt").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
 
 builder.Host.UseSerilog(logger);
 
