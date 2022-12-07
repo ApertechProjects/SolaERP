@@ -38,9 +38,9 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<ApiResponse<AccountResponseDto>> Login(LoginRequestDto dto)
         {
-            var user = await _userManager.FindByNameAsync(dto.Username);
+            var user = await _userManager.FindByNameAsync(dto.Email);
             if (user == null)
-                return ApiResponse<AccountResponseDto>.Fail($"User: {dto.Username} not found", 400);
+                return ApiResponse<AccountResponseDto>.Fail($"User: {dto.Email} not found", 400);
 
             var userdto = _mapper.Map<UserDto>(user);
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
@@ -79,7 +79,6 @@ namespace SolaERP.Controllers
         [HttpPost("token")]
         public async Task<ApiResponse<bool>> Logout(string token)
         {
-
             await _signInManager.SignOutAsync();
 
             var userId = await _userService.GetUserIdByTokenAsync(token);
