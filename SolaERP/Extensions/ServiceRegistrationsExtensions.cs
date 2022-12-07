@@ -18,28 +18,43 @@ namespace SolaERP.Extensions
     {
         public static void UseSqlDataAccessServices(this WebApplicationBuilder builder)
         {
+            #region UnitOfWork
             builder.Services.AddScoped<IUnitOfWork, SqlUnitOfWork>();
-
+            #endregion
+            #region User
             builder.Services.AddScoped<IUserRepository, SqlUserRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
-
+            #endregion
+            #region Group
             builder.Services.AddScoped<IGroupService, GroupService>();
             builder.Services.AddScoped<IGroupRepository, SqlGroupRepository>();
+            #endregion
+            #region Menu
             builder.Services.AddScoped<IMenuService, MenuService>();
             builder.Services.AddScoped<IMenuRepository, SqlMenuRepository>();
-
+            #endregion
+            #region BusinessUnit
             builder.Services.AddScoped<IBusinessUnitService, BusinessUnitService>();
             builder.Services.AddScoped<IBusinessUnitRepository, SqlBusinessUnitRepository>();
-
+            #endregion
+            #region ApproveStageMain
             builder.Services.AddScoped<IApproveStageMainService, ApproveStageMainService>();
             builder.Services.AddScoped<IApproveStageMainRepository, SqlApproveStageMainRepository>();
-
+            #endregion
+            #region ApproveStageDetail
+            builder.Services.AddScoped<IApproveStageDetailService, ApproveStageDetailService>();
+            builder.Services.AddScoped<IApproveStageDetailRepository, SqlApproveStageDetailRepository>();
+            #endregion
+            #region MailService
             builder.Services.AddScoped<IMailService, MailService>();
+            #endregion
+            #region ConnectionString
             builder.Services.AddScoped((t) =>
             {
                 var connectionString = builder.Configuration.GetConnectionString("DevelopmentConnectionString");
                 return ConnectionFactory.CreateSqlConnection(connectionString);
             });
+            #endregion
         }
 
         public static void UseValidationExtension(this WebApplicationBuilder builder)

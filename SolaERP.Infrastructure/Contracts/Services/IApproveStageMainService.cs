@@ -11,7 +11,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
 {
     public interface IApproveStageMainService : ICrudService<ApproveStagesMainDto>
     {
-        Task<ApiResponse<ApproveStagesMainDto>> GetApprovalStageHeaderLoad(int approvalStageMainId);
+        Task<ApiResponse<ApproveStagesMainDto>> GetApproveStageMainByApprovalStageMainId(int approveStageMainId);
         Task<ApiResponse<List<ApproveStagesMainDto>>> GetByBusinessUnitId(int buId);
     }
 }

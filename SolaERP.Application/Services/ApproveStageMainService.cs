@@ -27,7 +27,7 @@ namespace SolaERP.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ApiResponse<ApproveStagesMainDto>> GetApprovalStageHeaderLoad(int approvalStageMainId)
+        public async Task<ApiResponse<ApproveStagesMainDto>> GetApproveStageMainByApprovalStageMainId(int approvalStageMainId)
         {
             var approveStageHeader = await _approveStageMainRepository.GetApprovalStageHeaderLoad(approvalStageMainId);
             var dto = _mapper.Map<ApproveStagesMainDto>(approveStageHeader);
@@ -38,12 +38,6 @@ namespace SolaERP.Application.Services
         {
             var approveStagesList = await _approveStageMainRepository.GetByBusinessUnitId(buId);
             var dto = _mapper.Map<List<ApproveStagesMainDto>>(approveStagesList);
-
-            foreach (var proc in approveStagesList)
-            {
-                
-            }
-
             return ApiResponse<List<ApproveStagesMainDto>>.Success(dto, 200);
         }
 

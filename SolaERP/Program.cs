@@ -122,6 +122,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseGlobalExceptionHandlerMiddleware<Program>(app.Services.GetRequiredService<ILogger<Program>>());
 //app.UseEndpoints(endpoints => endpoints.MapHub<ChatHub>("/chatHub"));
-app.UseGlobalExceptionHandlerMiddleware();
+//app.UseGlobalExceptionHandlerMiddleware();
 app.MapControllers();
 app.Run();

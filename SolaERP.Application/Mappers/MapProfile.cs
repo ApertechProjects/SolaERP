@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SolaERP.Infrastructure.Dtos.ApproveStage;
+using SolaERP.Infrastructure.Dtos.ApproveStages;
 using SolaERP.Infrastructure.Dtos.BusinessUnit;
 using SolaERP.Infrastructure.Dtos.Group;
 using SolaERP.Infrastructure.Dtos.Menu;
@@ -25,6 +26,7 @@ namespace SolaERP.Application.Mappers
             CreateMap<Groups, GroupsDto>().ReverseMap();
             CreateMap<MenuWithPrivilagesDto, MenuWithPrivilages>().ReverseMap();
             CreateMap<ApproveStagesMain, ApproveStagesMainDto>().ReverseMap();
+            CreateMap<ApproveStagesDetail, ApproveStagesDetailDto>().ReverseMap();
             CreateMap<Procedure, ProcedureDto>().ReverseMap();
         }
     }
