@@ -79,7 +79,6 @@ namespace SolaERP.Controllers
         [HttpPost("token")]
         public async Task<ApiResponse<bool>> Logout(string token)
         {
-
             await _signInManager.SignOutAsync();
 
             var userId = await _userService.GetUserIdByTokenAsync(token);
