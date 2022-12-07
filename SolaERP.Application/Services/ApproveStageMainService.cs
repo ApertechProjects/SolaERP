@@ -38,6 +38,12 @@ namespace SolaERP.Application.Services
         {
             var approveStagesList = await _approveStageMainRepository.GetByBusinessUnitId(buId);
             var dto = _mapper.Map<List<ApproveStagesMainDto>>(approveStagesList);
+
+            foreach (var proc in approveStagesList)
+            {
+                
+            }
+
             return ApiResponse<List<ApproveStagesMainDto>>.Success(dto, 200);
         }
 
