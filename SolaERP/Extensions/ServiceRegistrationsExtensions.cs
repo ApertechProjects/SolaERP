@@ -34,7 +34,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IApproveStageMainService, ApproveStageMainService>();
             builder.Services.AddScoped<IApproveStageMainRepository, SqlApproveStageMainRepository>();
 
-            // builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<IMailService, MailService>();
             builder.Services.AddScoped((t) =>
             {
                 var connectionString = builder.Configuration.GetConnectionString("DevelopmentConnectionString");
@@ -47,11 +47,5 @@ namespace SolaERP.Extensions
             builder.Services.AddValidatorsFromAssemblyContaining<UserValidation>();
             builder.Services.AddScoped<ValidationFilter>();
         }
-
-        //        public static void MapHubs(this WebApplication app)
-        //        {
-        //            app.MapHub<ChatHub>("/chatHub")
-        //;
-        //        }
     }
 }
