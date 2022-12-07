@@ -37,9 +37,9 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<ApiResponse<AccountResponseDto>> Login(LoginRequestDto dto)
         {
-            var user = await _userManager.FindByNameAsync(dto.Email);
+            var user = await _userManager.FindByNameAsync(dto.Username);
             if (user == null)
-                return ApiResponse<AccountResponseDto>.Fail($"User: {dto.Email} not found", 400);
+                return ApiResponse<AccountResponseDto>.Fail($"User: {dto.Username} not found", 400);
 
             var userdto = _mapper.Map<UserDto>(user);
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
@@ -68,6 +68,13 @@ namespace SolaERP.Controllers
                         new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, result), AccountUser = result }, 200);
             }
             return ApiResponse<AccountResponseDto>.Fail("This email is already exsist", 400);
+        }
+
+        [HttpPost]
+        public async Task<ApiResponse<bool>> ResetPassword(UserDto dto)
+        {
+            await _userService.UpdateAsync(dto);
+            return ApiResponse<bool>.Success(200);
         }
 
         [HttpPost]

@@ -24,13 +24,13 @@ namespace SolaERP.Controllers
         }
 
         [HttpGet("{buId}")]
-        public async Task<ApiResult> GetApprovalStageLoad([FromHeader] string token, int buId)
+        public async Task<ApiResult> GetApprovalStageLoad([FromHeader] string token, int buId) //start
         {
             return await new EntityLogic(ConfHelper).GetApprovalStageLoad(token, buId);
         }
 
         [HttpGet("{approvalStageMainId}")]
-        public async Task<ApiResult> GetApprovalStageHeaderLoad([FromHeader] string token, int approvalStageMainId)
+        public async Task<ApiResult> GetApprovalStageHeaderLoad([FromHeader] string token, int approvalStageMainId) // start
         {
             return await new EntityLogic(ConfHelper).GetApprovalStageHeaderLoad(token, approvalStageMainId);
         }

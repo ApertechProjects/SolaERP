@@ -33,14 +33,17 @@ namespace SolaERP.Application.Services
             var user = _mapper.Map<User>(model);
             user.PasswordHash = SecurityUtil.ComputeSha256Hash(model.Password);
 
-            await _userRepository.AddAsync(user);
+            var result = await _userRepository.AddAsync(user);
             await _unitOfWork.SaveChangesAsync();
 
-
-            User lastInsertedUser = await _userRepository.GetLastInsertedUserAsync();
-            UserDto userDto = _mapper.Map<UserDto>(lastInsertedUser);
-            Kernel.CurrentUserId = lastInsertedUser.Id;
-            return userDto;
+            if (result)
+            {
+                User lastInsertedUser = await _userRepository.GetLastInsertedUserAsync();
+                UserDto userDto = _mapper.Map<UserDto>(lastInsertedUser);
+                Kernel.CurrentUserId = lastInsertedUser.Id;
+                return userDto;
+            }
+            return null;
         }
         public async Task<ApiResponse<List<UserDto>>> GetAllAsync()
         {
@@ -49,9 +52,16 @@ namespace SolaERP.Application.Services
 
             return ApiResponse<List<UserDto>>.Success(dto, 200);
         }
-        public async Task<ApiResponse<bool>> UpdateAsync(UserDto model)
+        public async Task<ApiResponse<bool>> UpdateAsync(UserDto userUpdateDto)
         {
-            var res = await _userRepository.GetAllAsync();
+            if (userUpdateDto.Password != userUpdateDto.ConfirmPassword)
+                throw new UserException("Password doesn't match with confirm password");
+
+            var user = _mapper.Map<User>(userUpdateDto);
+            user.PasswordHash = SecurityUtil.ComputeSha256Hash(userUpdateDto.Password);
+            _userRepository.Update(user);
+
+            await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }
         public async Task<ApiResponse<bool>> RemoveAsync(int Id)
@@ -84,5 +94,8 @@ namespace SolaERP.Application.Services
             //_userRepository.Update
             return ApiResponse<bool>.Success(200);
         }
+
+
+
     }
 }

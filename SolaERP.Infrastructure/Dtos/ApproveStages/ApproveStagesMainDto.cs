@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Entities.ApproveStage
+namespace SolaERP.Infrastructure.Dtos.ApproveStage
 {
-    public class ApproveStagesMain : BaseEntity
+    public class ApproveStagesMainDto
     {
         public int ApproveStageMainId { get; set; }
         public int ProcedureId { get; set; }
-        public Procedure.Procedure Procedure { get; set; }
         public int BusinessUnitId { get; set; }
+        public string ProcedureName { get; set; }
         public string ApproveStageName { get; set; }
     }
 }

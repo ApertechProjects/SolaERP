@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
 using SolaERP.Application.Services;
-using SolaERP.Application.Validations;
-using SolaERP.Application.Validations.UserValidation;
 using SolaERP.DataAccess.DataAcces.SqlServer;
 using SolaERP.DataAccess.DataAccess.SqlServer;
 using SolaERP.DataAccess.Factories;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Infrastructure.ValidationRules;
+using SolaERP.Infrastructure.ValidationRules.UserValidation;
 
 namespace SolaERP.Extensions
 {
@@ -19,8 +19,10 @@ namespace SolaERP.Extensions
         public static void UseSqlDataAccessServices(this WebApplicationBuilder builder)
         {
             builder.Services.AddScoped<IUnitOfWork, SqlUnitOfWork>();
+
             builder.Services.AddScoped<IUserRepository, SqlUserRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
+
             builder.Services.AddScoped<IGroupService, GroupService>();
             builder.Services.AddScoped<IGroupRepository, SqlGroupRepository>();
             builder.Services.AddScoped<IMenuService, MenuService>();
@@ -28,7 +30,11 @@ namespace SolaERP.Extensions
 
             builder.Services.AddScoped<IBusinessUnitService, BusinessUnitService>();
             builder.Services.AddScoped<IBusinessUnitRepository, SqlBusinessUnitRepository>();
-            builder.Services.AddScoped<IMailService, MailService>();
+
+            builder.Services.AddScoped<IApproveStageMainService, ApproveStageMainService>();
+            builder.Services.AddScoped<IApproveStageMainRepository, SqlApproveStageMainRepository>();
+
+            builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped((t) =>
             {
                 var connectionString = builder.Configuration.GetConnectionString("DevelopmentConnectionString");
