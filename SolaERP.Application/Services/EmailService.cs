@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Shared;
 using System.Net;
@@ -10,6 +9,13 @@ namespace SolaERP.Application.Services
     public class MailService : IMailService
     {
         private readonly IConfiguration _configuration;
+        private string ResetVrificationCode { get; set; }
+
+        public MailService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
 
         public async Task<ApiResponse<bool>> SendEmailForResetPassword(string email)
         {
@@ -30,8 +36,8 @@ namespace SolaERP.Application.Services
                     message.Subject = "Reset Password";
                     message.IsBodyHtml = true;
                     Random rand = new Random();
-                    Kernel.PasswordForReset = rand.Next(100000, 999999).ToString();
-                    message.Body = Kernel.PasswordForReset;
+                    ResetVrificationCode = rand.Next(100000, 999999).ToString();
+                    message.Body = ResetVrificationCode;
                     message.To.Add(email);
                     await smtpClient.SendMailAsync(message);
                 }

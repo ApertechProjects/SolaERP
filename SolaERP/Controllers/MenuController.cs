@@ -19,16 +19,16 @@ namespace SolaERP.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<ApiResponse<List<ParentMenuDto>>> GetUserMenusWithChilds()
+        [HttpGet("{token}")]
+        public async Task<ApiResponse<List<ParentMenuDto>>> GetUserMenusWithChilds(string token)
         {
-            return await _menuService.GetUserMenusWithChildsAsync();
+            return await _menuService.GetUserMenusWithChildsAsync(token);
         }
 
-        [HttpGet]
-        public async Task<ApiResponse<List<MenuWithPrivilagesDto>>> GetUserMenusWithPrivilages()
+        [HttpGet("{token}")]
+        public async Task<ApiResponse<List<MenuWithPrivilagesDto>>> GetUserMenusWithPrivilages(string token)
         {
-            return await _menuService.GetUserMenusWithPrivilagesAsync();
+            return await _menuService.GetUserMenusWithPrivilagesAsync(token);
         }
     }
 }

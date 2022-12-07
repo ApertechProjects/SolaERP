@@ -2,6 +2,7 @@
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.UnitOfWork;
+using System.Data;
 
 namespace SolaERP.DataAccess.DataAcces.SqlServer
 {
@@ -36,7 +37,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             });
             return result;
         }
-        public async Task<User> GetByUserId(int userId)
+        public async Task<User> GetUserByIdAsync(int userId)
         {
             var result = await Task.Run(() =>
             {
@@ -75,7 +76,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             });
             return result;
         }
-        public async Task<User> GetByEmailAsync(string email)
+        public async Task<User> GetUserByEmailAsync(string email)
         {
             var result = await Task.Run(() =>
             {
@@ -116,7 +117,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             });
             return result;
         }
-        public async Task<User> GetByUserNameAsync(string userName)
+        public async Task<User> GetUserByUsernameAsync(string userName)
         {
             var result = await Task.Run(() =>
             {
@@ -179,6 +180,43 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
                 command.ExecuteNonQuery();
             }
+        }
+        public async Task<int> GetUserIdByTokenAsync(string finderToken)
+        {
+            var result = await Task.Run(() =>
+            {
+                int userId = 0;
+                using (var command = _unitOfWork.CreateCommand())
+                {
+                    command.CommandText = "SELECT ID FROM CONFIG.APPUSER WHERE USERTOKEN = @USERTOKEN";
+                    command.Parameters.AddWithValue(command, "@USERTOKEN", finderToken);
+
+                    using var reader = command.ExecuteReader();
+                    if (reader.Read())
+                        userId = reader.Get<int>("Id");
+                }
+                return userId;
+            });
+            return result;
+        }
+        public async Task<bool> UpdateUserTokenAsync(int userId, Guid token)
+        {
+            var result = await Task.Run(() =>
+            {
+                using (var command = _unitOfWork.CreateCommand())
+                {
+                    command.CommandText = "SP_UPDATE_USER_TOKEN";//@USERID,@USERTOKEN";
+
+                    command.Parameters.AddWithValue(command, "@USERID", userId);
+                    command.Parameters.AddWithValue(command, "@USERTOKEN", token);
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    var result = command.ExecuteNonQuery();
+
+                    return result > 0 ? true : false;
+                }
+            });
+            return result;
         }
     }
 }

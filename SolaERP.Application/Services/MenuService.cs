@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Menu;
@@ -10,17 +9,22 @@ namespace SolaERP.Application.Services
     public class MenuService : IMenuService
     {
         private readonly IMenuRepository _menuRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public MenuService(IMenuRepository menuRepository, IMapper mapper)
+
+        public MenuService(IMenuRepository menuRepository, IUserRepository userRepository, IMapper mapper)
         {
             _menuRepository = menuRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
 
-        public async Task<ApiResponse<List<ParentMenuDto>>> GetUserMenusWithChildsAsync()
+        public async Task<ApiResponse<List<ParentMenuDto>>> GetUserMenusWithChildsAsync(string finderToken)
         {
-            var menusWithPrivilages = await _menuRepository.GetUserMenuWithPrivillagesAsync(Kernel.CurrentUserId);
+            var menusWithPrivilages = await _menuRepository.GetUserMenuWithPrivillagesAsync(
+                await _userRepository.GetUserIdByTokenAsync(finderToken));
+
             var parentMenusWithPrivilages = menusWithPrivilages.Where(m => m.ParentId == 0).ToList();//For getting ParentMenus
 
             List<ParentMenuDto> menus = new List<ParentMenuDto>();
@@ -58,9 +62,9 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<ParentMenuDto>>.Fail("BadRequest", 400);
         }
 
-        public async Task<ApiResponse<List<MenuWithPrivilagesDto>>> GetUserMenusWithPrivilagesAsync()
+        public async Task<ApiResponse<List<MenuWithPrivilagesDto>>> GetUserMenusWithPrivilagesAsync(string finderToken)
         {
-            var menus = await _menuRepository.GetUserMenuWithPrivillagesAsync(Kernel.CurrentUserId);
+            var menus = await _menuRepository.GetUserMenuWithPrivillagesAsync(await _userRepository.GetUserIdByTokenAsync(finderToken));
             var menusDto = _mapper.Map<List<MenuWithPrivilagesDto>>(menus);
 
             if (menusDto != null)

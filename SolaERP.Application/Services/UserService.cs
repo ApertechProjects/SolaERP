@@ -25,7 +25,7 @@ namespace SolaERP.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<UserDto> AddAsync(UserDto model)
+        public async Task AddAsync(UserDto model)
         {
             if (model.Password != model.ConfirmPassword)
                 throw new UserException("Password doesn't match with confirm password");
@@ -35,12 +35,6 @@ namespace SolaERP.Application.Services
 
             await _userRepository.AddAsync(user);
             await _unitOfWork.SaveChangesAsync();
-
-
-            User lastInsertedUser = await _userRepository.GetLastInsertedUserAsync();
-            UserDto userDto = _mapper.Map<UserDto>(lastInsertedUser);
-            Kernel.CurrentUserId = lastInsertedUser.Id;
-            return userDto;
         }
         public async Task<ApiResponse<List<UserDto>>> GetAllAsync()
         {
@@ -63,7 +57,7 @@ namespace SolaERP.Application.Services
         }
         public async Task<UserDto> GetByUserId(int userId)
         {
-            var userDatas = await _userRepository.GetByUserId(userId);
+            var userDatas = await _userRepository.GetUserByIdAsync(userId);
             var userDto = _mapper.Map<UserDto>(userDatas);
             return userDto;
         }
@@ -83,6 +77,21 @@ namespace SolaERP.Application.Services
             //var result = _mapper.Map<User>(userUpdatePasswordDto);
             //_userRepository.Update
             return ApiResponse<bool>.Success(200);
+        }
+
+        public async Task<ApiResponse<NoContentDto>> UpdateUserIdentifier(string finderToken, Guid newToken)
+        {
+            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+
+            var isSuccessfull = await _userRepository.UpdateUserTokenAsync(userId, newToken);
+            await _unitOfWork.SaveChangesAsync();
+
+            return ApiResponse<NoContentDto>.Success(200);
+        }
+
+        public Task<int> GetUserIdByTokenAsync(string finderToken)
+        {
+            return _userRepository.GetUserIdByTokenAsync(finderToken);
         }
     }
 }

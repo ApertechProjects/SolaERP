@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.Shared;
@@ -34,6 +33,8 @@ namespace SolaERP.Controllers
         }
 
 
+
+
         [HttpPost]
         public async Task<ApiResponse<AccountResponseDto>> Login(LoginRequestDto dto)
         {
@@ -46,13 +47,16 @@ namespace SolaERP.Controllers
 
             if (signInResult.Succeeded)
             {
-                Kernel.CurrentUserId = user.Id;
-                return ApiResponse<AccountResponseDto>.Success(
-                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, userdto), AccountUser = userdto }, 200);
-            }
+                var newtoken = Guid.NewGuid();
+                await _userService.UpdateUserIdentifier(user.UserToken.ToString(), newtoken);
 
+                return ApiResponse<AccountResponseDto>.Success(
+                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, userdto), UserIdentifier = newtoken.ToString() }, 200);
+            }
             return ApiResponse<AccountResponseDto>.Fail("Email or password is incorrect", 400);
         }
+
+
 
         [HttpPost]
         public async Task<ApiResponse<AccountResponseDto>> Register(UserDto dto)
@@ -61,19 +65,25 @@ namespace SolaERP.Controllers
 
             if (user is null)
             {
-                var result = await _userService.AddAsync(dto);
+                dto.UserToken = Guid.NewGuid();
+                await _userService.AddAsync(dto);
 
-                if (result != null)
-                    return ApiResponse<AccountResponseDto>.Success(
-                        new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, result), AccountUser = result }, 200);
+                return ApiResponse<AccountResponseDto>.Success(
+                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto), UserIdentifier = dto.UserToken.ToString() }, 200);
             }
             return ApiResponse<AccountResponseDto>.Fail("This email is already exsist", 400);
         }
 
-        [HttpPost]
-        public async Task<ApiResponse<bool>> Logout()
+
+
+        [HttpPost("token")]
+        public async Task<ApiResponse<bool>> Logout(string token)
         {
             await _signInManager.SignOutAsync();
+
+            var userId = await _userService.GetUserIdByTokenAsync(token);
+            await _userService.UpdateUserIdentifier(token, new Guid());
+
             return ApiResponse<bool>.Success(true, 200);
         }
 

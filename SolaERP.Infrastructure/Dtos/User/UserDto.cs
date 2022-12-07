@@ -1,4 +1,5 @@
 ﻿using SolaERP.Infrastructure.Enums;
+using System.Text.Json.Serialization;
 
 namespace SolaERP.Infrastructure.Dtos.UserDto
 {
@@ -12,6 +13,8 @@ namespace SolaERP.Infrastructure.Dtos.UserDto
         public string PhoneNumber { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
+        [JsonIgnore]
+        public Guid UserToken { get; set; }
         public UserRegisterType UserTypeId { get; set; }
     }
 }
