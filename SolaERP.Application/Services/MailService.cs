@@ -28,10 +28,10 @@ namespace SolaERP.Application.Services
                 mail.To.Add(to);
             mail.Subject = subject;
             mail.Body = body;
-            mail.From = new(_configuration["Mail:Username"], "Apertech", System.Text.Encoding.UTF8);
+            mail.From = new(_configuration["Mail:Email"], "Apertech", System.Text.Encoding.UTF8);
 
             SmtpClient smtp = new();
-            smtp.Credentials = new NetworkCredential(_configuration["Mail:Username"], _configuration["Mail:Password"]);
+            smtp.Credentials = new NetworkCredential(_configuration["Mail:Email"], _configuration["Mail:Password"]);
             smtp.Port = 587;
             smtp.EnableSsl = true;
             smtp.Host = _configuration["Mail:Host"];
@@ -42,10 +42,10 @@ namespace SolaERP.Application.Services
         {
             using (SmtpClient smtpClient = new SmtpClient())
             {
-                var basicCredential = new NetworkCredential(_configuration["Mail:Username"], _configuration["Mail:Password"]);
+                var basicCredential = new NetworkCredential(_configuration["Mail:Email"], _configuration["Mail:Password"]);
                 using (MailMessage message = new MailMessage())
                 {
-                    MailAddress fromAddress = new MailAddress(_configuration["Mail:Username"]);
+                    MailAddress fromAddress = new MailAddress(_configuration["Mail:Email"]);
 
                     smtpClient.Host = _configuration["Mail:Host"];
                     smtpClient.Port = 587;

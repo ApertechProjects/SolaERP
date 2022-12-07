@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.BusinessUnit;
 using SolaERP.Infrastructure.Dtos.Shared;
@@ -7,7 +8,7 @@ namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class BusinessUnitController : ControllerBase
     {
         private readonly IBusinessUnitService _businessUnitService;
@@ -22,10 +23,10 @@ namespace SolaERP.Controllers
             return await _businessUnitService.GetAllAsync();
         }
 
-        [HttpGet("{token}")]
-        public async Task<ApiResponse<List<BusinessUnitsDto>>> GetBusinessUnitListByUserId(string token)
+        [HttpGet]
+        public async Task<ApiResponse<List<BusinessUnitsDto>>> GetBusinessUnitListByUserId([FromHeader] string authToken)
         {
-            return await _businessUnitService.GetBusinessUnitListByUserId(token);
+            return await _businessUnitService.GetBusinessUnitListByUserId(authToken);
         }
     }
 }
