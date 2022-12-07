@@ -25,6 +25,8 @@ namespace SolaERP.Extensions
 
             builder.Services.AddScoped<IGroupService, GroupService>();
             builder.Services.AddScoped<IGroupRepository, SqlGroupRepository>();
+            builder.Services.AddScoped<IMenuService, MenuService>();
+            builder.Services.AddScoped<IMenuRepository, SqlMenuRepository>();
 
             builder.Services.AddScoped<IBusinessUnitService, BusinessUnitService>();
             builder.Services.AddScoped<IBusinessUnitRepository, SqlBusinessUnitRepository>();
@@ -32,7 +34,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IApproveStageMainService, ApproveStageMainService>();
             builder.Services.AddScoped<IApproveStageMainRepository, SqlApproveStageMainRepository>();
 
-            builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<IMailService, MailService>();
             builder.Services.AddScoped((t) =>
             {
                 var connectionString = builder.Configuration.GetConnectionString("DevelopmentConnectionString");

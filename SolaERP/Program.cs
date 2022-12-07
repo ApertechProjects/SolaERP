@@ -15,10 +15,19 @@ using SolaERP.Infrastructure.ValidationRules;
 using SolaERP.Middlewares;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers(options => { options.Filters.Add(new ValidationFilter()); }).Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+builder.Services.AddControllers(options => { options.Filters.Add(new ValidationFilter()); })
+    .AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    //This code ignores circular referanced object when they serialized to jsonfile 
+}).Services
+    .AddFluentValidationAutoValidation()
+    .AddFluentValidationClientsideAdapters();
+
 builder.Services.AddIdentity<User, Role>().AddDefaultTokenProviders();
 builder.Services.AddTransient<ITokenHandler, JwtTokenHandler>();
 builder.Services.AddScoped<IUserStore<User>, UserStore>();
@@ -47,7 +56,7 @@ builder.Services.AddAuthentication(x =>
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
- .AddJwtBearer(options =>
+    .AddJwtBearer(options =>
  {
      options.RequireHttpsMetadata = false;
      options.SaveToken = true;
@@ -97,6 +106,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddSingleton<ConfHelper>(new ConfHelper { DevelopmentUrl = builder.Configuration.GetConnectionString("DevelopmentConnectionString") });
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -111,5 +121,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseGlobalExceptionHandlerMiddleware<Program>(app.Services.GetRequiredService<ILogger<Program>>());
+//app.UseEndpoints(endpoints => endpoints.MapHub<ChatHub>("/chatHub"));
+app.UseGlobalExceptionHandlerMiddleware();
 app.MapControllers();
 app.Run();

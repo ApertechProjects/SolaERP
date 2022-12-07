@@ -5,6 +5,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
 {
     public interface IBusinessUnitService : ICrudService<BusinessUnitsAllDto>
     {
-        Task<ApiResponse<List<BusinessUnitsDto>>> GetBusinessUnitListByUserId(int userId);
+        Task<ApiResponse<List<BusinessUnitsDto>>> GetBusinessUnitListByUserId(string finderToken);
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.Shared;
@@ -34,25 +33,30 @@ namespace SolaERP.Controllers
         }
 
 
+
+
         [HttpPost]
         public async Task<ApiResponse<AccountResponseDto>> Login(LoginRequestDto dto)
         {
-            var user = await _userManager.FindByNameAsync(dto.Username);
+            var user = await _userManager.FindByNameAsync(dto.Email);
             if (user == null)
-                return ApiResponse<AccountResponseDto>.Fail($"User: {dto.Username} not found", 400);
+                return ApiResponse<AccountResponseDto>.Fail($"User: {dto.Email} not found", 400);
 
             var userdto = _mapper.Map<UserDto>(user);
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
 
             if (signInResult.Succeeded)
             {
-                Kernel.CurrentUserId = user.Id;
-                return ApiResponse<AccountResponseDto>.Success(
-                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2, userdto), AccountUser = userdto }, 200);
-            }
+                var newtoken = Guid.NewGuid();
+                await _userService.UpdateUserIdentifier(user.UserToken.ToString(), newtoken);
 
+                return ApiResponse<AccountResponseDto>.Success(
+                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, userdto), UserIdentifier = newtoken.ToString() }, 200);
+            }
             return ApiResponse<AccountResponseDto>.Fail("Email or password is incorrect", 400);
         }
+
+
 
         [HttpPost]
         public async Task<ApiResponse<AccountResponseDto>> Register(UserDto dto)
@@ -61,27 +65,32 @@ namespace SolaERP.Controllers
 
             if (user is null)
             {
-                var result = await _userService.AddAsync(dto);
+                dto.UserToken = Guid.NewGuid();
+                await _userService.AddAsync(dto);
 
-                if (result != null)
-                    return ApiResponse<AccountResponseDto>.Success(
-                        new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(2, result), AccountUser = result }, 200);
+                return ApiResponse<AccountResponseDto>.Success(
+                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto), UserIdentifier = dto.UserToken.ToString() }, 200);
             }
             return ApiResponse<AccountResponseDto>.Fail("This email is already exsist", 400);
         }
 
+
+
+        [HttpPost("token")]
+        public async Task<ApiResponse<bool>> Logout(string token)
+        {
+            await _signInManager.SignOutAsync();
+
+            var userId = await _userService.GetUserIdByTokenAsync(token);
+            await _userService.UpdateUserIdentifier(token, new Guid());
+
+            return ApiResponse<bool>.Success(true, 200);
+        }
         [HttpPost]
         public async Task<ApiResponse<bool>> ResetPassword(UserDto dto)
         {
             await _userService.UpdateAsync(dto);
             return ApiResponse<bool>.Success(200);
-        }
-
-        [HttpPost]
-        public async Task<ApiResponse<bool>> Logout()
-        {
-            await _signInManager.SignOutAsync();
-            return ApiResponse<bool>.Success(true, 200);
         }
 
     }

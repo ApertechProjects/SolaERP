@@ -3,12 +3,6 @@ using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.ApproveStage;
 using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Entities.ApproveStage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.Application.Services
 {
@@ -23,7 +17,7 @@ namespace SolaERP.Application.Services
             _mapper = mapper;
         }
 
-        public Task<ApproveStagesMainDto> AddAsync(ApproveStagesMainDto model)
+        public Task AddAsync(ApproveStagesMainDto model)
         {
             throw new NotImplementedException();
         }
@@ -44,6 +38,12 @@ namespace SolaERP.Application.Services
         {
             var approveStagesList = await _approveStageMainRepository.GetByBusinessUnitId(buId);
             var dto = _mapper.Map<List<ApproveStagesMainDto>>(approveStagesList);
+
+            foreach (var proc in approveStagesList)
+            {
+                
+            }
+
             return ApiResponse<List<ApproveStagesMainDto>>.Success(dto, 200);
         }
 

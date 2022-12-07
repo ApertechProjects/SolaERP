@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Auth;
 
@@ -36,7 +37,7 @@ namespace SolaERP.Application.Identity_Server
 
         public async Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByUserNameAsync(normalizedUserName);
+            var user = await _userRepository.GetUserByUsernameAsync(normalizedUserName);
             return user;
         }
 
@@ -149,11 +150,11 @@ namespace SolaERP.Application.Identity_Server
         //    throw new NotImplementedException();
         //}
 
-        //public async Task<User> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
-        //{
-        //    var user = await _userRepository.GetByEmailAsync(normalizedEmail);
-        //    return user;
-        //}
+        public async Task<User> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+        {
+            var user = await _userRepository.GetUserByEmailAsync(normalizedEmail);
+            return user;
+        }
 
         //public Task<string> GetNormalizedEmailAsync(User user, CancellationToken cancellationToken)
         //{
