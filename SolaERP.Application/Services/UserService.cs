@@ -1,15 +1,4 @@
-﻿using AutoMapper;
-using SolaERP.Application.Exceptions;
-using SolaERP.Application.Utils;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.User;
-using SolaERP.Infrastructure.Dtos.UserDto;
-using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.UnitOfWork;
-
-namespace SolaERP.Application.Services
+﻿namespace SolaERP.Application.Services
 {
     public class UserService : IUserService
     {
@@ -33,7 +22,7 @@ namespace SolaERP.Application.Services
             var user = _mapper.Map<User>(model);
             user.PasswordHash = SecurityUtil.ComputeSha256Hash(model.Password);
 
-            await _userRepository.AddAsync(user);
+            var result = await _userRepository.AddAsync(user);
             await _unitOfWork.SaveChangesAsync();
         }
         public async Task<ApiResponse<List<UserDto>>> GetAllAsync()
@@ -43,9 +32,16 @@ namespace SolaERP.Application.Services
 
             return ApiResponse<List<UserDto>>.Success(dto, 200);
         }
-        public async Task<ApiResponse<bool>> UpdateAsync(UserDto model)
+        public async Task<ApiResponse<bool>> UpdateAsync(UserDto userUpdateDto)
         {
-            var res = await _userRepository.GetAllAsync();
+            if (userUpdateDto.Password != userUpdateDto.ConfirmPassword)
+                throw new UserException("Password doesn't match with confirm password");
+
+            var user = _mapper.Map<User>(userUpdateDto);
+            user.PasswordHash = SecurityUtil.ComputeSha256Hash(userUpdateDto.Password);
+            _userRepository.Update(user);
+
+            await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }
         public async Task<ApiResponse<bool>> RemoveAsync(int Id)

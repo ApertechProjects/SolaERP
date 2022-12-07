@@ -6,11 +6,11 @@ using Microsoft.OpenApi.Models;
 using SolaERP.Application.Identity_Server;
 using SolaERP.Application.Mappers;
 using SolaERP.Application.Services;
-using SolaERP.Application.Validations;
 using SolaERP.Business.Models;
 using SolaERP.Extensions;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.ValidationRules;
 using SolaERP.Middlewares;
 using System.Security.Claims;
 using System.Text;
@@ -102,6 +102,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddSingleton<ConfHelper>(new ConfHelper { DevelopmentUrl = builder.Configuration.GetConnectionString("DevelopmentConnectionString") });
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -114,6 +115,7 @@ app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+//app.UseEndpoints(endpoints => endpoints.MapHub<ChatHub>("/chatHub"));
 app.UseGlobalExceptionHandlerMiddleware();
 app.MapControllers();
 app.Run();

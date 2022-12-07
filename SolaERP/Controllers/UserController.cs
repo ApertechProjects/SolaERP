@@ -27,9 +27,9 @@ namespace SolaERP.Controllers
         }
 
         [HttpPut]
-        public async Task<ApiResponse<bool>> UpdateUser(UserUpdateDto dto)
+        public async Task<ApiResponse<bool>> UpdateUser(UserDto dto)
         {
-            return await _userService.UpdateUserAsync(dto);
+            return await _userService.UpdateAsync(dto);
         }
 
         [HttpDelete]

@@ -1,13 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Auth;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.UserDto;
-using SolaERP.Infrastructure.Entities.Auth;
-
-namespace SolaERP.Controllers
+﻿namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -38,9 +29,9 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<ApiResponse<AccountResponseDto>> Login(LoginRequestDto dto)
         {
-            var user = await _userManager.FindByNameAsync(dto.Email);
+            var user = await _userManager.FindByNameAsync(dto.Username);
             if (user == null)
-                return ApiResponse<AccountResponseDto>.Fail($"User: {dto.Email} not found", 400);
+                return ApiResponse<AccountResponseDto>.Fail($"User: {dto.Username} not found", 400);
 
             var userdto = _mapper.Map<UserDto>(user);
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
@@ -78,6 +69,15 @@ namespace SolaERP.Controllers
 
         [HttpPost("token")]
         public async Task<ApiResponse<bool>> Logout(string token)
+        [HttpPost]
+        public async Task<ApiResponse<bool>> ResetPassword(UserDto dto)
+        {
+            await _userService.UpdateAsync(dto);
+            return ApiResponse<bool>.Success(200);
+        }
+
+        [HttpPost]
+        public async Task<ApiResponse<bool>> Logout()
         {
             await _signInManager.SignOutAsync();
 

@@ -1,10 +1,4 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.UnitOfWork;
-using System.Data;
-
-namespace SolaERP.DataAccess.DataAcces.SqlServer
+﻿namespace SolaERP.DataAccess.DataAcces.SqlServer
 {
     public class SqlUserRepository : IUserRepository
     {
@@ -21,7 +15,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             {
                 using (var command = _unitOfWork.CreateCommand())
                 {
-                    command.CommandText = query;//@$"Exec SP_User_insert 'SHAFA',0,'SHAFA!','shafa@gmail.com',0,'15e2b0d3c33891ebb0f1ef609ec419420c20e320ce94c65fbc8c3312448eb225',0,'00000000-0000-0000-0000-000000000000'";
+                    command.CommandText = query;
                     command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
                     command.Parameters.AddWithValue(command, "@StatusId", entity.StatusId);
                     command.Parameters.AddWithValue(command, "@UserName", entity.UserName);
@@ -168,7 +162,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         }
         public void Update(User entity)
         {
-            string query = "Exec [dbo].[SP_UserData_U] @UserId,@FullName,@Position,@PhoneNumber,@Photo";
+            string query = "Exec [dbo].[SP_UserData_U] @UserId,@FullName,@Position,@PhoneNumber,@Photo,@PasswordHash";
             using (var command = _unitOfWork.CreateCommand())
             {
                 command.Parameters.AddWithValue(command, "@UserId", entity.Id);
@@ -176,6 +170,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@Position", entity.Position);
                 command.Parameters.AddWithValue(command, "@PhoneNumber", entity.PhoneNumber);
                 command.Parameters.AddWithValue(command, "@Photo", entity.Photo);
+                command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
                 command.CommandText = query;
 
                 command.ExecuteNonQuery();
@@ -218,5 +213,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             });
             return result;
         }
+
     }
 }

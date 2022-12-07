@@ -1,13 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.Auth;
-
-namespace SolaERP.Application.Identity_Server
+﻿namespace SolaERP.Application.Identity_Server
 {
     public class UserStore : IUserStore<User>,
                              IUserRoleStore<User>,
-                             IUserPasswordStore<User>,
-                             IUserEmailStore<User>
+                             IUserPasswordStore<User>
 
 
     {
@@ -129,27 +124,26 @@ namespace SolaERP.Application.Identity_Server
 
         #endregion
 
-        #region IUserEmailStore Implementation 
-        public Task SetEmailAsync(User user, string email, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+        //#region IUserEmailStore Implementation 
+        //public Task SetEmailAsync(User user, string email, CancellationToken cancellationToken)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public async Task<string> GetEmailAsync(User user, CancellationToken cancellationToken)
-        {
-            var email = await Task.Run(() => { return user.Email; });
-            return email;
-        }
+        //public Task<string> GetEmailAsync(User user, CancellationToken cancellationToken)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public Task<bool> GetEmailConfirmedAsync(User user, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<bool> GetEmailConfirmedAsync(User user, CancellationToken cancellationToken)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public Task SetEmailConfirmedAsync(User user, bool confirmed, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task SetEmailConfirmedAsync(User user, bool confirmed, CancellationToken cancellationToken)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public async Task<User> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
@@ -157,17 +151,17 @@ namespace SolaERP.Application.Identity_Server
             return user;
         }
 
-        public Task<string> GetNormalizedEmailAsync(User user, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<string> GetNormalizedEmailAsync(User user, CancellationToken cancellationToken)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public Task SetNormalizedEmailAsync(User user, string normalizedEmail, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task SetNormalizedEmailAsync(User user, string normalizedEmail, CancellationToken cancellationToken)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
 
-        #endregion
+        //#endregion
     }
 }
