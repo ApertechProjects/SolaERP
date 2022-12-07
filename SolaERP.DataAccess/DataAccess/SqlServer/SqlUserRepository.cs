@@ -1,4 +1,10 @@
-﻿namespace SolaERP.DataAccess.DataAcces.SqlServer
+﻿using SolaERP.DataAccess.Extensions;
+using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.UnitOfWork;
+using System.Data;
+
+namespace SolaERP.DataAccess.DataAcces.SqlServer
 {
     public class SqlUserRepository : IUserRepository
     {

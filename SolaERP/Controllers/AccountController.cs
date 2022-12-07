@@ -1,4 +1,13 @@
-﻿namespace SolaERP.Controllers
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.Auth;
+using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Dtos.UserDto;
+using SolaERP.Infrastructure.Entities.Auth;
+
+namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -69,22 +78,20 @@
 
         [HttpPost("token")]
         public async Task<ApiResponse<bool>> Logout(string token)
-        [HttpPost]
-        public async Task<ApiResponse<bool>> ResetPassword(UserDto dto)
         {
-            await _userService.UpdateAsync(dto);
-            return ApiResponse<bool>.Success(200);
-        }
 
-        [HttpPost]
-        public async Task<ApiResponse<bool>> Logout()
-        {
             await _signInManager.SignOutAsync();
 
             var userId = await _userService.GetUserIdByTokenAsync(token);
             await _userService.UpdateUserIdentifier(token, new Guid());
 
             return ApiResponse<bool>.Success(true, 200);
+        }
+        [HttpPost]
+        public async Task<ApiResponse<bool>> ResetPassword(UserDto dto)
+        {
+            await _userService.UpdateAsync(dto);
+            return ApiResponse<bool>.Success(200);
         }
 
     }

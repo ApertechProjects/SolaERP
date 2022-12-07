@@ -1,4 +1,9 @@
-﻿namespace SolaERP.Application.Identity_Server
+﻿using Microsoft.AspNetCore.Identity;
+
+using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Entities.Auth;
+
+namespace SolaERP.Application.Identity_Server
 {
     public class UserStore : IUserStore<User>,
                              IUserRoleStore<User>,

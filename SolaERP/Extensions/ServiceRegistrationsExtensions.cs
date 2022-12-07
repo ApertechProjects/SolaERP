@@ -34,7 +34,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IApproveStageMainService, ApproveStageMainService>();
             builder.Services.AddScoped<IApproveStageMainRepository, SqlApproveStageMainRepository>();
 
-            builder.Services.AddScoped<IEmailService, EmailService>();
+            // builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped((t) =>
             {
                 var connectionString = builder.Configuration.GetConnectionString("DevelopmentConnectionString");
