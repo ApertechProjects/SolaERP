@@ -42,11 +42,13 @@ namespace SolaERP.Controllers
             return await _approveStageDetailService.GetApproveStageDetailsByApproveStageMainId(approveStageMainId);
         }
 
-        [HttpGet("{approveStageDetailsId}")]
-        public async Task<ApiResponse<List<ApproveStageRoleDto>>> GetApproveStageRolesByApproveStageDetailId(int approveStageDetailsId)
+        [HttpGet("{approveStageDetailId}")]
+        public async Task<ApiResponse<List<ApproveStageRoleDto>>> GetApproveStageRolesByApproveStageDetailId(int approveStageDetailId)
         {
-            return await _approveStageRoleService.GetApproveStageRolesByApproveStageDetailId(approveStageDetailsId);
+            return await _approveStageRoleService.GetApproveStageRolesByApproveStageDetailId(approveStageDetailId);
         }
+
+
     }
 
 }
