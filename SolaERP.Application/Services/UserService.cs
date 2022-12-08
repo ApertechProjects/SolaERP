@@ -14,7 +14,7 @@
             _mapper = mapper;
         }
 
-        public async Task<UserDto> AddAsync(UserDto model)
+        public async Task AddAsync(UserDto model)
         {
             if (model.Password != model.ConfirmPassword)
                 throw new UserException("Password doesn't match with confirm password");
@@ -24,15 +24,6 @@
 
             var result = await _userRepository.AddAsync(user);
             await _unitOfWork.SaveChangesAsync();
-
-            if (result)
-            {
-                User lastInsertedUser = await _userRepository.GetLastInsertedUserAsync();
-                UserDto userDto = _mapper.Map<UserDto>(lastInsertedUser);
-                Kernel.CurrentUserId = lastInsertedUser.Id;
-                return userDto;
-            }
-            return null;
         }
         public async Task<ApiResponse<List<UserDto>>> GetAllAsync()
         {
@@ -62,7 +53,7 @@
         }
         public async Task<UserDto> GetByUserId(int userId)
         {
-            var userDatas = await _userRepository.GetByUserId(userId);
+            var userDatas = await _userRepository.GetUserByIdAsync(userId);
             var userDto = _mapper.Map<UserDto>(userDatas);
             return userDto;
         }
@@ -84,7 +75,19 @@
             return ApiResponse<bool>.Success(200);
         }
 
+        public async Task<ApiResponse<NoContentDto>> UpdateUserIdentifier(string finderToken, Guid newToken)
+        {
+            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
 
+            var isSuccessfull = await _userRepository.UpdateUserTokenAsync(userId, newToken);
+            await _unitOfWork.SaveChangesAsync();
 
+            return ApiResponse<NoContentDto>.Success(200);
+        }
+
+        public Task<int> GetUserIdByTokenAsync(string finderToken)
+        {
+            return _userRepository.GetUserIdByTokenAsync(finderToken);
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
 {
     public interface IMenuService
     {
-        Task<ApiResponse<List<ParentMenuDto>>> GetUserMenusWithChildsAsync();
+        Task<ApiResponse<List<ParentMenuDto>>> GetUserMenusWithChildsAsync(string finderToken);
+        Task<ApiResponse<List<MenuWithPrivilagesDto>>> GetUserMenusWithPrivilagesAsync(string finderToken);
     }
 }

@@ -9,6 +9,11 @@
             CreateMap<BusinessUnits, BusinessUnitsDto>().ReverseMap();
             CreateMap<Groups, GroupsDto>().ReverseMap();
             CreateMap<MenuWithPrivilagesDto, MenuWithPrivilages>().ReverseMap();
+            CreateMap<ApproveStagesMain, ApproveStagesMainDto>().ReverseMap();
+            CreateMap<ApproveStagesDetail, ApproveStagesDetailDto>().ReverseMap();
+            CreateMap<Procedure, ProcedureDto>().ReverseMap();
+            CreateMap<ApproveStageRole, ApproveStageRoleDto>().ReverseMap();
+            CreateMap<ApproveRole, ApproveRoleDto>().ReverseMap();
         }
     }
 }

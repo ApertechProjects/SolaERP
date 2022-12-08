@@ -20,7 +20,7 @@ namespace SolaERP.Application.Services
             _mapper = mapper;
         }
 
-        public Task<GroupsDto> AddAsync(GroupsDto model)
+        public Task AddAsync(GroupsDto model)
         {
             throw new NotImplementedException();
         }

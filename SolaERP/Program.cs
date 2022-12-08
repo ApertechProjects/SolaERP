@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using SolaERP.Application.Identity_Server;
 using SolaERP.Application.Mappers;
 using SolaERP.Application.Services;
@@ -27,13 +28,9 @@ builder.Services.AddControllers(options => { options.Filters.Add(new ValidationF
     .AddFluentValidationAutoValidation()
     .AddFluentValidationClientsideAdapters();
 
-builder.Services.AddIdentity<User, Role>().AddDefaultTokenProviders();
-builder.Services.AddTransient<ITokenHandler, JwtTokenHandler>();
-builder.Services.AddScoped<IUserStore<User>, UserStore>();
-builder.Services.AddSingleton<IRoleStore<Role>, RoleStore>();
-builder.Services.AddSingleton<IPasswordHasher<User>, CustomPasswordHasher>();
+builder.UseIdentityService();
+builder.UseDataAccesServices();
 builder.Services.AddEndpointsApiExplorer();
-builder.UseSqlDataAccessServices();
 builder.UseValidationExtension();
 builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.Configure<ApiBehaviorOptions>(config => { config.SuppressModelStateInvalidFilter = true; });
@@ -45,7 +42,10 @@ builder.Services.AddCors(options =>
         .AllowAnyOrigin()
         .Build());
 });
+var logger = new LoggerConfiguration().WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"),"logs").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
+    //File("logs.txt").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
 
+builder.Host.UseSerilog(logger);
 
 builder.Services.AddAuthentication(x =>
 {
@@ -102,6 +102,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddSingleton<ConfHelper>(new ConfHelper { DevelopmentUrl = builder.Configuration.GetConnectionString("DevelopmentConnectionString") });
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -110,10 +111,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseHttpLogging();
 app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseGlobalExceptionHandlerMiddleware();
+app.UseGlobalExceptionHandlerMiddleware<Program>(app.Services.GetRequiredService<ILogger<Program>>());
+//app.UseEndpoints(endpoints => endpoints.MapHub<ChatHub>("/chatHub"));
+//app.UseGlobalExceptionHandlerMiddleware();
 app.MapControllers();
 app.Run();

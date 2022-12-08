@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Infrastructure.Entities.ApproveRole
 {
-    public class GroupApproveRoles : BaseEntity
+    public class ApproveRole : BaseEntity
     {
-        public int GroupApproveRoleId { get; set; }
-        public int GroupId { get; set; }
         public int ApproveRoleId { get; set; }
-
+        public string ApproveRoleName { get; set; }
     }
 }
