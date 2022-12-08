@@ -1,4 +1,21 @@
-﻿namespace SolaERP.Application.Mappers
+﻿using AutoMapper;
+using SolaERP.Infrastructure.Dtos.ApproveRole;
+using SolaERP.Infrastructure.Dtos.ApproveStage;
+using SolaERP.Infrastructure.Dtos.ApproveStages;
+using SolaERP.Infrastructure.Dtos.BusinessUnit;
+using SolaERP.Infrastructure.Dtos.Group;
+using SolaERP.Infrastructure.Dtos.Menu;
+using SolaERP.Infrastructure.Dtos.Procedure;
+using SolaERP.Infrastructure.Dtos.UserDto;
+using SolaERP.Infrastructure.Entities.ApproveRole;
+using SolaERP.Infrastructure.Entities.ApproveStage;
+using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Entities.BusinessUnits;
+using SolaERP.Infrastructure.Entities.Groups;
+using SolaERP.Infrastructure.Entities.Menu;
+using SolaERP.Infrastructure.Entities.Procedure;
+
+namespace SolaERP.Application.Mappers
 {
     public class MapProfile : Profile
     {

@@ -1,16 +1,11 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using SolaERP.Application.Identity_Server;
 using SolaERP.Application.Mappers;
-using SolaERP.Application.Services;
 using SolaERP.Business.Models;
 using SolaERP.Extensions;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.ValidationRules;
 using SolaERP.Middlewares;
 using System.Security.Claims;
@@ -38,14 +33,13 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
         corsBuilder => corsBuilder.WithOrigins(builder.Configuration["Cors:Origins"])
+        .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowCredentials()
         .Build());
 });
-var logger = new LoggerConfiguration().WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"),"logs").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
-    //File("logs.txt").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
+var logger = new LoggerConfiguration().WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"), "logs").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
+//File("logs.txt").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
 
 builder.Host.UseSerilog(logger);
 
