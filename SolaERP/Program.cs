@@ -43,6 +43,8 @@ builder.Services.AddCors(options =>
         corsBuilder => corsBuilder.WithOrigins(builder.Configuration["Cors:Origins"])
         .AllowAnyHeader()
         .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowCredentials()
         .Build());
 });
 
@@ -69,6 +71,7 @@ builder.Services.AddAuthentication(x =>
          LifetimeValidator = (notBefore, expires, securityToken, validationParametrs) => expires != null ? expires > DateTime.UtcNow : false
      };
  });
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc($"v1", new OpenApiInfo
