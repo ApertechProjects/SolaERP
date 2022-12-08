@@ -28,13 +28,9 @@ builder.Services.AddControllers(options => { options.Filters.Add(new ValidationF
     .AddFluentValidationAutoValidation()
     .AddFluentValidationClientsideAdapters();
 
-builder.Services.AddIdentity<User, Role>().AddDefaultTokenProviders();
-builder.Services.AddTransient<ITokenHandler, JwtTokenHandler>();
-builder.Services.AddScoped<IUserStore<User>, UserStore>();
-builder.Services.AddSingleton<IRoleStore<Role>, RoleStore>();
-builder.Services.AddSingleton<IPasswordHasher<User>, CustomPasswordHasher>();
+builder.UseIdentityService();
+builder.UseDataAccesServices();
 builder.Services.AddEndpointsApiExplorer();
-builder.UseSqlDataAccessServices();
 builder.UseValidationExtension();
 builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.Configure<ApiBehaviorOptions>(config => { config.SuppressModelStateInvalidFilter = true; });

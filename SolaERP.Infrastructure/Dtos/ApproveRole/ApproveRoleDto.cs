@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Entities.ApproveRole
+namespace SolaERP.Infrastructure.Dtos.ApproveRole
 {
-    public class ApproveRoles : BaseEntity
+    public class ApproveRoleDto
     {
         public int ApproveRoleId { get; set; }
         public string ApproveRoleName { get; set; }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SolaERP.Infrastructure.Dtos.ApproveRole;
 using SolaERP.Infrastructure.Dtos.ApproveStage;
 using SolaERP.Infrastructure.Dtos.ApproveStages;
 using SolaERP.Infrastructure.Dtos.BusinessUnit;
@@ -7,6 +8,7 @@ using SolaERP.Infrastructure.Dtos.Menu;
 using SolaERP.Infrastructure.Dtos.Procedure;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
+using SolaERP.Infrastructure.Entities.ApproveRole;
 using SolaERP.Infrastructure.Entities.ApproveStage;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Entities.BusinessUnits;
@@ -28,6 +30,8 @@ namespace SolaERP.Application.Mappers
             CreateMap<ApproveStagesMain, ApproveStagesMainDto>().ReverseMap();
             CreateMap<ApproveStagesDetail, ApproveStagesDetailDto>().ReverseMap();
             CreateMap<Procedure, ProcedureDto>().ReverseMap();
+            CreateMap<ApproveStageRole, ApproveStageRoleDto>().ReverseMap();
+            CreateMap<ApproveRole, ApproveRoleDto>().ReverseMap();
         }
     }
 }

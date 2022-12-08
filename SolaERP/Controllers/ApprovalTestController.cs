@@ -16,10 +16,12 @@ namespace SolaERP.Controllers
     {
         private readonly IApproveStageMainService _approveStageMainService;
         private readonly IApproveStageDetailService _approveStageDetailService;
-        public ApprovalTestController(IApproveStageMainService approveStageMainService, IApproveStageDetailService approveStageDetailService)
+        private readonly IApproveStageRoleService _approveStageRoleService;
+        public ApprovalTestController(IApproveStageMainService approveStageMainService, IApproveStageDetailService approveStageDetailService, IApproveStageRoleService approveStageRoleService)
         {
             _approveStageMainService = approveStageMainService;
             _approveStageDetailService = approveStageDetailService;
+            _approveStageRoleService = approveStageRoleService;
         }
 
         [HttpGet("{buId}")]
@@ -38,6 +40,12 @@ namespace SolaERP.Controllers
         public async Task<ApiResponse<List<ApproveStagesDetailDto>>> GetApproveStageDetailsByApprovalStageMainId(int approveStageMainId)
         {
             return await _approveStageDetailService.GetApproveStageDetailsByApproveStageMainId(approveStageMainId);
+        }
+
+        [HttpGet("{approveStageDetailsId}")]
+        public async Task<ApiResponse<List<ApproveStageRoleDto>>> GetApproveStageRolesByApproveStageDetailId(int approveStageDetailsId)
+        {
+            return await _approveStageRoleService.GetApproveStageRolesByApproveStageDetailId(approveStageDetailsId);
         }
     }
 

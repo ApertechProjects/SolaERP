@@ -50,5 +50,6 @@ namespace SolaERP.Application.Services
         {
             throw new NotImplementedException();
         }
+
     }
 }

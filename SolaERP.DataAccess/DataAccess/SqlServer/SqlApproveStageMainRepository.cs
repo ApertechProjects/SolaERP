@@ -102,7 +102,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     ProcedueId = reader.Get<int>("ProcedureId"),
                     ProcedureName = reader.Get<string>("ProcedureName")
                 }
-
             };
         }
 

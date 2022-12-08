@@ -190,7 +190,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 using (var command = _unitOfWork.CreateCommand())
                 {
                     command.CommandText = "SELECT ID FROM CONFIG.APPUSER WHERE USERTOKEN = @USERTOKEN";
-                    command.Parameters.AddWithValue(command, "@USERTOKEN", finderToken);
+                    command.Parameters.AddWithValue(command, "@USERTOKEN", finderToken == null ? DBNull.Value : finderToken);
 
                     using var reader = command.ExecuteReader();
                     if (reader.Read())
