@@ -76,13 +76,13 @@ namespace SolaERP.Controllers
 
 
 
-        [HttpPost("token")]
-        public async Task<ApiResponse<bool>> Logout(string token)
+        [HttpPost]
+        public async Task<ApiResponse<bool>> Logout([FromHeader] string authToken)
         {
             await _signInManager.SignOutAsync();
 
-            var userId = await _userService.GetUserIdByTokenAsync(token);
-            await _userService.UpdateUserIdentifier(token, new Guid());
+            var userId = await _userService.GetUserIdByTokenAsync(authToken);
+            await _userService.UpdateUserIdentifier(authToken, new Guid());
 
             return ApiResponse<bool>.Success(true, 200);
         }
