@@ -6,7 +6,7 @@ using SolaERP.Infrastructure.Dtos.Shared;
 
 namespace SolaERP.Application.Services
 {
-    public class ApproveStageMainService : IApproveStageMainService
+    public class ApproveStageMainService : IApproveStageMainService, ILoggableCrudService<ApproveStagesMainDto>
     {
         private readonly IApproveStageMainRepository _approveStageMainRepository;
         private IMapper _mapper;
@@ -21,6 +21,7 @@ namespace SolaERP.Application.Services
         {
             throw new NotImplementedException();
         }
+
 
         public Task<ApiResponse<List<ApproveStagesMainDto>>> GetAllAsync()
         {
@@ -42,6 +43,16 @@ namespace SolaERP.Application.Services
         }
 
         public Task<ApiResponse<bool>> RemoveAsync(int Id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(ApproveStagesMainDto entity, int userId = 0)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> AddAsync(ApproveStagesMainDto entity, int userId = 0)
         {
             throw new NotImplementedException();
         }
