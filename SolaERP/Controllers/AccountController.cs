@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
 
@@ -33,8 +34,6 @@ namespace SolaERP.Controllers
         }
 
 
-
-
         [HttpPost]
         public async Task<ApiResponse<AccountResponseDto>> Login(LoginRequestDto dto)
         {
@@ -48,15 +47,13 @@ namespace SolaERP.Controllers
             if (signInResult.Succeeded)
             {
                 var newtoken = Guid.NewGuid();
-                await _userService.UpdateUserIdentifier(user.UserToken.ToString(), newtoken);
+                await _userService.UpdateUserIdentifierAsync(user.UserToken.ToString(), newtoken);
 
                 return ApiResponse<AccountResponseDto>.Success(
                     new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, userdto), UserIdentifier = newtoken.ToString() }, 200);
             }
             return ApiResponse<AccountResponseDto>.Fail("Email or password is incorrect", 400);
         }
-
-
 
         [HttpPost]
         public async Task<ApiResponse<AccountResponseDto>> Register(UserDto dto)
@@ -82,16 +79,22 @@ namespace SolaERP.Controllers
             await _signInManager.SignOutAsync();
 
             var userId = await _userService.GetUserIdByTokenAsync(authToken);
-            await _userService.UpdateUserIdentifier(authToken, new Guid());
+            await _userService.UpdateUserIdentifierAsync(authToken, new Guid());
 
             return ApiResponse<bool>.Success(true, 200);
         }
-        [HttpPost]
-        public async Task<ApiResponse<bool>> ResetPassword(UserDto dto)
+
+        [HttpGet]
+        public async Task<ApiResponse<bool>> SendResetPasswordEmail(string email)
         {
-            await _userService.UpdateAsync(dto);
-            return ApiResponse<bool>.Success(200);
+            return await _userService.SendResetPasswordEmail(email);
         }
 
+
+        [HttpPost]
+        public async Task<ApiResponse<bool>> ResetPassword(ResetPasswordRequestDto resetPasswordrequestDto)
+        {
+            return await _userService.ResetPasswordAsync(resetPasswordrequestDto);
+        }
     }
 }

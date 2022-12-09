@@ -129,7 +129,7 @@ namespace SolaERP.Application.Identity_Server
 
         #endregion
 
-        //#region IUserEmailStore Implementation 
+        #region IUserEmailStore Implementation 
         //public Task SetEmailAsync(User user, string email, CancellationToken cancellationToken)
         //{
         //    throw new NotImplementedException();
@@ -167,6 +167,6 @@ namespace SolaERP.Application.Identity_Server
         //}
 
 
-        //#endregion
+        #endregion
     }
 }

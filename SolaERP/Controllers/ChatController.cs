@@ -15,7 +15,7 @@ namespace SolaERP.Controllers
             _context = context;
         }
 
-        [HttpPost("message")]
+        [HttpPost]
         public async Task SenMessage(string message)
         {
             await _context.Clients.All.SendAsync(message);
