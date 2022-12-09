@@ -1,16 +1,9 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Dtos.ApproveStage;
 using SolaERP.Infrastructure.Entities.ApproveStage;
 using SolaERP.Infrastructure.Entities.Procedure;
 using SolaERP.Infrastructure.UnitOfWork;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -37,7 +30,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             var result = await Task.Run(() =>
             {
-                ApproveStagesMain approveStagesMain = new ApproveStagesMain();
+                ApproveStagesMain approveStagesMain = null;
                 using (var command = _unitOfWork.CreateCommand())
                 {
                     command.CommandText = "EXEC dbo.SP_ApproveStageHeader_Load_BY_MainId @approvalStageMainId";
@@ -99,7 +92,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 ProcedureId = reader.Get<int>("ProcedureId"),
                 Procedure = new Procedure
                 {
-                    ProcedueId = reader.Get<int>("ProcedureId"),
+                    ProcedureId = reader.Get<int>("ProcedureId"),
                     ProcedureName = reader.Get<string>("ProcedureName")
                 }
             };

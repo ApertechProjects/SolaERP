@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SolaERP.Application.Services;
-using SolaERP.Business.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.ApproveRole;
 using SolaERP.Infrastructure.Dtos.ApproveStage;
 using SolaERP.Infrastructure.Dtos.ApproveStages;
+using SolaERP.Infrastructure.Dtos.Procedure;
 using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Entities.ApproveStage;
 
 namespace SolaERP.Controllers
 {
@@ -17,11 +15,19 @@ namespace SolaERP.Controllers
         private readonly IApproveStageMainService _approveStageMainService;
         private readonly IApproveStageDetailService _approveStageDetailService;
         private readonly IApproveStageRoleService _approveStageRoleService;
-        public ApprovalTestController(IApproveStageMainService approveStageMainService, IApproveStageDetailService approveStageDetailService, IApproveStageRoleService approveStageRoleService)
+        private readonly IApproveRoleService _approveRoleService;
+        private readonly IProcedureService _procedureService;
+        public ApprovalTestController(IApproveStageMainService approveStageMainService,
+                                      IApproveStageDetailService approveStageDetailService,
+                                      IApproveStageRoleService approveStageRoleService,
+                                      IApproveRoleService approveRoleService,
+                                      IProcedureService procedureService)
         {
             _approveStageMainService = approveStageMainService;
             _approveStageDetailService = approveStageDetailService;
             _approveStageRoleService = approveStageRoleService;
+            _approveRoleService = approveRoleService;
+            _procedureService = procedureService;
         }
 
         [HttpGet("{buId}")]
@@ -48,7 +54,17 @@ namespace SolaERP.Controllers
             return await _approveStageRoleService.GetApproveStageRolesByApproveStageDetailId(approveStageDetailId);
         }
 
+        [HttpGet]
+        public async Task<ApiResponse<List<ApproveRoleDto>>> GetApproveRoles()
+        {
+            return await _approveRoleService.GetAllAsync();
+        }
 
+        [HttpGet]
+        public async Task<ApiResponse<List<ProcedureDto>>> GetProcedures()
+        {
+            return await _procedureService.GetAllAsync();
+        }
     }
 
 }

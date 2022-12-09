@@ -28,7 +28,6 @@ namespace SolaERP.Application.Services
         {
             var businessUnits = await _businessUnitRepository.GetAllAsync();
             var dto = _mapper.Map<List<BusinessUnitsAllDto>>(businessUnits);
-
             return ApiResponse<List<BusinessUnitsAllDto>>.Success(dto, 200);
         }
 
