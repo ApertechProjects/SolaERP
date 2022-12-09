@@ -40,6 +40,8 @@ builder.Services.AddCors(options =>
         corsBuilder => corsBuilder.WithOrigins(builder.Configuration["Cors:Origins"])
         .AllowAnyHeader()
         .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowCredentials()
         .Build());
 });
 var logger = new LoggerConfiguration().WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"),"logs").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
@@ -69,6 +71,7 @@ builder.Services.AddAuthentication(x =>
          LifetimeValidator = (notBefore, expires, securityToken, validationParametrs) => expires != null ? expires > DateTime.UtcNow : false
      };
  });
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc($"v1", new OpenApiInfo
