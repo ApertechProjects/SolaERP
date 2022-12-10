@@ -35,8 +35,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     command.Parameters.AddWithValue(command, "@businessUnitId", entity.BusinessUnitId);
                     command.Parameters.AddWithValue(command, "@approveStageName", entity.ApproveStageName);
                     command.Parameters.AddWithValue(command, "@userId", userId);
-                    var value = command.ExecuteNonQuery();
-                    return value == 0 || value == -1 ? false : true;
+                    var value = command.ExecuteScalar();
+                    return value;
                 }
             });
 

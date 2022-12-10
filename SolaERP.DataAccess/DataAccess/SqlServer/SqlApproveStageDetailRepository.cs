@@ -32,8 +32,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     command.Parameters.AddWithValue(command, "@approveStageMainId", entity.ApproveStageMainId);
                     command.Parameters.AddWithValue(command, "@approveStageDetailName", entity.ApproveStageDetailsName);
                     command.Parameters.AddWithValue(command, "@sequence", entity.Sequence);
-                    var value = command.ExecuteNonQuery();
-                    return value == 0 || value == -1 ? false : true;
+                    var value = command.ExecuteScalar();
+                    return value;
                 }
             });
 
