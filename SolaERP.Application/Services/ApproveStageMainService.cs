@@ -3,10 +3,11 @@ using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.ApproveStage;
 using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Entities.ApproveStage;
 
 namespace SolaERP.Application.Services
 {
-    public class ApproveStageMainService : IApproveStageMainService, ILoggableCrudService<ApproveStagesMainDto>
+    public class ApproveStageMainService : IApproveStageMainService
     {
         private readonly IApproveStageMainRepository _approveStageMainRepository;
         private IMapper _mapper;
@@ -52,9 +53,11 @@ namespace SolaERP.Application.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> AddAsync(ApproveStagesMainDto entity, int userId = 0)
+        public async Task<int> AddAsync(ApproveStagesMainDto entity, int userId = 0)
         {
-            throw new NotImplementedException();
+            var model = _mapper.Map<ApproveStagesMain>(entity);
+            var approveStageMain = await _approveStageMainRepository.AddAsync(model, userId);
+            return approveStageMain;
         }
 
         public Task<ApiResponse<bool>> UpdateAsync(ApproveStagesMainDto model)
@@ -62,5 +65,14 @@ namespace SolaERP.Application.Services
             throw new NotImplementedException();
         }
 
+        public Task<bool> AddAsync(ApproveStagesMainDto entity, string authToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(ApproveStagesMainDto entity, string authToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

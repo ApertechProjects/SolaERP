@@ -3,27 +3,33 @@ using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.ApproveStages;
 using SolaERP.Infrastructure.Dtos.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SolaERP.Infrastructure.Entities.ApproveStage;
+using SolaERP.Infrastructure.UnitOfWork;
 
 namespace SolaERP.Application.Services
 {
     public class ApproveStageDetailService : IApproveStageDetailService
     {
         private readonly IApproveStageDetailRepository _approveStageDetailsRepository;
+        private IUnitOfWork _unitOfWork;
         private IMapper _mapper;
-        public ApproveStageDetailService(IApproveStageDetailRepository approveStageDetailsRepository, IMapper mapper)
+        public ApproveStageDetailService(IApproveStageDetailRepository approveStageDetailsRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _approveStageDetailsRepository = approveStageDetailsRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         public Task AddAsync(ApproveStagesDetailDto model)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<int> AddAsync(ApproveStagesDetailDto entity, int userId)
+        {
+            var model = _mapper.Map<ApproveStagesDetail>(entity);
+            var approveStageDetail = await _approveStageDetailsRepository.AddAsync(model, userId);
+            return approveStageDetail;
         }
 
         public Task<ApiResponse<List<ApproveStagesDetailDto>>> GetAllAsync()
@@ -38,7 +44,14 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<ApproveStagesDetailDto>>.Success(dto, 200);
         }
 
-        public Task<ApiResponse<bool>> RemoveAsync(int Id)
+        public async Task<ApiResponse<bool>> RemoveAsync(int Id)
+        {
+            var approveDetail = _approveStageDetailsRepository.Remove(Id);
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(200);
+        }
+
+        public void Update(ApproveStagesDetailDto entity, int userId)
         {
             throw new NotImplementedException();
         }

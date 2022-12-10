@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Infrastructure.Dtos.ApproveStages
+﻿namespace SolaERP.Infrastructure.Dtos.ApproveStages
 {
     public class ApproveStagesDetailDto
     {
@@ -12,5 +6,7 @@ namespace SolaERP.Infrastructure.Dtos.ApproveStages
         public int ApproveStageMainId { get; set; }
         public string ApproveStageDetailsName { get; set; }
         public int Sequence { get; set; }
+        public List<ApproveStageRoleDto> ApproveStageRolesDto { get; set; }
+        public string Type { get; set; }
     }
 }

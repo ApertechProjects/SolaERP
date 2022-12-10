@@ -2,7 +2,7 @@
 {
     public interface ILoggableCrudService<T>
     {
-        Task<bool> AddAsync(T entity, int userId = default);
-        void Update(T entity, int userId = default);
+        Task<int> AddAsync(T entity, int userId);
+        void Update(T entity, int userId);
     }
 }

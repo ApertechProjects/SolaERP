@@ -21,6 +21,28 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
+        public async Task<int> AddAsync(ApproveStagesMain entity, int userId = 0)
+        {
+            string query = "exec SP_ApproveStagesMain_IUD @approveStageMainId,@procedureId,@businessUnitId,@approveStageName,@userId";
+
+            var result = await Task.Run(() =>
+            {
+                using (var command = _unitOfWork.CreateCommand())
+                {
+                    command.CommandText = query;
+                    command.Parameters.AddWithValue(command, "@approveStageMainId", entity.ApproveStageMainId);
+                    command.Parameters.AddWithValue(command, "@procedureId", entity.ProcedureId);
+                    command.Parameters.AddWithValue(command, "@businessUnitId", entity.BusinessUnitId);
+                    command.Parameters.AddWithValue(command, "@approveStageName", entity.ApproveStageName);
+                    command.Parameters.AddWithValue(command, "@userId", userId);
+                    var value = command.ExecuteNonQuery();
+                    return value == 0 || value == -1 ? false : true;
+                }
+            });
+
+            return 0;
+        }
+
         public Task<List<ApproveStagesMain>> GetAllAsync()
         {
             throw new NotImplementedException();

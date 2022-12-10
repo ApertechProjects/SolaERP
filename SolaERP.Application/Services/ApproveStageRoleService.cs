@@ -3,27 +3,33 @@ using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.ApproveStages;
 using SolaERP.Infrastructure.Dtos.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SolaERP.Infrastructure.Entities.ApproveStage;
+using SolaERP.Infrastructure.UnitOfWork;
 
 namespace SolaERP.Application.Services
 {
     public class ApproveStageRoleService : IApproveStageRoleService
     {
         private readonly IApproveStageRoleRepository _approveStageRoleRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private IMapper _mapper;
-        public ApproveStageRoleService(IApproveStageRoleRepository approveStageRoleRepository, IMapper mapper)
+        public ApproveStageRoleService(IApproveStageRoleRepository approveStageRoleRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _approveStageRoleRepository = approveStageRoleRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         public Task AddAsync(ApproveStageRoleDto model)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<int> AddAsync(ApproveStageRoleDto entity, int userId)
+        {
+            var model = _mapper.Map<ApproveStageRole>(entity);
+            var role = await _approveStageRoleRepository.AddAsync(model, userId);
+            return role;
         }
 
         public Task<ApiResponse<List<ApproveStageRoleDto>>> GetAllAsync()
@@ -38,7 +44,14 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<ApproveStageRoleDto>>.Success(dto, 200);
         }
 
-        public Task<ApiResponse<bool>> RemoveAsync(int Id)
+        public async Task<ApiResponse<bool>> RemoveAsync(int Id)
+        {
+            _approveStageRoleRepository.Remove(Id);
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(200);
+        }
+
+        public void Update(ApproveStageRoleDto entity, int userId)
         {
             throw new NotImplementedException();
         }

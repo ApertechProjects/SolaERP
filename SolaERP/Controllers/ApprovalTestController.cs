@@ -5,6 +5,7 @@ using SolaERP.Infrastructure.Dtos.ApproveStage;
 using SolaERP.Infrastructure.Dtos.ApproveStages;
 using SolaERP.Infrastructure.Dtos.Procedure;
 using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.ViewModels;
 
 namespace SolaERP.Controllers
 {
@@ -17,17 +18,20 @@ namespace SolaERP.Controllers
         private readonly IApproveStageRoleService _approveStageRoleService;
         private readonly IApproveRoleService _approveRoleService;
         private readonly IProcedureService _procedureService;
+        private readonly IUserService _userService;
         public ApprovalTestController(IApproveStageMainService approveStageMainService,
                                       IApproveStageDetailService approveStageDetailService,
                                       IApproveStageRoleService approveStageRoleService,
                                       IApproveRoleService approveRoleService,
-                                      IProcedureService procedureService)
+                                      IProcedureService procedureService,
+                                      IUserService userService)
         {
             _approveStageMainService = approveStageMainService;
             _approveStageDetailService = approveStageDetailService;
             _approveStageRoleService = approveStageRoleService;
             _approveRoleService = approveRoleService;
             _procedureService = procedureService;
+            _userService = userService;
         }
 
         [HttpGet("{buId}")]
@@ -64,6 +68,44 @@ namespace SolaERP.Controllers
         public async Task<ApiResponse<List<ProcedureDto>>> GetProcedures()
         {
             return await _procedureService.GetAllAsync();
+        }
+
+        [HttpPost]
+        public async Task<ApiResponse<bool>> ApprovalStageSave([FromHeader] string authToken, ApprovalStageSaveVM approvalStageSaveVM)
+        {
+            var userId = await _userService.GetUserIdByTokenAsync(authToken);
+
+            var mainId = await _approveStageMainService.AddAsync(approvalStageSaveVM.ApproveStagesMainDto, userId);
+
+            string typeOfDetail = string.Empty;
+            string typeOfRole = string.Empty;
+            for (int i = 0; i < approvalStageSaveVM.ApproveStagesDetailDtos.Count; i++)
+            {
+                typeOfDetail = approvalStageSaveVM.ApproveStagesDetailDtos[i].Type;
+                if (typeOfDetail == "remove")
+                {
+                    await _approveStageDetailService.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageDetailsId); //+
+                }
+                else
+                {
+                    var detailId = await _approveStageDetailService.AddAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i], userId);
+
+                    for (int j = 0; j < approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto.Count; j++)
+                    {
+                        typeOfRole = approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].Type;
+
+                        if (typeOfRole == "remove")
+                        {
+                            await _approveStageRoleService.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].ApproveStageRoleId);
+                        }
+                        else
+                        {
+                            await _approveStageRoleService.AddAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j]);
+                        }
+                    }
+                }
+            }
+            return ApiResponse<bool>.Success(200);
         }
     }
 
