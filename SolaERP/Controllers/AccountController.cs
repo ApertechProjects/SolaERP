@@ -84,8 +84,8 @@ namespace SolaERP.Controllers
             return ApiResponse<bool>.Success(true, 200);
         }
 
-        [HttpGet]
-        public async Task<ApiResponse<bool>> SendResetPasswordEmail(string email)
+        [HttpPost("{email}")]
+        public async Task<ApiResponse<bool>> SendResetPasswordEmail([FromBody] string email)
         {
             return await _userService.SendResetPasswordEmail(email);
         }

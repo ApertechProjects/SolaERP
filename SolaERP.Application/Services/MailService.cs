@@ -8,7 +8,6 @@ namespace SolaERP.Application.Services
     public class MailService : IMailService
     {
         private readonly IConfiguration _configuration;
-        private string ResetVrificationCode { get; set; }
 
         public MailService(IConfiguration configuration)
         {
@@ -54,11 +53,10 @@ namespace SolaERP.Application.Services
                     smtpClient.Credentials = basicCredential;
 
                     message.From = fromAddress;
-                    message.Subject = "Reset Password";
+                    message.Subject = "Email Verification for Reset Password";
                     message.IsBodyHtml = true;
-                    Random rand = new Random();
 
-                    message.Body = ResetVrificationCode;
+                    message.Body = @"";
                     message.To.Add(to);
                     await smtpClient.SendMailAsync(message);
 
