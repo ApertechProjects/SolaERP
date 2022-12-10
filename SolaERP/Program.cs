@@ -1,18 +1,14 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using SolaERP.Application.Identity_Server;
 using SolaERP.Application.Mappers;
-using SolaERP.Application.Services;
 using SolaERP.Business.Models;
 using SolaERP.Extensions;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.ValidationRules;
 using SolaERP.Middlewares;
+using SolaERP.SignalR.Hubs;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -20,13 +16,13 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers(options => { options.Filters.Add(new ValidationFilter()); })
-    .AddJsonOptions(options =>
+.AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     //This code ignores circular referanced object when they serialized to jsonfile 
 }).Services
-    .AddFluentValidationAutoValidation()
-    .AddFluentValidationClientsideAdapters();
+.AddFluentValidationAutoValidation()
+.AddFluentValidationClientsideAdapters();
 
 builder.UseIdentityService();
 builder.UseDataAccesServices();
@@ -38,14 +34,12 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
         corsBuilder => corsBuilder.WithOrigins(builder.Configuration["Cors:Origins"])
+        .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowCredentials()
         .Build());
 });
-var logger = new LoggerConfiguration().WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"),"logs").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
-    //File("logs.txt").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
+var logger = new LoggerConfiguration().WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"), "logs").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
 
 builder.Host.UseSerilog(logger);
 
@@ -118,9 +112,8 @@ app.UseHttpLogging();
 app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 app.UseAuthentication();
+app.MapHub<ChatHub>("/Hubs/ChatHub");
 app.UseAuthorization();
 app.UseGlobalExceptionHandlerMiddleware<Program>(app.Services.GetRequiredService<ILogger<Program>>());
-//app.UseEndpoints(endpoints => endpoints.MapHub<ChatHub>("/chatHub"));
-//app.UseGlobalExceptionHandlerMiddleware();
 app.MapControllers();
 app.Run();

@@ -14,25 +14,24 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> AddAsync(User entity)
+
+        #region Read Operations
+
+        public async Task<List<User>> GetAllAsync()
         {
-            string query = "Exec SP_User_insert @FullName,@StatusId,@UserName,@Email ,@EmailConfirmed ,@PasswordHash,@UserTypeId,@UserToken";
             var result = await Task.Run(() =>
             {
                 using (var command = _unitOfWork.CreateCommand())
                 {
-                    command.CommandText = query;
-                    command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
-                    command.Parameters.AddWithValue(command, "@StatusId", entity.StatusId);
-                    command.Parameters.AddWithValue(command, "@UserName", entity.UserName);
-                    command.Parameters.AddWithValue(command, "@Email", entity.Email);
-                    command.Parameters.AddWithValue(command, "@EmailConfirmed", entity.EmailConfirmed);
-                    command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
-                    command.Parameters.AddWithValue(command, "@UserTypeId", entity.UserTypeId);
-                    command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken.ToString());
+                    command.CommandText = "Select * from Config.AppUser where IsDeleted = 0";
+                    using var reader = command.ExecuteReader();
 
-                    var value = command.ExecuteNonQuery();
-                    return value == 0 || value == -1 ? false : true;
+                    List<User> users = new List<User>();
+                    while (reader.Read())
+                    {
+                        users.Add(reader.GetByEntityStructure<User>());
+                    }
+                    return users;
                 }
             });
             return result;
@@ -57,25 +56,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             });
             return result;
         }
-        public async Task<List<User>> GetAllAsync()
-        {
-            var result = await Task.Run(() =>
-            {
-                using (var command = _unitOfWork.CreateCommand())
-                {
-                    command.CommandText = "Select * from Config.AppUser where IsDeleted = 0";
-                    using var reader = command.ExecuteReader();
-
-                    List<User> users = new List<User>();
-                    while (reader.Read())
-                    {
-                        users.Add(reader.GetByEntityStructure<User>());
-                    }
-                    return users;
-                }
-            });
-            return result;
-        }
         public async Task<User> GetUserByEmailAsync(string email)
         {
             var result = await Task.Run(() =>
@@ -83,8 +63,8 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 User user = null;
                 using (var command = _unitOfWork.CreateCommand())
                 {
-                    command.CommandText = "EXEC SP_GET_USER_BY_EMAIL @Email";
-                    command.Parameters.AddWithValue(command, "@Email", email);
+                    command.CommandText = "SELECT * FROM FN_GET_USER_BY_EMAIL (@Email)";
+                    command.Parameters.AddWithValue(command, "@Email", email == null ? DBNull.Value : email);
 
                     using var reader = command.ExecuteReader();
 
@@ -155,6 +135,52 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             });
             return result;
         }
+        public async Task<int> GetUserIdByTokenAsync(string finderToken)
+        {
+            var result = await Task.Run(() =>
+            {
+                int userId = 0;
+                using (var command = _unitOfWork.CreateCommand())
+                {
+                    command.CommandText = "SELECT ID FROM CONFIG.APPUSER WHERE USERTOKEN = @USERTOKEN";
+                    command.Parameters.AddWithValue(command, "@USERTOKEN", finderToken == null ? DBNull.Value : finderToken);
+
+                    using var reader = command.ExecuteReader();
+                    if (reader.Read())
+                        userId = reader.Get<int>("Id");
+                }
+                return userId;
+            });
+            return result;
+        }
+
+        #endregion
+        //
+        #region DML Operations 
+
+        public async Task<bool> AddAsync(User entity)
+        {
+            string query = "Exec SP_User_insert @FullName,@StatusId,@UserName,@Email ,@EmailConfirmed ,@PasswordHash,@UserTypeId,@UserToken";
+            var result = await Task.Run(() =>
+            {
+                using (var command = _unitOfWork.CreateCommand())
+                {
+                    command.CommandText = query;
+                    command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
+                    command.Parameters.AddWithValue(command, "@StatusId", entity.StatusId);
+                    command.Parameters.AddWithValue(command, "@UserName", entity.UserName);
+                    command.Parameters.AddWithValue(command, "@Email", entity.Email);
+                    command.Parameters.AddWithValue(command, "@EmailConfirmed", entity.EmailConfirmed);
+                    command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
+                    command.Parameters.AddWithValue(command, "@UserTypeId", entity.UserTypeId);
+                    command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken.ToString());
+
+                    var value = command.ExecuteNonQuery();
+                    return value == 0 || value == -1 ? false : true;
+                }
+            });
+            return result;
+        }
         public bool Remove(int Id)
         {
             using (var command = _unitOfWork.CreateCommand())
@@ -178,27 +204,9 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@Photo", entity.Photo);
                 command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
                 command.CommandText = query;
-
+                //TODO: Handle Procedure Convert Error When Updateing User
                 command.ExecuteNonQuery();
             }
-        }
-        public async Task<int> GetUserIdByTokenAsync(string finderToken)
-        {
-            var result = await Task.Run(() =>
-            {
-                int userId = 0;
-                using (var command = _unitOfWork.CreateCommand())
-                {
-                    command.CommandText = "SELECT ID FROM CONFIG.APPUSER WHERE USERTOKEN = @USERTOKEN";
-                    command.Parameters.AddWithValue(command, "@USERTOKEN", finderToken == null ? DBNull.Value : finderToken);
-
-                    using var reader = command.ExecuteReader();
-                    if (reader.Read())
-                        userId = reader.Get<int>("Id");
-                }
-                return userId;
-            });
-            return result;
         }
         public async Task<bool> UpdateUserTokenAsync(int userId, Guid token)
         {
@@ -219,6 +227,27 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             });
             return result;
         }
+        public async Task<bool> ResetUserPasswordAsync(string email, string passwordHash)
+        {
+            var isSucessfull = await Task.Run(() =>
+            {
+                using (var command = _unitOfWork.CreateCommand())
+                {
+                    command.CommandText = "SP_UserPassword_U";
+                    command.CommandType = CommandType.StoredProcedure;
 
+                    command.Parameters.AddWithValue(command, "@EMAIL", email);
+                    command.Parameters.AddWithValue(command, "@PASSWORDHASH", passwordHash);
+
+                    var result = command.ExecuteNonQuery();
+
+                    return result > 0 ? true : false;
+                }
+            });
+
+            return isSucessfull;
+        }
+
+        #endregion
     }
 }

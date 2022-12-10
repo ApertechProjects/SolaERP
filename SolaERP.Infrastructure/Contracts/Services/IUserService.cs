@@ -6,10 +6,12 @@ namespace SolaERP.Infrastructure.Contracts.Services
 {
     public interface IUserService : ICrudService<UserDto>
     {
-        Task<UserDto> GetByUserId(int userId);
+        Task<UserDto> GetUserByIdAsync(int userId);
+        Task<UserDto> GetUserByEmailAsync(string email);
         Task<ApiResponse<bool>> UpdateUserAsync(UserUpdateDto userUpdateDto);
-        Task<ApiResponse<bool>> UpdateUserPassword(UserUpdatePasswordDto userUpdatePasswordDto);
-        Task<ApiResponse<NoContentDto>> UpdateUserIdentifier(string finderToken, Guid newToken);
+        Task<ApiResponse<NoContentDto>> UpdateUserIdentifierAsync(string finderToken, Guid newToken);
+        Task<ApiResponse<bool>> SendResetPasswordEmail(string email);
         Task<int> GetUserIdByTokenAsync(string finderToken);
+        Task<ApiResponse<bool>> ResetPasswordAsync(ResetPasswordRequestDto resetPasswordRequestDto);
     }
 }

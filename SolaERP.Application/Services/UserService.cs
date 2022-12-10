@@ -15,13 +15,17 @@ namespace SolaERP.Application.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMailService _mailService;
         private readonly IMapper _mapper;
+        private string _email;
         public UserService(IUserRepository userRepository,
                            IUnitOfWork unitOfWork,
-                           IMapper mapper)
+                           IMapper mapper,
+                           IMailService mailService)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
+            _mailService = mailService;
             _mapper = mapper;
         }
 
@@ -36,6 +40,7 @@ namespace SolaERP.Application.Services
             var result = await _userRepository.AddAsync(user);
             await _unitOfWork.SaveChangesAsync();
         }
+
         public async Task<ApiResponse<List<UserDto>>> GetAllAsync()
         {
             var users = await _userRepository.GetAllAsync();
@@ -43,6 +48,7 @@ namespace SolaERP.Application.Services
 
             return ApiResponse<List<UserDto>>.Success(dto, 200);
         }
+
         public async Task<ApiResponse<bool>> UpdateAsync(UserDto userUpdateDto)
         {
             if (userUpdateDto.Password != userUpdateDto.ConfirmPassword)
@@ -55,6 +61,7 @@ namespace SolaERP.Application.Services
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }
+
         public async Task<ApiResponse<bool>> RemoveAsync(int Id)
         {
             _userRepository.Remove(Id);
@@ -62,12 +69,14 @@ namespace SolaERP.Application.Services
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }
-        public async Task<UserDto> GetByUserId(int userId)
+
+        public async Task<UserDto> GetUserByIdAsync(int userId)
         {
             var userDatas = await _userRepository.GetUserByIdAsync(userId);
             var userDto = _mapper.Map<UserDto>(userDatas);
             return userDto;
         }
+
         public async Task<ApiResponse<bool>> UpdateUserAsync(UserUpdateDto userUpdateDto)
         {
             var result = _mapper.Map<User>(userUpdateDto);
@@ -75,18 +84,27 @@ namespace SolaERP.Application.Services
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }
-        public async Task<ApiResponse<bool>> UpdateUserPassword(UserUpdatePasswordDto userUpdatePasswordDto)
+
+        public async Task<ApiResponse<bool>> ResetPasswordAsync(ResetPasswordRequestDto resetPasswordRequestDto)
         {
+            var user = await _userRepository.GetUserByEmailAsync(resetPasswordRequestDto.Email);
 
-            //if (userUpdatePasswordDto.PasswordHash != userUpdatePasswordDto.ConfirmPasswordHash)
-            //    throw new UserException("Password doesn't match with confirm password");
+            if (user == null)
+                return ApiResponse<bool>.Fail($"We can't find this email: {resetPasswordRequestDto.Email}", 404);
 
-            //var result = _mapper.Map<User>(userUpdatePasswordDto);
-            //_userRepository.Update
-            return ApiResponse<bool>.Success(200);
+            if (resetPasswordRequestDto.Password == resetPasswordRequestDto.ConfirmPassword)
+            {
+                user.PasswordHash = SecurityUtil.ComputeSha256Hash(resetPasswordRequestDto.Password);
+                await _userRepository.ResetUserPasswordAsync(resetPasswordRequestDto.Email, user.PasswordHash);
+
+                await _unitOfWork.SaveChangesAsync();
+                return ApiResponse<bool>.Success(true, 200);
+            }
+
+            return ApiResponse<bool>.Fail("Password does not match with ConfirmPassword", 400);
         }
 
-        public async Task<ApiResponse<NoContentDto>> UpdateUserIdentifier(string finderToken, Guid newToken)
+        public async Task<ApiResponse<NoContentDto>> UpdateUserIdentifierAsync(string finderToken, Guid newToken)
         {
             var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
 
@@ -99,6 +117,26 @@ namespace SolaERP.Application.Services
         public Task<int> GetUserIdByTokenAsync(string finderToken)
         {
             return _userRepository.GetUserIdByTokenAsync(finderToken);
+        }
+
+        public async Task<UserDto> GetUserByEmailAsync(string email)
+        {
+            var user = await _userRepository.GetUserByEmailAsync(email);
+            var userDto = _mapper.Map<UserDto>(user);
+
+            return userDto;
+        }
+
+        public async Task<ApiResponse<bool>> SendResetPasswordEmail(string email)
+        {
+            var userExsist = await _userRepository.GetUserByEmailAsync(email);
+
+            if (userExsist == null)
+                return ApiResponse<bool>.Fail($"We can't found this email: {email}", 404);
+
+            _email = email;
+            await _mailService.SendPasswordResetMailAsync(email);
+            return ApiResponse<bool>.Success(true, 200);
         }
     }
 }

@@ -61,7 +61,6 @@ namespace SolaERP.Application.Services
 
             return ApiResponse<List<ParentMenuDto>>.Fail("BadRequest", 400);
         }
-
         public async Task<ApiResponse<List<MenuWithPrivilagesDto>>> GetUserMenusWithPrivilagesAsync(string finderToken)
         {
             var menus = await _menuRepository.GetUserMenuWithPrivillagesAsync(await _userRepository.GetUserIdByTokenAsync(finderToken));
