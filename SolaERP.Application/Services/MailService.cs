@@ -8,7 +8,6 @@ namespace SolaERP.Application.Services
     public class MailService : IMailService
     {
         private readonly IConfiguration _configuration;
-        private string ResetVrificationCode { get; set; }
 
         public MailService(IConfiguration configuration)
         {
@@ -38,14 +37,14 @@ namespace SolaERP.Application.Services
             await smtp.SendMailAsync(mail);
         }
 
-        public async Task SendPasswordResetMailAsync(string to, string userId, string resetToken)
+        public async Task SendPasswordResetMailAsync(string to)
         {
             using (SmtpClient smtpClient = new SmtpClient())
             {
-                var basicCredential = new NetworkCredential(_configuration["Mail:Email"], _configuration["Mail:Password"]);
+                var basicCredential = new NetworkCredential(_configuration["Mail:Username"], _configuration["Mail:Password"]);
                 using (MailMessage message = new MailMessage())
                 {
-                    MailAddress fromAddress = new MailAddress(_configuration["Mail:Email"]);
+                    MailAddress fromAddress = new MailAddress(_configuration["Mail:Username"]);
 
                     smtpClient.Host = _configuration["Mail:Host"];
                     smtpClient.Port = 587;
@@ -54,13 +53,13 @@ namespace SolaERP.Application.Services
                     smtpClient.Credentials = basicCredential;
 
                     message.From = fromAddress;
-                    message.Subject = "Reset Password";
+                    message.Subject = "Email Verification for Reset Password";
                     message.IsBodyHtml = true;
-                    Random rand = new Random();
-                    ResetVrificationCode = rand.Next(100000, 999999).ToString();
-                    message.Body = ResetVrificationCode;
+
+                    message.Body = @"";
                     message.To.Add(to);
                     await smtpClient.SendMailAsync(message);
+
                 }
             }
         }

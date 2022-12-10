@@ -23,7 +23,7 @@ namespace SolaERP.Controllers
         [HttpGet("{id}")]
         public async Task<UserDto> GetUserById(int id)
         {
-            return await _userService.GetByUserId(id);
+            return await _userService.GetUserByIdAsync(id);
         }
 
         [HttpPut]
