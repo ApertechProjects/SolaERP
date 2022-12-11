@@ -120,6 +120,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return result;
             }
         }
+        public async Task<List<BusinessUnitForGroup>> GetBusinessUnitForGroups(int groupId)
+        {
+            List<BusinessUnitForGroup> businessUnitForGroups = new();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SP_GroupBusinessUnit_Load";
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    businessUnitForGroups.Add(reader.GetByEntityStructure<BusinessUnitForGroup>());
+
+                return businessUnitForGroups;
+            }
+        }
 
         #endregion
 

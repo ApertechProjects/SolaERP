@@ -31,7 +31,15 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<BusinessUnitsAllDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<List<BusinessUnitsDto>>> GetBusinessUnitListByUserId(string finderToken)
+        public async Task<ApiResponse<List<BusinessUnitForGroupDto>>> GetBusinessUnitForGroupAsync(int groupId)
+        {
+            var buisnessUnitForGroup = await _businessUnitRepository.GetBusinessUnitForGroups(groupId);
+            var dto = _mapper.Map<List<BusinessUnitForGroupDto>>(buisnessUnitForGroup);
+
+            return ApiResponse<List<BusinessUnitForGroupDto>>.Success(dto, 200);
+        }
+
+        public async Task<ApiResponse<List<BusinessUnitsDto>>> GetBusinessUnitListByUserToken(string finderToken)
         {
             var businessUnits = await _businessUnitRepository.GetBusinessUnitListByUserId(
                 await _userRepository.GetUserIdByTokenAsync(finderToken));
@@ -40,6 +48,7 @@ namespace SolaERP.Application.Services
 
             return ApiResponse<List<BusinessUnitsDto>>.Success(null, 200);
         }
+
 
         public Task<ApiResponse<bool>> RemoveAsync(int Id)
         {

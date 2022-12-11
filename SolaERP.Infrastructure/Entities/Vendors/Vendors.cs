@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Infrastructure.Entities.Vendors
+﻿namespace SolaERP.Infrastructure.Entities.Vendors
 {
-    internal class Vendors
+    public class Vendors : BaseEntity
     {
         public int VendorId { get; set; }
         public string VendorCode { get; set; }

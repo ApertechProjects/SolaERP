@@ -6,7 +6,7 @@ using SolaERP.Infrastructure.Dtos.Shared;
 
 namespace SolaERP.Application.Services
 {
-    public class ApproveStageMainService : IApproveStageMainService, ILoggableCrudService<ApproveStagesMainDto>
+    public class ApproveStageMainService : IApproveStageMainService, ILogableCrudService<ApproveStagesMainDto>
     {
         private readonly IApproveStageMainRepository _approveStageMainRepository;
         private IMapper _mapper;

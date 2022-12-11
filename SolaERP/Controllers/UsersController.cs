@@ -27,5 +27,7 @@ namespace SolaERP.Controllers
         {
             return await new EntityLogic(ConfHelper).GetUserListForGroup(token, groupId);
         }
+
+
     }
 }

@@ -138,5 +138,30 @@ namespace SolaERP.Application.Services
             await _mailService.SendPasswordResetMailAsync(email);
             return ApiResponse<bool>.Success(true, 200);
         }
+
+        public async Task<ApiResponse<UserDto>> GetUserByTokenAsync(string finderToken)
+        {
+            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            var user = await _userRepository.GetUserByIdAsync(userId);
+
+            if (user is null)
+                return ApiResponse<UserDto>.Fail("User not found", 404);
+
+            var dto = _mapper.Map<UserDto>(user);
+            return ApiResponse<UserDto>.Success(dto, 200);
+        }
+
+        public async Task<ApiResponse<bool>> RemoveUserByTokenAsync(string finderToken)
+        {
+            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+
+            if (userId == 0)
+                return ApiResponse<bool>.Fail("User not found", 404);
+
+            var result = _userRepository.Remove(userId);
+            await _unitOfWork.SaveChangesAsync();
+
+            return ApiResponse<bool>.Success(200);
+        }
     }
 }

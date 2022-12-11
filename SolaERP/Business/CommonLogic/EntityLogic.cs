@@ -206,6 +206,7 @@ namespace SolaERP.Business.CommonLogic
             return UnAuthorizedUserResult();
         }
 
+        //DONE
         internal async Task<ApiResult> GetUserMenu_Load(string token)
         {
             if (true)//await UserIsAuthorized(token))
@@ -217,18 +218,7 @@ namespace SolaERP.Business.CommonLogic
             }
             return UnAuthorizedUserResult();
         }
-
-
-        internal async Task<ApiResult> GetGroups(string token)
-        {
-            if (await UserIsAuthorized(token))
-            {
-                var result = new GenericMapLogic<GroupMain>().BuildModel(await GetData.FromQuery($"EXEC dbo.SP_GroupMain_Load", ConfHelper.DevelopmentUrl));
-                return result;
-            }
-            return UnAuthorizedUserResult();
-        }
-
+        //DONE
         internal async Task<ApiResult> GetUserMenuWithoutAccess(string token)
         {
             if (await UserIsAuthorized(token))
@@ -276,6 +266,21 @@ namespace SolaERP.Business.CommonLogic
             }
             return UnAuthorizedUserResult();
         }
+
+
+
+
+        internal async Task<ApiResult> GetGroups(string token)
+        {
+            if (await UserIsAuthorized(token))
+            {
+                var result = new GenericMapLogic<GroupMain>().BuildModel(await GetData.FromQuery($"EXEC dbo.SP_GroupMain_Load", ConfHelper.DevelopmentUrl));
+                return result;
+            }
+            return UnAuthorizedUserResult();
+        }
+
+
 
         internal async Task<ApiResult> DownloadFile(string token, int fileId)
         {
