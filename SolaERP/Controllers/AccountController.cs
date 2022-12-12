@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos;
 using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.User;
@@ -84,10 +85,10 @@ namespace SolaERP.Controllers
             return ApiResponse<bool>.Success(true, 200);
         }
 
-        [HttpPost("{email}")]
-        public async Task<ApiResponse<bool>> SendResetPasswordEmail([FromBody] string email)
+        [HttpPost]
+        public async Task<ApiResponse<bool>> SendResetPasswordEmail(EmailDto dto)
         {
-            return await _userService.SendResetPasswordEmail(email);
+            return await _userService.SendResetPasswordEmail(dto.Email);
         }
 
 
