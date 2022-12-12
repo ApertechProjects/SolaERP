@@ -3,6 +3,8 @@ using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Menu;
 using SolaERP.Infrastructure.UnitOfWork;
+using System.Data;
+using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -49,6 +51,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 }
             });
             return result;
+        }
+
+        public async Task<List<GroupMenu>> GetGroupMenusByGroupIdAsync(int groupId)
+        {
+            List<GroupMenu> menus = new();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SP_GroupMenus_Load";
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                    menus.Add(reader.GetByEntityStructure<GroupMenu>());
+
+                return menus;
+            }
         }
 
         public bool Remove(int Id)
