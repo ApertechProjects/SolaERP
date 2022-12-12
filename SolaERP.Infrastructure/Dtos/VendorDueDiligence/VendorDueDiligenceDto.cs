@@ -1,6 +1,6 @@
-﻿namespace SolaERP.Infrastructure.Entities.VendorDueDiligence
+﻿namespace SolaERP.Infrastructure.Dtos.VendorDueDiligence
 {
-    public class VendorDueDiligence : BaseEntity
+    public class VendorDueDiligenceDto
     {
         public int VendorDueDiligenceId { get; set; }
         public int DueDiligenceDesignId { get; set; }

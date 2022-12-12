@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Infrastructure.Entities.Attachments
+﻿namespace SolaERP.Infrastructure.Dtos.Attachment
 {
-    public class Attachments : BaseEntity
+    public class AttachmentDto
     {
         public int AttachmentId { get; set; }
         public string FileName { get; set; }

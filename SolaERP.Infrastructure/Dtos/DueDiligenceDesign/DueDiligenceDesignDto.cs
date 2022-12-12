@@ -1,6 +1,6 @@
-﻿namespace SolaERP.Infrastructure.Entities.DueDiligenceDesign
+﻿namespace SolaERP.Infrastructure.Dtos.DueDiligenceDesign
 {
-    public class DueDiligenceDesign : BaseEntity
+    public class DueDiligenceDesignDto
     {
         public int DueDiligenceDesignId { get; set; }
         public int LineNo { get; set; }
@@ -22,8 +22,7 @@
         public int GridColumnCount { get; set; }
         public bool HasAgreement { get; set; }
         public string AgreementText { get; set; }
-        public VendorDueDiligence.VendorDueDiligence VendorDueDiligence { get; set; }
-        public Attachment.Attachment Attachments { get; set; }
-
+        public VendorDueDiligence.VendorDueDiligenceDto VendorDueDiligence { get; set; }
+        public Attachment.AttachmentDto Attachments { get; set; }
     }
 }
