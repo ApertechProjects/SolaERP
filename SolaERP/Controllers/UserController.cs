@@ -46,7 +46,7 @@ namespace SolaERP.Controllers
         //[HttpGet("{groupId}")]
         //public async Task<ApiResponse<UserDto>> GetUsersForGroup(int groupId)
         //{
-
+        //    return _userService.Get
         //}
     }
 }

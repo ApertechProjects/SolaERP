@@ -71,5 +71,35 @@ namespace SolaERP.Application.Services
 
             return ApiResponse<List<MenuWithPrivilagesDto>>.Fail("BadRequest", 400);
         }
+        public async Task<ApiResponse<GroupMenuResponseDto>> GetGroupMenuWithPrivillageListByGroupIdAsync(string finderToken, int groupId)
+        {
+            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            var menus = await _menuRepository.GetUserMenuWithPrivillagesAsync(userId);
+
+            GroupMenuResponseDto response = new() { Menus = _mapper.Map<List<MenuWithPrivilagesDto>>(menus) };
+            GroupMenuWithPrivillageIdListDto groupMenusWithPrivList = new();
+
+            if (groupId > 0)
+            {
+                var groupMenus = await _menuRepository.GetGroupMenusByGroupIdAsync(groupId);
+                foreach (var userMenu in menus)
+                {
+                    var comparer = groupMenus.Where(gm => gm.MenuId == userMenu.MenuId).FirstOrDefault();
+                    if (comparer != null)
+                    {
+                        if (comparer.CreateAccess == 1)
+                            groupMenusWithPrivList.Create.Add(comparer.MenuId);
+                        if (comparer.DeleteAccess == 1)
+                            groupMenusWithPrivList.Delete.Add(comparer.MenuId);
+                        if (comparer.ExportAccess == 1)
+                            groupMenusWithPrivList.Export.Add(comparer.MenuId);
+                        if (comparer.EditAccess == 1)
+                            groupMenusWithPrivList.Edit.Add(comparer.MenuId);
+                    }
+                }
+            }
+            response.PrivillageList = groupMenusWithPrivList;
+            return ApiResponse<GroupMenuResponseDto>.Success(response, 200);
+        }
     }
 }

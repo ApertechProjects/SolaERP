@@ -630,7 +630,7 @@ namespace SolaERP.Business.CommonLogic
         {
             if (await UserIsAuthorized(token))
             {
-                int userId = await GetUserIdByToken(token);
+                int userId = 1407;//await GetUserIdByToken(token);
                 var result = new ApiResult();
                 var userMenuResult = (await GetData.FromQuery($"EXEC dbo.SP_UserMenu_Load {userId}", ConfHelper.DevelopmentUrl)).ConvertToClassListModel<UserMenu_Load>();
                 var wrapperModel = new GroupMenuExternalDataWrapper()

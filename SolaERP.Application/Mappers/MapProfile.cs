@@ -32,6 +32,8 @@ namespace SolaERP.Application.Mappers
             CreateMap<ApproveStageRole, ApproveStageRoleDto>().ReverseMap();
             CreateMap<ApproveRole, ApproveRoleDto>().ReverseMap();
             CreateMap<BusinessUnitForGroup, BusinessUnitForGroupDto>().ReverseMap();
+            CreateMap<GroupMenu, GroupMenuDto>().ReverseMap();
+            CreateMap<MenuWithPrivilages, GroupMenuWithPrivillageIdListDto>();
         }
     }
 }
