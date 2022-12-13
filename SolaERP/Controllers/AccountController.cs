@@ -88,7 +88,7 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<ApiResponse<bool>> SendResetPasswordEmail(EmailDto dto)
         {
-            return await _userService.SendResetPasswordEmail(dto.Email);
+            return await _userService.SendResetPasswordEmail(dto.Email, @"C:\Users\HP\source\repos\SolaERP\SolaERP\Templates\EmailTemplate.html");
         }
 
 

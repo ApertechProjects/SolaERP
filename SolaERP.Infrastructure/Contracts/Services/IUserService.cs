@@ -11,7 +11,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<UserDto> GetUserByEmailAsync(string email);
         Task<ApiResponse<bool>> UpdateUserAsync(UserUpdateDto userUpdateDto);
         Task<ApiResponse<NoContentDto>> UpdateUserIdentifierAsync(string finderToken, Guid newToken);
-        Task<ApiResponse<bool>> SendResetPasswordEmail(string email);
+        Task<ApiResponse<bool>> SendResetPasswordEmail(string email, string templatePath);
         Task<int> GetUserIdByTokenAsync(string finderToken);
         Task<ApiResponse<bool>> RemoveUserByTokenAsync(string finderToken);
         Task<ApiResponse<bool>> ResetPasswordAsync(ResetPasswordRequestDto resetPasswordRequestDto);

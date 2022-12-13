@@ -17,7 +17,6 @@ namespace SolaERP.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMailService _mailService;
         private readonly IMapper _mapper;
-        private string _email;
         public UserService(IUserRepository userRepository,
                            IUnitOfWork unitOfWork,
                            IMapper mapper,
@@ -127,15 +126,14 @@ namespace SolaERP.Application.Services
             return userDto;
         }
 
-        public async Task<ApiResponse<bool>> SendResetPasswordEmail(string email)
+        public async Task<ApiResponse<bool>> SendResetPasswordEmail(string email, string templatePath)
         {
             var userExsist = await _userRepository.GetUserByEmailAsync(email);
 
             if (userExsist == null)
                 return ApiResponse<bool>.Fail($"We can't found this email: {email}", 404);
 
-            _email = email;
-            await _mailService.SendPasswordResetMailAsync(email);
+            await _mailService.SendPasswordResetMailAsync(email, templatePath);
             return ApiResponse<bool>.Success(true, 200);
         }
 

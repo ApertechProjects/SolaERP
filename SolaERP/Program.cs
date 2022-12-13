@@ -26,8 +26,8 @@ builder.Services.AddControllers(options => { options.Filters.Add(new ValidationF
 
 builder.UseIdentityService();
 builder.UseDataAccesServices();
-builder.Services.AddEndpointsApiExplorer();
 builder.UseValidationExtension();
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.Configure<ApiBehaviorOptions>(config => { config.SuppressModelStateInvalidFilter = true; });
 builder.Services.AddCors(options =>
