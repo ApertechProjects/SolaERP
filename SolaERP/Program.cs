@@ -27,6 +27,7 @@ builder.Services.AddControllers(options => { options.Filters.Add(new ValidationF
 builder.UseIdentityService();
 builder.UseDataAccesServices();
 builder.UseValidationExtension();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.Configure<ApiBehaviorOptions>(config => { config.SuppressModelStateInvalidFilter = true; });
@@ -39,8 +40,8 @@ builder.Services.AddCors(options =>
         .AllowAnyOrigin()
         .Build());
 });
-var logger = new LoggerConfiguration().WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"), "logs").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
 
+var logger = new LoggerConfiguration().WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"), "logs").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
 builder.Host.UseSerilog(logger);
 
 builder.Services.AddAuthentication(x =>
