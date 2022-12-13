@@ -1,6 +1,7 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using SolaERP.Application.Mappers;
@@ -40,6 +41,12 @@ builder.Services.AddCors(options =>
         .Build());
 });
 var logger = new LoggerConfiguration().WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"), "logs").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
+builder.Services.Configure<HubOptions<ChatHub>>(config => 
+{
+    config.ClientTimeoutInterval = TimeSpan.FromMinutes(30);    
+    config.KeepAliveInterval= TimeSpan.FromMinutes(30); 
+
+});
 
 builder.Host.UseSerilog(logger);
 
@@ -112,7 +119,7 @@ app.UseHttpLogging();
 app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 app.UseAuthentication();
-app.MapHub<ChatHub>("/Hubs/ChatHub");
+app.MapHub<ChatHub>("/ChatHub");
 app.UseAuthorization();
 app.UseGlobalExceptionHandlerMiddleware<Program>(app.Services.GetRequiredService<ILogger<Program>>());
 app.MapControllers();
