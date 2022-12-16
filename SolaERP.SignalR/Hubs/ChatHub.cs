@@ -1,21 +1,45 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using SignalRChatExample.Models;
+using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.SignalR.InMemorySource;
 
 namespace SolaERP.SignalR.Hubs
 {
     public class ChatHub : Hub
     {
-        public async Task GetUsernameAsync(string userName)
+        private readonly IChatService _chatService;
+        public ChatHub(IChatService chatService)
         {
-            ClientModel client = new ClientModel
+            _chatService = chatService;
+        }
+
+
+        public async Task GetUsernameAsync([FromHeader] string authToken)
+        {
+            #region Version 1
+            //ClientModel client = new ClientModel
+            //{
+            //    ConnectionId = Context.ConnectionId,
+            //};
+            //ClientSource.Source.Add(client);
+            //await Clients.All.SendAsync("userJoined", userName);
+            //await Clients.Others.SendAsync("activeUsers", ClientSource.Source);
+            #endregion
+
+            var sender = await _chatService.GetSenderAsync(authToken);
+            if (sender != null)
             {
-                ConnectionId = Context.ConnectionId,
-                Username = userName
-            };
-            ClientSource.Source.Add(client);
-            await Clients.All.SendAsync("userJoined", userName);
-            await Clients.Others.SendAsync("activeUsers", ClientSource.Source);
+                ClientModel client = new ClientModel
+                {
+                    ConnectionId = Context.ConnectionId,
+                    Username = sender.UserName,
+                    UserType = sender.UserTypeId
+                };
+                ClientSource.Source.Add(client);
+                await Clients.All.SendAsync("clientJoined", client.Username);
+                await Clients.Others.SendAsync("activeClient", ClientSource.Source);
+            }
         }
 
         public async Task SendMessageAsync(string userName, string message)
