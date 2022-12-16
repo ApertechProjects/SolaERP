@@ -21,7 +21,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "SP_Load_Chat_History @ChatId";
-                command.Parameters.AddWithValue(command, "@ChatId", chatId)
+                command.Parameters.AddWithValue(command, "@ChatId", chatId);
 
                 using var reader = await command.ExecuteReaderAsync();
                 while (reader.Read())
@@ -72,7 +72,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     UserName = reader.Get<string>("SenderUsername"),
                     Photo = reader.Get<byte[]>("SenderPhoto"),
                     Email = reader.Get<string>("SenderEmail"),
-                    UserToken = reader.Get<string>("SenderToken"),
+                    UserToken = reader.Get<Guid>("SenderToken"),
                 },
                 Receiver = new()
                 {
@@ -81,7 +81,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     UserName = reader.Get<string>("ReceiverUsername"),
                     Photo = reader.Get<byte[]>("ReceiverPhoto"),
                     Email = reader.Get<string>("ReceiverEmail"),
-                    UserToken = reader.Get<string>("ReceiverToken"),
+                    UserToken = reader.Get<Guid>("ReceiverToken"),
                 },
 
             };
