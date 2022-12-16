@@ -40,6 +40,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IApproveRoleService, ApproveRoleService>();
             builder.Services.AddScoped<IProcedureService, ProcedureService>();
             builder.Services.AddScoped<IMailService, MailService>();
+            builder.Services.AddScoped<IChatService, ChatService>();
         }
         private static void UseRepositories(this WebApplicationBuilder builder)
         {
@@ -52,6 +53,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IApproveStageRoleRepository, SqlApproveStageRoleRepository>();
             builder.Services.AddScoped<IApproveRoleRepository, SqlApproveRoleRepository>();
             builder.Services.AddScoped<IProcedureRepository, SqlProcedureRepository>();
+            builder.Services.AddScoped<IChatRepository, SqlChatRepository>();
         }
         public static void UseValidationExtension(this WebApplicationBuilder builder)
         {
