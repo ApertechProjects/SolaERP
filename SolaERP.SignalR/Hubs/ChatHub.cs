@@ -2,20 +2,15 @@
 using Microsoft.AspNetCore.SignalR;
 using SignalRChatExample.Models;
 using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.SignalR.InMemorySource;
+using SolaERP.SignalR.Models;
 
 namespace SolaERP.SignalR.Hubs
 {
     public class ChatHub : Hub
     {
-        private readonly IChatService _chatService;
-        public ChatHub(IChatService chatService)
-        {
-            _chatService = chatService;
-        }
-
-
-        public async Task GetUsernameAsync([FromHeader] string authToken)
+        public async Task GetUsernameAsync(ChatModel model)
         {
             #region Version 1
             //ClientModel client = new ClientModel
@@ -27,7 +22,7 @@ namespace SolaERP.SignalR.Hubs
             //await Clients.Others.SendAsync("activeUsers", ClientSource.Source);
             #endregion
 
-            var sender = await _chatService.GetSenderAsync(authToken);
+            var sender = new User();
             if (sender != null)
             {
                 ClientModel client = new ClientModel
@@ -42,12 +37,12 @@ namespace SolaERP.SignalR.Hubs
             }
         }
 
-        public async Task SendMessageAsync(string userName, string message)
+        public async Task SendMessageAsync(ChatModel model)
         {
-            var client = ClientSource.Source.FirstOrDefault(c => c.Username == userName);
+            var client = ClientSource.Source.FirstOrDefault(c => c.Username == model.Username);
 
             if (client != null)
-                await Clients.Clients(client.ConnectionId).SendAsync("getMessages", message);
+                await Clients.Clients(client.ConnectionId).SendAsync("getMessages", model.Message);
         }
 
         public async Task JoinToGroupAsync(string groupName)
