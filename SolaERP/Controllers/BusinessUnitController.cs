@@ -30,7 +30,7 @@ namespace SolaERP.Controllers
         }
 
         [HttpGet("{groupId}")]
-        public async Task<ApiResponse<List<BusinessUnitForGroupDto>>> GetBusinessUnitForGroups(int groupId)
+        public async Task<ApiResponse<List<BusinessUnitForGroupDto>>> GetBusinessUnitListForGroups(int groupId)
         {
             return await _businessUnitService.GetBusinessUnitForGroupAsync(groupId);
         }
