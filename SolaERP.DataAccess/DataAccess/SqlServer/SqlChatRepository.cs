@@ -20,7 +20,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             List<ChatHistory> history = new List<ChatHistory>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SP_Load_Chat_History @ChatId";
+                command.CommandText = "EXEC SP_Load_Chat_History @ChatId";
                 command.Parameters.AddWithValue(command, "@ChatId", chatId);
 
                 using var reader = await command.ExecuteReaderAsync();
@@ -65,6 +65,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 ReceiverId = reader.Get<int>("ReceiverId"),
                 Message = reader.Get<string>("Message"),
                 MessageDate = reader.Get<DateTime>("MessageDate"),
+                ReceiverConnectionId = reader.Get<string>("ReceiverConnectionId"),
+                SenderConnectionId = reader.Get<string>("SenderConnectionId"),
                 Sender = new()
                 {
                     Id = reader.Get<int>("Sender_Id"),

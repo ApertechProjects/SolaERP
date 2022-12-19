@@ -11,5 +11,7 @@ namespace SolaERP.Infrastructure.Entities.Chat
         public User Receiver { get; set; }
         public string Message { get; set; }
         public DateTime MessageDate { get; set; }
+        public string ReceiverConnectionId { get; set; }
+        public string SenderConnectionId { get; set; }
     }
 }

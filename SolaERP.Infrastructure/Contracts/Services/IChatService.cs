@@ -1,5 +1,4 @@
 ﻿using SolaERP.Infrastructure.Dtos.Chat;
-using SolaERP.Infrastructure.Entities.Auth;
 
 namespace SolaERP.Infrastructure.Contracts.Services
 {
@@ -7,6 +6,5 @@ namespace SolaERP.Infrastructure.Contracts.Services
     {
         Task SaveChatHistoryAsync(ChatHistoryDto chatHistory);
         Task<List<ChatHistoryDto>> LoadChatHistoryAsync(int chatId);
-        Task<User> GetSenderAsync(string finderToken);
     }
 }
