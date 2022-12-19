@@ -1,18 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using SignalRChatExample.Models;
-using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.SignalR.InMemorySource;
 
 namespace SolaERP.SignalR.Hubs
 {
     public class ChatHub : Hub
     {
-        private readonly IChatService _chatService;
-        public ChatHub(IChatService chatService)
-        {
-            _chatService = chatService;
-        }
 
 
         public async Task GetUsernameAsync([FromHeader] string authToken)
@@ -27,7 +22,7 @@ namespace SolaERP.SignalR.Hubs
             //await Clients.Others.SendAsync("activeUsers", ClientSource.Source);
             #endregion
 
-            var sender = await _chatService.GetSenderAsync(authToken);
+            var sender = new User();
             if (sender != null)
             {
                 ClientModel client = new ClientModel
@@ -41,6 +36,13 @@ namespace SolaERP.SignalR.Hubs
                 await Clients.Others.SendAsync("activeClient", ClientSource.Source);
             }
         }
+
+        public override Task OnConnectedAsync()
+        {
+
+            return base.OnConnectedAsync();
+        }
+
 
         public async Task SendMessageAsync(string userName, string message)
         {

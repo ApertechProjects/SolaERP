@@ -70,7 +70,6 @@ namespace SolaERP.Extensions
         {
             builder.UseRepositories();
             builder.UseServices();
-
             builder.UseSqlConnection();
         }
 

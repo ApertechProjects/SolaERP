@@ -8,6 +8,7 @@ using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.SignalR.Hubs;
 
 namespace SolaERP.Controllers
 {
