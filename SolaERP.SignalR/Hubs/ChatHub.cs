@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using SignalRChatExample.Models;
 using SolaERP.Infrastructure.Contracts.Services;
@@ -10,39 +11,50 @@ namespace SolaERP.SignalR.Hubs
 {
     public class ChatHub : Hub
     {
+        IHttpContextAccessor _conetext;
+        public ChatHub(IHttpContextAccessor accessor)
+        {
+            _conetext = accessor;
+        }
         public async Task GetUsernameAsync(ChatModel model)
         {
             #region Version 1
-            //ClientModel client = new ClientModel
-            //{
-            //    ConnectionId = Context.ConnectionId,
-            //};
-            //ClientSource.Source.Add(client);
-            //await Clients.All.SendAsync("userJoined", userName);
-            //await Clients.Others.SendAsync("activeUsers", ClientSource.Source);
+            ClientModel client = new ClientModel
+            {
+                ConnectionId = Context.ConnectionId,
+                Username = model.Username,
+            };
+            ClientSource.Source.Add(client);
+            await Clients.All.SendAsync("userjoined", model.Username);
+            await Clients.Others.SendAsync("activeusers", ClientSource.Source);
             #endregion
 
-            var sender = new User();
-            if (sender != null)
-            {
-                ClientModel client = new ClientModel
-                {
-                    ConnectionId = Context.ConnectionId,
-                    Username = sender.UserName,
-                    UserType = sender.UserTypeId
-                };
-                ClientSource.Source.Add(client);
-                await Clients.All.SendAsync("clientJoined", client.Username);
-                await Clients.Others.SendAsync("activeClient", ClientSource.Source);
-            }
+            #region Version 2
+            //var sender = new User();
+            //if (sender != null)
+            //{
+            //    ClientModel client = new ClientModel
+            //    {
+            //        ConnectionId = Context.ConnectionId,
+            //        Username = sender.UserName,
+            //        UserType = sender.UserTypeId
+            //    };
+            //    ClientSource.Source.Add(client);
+            //    await Clients.All.SendAsync("clientJoined", client.Username);
+            //    await Clients.Others.SendAsync("activeClient", ClientSource.Source);
+            //}
+            #endregion
         }
+
+        
 
         public async Task SendMessageAsync(ChatModel model)
         {
             var client = ClientSource.Source.FirstOrDefault(c => c.Username == model.Username);
+            var sender = ClientSource.Source.FirstOrDefault(c => c.ConnectionId == Context.ConnectionId);
 
             if (client != null)
-                await Clients.Clients(client.ConnectionId).SendAsync("getMessages", model.Message);
+                await Clients.Clients(client.ConnectionId).SendAsync("getMessages", model.Message,sender?.Username);
         }
 
         public async Task JoinToGroupAsync(string groupName)
