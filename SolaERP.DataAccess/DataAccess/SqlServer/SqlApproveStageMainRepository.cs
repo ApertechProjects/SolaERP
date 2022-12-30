@@ -104,6 +104,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
+        public Task<int> UpdateAsync(ApproveStagesMain entity, int userId)
+        {
+            throw new NotImplementedException();
+        }
+
         private ApproveStagesMain GetFromReader(IDataReader reader)
         {
             return new ApproveStagesMain

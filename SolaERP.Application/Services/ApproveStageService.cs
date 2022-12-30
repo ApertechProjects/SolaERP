@@ -2,27 +2,25 @@
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.ApproveStage;
+using SolaERP.Infrastructure.Dtos.ApproveStages;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Entities.ApproveStage;
 
 namespace SolaERP.Application.Services
 {
-    public class ApproveStageMainService : IApproveStageMainService
+    public class ApproveStageService : IApproveStageService
     {
         private readonly IApproveStageMainRepository _approveStageMainRepository;
+        private readonly IApproveStageDetailRepository _approveStageDetailRepository;
+        private readonly IUserRepository _userRepository;
         private IMapper _mapper;
 
-        public ApproveStageMainService(IApproveStageMainRepository approveStageMainRepository, IMapper mapper)
+        public ApproveStageService(IApproveStageMainRepository approveStageMainRepository, IUserRepository userRepository, IMapper mapper)
         {
             _approveStageMainRepository = approveStageMainRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
-
-        public Task AddAsync(ApproveStagesMainDto model)
-        {
-            throw new NotImplementedException();
-        }
-
 
         public Task<ApiResponse<List<ApproveStagesMainDto>>> GetAllAsync()
         {
@@ -48,29 +46,54 @@ namespace SolaERP.Application.Services
             throw new NotImplementedException();
         }
 
-        public void Update(ApproveStagesMainDto entity, int userId = 0)
+        public async Task<int> UpdateAsync(string authToken, ApproveStagesMainDto entity)
         {
-            throw new NotImplementedException();
+            var userId = await _userRepository.GetUserIdByTokenAsync(authToken);
+            var model = _mapper.Map<ApproveStagesMain>(entity);
+            var approveStageMain = await _approveStageMainRepository.UpdateAsync(model, userId);
+            return approveStageMain;
         }
 
-        public async Task<int> AddAsync(ApproveStagesMainDto entity, int userId = 0)
+        public async Task<int> AddAsync(string authToken, ApproveStagesMainDto entity)
         {
+            var userId = await _userRepository.GetUserIdByTokenAsync(authToken);
             var model = _mapper.Map<ApproveStagesMain>(entity);
             var approveStageMain = await _approveStageMainRepository.AddAsync(model, userId);
             return approveStageMain;
         }
 
-        public Task<ApiResponse<bool>> UpdateAsync(ApproveStagesMainDto model)
+        public async Task<int> SaveApproveStageDetailsAsync(List<ApproveStagesDetailDto> details)
+        {
+            var entityList = _mapper.Map<List<ApproveStagesDetail>>(details);
+            foreach (var item in collection)
+            {
+                var approveStageDetail = await _approveStageDetailRepository.AddAsync(details, userId);
+
+            }
+            return approveStageDetail;
+        }
+
+        public Task<int> RemoveApproveStageDetailsAsync(int approveStageDetailsId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> AddAsync(ApproveStagesMainDto entity, string authToken)
+        public Task<ApiResponse<List<ApproveStagesDetailDto>>> GetApproveStageDetailsByApproveStageMainId(int approveStageMainId)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(ApproveStagesMainDto entity, string authToken)
+        public Task<int> SaveApproveStageRolesAsync(List<ApproveStageRoleDto> roles)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> RemoveApproveStageolesAsync(int roleId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApiResponse<List<ApproveStageRoleDto>>> GetApproveStageRolesByApproveStageDetailId(int approveStageDetailsId)
         {
             throw new NotImplementedException();
         }

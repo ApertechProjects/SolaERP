@@ -1,8 +1,12 @@
-﻿namespace SolaERP.Infrastructure.Contracts.Services
+﻿using SolaERP.Infrastructure.Dtos.Shared;
+
+namespace SolaERP.Infrastructure.Contracts.Services
 {
     public interface ILoggableCrudService<T>
     {
-        Task<int> AddAsync(T entity, int userId);
-        void Update(T entity, int userId);
+        Task<ApiResponse<List<T>>> GetAllAsync();
+        Task<int> AddAsync(string authToken, T entity);
+        Task<int> UpdateAsync(string authToken, T entity);
+        Task<ApiResponse<bool>> RemoveAsync(int Id);
     }
 }

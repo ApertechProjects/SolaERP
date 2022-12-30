@@ -11,11 +11,13 @@ namespace SolaERP.Application.Services
     public class ApproveStageRoleService : IApproveStageRoleService
     {
         private readonly IApproveStageRoleRepository _approveStageRoleRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private IMapper _mapper;
-        public ApproveStageRoleService(IApproveStageRoleRepository approveStageRoleRepository, IUnitOfWork unitOfWork, IMapper mapper)
+        public ApproveStageRoleService(IApproveStageRoleRepository approveStageRoleRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _approveStageRoleRepository = approveStageRoleRepository;
+            _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
@@ -27,6 +29,14 @@ namespace SolaERP.Application.Services
 
         public async Task<int> AddAsync(ApproveStageRoleDto entity, int userId)
         {
+            var model = _mapper.Map<ApproveStageRole>(entity);
+            var role = await _approveStageRoleRepository.AddAsync(model, userId);
+            return role;
+        }
+
+        public async Task<int> AddAsync(string authToken, ApproveStageRoleDto entity)
+        {
+            var userId = await _userRepository.GetUserIdByTokenAsync(authToken);
             var model = _mapper.Map<ApproveStageRole>(entity);
             var role = await _approveStageRoleRepository.AddAsync(model, userId);
             return role;
@@ -51,14 +61,17 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(200);
         }
 
-        public void Update(ApproveStageRoleDto entity, int userId)
+        public Task<ApiResponse<bool>> UpdateAsync(ApproveStageRoleDto model)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ApiResponse<bool>> UpdateAsync(ApproveStageRoleDto model)
+        public async Task<int> UpdateAsync(string authToken, ApproveStageRoleDto entity)
         {
-            throw new NotImplementedException();
+            var userId = await _userRepository.GetUserIdByTokenAsync(authToken);
+            var model = _mapper.Map<ApproveStageRole>(entity);
+            var role = await _approveStageRoleRepository.AddAsync(model, userId);
+            return role;
         }
     }
 }

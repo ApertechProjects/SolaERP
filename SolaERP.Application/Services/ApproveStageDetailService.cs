@@ -11,6 +11,7 @@ namespace SolaERP.Application.Services
     public class ApproveStageDetailService : IApproveStageDetailService
     {
         private readonly IApproveStageDetailRepository _approveStageDetailsRepository;
+        private readonly IUserRepository _userRepository;
         private IUnitOfWork _unitOfWork;
         private IMapper _mapper;
         public ApproveStageDetailService(IApproveStageDetailRepository approveStageDetailsRepository, IUnitOfWork unitOfWork, IMapper mapper)
@@ -25,10 +26,11 @@ namespace SolaERP.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<int> AddAsync(ApproveStagesDetailDto entity, int userId)
+        public async Task<int> AddAsync(string authToken, ApproveStagesDetailDto entity)
         {
+            var userId = await _userRepository.GetUserIdByTokenAsync(authToken);
             var model = _mapper.Map<ApproveStagesDetail>(entity);
-            var approveStageDetail = await _approveStageDetailsRepository.AddAsync(model, userId);
+            var approveStageDetail = await _approveStageDetailsRepository.AddAsync(model);
             return approveStageDetail;
         }
 
@@ -51,12 +53,13 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(200);
         }
 
-        public void Update(ApproveStagesDetailDto entity, int userId)
+
+        public Task<ApiResponse<bool>> UpdateAsync(ApproveStagesDetailDto model)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ApiResponse<bool>> UpdateAsync(ApproveStagesDetailDto model)
+        public Task<int> UpdateAsync(string authToken, ApproveStagesDetailDto entity)
         {
             throw new NotImplementedException();
         }

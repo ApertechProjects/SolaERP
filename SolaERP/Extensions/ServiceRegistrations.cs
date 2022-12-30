@@ -34,7 +34,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IGroupService, GroupService>();
             builder.Services.AddScoped<IMenuService, MenuService>();
             builder.Services.AddScoped<IBusinessUnitService, BusinessUnitService>();
-            builder.Services.AddScoped<IApproveStageMainService, ApproveStageMainService>();
+            builder.Services.AddScoped<IApproveStageService, ApproveStageService>();
             builder.Services.AddScoped<IApproveStageDetailService, ApproveStageDetailService>();
             builder.Services.AddScoped<IApproveStageRoleService, ApproveStageRoleService>();
             builder.Services.AddScoped<IApproveRoleService, ApproveRoleService>();

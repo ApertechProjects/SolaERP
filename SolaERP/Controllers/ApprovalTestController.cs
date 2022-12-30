@@ -13,13 +13,13 @@ namespace SolaERP.Controllers
     [ApiController]
     public class ApprovalTestController : ControllerBase
     {
-        private readonly IApproveStageMainService _approveStageMainService;
+        private readonly IApproveStageService _approveStageMainService;
         private readonly IApproveStageDetailService _approveStageDetailService;
         private readonly IApproveStageRoleService _approveStageRoleService;
         private readonly IApproveRoleService _approveRoleService;
         private readonly IProcedureService _procedureService;
         private readonly IUserService _userService;
-        public ApprovalTestController(IApproveStageMainService approveStageMainService,
+        public ApprovalTestController(IApproveStageService approveStageMainService,
                                       IApproveStageDetailService approveStageDetailService,
                                       IApproveStageRoleService approveStageRoleService,
                                       IApproveRoleService approveRoleService,
@@ -73,38 +73,37 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<ApiResponse<bool>> ApprovalStageSave([FromHeader] string authToken, ApprovalStageSaveVM approvalStageSaveVM)
         {
-            var userId = await _userService.GetUserIdByTokenAsync(authToken);
-
-            var mainId = await _approveStageMainService.AddAsync(approvalStageSaveVM.ApproveStagesMainDto, userId);
-
             string typeOfDetail = string.Empty;
             string typeOfRole = string.Empty;
-            for (int i = 0; i < approvalStageSaveVM.ApproveStagesDetailDtos.Count; i++)
-            {
-                typeOfDetail = approvalStageSaveVM.ApproveStagesDetailDtos[i].Type;
-                if (typeOfDetail == "remove")
-                {
-                    await _approveStageDetailService.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageDetailsId); //+
-                }
-                else
-                {
-                    var detailId = await _approveStageDetailService.AddAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i], userId);
 
-                    for (int j = 0; j < approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto.Count; j++)
-                    {
-                        typeOfRole = approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].Type;
+            await _approveStageMainService.AddAsync(authToken, approvalStageSaveVM.ApproveStagesMainDto);
 
-                        if (typeOfRole == "remove")
-                        {
-                            await _approveStageRoleService.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].ApproveStageRoleId);
-                        }
-                        else
-                        {
-                            await _approveStageRoleService.AddAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j]);
-                        }
-                    }
-                }
-            }
+            //for (int i = 0; i < approvalStageSaveVM.ApproveStagesDetailDtos.Count; i++)
+            //{
+            //    typeOfDetail = approvalStageSaveVM.ApproveStagesDetailDtos[i].Type;
+            //    if (typeOfDetail == "remove")
+            //    {
+            //        await _approveStageDetailService.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageDetailsId); //+
+            //    }
+            //    else
+            //    {
+            //        await _approveStageDetailService.AddAsync(authToken, approvalStageSaveVM.ApproveStagesDetailDtos[i]);
+
+            //        for (int j = 0; j < approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto.Count; j++)
+            //        {
+            //            typeOfRole = approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].Type;
+
+            //            if (typeOfRole == "remove")
+            //            {
+            //                await _approveStageRoleService.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].ApproveStageRoleId);
+            //            }
+            //            else
+            //            {
+            //                await _approveStageRoleService.AddAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j]);
+            //            }
+            //        }
+            //    }
+            //}
             return ApiResponse<bool>.Success(200);
         }
     }

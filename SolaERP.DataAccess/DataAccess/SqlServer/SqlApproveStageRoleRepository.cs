@@ -17,7 +17,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<int> AddAsync(ApproveStageRole entity, int userId = 0)
         {
-            string query = "exec exec SP_ApproveStageRoles_ID  @approveStageRoleId,@approveStageDetailId,@approveRoleId,@amountFrom,@amountTo";
+            string query = "exec SP_ApproveStageRoles_ID  @approveStageRoleId,@approveStageDetailId,@approveRoleId,@amountFrom,@amountTo";
 
             var result = await Task.Run(() =>
             {
@@ -82,6 +82,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
         public void Update(ApproveStageRole entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> UpdateAsync(ApproveStageRole entity, int userId)
         {
             throw new NotImplementedException();
         }
