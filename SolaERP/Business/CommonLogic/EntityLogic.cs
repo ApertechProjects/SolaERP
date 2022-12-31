@@ -55,6 +55,8 @@ namespace SolaERP.Business.CommonLogic
                     ApproveStages = await GetApproveStage_Lists("VENDR"),
                     VendorDrafts = await GetVendorDraft(userId, BU)
                 };
+                                                                    
+                #region Verion 1
                 //if (!vendorList.WFAVendor.Any())
                 //{
                 //    vendorList.WFAVendor.Add(new VendorWFA { FullName = " " });
@@ -88,6 +90,8 @@ namespace SolaERP.Business.CommonLogic
                 //    }
 
                 //}
+                #endregion
+
                 return new ApiResult
                 {
                     Data = vendorList,
@@ -206,6 +210,8 @@ namespace SolaERP.Business.CommonLogic
             return UnAuthorizedUserResult();
         }
 
+
+        #region Done
         //DONE
         internal async Task<ApiResult> GetUserMenu_Load(string token)
         {
@@ -266,7 +272,7 @@ namespace SolaERP.Business.CommonLogic
             }
             return UnAuthorizedUserResult();
         }
-
+        #endregion
 
 
 
