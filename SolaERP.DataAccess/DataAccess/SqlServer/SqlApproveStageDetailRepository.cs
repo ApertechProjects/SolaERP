@@ -15,10 +15,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             _unitOfWork = unitOfWork;
         }
-        public Task<bool> AddAsync(ApproveStagesDetail entity)
-        {
-            throw new NotImplementedException();
-        }
 
         public Task<List<ApproveStagesDetail>> GetAllAsync()
         {
@@ -86,6 +82,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     command.Parameters.AddWithValue(command, "@approveStageDetailName", entity.ApproveStageDetailsName);
                     command.Parameters.AddWithValue(command, "@sequence", entity.Sequence);
                 }
+                return await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        async Task<int> IReturnableAddAsync<ApproveStagesDetail>.AddAsync(ApproveStagesDetail entity)
+        {
+            string query = "exec SP_ApproveStagesDetails_IUD @approveStageDetailId,@approveStageMainId,@approveStageDetailName,@sequence";
+
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = query;
+                command.Parameters.AddWithValue(command, "@approveStageDetailId", entity.ApproveStageDetailsId);
+                command.Parameters.AddWithValue(command, "@approveStageMainId", entity.ApproveStageMainId);
+                command.Parameters.AddWithValue(command, "@approveStageDetailName", entity.ApproveStageDetailsName);
+                command.Parameters.AddWithValue(command, "@sequence", entity.Sequence);
                 return await command.ExecuteNonQueryAsync();
             }
         }

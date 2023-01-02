@@ -2,7 +2,9 @@
 
 namespace SolaERP.Infrastructure.Contracts.Repositories
 {
-    public interface IApproveStageRoleRepository : ICrudOperations<ApproveStageRole>, ILoggableCrudOperations<ApproveStageRole>
+    public interface IApproveStageRoleRepository :
+        //ICrudOperations<ApproveStageRole>,
+        IReturnableAddAsync<ApproveStageRole>
     {
         Task<List<ApproveStageRole>> GetApproveStageRolesByApproveStageDetailId(int approveStageDetailId);
     }

@@ -71,40 +71,9 @@ namespace SolaERP.Controllers
         }
 
         [HttpPost]
-        public async Task<ApiResponse<bool>> ApprovalStageSave([FromHeader] string authToken, ApprovalStageSaveVM approvalStageSaveVM)
+        public async Task<ApiResponse<ApprovalStageSaveVM>> ApprovalStageSave([FromHeader] string authToken, ApprovalStageSaveVM approvalStageSaveVM)
         {
-            string typeOfDetail = string.Empty;
-            string typeOfRole = string.Empty;
-
-            await _approveStageMainService.AddAsync(authToken, approvalStageSaveVM.ApproveStagesMainDto);
-
-            //for (int i = 0; i < approvalStageSaveVM.ApproveStagesDetailDtos.Count; i++)
-            //{
-            //    typeOfDetail = approvalStageSaveVM.ApproveStagesDetailDtos[i].Type;
-            //    if (typeOfDetail == "remove")
-            //    {
-            //        await _approveStageDetailService.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageDetailsId); //+
-            //    }
-            //    else
-            //    {
-            //        await _approveStageDetailService.AddAsync(authToken, approvalStageSaveVM.ApproveStagesDetailDtos[i]);
-
-            //        for (int j = 0; j < approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto.Count; j++)
-            //        {
-            //            typeOfRole = approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].Type;
-
-            //            if (typeOfRole == "remove")
-            //            {
-            //                await _approveStageRoleService.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].ApproveStageRoleId);
-            //            }
-            //            else
-            //            {
-            //                await _approveStageRoleService.AddAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j]);
-            //            }
-            //        }
-            //    }
-            //}
-            return ApiResponse<bool>.Success(200);
+            return await _approveStageMainService.SaveApproveStageMainAsync(authToken, approvalStageSaveVM);
         }
     }
 

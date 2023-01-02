@@ -31,7 +31,12 @@ namespace SolaERP.Application.Services
             var userId = await _userRepository.GetUserIdByTokenAsync(authToken);
             var model = _mapper.Map<ApproveStagesDetail>(entity);
             var approveStageDetail = await _approveStageDetailsRepository.AddAsync(model);
-            return approveStageDetail;
+            return 0;
+        }
+
+        public Task<int> AddAsync(ApproveStagesDetailDto entity, int userId)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<ApiResponse<List<ApproveStagesDetailDto>>> GetAllAsync()
@@ -53,6 +58,10 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(200);
         }
 
+        public void Update(ApproveStagesDetailDto entity, int userId)
+        {
+            throw new NotImplementedException();
+        }
 
         public Task<ApiResponse<bool>> UpdateAsync(ApproveStagesDetailDto model)
         {

@@ -5,6 +5,7 @@ using SolaERP.Infrastructure.Dtos.ApproveStage;
 using SolaERP.Infrastructure.Dtos.ApproveStages;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Entities.ApproveStage;
+using SolaERP.Infrastructure.ViewModels;
 
 namespace SolaERP.Application.Services
 {
@@ -12,12 +13,14 @@ namespace SolaERP.Application.Services
     {
         private readonly IApproveStageMainRepository _approveStageMainRepository;
         private readonly IApproveStageDetailRepository _approveStageDetailRepository;
+        private readonly IApproveStageRoleRepository _approveStageRoleRepository;
         private readonly IUserRepository _userRepository;
         private IMapper _mapper;
 
-        public ApproveStageService(IApproveStageMainRepository approveStageMainRepository, IUserRepository userRepository, IMapper mapper)
+        public ApproveStageService(IApproveStageMainRepository approveStageMainRepository, IApproveStageDetailRepository approveStageDetailRepository, IUserRepository userRepository, IMapper mapper)
         {
             _approveStageMainRepository = approveStageMainRepository;
+            _approveStageDetailRepository = approveStageDetailRepository;
             _userRepository = userRepository;
             _mapper = mapper;
         }
@@ -62,40 +65,73 @@ namespace SolaERP.Application.Services
             return approveStageMain;
         }
 
-        public async Task<int> SaveApproveStageDetailsAsync(List<ApproveStagesDetailDto> details)
+        public async Task<int> SaveApproveStageDetailsAsync(ApproveStagesDetailDto detail)
         {
-            var entityList = _mapper.Map<List<ApproveStagesDetail>>(details);
-            foreach (var item in collection)
-            {
-                var approveStageDetail = await _approveStageDetailRepository.AddAsync(details, userId);
-
-            }
+            var entity = _mapper.Map<ApproveStagesDetail>(detail);
+            var approveStageDetail = await _approveStageDetailRepository.AddAsync(entity);
             return approveStageDetail;
         }
 
-        public Task<int> RemoveApproveStageDetailsAsync(int approveStageDetailsId)
+        public bool RemoveApproveStageDetailsAsync(int approveStageDetailsId)
         {
-            throw new NotImplementedException();
+            var approveDetail = _approveStageDetailRepository.Remove(approveStageDetailsId);
+            return approveDetail;
         }
 
-        public Task<ApiResponse<List<ApproveStagesDetailDto>>> GetApproveStageDetailsByApproveStageMainId(int approveStageMainId)
+        public async Task<ApiResponse<List<ApproveStagesDetailDto>>> GetApproveStageDetailsByApproveStageMainId(int approveStageMainId)
         {
-            throw new NotImplementedException();
+            var approveDetailById = await _approveStageDetailRepository.GetApproveStageDetailsByApproveStageMainId(approveStageMainId);
+            var dto = _mapper.Map<List<ApproveStagesDetailDto>>(approveDetailById);
+            return ApiResponse<List<ApproveStagesDetailDto>>.Success(dto, 200);
         }
 
-        public Task<int> SaveApproveStageRolesAsync(List<ApproveStageRoleDto> roles)
+        public async Task<int> SaveApproveStageRolesAsync(ApproveStageRoleDto role)
         {
-            throw new NotImplementedException();
+            var entity = _mapper.Map<ApproveStageRole>(role);
+            var model = await _approveStageRoleRepository.AddAsync(entity);
+            return model;
         }
 
-        public Task<int> RemoveApproveStageolesAsync(int roleId)
+        public bool RemoveApproveStageRolesAsync(int roleId)
         {
-            throw new NotImplementedException();
+            var approveStageRole = _approveStageRoleRepository.Remove(roleId);
+            return approveStageRole;
         }
 
         public Task<ApiResponse<List<ApproveStageRoleDto>>> GetApproveStageRolesByApproveStageDetailId(int approveStageDetailsId)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<ApiResponse<ApprovalStageSaveVM>> SaveApproveStageMainAsync(string authToken, ApprovalStageSaveVM approvalStageSaveVM)
+        {
+            string typeOfDetail = string.Empty;
+            string typeOfRole = string.Empty;
+
+            await AddAsync(authToken, approvalStageSaveVM.ApproveStagesMainDto);
+
+            for (int i = 0; i < approvalStageSaveVM.ApproveStagesDetailDtos.Count; i++)
+            {
+                typeOfDetail = approvalStageSaveVM.ApproveStagesDetailDtos[i].Type;
+                if (typeOfDetail == "remove")
+                    RemoveApproveStageDetailsAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageDetailsId); //+
+                else
+                {
+                    await SaveApproveStageDetailsAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i]);
+
+                    for (int j = 0; j < approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto.Count; j++)
+                    {
+                        typeOfRole = approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].Type;
+
+                        if (typeOfRole == "remove")
+                            RemoveApproveStageRolesAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].ApproveStageRoleId);
+                        else
+                            await SaveApproveStageRolesAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j]);
+                    }
+                }
+            }
+
+            return ApiResponse<ApprovalStageSaveVM>.Success(approvalStageSaveVM, 200);
         }
     }
 }
