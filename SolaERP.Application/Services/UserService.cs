@@ -17,7 +17,6 @@ namespace SolaERP.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMailService _mailService;
         private readonly IMapper _mapper;
-        private string _email;
         public UserService(IUserRepository userRepository,
                            IUnitOfWork unitOfWork,
                            IMapper mapper,
@@ -127,16 +126,40 @@ namespace SolaERP.Application.Services
             return userDto;
         }
 
-        public async Task<ApiResponse<bool>> SendResetPasswordEmail(string email)
+        public async Task<ApiResponse<bool>> SendResetPasswordEmail(string email, string templatePath)
         {
             var userExsist = await _userRepository.GetUserByEmailAsync(email);
 
             if (userExsist == null)
                 return ApiResponse<bool>.Fail($"We can't found this email: {email}", 404);
 
-            _email = email;
-            await _mailService.SendPasswordResetMailAsync(email);
+            await _mailService.SendPasswordResetMailAsync(email, templatePath);
             return ApiResponse<bool>.Success(true, 200);
+        }
+
+        public async Task<ApiResponse<UserDto>> GetUserByTokenAsync(string finderToken)
+        {
+            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            var user = await _userRepository.GetUserByIdAsync(userId);
+
+            if (user is null)
+                return ApiResponse<UserDto>.Fail("User not found", 404);
+
+            var dto = _mapper.Map<UserDto>(user);
+            return ApiResponse<UserDto>.Success(dto, 200);
+        }
+
+        public async Task<ApiResponse<bool>> RemoveUserByTokenAsync(string finderToken)
+        {
+            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+
+            if (userId == 0)
+                return ApiResponse<bool>.Fail("User not found", 404);
+
+            var result = _userRepository.Remove(userId);
+            await _unitOfWork.SaveChangesAsync();
+
+            return ApiResponse<bool>.Success(200);
         }
     }
 }

@@ -55,6 +55,8 @@ namespace SolaERP.Business.CommonLogic
                     ApproveStages = await GetApproveStage_Lists("VENDR"),
                     VendorDrafts = await GetVendorDraft(userId, BU)
                 };
+                                                                    
+                #region Verion 1
                 //if (!vendorList.WFAVendor.Any())
                 //{
                 //    vendorList.WFAVendor.Add(new VendorWFA { FullName = " " });
@@ -88,6 +90,8 @@ namespace SolaERP.Business.CommonLogic
                 //    }
 
                 //}
+                #endregion
+
                 return new ApiResult
                 {
                     Data = vendorList,
@@ -206,6 +210,9 @@ namespace SolaERP.Business.CommonLogic
             return UnAuthorizedUserResult();
         }
 
+
+        #region Done
+        //DONE
         internal async Task<ApiResult> GetUserMenu_Load(string token)
         {
             if (true)//await UserIsAuthorized(token))
@@ -217,18 +224,7 @@ namespace SolaERP.Business.CommonLogic
             }
             return UnAuthorizedUserResult();
         }
-
-
-        internal async Task<ApiResult> GetGroups(string token)
-        {
-            if (await UserIsAuthorized(token))
-            {
-                var result = new GenericMapLogic<GroupMain>().BuildModel(await GetData.FromQuery($"EXEC dbo.SP_GroupMain_Load", ConfHelper.DevelopmentUrl));
-                return result;
-            }
-            return UnAuthorizedUserResult();
-        }
-
+        //DONE
         internal async Task<ApiResult> GetUserMenuWithoutAccess(string token)
         {
             if (await UserIsAuthorized(token))
@@ -276,6 +272,21 @@ namespace SolaERP.Business.CommonLogic
             }
             return UnAuthorizedUserResult();
         }
+        #endregion
+
+
+
+        internal async Task<ApiResult> GetGroups(string token)
+        {
+            if (await UserIsAuthorized(token))
+            {
+                var result = new GenericMapLogic<GroupMain>().BuildModel(await GetData.FromQuery($"EXEC dbo.SP_GroupMain_Load", ConfHelper.DevelopmentUrl));
+                return result;
+            }
+            return UnAuthorizedUserResult();
+        }
+
+
 
         internal async Task<ApiResult> DownloadFile(string token, int fileId)
         {
@@ -625,7 +636,7 @@ namespace SolaERP.Business.CommonLogic
         {
             if (await UserIsAuthorized(token))
             {
-                int userId = await GetUserIdByToken(token);
+                int userId = 1407;//await GetUserIdByToken(token);
                 var result = new ApiResult();
                 var userMenuResult = (await GetData.FromQuery($"EXEC dbo.SP_UserMenu_Load {userId}", ConfHelper.DevelopmentUrl)).ConvertToClassListModel<UserMenu_Load>();
                 var wrapperModel = new GroupMenuExternalDataWrapper()

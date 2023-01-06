@@ -7,5 +7,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
     {
         Task<ApiResponse<List<ParentMenuDto>>> GetUserMenusWithChildsAsync(string finderToken);
         Task<ApiResponse<List<MenuWithPrivilagesDto>>> GetUserMenusWithPrivilagesAsync(string finderToken);
+        Task<ApiResponse<GroupMenuResponseDto>> GetGroupMenuWithPrivillageListByGroupIdAsync(string finderToken, int groupId);
     }
 }

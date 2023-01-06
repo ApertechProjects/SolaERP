@@ -24,9 +24,15 @@ namespace SolaERP.Controllers
         }
 
         [HttpGet]
-        public async Task<ApiResponse<List<BusinessUnitsDto>>> GetBusinessUnitListByUserId([FromHeader] string authToken)
+        public async Task<ApiResponse<List<BusinessUnitsDto>>> GetBusinessUnitListByUser([FromHeader] string authToken)
         {
-            return await _businessUnitService.GetBusinessUnitListByUserId(authToken);
+            return await _businessUnitService.GetBusinessUnitListByUserToken(authToken);
+        }
+
+        [HttpGet("{groupId}")]
+        public async Task<ApiResponse<List<BusinessUnitForGroupDto>>> GetBusinessUnitListForGroups(int groupId)
+        {
+            return await _businessUnitService.GetBusinessUnitForGroupAsync(groupId);
         }
     }
 }

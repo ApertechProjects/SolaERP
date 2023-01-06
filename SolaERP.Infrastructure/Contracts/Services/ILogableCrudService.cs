@@ -2,7 +2,7 @@
 
 namespace SolaERP.Infrastructure.Contracts.Services
 {
-    public interface ILoggableCrudService<T>
+    public interface ILogableCrudService<T>
     {
         Task<ApiResponse<List<T>>> GetAllAsync();
         Task<int> AddAsync(string authToken, T entity);

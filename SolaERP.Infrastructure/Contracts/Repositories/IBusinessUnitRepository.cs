@@ -5,5 +5,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
     public interface IBusinessUnitRepository : ICrudOperations<BusinessUnits>
     {
         Task<List<BusinessUnits>> GetBusinessUnitListByUserId(int userId);
+        Task<List<BusinessUnitForGroup>> GetBusinessUnitForGroups(int groupId);
     }
 }

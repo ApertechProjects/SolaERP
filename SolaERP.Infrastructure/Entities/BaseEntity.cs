@@ -1,6 +1,6 @@
 ﻿namespace SolaERP.Infrastructure.Entities
 {
-    public class BaseEntity
+    public abstract class BaseEntity
     {
     }
 }

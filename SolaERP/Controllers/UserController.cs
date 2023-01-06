@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
 
 namespace SolaERP.Controllers
@@ -20,10 +19,10 @@ namespace SolaERP.Controllers
         }
 
 
-        [HttpGet("{id}")]
-        public async Task<UserDto> GetUserById(int id)
+        [HttpGet]
+        public async Task<ApiResponse<UserDto>> GetUserByToken([FromHeader] string authToken)
         {
-            return await _userService.GetUserByIdAsync(id);
+            return await _userService.GetUserByTokenAsync(authToken);
         }
 
         [HttpPut]
@@ -33,9 +32,9 @@ namespace SolaERP.Controllers
         }
 
         [HttpDelete]
-        public async Task<ApiResponse<bool>> RemoveUser(int Id)
+        public async Task<ApiResponse<bool>> RemoveUser([FromHeader] string authToken)
         {
-            return await _userService.RemoveAsync(Id);
+            return await _userService.RemoveUserByTokenAsync(authToken);
         }
 
         [HttpGet]
@@ -44,12 +43,10 @@ namespace SolaERP.Controllers
             return await _userService.GetAllAsync();
         }
 
-        //[HttpGet]
-        //[Authorize]
-        //public async Task<ApiResponse<List<MenuWithPrivilagesDto>>> GetUserMenus()
+        //[HttpGet("{groupId}")]
+        //public async Task<ApiResponse<UserDto>> GetUsersForGroup(int groupId)
         //{
-        //    return await _userService.GetUserMenusAsync();
+        //    return _userService.Get
         //}
-
     }
 }

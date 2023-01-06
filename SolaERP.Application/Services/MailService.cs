@@ -5,6 +5,9 @@ using System.Net.Mail;
 
 namespace SolaERP.Application.Services
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class MailService : IMailService
     {
         private readonly IConfiguration _configuration;
@@ -37,8 +40,15 @@ namespace SolaERP.Application.Services
             await smtp.SendMailAsync(mail);
         }
 
-        public async Task SendPasswordResetMailAsync(string to)
+        /// <summary>
+        /// Sends Password Reset email 
+        /// </summary>
+        /// <param name="to">Email receiver</param>
+        /// <param name="templatePath">Template path for sendin email </param>
+        /// <returns></returns>
+        public async Task SendPasswordResetMailAsync(string to, string templatePath)
         {
+            using StreamReader reader = new StreamReader(templatePath);
             using (SmtpClient smtpClient = new SmtpClient())
             {
                 var basicCredential = new NetworkCredential(_configuration["Mail:Username"], _configuration["Mail:Password"]);
@@ -56,10 +66,10 @@ namespace SolaERP.Application.Services
                     message.Subject = "Email Verification for Reset Password";
                     message.IsBodyHtml = true;
 
-                    message.Body = @"";
+                    message.Body = reader.ReadToEnd();
                     message.To.Add(to);
-                    await smtpClient.SendMailAsync(message);
 
+                    await smtpClient.SendMailAsync(message);
                 }
             }
         }
