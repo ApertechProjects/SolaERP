@@ -10,5 +10,10 @@
         public DateTime EntryDate { get; set; }
         public DateTime RequestDate { get; set; }
         public DateTime RequestDeadline { get; set; }
+        public string Buyer { get; set; }
+        public string Requester { get; set; }
+        public string RequestCommand { get; set; }
+        public string OpertorComment { get; set; }
+        public string QualityRequired { get; set; }
     }
 }
