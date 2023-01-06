@@ -17,6 +17,9 @@
         public string OperatorComment { get; set; }
         public string QualityRequired { get; set; }
         public string CurrencyCode { get; set; }
+        public int RowNum { get; set; }
+        public string Buyer { get; set; }
         public decimal LogisticTotal { get; set; }
+        public string ApproveStatus { get; set; }
     }
 }
