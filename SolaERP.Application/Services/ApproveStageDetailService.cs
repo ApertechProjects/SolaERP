@@ -34,11 +34,6 @@ namespace SolaERP.Application.Services
             return 0;
         }
 
-        public Task<int> AddAsync(ApproveStagesDetailDto entity, int userId)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<ApiResponse<List<ApproveStagesDetailDto>>> GetAllAsync()
         {
             throw new NotImplementedException();
@@ -58,10 +53,7 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(200);
         }
 
-        public void Update(ApproveStagesDetailDto entity, int userId)
-        {
-            throw new NotImplementedException();
-        }
+  
 
         public Task<ApiResponse<bool>> UpdateAsync(ApproveStagesDetailDto model)
         {

@@ -133,5 +133,25 @@ namespace SolaERP.Application.Services
 
             return ApiResponse<ApprovalStageSaveVM>.Success(approvalStageSaveVM, 200);
         }
+
+        public Task<int> SaveApproveStageDetailsAsync(List<ApproveStagesDetailDto> details)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<int> IApproveStageService.RemoveApproveStageDetailsAsync(int approveStageDetailsId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> SaveApproveStageRolesAsync(List<ApproveStageRoleDto> roles)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> RemoveApproveStageolesAsync(int roleId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

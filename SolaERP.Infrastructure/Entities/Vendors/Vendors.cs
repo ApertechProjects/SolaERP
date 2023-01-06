@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SolaERP.Infrastructure.Entities.Auth;
 
 namespace SolaERP.Infrastructure.Entities.Vendors
 {
-    internal class Vendors
+    public class Vendor : BaseEntity
     {
         public int VendorId { get; set; }
         public string VendorCode { get; set; }
@@ -21,11 +17,17 @@ namespace SolaERP.Infrastructure.Entities.Vendors
         public int V60DaysPayment { get; set; } //db name 60DaysPayment
         public string Country { get; set; }
         public int Status { get; set; }
+        public string StatusName { get; set; }
+        public string ApproveStatusName { get; set; }
         public int BusinessUnitId { get; set; }
         public string OtherProducts { get; set; }
         public int ApproveStageMainId { get; set; }
         public string CompanyAddress { get; set; }
         public DateTime CompanyRegistrationDate { get; set; }
         public string TaxOffice { get; set; }
+        public int UserId { get; set; }
+        public string UserStatusName { get; set; }
+        public VendorApprovals VendorApprovals { get; set; }
+        public User AppUser { get; set; }
     }
 }

@@ -29,5 +29,11 @@ namespace SolaERP.Controllers
         {
             return await _menuService.GetUserMenusWithPrivilagesAsync(authToken);
         }
+
+        [HttpGet]
+        public async Task<ApiResponse<GroupMenuResponseDto>> GetGroupMenuWithPrivillageList([FromHeader] string authToken, int groupId)
+        {
+            return await _menuService.GetGroupMenuWithPrivillageListByGroupIdAsync(authToken, groupId);
+        }
     }
 }

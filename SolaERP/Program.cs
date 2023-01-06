@@ -1,17 +1,5 @@
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Models;
-using Serilog;
-using SolaERP.Application.Mappers;
-using SolaERP.Application.Validations;
-using SolaERP.Business.Models;
-using SolaERP.Extensions;
-using SolaERP.Middlewares;
-using SolaERP.SignalR.Hubs;
 using System.Security.Claims;
 using System.Text;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,8 +14,9 @@ builder.Services.AddControllers(options => { options.Filters.Add(new ValidationF
 
 builder.UseIdentityService();
 builder.UseDataAccesServices();
-builder.Services.AddEndpointsApiExplorer();
 builder.UseValidationExtension();
+
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.Configure<ApiBehaviorOptions>(config => { config.SuppressModelStateInvalidFilter = true; });
 builder.Services.AddCors(options =>
@@ -39,8 +28,14 @@ builder.Services.AddCors(options =>
         .AllowAnyOrigin()
         .Build());
 });
+
 var logger = new LoggerConfiguration().WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"), "logs").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
-//File("logs.txt").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
+builder.Services.Configure<HubOptions<ChatHub>>(config =>
+{
+    config.ClientTimeoutInterval = TimeSpan.FromMinutes(30);
+    config.KeepAliveInterval = TimeSpan.FromMinutes(30);
+
+});
 
 builder.Host.UseSerilog(logger);
 
@@ -48,6 +43,11 @@ builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/Login";
 })
     .AddJwtBearer(options =>
  {
@@ -75,7 +75,6 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Description = "Our test swagger client",
     });
-
     var jwtSecurityScheme = new OpenApiSecurityScheme
     {
         Scheme = "bearer",
@@ -91,7 +90,6 @@ builder.Services.AddSwaggerGen(c =>
             Type = ReferenceType.SecurityScheme
         }
     };
-
     c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -113,7 +111,7 @@ app.UseHttpLogging();
 app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 app.UseAuthentication();
-app.MapHub<ChatHub>("/Hubs/ChatHub");
+app.MapHub<ChatHub>("/ChatHub");
 app.UseAuthorization();
 app.UseGlobalExceptionHandlerMiddleware<Program>(app.Services.GetRequiredService<ILogger<Program>>());
 app.MapControllers();

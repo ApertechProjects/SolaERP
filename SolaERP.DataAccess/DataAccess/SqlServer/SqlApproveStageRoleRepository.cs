@@ -21,27 +21,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public async Task<int> AddAsync(ApproveStageRole entity, int userId = 0)
-        {
-            string query = "exec SP_ApproveStageRoles_ID  @approveStageRoleId,@approveStageDetailId,@approveRoleId,@amountFrom,@amountTo";
-
-            var result = await Task.Run(() =>
-            {
-                using (var command = _unitOfWork.CreateCommand())
-                {
-                    command.CommandText = query;
-                    command.Parameters.AddWithValue(command, "@approveStageRoleId", entity.ApproveRoleId);
-                    command.Parameters.AddWithValue(command, "@approveStageDetailId", entity.ApproveStageDetailId);
-                    command.Parameters.AddWithValue(command, "@approveRoleId", entity.ApproveRoleId);
-                    command.Parameters.AddWithValue(command, "@amountFrom", entity.AmountFrom);
-                    command.Parameters.AddWithValue(command, "@amountTo", entity.AmountTo);
-                    var value = command.ExecuteNonQuery();
-                    return value == 0 || value == -1 ? false : true;
-                }
-            });
-
-            return 0;
-        }
 
         public Task<int> AddAsync(List<ApproveStageRole> entities)
         {
@@ -69,11 +48,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return result;
         }
 
-        public Task<ApproveStageRole> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public bool Remove(int Id)
         {
             using (var commad = _unitOfWork.CreateCommand())
@@ -86,16 +60,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 var value = commad.ExecuteNonQuery();
                 return value == 0 || value == -1 ? false : true;
             }
-        }
-
-        public void Update(ApproveStageRole entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> UpdateAsync(ApproveStageRole entity, int userId)
-        {
-            throw new NotImplementedException();
         }
 
         async Task<int> IReturnableAddAsync<ApproveStageRole>.AddAsync(ApproveStageRole entity)

@@ -1,0 +1,10 @@
+﻿namespace SolaERP.Infrastructure.Entities.BusinessUnits
+{
+    public class BusinessUnitForGroup : BaseEntity
+    {
+        public int GroupBusinessUnitId { get; set; }
+        public int BusinessUnitId { get; set; }
+        public string BusinessUnitCode { get; set; }
+        public string BusinessUnitName { get; set; }
+    }
+}
