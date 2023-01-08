@@ -72,6 +72,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
+        public Task<int> UpdateAsync(Vendor entity, int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<int> ILoggableCrudOperations<Vendor>.AddAsync(Vendor entity, int userId)
+        {
+            throw new NotImplementedException();
+        }
+
         private Vendor GetVendorDarftsFromReader(IDataReader reader)
         {
             return new Vendor
