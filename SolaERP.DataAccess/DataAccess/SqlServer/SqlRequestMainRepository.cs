@@ -42,24 +42,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<RequestMain> GetByIdAsync(int id)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "Select * from Procurement.RequestMain Where RequestMainId = @Id";
-                command.Parameters.AddWithValue(command, "@Id", id);
 
-                using var reader = await command.ExecuteReaderAsync();
-                RequestMain mainRequest = null;
 
-                if (reader.Read())
-                    mainRequest = GetFromReader(reader);
-
-                return mainRequest;
-            }
-        }
-
-        public async Task<int> RemoveAsync(int Id)
+        public async Task<int> DeleteAsync(int Id)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
@@ -68,21 +53,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.Add("@NewRequestMainId", SqlDbType.Int);
                 command.Parameters["@NewRequestMainId"].Direction = ParameterDirection.Output;
 
-                var returnValue = command.Parameters["@NewRequestMainId"].Value;
+                await command.ExecuteNonQueryAsync();
 
+                var returnValue = command.Parameters["@NewRequestMainId"].Value;
                 return returnValue != DBNull.Value && returnValue != null ? Convert.ToInt32(returnValue) : 0;
             }
         }
 
-
-        /// <summary>
-        /// This method comes from ICrudOperation but  we don't use it 
-        /// </summary>
-        /// <param name="entity"></param>
-        public void Update(RequestMain entity)
-        {
-            return;
-        }
 
         public async Task<int> AddOrUpdateAsync(RequestMain entity)
         {
@@ -145,6 +122,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 ApproveStatus = reader.Get<string>("ApproveStatus")
             };
         }
+
 
     }
 }
