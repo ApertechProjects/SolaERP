@@ -1,3 +1,19 @@
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.OpenApi.Models;
+using Serilog;
+using SolaERP.Application.Mappers;
+using SolaERP.Application.Validations;
+using SolaERP.Business.Models;
+using SolaERP.Extensions;
+using SolaERP.Middlewares;
+using SolaERP.SignalR.Hubs;
+using System.Security.Claims;
+using System.Text;
+using System.Text.Json.Serialization;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers(options => { options.Filters.Add(new ValidationFilter()); })
