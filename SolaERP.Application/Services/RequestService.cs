@@ -35,6 +35,10 @@ namespace SolaERP.Application.Services
             throw new NotImplementedException();
         }
 
+        public bool DeleteAsync(RequestMain entity)
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task<ApiResponse<List<RequestMainDto>>> GetAllAsync(RequestMainGetParametersDto getParametersDto)
         {
