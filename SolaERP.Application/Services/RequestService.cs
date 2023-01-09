@@ -2,6 +2,7 @@
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Request;
+using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.UnitOfWork;
 
 namespace SolaERP.Application.Services
@@ -38,12 +39,18 @@ namespace SolaERP.Application.Services
             return mainRequestDto;
         }
 
-        public async Task<List<RequestMainDto>> GetAllAsync(RequestMainGetParametersDto getParametersDto)
+        public async Task<ApiResponse<List<RequestMainDto>>> GetAllAsync(RequestMainGetParametersDto getParametersDto)
         {
             var mainRequest = await _requestMainRepository.GetAllAsync(getParametersDto.BusinessUnitId, getParametersDto.ItemCode, getParametersDto.DateFrom, getParametersDto.DateTo, getParametersDto.ApproveStatus, getParametersDto.Status);
             var mainRequestDto = _mapper.Map<List<RequestMainDto>>(mainRequest);
 
-            return mainRequestDto;
+            if (mainRequestDto != null && mainRequestDto.Count > 0)
+                return ApiResponse<List<RequestMainDto>>.Success(mainRequestDto, 200);
+
+            else
+            {
+                return ApiResponse<List<RequestMainDto>>.Fail("Bad Request", 404);
+            }
         }
 
         public Task<RequestMainDto> GetByIdAsync(int Id)
