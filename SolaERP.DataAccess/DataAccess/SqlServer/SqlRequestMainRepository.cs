@@ -46,7 +46,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 List<RequestMain> mainRequests = new List<RequestMain>();
                 while (reader.Read())
                 {
-                    mainRequests.Add(GetRequestMainFromReader(reader));
+                    mainRequests.Add(GetFromReader(reader));
                 }
                 return mainRequests;
             }
@@ -63,7 +63,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RequestMain mainRequest = null;
 
                 if (reader.Read())
-                    mainRequest = GetRequestMainFromReader(reader);
+                    mainRequest = GetFromReader(reader);
 
                 return mainRequest;
             }
@@ -129,7 +129,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        private RequestMain GetRequestMainFromReader(IDataReader reader)
+        private RequestMain GetFromReader(IDataReader reader)
         {
             return new RequestMain
             {
