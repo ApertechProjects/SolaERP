@@ -5,5 +5,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
 {
     public interface IRequestService : IDeleteableAsync, IReadableAsync<RequestMainDto>, IReturnableServiceMethodAsync<RequestMainDto>
     {
+        Task<List<RequestMainDto>> GetAllAsync(RequestMainGetParametersDto requestMainGet);
     }
 }

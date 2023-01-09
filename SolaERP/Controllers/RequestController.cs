@@ -4,7 +4,7 @@ using SolaERP.Infrastructure.Dtos.Request;
 
 namespace SolaERP.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class RequestController : ControllerBase
     {
@@ -16,10 +16,10 @@ namespace SolaERP.Controllers
             _requestService = requestService;
         }
 
-        [HttpGet]
-        public async Task<List<RequestMainDto>> GetAllMainRequest()
+        [HttpPost]
+        public async Task<List<RequestMainDto>> GetAllMainRequest(RequestMainGetParametersDto requestMainParameters)
         {
-            return await _requestService.GetAllAsync();
+            return await _requestService.GetAllAsync(requestMainParameters);
         }
 
     }

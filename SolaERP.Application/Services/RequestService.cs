@@ -38,6 +38,14 @@ namespace SolaERP.Application.Services
             return mainRequestDto;
         }
 
+        public async Task<List<RequestMainDto>> GetAllAsync(RequestMainGetParametersDto getParametersDto)
+        {
+            var mainRequest = await _requestMainRepository.GetAllAsync(getParametersDto.BusinessUnitId, getParametersDto.ItemCode, getParametersDto.DateFrom, getParametersDto.DateTo, getParametersDto.ApproveStatus, getParametersDto.Status);
+            var mainRequestDto = _mapper.Map<List<RequestMainDto>>(mainRequest);
+
+            return mainRequestDto;
+        }
+
         public Task<RequestMainDto> GetByIdAsync(int Id)
         {
             throw new NotImplementedException();
