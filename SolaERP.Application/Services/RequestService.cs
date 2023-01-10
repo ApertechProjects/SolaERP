@@ -58,7 +58,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<RequestSaveVM>> SaveRequest(RequestSaveVM requestSaveVM)
         {
-            var mainId = await AddOrUpdate(requestSaveVM.RequestMainDto);//await _requestMainRepository.AddOrUpdateAsync(_mapper.Map<RequestMain>(requestSaveVM.RequestMainDto));
+            var mainId = await _requestMainRepository.AddOrUpdateAsync(_mapper.Map<RequestMain>(requestSaveVM.RequestMainDto));
 
             for (int i = 0; i < requestSaveVM.RequestDetailDtos.Count; i++)
             {
