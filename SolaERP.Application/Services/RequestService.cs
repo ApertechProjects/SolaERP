@@ -1,24 +1,18 @@
-﻿using AutoMapper;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Request;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Entities.Request;
-using SolaERP.Infrastructure.UnitOfWork;
-
-namespace SolaERP.Application.Services
+﻿namespace SolaERP.Application.Services
 {
     public class RequestService : IRequestService
     {
         public IUnitOfWork _unitOfWork;
         public IMapper _mapper;
         public IRequestMainRepository _requestMainRepository;
+        public IRequestDetailRepository _requestDetailRepository;
 
-        public RequestService(IUnitOfWork unitOfWork, IMapper mapper, IRequestMainRepository requestMainRepository)
+        public RequestService(IUnitOfWork unitOfWork, IMapper mapper, IRequestMainRepository requestMainRepository, IRequestDetailRepository requestDetailRepository)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _requestMainRepository = requestMainRepository;
+            _requestDetailRepository = requestDetailRepository;
         }
 
 
@@ -35,12 +29,14 @@ namespace SolaERP.Application.Services
             throw new NotImplementedException();
         }
 
-        public bool DeleteAsync(RequestMain entity)
+        public bool RemoveRequestDetailAsync(RequestDetailDto requestDetailDto)
         {
-            throw new NotImplementedException();
+            var entity = _mapper.Map<RequestDetail>(requestDetailDto);
+            var model = _requestDetailRepository.RemoveRequestDetailAsync(entity.RequestMainId);
+            return model;
         }
 
-        public async Task<ApiResponse<List<RequestMainDto>>> GetAllAsync(RequestMainGetParametersDto getParametersDto)
+        public async Task<List<RequestMainDto>> GetAllAsync()
         {
             var mainRequest = await _requestMainRepository.GetAllAsync(getParametersDto.BusinessUnitId, getParametersDto.ItemCode, getParametersDto.DateFrom, getParametersDto.DateTo, getParametersDto.ApproveStatus, getParametersDto.Status);
             var mainRequestDto = _mapper.Map<List<RequestMainDto>>(mainRequest);
@@ -50,5 +46,40 @@ namespace SolaERP.Application.Services
 
             return ApiResponse<List<RequestMainDto>>.Fail("Bad Request", 404);
         }
+    }
+            else
+            {
+                return ApiResponse<List<RequestMainDto>>.Fail("Bad Request", 404);
+            }
+        }
+
+        public async Task<ApiResponse<RequestSaveVM>> SaveRequest(RequestSaveVM requestSaveVM)
+{
+    var mainId = await AddOrUpdate(requestSaveVM.RequestMainDto);
+
+    for (int i = 0; i < requestSaveVM.RequestDetailDtos.Count; i++)
+    {
+        var requestDetailDto = requestSaveVM.RequestDetailDtos[i];
+        requestDetailDto.RequestMainId = mainId;
+        if (requestDetailDto.Type == "remove")
+        {
+            RemoveRequestDetailAsync(requestDetailDto);
+        }
+        else
+        {
+            await SaveRequestDetailsAsync(requestDetailDto);
+        }
+    }
+
+    return ApiResponse<RequestSaveVM>.Success(requestSaveVM, 200);
+}
+
+public async Task<int> SaveRequestDetailsAsync(RequestDetailDto requestDetailDto)
+{
+    var entity = _mapper.Map<RequestDetail>(requestDetailDto);
+    var requestDetails = await _requestDetailRepository.AddOrUpdateAsync(entity);
+    await _unitOfWork.SaveChangesAsync();
+    return requestDetails;
+}
     }
 }

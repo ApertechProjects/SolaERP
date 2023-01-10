@@ -1,12 +1,4 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Entities.Vendors;
-using SolaERP.Infrastructure.UnitOfWork;
-using System.Data;
-using System.Data.Common;
-
-namespace SolaERP.DataAccess.DataAccess.SqlServer
+﻿namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
     public class SqlVendorRepository : IVendorRepository, ILoggableCrudOperations<Vendors>
     {
@@ -72,7 +64,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        private Vendors GetVendorDarftsFromReader(IDataReader reader)
+        public Task<int> UpdateAsync(Vendor entity, int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<int> ILoggableCrudOperations<Vendor>.AddAsync(Vendor entity, int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        private Vendor GetVendorDarftsFromReader(IDataReader reader)
         {
             return new Vendors
             {

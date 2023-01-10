@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Request;
-using SolaERP.Infrastructure.Dtos.Shared;
-
-namespace SolaERP.Controllers
+﻿namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -23,5 +18,10 @@ namespace SolaERP.Controllers
             return await _requestService.GetAllAsync(requestMainParameters);
         }
 
+        [HttpPost]
+        public async Task<ApiResponse<RequestSaveVM>> SaveRequest(RequestSaveVM requestSaveVM)
+        {
+            return await _requestService.SaveRequest(requestSaveVM);
+        }
     }
 }

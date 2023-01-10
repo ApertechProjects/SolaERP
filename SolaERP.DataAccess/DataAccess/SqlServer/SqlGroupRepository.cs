@@ -53,9 +53,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 dbDataParameter.ParameterName = "@Id";
                 dbDataParameter.Value = Id;
                 command.Parameters.Add(dbDataParameter);
-
                 var value = command.ExecuteNonQuery();
-
                 return value == 0 || value == -1 ? false : true;
             }
         }

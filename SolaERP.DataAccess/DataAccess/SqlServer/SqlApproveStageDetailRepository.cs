@@ -2,6 +2,8 @@
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.ApproveStage;
 using SolaERP.Infrastructure.UnitOfWork;
+using System.Data;
+using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -12,10 +14,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public SqlApproveStageDetailRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-        }
-        public Task<bool> AddAsync(ApproveStagesDetail entity)
-        {
-            throw new NotImplementedException();
         }
 
         public Task<List<ApproveStagesDetail>> GetAllAsync()
@@ -29,7 +27,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 List<ApproveStagesDetail> approveStagesDetail = new List<ApproveStagesDetail>();
 
-                using(var command = _unitOfWork.CreateCommand())
+                using (var command = _unitOfWork.CreateCommand())
                 {
                     command.CommandText = "EXEC dbo.SP_ApproveStageDetails_Load @approveStageMainId";
                     command.Parameters.AddWithValue(command, "@approveStageMainId", approveStageMainId);
@@ -53,12 +51,54 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public bool Remove(int id)
         {
-            throw new NotImplementedException();
+            using (var commad = _unitOfWork.CreateCommand())
+            {
+                commad.CommandText = $"exec SP_ApproveStagesDetails_IUD @detailId";
+                IDbDataParameter dbDataParameter = commad.CreateParameter();
+                dbDataParameter.ParameterName = "@detailId";
+                dbDataParameter.Value = id;
+                commad.Parameters.Add(dbDataParameter);
+                var value = commad.ExecuteNonQuery();
+                return value == 0 || value == -1 ? false : true;
+            }
         }
 
         public void Update(ApproveStagesDetail entity)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<int> AddAsync(List<ApproveStagesDetail> entities)
+        {
+            string query = "exec SP_ApproveStagesDetails_IUD @approveStageDetailId,@approveStageMainId,@approveStageDetailName,@sequence";
+
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = query;
+                foreach (var entity in entities)
+                {
+                    command.Parameters.AddWithValue(command, "@approveStageDetailId", entity.ApproveStageDetailsId);
+                    command.Parameters.AddWithValue(command, "@approveStageMainId", entity.ApproveStageMainId);
+                    command.Parameters.AddWithValue(command, "@approveStageDetailName", entity.ApproveStageDetailsName);
+                    command.Parameters.AddWithValue(command, "@sequence", entity.Sequence);
+                }
+                return await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        async Task<int> IReturnableAddAsync<ApproveStagesDetail>.AddAsync(ApproveStagesDetail entity)
+        {
+            string query = "exec SP_ApproveStagesDetails_IUD @approveStageDetailId,@approveStageMainId,@approveStageDetailName,@sequence";
+
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = query;
+                command.Parameters.AddWithValue(command, "@approveStageDetailId", entity.ApproveStageDetailsId);
+                command.Parameters.AddWithValue(command, "@approveStageMainId", entity.ApproveStageMainId);
+                command.Parameters.AddWithValue(command, "@approveStageDetailName", entity.ApproveStageDetailsName);
+                command.Parameters.AddWithValue(command, "@sequence", entity.Sequence);
+                return await command.ExecuteNonQueryAsync();
+            }
         }
     }
 }

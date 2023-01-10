@@ -10,15 +10,44 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
     public class SqlApproveStageRoleRepository : IApproveStageRoleRepository
     {
         private readonly IUnitOfWork _unitOfWork;
+
+        public SqlApproveStageRoleRepository(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
         public Task<bool> AddAsync(ApproveStageRole entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<ApproveStageRole>> GetAllAsync()
+        public async Task<int> AddAsync(ApproveStageRole entity, int userId = 0)
+        {
+            string query = "exec SP_ApproveStageRoles_ID  @approveStageRoleId,@approveStageDetailId,@approveRoleId,@amountFrom,@amountTo";
+
+            var result = await Task.Run(() =>
+            {
+                using (var command = _unitOfWork.CreateCommand())
+                {
+                    command.CommandText = query;
+                    command.Parameters.AddWithValue(command, "@approveStageRoleId", entity.ApproveRoleId);
+                    command.Parameters.AddWithValue(command, "@approveStageDetailId", entity.ApproveStageDetailId);
+                    command.Parameters.AddWithValue(command, "@approveRoleId", entity.ApproveRoleId);
+                    command.Parameters.AddWithValue(command, "@amountFrom", entity.AmountFrom);
+                    command.Parameters.AddWithValue(command, "@amountTo", entity.AmountTo);
+                    var value = command.ExecuteNonQuery();
+                    return value == 0 || value == -1 ? false : true;
+                }
+            });
+
+            return 0;
+        }
+
+        public Task<int> AddAsync(List<ApproveStageRole> entities)
         {
             throw new NotImplementedException();
         }
+
 
         public async Task<List<ApproveStageRole>> GetApproveStageRolesByApproveStageDetailId(int approveStageDetailId)
         {
@@ -47,12 +76,48 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public bool Remove(int Id)
         {
-            throw new NotImplementedException();
+            using (var commad = _unitOfWork.CreateCommand())
+            {
+                commad.CommandText = $"exec SP_ApproveStageRoles_ID @roleId";
+                IDbDataParameter dbDataParameter = commad.CreateParameter();
+                dbDataParameter.ParameterName = "@roleId";
+                dbDataParameter.Value = Id;
+                commad.Parameters.Add(dbDataParameter);
+                var value = commad.ExecuteNonQuery();
+                return value == 0 || value == -1 ? false : true;
+            }
         }
 
         public void Update(ApproveStageRole entity)
         {
             throw new NotImplementedException();
+        }
+
+        public Task<int> UpdateAsync(ApproveStageRole entity, int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        async Task<int> IReturnableAddAsync<ApproveStageRole>.AddAsync(ApproveStageRole entity)
+        {
+            string query = "exec SP_ApproveStageRoles_ID  @approveStageRoleId,@approveStageDetailId,@approveRoleId,@amountFrom,@amountTo";
+
+            var result = await Task.Run(() =>
+            {
+                using (var command = _unitOfWork.CreateCommand())
+                {
+                    command.CommandText = query;
+                    command.Parameters.AddWithValue(command, "@approveStageRoleId", entity.ApproveRoleId);
+                    command.Parameters.AddWithValue(command, "@approveStageDetailId", entity.ApproveStageDetailId);
+                    command.Parameters.AddWithValue(command, "@approveRoleId", entity.ApproveRoleId);
+                    command.Parameters.AddWithValue(command, "@amountFrom", entity.AmountFrom);
+                    command.Parameters.AddWithValue(command, "@amountTo", entity.AmountTo);
+                    var value = command.ExecuteNonQuery();
+                    return value == 0 || value == -1 ? false : true;
+                }
+            });
+
+            return 0;
         }
 
         private ApproveStageRole GetFromReader(IDataReader reader)

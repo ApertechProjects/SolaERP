@@ -6,6 +6,7 @@ using SolaERP.Infrastructure.Dtos.ApproveStage;
 using SolaERP.Infrastructure.Dtos.ApproveStages;
 using SolaERP.Infrastructure.Dtos.Procedure;
 using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.ViewModels;
 
 namespace SolaERP.Controllers
 {
@@ -14,22 +15,25 @@ namespace SolaERP.Controllers
     [Authorize]
     public class ApprovalTestController : ControllerBase
     {
-        private readonly IApproveStageMainService _approveStageMainService;
+        private readonly IApproveStageService _approveStageMainService;
         private readonly IApproveStageDetailService _approveStageDetailService;
         private readonly IApproveStageRoleService _approveStageRoleService;
         private readonly IApproveRoleService _approveRoleService;
         private readonly IProcedureService _procedureService;
-        public ApprovalTestController(IApproveStageMainService approveStageMainService,
+        private readonly IUserService _userService;
+        public ApprovalTestController(IApproveStageService approveStageMainService,
                                       IApproveStageDetailService approveStageDetailService,
                                       IApproveStageRoleService approveStageRoleService,
                                       IApproveRoleService approveRoleService,
-                                      IProcedureService procedureService)
+                                      IProcedureService procedureService,
+                                      IUserService userService)
         {
             _approveStageMainService = approveStageMainService;
             _approveStageDetailService = approveStageDetailService;
             _approveStageRoleService = approveStageRoleService;
             _approveRoleService = approveRoleService;
             _procedureService = procedureService;
+            _userService = userService;
         }
 
         [HttpGet("{buId}")]
@@ -66,6 +70,12 @@ namespace SolaERP.Controllers
         public async Task<ApiResponse<List<ProcedureDto>>> GetProcedures()
         {
             return await _procedureService.GetAllAsync();
+        }
+
+        [HttpPost]
+        public async Task<ApiResponse<ApprovalStageSaveVM>> ApprovalStageSave([FromHeader] string authToken, ApprovalStageSaveVM approvalStageSaveVM)
+        {
+            return await _approveStageMainService.SaveApproveStageMainAsync(authToken, approvalStageSaveVM);
         }
     }
 
