@@ -10,5 +10,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<int> SaveRequestDetailsAsync(RequestDetailDto requestDetailDto);
         Task<ApiResponse<RequestSaveVM>> SaveRequest(RequestSaveVM requestSaveVM);
         bool RemoveRequestDetailAsync(RequestDetailDto requestDetailDto);
+        Task<List<RequestTypesDto>> GetRequestTypesByBusinessUnitId(int businessUnitId);
     }
 }

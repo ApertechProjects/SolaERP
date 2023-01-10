@@ -151,5 +151,34 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             };
         }
 
+        private RequestTypes GetRequestTypesFromReader(IDataReader reader)
+        {
+            return new RequestTypes
+            {
+                RequestTypeId = reader.Get<int>("RequestTypeId"),
+                RequestType = reader.Get<string>("RequestType"),
+                ApproveStageMainId = reader.Get<int>("ApproveStageMainId"),
+                BusinessUnitId = reader.Get<int>("BusinessUnitId")
+            };
+        }
+
+        public async Task<List<RequestTypes>> GetRequestTypesByBusinessUnitId(int businessUnitId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec SP_RequestTypesByBuId @BusinessUnitId";
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                List<RequestTypes> requestTypes = new List<RequestTypes>();
+
+                while (reader.Read())
+                    requestTypes.Add(reader.GetByEntityStructure<RequestTypes>());
+
+                return requestTypes;
+            }
+
+        }
     }
 }
+

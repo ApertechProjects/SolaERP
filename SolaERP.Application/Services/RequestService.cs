@@ -83,5 +83,12 @@ namespace SolaERP.Application.Services
             await _unitOfWork.SaveChangesAsync();
             return requestDetails;
         }
+
+        public async Task<List<RequestTypesDto>> GetRequestTypesByBusinessUnitId(int businessUnitId)
+        {
+            var entity = await _requestMainRepository.GetRequestTypesByBusinessUnitId(businessUnitId);
+            var dto = _mapper.Map<List<RequestTypesDto>>(entity);
+            return dto;
+        }
     }
 }

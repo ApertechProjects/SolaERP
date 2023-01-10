@@ -29,5 +29,11 @@ namespace SolaERP.Controllers
         {
             return await _requestService.SaveRequest(requestSaveVM);
         }
+
+        [HttpGet("{businessUnitId}")]
+        public async Task<List<RequestTypesDto>> GetRequestTypesByBusinessUnitId(int businessUnitId)
+        {
+            return await _requestService.GetRequestTypesByBusinessUnitId(businessUnitId);
+        }
     }
 }

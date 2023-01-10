@@ -37,6 +37,7 @@ namespace SolaERP.Application.Mappers
             CreateMap<GroupMenu, GroupMenuDto>().ReverseMap();
             CreateMap<MenuWithPrivilages, GroupMenuWithPrivillageIdListDto>();
             CreateMap<RequestMain, RequestMainDto>().ReverseMap();
+            CreateMap<RequestTypes, RequestTypesDto>().ReverseMap();
         }
     }
 }

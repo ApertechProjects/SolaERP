@@ -54,6 +54,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IApproveRoleRepository, SqlApproveRoleRepository>();
             builder.Services.AddScoped<IProcedureRepository, SqlProcedureRepository>();
             builder.Services.AddScoped<IRequestMainRepository, SqlRequestMainRepository>();
+            builder.Services.AddScoped<IRequestDetailRepository, SqlRequestDetailRepository>();
         }
         public static void UseValidationExtension(this WebApplicationBuilder builder)
         {
