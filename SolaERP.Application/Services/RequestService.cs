@@ -1,4 +1,13 @@
-﻿namespace SolaERP.Application.Services
+﻿using AutoMapper;
+using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.Request;
+using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Entities.Request;
+using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Infrastructure.ViewModels;
+
+namespace SolaERP.Application.Services
 {
     public class RequestService : IRequestService
     {
@@ -36,18 +45,15 @@
             return model;
         }
 
-        public async Task<List<RequestMainDto>> GetAllAsync()
+        public async Task<ApiResponse<List<RequestMainDto>>> GetAllAsync(RequestMainGetParametersDto getParametersDto)
         {
             var mainRequest = await _requestMainRepository.GetAllAsync(getParametersDto.BusinessUnitId, getParametersDto.ItemCode, getParametersDto.DateFrom, getParametersDto.DateTo, getParametersDto.ApproveStatus, getParametersDto.Status);
             var mainRequestDto = _mapper.Map<List<RequestMainDto>>(mainRequest);
 
             if (mainRequestDto != null && mainRequestDto.Count > 0)
                 return ApiResponse<List<RequestMainDto>>.Success(mainRequestDto, 200);
-
             else
-            {
                 return ApiResponse<List<RequestMainDto>>.Fail("Bad Request", 404);
-            }
         }
 
         public async Task<ApiResponse<RequestSaveVM>> SaveRequest(RequestSaveVM requestSaveVM)
@@ -57,7 +63,7 @@
             for (int i = 0; i < requestSaveVM.RequestDetailDtos.Count; i++)
             {
                 var requestDetailDto = requestSaveVM.RequestDetailDtos[i];
-                requestDetailDto.RequestMainId = mainId;
+                requestDetailDto.RequestMainId = mainId.Data;
                 if (requestDetailDto.Type == "remove")
                 {
                     RemoveRequestDetailAsync(requestDetailDto);
@@ -84,6 +90,11 @@
             var entity = await _requestMainRepository.GetRequestTypesByBusinessUnitId(businessUnitId);
             var dto = _mapper.Map<List<RequestTypesDto>>(entity);
             return dto;
+        }
+
+        public bool DeleteAsync(RequestMain entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }
