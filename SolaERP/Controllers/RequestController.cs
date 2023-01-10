@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Request;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.ViewModels;
-
-namespace SolaERP.Controllers
+﻿namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -18,10 +12,10 @@ namespace SolaERP.Controllers
             _requestService = requestService;
         }
 
-        [HttpGet]
-        public async Task<List<RequestMainDto>> GetAllMainRequest()
+        [HttpPost]
+        public async Task<ApiResponse<List<RequestMainDto>>> GetAllMainRequest(RequestMainGetParametersDto requestMainParameters)
         {
-            return await _requestService.GetAllAsync();
+            return await _requestService.GetAllAsync(requestMainParameters);
         }
 
         [HttpPost]

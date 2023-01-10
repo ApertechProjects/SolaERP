@@ -1,13 +1,4 @@
-﻿using AutoMapper;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Request;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Entities.Request;
-using SolaERP.Infrastructure.UnitOfWork;
-using SolaERP.Infrastructure.ViewModels;
-
-namespace SolaERP.Application.Services
+﻿namespace SolaERP.Application.Services
 {
     public class RequestService : IRequestService
     {
@@ -25,9 +16,12 @@ namespace SolaERP.Application.Services
         }
 
 
-        public Task<int> AddOrUpdate(RequestMainDto dto)
+        public async Task<ApiResponse<int>> AddOrUpdate(RequestMainDto dto)
         {
-            throw new NotImplementedException();
+            var entity = _mapper.Map<RequestMain>(dto);
+            var result = await _requestMainRepository.AddOrUpdateAsync(entity);
+
+            return result > 0 ? ApiResponse<int>.Success(result, 200) : ApiResponse<int>.Fail("Something went wrong. Please contact with us", 400);
         }
 
         public Task<int> DeleteAsync(int Id)
@@ -44,15 +38,16 @@ namespace SolaERP.Application.Services
 
         public async Task<List<RequestMainDto>> GetAllAsync()
         {
-            var mainRequest = await _requestMainRepository.GetAllAsync();
+            var mainRequest = await _requestMainRepository.GetAllAsync(getParametersDto.BusinessUnitId, getParametersDto.ItemCode, getParametersDto.DateFrom, getParametersDto.DateTo, getParametersDto.ApproveStatus, getParametersDto.Status);
             var mainRequestDto = _mapper.Map<List<RequestMainDto>>(mainRequest);
 
-            return mainRequestDto;
-        }
+            if (mainRequestDto != null && mainRequestDto.Count > 0)
+                return ApiResponse<List<RequestMainDto>>.Success(mainRequestDto, 200);
 
-        public Task<RequestMainDto> GetByIdAsync(int Id)
-        {
-            throw new NotImplementedException();
+            else
+            {
+                return ApiResponse<List<RequestMainDto>>.Fail("Bad Request", 404);
+            }
         }
 
         public async Task<ApiResponse<RequestSaveVM>> SaveRequest(RequestSaveVM requestSaveVM)
