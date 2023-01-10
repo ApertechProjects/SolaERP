@@ -78,7 +78,7 @@ namespace SolaERP.Application.Services
 
         public bool RemoveApproveStageDetailsAsync(int approveStageDetailsId)
         {
-            var approveDetail = _approveStageDetailRepository.Remove(approveStageDetailsId);
+            var approveDetail = _approveStageDetailRepository.RemoveAsync(approveStageDetailsId);
             return approveDetail;
         }
 
@@ -98,7 +98,7 @@ namespace SolaERP.Application.Services
 
         public bool RemoveApproveStageRolesAsync(int roleId)
         {
-            var approveStageRole = _approveStageRoleRepository.Remove(roleId);
+            var approveStageRole = _approveStageRoleRepository.RemoveAsync(roleId);
             return approveStageRole;
         }
 

@@ -34,23 +34,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<MenuWithPrivilages>> GetUserMenuWithPrivillagesAsync(int userId)
         {
-            var result = await Task.Run(() =>
+            List<MenuWithPrivilages> userMenus = new List<MenuWithPrivilages>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                List<MenuWithPrivilages> userMenus = new List<MenuWithPrivilages>();
-                using (var command = _unitOfWork.CreateCommand())
-                {
-                    command.CommandText = "EXEC dbo.SP_UserMenu_Load @userId";
-                    command.Parameters.AddWithValue(command, "@userId", userId);
+                command.CommandText = "EXEC dbo.SP_UserMenu_Load @userId";
+                command.Parameters.AddWithValue(command, "@userId", userId);
 
-                    using var reader = command.ExecuteReader();
+                using var reader = await command.ExecuteReaderAsync();
 
-                    while (reader.Read())
-                        userMenus.Add(reader.GetByEntityStructure<MenuWithPrivilages>());
+                while (reader.Read())
+                    userMenus.Add(reader.GetByEntityStructure<MenuWithPrivilages>());
 
-                    return userMenus;
-                }
-            });
-            return result;
+                return userMenus;
+            }
         }
 
         public async Task<List<GroupMenu>> GetGroupMenusByGroupIdAsync(int groupId)
@@ -70,12 +66,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public bool Remove(int Id)
+        public Task<bool> RemoveAsync(int Id)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(Menu entity)
+        public Task UpdateAsync(Menu entity)
         {
             throw new NotImplementedException();
         }

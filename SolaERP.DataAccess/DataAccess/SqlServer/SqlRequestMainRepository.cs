@@ -1,13 +1,4 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.Request;
-using SolaERP.Infrastructure.Enums;
-using SolaERP.Infrastructure.UnitOfWork;
-using System.Data;
-using System.Data.Common;
-using System.Data.SqlClient;
-
-namespace SolaERP.DataAccess.DataAccess.SqlServer
+﻿namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
     public class SqlRequestMainRepository : IRequestMainRepository
     {
@@ -117,7 +108,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RequestComment = reader.Get<string>("RequestComment"),
                 OperatorComment = reader.Get<string>("OperatorComment"),
                 QualityRequired = reader.Get<string>("QualityRequired"),
-                ApproveStatus = reader.Get<string>("ApproveStatus")
+                ApproveStatus = reader.Get<string>("ApproveStatus"),
             };
         }
 

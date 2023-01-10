@@ -2,7 +2,7 @@
 
 namespace SolaERP.Infrastructure.Contracts.Repositories
 {
-    public interface IApproveStageMainRepository : ICrudOperations<ApproveStagesMain>, ILoggableCrudOperations<ApproveStagesMain>
+    public interface IApproveStageMainRepository : ILoggableCrudOperations<ApproveStagesMain>
     {
         Task<ApproveStagesMain> GetApprovalStageHeaderLoad(int approvalStageMainId);
         Task<List<ApproveStagesMain>> GetByBusinessUnitId(int buId);

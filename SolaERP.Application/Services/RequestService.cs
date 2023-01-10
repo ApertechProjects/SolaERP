@@ -1,13 +1,4 @@
-﻿using AutoMapper;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Request;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Entities.Request;
-using SolaERP.Infrastructure.UnitOfWork;
-using SolaERP.Infrastructure.ViewModels;
-
-namespace SolaERP.Application.Services
+﻿namespace SolaERP.Application.Services
 {
     public class RequestService : IRequestService
     {
@@ -38,10 +29,10 @@ namespace SolaERP.Application.Services
             throw new NotImplementedException();
         }
 
-        public bool RemoveRequestDetailAsync(RequestDetailDto requestDetailDto)
+        public async Task<bool> RemoveRequestDetailAsync(RequestDetailDto requestDetailDto)
         {
             var entity = _mapper.Map<RequestDetail>(requestDetailDto);
-            var model = _requestDetailRepository.RemoveRequestDetailAsync(entity.RequestMainId);
+            var model = await _requestDetailRepository.RemoveAsync(entity.RequestMainId);
             return model;
         }
 
@@ -52,13 +43,13 @@ namespace SolaERP.Application.Services
 
             if (mainRequestDto != null && mainRequestDto.Count > 0)
                 return ApiResponse<List<RequestMainDto>>.Success(mainRequestDto, 200);
-            else
-                return ApiResponse<List<RequestMainDto>>.Fail("Bad Request", 404);
+
+            return ApiResponse<List<RequestMainDto>>.Fail("Bad Request", 404);
         }
 
         public async Task<ApiResponse<RequestSaveVM>> SaveRequest(RequestSaveVM requestSaveVM)
         {
-            var mainId = await AddOrUpdate(requestSaveVM.RequestMainDto);
+            var mainId = await _requestMainRepository.AddOrUpdateAsync(_mapper.Map<RequestMain>(requestSaveVM.RequestMainDto));
 
             for (int i = 0; i < requestSaveVM.RequestDetailDtos.Count; i++)
             {
@@ -66,7 +57,7 @@ namespace SolaERP.Application.Services
                 requestDetailDto.RequestMainId = mainId.Data;
                 if (requestDetailDto.Type == "remove")
                 {
-                    RemoveRequestDetailAsync(requestDetailDto);
+                    await RemoveRequestDetailAsync(requestDetailDto);
                 }
                 else
                 {

@@ -1,10 +1,8 @@
-﻿using SolaERP.Infrastructure.Contracts.Common;
-using SolaERP.Infrastructure.Entities.Request;
+﻿using SolaERP.Infrastructure.Entities.Request;
 
 namespace SolaERP.Infrastructure.Contracts.Repositories
 {
-    public interface IRequestDetailRepository : ICrudOperations<RequestDetail>, IReturnableRepoMethodAsync<RequestDetail>
+    public interface IRequestDetailRepository : ICrudOperations<RequestDetail>
     {
-        bool RemoveRequestDetailAsync(int id);
     }
 }

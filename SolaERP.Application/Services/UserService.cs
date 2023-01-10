@@ -55,7 +55,7 @@ namespace SolaERP.Application.Services
 
             var user = _mapper.Map<User>(userUpdateDto);
             user.PasswordHash = SecurityUtil.ComputeSha256Hash(userUpdateDto.Password);
-            _userRepository.Update(user);
+            _userRepository.UpdateAsync(user);
 
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
@@ -63,7 +63,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<bool>> RemoveAsync(int Id)
         {
-            _userRepository.Remove(Id);
+            _userRepository.RemoveAsync(Id);
 
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
@@ -79,7 +79,7 @@ namespace SolaERP.Application.Services
         public async Task<ApiResponse<bool>> UpdateUserAsync(UserUpdateDto userUpdateDto)
         {
             var result = _mapper.Map<User>(userUpdateDto);
-            _userRepository.Update(result);
+            _userRepository.UpdateAsync(result);
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }
@@ -156,7 +156,7 @@ namespace SolaERP.Application.Services
             if (userId == 0)
                 return ApiResponse<bool>.Fail("User not found", 404);
 
-            var result = _userRepository.Remove(userId);
+            var result = _userRepository.RemoveAsync(userId);
             await _unitOfWork.SaveChangesAsync();
 
             return ApiResponse<bool>.Success(200);

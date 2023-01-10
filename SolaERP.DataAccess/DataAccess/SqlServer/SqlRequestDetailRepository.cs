@@ -2,7 +2,6 @@
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.UnitOfWork;
-using System.Data;
 using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
@@ -15,12 +14,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public Task<bool> AddAsync(RequestDetail entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<int> AddOrUpdateAsync(RequestDetail entity)
+        public async Task<bool> AddAsync(RequestDetail entity)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -88,7 +82,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@AnalysisCode9Id", null);
                 command.Parameters.AddWithValue(command, "@AnalysisCode10Id", null);
 
-                return await command.ExecuteNonQueryAsync();
+                return await command.ExecuteNonQueryAsync() > 0;
             }
         }
 
@@ -102,28 +96,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public bool Remove(int Id)
+        public async Task<bool> RemoveAsync(int Id)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool RemoveRequestDetailAsync(int id)
-        {
-            using (var commad = _unitOfWork.CreateCommand())
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                commad.CommandText = $"exec SP_RequestDetails_IUD @RequestDetailId";
-                IDbDataParameter dbDataParameter = commad.CreateParameter();
-                dbDataParameter.ParameterName = "@RequestDetailId";
-                dbDataParameter.Value = id;
-                commad.Parameters.Add(dbDataParameter);
-                var value = commad.ExecuteNonQuery();
-                return value == 0 || value == -1 ? false : true;
+                command.CommandText = $"exec SP_RequestDetails_IUD @RequestDetailId";
+                command.Parameters.AddWithValue(command, "@RequestDetailId", Id);
+                var value = await command.ExecuteNonQueryAsync();
+
+                return value > 0;
             }
         }
 
-        public void Update(RequestDetail entity)
+        public async Task UpdateAsync(RequestDetail entity)
         {
-            throw new NotImplementedException();
+            await AddAsync(entity);
         }
     }
 }

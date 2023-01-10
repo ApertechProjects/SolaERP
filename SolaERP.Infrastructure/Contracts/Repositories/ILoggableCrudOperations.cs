@@ -6,5 +6,7 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
     {
         Task<int> AddAsync(Tentity entity, int userId);
         Task<int> UpdateAsync(Tentity entity, int userId);
+        Task<int> DeleteAsync(int userId);
+        Task<List<Tentity>> GetAllAsync();
     }
 }
