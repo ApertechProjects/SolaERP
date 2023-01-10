@@ -2,7 +2,6 @@
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.ViewModels;
 
 namespace SolaERP.Controllers
 {
@@ -25,9 +24,9 @@ namespace SolaERP.Controllers
         }
 
         [HttpPost]
-        public async Task<ApiResponse<RequestSaveVM>> SaveRequest(RequestSaveVM requestSaveVM)
+        public async Task<ApiResponse<RequestMainDto>> SaveRequest(RequestMainDto requestMainDto)
         {
-            return await _requestService.SaveRequest(requestSaveVM);
+            return await _requestService.AddOrUpdateAsync(requestMainDto);
         }
 
         [HttpGet("{businessUnitId}")]

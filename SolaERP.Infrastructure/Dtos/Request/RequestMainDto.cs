@@ -16,5 +16,6 @@
         public string OpertorComment { get; set; }
         public string QualityRequired { get; set; }
         public int ApproveStatus { get; set; }
+        public List<RequestDetailDto> RequestDetailDtos { get; set; }
     }
 }

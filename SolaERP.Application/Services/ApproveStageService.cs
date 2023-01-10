@@ -76,9 +76,9 @@ namespace SolaERP.Application.Services
             return approveStageDetail;
         }
 
-        public bool RemoveApproveStageDetailsAsync(int approveStageDetailsId)
+        public async Task<bool> RemoveApproveStageDetailsAsync(int approveStageDetailsId)
         {
-            var approveDetail = _approveStageDetailRepository.RemoveAsync(approveStageDetailsId);
+            var approveDetail = await _approveStageDetailRepository.RemoveAsync(approveStageDetailsId);
             return approveDetail;
         }
 
@@ -96,9 +96,9 @@ namespace SolaERP.Application.Services
             return model;
         }
 
-        public bool RemoveApproveStageRolesAsync(int roleId)
+        public async Task<bool> RemoveApproveStageRolesAsync(int roleId)
         {
-            var approveStageRole = _approveStageRoleRepository.RemoveAsync(roleId);
+            var approveStageRole = await _approveStageRoleRepository.RemoveAsync(roleId);
             return approveStageRole;
         }
 

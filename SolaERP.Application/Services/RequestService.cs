@@ -1,11 +1,20 @@
-﻿namespace SolaERP.Application.Services
+﻿using AutoMapper;
+using SolaERP.Infrastructure.Contracts.Common;
+using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.Request;
+using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Entities.Request;
+using SolaERP.Infrastructure.UnitOfWork;
+
+namespace SolaERP.Application.Services
 {
     public class RequestService : IRequestService
     {
         public IUnitOfWork _unitOfWork;
         public IMapper _mapper;
         public IRequestMainRepository _requestMainRepository;
-        public IRequestDetailRepository _requestDetailRepository;
+        private IRequestDetailRepository _requestDetailRepository;
 
         public RequestService(IUnitOfWork unitOfWork, IMapper mapper, IRequestMainRepository requestMainRepository, IRequestDetailRepository requestDetailRepository)
         {
@@ -13,15 +22,6 @@
             _mapper = mapper;
             _requestMainRepository = requestMainRepository;
             _requestDetailRepository = requestDetailRepository;
-        }
-
-
-        public async Task<ApiResponse<int>> AddOrUpdate(RequestMainDto dto)
-        {
-            var entity = _mapper.Map<RequestMain>(dto);
-            var result = await _requestMainRepository.AddOrUpdateAsync(entity);
-
-            return result > 0 ? ApiResponse<int>.Success(result, 200) : ApiResponse<int>.Fail("Something went wrong. Please contact with us", 400);
         }
 
         public Task<int> DeleteAsync(int Id)
@@ -32,7 +32,7 @@
         public async Task<bool> RemoveRequestDetailAsync(RequestDetailDto requestDetailDto)
         {
             var entity = _mapper.Map<RequestDetail>(requestDetailDto);
-            var model = await _requestDetailRepository.RemoveAsync(entity.RequestMainId);
+            var model = await _requestDetailRepository.RemoveAsync(entity.RequestDetailId);
             return model;
         }
 
@@ -47,31 +47,10 @@
             return ApiResponse<List<RequestMainDto>>.Fail("Bad Request", 404);
         }
 
-        public async Task<ApiResponse<RequestSaveVM>> SaveRequest(RequestSaveVM requestSaveVM)
-        {
-            var mainId = await _requestMainRepository.AddOrUpdateAsync(_mapper.Map<RequestMain>(requestSaveVM.RequestMainDto));
-
-            for (int i = 0; i < requestSaveVM.RequestDetailDtos.Count; i++)
-            {
-                var requestDetailDto = requestSaveVM.RequestDetailDtos[i];
-                requestDetailDto.RequestMainId = mainId.Data;
-                if (requestDetailDto.Type == "remove")
-                {
-                    await RemoveRequestDetailAsync(requestDetailDto);
-                }
-                else
-                {
-                    await SaveRequestDetailsAsync(requestDetailDto);
-                }
-            }
-
-            return ApiResponse<RequestSaveVM>.Success(requestSaveVM, 200);
-        }
-
-        public async Task<int> SaveRequestDetailsAsync(RequestDetailDto requestDetailDto)
+        public async Task<bool> SaveRequestDetailsAsync(RequestDetailDto requestDetailDto)
         {
             var entity = _mapper.Map<RequestDetail>(requestDetailDto);
-            var requestDetails = await _requestDetailRepository.AddOrUpdateAsync(entity);
+            var requestDetails = await _requestDetailRepository.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
             return requestDetails;
         }
@@ -86,6 +65,27 @@
         public bool DeleteAsync(RequestMain entity)
         {
             throw new NotImplementedException();
+        }
+
+        async Task<ApiResponse<RequestMainDto>> IReturnableServiceMethodAsync<RequestMainDto>.AddOrUpdateAsync(RequestMainDto requestMainDto)
+        {
+            var mainId = await _requestMainRepository.AddOrUpdateAsync(_mapper.Map<RequestMain>(requestMainDto));
+
+            for (int i = 0; i < requestMainDto.RequestDetailDtos.Count; i++)
+            {
+                var requestDetailDto = requestMainDto.RequestDetailDtos[i];
+                requestDetailDto.RequestMainId = mainId;
+                if (requestDetailDto.Type == "remove")
+                {
+                    await RemoveRequestDetailAsync(requestDetailDto);
+                }
+                else
+                {
+                    await SaveRequestDetailsAsync(requestDetailDto);
+                }
+            }
+
+            return ApiResponse<RequestMainDto>.Success(requestMainDto, 200);
         }
     }
 }
