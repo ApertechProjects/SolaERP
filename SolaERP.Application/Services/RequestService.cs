@@ -41,7 +41,7 @@ namespace SolaERP.Application.Services
         public async Task<bool> RemoveRequestDetailAsync(RequestDetailDto requestDetailDto)
         {
             var entity = _mapper.Map<RequestDetail>(requestDetailDto);
-            var model = await _requestDetailRepository.RemoveRequestDetailAsync(entity.RequestMainId);
+            var model = await _requestDetailRepository.RemoveAsync(entity.RequestMainId);
             return model;
         }
 
