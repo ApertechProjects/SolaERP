@@ -1,13 +1,4 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.Request;
-using SolaERP.Infrastructure.Enums;
-using SolaERP.Infrastructure.UnitOfWork;
-using System.Data;
-using System.Data.Common;
-using System.Data.SqlClient;
-
-namespace SolaERP.DataAccess.DataAccess.SqlServer
+﻿namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
     public class SqlRequestMainRepository : IRequestMainRepository
     {
@@ -18,21 +9,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
-        public Task<bool> AddAsync(RequestMain entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<RequestMain>> GetAllAsync()
-        {
-            throw null;
-        }
-
         public async Task<List<RequestMain>> GetAllAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo, ApproveStatuses approveStatus, Status status)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_RequestmMainAll @BusinessUnitId,@ItemCode,@DateFrom,@DateTo,@ApproveStatus,@Status";
+                command.CommandText = "EXEC SP_RequestMainAll @BusinessUnitId,@ItemCode,@DateFrom,@DateTo,@ApproveStatus,@Status";
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
                 command.Parameters.AddWithValue(command, "@ItemCode", itemCode);
@@ -46,48 +27,30 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 List<RequestMain> mainRequests = new List<RequestMain>();
                 while (reader.Read())
                 {
-                    mainRequests.Add(GetRequestMainFromReader(reader));
+                    mainRequests.Add(GetFromReader(reader));
                 }
                 return mainRequests;
             }
         }
 
-        public async Task<RequestMain> GetByIdAsync(int id)
+
+
+        public async Task<int> DeleteAsync(int Id)
         {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "Select * from Procurement.RequestMain Where RequestMainId = @Id";
-                command.Parameters.AddWithValue(command, "@Id", id);
-
-                using var reader = await command.ExecuteReaderAsync();
-                RequestMain mainRequest = null;
-
-                if (reader.Read())
-                    mainRequest = GetRequestMainFromReader(reader);
-
-                return mainRequest;
-            }
-        }
-
-        public bool Remove(int Id)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText = "EXEC SP_RequestMain_IUD @RequestMainId";
                 command.Parameters.AddWithValue(command, "@RequestMainId", Id);
-                return command.ExecuteNonQuery() == 0;
+                command.Parameters.Add("@NewRequestMainId", SqlDbType.Int);
+                command.Parameters["@NewRequestMainId"].Direction = ParameterDirection.Output;
+
+                await command.ExecuteNonQueryAsync();
+
+                var returnValue = command.Parameters["@NewRequestMainId"].Value;
+                return returnValue != DBNull.Value && returnValue != null ? Convert.ToInt32(returnValue) : 0;
             }
         }
 
-
-        /// <summary>
-        /// This method comes from ICrudOperation but  we don't use it 
-        /// </summary>
-        /// <param name="entity"></param>
-        public void Update(RequestMain entity)
-        {
-            return;
-        }
 
         public async Task<int> AddOrUpdateAsync(RequestMain entity)
         {
@@ -129,7 +92,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        private RequestMain GetRequestMainFromReader(IDataReader reader)
+        private RequestMain GetFromReader(IDataReader reader)
         {
             return new RequestMain
             {
