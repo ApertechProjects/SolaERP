@@ -48,11 +48,7 @@ namespace SolaERP.Application.Services
             if (mainRequestDto != null && mainRequestDto.Count > 0)
                 return ApiResponse<List<RequestMainDto>>.Success(mainRequestDto, 200);
 
-            else
-            {
-                return ApiResponse<List<RequestMainDto>>.Fail("Bad Request", 404);
-            }
+            return ApiResponse<List<RequestMainDto>>.Fail("Bad Request", 404);
         }
-
     }
 }

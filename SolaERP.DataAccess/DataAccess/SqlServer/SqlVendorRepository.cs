@@ -8,7 +8,7 @@ using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlVendorRepository : IVendorRepository, ILoggableCrudOperations<Vendor>
+    public class SqlVendorRepository : IVendorRepository, ILoggableCrudOperations<Vendors>
     {
         private readonly IUnitOfWork _unitOfWork;
         public SqlVendorRepository(IUnitOfWork unitOfWork)
@@ -16,29 +16,29 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public Task<bool> AddAsync(Vendor entity)
+        public Task<bool> AddAsync(Vendors entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> AddAsync(Vendor entity, int userId = 0)
+        public Task<bool> AddAsync(Vendors entity, int userId = 0)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Vendor>> GetAllAsync()
+        public Task<List<Vendors>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<Vendor> GetByIdAsync(int id)
+        public Task<Vendors> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<Vendor>> GetVendorDrafts(int userId, int businessUnitId)
+        public async Task<List<Vendors>> GetVendorDrafts(int userId, int businessUnitId)
         {
-            List<Vendor> vendorDraftList = new List<Vendor>();
+            List<Vendors> vendorDraftList = new List<Vendors>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "EXEC dbo.SP_VendorDraft @UserID,@BusinessUnitId";
@@ -57,7 +57,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         }
 
-        public Task<List<Vendor>> GetVendorWFA(int userId, int businessUnitId)
+        public Task<List<Vendors>> GetVendorWFA(int userId, int businessUnitId)
         {
             throw new NotImplementedException();
         }
@@ -67,14 +67,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public void Update(Vendor entity)
+        public void Update(Vendors entity)
         {
             throw new NotImplementedException();
         }
 
-        private Vendor GetVendorDarftsFromReader(IDataReader reader)
+        private Vendors GetVendorDarftsFromReader(IDataReader reader)
         {
-            return new Vendor
+            return new Vendors
             {
                 VendorId = reader.Get<int>("VendorId"),
                 VendorCode = reader.Get<string>("VendorCode"),

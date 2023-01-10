@@ -2,7 +2,7 @@
 
 namespace SolaERP.Infrastructure.Contracts.Services
 {
-    public interface IVendorService : ICrudService<Vendor>
+    public interface IVendorService : ICrudService<Vendors>
     {
         //public Task<ApiResponse<VendorDetails>> GetVendorDetails();
 
