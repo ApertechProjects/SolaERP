@@ -43,12 +43,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public bool Remove(int Id)
+        public Task<bool> RemoveAsync(int Id)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(Procedure entity)
+        public Task UpdateAsync(Procedure entity)
         {
             throw new NotImplementedException();
         }

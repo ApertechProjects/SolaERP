@@ -2,6 +2,7 @@
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.ApproveRole;
 using SolaERP.Infrastructure.UnitOfWork;
+using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -20,22 +21,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<ApproveRole>> GetAllAsync()
         {
-            var result = await Task.Run(() =>
+            List<ApproveRole> approveRoles = new List<ApproveRole>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                List<ApproveRole> approveRoles = new List<ApproveRole>();
-                using (var command = _unitOfWork.CreateCommand())
+                command.CommandText = "SELECT * FROM dbo.VW_ApproveRoles_List";
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
                 {
-                    command.CommandText = "SELECT * FROM dbo.VW_ApproveRoles_List";
-                    using var reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        approveRoles.Add(reader.GetByEntityStructure<ApproveRole>());
-                    }
-
-                    return approveRoles;
+                    approveRoles.Add(reader.GetByEntityStructure<ApproveRole>());
                 }
-            });
-            return result;
+
+                return approveRoles;
+            }
         }
 
         public Task<ApproveRole> GetByIdAsync(int id)
@@ -43,12 +40,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public bool Remove(int Id)
+        public Task<bool> RemoveAsync(int Id)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(ApproveRole entity)
+        public Task UpdateAsync(ApproveRole entity)
         {
             throw new NotImplementedException();
         }

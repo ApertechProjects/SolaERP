@@ -4,6 +4,7 @@ using SolaERP.Infrastructure.Entities.ApproveStage;
 using SolaERP.Infrastructure.Entities.Procedure;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
+using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -16,31 +17,27 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public Task<bool> AddAsync(ApproveStagesMain entity)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<int> AddAsync(ApproveStagesMain entity, int userId = 0)
         {
             string query = "exec SP_ApproveStagesMain_IUD @approveStageMainId,@procedureId,@businessUnitId,@approveStageName,@userId";
 
-            var result = await Task.Run(() =>
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                using (var command = _unitOfWork.CreateCommand())
-                {
-                    command.CommandText = query;
-                    command.Parameters.AddWithValue(command, "@approveStageMainId", entity.ApproveStageMainId);
-                    command.Parameters.AddWithValue(command, "@procedureId", entity.ProcedureId);
-                    command.Parameters.AddWithValue(command, "@businessUnitId", entity.BusinessUnitId);
-                    command.Parameters.AddWithValue(command, "@approveStageName", entity.ApproveStageName);
-                    command.Parameters.AddWithValue(command, "@userId", userId);
-                    var value = command.ExecuteScalar();
-                    return value;
-                }
-            });
+                command.CommandText = query;
+                command.Parameters.AddWithValue(command, "@approveStageMainId", entity.ApproveStageMainId);
+                command.Parameters.AddWithValue(command, "@procedureId", entity.ProcedureId);
+                command.Parameters.AddWithValue(command, "@businessUnitId", entity.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@approveStageName", entity.ApproveStageName);
+                command.Parameters.AddWithValue(command, "@userId", userId);
+                var value = await command.ExecuteNonQueryAsync();
+                return value;
+            }
+        }
 
-            return 0;
+        public Task<int> DeleteAsync(int userId)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<List<ApproveStagesMain>> GetAllAsync()
@@ -50,43 +47,35 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<ApproveStagesMain> GetApprovalStageHeaderLoad(int approvalStageMainId)
         {
-            var result = await Task.Run(() =>
+            ApproveStagesMain approveStagesMain = null;
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                ApproveStagesMain approveStagesMain = null;
-                using (var command = _unitOfWork.CreateCommand())
+                command.CommandText = "EXEC dbo.SP_ApproveStageHeader_Load_BY_MainId @approvalStageMainId";
+                command.Parameters.AddWithValue(command, "@approvalStageMainId", approvalStageMainId);
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
                 {
-                    command.CommandText = "EXEC dbo.SP_ApproveStageHeader_Load_BY_MainId @approvalStageMainId";
-                    command.Parameters.AddWithValue(command, "@approvalStageMainId", approvalStageMainId);
-                    using var reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        approveStagesMain = GetFromReader(reader);
-                    }
-                    return approveStagesMain;
+                    approveStagesMain = GetFromReader(reader);
                 }
-            });
-            return result;
+                return approveStagesMain;
+            }
         }
 
         public async Task<List<ApproveStagesMain>> GetByBusinessUnitId(int buId)
         {
-            var result = await Task.Run(() =>
+            List<ApproveStagesMain> approveStagesMain = new List<ApproveStagesMain>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                List<ApproveStagesMain> approveStagesMain = new List<ApproveStagesMain>();
-                using (var command = _unitOfWork.CreateCommand())
-                {
-                    command.CommandText = "Exec dbo.SP_ApproveStageMain_Load_BY_BU @BuId";
-                    command.Parameters.AddWithValue(command, "@BuId", buId);
+                command.CommandText = "Exec dbo.SP_ApproveStageMain_Load_BY_BU @BuId";
+                command.Parameters.AddWithValue(command, "@BuId", buId);
 
-                    using var reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        approveStagesMain.Add(GetFromReader(reader));
-                    }
-                    return approveStagesMain;
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    approveStagesMain.Add(GetFromReader(reader));
                 }
-            });
-            return result;
+                return approveStagesMain;
+            }
         }
 
         public Task<ApproveStagesMain> GetByIdAsync(int id)
@@ -94,12 +83,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public bool Remove(int Id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(ApproveStagesMain entity)
+        public bool RemoveAsync(int Id)
         {
             throw new NotImplementedException();
         }

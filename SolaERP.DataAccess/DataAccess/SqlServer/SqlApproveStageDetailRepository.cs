@@ -49,26 +49,26 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public bool Remove(int id)
+        public async Task<bool> RemoveAsync(int id)
         {
-            using (var commad = _unitOfWork.CreateCommand())
+            using (var commad = _unitOfWork.CreateCommand() as DbCommand)
             {
                 commad.CommandText = $"exec SP_ApproveStagesDetails_IUD @detailId";
                 IDbDataParameter dbDataParameter = commad.CreateParameter();
                 dbDataParameter.ParameterName = "@detailId";
                 dbDataParameter.Value = id;
                 commad.Parameters.Add(dbDataParameter);
-                var value = commad.ExecuteNonQuery();
-                return value == 0 || value == -1 ? false : true;
+                var value = await commad.ExecuteNonQueryAsync();
+                return value >= 0;
             }
         }
 
-        public void Update(ApproveStagesDetail entity)
+        public Task UpdateAsync(ApproveStagesDetail entity)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<int> AddAsync(List<ApproveStagesDetail> entities)
+        public async Task<int> AddRangeAsync(List<ApproveStagesDetail> entities)
         {
             string query = "exec SP_ApproveStagesDetails_IUD @approveStageDetailId,@approveStageMainId,@approveStageDetailName,@sequence";
 
@@ -86,7 +86,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        async Task<int> IReturnableAddAsync<ApproveStagesDetail>.AddAsync(ApproveStagesDetail entity)
+        public async Task<int> AddAsync(ApproveStagesDetail entity)
         {
             string query = "exec SP_ApproveStagesDetails_IUD @approveStageDetailId,@approveStageMainId,@approveStageDetailName,@sequence";
 

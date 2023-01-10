@@ -5,6 +5,7 @@ using SolaERP.Infrastructure.Entities.DueDiligenceDesign;
 using SolaERP.Infrastructure.Entities.VendorDueDiligence;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
+using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -21,23 +22,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public Task<List<DueDiligenceDesign>> GetAllAsync()
+        public async Task<List<DueDiligenceDesign>> GetAllAsync()
         {
-            var result = Task.Run(() =>
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                using (var command = _unitOfWork.CreateCommand())
+                command.CommandText = "EXEC dbo.SP_DueDiligenceDesign_Load";
+                using var reader = await command.ExecuteReaderAsync();
+                List<DueDiligenceDesign> dueDiligenceDesigns = new List<DueDiligenceDesign>();
+                while (reader.Read())
                 {
-                    command.CommandText = "EXEC dbo.SP_DueDiligenceDesign_Load";
-                    using var reader = command.ExecuteReader();
-                    List<DueDiligenceDesign> dueDiligenceDesigns = new List<DueDiligenceDesign>();
-                    while (reader.Read())
-                    {
-                        dueDiligenceDesigns.Add(GetFromReader(reader));
-                    }
-                    return dueDiligenceDesigns;
+                    dueDiligenceDesigns.Add(GetFromReader(reader));
                 }
-            });
-            return result;
+                return dueDiligenceDesigns;
+            }
         }
 
         public Task<DueDiligenceDesign> GetByIdAsync(int id)
@@ -45,12 +42,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public bool Remove(int Id)
+        public Task<bool> RemoveAsync(int Id)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(DueDiligenceDesign entity)
+        public Task UpdateAsync(DueDiligenceDesign entity)
         {
             throw new NotImplementedException();
         }
