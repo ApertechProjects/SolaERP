@@ -26,6 +26,7 @@ namespace SolaERP.Application.Mappers
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<BusinessUnits, BusinessUnitsAllDto>().ReverseMap();
             CreateMap<BusinessUnits, BusinessUnitsDto>().ReverseMap();
+            CreateMap<BaseBusinessUnit, BaseBusinessUnitDto>().ReverseMap();
             CreateMap<Groups, GroupsDto>().ReverseMap();
             CreateMap<MenuWithPrivilagesDto, MenuWithPrivilages>().ReverseMap();
             CreateMap<ApproveStagesMain, ApproveStagesMainDto>().ReverseMap();

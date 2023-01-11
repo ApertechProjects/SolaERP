@@ -39,14 +39,14 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<BusinessUnitForGroupDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<List<BusinessUnitsDto>>> GetBusinessUnitListByUserToken(string finderToken)
+        public async Task<ApiResponse<List<BaseBusinessUnitDto>>> GetBusinessUnitListByUserToken(string finderToken)
         {
             var businessUnits = await _businessUnitRepository.GetBusinessUnitListByUserId(
                 await _userRepository.GetUserIdByTokenAsync(finderToken));
 
-            var dto = _mapper.Map<List<BusinessUnitsDto>>(businessUnits);
+            var dto = _mapper.Map<List<BaseBusinessUnitDto>>(businessUnits);
 
-            return ApiResponse<List<BusinessUnitsDto>>.Success(null, 200);
+            return ApiResponse<List<BaseBusinessUnitDto>>.Success(dto, 200);
         }
 
 
