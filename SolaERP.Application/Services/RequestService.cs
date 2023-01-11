@@ -84,5 +84,15 @@ namespace SolaERP.Application.Services
             await _unitOfWork.SaveChangesAsync();
             return result;
         }
+
+        public Task<ApiResponse<List<RequestMainWithDetailsDto>>> GetAllMainRequetsWithDetails()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApiResponse<RequestMainWithDetailsDto>> GetRequetsMainWithDetailsById(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

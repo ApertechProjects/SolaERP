@@ -76,9 +76,9 @@ namespace SolaERP.Application.Services
             return approveStageDetail;
         }
 
-        public bool RemoveApproveStageDetailsAsync(int approveStageDetailsId)
+        public async Task<bool> RemoveApproveStageDetailsAsync(int approveStageDetailsId)
         {
-            var approveDetail = _approveStageDetailRepository.RemoveAsync(approveStageDetailsId);
+            var approveDetail = await _approveStageDetailRepository.RemoveAsync(approveStageDetailsId);
             return approveDetail;
         }
 
@@ -96,9 +96,9 @@ namespace SolaERP.Application.Services
             return model;
         }
 
-        public bool RemoveApproveStageRolesAsync(int roleId)
+        public async Task<bool> RemoveApproveStageRolesAsync(int roleId)
         {
-            var approveStageRole = _approveStageRoleRepository.RemoveAsync(roleId);
+            var approveStageRole = await _approveStageRoleRepository.RemoveAsync(roleId);
             return approveStageRole;
         }
 
@@ -118,7 +118,7 @@ namespace SolaERP.Application.Services
             {
                 typeOfDetail = approvalStageSaveVM.ApproveStagesDetailDtos[i].Type;
                 if (typeOfDetail == "remove")
-                    RemoveApproveStageDetailsAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageDetailsId); //+
+                    await RemoveApproveStageDetailsAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageDetailsId); //+
                 else
                 {
                     await SaveApproveStageDetailsAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i]);
@@ -136,6 +136,16 @@ namespace SolaERP.Application.Services
             }
 
             return ApiResponse<ApprovalStageSaveVM>.Success(approvalStageSaveVM, 200);
+        }
+
+        bool IApproveStageService.RemoveApproveStageDetailsAsync(int approveStageDetailsId)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IApproveStageService.RemoveApproveStageRolesAsync(int roleId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
