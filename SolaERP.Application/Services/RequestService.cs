@@ -77,12 +77,12 @@ namespace SolaERP.Application.Services
             return ApiResponse<RequestSaveVM>.Success(requestSaveVM, 200);
         }
 
-        public async Task<int> SaveRequestDetailsAsync(RequestDetailDto requestDetailDto)
+        public async Task<bool> SaveRequestDetailsAsync(RequestDetailDto requestDetailDto)
         {
             var entity = _mapper.Map<RequestDetail>(requestDetailDto);
-            var requestDetails = await _requestDetailRepository.AddOrUpdateAsync(entity);
+            var result = await _requestDetailRepository.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            return requestDetails;
+            return result;
         }
     }
 }
