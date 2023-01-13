@@ -36,7 +36,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 List<RequestMain> mainRequests = new List<RequestMain>();
                 while (reader.Read())
                 {
-                    mainRequests.Add(GetFromReader(reader));
+                    mainRequests.Add(GetAllFromReader(reader));
                 }
                 return mainRequests;
             }
@@ -101,7 +101,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        private RequestMain GetFromReader(IDataReader reader)
+        private RequestMain GetAllFromReader(IDataReader reader)
         {
             return new RequestMain
             {
@@ -121,6 +121,52 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 QualityRequired = reader.Get<string>("QualityRequired"),
                 ApproveStatus = reader.Get<string>("ApproveStatus"),
             };
+        }
+
+        private RequestMain GetWaitingForApprovalFromReader(IDataReader reader)
+        {
+            return new RequestMain
+            {
+                RequestMainId = reader.Get<int>("RequestMainId"),
+                BusinessUnitId = reader.Get<int>("BusinessUnitId"),
+                RequestTypeId = reader.Get<int>("RequestType"),
+                RequestNo = reader.Get<string>("RequestNo"),
+                EntryDate = reader.Get<DateTime>("EntryDate"),
+                RequestDate = reader.Get<DateTime>("RequestDate"),
+                RequsetDeadline = reader.Get<DateTime>("RequestDeadline"),
+                UserId = reader.Get<int>("UserId"),
+                Requester = reader.Get<int>("Requester"),
+                Status = reader.Get<int>("Status"),
+                SupplierCode = reader.Get<string>("SupplierCode"),
+                RequestComment = reader.Get<string>("RequestComment"),
+                OperatorComment = reader.Get<string>("OperatorComment"),
+                QualityRequired = reader.Get<string>("QualityRequired"),
+                CurrencyCode = reader.Get<string>("CurrencyCode"),
+                LogisticTotal = reader.Get<decimal>("LogisticTotal"),
+            };
+        }
+
+        public async Task<List<RequestMain>> GetWaitingForApprovalsAsync(int userId, int businessUnitId, DateTime dateFrom, DateTime dateTo, string itemCode)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RequestMainWFA @UserId,@BusinessUnitId,@DateFrom,@DateTo,@ItemCode";
+
+                command.Parameters.AddWithValue(command, "@UserId", itemCode);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+                command.Parameters.AddWithValue(command, "@DateFrom", dateFrom);
+                command.Parameters.AddWithValue(command, "DateTo", dateTo);
+                command.Parameters.AddWithValue(command, "@ItemCode", itemCode);
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                List<RequestMain> mainRequests = new List<RequestMain>();
+                while (reader.Read())
+                {
+                    mainRequests.Add(GetWaitingForApprovalFromReader(reader));
+                }
+                return mainRequests;
+            }
         }
     }
 }

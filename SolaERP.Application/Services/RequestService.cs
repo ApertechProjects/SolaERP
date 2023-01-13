@@ -94,5 +94,16 @@ namespace SolaERP.Application.Services
         {
             throw new NotImplementedException();
         }
+
+        public async Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(RequestWFAGetParametersDto requestWFAGetParametersDto)
+        {
+            var mainRequest = await _requestMainRepository.GetWaitingForApprovalsAsync(requestWFAGetParametersDto.UserId, requestWFAGetParametersDto.BusinessUnitId, requestWFAGetParametersDto.DateFrom, requestWFAGetParametersDto.DateTo, requestWFAGetParametersDto.ItemCode);
+            var mainRequestDto = _mapper.Map<List<RequestWFADto>>(mainRequest);
+
+            if (mainRequestDto != null && mainRequestDto.Count > 0)
+                return ApiResponse<List<RequestWFADto>>.Success(mainRequestDto, 200);
+
+            return ApiResponse<List<RequestWFADto>>.Fail("Bad Request", 404);
+        }
     }
 }

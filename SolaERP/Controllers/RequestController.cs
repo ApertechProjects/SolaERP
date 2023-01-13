@@ -8,7 +8,7 @@ namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class RequestController : ControllerBase
+    public class RequestController : CustomBaseController
     {
         private readonly IRequestService _requestService;
 
@@ -27,6 +27,12 @@ namespace SolaERP.Controllers
         public async Task<ApiResponse<RequestSaveVM>> SaveRequest(RequestSaveVM requestSaveVM)
         {
             return await _requestService.SaveRequest(requestSaveVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetWaitingForApprovalsRequest(RequestWFAGetParametersDto requestWFAGetParametersDto)
+        {
+            return CreateActionResult(await _requestService.GetWaitingForApprovalsAsync(requestWFAGetParametersDto));
         }
     }
 }
