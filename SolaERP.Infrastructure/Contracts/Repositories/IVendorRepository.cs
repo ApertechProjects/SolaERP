@@ -2,10 +2,10 @@
 
 namespace SolaERP.Infrastructure.Contracts.Repositories
 {
-    public interface IVendorRepository : ICrudOperations<Vendor>
+    public interface IVendorRepository : ICrudOperations<Vendors>
     {
-        public Task<List<Vendor>> GetVendorDrafts(int userId, int businessUnitId);
-        public Task<List<Vendor>>GetVendorWFA(int userId, int businessUnitId);  
+        public Task<List<Vendors>> GetVendorDrafts(int userId, int businessUnitId);
+        public Task<List<Vendors>> GetVendorWFA(int userId, int businessUnitId);
 
     }
 }

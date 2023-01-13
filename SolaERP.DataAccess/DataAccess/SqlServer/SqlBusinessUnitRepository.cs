@@ -32,7 +32,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return result > 0 ? true : false;
             }
         }
-        public bool Remove(int Id)
+        public async Task<bool> RemoveAsync(int Id)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -41,13 +41,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", Id);
 
-                var result = command.ExecuteNonQuery();
+                var result = await command.ExecuteNonQueryAsync();
 
                 return result > 0;
             }
 
         }
-        public async void Update(BusinessUnits entity)
+        public async Task UpdateAsync(BusinessUnits entity)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -66,45 +66,37 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         //
         #region Get Operations
 
-        public Task<List<BusinessUnits>> GetAllAsync()
+        public async Task<List<BusinessUnits>> GetAllAsync()
         {
-            var result = Task.Run(() =>
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                using (var command = _unitOfWork.CreateCommand())
+                command.CommandText = "Select * from dbo.VW_BusinessUnits_List";
+                using var reader = await command.ExecuteReaderAsync();
+
+                List<BusinessUnits> businessUnits = new List<BusinessUnits>();
+
+                while (reader.Read())
                 {
-                    command.CommandText = "Select * from dbo.VW_BusinessUnits_List";
-                    using var reader = command.ExecuteReader();
-
-                    List<BusinessUnits> businessUnits = new List<BusinessUnits>();
-
-                    while (reader.Read())
-                    {
-                        businessUnits.Add(reader.GetByEntityStructure<BusinessUnits>());
-                    }
-                    return businessUnits;
+                    businessUnits.Add(reader.GetByEntityStructure<BusinessUnits>());
                 }
-            });
-            return result;
+                return businessUnits;
+            }
         }
-        public Task<List<BusinessUnits>> GetBusinessUnitListByUserId(int userId)
+        public async Task<List<BusinessUnits>> GetBusinessUnitListByUserId(int userId)
         {
-            var result = Task.Run(() =>
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                using (var command = _unitOfWork.CreateCommand())
+                command.CommandText = $"EXEC SP_BusinessUnitsList {userId}";
+                using var reader = await command.ExecuteReaderAsync();
+
+                List<BusinessUnits> businessUnits = new List<BusinessUnits>();
+
+                while (reader.Read())
                 {
-                    command.CommandText = $"EXEC SP_BusinessUnitsList {userId}";
-                    using var reader = command.ExecuteReader();
-
-                    List<BusinessUnits> businessUnits = new List<BusinessUnits>();
-
-                    while (reader.Read())
-                    {
-                        businessUnits.Add(reader.GetByEntityStructure<BusinessUnits>());
-                    }
-                    return businessUnits;
+                    businessUnits.Add(reader.GetByEntityStructure<BusinessUnits>());
                 }
-            });
-            return result;
+                return businessUnits;
+            }
         }
         public async Task<BusinessUnits> GetByIdAsync(int id)
         {

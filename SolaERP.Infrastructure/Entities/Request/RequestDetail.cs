@@ -25,6 +25,7 @@ namespace SolaERP.Infrastructure.Entities.Request
         public decimal OriginalQuantity { get; set; }
         public decimal TotalBudget { get; set; }
         public decimal RemainingBudget { get; set; }
+        public decimal Amount { get; set; }
         public string ConnectedOrderReference { get; set; }
         public decimal ConnectedOrderLineNo { get; set; }
         public string AccountCode { get; set; }

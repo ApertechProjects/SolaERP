@@ -15,13 +15,13 @@ namespace SolaERP.Infrastructure.Contracts.Services
         //
         #region Details
         Task<int> SaveApproveStageDetailsAsync(ApproveStagesDetailDto details);
-        bool RemoveApproveStageDetailsAsync(int approveStageDetailsId);
+        Task<bool> RemoveApproveStageDetailsAsync(int approveStageDetailsId);
         Task<ApiResponse<List<ApproveStagesDetailDto>>> GetApproveStageDetailsByApproveStageMainId(int approveStageMainId);
         #endregion
         //
         #region Roles
         Task<int> SaveApproveStageRolesAsync(ApproveStageRoleDto role);
-        bool RemoveApproveStageRolesAsync(int roleId);
+        Task<bool> RemoveApproveStageRolesAsync(int roleId);
         Task<ApiResponse<List<ApproveStageRoleDto>>> GetApproveStageRolesByApproveStageDetailId(int approveStageDetailsId);
         #endregion
     }

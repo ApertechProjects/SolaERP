@@ -3,6 +3,7 @@ using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
+using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -21,22 +22,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<Groups>> GetAllAsync()
         {
-            var result = await Task.Run(() =>
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                using (var command = _unitOfWork.CreateCommand())
-                {
-                    command.CommandText = "EXEC dbo.SP_GroupMain_Load";
-                    using var reader = command.ExecuteReader();
+                command.CommandText = "EXEC dbo.SP_GroupMain_Load";
+                using var reader = await command.ExecuteReaderAsync();
 
-                    List<Groups> groups = new List<Groups>();
-                    while (reader.Read())
-                    {
-                        groups.Add(reader.GetByEntityStructure<Groups>());
-                    }
-                    return groups;
+                List<Groups> groups = new List<Groups>();
+                while (reader.Read())
+                {
+                    groups.Add(reader.GetByEntityStructure<Groups>());
                 }
-            });
-            return result;
+                return groups;
+            }
         }
 
         public Task<Groups> GetByIdAsync(int id)
@@ -44,30 +41,30 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public bool Remove(int Id)
+        public async Task<bool> RemoveAsync(int Id)
         {
-            using (var command = _unitOfWork.CreateCommand())
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "Delete from Config.AppUser Where Id = @Id";
                 IDbDataParameter dbDataParameter = command.CreateParameter();
                 dbDataParameter.ParameterName = "@Id";
                 dbDataParameter.Value = Id;
                 command.Parameters.Add(dbDataParameter);
-                var value = command.ExecuteNonQuery();
-                return value == 0 || value == -1 ? false : true;
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
             }
         }
 
-        public void Update(Groups entity)
+        public async Task UpdateAsync(Groups entity)
         {
-            using (var command = _unitOfWork.CreateCommand())
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "EXEC SP_Groups_IUD @groupId";
                 IDbDataParameter dbDataParameter = command.CreateParameter();
                 dbDataParameter.ParameterName = "@groupId";
                 dbDataParameter.Value = entity.GroupId;
                 command.Parameters.Add(dbDataParameter);
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
     }

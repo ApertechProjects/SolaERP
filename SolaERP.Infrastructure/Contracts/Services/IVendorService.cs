@@ -1,11 +1,10 @@
-﻿using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Entities.Vendors;
+﻿using SolaERP.Infrastructure.Entities.Vendors;
 
 namespace SolaERP.Infrastructure.Contracts.Services
 {
-    public interface IVendorService : ICrudService<Vendor>
+    public interface IVendorService : ICrudService<Vendors>
     {
-        public Task<ApiResponse<Vendor>> GetVendorDetails();
+        //public Task<ApiResponse<VendorDetails>> GetVendorDetails();
 
     }
 }

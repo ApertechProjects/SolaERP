@@ -3,6 +3,7 @@ using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
+using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAcces.SqlServer
 {
@@ -19,139 +20,110 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public async Task<List<User>> GetAllAsync()
         {
-            var result = await Task.Run(() =>
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                using (var command = _unitOfWork.CreateCommand())
-                {
-                    command.CommandText = "Select * from Config.AppUser where IsDeleted = 0";
-                    using var reader = command.ExecuteReader();
+                command.CommandText = "Select * from Config.AppUser where IsDeleted = 0";
+                using var reader = await command.ExecuteReaderAsync();
 
-                    List<User> users = new List<User>();
-                    while (reader.Read())
-                    {
-                        users.Add(reader.GetByEntityStructure<User>());
-                    }
-                    return users;
+                List<User> users = new List<User>();
+                while (reader.Read())
+                {
+                    users.Add(reader.GetByEntityStructure<User>());
                 }
-            });
-            return result;
+                return users;
+            }
         }
         public async Task<User> GetUserByIdAsync(int userId)
         {
-            var result = await Task.Run(() =>
+            User user = null;
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                User user = null;
-                using (var command = _unitOfWork.CreateCommand())
-                {
-                    command.CommandText = "Select * from Config.AppUser where Id = @Id";
-                    command.Parameters.AddWithValue(command, "@Id", userId);
+                command.CommandText = "Select * from Config.AppUser where Id = @Id";
+                command.Parameters.AddWithValue(command, "@Id", userId);
 
-                    using var reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        user = reader.GetByEntityStructure<User>();
-                    }
-                    return user;
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    user = reader.GetByEntityStructure<User>();
                 }
-            });
-            return result;
+                return user;
+            }
         }
         public async Task<User> GetUserByEmailAsync(string email)
         {
-            var result = await Task.Run(() =>
+            User user = null;
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                User user = null;
-                using (var command = _unitOfWork.CreateCommand())
-                {
-                    command.CommandText = "SELECT * FROM FN_GET_USER_BY_EMAIL (@Email)";
-                    command.Parameters.AddWithValue(command, "@Email", email == null ? DBNull.Value : email);
+                command.CommandText = "SELECT * FROM FN_GET_USER_BY_EMAIL (@Email)";
+                command.Parameters.AddWithValue(command, "@Email", email == null ? DBNull.Value : email);
 
-                    using var reader = command.ExecuteReader();
+                using var reader = await command.ExecuteReaderAsync();
 
-                    if (reader.Read())
-                        user = reader.GetByEntityStructure<User>();
+                if (reader.Read())
+                    user = reader.GetByEntityStructure<User>();
 
-                    return user;
-                }
-            });
-            return result;
-
+                return user;
+            }
         }
         public async Task<User> GetByIdAsync(int id)
         {
-            var result = await Task.Run(() =>
+            User user = null;
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                User user = null;
-                using (var command = _unitOfWork.CreateCommand())
-                {
-                    command.CommandText = "EXEC SP_GETUSER_BY_NAME_OR_ID @Id";
-                    command.Parameters.AddWithValue(command, "@Id", id);
+                command.CommandText = "EXEC SP_GETUSER_BY_NAME_OR_ID @Id";
+                command.Parameters.AddWithValue(command, "@Id", id);
 
-                    using var reader = command.ExecuteReader();
+                using var reader = await command.ExecuteReaderAsync();
 
-                    if (reader.Read())
-                        user = reader.GetByEntityStructure<User>();
+                if (reader.Read())
+                    user = reader.GetByEntityStructure<User>();
 
-                    return user;
-                }
-            });
-            return result;
+                return user;
+            }
         }
         public async Task<User> GetUserByUsernameAsync(string userName)
         {
-            var result = await Task.Run(() =>
+            User user = null;
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                User user = null;
-                using (var command = _unitOfWork.CreateCommand())
-                {
-                    command.CommandText = "EXEC SP_GETUSER_BY_NAME_OR_ID NULL,@UserName";
-                    command.Parameters.AddWithValue(command, "@UserName", userName);
+                command.CommandText = "EXEC SP_GETUSER_BY_NAME_OR_ID NULL,@UserName";
+                command.Parameters.AddWithValue(command, "@UserName", userName);
 
-                    using var reader = command.ExecuteReader();
-                    if (reader.Read())
-                        user = reader.GetByEntityStructure<User>();
+                using var reader = await command.ExecuteReaderAsync();
+                if (reader.Read())
+                    user = reader.GetByEntityStructure<User>();
 
-                    return user;
-                }
-            });
-            return result;
+                return user;
+            }
         }
         public async Task<User> GetLastInsertedUserAsync()
         {
-            var result = await Task.Run(() =>
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                using (var command = _unitOfWork.CreateCommand())
-                {
-                    command.CommandText = "SELECT * FROM GET_LAST_INSERTED_USER";
-                    using var reader = command.ExecuteReader();
+                command.CommandText = "SELECT * FROM GET_LAST_INSERTED_USER";
+                using var reader = await command.ExecuteReaderAsync();
 
-                    User user = new User();
-                    if (reader.Read())
-                    {
-                        user = reader.GetByEntityStructure<User>();
-                    }
-                    return user;
+                User user = new User();
+                if (reader.Read())
+                {
+                    user = reader.GetByEntityStructure<User>();
                 }
-            });
-            return result;
+                return user;
+            }
         }
         public async Task<int> GetUserIdByTokenAsync(string finderToken)
         {
-            var result = await Task.Run(() =>
+            int userId = 0;
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                int userId = 0;
-                using (var command = _unitOfWork.CreateCommand())
-                {
-                    command.CommandText = "SELECT ID FROM CONFIG.APPUSER WHERE USERTOKEN = @USERTOKEN";
-                    command.Parameters.AddWithValue(command, "@USERTOKEN", finderToken == null ? DBNull.Value : finderToken);
+                command.CommandText = "SELECT ID FROM CONFIG.APPUSER WHERE USERTOKEN = @USERTOKEN";
+                command.Parameters.AddWithValue(command, "@USERTOKEN", finderToken == null ? DBNull.Value : finderToken);
 
-                    using var reader = command.ExecuteReader();
-                    if (reader.Read())
-                        userId = reader.Get<int>("Id");
-                }
-                return userId;
-            });
-            return result;
+                using var reader = await command.ExecuteReaderAsync();
+                if (reader.Read())
+                    userId = reader.Get<int>("Id");
+            }
+            return userId;
         }
 
         #endregion
@@ -161,41 +133,37 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         public async Task<bool> AddAsync(User entity)
         {
             string query = "Exec SP_User_insert @FullName,@StatusId,@UserName,@Email ,@EmailConfirmed ,@PasswordHash,@UserTypeId,@UserToken";
-            var result = await Task.Run(() =>
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                using (var command = _unitOfWork.CreateCommand())
-                {
-                    command.CommandText = query;
-                    command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
-                    command.Parameters.AddWithValue(command, "@StatusId", entity.StatusId);
-                    command.Parameters.AddWithValue(command, "@UserName", entity.UserName);
-                    command.Parameters.AddWithValue(command, "@Email", entity.Email);
-                    command.Parameters.AddWithValue(command, "@EmailConfirmed", entity.EmailConfirmed);
-                    command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
-                    command.Parameters.AddWithValue(command, "@UserTypeId", entity.UserTypeId);
-                    command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken.ToString());
+                command.CommandText = query;
+                command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
+                command.Parameters.AddWithValue(command, "@StatusId", entity.StatusId);
+                command.Parameters.AddWithValue(command, "@UserName", entity.UserName);
+                command.Parameters.AddWithValue(command, "@Email", entity.Email);
+                command.Parameters.AddWithValue(command, "@EmailConfirmed", entity.EmailConfirmed);
+                command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
+                command.Parameters.AddWithValue(command, "@UserTypeId", entity.UserTypeId);
+                command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken.ToString());
 
-                    var value = command.ExecuteNonQuery();
-                    return value == 0 || value == -1 ? false : true;
-                }
-            });
-            return result;
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
+            }
         }
-        public bool Remove(int Id)
+        public async Task<bool> RemoveAsync(int Id)
         {
-            using (var command = _unitOfWork.CreateCommand())
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "SP_DELETE_USER @Id";
                 command.Parameters.AddWithValue(command, "@Id", Id);
-                var value = command.ExecuteNonQuery();
+                var value = await command.ExecuteNonQueryAsync();
 
-                return value == 0 || value == -1 ? false : true;
+                return value > 0;
             }
         }
-        public void Update(User entity)
+        public async Task UpdateAsync(User entity)
         {
             string query = "Exec [dbo].[SP_UserData_U] @UserId,@FullName,@Position,@PhoneNumber,@Photo,@PasswordHash";
-            using (var command = _unitOfWork.CreateCommand())
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.Parameters.AddWithValue(command, "@UserId", entity.Id);
                 command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
@@ -205,49 +173,39 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
                 command.CommandText = query;
                 //TODO: Handle Procedure Convert Error When Updateing User
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
         public async Task<bool> UpdateUserTokenAsync(int userId, Guid token)
         {
-            var result = await Task.Run(() =>
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                using (var command = _unitOfWork.CreateCommand())
-                {
-                    command.CommandText = "SP_UPDATE_USER_TOKEN";//@USERID,@USERTOKEN";
+                command.CommandText = "SP_UPDATE_USER_TOKEN";//@USERID,@USERTOKEN";
 
-                    command.Parameters.AddWithValue(command, "@USERID", userId);
-                    command.Parameters.AddWithValue(command, "@USERTOKEN", token);
-                    command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(command, "@USERID", userId);
+                command.Parameters.AddWithValue(command, "@USERTOKEN", token);
+                command.CommandType = CommandType.StoredProcedure;
 
-                    var result = command.ExecuteNonQuery();
+                var result = await command.ExecuteNonQueryAsync();
 
-                    return result > 0 ? true : false;
-                }
-            });
-            return result;
+                return result > 0;
+            }
         }
         public async Task<bool> ResetUserPasswordAsync(string email, string passwordHash)
         {
-            var isSucessfull = await Task.Run(() =>
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                using (var command = _unitOfWork.CreateCommand())
-                {
-                    command.CommandText = "SP_UserPassword_U";
-                    command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "SP_UserPassword_U";
+                command.CommandType = CommandType.StoredProcedure;
 
-                    command.Parameters.AddWithValue(command, "@EMAIL", email);
-                    command.Parameters.AddWithValue(command, "@PASSWORDHASH", passwordHash);
+                command.Parameters.AddWithValue(command, "@EMAIL", email);
+                command.Parameters.AddWithValue(command, "@PASSWORDHASH", passwordHash);
 
-                    var result = command.ExecuteNonQuery();
+                var result = await command.ExecuteNonQueryAsync();
 
-                    return result > 0 ? true : false;
-                }
-            });
-
-            return isSucessfull;
+                return result > 0;
+            }
         }
-
         #endregion
     }
 }

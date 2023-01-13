@@ -5,6 +5,7 @@ using SolaERP.Infrastructure.Dtos.ApproveStage;
 using SolaERP.Infrastructure.Dtos.ApproveStages;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Entities.ApproveStage;
+using SolaERP.Infrastructure.UnitOfWork;
 using SolaERP.Infrastructure.ViewModels;
 
 namespace SolaERP.Application.Services
@@ -16,13 +17,15 @@ namespace SolaERP.Application.Services
         private readonly IApproveStageRoleRepository _approveStageRoleRepository;
         private readonly IUserRepository _userRepository;
         private IMapper _mapper;
+        private IUnitOfWork _unitOfWork;
 
-        public ApproveStageService(IApproveStageMainRepository approveStageMainRepository, IApproveStageDetailRepository approveStageDetailRepository, IUserRepository userRepository, IMapper mapper)
+        public ApproveStageService(IApproveStageMainRepository approveStageMainRepository, IApproveStageDetailRepository approveStageDetailRepository, IUserRepository userRepository, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _approveStageMainRepository = approveStageMainRepository;
             _approveStageDetailRepository = approveStageDetailRepository;
             _userRepository = userRepository;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
         public Task<ApiResponse<List<ApproveStagesMainDto>>> GetAllAsync()
@@ -62,6 +65,7 @@ namespace SolaERP.Application.Services
             var userId = await _userRepository.GetUserIdByTokenAsync(authToken);
             var model = _mapper.Map<ApproveStagesMain>(entity);
             var approveStageMain = await _approveStageMainRepository.AddAsync(model, userId);
+            await _unitOfWork.SaveChangesAsync();
             return approveStageMain;
         }
 
@@ -72,9 +76,9 @@ namespace SolaERP.Application.Services
             return approveStageDetail;
         }
 
-        public bool RemoveApproveStageDetailsAsync(int approveStageDetailsId)
+        public async Task<bool> RemoveApproveStageDetailsAsync(int approveStageDetailsId)
         {
-            var approveDetail = _approveStageDetailRepository.Remove(approveStageDetailsId);
+            var approveDetail = await _approveStageDetailRepository.RemoveAsync(approveStageDetailsId);
             return approveDetail;
         }
 
@@ -92,9 +96,9 @@ namespace SolaERP.Application.Services
             return model;
         }
 
-        public bool RemoveApproveStageRolesAsync(int roleId)
+        public async Task<bool> RemoveApproveStageRolesAsync(int roleId)
         {
-            var approveStageRole = _approveStageRoleRepository.Remove(roleId);
+            var approveStageRole = await _approveStageRoleRepository.RemoveAsync(roleId);
             return approveStageRole;
         }
 

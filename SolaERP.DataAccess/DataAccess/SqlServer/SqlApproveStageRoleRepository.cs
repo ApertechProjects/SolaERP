@@ -4,6 +4,7 @@ using SolaERP.Infrastructure.Entities.ApproveRole;
 using SolaERP.Infrastructure.Entities.ApproveStage;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
+using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -16,13 +17,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public Task<bool> AddAsync(ApproveStageRole entity)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public Task<int> AddAsync(List<ApproveStageRole> entities)
+        public Task<int> AddRangeAsync(List<ApproveStageRole> entities)
         {
             throw new NotImplementedException();
         }
@@ -30,58 +25,60 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<ApproveStageRole>> GetApproveStageRolesByApproveStageDetailId(int approveStageDetailId)
         {
-            var result = await Task.Run(() =>
+            List<ApproveStageRole> approveStageRoles = new List<ApproveStageRole>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                List<ApproveStageRole> approveStageRoles = new List<ApproveStageRole>();
-                using (var command = _unitOfWork.CreateCommand())
+                command.CommandText = "EXEC dbo.SP_ApproveStageRoles_Load @approveStageDetailsId";
+                command.Parameters.AddWithValue(command, "@approveStageDetailsId", approveStageDetailId);
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
                 {
-                    command.CommandText = "EXEC dbo.SP_ApproveStageRoles_Load @approveStageDetailsId";
-                    command.Parameters.AddWithValue(command, "@approveStageDetailsId", approveStageDetailId);
-                    using var reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        approveStageRoles.Add(GetFromReader(reader));
-                    }
-                    return approveStageRoles;
+                    approveStageRoles.Add(GetFromReader(reader));
                 }
-            });
-            return result;
+                return approveStageRoles;
+            }
         }
 
-        public bool Remove(int Id)
+        public Task<ApproveStageRole> GetByIdAsync(int id)
         {
-            using (var commad = _unitOfWork.CreateCommand())
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> RemoveAsync(int Id)
+        {
+            using (var commad = _unitOfWork.CreateCommand() as DbCommand)
             {
                 commad.CommandText = $"exec SP_ApproveStageRoles_ID @roleId";
                 IDbDataParameter dbDataParameter = commad.CreateParameter();
                 dbDataParameter.ParameterName = "@roleId";
                 dbDataParameter.Value = Id;
                 commad.Parameters.Add(dbDataParameter);
-                var value = commad.ExecuteNonQuery();
-                return value == 0 || value == -1 ? false : true;
+                var value = await commad.ExecuteNonQueryAsync();
+                return value > 0;
             }
         }
 
-        async Task<int> IReturnableAddAsync<ApproveStageRole>.AddAsync(ApproveStageRole entity)
+
+        public Task<int> UpdateAsync(ApproveStageRole entity, int userId = 0)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<int> AddAsync(ApproveStageRole entity)
         {
             string query = "exec SP_ApproveStageRoles_ID  @approveStageRoleId,@approveStageDetailId,@approveRoleId,@amountFrom,@amountTo";
 
-            var result = await Task.Run(() =>
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                using (var command = _unitOfWork.CreateCommand())
-                {
-                    command.CommandText = query;
-                    command.Parameters.AddWithValue(command, "@approveStageRoleId", entity.ApproveRoleId);
-                    command.Parameters.AddWithValue(command, "@approveStageDetailId", entity.ApproveStageDetailId);
-                    command.Parameters.AddWithValue(command, "@approveRoleId", entity.ApproveRoleId);
-                    command.Parameters.AddWithValue(command, "@amountFrom", entity.AmountFrom);
-                    command.Parameters.AddWithValue(command, "@amountTo", entity.AmountTo);
-                    var value = command.ExecuteNonQuery();
-                    return value == 0 || value == -1 ? false : true;
-                }
-            });
-
-            return 0;
+                command.CommandText = query;
+                command.Parameters.AddWithValue(command, "@approveStageRoleId", entity.ApproveRoleId);
+                command.Parameters.AddWithValue(command, "@approveStageDetailId", entity.ApproveStageDetailId);
+                command.Parameters.AddWithValue(command, "@approveRoleId", entity.ApproveRoleId);
+                command.Parameters.AddWithValue(command, "@amountFrom", entity.AmountFrom);
+                command.Parameters.AddWithValue(command, "@amountTo", entity.AmountTo);
+                var value = await command.ExecuteNonQueryAsync();
+                return value;
+            }
         }
 
         private ApproveStageRole GetFromReader(IDataReader reader)

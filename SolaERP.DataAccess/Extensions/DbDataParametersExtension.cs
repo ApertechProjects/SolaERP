@@ -19,6 +19,5 @@ namespace SolaERP.DataAccess.Extensions
             parameter.Value = value == null ? DBNull.Value : value;
             command.Parameters.Add(parameter);
         }
-
     }
 }

@@ -2,7 +2,7 @@
 
 namespace SolaERP.Infrastructure.Entities.Vendors
 {
-    public class Vendor : BaseEntity
+    public class Vendors : BaseEntity
     {
         public int VendorId { get; set; }
         public string VendorCode { get; set; }
