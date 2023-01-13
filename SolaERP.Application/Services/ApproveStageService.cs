@@ -118,7 +118,7 @@ namespace SolaERP.Application.Services
             {
                 typeOfDetail = approvalStageSaveVM.ApproveStagesDetailDtos[i].Type;
                 if (typeOfDetail == "remove")
-                    RemoveApproveStageDetailsAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageDetailsId); //+
+                    await RemoveApproveStageDetailsAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageDetailsId); //+
                 else
                 {
                     await SaveApproveStageDetailsAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i]);
@@ -138,6 +138,14 @@ namespace SolaERP.Application.Services
             return ApiResponse<ApprovalStageSaveVM>.Success(approvalStageSaveVM, 200);
         }
 
+        bool IApproveStageService.RemoveApproveStageDetailsAsync(int approveStageDetailsId)
+        {
+            throw new NotImplementedException();
+        }
 
+        bool IApproveStageService.RemoveApproveStageRolesAsync(int roleId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

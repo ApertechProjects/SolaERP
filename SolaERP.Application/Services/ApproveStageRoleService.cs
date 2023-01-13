@@ -44,7 +44,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<bool>> RemoveAsync(int Id)
         {
-            _approveStageRoleRepository.RemoveAsync(Id);
+            await _approveStageRoleRepository.RemoveAsync(Id);
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }

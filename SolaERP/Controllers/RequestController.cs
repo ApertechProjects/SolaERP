@@ -9,7 +9,6 @@ namespace SolaERP.Controllers
     [ApiController]
     public class RequestController : ControllerBase
     {
-
         private readonly IRequestService _requestService;
 
         public RequestController(IRequestService requestService)

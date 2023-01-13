@@ -1,6 +1,6 @@
-﻿namespace SolaERP.Infrastructure.Dtos.BusinessUnit
+﻿namespace SolaERP.Infrastructure.Entities.BusinessUnits
 {
-    public class BaseBusinessUnitDto
+    public class BaseBusinessUnit : BaseEntity
     {
         public int BusinessUnitId { get; set; }
         public string BusinessUnitCode { get; set; }

@@ -40,7 +40,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandType = CommandType.StoredProcedure;
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", Id);
-
                 var result = await command.ExecuteNonQueryAsync();
 
                 return result > 0;
@@ -82,19 +81,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return businessUnits;
             }
         }
-        public async Task<List<BusinessUnits>> GetBusinessUnitListByUserId(int userId)
+        public async Task<List<BaseBusinessUnit>> GetBusinessUnitListByUserId(int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = $"EXEC SP_BusinessUnitsList {userId}";
                 using var reader = await command.ExecuteReaderAsync();
 
-                List<BusinessUnits> businessUnits = new List<BusinessUnits>();
+                List<BaseBusinessUnit> businessUnits = new List<BaseBusinessUnit>();
 
                 while (reader.Read())
-                {
-                    businessUnits.Add(reader.GetByEntityStructure<BusinessUnits>());
-                }
+                    businessUnits.Add(reader.GetByEntityStructure<BaseBusinessUnit>());
+
                 return businessUnits;
             }
         }

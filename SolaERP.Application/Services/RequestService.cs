@@ -85,7 +85,22 @@ namespace SolaERP.Application.Services
                 }
             }
 
-            return ApiResponse<RequestMainDto>.Success(requestMainDto, 200);
+        public async Task<bool> SaveRequestDetailsAsync(RequestDetailDto requestDetailDto)
+        {
+            var entity = _mapper.Map<RequestDetail>(requestDetailDto);
+            var result = await _requestDetailRepository.AddAsync(entity);
+            await _unitOfWork.SaveChangesAsync();
+            return result;
+        }
+
+        public Task<ApiResponse<List<RequestMainWithDetailsDto>>> GetAllMainRequetsWithDetails()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApiResponse<RequestMainWithDetailsDto>> GetRequetsMainWithDetailsById(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
