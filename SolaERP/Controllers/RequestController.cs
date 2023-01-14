@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Request;
-
-namespace SolaERP.Controllers
+﻿namespace SolaERP.Controllers
 {
     [Route("/[action]")]
     [ApiController]
@@ -32,7 +28,19 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _requestService.ChangeRequestStatus(requestChangeStatusParametersDtos));
 
         [HttpPost]
+        public async Task<ApiResponse<bool>> ChangeRequestStatus(List<RequestChangeStatusParametersDto> requestChangeStatusParametersDtos)
+        {
+            return await _requestService.ChangeRequestStatus(requestChangeStatusParametersDtos);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetApproveAmendmentRequests(RequestApproveAmendmentGetParametersDto requestParametersDto)
+        {
+            return CreateActionResult(await _requestService.GetApproveAmendmentRequests(requestParametersDto));
+        }
+
         public async Task<IActionResult> GetAllMainDraftsAsync(RequestMainDraftGetDto mainDraftRequest)
             => CreateActionResult(await _requestService.GetAllRequestMainDraftsAsync(mainDraftRequest));
     }
 }
+

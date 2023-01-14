@@ -1,12 +1,4 @@
-﻿using AutoMapper;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Request;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Entities.Request;
-using SolaERP.Infrastructure.UnitOfWork;
-
-namespace SolaERP.Application.Services
+﻿namespace SolaERP.Application.Services
 {
     public class RequestService : IRequestService
     {
@@ -125,6 +117,18 @@ namespace SolaERP.Application.Services
                 return ApiResponse<List<RequestMainDraftDto>>.Success(mainDraftDto, 200);
 
             return ApiResponse<List<RequestMainDraftDto>>.Fail("Error not found", 404);
+        }
+
+        public async Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(RequestApproveAmendmentGetParametersDto requestParametersDto)
+        {
+            var userId = await _userRepository.GetUserIdByTokenAsync(requestParametersDto.FinderToken);
+            var mainRequest = await _requestMainRepository.GetApproveAmendmentRequests(userId, requestParametersDto);
+            var mainRequestDto = _mapper.Map<List<RequestApproveAmendmentDto>>(mainRequest);
+
+            if (mainRequestDto != null && mainRequestDto.Count > 0)
+                return ApiResponse<List<RequestApproveAmendmentDto>>.Success(mainRequestDto, 200);
+
+            return ApiResponse<List<RequestApproveAmendmentDto>>.Fail("Bad Request", 404);
         }
     }
 
