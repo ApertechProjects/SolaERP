@@ -6,6 +6,7 @@ using SolaERP.Infrastructure.Enums;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
+using System.Data.SqlClient;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {

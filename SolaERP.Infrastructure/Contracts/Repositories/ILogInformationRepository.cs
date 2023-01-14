@@ -1,4 +1,5 @@
-﻿using SolaERP.Infrastructure.Enums;
+﻿using SolaERP.Infrastructure.Entities.LogInfo;
+using SolaERP.Infrastructure.Enums;
 
 namespace SolaERP.Infrastructure.Contracts.Repositories
 {
