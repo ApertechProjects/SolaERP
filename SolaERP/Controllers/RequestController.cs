@@ -16,7 +16,7 @@ namespace SolaERP.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetAllMainRequest(RequestMainGetParametersDto requestMainParameters)
+        public async Task<IActionResult> GetAllMainRequestAsync(RequestMainGetParametersDto requestMainParameters)
             => CreateActionResult(await _requestService.GetAllAsync(requestMainParameters));
 
         [HttpPost]
