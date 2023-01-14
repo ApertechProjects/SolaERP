@@ -1,4 +1,12 @@
-﻿namespace SolaERP.Application.Services
+﻿using AutoMapper;
+using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.Request;
+using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Entities.Request;
+using SolaERP.Infrastructure.UnitOfWork;
+
+namespace SolaERP.Application.Services
 {
     public class RequestService : IRequestService
     {
@@ -122,7 +130,7 @@
         public async Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(RequestApproveAmendmentGetParametersDto requestParametersDto)
         {
             var userId = await _userRepository.GetUserIdByTokenAsync(requestParametersDto.FinderToken);
-            var mainRequest = await _requestMainRepository.GetApproveAmendmentRequests(userId, requestParametersDto);
+            var mainRequest = await _requestMainRepository.GetApproveAmendmentRequestsAsync(userId, requestParametersDto);
             var mainRequestDto = _mapper.Map<List<RequestApproveAmendmentDto>>(mainRequest);
 
             if (mainRequestDto != null && mainRequestDto.Count > 0)

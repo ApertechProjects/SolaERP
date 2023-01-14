@@ -1,4 +1,13 @@
-﻿namespace SolaERP.DataAccess.DataAccess.SqlServer
+﻿using SolaERP.DataAccess.Extensions;
+using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Dtos.Request;
+using SolaERP.Infrastructure.Entities.Request;
+using SolaERP.Infrastructure.Enums;
+using SolaERP.Infrastructure.UnitOfWork;
+using System.Data;
+using System.Data.Common;
+
+namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
     public class SqlRequestMainRepository : IRequestMainRepository
     {
@@ -247,7 +256,7 @@
             }
         }
 
-        public async Task<List<RequestMain>> GetApproveAmendmentRequests(int userId, RequestApproveAmendmentGetParametersDto requestParametersDto)
+        public async Task<List<RequestMain>> GetApproveAmendmentRequestsAsync(int userId, RequestApproveAmendmentGetParametersDto requestParametersDto)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -268,6 +277,11 @@
                 }
                 return mainRequests;
             }
+        }
+
+        private RequestMain GetFromReader(IDataReader reader)
+        {
+            throw new NotImplementedException();
         }
     }
 }

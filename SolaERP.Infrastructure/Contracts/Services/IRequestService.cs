@@ -1,4 +1,8 @@
-﻿namespace SolaERP.Infrastructure.Contracts.Services
+﻿using SolaERP.Infrastructure.Contracts.Common;
+using SolaERP.Infrastructure.Dtos.Request;
+using SolaERP.Infrastructure.Dtos.Shared;
+
+namespace SolaERP.Infrastructure.Contracts.Services
 {
     public interface IRequestService : IDeleteableAsync, IReturnableServiceMethodAsync<RequestMainDto>
     {

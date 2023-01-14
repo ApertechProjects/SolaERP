@@ -1,4 +1,8 @@
-﻿namespace SolaERP.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.Request;
+
+namespace SolaERP.Controllers
 {
     [Route("/[action]")]
     [ApiController]
@@ -24,21 +28,14 @@
             => CreateActionResult(await _requestService.GetRequestTypesByBusinessUnitIdAsync(businessUnitId));
 
         [HttpPost]
-        public async Task<IActionResult> ChangeRequestStatus(List<RequestChangeStatusParametersDto> requestChangeStatusParametersDtos)
+        public async Task<IActionResult> ChangeRequestStatusAsync(List<RequestChangeStatusParametersDto> requestChangeStatusParametersDtos)
             => CreateActionResult(await _requestService.ChangeRequestStatus(requestChangeStatusParametersDtos));
 
         [HttpPost]
-        public async Task<ApiResponse<bool>> ChangeRequestStatus(List<RequestChangeStatusParametersDto> requestChangeStatusParametersDtos)
-        {
-            return await _requestService.ChangeRequestStatus(requestChangeStatusParametersDtos);
-        }
+        public async Task<IActionResult> GetApproveAmendmentRequestsAsync(RequestApproveAmendmentGetParametersDto requestParametersDto)
+            => CreateActionResult(await _requestService.GetApproveAmendmentRequests(requestParametersDto));
 
         [HttpPost]
-        public async Task<IActionResult> GetApproveAmendmentRequests(RequestApproveAmendmentGetParametersDto requestParametersDto)
-        {
-            return CreateActionResult(await _requestService.GetApproveAmendmentRequests(requestParametersDto));
-        }
-
         public async Task<IActionResult> GetAllMainDraftsAsync(RequestMainDraftGetDto mainDraftRequest)
             => CreateActionResult(await _requestService.GetAllRequestMainDraftsAsync(mainDraftRequest));
     }
