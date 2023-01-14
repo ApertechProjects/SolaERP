@@ -86,12 +86,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public Task<bool> AddAsync(ApproveStagesDetail entity)
-        public async Task<int> AddAsync(ApproveStagesDetail entity)
-        {
-            throw new NotImplementedException();
-        }
-
         Task<int> IReturnableAddAsync<ApproveStagesDetail>.AddAsync(ApproveStagesDetail entity)
         {
             throw new NotImplementedException();

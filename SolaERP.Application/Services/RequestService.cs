@@ -6,6 +6,7 @@ using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Infrastructure.ViewModels;
 
 namespace SolaERP.Application.Services
 {
@@ -62,11 +63,6 @@ namespace SolaERP.Application.Services
             return dto;
         }
 
-        public bool DeleteAsync(RequestMain entity)
-        {
-            throw new NotImplementedException();
-        }
-
         async Task<ApiResponse<RequestMainDto>> IReturnableServiceMethodAsync<RequestMainDto>.AddOrUpdateAsync(RequestMainDto requestMainDto)
         {
             var mainId = await _requestMainRepository.AddOrUpdateAsync(_mapper.Map<RequestMain>(requestMainDto));
@@ -84,23 +80,25 @@ namespace SolaERP.Application.Services
                     await SaveRequestDetailsAsync(requestDetailDto);
                 }
             }
+            return ApiResponse<RequestMainDto>.Success(requestMainDto, 200);
 
-        public async Task<bool> SaveRequestDetailsAsync(RequestDetailDto requestDetailDto)
-        {
-            var entity = _mapper.Map<RequestDetail>(requestDetailDto);
-            var result = await _requestDetailRepository.AddAsync(entity);
-            await _unitOfWork.SaveChangesAsync();
-            return result;
+
         }
 
-        public Task<ApiResponse<List<RequestMainWithDetailsDto>>> GetAllMainRequetsWithDetails()
+        Task<ApiResponse<List<RequestMainWithDetailsDto>>> IRequestService.GetAllMainRequetsWithDetails()
         {
             throw new NotImplementedException();
         }
 
-        public Task<ApiResponse<RequestMainWithDetailsDto>> GetRequetsMainWithDetailsById(int id)
+        Task<ApiResponse<RequestMainWithDetailsDto>> IRequestService.GetRequetsMainWithDetailsById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApiResponse<RequestSaveVM>> SaveRequest(RequestSaveVM requestSaveVM)
         {
             throw new NotImplementedException();
         }
     }
+
 }
