@@ -98,14 +98,24 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<bool>> ChangeRequestStatus(List<RequestChangeStatusParametersDto> changeStatusParametersDtos)
         {
-
             var userId = await _userRepository.GetUserIdByTokenAsync(changeStatusParametersDtos[0].FinderToken);
             for (int i = 0; i < changeStatusParametersDtos.Count; i++)
             {
-                changeStatusParametersDtos[i].UserId = userId;
-                await _requestMainRepository.ChangeRequestStatus(changeStatusParametersDtos[i]);
+                await _requestMainRepository.ChangeRequestStatus(userId, changeStatusParametersDtos[i]);
             }
             return ApiResponse<bool>.Success(200);
+        }
+
+        public async Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(RequestApproveAmendmentGetParametersDto requestParametersDto)
+        {
+            var userId = await _userRepository.GetUserIdByTokenAsync(requestParametersDto.FinderToken);
+            var mainRequest = await _requestMainRepository.GetApproveAmendmentRequests(userId, requestParametersDto);
+            var mainRequestDto = _mapper.Map<List<RequestApproveAmendmentDto>>(mainRequest);
+
+            if (mainRequestDto != null && mainRequestDto.Count > 0)
+                return ApiResponse<List<RequestApproveAmendmentDto>>.Success(mainRequestDto, 200);
+
+            return ApiResponse<List<RequestApproveAmendmentDto>>.Fail("Bad Request", 404);
         }
     }
 

@@ -12,5 +12,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<bool> RemoveRequestDetailAsync(RequestDetailDto requestDetailDto);
         Task<List<RequestTypesDto>> GetRequestTypesByBusinessUnitId(int businessUnitId);
         Task<ApiResponse<bool>> ChangeRequestStatus(List<RequestChangeStatusParametersDto> changeStatusParametersDtos);
+        Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(RequestApproveAmendmentGetParametersDto requestParametersDto);
     }
 }

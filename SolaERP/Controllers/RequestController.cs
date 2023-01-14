@@ -7,7 +7,7 @@ namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class RequestController : ControllerBase
+    public class RequestController : CustomBaseController
     {
         private readonly IRequestService _requestService;
 
@@ -39,5 +39,13 @@ namespace SolaERP.Controllers
         {
             return await _requestService.ChangeRequestStatus(requestChangeStatusParametersDtos);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> GetApproveAmendmentRequests(RequestApproveAmendmentGetParametersDto requestParametersDto)
+        {
+            return CreateActionResult(await _requestService.GetApproveAmendmentRequests(requestParametersDto));
+        }
+
     }
 }
+

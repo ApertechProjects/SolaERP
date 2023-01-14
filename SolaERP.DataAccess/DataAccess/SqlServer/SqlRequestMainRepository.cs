@@ -88,7 +88,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@OperatorComment", entity.OperatorComment);
                 command.Parameters.AddWithValue(command, "@QualityRequired", entity.QualityRequired);
                 command.Parameters.AddWithValue(command, "@CurrencyCode", entity.CurrencyCode);
-                command.Parameters.AddWithValue(command, "@LogisticTotal", entity.LogisticTotal);
+                command.Parameters.AddWithValue(command, "@LogisticTotal", entity.LogisticsTotal);
 
                 command.Parameters.Add("@NewRequestMainId", SqlDbType.Int);
                 command.Parameters["@NewRequestMainId"].Direction = ParameterDirection.Output;
@@ -151,7 +151,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         }
 
-        public async Task<bool> ChangeRequestStatus(RequestChangeStatusParametersDto changeStatusParametersDto)
+        public async Task<bool> ChangeRequestStatus(int userId, RequestChangeStatusParametersDto changeStatusParametersDto)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -159,12 +159,35 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@RequestMainId", changeStatusParametersDto.RequestMainId);
                 command.Parameters.AddWithValue(command, "@RequestDetailId", changeStatusParametersDto.RequestDetailId);
-                command.Parameters.AddWithValue(command, "@UserId", changeStatusParametersDto.UserId);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@Sequence", changeStatusParametersDto.Sequence);
                 command.Parameters.AddWithValue(command, "@Status", changeStatusParametersDto.Status);
                 command.Parameters.AddWithValue(command, "@Comment", changeStatusParametersDto.Comment);
 
                 return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<List<RequestMain>> GetApproveAmendmentRequests(int userId, RequestApproveAmendmentGetParametersDto requestParametersDto)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RequestMainApproveAmendment @UserId,@BusinessUnitId,@DateFrom,@DateTo,@ItemCode";
+
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", requestParametersDto.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@DateFrom", requestParametersDto.DateFrom);
+                command.Parameters.AddWithValue(command, "DateTo", requestParametersDto.DateTo);
+                command.Parameters.AddWithValue(command, "@ItemCode", requestParametersDto.ItemCode);
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                List<RequestMain> mainRequests = new List<RequestMain>();
+                while (reader.Read())
+                {
+                    mainRequests.Add(GetFromReader(reader));
+                }
+                return mainRequests;
             }
         }
     }
