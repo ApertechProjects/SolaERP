@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.DataAccess", "SolaE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.Application", "SolaERP.Application\SolaERP.Application.csproj", "{C9CB4045-DAF3-49FD-B253-118F94C21BDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolaERP.SignalR", "SolaERP.SignalR\SolaERP.SignalR.csproj", "{9296A16F-A3C7-482E-B0FD-3C43F2216926}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.SignalR", "SolaERP.SignalR\SolaERP.SignalR.csproj", "{9296A16F-A3C7-482E-B0FD-3C43F2216926}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

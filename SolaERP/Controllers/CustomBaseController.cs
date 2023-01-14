@@ -3,7 +3,7 @@ using SolaERP.Infrastructure.Dtos.Shared;
 
 namespace SolaERP.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class CustomBaseController : ControllerBase
     {
