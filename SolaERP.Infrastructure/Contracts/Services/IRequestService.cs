@@ -10,7 +10,9 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<List<RequestMainWithDetailsDto>>> GetAllMainRequetsWithDetails();
         Task<ApiResponse<RequestMainWithDetailsDto>> GetRequetsMainWithDetailsById(int id);
         Task<bool> RemoveRequestDetailAsync(RequestDetailDto requestDetailDto);
-        Task<List<RequestTypesDto>> GetRequestTypesByBusinessUnitId(int businessUnitId);
+        Task<ApiResponse<List<RequestTypesDto>>> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId);
         Task<ApiResponse<bool>> ChangeRequestStatus(List<RequestChangeStatusParametersDto> changeStatusParametersDtos);
+        Task<ApiResponse<bool>> SendMainToApproveAsync(RequestMainSendToApproveDto sendToApproveModel);
+        Task<ApiResponse<List<RequestMainDraftDto>>> GetAllRequestMainDraftsAsync(RequestMainDraftGetDto getMainDraftParameters);
     }
 }
