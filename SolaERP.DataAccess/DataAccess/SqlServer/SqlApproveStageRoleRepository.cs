@@ -17,12 +17,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public Task<int> AddRangeAsync(List<ApproveStageRole> entities)
-        {
-            throw new NotImplementedException();
-        }
-
-
         public async Task<List<ApproveStageRole>> GetApproveStageRolesByApproveStageDetailId(int approveStageDetailId)
         {
             List<ApproveStageRole> approveStageRoles = new List<ApproveStageRole>();
@@ -57,7 +51,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return value > 0;
             }
         }
-
 
         public Task<int> UpdateAsync(ApproveStageRole entity, int userId = 0)
         {
