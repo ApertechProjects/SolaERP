@@ -1,4 +1,9 @@
-﻿namespace SolaERP.Infrastructure.Contracts.Repositories
+﻿using SolaERP.Infrastructure.Contracts.Common;
+using SolaERP.Infrastructure.Dtos.Request;
+using SolaERP.Infrastructure.Entities.Request;
+using SolaERP.Infrastructure.Enums;
+
+namespace SolaERP.Infrastructure.Contracts.Repositories
 {
     public interface IRequestMainRepository : IDeleteableAsync, IReturnableRepoMethodAsync<RequestMain>
     {
@@ -7,7 +12,6 @@
         Task<List<RequestTypes>> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId);
         Task<List<RequestMainDraft>> GetAllMainRequestDraftsAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo);
         Task<bool> SendRequestToApproveAsync(int userId, int requestMainId);
-        Task<List<RequestMain>> GetApproveAmendmentRequests(int userId, RequestApproveAmendmentGetParametersDto requestParametersDto);
-        Task<List<RequestTypes>> GetRequestTypesByBusinessUnitId(int businessUnitId);
+        Task<List<RequestMain>> GetApproveAmendmentRequestsAsync(int userId, RequestApproveAmendmentGetParametersDto requestParametersDto);
     }
 }
