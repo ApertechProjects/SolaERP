@@ -1,5 +1,6 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.Enums;
 using SolaERP.Infrastructure.UnitOfWork;
@@ -148,6 +149,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return requestTypes;
             }
 
+        }
+
+        public async Task<bool> ChangeRequestStatus(RequestChangeStatusParametersDto changeStatusParametersDto)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RequestMain_IUD @RequestMainId,@RequestDetailId,@UserId,@Sequence,@Status,@ApproveStatus,@Comment";
+
+                command.Parameters.AddWithValue(command, "@RequestMainId", changeStatusParametersDto.RequestMainId);
+                command.Parameters.AddWithValue(command, "@RequestDetailId", changeStatusParametersDto.RequestDetailId);
+                command.Parameters.AddWithValue(command, "@UserId", changeStatusParametersDto.UserId);
+                command.Parameters.AddWithValue(command, "@Sequence", changeStatusParametersDto.Sequence);
+                command.Parameters.AddWithValue(command, "@Status", changeStatusParametersDto.Status);
+                command.Parameters.AddWithValue(command, "@Comment", changeStatusParametersDto.Comment);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
         }
     }
 }

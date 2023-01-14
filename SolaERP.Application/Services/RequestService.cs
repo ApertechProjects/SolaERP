@@ -6,7 +6,6 @@ using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.UnitOfWork;
-using SolaERP.Infrastructure.ViewModels;
 
 namespace SolaERP.Application.Services
 {
@@ -16,13 +15,15 @@ namespace SolaERP.Application.Services
         public IMapper _mapper;
         public IRequestMainRepository _requestMainRepository;
         private IRequestDetailRepository _requestDetailRepository;
+        private IUserRepository _userRepository;
 
-        public RequestService(IUnitOfWork unitOfWork, IMapper mapper, IRequestMainRepository requestMainRepository, IRequestDetailRepository requestDetailRepository)
+        public RequestService(IUnitOfWork unitOfWork, IMapper mapper, IRequestMainRepository requestMainRepository, IRequestDetailRepository requestDetailRepository, IUserRepository userRepository)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _requestMainRepository = requestMainRepository;
             _requestDetailRepository = requestDetailRepository;
+            _userRepository = userRepository;
         }
 
         public Task<int> DeleteAsync(int Id)
@@ -95,9 +96,16 @@ namespace SolaERP.Application.Services
             throw new NotImplementedException();
         }
 
-        public Task<ApiResponse<RequestSaveVM>> SaveRequest(RequestSaveVM requestSaveVM)
+        public async Task<ApiResponse<bool>> ChangeRequestStatus(List<RequestChangeStatusParametersDto> changeStatusParametersDtos)
         {
-            throw new NotImplementedException();
+
+            var userId = await _userRepository.GetUserIdByTokenAsync(changeStatusParametersDtos[0].FinderToken);
+            for (int i = 0; i < changeStatusParametersDtos.Count; i++)
+            {
+                changeStatusParametersDtos[i].UserId = userId;
+                await _requestMainRepository.ChangeRequestStatus(changeStatusParametersDtos[i]);
+            }
+            return ApiResponse<bool>.Success(200);
         }
     }
 

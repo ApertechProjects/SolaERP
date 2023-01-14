@@ -33,5 +33,11 @@ namespace SolaERP.Controllers
         {
             return await _requestService.GetRequestTypesByBusinessUnitId(businessUnitId);
         }
+
+        [HttpPost]
+        public async Task<ApiResponse<bool>> ChangeRequestStatus(List<RequestChangeStatusParametersDto> requestChangeStatusParametersDtos)
+        {
+            return await _requestService.ChangeRequestStatus(requestChangeStatusParametersDtos);
+        }
     }
 }
