@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.ApproveRole;
-using SolaERP.Infrastructure.Dtos.ApproveStage;
-using SolaERP.Infrastructure.Dtos.ApproveStages;
-using SolaERP.Infrastructure.Dtos.Procedure;
-using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.ViewModels;
 
 namespace SolaERP.Controllers
@@ -13,7 +8,7 @@ namespace SolaERP.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
-    public class ApprovalTestController : ControllerBase
+    public class ApprovalTestController : CustomBaseController
     {
         private readonly IApproveStageService _approveStageMainService;
         private readonly IApproveStageDetailService _approveStageDetailService;
@@ -37,46 +32,32 @@ namespace SolaERP.Controllers
         }
 
         [HttpGet("{buId}")]
-        public async Task<ApiResponse<List<ApproveStagesMainDto>>> GetApproveStageMainByBuId(int buId)
-        {
-            return await _approveStageMainService.GetByBusinessUnitId(buId);
-        }
+        public async Task<IActionResult> GetApproveStageMainByBuId(int buId)
+            => CreateActionResult(await _approveStageMainService.GetByBusinessUnitId(buId));
 
         [HttpGet("{approveStageMainId}")]
-        public async Task<ApiResponse<ApproveStagesMainDto>> GetApproveStageMainByApprovalStageMainId(int approveStageMainId)
-        {
-            return await _approveStageMainService.GetApproveStageMainByApprovalStageMainId(approveStageMainId);
-        }
+        public async Task<IActionResult> GetApproveStageMainByApprovalStageMainId(int approveStageMainId)
+            => CreateActionResult(await _approveStageMainService.GetApproveStageMainByApprovalStageMainId(approveStageMainId));
 
         [HttpGet("{approveStageMainId}")]
-        public async Task<ApiResponse<List<ApproveStagesDetailDto>>> GetApproveStageDetailsByApprovalStageMainId(int approveStageMainId)
-        {
-            return await _approveStageDetailService.GetApproveStageDetailsByApproveStageMainId(approveStageMainId);
-        }
+        public async Task<IActionResult> GetApproveStageDetailsByApprovalStageMainId(int approveStageMainId)
+            => CreateActionResult(await _approveStageDetailService.GetApproveStageDetailsByApproveStageMainId(approveStageMainId));
 
         [HttpGet("{approveStageDetailId}")]
-        public async Task<ApiResponse<List<ApproveStageRoleDto>>> GetApproveStageRolesByApproveStageDetailId(int approveStageDetailId)
-        {
-            return await _approveStageRoleService.GetApproveStageRolesByApproveStageDetailId(approveStageDetailId);
-        }
+        public async Task<IActionResult> GetApproveStageRolesByApproveStageDetailId(int approveStageDetailId)
+            => CreateActionResult(await _approveStageRoleService.GetApproveStageRolesByApproveStageDetailId(approveStageDetailId));
 
         [HttpGet]
-        public async Task<ApiResponse<List<ApproveRoleDto>>> GetApproveRoles()
-        {
-            return await _approveRoleService.GetAllAsync();
-        }
+        public async Task<IActionResult> GetApproveRoles()
+            => CreateActionResult(await _approveRoleService.GetAllAsync());
 
         [HttpGet]
-        public async Task<ApiResponse<List<ProcedureDto>>> GetProcedures()
-        {
-            return await _procedureService.GetAllAsync();
-        }
+        public async Task<IActionResult> GetProcedures()
+            => CreateActionResult(await _procedureService.GetAllAsync());
 
         [HttpPost]
-        public async Task<ApiResponse<ApprovalStageSaveVM>> ApprovalStageSave([FromHeader] string authToken, ApprovalStageSaveVM approvalStageSaveVM)
-        {
-            return await _approveStageMainService.SaveApproveStageMainAsync(authToken, approvalStageSaveVM);
-        }
+        public async Task<IActionResult> ApprovalStageSave([FromHeader] string authToken, ApprovalStageSaveVM approvalStageSaveVM)
+            => CreateActionResult(await _approveStageMainService.SaveApproveStageMainAsync(authToken, approvalStageSaveVM));
     }
 
 }

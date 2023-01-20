@@ -1,14 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Group;
-using SolaERP.Infrastructure.Dtos.Shared;
 
 namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [ApiController]
-    public class GroupController : ControllerBase
+    public class GroupController : CustomBaseController
     {
         private readonly IGroupService _groupService;
         private readonly IMapper _mapper;
@@ -19,15 +16,11 @@ namespace SolaERP.Controllers
         }
 
         [HttpGet]
-        public async Task<ApiResponse<List<GroupsDto>>> GetGroups()
-        {
-            return await _groupService.GetAllAsync();
-        }
+        public async Task<IActionResult> GetGroups()
+            => CreateActionResult(await _groupService.GetAllAsync());
 
         [HttpDelete]
-        public async Task<ApiResponse<bool>> DeleteGroups(int Id)
-        {
-            return await _groupService.RemoveAsync(Id);
-        }
+        public async Task<IActionResult> DeleteGroups(int Id)
+            => CreateActionResult(await _groupService.RemoveAsync(Id));
     }
 }

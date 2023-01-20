@@ -1,15 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.UserDto;
 
 namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [ApiController]
     [Authorize]
-    public class UserController : ControllerBase
+    public class UserController : CustomBaseController
     {
         private readonly IUserService _userService;
 
@@ -20,28 +18,20 @@ namespace SolaERP.Controllers
 
 
         [HttpGet]
-        public async Task<ApiResponse<UserDto>> GetUserByToken([FromHeader] string authToken)
-        {
-            return await _userService.GetUserByTokenAsync(authToken);
-        }
+        public async Task<IActionResult> GetUserByToken([FromHeader] string authToken)
+            => CreateActionResult(await _userService.GetUserByTokenAsync(authToken));
 
         [HttpPut]
-        public async Task<ApiResponse<bool>> UpdateUser(UserDto dto)
-        {
-            return await _userService.UpdateAsync(dto);
-        }
+        public async Task<IActionResult> UpdateUser(UserDto dto)
+            => CreateActionResult(await _userService.UpdateAsync(dto));
 
         [HttpDelete]
-        public async Task<ApiResponse<bool>> RemoveUser([FromHeader] string authToken)
-        {
-            return await _userService.RemoveUserByTokenAsync(authToken);
-        }
+        public async Task<IActionResult> RemoveUser([FromHeader] string authToken)
+            => CreateActionResult(await _userService.RemoveUserByTokenAsync(authToken));
 
         [HttpGet]
-        public async Task<ApiResponse<List<UserDto>>> GetAllUsers()
-        {
-            return await _userService.GetAllAsync();
-        }
+        public async Task<IActionResult> GetAllUsers()
+            => CreateActionResult(await _userService.GetAllAsync());
 
         //[HttpGet("{groupId}")]
         //public async Task<ApiResponse<UserDto>> GetUsersForGroup(int groupId)

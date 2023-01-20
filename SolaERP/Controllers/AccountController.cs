@@ -8,13 +8,11 @@ using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.SignalR.Hubs;
 
 namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountController : CustomBaseController
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
@@ -37,11 +35,11 @@ namespace SolaERP.Controllers
 
 
         [HttpPost]
-        public async Task<ApiResponse<AccountResponseDto>> Login(LoginRequestDto dto)
+        public async Task<IActionResult> Login(LoginRequestDto dto)
         {
             var user = await _userManager.FindByNameAsync(dto.Email);
             if (user == null)
-                return ApiResponse<AccountResponseDto>.Fail($"User: {dto.Email} not found", 400);
+                return CreateActionResult(ApiResponse<AccountResponseDto>.Fail($"User: {dto.Email} not found", 400));
 
             var userdto = _mapper.Map<UserDto>(user);
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
@@ -51,14 +49,14 @@ namespace SolaERP.Controllers
                 var newtoken = Guid.NewGuid();
                 await _userService.UpdateUserIdentifierAsync(user.UserToken.ToString(), newtoken);
 
-                return ApiResponse<AccountResponseDto>.Success(
-                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, userdto), UserIdentifier = newtoken.ToString() }, 200);
+                return CreateActionResult(ApiResponse<AccountResponseDto>.Success(
+                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, userdto), UserIdentifier = newtoken.ToString() }, 200));
             }
-            return ApiResponse<AccountResponseDto>.Fail("Email or password is incorrect", 400);
+            return CreateActionResult(ApiResponse<AccountResponseDto>.Fail("Email or password is incorrect", 400));
         }
 
         [HttpPost]
-        public async Task<ApiResponse<AccountResponseDto>> Register(UserDto dto)
+        public async Task<IActionResult> Register(UserDto dto)
         {
             var user = await _userManager.FindByNameAsync(dto.Email);
 
@@ -67,36 +65,30 @@ namespace SolaERP.Controllers
                 dto.UserToken = Guid.NewGuid();
                 await _userService.AddAsync(dto);
 
-                return ApiResponse<AccountResponseDto>.Success(
-                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto), UserIdentifier = dto.UserToken.ToString() }, 200);
+                return CreateActionResult(ApiResponse<AccountResponseDto>.Success(new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto), UserIdentifier = dto.UserToken.ToString() }, 200));
             }
-            return ApiResponse<AccountResponseDto>.Fail("This email is already exsist", 400);
+            return CreateActionResult(ApiResponse<AccountResponseDto>.Fail("This email is already exsist", 400));
         }
 
 
-
         [HttpPost]
-        public async Task<ApiResponse<bool>> Logout([FromHeader] string authToken)
+        public async Task<IActionResult> Logout([FromHeader] string authToken)
         {
             await _signInManager.SignOutAsync();
 
             var userId = await _userService.GetUserIdByTokenAsync(authToken);
             await _userService.UpdateUserIdentifierAsync(authToken, new Guid());
 
-            return ApiResponse<bool>.Success(true, 200);
+            return CreateActionResult(ApiResponse<bool>.Success(true, 200));
         }
 
         [HttpPost]
-        public async Task<ApiResponse<bool>> SendResetPasswordEmail(EmailDto dto)
-        {
-            return await _userService.SendResetPasswordEmail(dto.Email, @"C:\Users\HP\source\repos\SolaERP\SolaERP\Templates\EmailTemplate.html");
-        }
+        public async Task<IActionResult> SendResetPasswordEmail(EmailDto dto)
+            => CreateActionResult(await _userService.SendResetPasswordEmail(dto.Email, @"C:\Users\HP\source\repos\SolaERP\SolaERP\Templates\EmailTemplate.html"));
 
 
         [HttpPost]
-        public async Task<ApiResponse<bool>> ResetPassword(ResetPasswordRequestDto resetPasswordrequestDto)
-        {
-            return await _userService.ResetPasswordAsync(resetPasswordrequestDto);
-        }
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequestDto resetPasswordrequestDto)
+            => CreateActionResult(await _userService.ResetPasswordAsync(resetPasswordrequestDto));
     }
 }

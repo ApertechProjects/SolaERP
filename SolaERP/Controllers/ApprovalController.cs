@@ -7,7 +7,7 @@ namespace SolaERP.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     //[Authorize]
-    public class ApprovalController : ControllerBase
+    public class ApprovalController : CustomBaseController
     {
         public ApprovalController(ConfHelper confHelper)
         {
