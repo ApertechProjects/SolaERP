@@ -85,16 +85,6 @@ namespace SolaERP.Application.Services
             return result;
         }
 
-        public Task<ApiResponse<List<RequestMainWithDetailsDto>>> GetAllMainRequetsWithDetails()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ApiResponse<RequestMainWithDetailsDto>> GetRequetsMainWithDetailsById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(RequestWFAGetParametersDto requestWFAGetParametersDto)
         {
             var mainRequest = await _requestMainRepository.GetWaitingForApprovalsAsync(requestWFAGetParametersDto.UserId, requestWFAGetParametersDto.BusinessUnitId, requestWFAGetParametersDto.DateFrom, requestWFAGetParametersDto.DateTo, requestWFAGetParametersDto.ItemCode);
@@ -104,6 +94,14 @@ namespace SolaERP.Application.Services
                 return ApiResponse<List<RequestWFADto>>.Success(mainRequestDto, 200);
 
             return ApiResponse<List<RequestWFADto>>.Fail("Bad Request", 404);
+        }
+
+        public async Task<ApiResponse<RequestMainWithDetailsDto>> GetRequestByRequestMainId(int requestMainId)
+        {
+            var request = await _requestMainRepository.GetRequestByRequestMainId(requestMainId);
+            var requestDto = _mapper.Map<RequestMainWithDetailsDto>(requestMainId);
+
+            return ApiResponse<RequestMainWithDetailsDto>.Success(requestDto, 200);
         }
     }
 }

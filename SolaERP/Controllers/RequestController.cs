@@ -34,5 +34,11 @@ namespace SolaERP.Controllers
         {
             return CreateActionResult(await _requestService.GetWaitingForApprovalsAsync(requestWFAGetParametersDto));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> GetRequestByRequestMainId(int requestMainId)
+        {
+            return CreateActionResult(await _requestService.GetRequestByRequestMainId(requestMainId));
+        }
     }
 }

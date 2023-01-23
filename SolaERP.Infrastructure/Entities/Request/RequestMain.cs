@@ -22,6 +22,6 @@
         public decimal LogisticTotal { get; set; }
         public string ApproveStatus { get; set; }
 
-        public RequestDetail Deta { get; set; }
+        public List<RequestDetail> Details { get; set; }
     }
 }
