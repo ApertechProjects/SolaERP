@@ -46,7 +46,24 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         private RequestMain GetRequestMainFromReader(DbDataReader reader)
         {
-            throw new NotImplementedException();
+            return new RequestMain
+            {
+                RequestMainId = reader.Get<int>("RequestMainId"),
+                Status = reader.Get<int>("Status"),
+                BusinessUnitId = reader.Get<int>("BusinessUnitId"),
+                RowNum = reader.Get<int>("RowNum"),
+                RequestTypeId = reader.Get<int>("RequestType"),
+                RequestNo = reader.Get<string>("RequestNo"),
+                EntryDate = reader.Get<DateTime>("EntryDate"),
+                RequestDate = reader.Get<DateTime>("RequestDate"),
+                RequsetDeadline = reader.Get<DateTime>("RequestDeadline"),
+                Buyer = reader.Get<string>("Buyer"),
+                Requester = reader.Get<int>("Requester"),
+                RequestComment = reader.Get<string>("RequestComment"),
+                OperatorComment = reader.Get<string>("OperatorComment"),
+                QualityRequired = reader.Get<string>("QualityRequired"),
+                ApproveStatus = reader.Get<string>("ApproveStatus"),
+            };
         }
 
         public async Task<int> DeleteAsync(int Id)
