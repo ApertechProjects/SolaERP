@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Request;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.ViewModels;
 
 namespace SolaERP.Controllers
 {
-    [Route("/[action]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class RequestController : CustomBaseController
     {
