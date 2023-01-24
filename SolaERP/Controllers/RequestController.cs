@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Request;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.ViewModels;
 
 namespace SolaERP.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("/[action]")]
     [ApiController]
     public class RequestController : CustomBaseController
     {
@@ -18,10 +16,24 @@ namespace SolaERP.Controllers
         }
 
         [HttpPost]
-        public async Task<ApiResponse<List<RequestMainDto>>> GetAllMainRequest(RequestMainGetParametersDto requestMainParameters)
-        {
-            return await _requestService.GetAllAsync(requestMainParameters);
-        }
+        public async Task<IActionResult> GetAllMainRequestAsync(RequestMainGetParametersDto requestMainParameters)
+            => CreateActionResult(await _requestService.GetAllAsync(requestMainParameters));
+
+        [HttpPost]
+        public async Task<IActionResult> SaveRequestAsync(RequestMainDto requestMainDto)
+        => CreateActionResult(await _requestService.AddOrUpdateAsync(requestMainDto));
+
+        [HttpGet("{businessUnitId}")]
+        public async Task<IActionResult> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId)
+            => CreateActionResult(await _requestService.GetRequestTypesByBusinessUnitIdAsync(businessUnitId));
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeRequestStatusAsync(List<RequestChangeStatusParametersDto> requestChangeStatusParametersDtos)
+            => CreateActionResult(await _requestService.ChangeRequestStatus(requestChangeStatusParametersDtos));
+
+        [HttpPost]
+        public async Task<IActionResult> GetApproveAmendmentRequestsAsync(RequestApproveAmendmentGetParametersDto requestParametersDto)
+            => CreateActionResult(await _requestService.GetApproveAmendmentRequests(requestParametersDto));
 
         [HttpPost]
         public async Task<ApiResponse<RequestSaveVM>> SaveRequest(RequestSaveVM requestSaveVM)
@@ -42,3 +54,4 @@ namespace SolaERP.Controllers
         }
     }
 }
+

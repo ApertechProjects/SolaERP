@@ -1,6 +1,7 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.BusinessUnits;
+using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.Enums;
 using SolaERP.Infrastructure.UnitOfWork;
@@ -37,13 +38,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 List<RequestMain> mainRequests = new List<RequestMain>();
                 while (reader.Read())
                 {
-                    mainRequests.Add(GetAllFromReader(reader));
+                    mainRequests.Add(GetRequestMainFromReader(reader));
                 }
                 return mainRequests;
             }
         }
-
-
 
         public async Task<int> DeleteAsync(int Id)
         {
@@ -60,7 +59,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return returnValue != DBNull.Value && returnValue != null ? Convert.ToInt32(returnValue) : 0;
             }
         }
-
 
         public async Task<int> AddOrUpdateAsync(RequestMain entity)
         {
@@ -90,7 +88,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@OperatorComment", entity.OperatorComment);
                 command.Parameters.AddWithValue(command, "@QualityRequired", entity.QualityRequired);
                 command.Parameters.AddWithValue(command, "@CurrencyCode", entity.CurrencyCode);
-                command.Parameters.AddWithValue(command, "@LogisticTotal", entity.LogisticTotal);
+                command.Parameters.AddWithValue(command, "@LogisticTotal", entity.LogisticsTotal);
 
                 command.Parameters.Add("@NewRequestMainId", SqlDbType.Int);
                 command.Parameters["@NewRequestMainId"].Direction = ParameterDirection.Output;
@@ -102,7 +100,76 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        private RequestMain GetAllFromReader(IDataReader reader)
+        public async Task<List<RequestTypes>> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec SP_RequestTypesByBuId @BusinessUnitId";
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                List<RequestTypes> requestTypes = new List<RequestTypes>();
+
+                while (reader.Read())
+                    requestTypes.Add(reader.GetByEntityStructure<RequestTypes>());
+
+                return requestTypes;
+            }
+
+        }
+
+        public async Task<bool> ChangeRequestStatusAsync(RequestChangeStatusParametersDto changeStatusParametersDto)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RequestMain_IUD @RequestMainId,@RequestDetailId,@UserId,@Sequence,@Status,@ApproveStatus,@Comment";
+
+                command.Parameters.AddWithValue(command, "@RequestMainId", changeStatusParametersDto.RequestMainId);
+                command.Parameters.AddWithValue(command, "@RequestDetailId", changeStatusParametersDto.RequestDetailId);
+                command.Parameters.AddWithValue(command, "@UserId", changeStatusParametersDto.UserId);
+                command.Parameters.AddWithValue(command, "@Sequence", changeStatusParametersDto.Sequence);
+                command.Parameters.AddWithValue(command, "@Status", changeStatusParametersDto.Status);
+                command.Parameters.AddWithValue(command, "@Comment", changeStatusParametersDto.Comment);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<List<RequestMainDraft>> GetAllMainRequestDraftsAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RequestMainDrafts @BusinessUnitId,@ItemCode,@DateFrom,@DateTo";
+
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+                command.Parameters.AddWithValue(command, "@ItemCode", itemCode);
+                command.Parameters.AddWithValue(command, "@DateFrom", dateFrom);
+                command.Parameters.AddWithValue(command, "DateTo", dateTo);
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                List<RequestMainDraft> mainDrafts = new List<RequestMainDraft>();
+                while (reader.Read())
+                    mainDrafts.Add(GetMainDraftFromReader(reader));
+
+                return mainDrafts;
+            }
+        }
+
+        public async Task<bool> SendRequestToApproveAsync(int userId, int requestMainId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RequestSendToApprove @UserId,@RequestMainId";
+
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        private RequestMain GetFromReader(IDataReader reader)
         {
             return new RequestMain
             {
@@ -122,115 +189,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 QualityRequired = reader.Get<string>("QualityRequired"),
                 ApproveStatus = reader.Get<string>("ApproveStatus"),
             };
-        }
-
-        private RequestDetail GetAllDetailsFromReader(IDataReader reader)
-        {
-            return new RequestDetail
-            {
-                RequestMainId = reader.Get<int>("RequestMainId"),
-                AccountCode = reader.Get<string>("AccountCode"),
-                Amount = reader.Get<decimal>("Amount"),
-                AvailableQuantity = reader.Get<decimal>("AvailableQuantity"),
-                Buyer = reader.Get<string>("Buyer"),
-                ConnectedOrderLineNo = reader.Get<decimal>("ConnectedOrderLineNo"),
-                ConnectedOrderReference = reader.Get<string>("ConnectedOrderReference"),
-                Description = reader.Get<string>("Description"),
-                ItemCode = reader.Get<string>("ItemCode"),
-                LineNo = reader.Get<int>("LineNo"),
-                Location = reader.Get<string>("Location"),
-                OriginalQuantity = reader.Get<decimal>("OriginalQuantity"),
-                Quantity = reader.Get<decimal>("Quantity"),
-                QuantityFromStock = reader.Get<decimal>("QuantityFromStock"),
-                RemainingBudget = reader.Get<decimal>("RemainingBudget"),
-                RequestDate = reader.Get<DateTime>("RequestDate"),
-                RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
-                RequestDetailId = reader.Get<int>("RequestDetailId"),
-                RequestedDate = reader.Get<DateTime>("RequestedDate"),
-                TotalBudget = reader.Get<decimal>("TotalBudget"),
-                UOM = reader.Get<string>("UOM"),
-            };
-        }
-
-        private RequestMain GetWaitingForApprovalFromReader(IDataReader reader)
-        {
-            return new RequestMain
-            {
-                RequestMainId = reader.Get<int>("RequestMainId"),
-                BusinessUnitId = reader.Get<int>("BusinessUnitId"),
-                RequestTypeId = reader.Get<int>("RequestType"),
-                RequestNo = reader.Get<string>("RequestNo"),
-                EntryDate = reader.Get<DateTime>("EntryDate"),
-                RequestDate = reader.Get<DateTime>("RequestDate"),
-                RequsetDeadline = reader.Get<DateTime>("RequestDeadline"),
-                UserId = reader.Get<int>("UserId"),
-                Requester = reader.Get<int>("Requester"),
-                Status = reader.Get<int>("Status"),
-                SupplierCode = reader.Get<string>("SupplierCode"),
-                RequestComment = reader.Get<string>("RequestComment"),
-                OperatorComment = reader.Get<string>("OperatorComment"),
-                QualityRequired = reader.Get<string>("QualityRequired"),
-                CurrencyCode = reader.Get<string>("CurrencyCode"),
-                LogisticTotal = reader.Get<decimal>("LogisticTotal"),
-            };
-        }
-
-        public async Task<List<RequestMain>> GetWaitingForApprovalsAsync(int userId, int businessUnitId, DateTime dateFrom, DateTime dateTo, string itemCode)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "EXEC SP_RequestMainWFA @UserId,@BusinessUnitId,@DateFrom,@DateTo,@ItemCode";
-
-                command.Parameters.AddWithValue(command, "@UserId", itemCode);
-                command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
-                command.Parameters.AddWithValue(command, "@DateFrom", dateFrom);
-                command.Parameters.AddWithValue(command, "DateTo", dateTo);
-                command.Parameters.AddWithValue(command, "@ItemCode", itemCode);
-
-                using var reader = await command.ExecuteReaderAsync();
-
-                List<RequestMain> mainRequests = new List<RequestMain>();
-                while (reader.Read())
-                {
-                    mainRequests.Add(GetWaitingForApprovalFromReader(reader));
-                }
-                return mainRequests;
-            }
-        }
-
-        public async Task<RequestMain> GetRequestByRequestMainId(int requestMainId)
-        {
-            List<RequestDetail> requestDetails = new List<RequestDetail>();
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "Select * from Procurement.RequestDetails where RequestMainId = @Id";
-
-                command.Parameters.AddWithValue(command, "@Id", requestMainId);
-
-                using var reader = await command.ExecuteReaderAsync();
-
-                while (reader.Read())
-                {
-                    requestDetails.Add(GetAllDetailsFromReader(reader));
-                }
-            }
-
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "Select * from Procurement.RequestMain where RequestMainId = @Id";
-
-                command.Parameters.AddWithValue(command, "@Id", requestMainId);
-
-                using var reader = await command.ExecuteReaderAsync();
-
-                RequestMain mainRequests = new RequestMain();
-                while (reader.Read())
-                {
-                    mainRequests = GetAllFromReader(reader);
-                }
-                mainRequests.Details = requestDetails;
-                return mainRequests;
-            }
         }
     }
 }

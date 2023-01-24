@@ -1,4 +1,10 @@
-﻿using SolaERP.Infrastructure.Entities.Request;
+﻿using SolaERP.Infrastructure.Dtos.Request;
+using SolaERP.Infrastructure.Entities.Request;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SolaERP.Infrastructure.Contracts.Repositories
 {

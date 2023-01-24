@@ -4,6 +4,7 @@ using SolaERP.Infrastructure.Dtos.ApproveStage;
 using SolaERP.Infrastructure.Dtos.ApproveStages;
 using SolaERP.Infrastructure.Dtos.BusinessUnit;
 using SolaERP.Infrastructure.Dtos.Group;
+using SolaERP.Infrastructure.Dtos.LogInfo;
 using SolaERP.Infrastructure.Dtos.Menu;
 using SolaERP.Infrastructure.Dtos.Procedure;
 using SolaERP.Infrastructure.Dtos.Request;
@@ -13,6 +14,7 @@ using SolaERP.Infrastructure.Entities.ApproveStage;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Entities.BusinessUnits;
 using SolaERP.Infrastructure.Entities.Groups;
+using SolaERP.Infrastructure.Entities.LogInfo;
 using SolaERP.Infrastructure.Entities.Menu;
 using SolaERP.Infrastructure.Entities.Procedure;
 using SolaERP.Infrastructure.Entities.Request;
@@ -40,6 +42,10 @@ namespace SolaERP.Application.Mappers
             CreateMap<RequestMain, RequestMainDto>().ReverseMap();
             CreateMap<RequestMain, RequestWFADto>().ReverseMap();
             CreateMap<RequestDetail, RequestDetailDto>().ReverseMap();
+            CreateMap<RequestMain, RequestApproveAmendmentDto>().ReverseMap();
+            CreateMap<RequestTypes, RequestTypesDto>().ReverseMap();
+            CreateMap<RequestMainDraftDto, RequestMainDraft>().ReverseMap();
+            CreateMap<LogInfo, LogInfoDto>().ReverseMap();
         }
     }
 }

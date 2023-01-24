@@ -8,8 +8,11 @@
 
   <ItemGroup>
     <Compile Remove="Entities\ApproveStage\**" />
+    <Compile Remove="Entities\Log\**" />
     <EmbeddedResource Remove="Entities\ApproveStage\**" />
+    <EmbeddedResource Remove="Entities\Log\**" />
     <None Remove="Entities\ApproveStage\**" />
+    <None Remove="Entities\Log\**" />
   </ItemGroup>
 
   <ItemGroup>
