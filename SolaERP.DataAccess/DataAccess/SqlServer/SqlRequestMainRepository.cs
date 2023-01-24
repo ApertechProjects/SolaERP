@@ -180,7 +180,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         private RequestMainDraft GetMainDraftFromReader(DbDataReader reader)
         {
-            throw new NotImplementedException();
+            return new RequestMainDraft()
+            {
+                RequestMainId = reader.Get<int>("RequestMainId"),
+                BusinessUnitCode = reader.Get<string>("BusinessunitCode"),
+                RowNum = reader.Get<int>("RowNum"),
+                RequestType = reader.Get<string>("RequestType"),
+                RequetsNo = reader.Get<int>("RequestNo"),
+                EntryDate = reader.Get<DateTime>("EntrDate"),
+                RequestDate = reader.Get<DateTime>("RequestDate"),
+                RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
+                Buyer = reader.Get<string>("Buyer"),
+                Requester = reader.Get<string>("Requester"),
+                RequestComment = reader.Get<string>("RequestComment"),
+                OperatorComment = reader.Get<string>("OperatorComment"),
+                QualityRequired = reader.Get<string>("QualitiyRequired"),
+                ApproveStatus = reader.Get<string>("ApproveStatus")
+            };
         }
 
         public async Task<bool> SendRequestToApproveAsync(int userId, int requestMainId)
