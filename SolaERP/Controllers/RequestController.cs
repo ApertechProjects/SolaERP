@@ -22,7 +22,7 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _requestService.GetAllAsync(requestMainParameters));
 
         [HttpPost]
-        public async Task<IActionResult> SaveRequestAsync(RequestMainDto requestMainDto)
+        public async Task<IActionResult> SaveRequestAsync(RequestMainWithDetailsDto requestMainDto)
         => CreateActionResult(await _requestService.AddOrUpdateAsync(requestMainDto));
 
         [HttpGet("{businessUnitId}")]
@@ -37,15 +37,11 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetApproveAmendmentRequestsAsync(RequestApproveAmendmentGetParametersDto requestParametersDto)
             => CreateActionResult(await _requestService.GetApproveAmendmentRequests(requestParametersDto));
 
-        [HttpPost]
-        public async Task<IActionResult> SaveRequest(RequestMainDto requestMain)
-             => CreateActionResult(await _requestService.AddOrUpdateAsync(requestMain));
-
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> GetWaitingForApprovalsRequest(RequestWFAGetParametersDto requestWFAGetParametersDto)
             => CreateActionResult(await _requestService.GetWaitingForApprovalsAsync(requestWFAGetParametersDto));
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> GetRequestByRequestMainId(int requestMainId)
              => CreateActionResult(await _requestService.GetRequestByRequestMainId(requestMainId));
     }

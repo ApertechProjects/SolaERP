@@ -5,6 +5,6 @@ namespace SolaERP.Infrastructure.Contracts.Common
 {
     public interface IReturnableServiceMethodAsync<T>
     {
-        public Task<ApiResponse<RequestMainDto>> AddOrUpdateAsync(T requestMainDto);
+        public Task<ApiResponse<RequestMainWithDetailsDto>> AddOrUpdateAsync(T requestMainDto);
     }
 }

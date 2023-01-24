@@ -61,15 +61,15 @@ namespace SolaERP.Application.Services
                 ApiResponse<List<RequestTypesDto>>.Fail("Request types not found", 404);
         }
 
-        public async Task<ApiResponse<RequestMainDto>> AddOrUpdateAsync(RequestMainDto requestMainDto)
+        public async Task<ApiResponse<RequestMainWithDetailsDto>> AddOrUpdateAsync(RequestMainWithDetailsDto requestMainDto)
         {
             var mainId = await _requestMainRepository.AddOrUpdateAsync(_mapper.Map<RequestMain>(requestMainDto));
 
             if (mainId != 0)
             {
-                for (int i = 0; i < requestMainDto.RequestDetailDtos.Count; i++)
+                for (int i = 0; i < requestMainDto.Details.Count; i++)
                 {
-                    var requestDetailDto = requestMainDto.RequestDetailDtos[i];
+                    var requestDetailDto = requestMainDto.Details[i];
                     requestDetailDto.RequestMainId = mainId;
                     if (requestDetailDto.Type == "remove")
                     {
@@ -80,9 +80,9 @@ namespace SolaERP.Application.Services
                         await SaveRequestDetailsAsync(requestDetailDto);
                     }
                 }
-                return ApiResponse<RequestMainDto>.Success(requestMainDto, 200);
+                return ApiResponse<RequestMainWithDetailsDto>.Success(requestMainDto, 200);
             }
-            return ApiResponse<RequestMainDto>.Fail("Not Found", 404);
+            return ApiResponse<RequestMainWithDetailsDto>.Fail("Not Found", 404);
         }
 
         public async Task<ApiResponse<bool>> ChangeRequestStatus(List<RequestChangeStatusParametersDto> changeStatusParametersDtos)
@@ -120,8 +120,10 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<RequestMainWithDetailsDto>> GetRequestByRequestMainId(int requestMainId)
         {
-            var request = await _requestMainRepository.GetRequestByRequestMainId(requestMainId);
-            var requestDto = _mapper.Map<RequestMainWithDetailsDto>(requestMainId);
+            var requestMain = await _requestMainRepository.GetRequestByRequestMainIAsync(requestMainId);
+            requestMain.Details = await _requestDetailRepository.GetAllDetailsByRequestMainIdAsync(requestMainId);
+
+            var requestDto = _mapper.Map<RequestMainWithDetailsDto>(requestMain);
 
             return ApiResponse<RequestMainWithDetailsDto>.Success(requestDto, 200);
         }

@@ -5,7 +5,7 @@ using SolaERP.Infrastructure.ViewModels;
 
 namespace SolaERP.Infrastructure.Contracts.Services
 {
-    public interface IRequestService : IDeleteableAsync, IReturnableServiceMethodAsync<RequestMainDto>
+    public interface IRequestService : IDeleteableAsync, IReturnableServiceMethodAsync<RequestMainWithDetailsDto>
     {
         Task<ApiResponse<List<RequestMainDto>>> GetAllAsync(RequestMainGetParametersDto requestMainGet);
         Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(RequestWFAGetParametersDto requestWFAGetParametersDto);
