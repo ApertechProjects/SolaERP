@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Request;
+using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.ViewModels;
 
 namespace SolaERP.Controllers
 {
@@ -36,22 +38,16 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _requestService.GetApproveAmendmentRequests(requestParametersDto));
 
         [HttpPost]
-        public async Task<ApiResponse<RequestSaveVM>> SaveRequest(RequestSaveVM requestSaveVM)
-        {
-            return await _requestService.SaveRequest(requestSaveVM);
-        }
+        public async Task<IActionResult> SaveRequest(RequestMainDto requestMain)
+             => CreateActionResult(await _requestService.AddOrUpdateAsync(requestMain));
 
         [HttpPost]
         public async Task<IActionResult> GetWaitingForApprovalsRequest(RequestWFAGetParametersDto requestWFAGetParametersDto)
-        {
-            return CreateActionResult(await _requestService.GetWaitingForApprovalsAsync(requestWFAGetParametersDto));
-        }
+            => CreateActionResult(await _requestService.GetWaitingForApprovalsAsync(requestWFAGetParametersDto));
 
         [HttpPost]
         public async Task<IActionResult> GetRequestByRequestMainId(int requestMainId)
-        {
-            return CreateActionResult(await _requestService.GetRequestByRequestMainId(requestMainId));
-        }
+             => CreateActionResult(await _requestService.GetRequestByRequestMainId(requestMainId));
     }
 }
 

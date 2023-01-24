@@ -44,6 +44,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        private RequestMain GetRequestMainFromReader(DbDataReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<int> DeleteAsync(int Id)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
@@ -156,6 +161,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        private RequestMainDraft GetMainDraftFromReader(DbDataReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<bool> SendRequestToApproveAsync(int userId, int requestMainId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -189,6 +199,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 QualityRequired = reader.Get<string>("QualityRequired"),
                 ApproveStatus = reader.Get<string>("ApproveStatus"),
             };
+        }
+
+        public Task<RequestMain> GetRequestByRequestMainId(int requestMainId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<RequestMain>> GetWaitingForApprovalsAsync(int userId, int businessUnitId, DateTime dateFrom, DateTime dateTo, string itemCode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<RequestMain>> GetApproveAmendmentRequestsAsync(int userId, RequestApproveAmendmentGetParametersDto requestParametersDto)
+        {
+            throw new NotImplementedException();
         }
     }
 }
