@@ -5,6 +5,7 @@ using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Infrastructure.ViewModels;
 
 namespace SolaERP.Application.Services
 {
@@ -60,15 +61,15 @@ namespace SolaERP.Application.Services
                 ApiResponse<List<RequestTypesDto>>.Fail("Request types not found", 404);
         }
 
-        public async Task<ApiResponse<RequestMainDto>> AddOrUpdateAsync(RequestMainDto requestMainDto)
+        public async Task<ApiResponse<RequestMainWithDetailsDto>> AddOrUpdateAsync(RequestMainWithDetailsDto requestMainDto)
         {
             var mainId = await _requestMainRepository.AddOrUpdateAsync(_mapper.Map<RequestMain>(requestMainDto));
 
             if (mainId != 0)
             {
-                for (int i = 0; i < requestMainDto.RequestDetailDtos.Count; i++)
+                for (int i = 0; i < requestMainDto.Details.Count; i++)
                 {
-                    var requestDetailDto = requestMainDto.RequestDetailDtos[i];
+                    var requestDetailDto = requestMainDto.Details[i];
                     requestDetailDto.RequestMainId = mainId;
                     if (requestDetailDto.Type == "remove")
                     {
@@ -79,9 +80,9 @@ namespace SolaERP.Application.Services
                         await SaveRequestDetailsAsync(requestDetailDto);
                     }
                 }
-                return ApiResponse<RequestMainDto>.Success(requestMainDto, 200);
+                return ApiResponse<RequestMainWithDetailsDto>.Success(requestMainDto, 200);
             }
-            return ApiResponse<RequestMainDto>.Fail("Not Found", 404);
+            return ApiResponse<RequestMainWithDetailsDto>.Fail("Not Found", 404);
         }
 
         public async Task<ApiResponse<bool>> ChangeRequestStatus(List<RequestChangeStatusParametersDto> changeStatusParametersDtos)
@@ -106,14 +107,25 @@ namespace SolaERP.Application.Services
             return result ? ApiResponse<bool>.Success(204) : ApiResponse<bool>.Fail("Requst not approved", 400);
         }
 
-        public Task<ApiResponse<List<RequestMainWithDetailsDto>>> GetAllMainRequetsWithDetails()
+        public async Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(RequestWFAGetParametersDto requestWFAGetParametersDto)
         {
-            throw new NotImplementedException();
+            var mainRequest = await _requestMainRepository.GetWaitingForApprovalsAsync(requestWFAGetParametersDto.UserId, requestWFAGetParametersDto.BusinessUnitId, requestWFAGetParametersDto.DateFrom, requestWFAGetParametersDto.DateTo, requestWFAGetParametersDto.ItemCode);
+            var mainRequestDto = _mapper.Map<List<RequestWFADto>>(mainRequest);
+
+            if (mainRequestDto != null && mainRequestDto.Count > 0)
+                return ApiResponse<List<RequestWFADto>>.Success(mainRequestDto, 200);
+
+            return ApiResponse<List<RequestWFADto>>.Fail("Bad Request", 404);
         }
 
-        public Task<ApiResponse<RequestMainWithDetailsDto>> GetRequetsMainWithDetailsById(int id)
+        public async Task<ApiResponse<RequestMainWithDetailsDto>> GetRequestByRequestMainId(int requestMainId)
         {
-            throw new NotImplementedException();
+            var requestMain = await _requestMainRepository.GetRequestByRequestMainIAsync(requestMainId);
+            requestMain.Details = await _requestDetailRepository.GetAllDetailsByRequestMainIdAsync(requestMainId);
+
+            var requestDto = _mapper.Map<RequestMainWithDetailsDto>(requestMain);
+
+            return ApiResponse<RequestMainWithDetailsDto>.Success(requestDto, 200);
         }
 
         public async Task<ApiResponse<List<RequestMainDraftDto>>> GetAllRequestMainDraftsAsync(RequestMainDraftGetDto getMainDraftParameters)
@@ -138,6 +150,7 @@ namespace SolaERP.Application.Services
 
             return ApiResponse<List<RequestApproveAmendmentDto>>.Fail("Bad Request", 404);
         }
+
     }
 
 }

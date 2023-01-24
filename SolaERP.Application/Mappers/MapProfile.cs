@@ -40,7 +40,10 @@ namespace SolaERP.Application.Mappers
             CreateMap<GroupMenu, GroupMenuDto>().ReverseMap();
             CreateMap<MenuWithPrivilages, GroupMenuWithPrivillageIdListDto>();
             CreateMap<RequestMain, RequestMainDto>().ReverseMap();
+            CreateMap<RequestMain, RequestWFADto>().ReverseMap();
+            CreateMap<RequestMain, RequestMainWithDetailsDto>().ReverseMap();
             CreateMap<RequestMain, RequestApproveAmendmentDto>().ReverseMap();
+            CreateMap<RequestDetail, RequestDetailDto>().ReverseMap();
             CreateMap<RequestTypes, RequestTypesDto>().ReverseMap();
             CreateMap<RequestMainDraftDto, RequestMainDraft>().ReverseMap();
             CreateMap<LogInfo, LogInfoDto>().ReverseMap();

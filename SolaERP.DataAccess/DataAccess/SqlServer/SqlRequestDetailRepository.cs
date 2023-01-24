@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Common;
+using System.Data;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -94,6 +95,53 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public Task<List<RequestDetail>> GetAllAsync()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<RequestDetail>> GetAllDetailsByRequestMainIdAsync(int requestMainId)
+        {
+            List<RequestDetail> requestDetails = new List<RequestDetail>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "Select * from Procurement.RequestDetails where RequestMainId = @Id";
+
+                command.Parameters.AddWithValue(command, "@Id", requestMainId);
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                {
+                    requestDetails.Add(GetAllDetailsFromReader(reader));
+                }
+                return requestDetails;
+            }
+        }
+
+        private RequestDetail GetAllDetailsFromReader(IDataReader reader)
+        {
+            return new RequestDetail
+            {
+                RequestMainId = reader.Get<int>("RequestMainId"),
+                AccountCode = reader.Get<string>("AccountCode"),
+                Amount = reader.Get<decimal>("Amount"),
+                AvailableQuantity = reader.Get<decimal>("AvailableQuantity"),
+                Buyer = reader.Get<string>("Buyer"),
+                ConnectedOrderLineNo = reader.Get<decimal>("ConnectedOrderLineNo"),
+                ConnectedOrderReference = reader.Get<string>("ConnectedOrderReference"),
+                Description = reader.Get<string>("Description"),
+                ItemCode = reader.Get<string>("ItemCode"),
+                LineNo = reader.Get<string>("LineNo"),
+                Location = reader.Get<string>("Location"),
+                OriginalQuantity = reader.Get<decimal>("OriginalQuantity"),
+                Quantity = reader.Get<decimal>("Quantity"),
+                QuantityFromStock = reader.Get<decimal>("QuantityFromStock"),
+                RemainingBudget = reader.Get<decimal>("RemainingBudget"),
+                RequestDate = reader.Get<DateTime>("RequestDate"),
+                RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
+                RequestDetailId = reader.Get<int>("RequestDetailId"),
+                RequestedDate = reader.Get<DateTime>("RequestedDate"),
+                TotalBudget = reader.Get<decimal>("TotalBudget"),
+                UOM = reader.Get<string>("UOM"),
+            };
         }
 
         public Task<RequestDetail> GetByIdAsync(int id)

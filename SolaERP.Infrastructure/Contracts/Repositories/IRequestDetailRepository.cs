@@ -10,5 +10,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
 {
     public interface IRequestDetailRepository : ICrudOperations<RequestDetail>
     {
+        Task<List<RequestDetail>> GetAllDetailsByRequestMainIdAsync(int requestMainId);
     }
 }
