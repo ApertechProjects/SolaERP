@@ -11,6 +11,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        public SqlItemCodeRepository(IUnitOfWork unitOfWork)
+        {
+            this._unitOfWork = unitOfWork;
+        }
+
         public async Task<List<ItemCode>> GetAllAsync()
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)

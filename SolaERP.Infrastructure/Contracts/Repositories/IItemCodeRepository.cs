@@ -5,6 +5,5 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
 {
     public interface IItemCodeRepository : IReadableAsync<ItemCode>
     {
-
     }
 }

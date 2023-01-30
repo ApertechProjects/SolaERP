@@ -21,6 +21,7 @@ using SolaERP.Infrastructure.Entities.Menu;
 using SolaERP.Infrastructure.Entities.Procedure;
 using SolaERP.Infrastructure.Entities.Request;
 
+
 namespace SolaERP.Application.Mappers
 {
     public class MapProfile : Profile
