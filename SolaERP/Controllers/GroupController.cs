@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
 
 namespace SolaERP.Controllers
@@ -8,10 +7,8 @@ namespace SolaERP.Controllers
     public class GroupController : CustomBaseController
     {
         private readonly IGroupService _groupService;
-        private readonly IMapper _mapper;
-        public GroupController(IGroupService groupService, IMapper mapper)
+        public GroupController(IGroupService groupService)
         {
-            _mapper = mapper;
             _groupService = groupService;
         }
 
@@ -20,7 +17,7 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _groupService.GetAllAsync());
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteGroups(int Id)
+        public async Task<IActionResult> DeleteGroup(int Id)
             => CreateActionResult(await _groupService.RemoveAsync(Id));
     }
 }

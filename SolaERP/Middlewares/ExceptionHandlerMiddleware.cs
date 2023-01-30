@@ -7,7 +7,7 @@ namespace SolaERP.Middlewares
 {
     public static class ExceptionHandlerMiddleware
     {
-        public static void UseGlobalExceptionHandlerMiddleware<T>(this IApplicationBuilder app,ILogger<T> _logger)
+        public static void UseGlobalExceptionHandlerMiddleware<T>(this IApplicationBuilder app, ILogger<T> _logger)
         {
             app.UseExceptionHandler(config =>
             {
