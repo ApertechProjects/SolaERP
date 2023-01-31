@@ -1,6 +1,5 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.BusinessUnits;
 using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.Enums;
@@ -30,8 +29,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@ItemCode", itemCode);
                 command.Parameters.AddWithValue(command, "@DateFrom", dateFrom);
                 command.Parameters.AddWithValue(command, "DateTo", dateTo);
-                command.Parameters.AddWithValue(command, "@ApproveStatus", approveStatus);
-                command.Parameters.AddWithValue(command, "@Status", status);
+                command.Parameters.AddWithValue(command, "@ApproveStatus", (byte)approveStatus);
+                command.Parameters.AddWithValue(command, "@Status", (byte)status);
 
                 using var reader = await command.ExecuteReaderAsync();
 
@@ -300,7 +299,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             };
         }
 
-     
+
 
         private RequestMain GetWaitingForApprovalFromReader(IDataReader reader)
         {

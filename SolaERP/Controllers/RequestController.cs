@@ -35,7 +35,7 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetApproveAmendmentRequestsAsync(RequestApproveAmendmentGetParametersDto requestParametersDto)
             => CreateActionResult(await _requestService.GetApproveAmendmentRequests(requestParametersDto));
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetWaitingForApprovalsRequest(RequestWFAGetParametersDto requestWFAGetParametersDto)
             => CreateActionResult(await _requestService.GetWaitingForApprovalsAsync(requestWFAGetParametersDto));
 
