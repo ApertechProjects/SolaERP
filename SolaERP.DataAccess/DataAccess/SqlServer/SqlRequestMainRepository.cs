@@ -261,7 +261,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@UserId", itemCode);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
                 command.Parameters.AddWithValue(command, "@DateFrom", dateFrom);
-                command.Parameters.AddWithValue(command, "DateTo", dateTo);
+                command.Parameters.AddWithValue(command, "@DateTo", dateTo);
                 command.Parameters.AddWithValue(command, "@ItemCode", itemCode);
 
                 using var reader = await command.ExecuteReaderAsync();
@@ -271,6 +271,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 {
                     mainRequests.Add(GetWaitingForApprovalFromReader(reader));
                 }
+                if (mainRequests.Count == 0)
+                    mainRequests.Add(new RequestMain { BusinessUnitId = 0, Buyer = null });
                 return mainRequests;
             }
         }
