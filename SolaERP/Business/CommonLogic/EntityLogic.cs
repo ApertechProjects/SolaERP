@@ -55,7 +55,7 @@ namespace SolaERP.Business.CommonLogic
                     ApproveStages = await GetApproveStage_Lists("VENDR"),
                     VendorDrafts = await GetVendorDraft(userId, BU)
                 };
-                                                                    
+
                 #region Verion 1
                 //if (!vendorList.WFAVendor.Any())
                 //{
@@ -856,6 +856,7 @@ namespace SolaERP.Business.CommonLogic
             if (await UserIsAuthorized(token))
             {
                 int approveStageMainId = saveApprovalStageWrapper.ApproveStageHeader_Load.ApproveStageMainId;
+                int approveStageDetailId = 0;
                 int userId = await GetUserIdByToken(token);
                 await GetData.FromQuery($"exec SP_ApproveStagesMain_IUD " +
                     $"{saveApprovalStageWrapper.ApproveStageHeader_Load.ApproveStageMainId}," +
@@ -888,15 +889,18 @@ namespace SolaERP.Business.CommonLogic
                        , ConfHelper.DevelopmentUrl);
 
 
-                    //for (int j = 0; j < saveApprovalStageWrapper.ApproveStageDetails_Load[i].approvalStageRoles_Loads.Count; j++)
-                    //{
-                    //    await GetData.FromQuery($"exec SP_ApproveStageRoles_ID " +
-                    // $"{approveStageDetailsId}," +
-                    // $"{saveApprovalStageWrapper.ApproveStageDetails_Load[i].approvalStageRoles_Loads[j].ApproveRoleId}," +
-                    // $"'{saveApprovalStageWrapper.ApproveStageDetails_Load[i].approvalStageRoles_Loads[j].AmountFrom}'," +
-                    // $"{saveApprovalStageWrapper.ApproveStageDetails_Load[i].approvalStageRoles_Loads[j].AmountTo}"
-                    //  , ConfHelper.DevelopmentUrl);
-                    //}
+                    if (saveApprovalStageWrapper.ApproveStageHeader_Load.ApproveStageMainId == 0)
+                        approveStageDetailId = await Utility.GetMaxId("Config.ApproveStagesDetail", ConfHelper);
+
+                    for (int j = 0; j < saveApprovalStageWrapper.ApproveStageDetails_Load[i].approvalStageRoles_Loads.Count; j++)
+                    {
+                        await GetData.FromQuery($"exec SP_ApproveStageRoles_ID " +
+                     $"{approveStageDetailId}," +
+                     $"{saveApprovalStageWrapper.ApproveStageDetails_Load[i].approvalStageRoles_Loads[j].ApproveRoleId}," +
+                     $"'{saveApprovalStageWrapper.ApproveStageDetails_Load[i].approvalStageRoles_Loads[j].AmountFrom}'," +
+                     $"{saveApprovalStageWrapper.ApproveStageDetails_Load[i].approvalStageRoles_Loads[j].AmountTo}"
+                      , ConfHelper.DevelopmentUrl);
+                    }
                 }
 
                 return new ApiResult

@@ -39,6 +39,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 {
                     mainRequests.Add(GetRequestMainFromReader(reader));
                 }
+                if (mainRequests.Count == 0)
+                    mainRequests.Add(new RequestMain { BusinessUnitId = 0 });
                 return mainRequests;
             }
         }
@@ -172,7 +174,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 List<RequestMainDraft> mainDrafts = new List<RequestMainDraft>();
                 while (reader.Read())
                     mainDrafts.Add(GetMainDraftFromReader(reader));
-
+                if (mainDrafts.Count == 0)
+                    mainDrafts.Add(new RequestMainDraft { Status = 0 });
                 return mainDrafts;
             }
         }
@@ -272,7 +275,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     mainRequests.Add(GetWaitingForApprovalFromReader(reader));
                 }
                 if (mainRequests.Count == 0)
-                    mainRequests.Add(new RequestMain { BusinessUnitId = 0, Buyer = null });
+                    mainRequests.Add(new RequestMain { BusinessUnitId = 0 });
                 return mainRequests;
             }
         }
