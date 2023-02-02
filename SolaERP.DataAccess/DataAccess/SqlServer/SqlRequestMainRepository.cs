@@ -233,7 +233,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             };
         }
 
-        public async Task<RequestMain> GetRequestByRequestMainIAsync(int requestMainId)
+        public async Task<RequestMain> GetRequestByRequestMainIdAsync(int requestMainId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

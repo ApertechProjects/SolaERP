@@ -16,5 +16,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<List<RequestMainDraftDto>>> GetAllRequestMainDraftsAsync(RequestMainDraftGetDto getMainDraftParameters);
         Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(RequestApproveAmendmentGetParametersDto requestParametersDto);
         Task<ApiResponse<RequestMainWithDetailsDto>> GetRequestByRequestMainId(int requestMainId);
+        Task<ApiResponse<RequestMainWithDetailsDto>> AddOrUpdateAsync(RequestMainWithDetailsDto requestMainDto);
+
     }
 }

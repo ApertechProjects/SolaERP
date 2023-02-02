@@ -119,7 +119,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<RequestMainWithDetailsDto>> GetRequestByRequestMainId(int requestMainId)
         {
-            var requestMain = await _requestMainRepository.GetRequestByRequestMainIAsync(requestMainId);
+            var requestMain = await _requestMainRepository.GetRequestByRequestMainIdAsync(requestMainId);
             requestMain.Details = await _requestDetailRepository.GetAllDetailsByRequestMainIdAsync(requestMainId);
 
             var requestDto = _mapper.Map<RequestMainWithDetailsDto>(requestMain);
