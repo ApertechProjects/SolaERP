@@ -1,7 +1,6 @@
 ﻿using SolaERP.Infrastructure.Contracts.Common;
 using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.ViewModels;
 
 namespace SolaERP.Infrastructure.Contracts.Services
 {
@@ -14,7 +13,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<bool>> ChangeRequestStatus(List<RequestChangeStatusParametersDto> changeStatusParametersDtos);
         Task<ApiResponse<bool>> SendMainToApproveAsync(RequestMainSendToApproveDto sendToApproveModel);
         Task<ApiResponse<List<RequestMainDraftDto>>> GetAllRequestMainDraftsAsync(RequestMainDraftGetDto getMainDraftParameters);
-        Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(RequestApproveAmendmentGetParametersDto requestParametersDto);
+        Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentGetParametersDto requestParametersDto);
         Task<ApiResponse<RequestMainWithDetailsDto>> GetRequestByRequestMainId(int requestMainId);
         Task<ApiResponse<RequestMainWithDetailsDto>> AddOrUpdateAsync(RequestMainWithDetailsDto requestMainDto);
 
