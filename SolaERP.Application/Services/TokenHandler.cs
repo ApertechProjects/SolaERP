@@ -27,7 +27,7 @@ namespace SolaERP.Application.Services
                 SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:SecurityKey"]));
                 SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 
-                token.Expiration = DateTime.Now.AddMinutes(minutes);
+                token.Expiration = DateTime.Now.AddDays(minutes);
                 SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Audience = _configuration["Token:Audience"],
