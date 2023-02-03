@@ -14,6 +14,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<List<RequestMain>> GetWaitingForApprovalsAsync(int userId, int businessUnitId, DateTime dateFrom, DateTime dateTo, string itemCode);
         Task<List<RequestMainDraft>> GetAllMainRequestDraftsAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo);
         Task<bool> SendRequestToApproveAsync(int userId, int requestMainId);
-        Task<List<RequestMain>> GetApproveAmendmentRequestsAsync(int userId, RequestApproveAmendmentGetParametersDto requestParametersDto);
+        Task<List<RequestAmendment>> GetApproveAmendmentRequestsAsync(int userId, RequestApproveAmendmentGetParametersDto requestParametersDto);
     }
 }

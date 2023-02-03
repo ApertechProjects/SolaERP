@@ -45,27 +45,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        private RequestMain GetRequestMainFromReader(DbDataReader reader)
-        {
-            return new RequestMain
-            {
-                RequestMainId = reader.Get<int>("RequestMainId"),
-                Status = reader.Get<int>("Status"),
-                BusinessUnitId = reader.Get<int>("BusinessUnitId"),
-                RowNum = reader.Get<int>("RowNum"),
-                RequestTypeId = reader.Get<int>("RequestType"),
-                RequestNo = reader.Get<string>("RequestNo"),
-                EntryDate = reader.Get<DateTime>("EntryDate"),
-                RequestDate = reader.Get<DateTime>("RequestDate"),
-                RequsetDeadline = reader.Get<DateTime>("RequestDeadline"),
-                Buyer = reader.Get<string>("Buyer"),
-                Requester = reader.Get<int>("Requester"),
-                RequestComment = reader.Get<string>("RequestComment"),
-                OperatorComment = reader.Get<string>("OperatorComment"),
-                QualityRequired = reader.Get<string>("QualityRequired"),
-                ApproveStatus = reader.Get<string>("ApproveStatus"),
-            };
-        }
+
 
         public async Task<int> DeleteAsync(int Id)
         {
@@ -180,26 +160,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        private RequestMainDraft GetMainDraftFromReader(DbDataReader reader)
-        {
-            return new RequestMainDraft()
-            {
-                RequestMainId = reader.Get<int>("RequestMainId"),
-                BusinessUnitCode = reader.Get<string>("BusinessunitCode"),
-                RowNum = reader.Get<int>("RowNum"),
-                RequestType = reader.Get<string>("RequestType"),
-                RequetsNo = reader.Get<int>("RequestNo"),
-                EntryDate = reader.Get<DateTime>("EntrDate"),
-                RequestDate = reader.Get<DateTime>("RequestDate"),
-                RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
-                Buyer = reader.Get<string>("Buyer"),
-                Requester = reader.Get<string>("Requester"),
-                RequestComment = reader.Get<string>("RequestComment"),
-                OperatorComment = reader.Get<string>("OperatorComment"),
-                QualityRequired = reader.Get<string>("QualitiyRequired"),
-                ApproveStatus = reader.Get<string>("ApproveStatus")
-            };
-        }
+
 
         public async Task<bool> SendRequestToApproveAsync(int userId, int requestMainId)
         {
@@ -214,27 +175,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        private RequestMain GetFromReader(IDataReader reader)
-        {
-            return new RequestMain
-            {
-                RequestMainId = reader.Get<int>("RequestMainId"),
-                Status = reader.Get<int>("Status"),
-                BusinessUnitId = reader.Get<int>("BusinessUnitId"),
-                RowNum = reader.Get<int>("RowNum"),
-                RequestTypeId = reader.Get<int>("RequestType"),
-                RequestNo = reader.Get<string>("RequestNo"),
-                EntryDate = reader.Get<DateTime>("EntryDate"),
-                RequestDate = reader.Get<DateTime>("RequestDate"),
-                RequsetDeadline = reader.Get<DateTime>("RequestDeadline"),
-                Buyer = reader.Get<string>("Buyer"),
-                Requester = reader.Get<int>("Requester"),
-                RequestComment = reader.Get<string>("RequestComment"),
-                OperatorComment = reader.Get<string>("OperatorComment"),
-                QualityRequired = reader.Get<string>("QualityRequired"),
-                ApproveStatus = reader.Get<string>("ApproveStatus"),
-            };
-        }
+
+
+
 
         public async Task<RequestMain> GetRequestByRequestMainIdAsync(int requestMainId)
         {
@@ -280,9 +223,31 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public Task<List<RequestMain>> GetApproveAmendmentRequestsAsync(int userId, RequestApproveAmendmentGetParametersDto requestParametersDto)
+        public async Task<List<RequestAmendment>> GetApproveAmendmentRequestsAsync(int userId, RequestApproveAmendmentGetParametersDto requestParametersDto)
         {
-            throw new NotImplementedException();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC dbo.SP_RequestMainApproveAmendment @UserId,@BusinessUnitId,@DateFrom,@DateTo,@ItemCode";
+
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", requestParametersDto.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@DateFrom", requestParametersDto.DateFrom);
+                command.Parameters.AddWithValue(command, "@DateTo", requestParametersDto.DateTo);
+                command.Parameters.AddWithValue(command, "@ItemCode", requestParametersDto.ItemCode);
+
+                List<RequestAmendment> mainRequestsForAmendment = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (await reader.ReadAsync())
+                {
+                    mainRequestsForAmendment.Add(GetRequestAmendmentFromReader(reader));
+                }
+
+                if (mainRequestsForAmendment.Count == 0)
+                    mainRequestsForAmendment.Add(new() { BusinessUnitId = 1, RequestComment = "Tessst", Requester = "ShaSha", RequestMainId = 1, Status = 1 });
+
+                return mainRequestsForAmendment;
+            }
         }
 
         private RequestMain GetAllFromReader(IDataReader reader)
@@ -328,6 +293,96 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 LogisticsTotal = reader.Get<decimal>("LogisticsTotal"),
             };
         }
+
+        private RequestMain GetFromReader(IDataReader reader)
+        {
+            return new RequestMain
+            {
+                RequestMainId = reader.Get<int>("RequestMainId"),
+                Status = reader.Get<int>("Status"),
+                BusinessUnitId = reader.Get<int>("BusinessUnitId"),
+                RowNum = reader.Get<int>("RowNum"),
+                RequestTypeId = reader.Get<int>("RequestType"),
+                RequestNo = reader.Get<string>("RequestNo"),
+                EntryDate = reader.Get<DateTime>("EntryDate"),
+                RequestDate = reader.Get<DateTime>("RequestDate"),
+                RequsetDeadline = reader.Get<DateTime>("RequestDeadline"),
+                Buyer = reader.Get<string>("Buyer"),
+                Requester = reader.Get<int>("Requester"),
+                RequestComment = reader.Get<string>("RequestComment"),
+                OperatorComment = reader.Get<string>("OperatorComment"),
+                QualityRequired = reader.Get<string>("QualityRequired"),
+                ApproveStatus = reader.Get<string>("ApproveStatus"),
+            };
+        }
+
+        private RequestAmendment GetRequestAmendmentFromReader(IDataReader reader)
+        {
+            return new()
+            {
+                RequestMainId = reader.Get<int>("RequestMainId"),
+                BusinessUnitId = reader.Get<int>("BusinessUnitId"),
+                RequetsTypeId = reader.Get<int>("RequetsTypeId"),
+                RequestNo = reader.Get<int>("RequestNo"),
+                EntryDate = reader.Get<DateTime>("EntryDate"),
+                RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
+                UserId = reader.Get<int>("UserId"),
+                Requester = reader.Get<string>("Requester"),
+                Status = reader.Get<int>("Status"),
+                SupplierCode = reader.Get<string>("SupplierCode"),
+                RequestComment = reader.Get<string>("RequestComment"),
+                OperatorComment = reader.Get<string>("OperatorComment"),
+                QualityRequired = reader.Get<string>("QualityRequired"),
+                CurrencyCode = reader.Get<string>("CurrencyCode"),
+                LogisticTotal = reader.Get<int>("LogisticTotal"),
+
+            };
+        }
+
+        private RequestMainDraft GetMainDraftFromReader(DbDataReader reader)
+        {
+            return new RequestMainDraft()
+            {
+                RequestMainId = reader.Get<int>("RequestMainId"),
+                BusinessUnitCode = reader.Get<string>("BusinessunitCode"),
+                RowNum = reader.Get<int>("RowNum"),
+                RequestType = reader.Get<string>("RequestType"),
+                RequetsNo = reader.Get<int>("RequestNo"),
+                EntryDate = reader.Get<DateTime>("EntrDate"),
+                RequestDate = reader.Get<DateTime>("RequestDate"),
+                RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
+                Buyer = reader.Get<string>("Buyer"),
+                Requester = reader.Get<string>("Requester"),
+                RequestComment = reader.Get<string>("RequestComment"),
+                OperatorComment = reader.Get<string>("OperatorComment"),
+                QualityRequired = reader.Get<string>("QualitiyRequired"),
+                ApproveStatus = reader.Get<string>("ApproveStatus")
+            };
+        }
+
+
+        private RequestMain GetRequestMainFromReader(DbDataReader reader)
+        {
+            return new RequestMain
+            {
+                RequestMainId = reader.Get<int>("RequestMainId"),
+                Status = reader.Get<int>("Status"),
+                BusinessUnitId = reader.Get<int>("BusinessUnitId"),
+                RowNum = reader.Get<int>("RowNum"),
+                RequestTypeId = reader.Get<int>("RequestType"),
+                RequestNo = reader.Get<string>("RequestNo"),
+                EntryDate = reader.Get<DateTime>("EntryDate"),
+                RequestDate = reader.Get<DateTime>("RequestDate"),
+                RequsetDeadline = reader.Get<DateTime>("RequestDeadline"),
+                Buyer = reader.Get<string>("Buyer"),
+                Requester = reader.Get<int>("Requester"),
+                RequestComment = reader.Get<string>("RequestComment"),
+                OperatorComment = reader.Get<string>("OperatorComment"),
+                QualityRequired = reader.Get<string>("QualityRequired"),
+                ApproveStatus = reader.Get<string>("ApproveStatus"),
+            };
+        }
+
     }
 
 }

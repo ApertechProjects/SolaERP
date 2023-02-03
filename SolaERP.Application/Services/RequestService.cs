@@ -142,6 +142,7 @@ namespace SolaERP.Application.Services
         {
             var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
             var mainRequest = await _requestMainRepository.GetApproveAmendmentRequestsAsync(userId, requestParametersDto);
+            //var mainRequestDto = _mapper.Map<List<RequestApproveAmendmentDto>>(mainRequest);
             var mainRequestDto = _mapper.Map<List<RequestApproveAmendmentDto>>(mainRequest);
 
             if (mainRequestDto != null && mainRequestDto.Count > 0)
