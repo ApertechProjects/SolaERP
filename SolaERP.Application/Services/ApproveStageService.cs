@@ -128,7 +128,7 @@ namespace SolaERP.Application.Services
                         typeOfRole = approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].Type;
 
                         if (typeOfRole == "remove")
-                            RemoveApproveStageRolesAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].ApproveStageRoleId);
+                            await RemoveApproveStageRolesAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].ApproveStageRoleId);
                         else
                             await SaveApproveStageRolesAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j]);
                     }
@@ -138,5 +138,15 @@ namespace SolaERP.Application.Services
             return ApiResponse<ApprovalStageSaveVM>.Success(approvalStageSaveVM, 200);
         }
 
+        public async Task<ApiResponse<List<ApprovalStatusDto>>> GetApproveStatuses()
+        {
+            var approvalStatuses = await _approveStageMainRepository.GetApprovalStatusList();
+            var approvalStatusDto = _mapper.Map<List<ApprovalStatusDto>>(approvalStatuses);
+
+            if (approvalStatusDto.Any())
+                return ApiResponse<List<ApprovalStatusDto>>.Success(approvalStatusDto, 200);
+
+            return ApiResponse<List<ApprovalStatusDto>>.Fail("Approval statuses is empty", 404);
+        }
     }
 }
