@@ -9,6 +9,6 @@ namespace SolaERP.Infrastructure.Dtos.Request
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
         public ApproveStatuses ApproveStatus { get; set; }
-        public Status Status { get; set; }
+        public Statuss Status { get; set; }
     }
 }

@@ -9,6 +9,7 @@ using SolaERP.Infrastructure.Dtos.LogInfo;
 using SolaERP.Infrastructure.Dtos.Menu;
 using SolaERP.Infrastructure.Dtos.Procedure;
 using SolaERP.Infrastructure.Dtos.Request;
+using SolaERP.Infrastructure.Dtos.Status;
 using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.ApproveRole;
 using SolaERP.Infrastructure.Entities.ApproveStage;
@@ -20,7 +21,7 @@ using SolaERP.Infrastructure.Entities.LogInfo;
 using SolaERP.Infrastructure.Entities.Menu;
 using SolaERP.Infrastructure.Entities.Procedure;
 using SolaERP.Infrastructure.Entities.Request;
-
+using SolaERP.Infrastructure.Entities.Status;
 
 namespace SolaERP.Application.Mappers
 {
@@ -51,6 +52,7 @@ namespace SolaERP.Application.Mappers
             CreateMap<RequestMainDraftDto, RequestMainDraft>().ReverseMap();
             CreateMap<LogInfo, LogInfoDto>().ReverseMap();
             CreateMap<ItemCode, ItemCodeDto>().ReverseMap();
+            CreateMap<Status, StatusDto>().ReverseMap();
         }
     }
 }

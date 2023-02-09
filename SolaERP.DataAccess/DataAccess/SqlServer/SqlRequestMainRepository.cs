@@ -19,7 +19,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
-        public async Task<List<RequestMain>> GetAllAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo, ApproveStatuses approveStatus, Status status)
+        public async Task<List<RequestMain>> GetAllAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo, ApproveStatuses approveStatus, Statuss status)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

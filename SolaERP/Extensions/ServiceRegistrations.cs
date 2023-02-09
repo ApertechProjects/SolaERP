@@ -43,6 +43,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IMailService, MailService>();
             builder.Services.AddScoped<IItemService, ItemService>();
             builder.Services.AddScoped<ILogInformationService, LogInformationService>();
+            builder.Services.AddScoped<IStatusService, StatusService>();
         }
         private static void UseRepositories(this WebApplicationBuilder builder)
         {
@@ -59,6 +60,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IRequestDetailRepository, SqlRequestDetailRepository>();
             builder.Services.AddScoped<ILogInformationRepository, SqlLogInformationRepository>();
             builder.Services.AddScoped<IItemCodeRepository, SqlItemCodeRepository>();
+            builder.Services.AddScoped<IStatusRepository, SqlStatusRepository>();
         }
         public static void UseValidationExtension(this WebApplicationBuilder builder)
         {
