@@ -106,9 +106,10 @@ namespace SolaERP.Application.Services
             return result ? ApiResponse<bool>.Success(204) : ApiResponse<bool>.Fail("Requst not approved", 400);
         }
 
-        public async Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(RequestWFAGetParametersDto requestWFAGetParametersDto)
+        public async Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(string finderToken, RequestWFAGetParametersDto requestWFAGetParametersDto)
         {
-            var mainRequest = await _requestMainRepository.GetWaitingForApprovalsAsync(requestWFAGetParametersDto.UserId, requestWFAGetParametersDto.BusinessUnitId, requestWFAGetParametersDto.DateFrom, requestWFAGetParametersDto.DateTo, requestWFAGetParametersDto.ItemCode);
+            int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            var mainRequest = await _requestMainRepository.GetWaitingForApprovalsAsync(userId, requestWFAGetParametersDto.BusinessUnitId, requestWFAGetParametersDto.DateFrom, requestWFAGetParametersDto.DateTo, requestWFAGetParametersDto.ItemCode);
             var mainRequestDto = _mapper.Map<List<RequestWFADto>>(mainRequest);
 
             if (mainRequestDto != null && mainRequestDto.Count > 0)
@@ -142,7 +143,6 @@ namespace SolaERP.Application.Services
         {
             var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
             var mainRequest = await _requestMainRepository.GetApproveAmendmentRequestsAsync(userId, requestParametersDto);
-            //var mainRequestDto = _mapper.Map<List<RequestApproveAmendmentDto>>(mainRequest);
             var mainRequestDto = _mapper.Map<List<RequestApproveAmendmentDto>>(mainRequest);
 
             if (mainRequestDto != null && mainRequestDto.Count > 0)

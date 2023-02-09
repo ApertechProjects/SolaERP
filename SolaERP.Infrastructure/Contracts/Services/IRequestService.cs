@@ -7,7 +7,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
     public interface IRequestService : IDeleteableAsync, IReturnableServiceMethodAsync<RequestMainWithDetailsDto>
     {
         Task<ApiResponse<List<RequestMainDto>>> GetAllAsync(RequestMainGetParametersDto requestMainGet);
-        Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(RequestWFAGetParametersDto requestWFAGetParametersDto);
+        Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(string finderToken, RequestWFAGetParametersDto requestWFAGetParametersDto);
         Task<bool> RemoveRequestDetailAsync(RequestDetailDto requestDetailDto);
         Task<ApiResponse<List<RequestTypesDto>>> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId);
         Task<ApiResponse<bool>> ChangeRequestStatus(List<RequestChangeStatusParametersDto> changeStatusParametersDtos);
