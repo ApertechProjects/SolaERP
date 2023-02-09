@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Auth;
-using SolaERP.Infrastructure.Services;
+using SolaERP.Infrastructure.Dtos.UserDto;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
+
 
 namespace SolaERP.Application.Services
 {
@@ -16,22 +19,24 @@ namespace SolaERP.Application.Services
             _configuration = configuration;
         }
 
-        public async Task<Token> GenerateJwtTokenAsync(int days)
+        public async Task<Token> GenerateJwtTokenAsync(int minutes, UserDto user)
         {
-            Token token = new Token();
-            return await Task.Run(() =>
+            Token result = await Task.Run(async () =>
             {
+                Token token = new Token();
                 SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:SecurityKey"]));
                 SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 
-                token.Expiration = DateTime.Now.AddDays(days);
+                token.Expiration = DateTime.Now.AddDays(minutes);
                 SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Audience = _configuration["Token:Audience"],
                     Issuer = _configuration["Token:Issuer"],
                     Expires = token.Expiration,
                     NotBefore = DateTime.UtcNow,
-                    SigningCredentials = signingCredentials,
+                    Subject = new ClaimsIdentity(await GetUserClaimsAsync(user)),
+                    SigningCredentials = signingCredentials
+
                 };
 
                 JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
@@ -41,6 +46,25 @@ namespace SolaERP.Application.Services
 
                 return token;
             });
+            return result;
         }
+
+        public async Task<List<Claim>> GetUserClaimsAsync(UserDto user)
+        {
+            var claims = await Task.Run(() =>
+            {
+                var value = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name,user.Id.ToString()),
+                    new Claim(ClaimTypes.Email,user.Email),
+                    new Claim(ClaimTypes.NameIdentifier,user.Id.ToString())
+                };
+                return value;
+            });
+
+            return claims;
+        }
+
+
     }
 }

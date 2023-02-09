@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SolaERP.Business.CommonLogic;
 using SolaERP.Business.Models;
 
@@ -7,8 +6,8 @@ namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
-    public class ApprovalController : ControllerBase
+    //[Authorize]
+    public class ApprovalController : CustomBaseController
     {
         public ApprovalController(ConfHelper confHelper)
         {
@@ -24,13 +23,13 @@ namespace SolaERP.Controllers
         }
 
         [HttpGet("{buId}")]
-        public async Task<ApiResult> GetApprovalStageLoad([FromHeader] string token, int buId)
+        public async Task<ApiResult> GetApprovalStageLoad([FromHeader] string token, int buId) //start
         {
             return await new EntityLogic(ConfHelper).GetApprovalStageLoad(token, buId);
         }
 
         [HttpGet("{approvalStageMainId}")]
-        public async Task<ApiResult> GetApprovalStageHeaderLoad([FromHeader] string token, int approvalStageMainId)
+        public async Task<ApiResult> GetApprovalStageHeaderLoad([FromHeader] string token, int approvalStageMainId) // start
         {
             return await new EntityLogic(ConfHelper).GetApprovalStageHeaderLoad(token, approvalStageMainId);
         }

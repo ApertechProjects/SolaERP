@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DataAccess\EmailServer\**" />
+    <EmbeddedResource Remove="DataAccess\EmailServer\**" />
+    <None Remove="DataAccess\EmailServer\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
 

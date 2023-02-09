@@ -1,38 +1,68 @@
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.OpenApi.Models;
-using SolaERP.Application.Identity_Server;
+using Serilog;
 using SolaERP.Application.Mappers;
-using SolaERP.Application.Services;
+using SolaERP.Application.Validations;
 using SolaERP.Business.Models;
 using SolaERP.Extensions;
-using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Services;
+using SolaERP.Middlewares;
+using SolaERP.SignalR.Hubs;
+using System.Security.Claims;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddControllers(options => { options.Filters.Add(new ValidationFilter()); })
+.AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    //This code ignores circular referanced object when they serialized to jsonfile 
+}).Services
+.AddFluentValidationAutoValidation()
+.AddFluentValidationClientsideAdapters();
 
-builder.Services.AddControllers();
+builder.UseIdentityService();
+builder.UseDataAccesServices();
+builder.UseValidationExtension();
 
-builder.Services.AddIdentity<User, Role>().AddDefaultTokenProviders();
-builder.Services.AddTransient<ITokenHandler, JwtTokenHandler>();
-builder.Services.AddSingleton<IUserStore<User>, UserStore>();
-builder.Services.AddSingleton<IRoleStore<Role>, RoleStore>();
-builder.Services.AddSingleton<IPasswordHasher<User>, CustomPasswordHasher>();
 builder.Services.AddEndpointsApiExplorer();
-builder.UseSqlDataAccessServices();
 builder.Services.AddAutoMapper(typeof(MapProfile));
+builder.Services.Configure<ApiBehaviorOptions>(config => { config.SuppressModelStateInvalidFilter = true; });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy",
+        corsBuilder => corsBuilder.WithOrigins(builder.Configuration["Cors:Origins"])
+         .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowAnyOrigin()
+        .Build());
+});
 
+var logger = new LoggerConfiguration().WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"), "logs").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
+builder.Services.Configure<HubOptions<ChatHub>>(config =>
+{
+    config.ClientTimeoutInterval = TimeSpan.FromMinutes(30);
+    config.KeepAliveInterval = TimeSpan.FromMinutes(30);
+
+});
+
+builder.Host.UseSerilog(logger);
 
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
- .AddJwtBearer(options =>
+    .AddCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/Login";
+})
+    .AddJwtBearer(options =>
  {
      options.RequireHttpsMetadata = false;
      options.SaveToken = true;
@@ -44,10 +74,11 @@ builder.Services.AddAuthentication(x =>
          ValidateIssuerSigningKey = true,
          ValidAudience = builder.Configuration["Token:Audience"],
          ValidIssuer = builder.Configuration["Token:Issuer"],
-         IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"]))
+         IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
+         NameClaimType = ClaimTypes.NameIdentifier,
+         LifetimeValidator = (notBefore, expires, securityToken, validationParametrs) => expires != null ? expires > DateTime.UtcNow : false
      };
  });
-
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -57,21 +88,44 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Description = "Our test swagger client",
     });
+    var jwtSecurityScheme = new OpenApiSecurityScheme
+    {
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Name = "JWT Authentication",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
+
+        Reference = new OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+    c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+       { jwtSecurityScheme, Array.Empty<string>() }
+    });
 });
 builder.Services.AddSingleton<ConfHelper>(new ConfHelper { DevelopmentUrl = builder.Configuration.GetConnectionString("DevelopmentConnectionString") });
-
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseHttpLogging();
+app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 app.UseAuthentication();
+app.MapHub<ChatHub>("/ChatHub");
 app.UseAuthorization();
+app.UseGlobalExceptionHandlerMiddleware<Program>(app.Services.GetRequiredService<ILogger<Program>>());
 app.MapControllers();
 app.Run();

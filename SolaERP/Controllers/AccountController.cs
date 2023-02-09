@@ -1,70 +1,94 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SolaERP.Application.Services;
+using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos;
 using SolaERP.Infrastructure.Dtos.Auth;
+using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Dtos.User;
+using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Services;
 
 namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountController : CustomBaseController
     {
-        private readonly UserService _userService;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IUserService _userService;
         private readonly ITokenHandler _tokenHandler;
-        public AccountController(UserService userService,
+        private readonly IMapper _mapper;
+
+        public AccountController(UserManager<User> userManager,
                                  SignInManager<User> signInManager,
-                                 UserManager<User> userManager,
-                                 ITokenHandler handler)
+                                 IUserService userService,
+                                 ITokenHandler handler,
+                                 IMapper mapper)
         {
             _userService = userService;
             _signInManager = signInManager;
             _userManager = userManager;
             _tokenHandler = handler;
+            _mapper = mapper;
         }
 
 
-        [HttpGet]
-        public ApiResponse<List<UserDto>> GetAllUsers()
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginRequestDto dto)
         {
-            return _userService.GetAll();
+            var user = await _userManager.FindByNameAsync(dto.Email);
+            if (user == null)
+                return CreateActionResult(ApiResponse<AccountResponseDto>.Fail($"User: {dto.Email} not found", 400));
+
+            var userdto = _mapper.Map<UserDto>(user);
+            var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
+
+            if (signInResult.Succeeded)
+            {
+                var newtoken = Guid.NewGuid();
+                await _userService.UpdateUserIdentifierAsync(user.UserToken.ToString(), newtoken);
+
+                return CreateActionResult(ApiResponse<AccountResponseDto>.Success(
+                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, userdto), UserIdentifier = newtoken.ToString() }, 200));
+            }
+            return CreateActionResult(ApiResponse<AccountResponseDto>.Fail("Email or password is incorrect", 400));
         }
 
         [HttpPost]
-        public async Task<ApiResponse<Token>> Login(LoginRequestDto dto)
+        public async Task<IActionResult> Register(UserDto dto)
         {
             var user = await _userManager.FindByNameAsync(dto.Email);
 
-            if (user == null)
-                return ApiResponse<Token>.Fail("User not found", 404);
+            if (user is null)
+            {
+                dto.UserToken = Guid.NewGuid();
+                await _userService.AddAsync(dto);
 
-            var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, true, false);
-            if (signInResult.Succeeded)
-                return ApiResponse<Token>.Success(await _tokenHandler.GenerateJwtTokenAsync(2), 200);
+                return CreateActionResult(ApiResponse<AccountResponseDto>.Success(new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto), UserIdentifier = dto.UserToken.ToString() }, 200));
+            }
+            return CreateActionResult(ApiResponse<AccountResponseDto>.Fail("This email is already exsist", 400));
+        }
 
-            return ApiResponse<Token>.Fail("User cant sign in", 403);
+
+        [HttpPost]
+        public async Task<IActionResult> Logout([FromHeader] string authToken)
+        {
+            await _signInManager.SignOutAsync();
+
+            var userId = await _userService.GetUserIdByTokenAsync(authToken);
+            await _userService.UpdateUserIdentifierAsync(authToken, new Guid());
+
+            return CreateActionResult(ApiResponse<bool>.Success(true, 200));
         }
 
         [HttpPost]
-        public ApiResponse<bool> AddUser(UserDto dto)
-        {
-            return _userService.Register(dto);
-        }
+        public async Task<IActionResult> SendResetPasswordEmail(EmailDto dto)
+            => CreateActionResult(await _userService.SendResetPasswordEmail(dto.Email, @"C:\Users\HP\source\repos\SolaERP\SolaERP\Templates\EmailTemplate.html"));
 
-        [HttpPut]
-        public async Task<ApiResponse<bool>> UpdateUser(UserDto dto)
-        {
-            return await _userService.UpdateUser(dto);
-        }
 
-        [HttpDelete]
-        public ApiResponse<bool> RemoveUser(UserDto dto)
-        {
-            return _userService.RemoveUser(dto);
-        }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequestDto resetPasswordrequestDto)
+            => CreateActionResult(await _userService.ResetPasswordAsync(resetPasswordrequestDto));
     }
 }

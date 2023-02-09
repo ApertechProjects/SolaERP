@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Infrastructure.Entities.VendorDueDiligence
+﻿namespace SolaERP.Infrastructure.Entities.VendorDueDiligence
 {
     public class VendorDueDiligence : BaseEntity
     {
@@ -16,7 +10,7 @@ namespace SolaERP.Infrastructure.Entities.VendorDueDiligence
         public bool CheckboxValue { get; set; }
         public bool RadioboxValue { get; set; }
         public int IntValue { get; set; }
-        public decimal decimalValue { get; set; }
+        public decimal DecimalValue { get; set; }
         public DateTime DateTimeValue { get; set; }
         public decimal Scoring { get; set; }
         public bool AgreementValue { get; set; }

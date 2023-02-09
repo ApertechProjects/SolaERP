@@ -1,31 +1,42 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SolaERP.Business.CommonLogic;
-using SolaERP.Business.Models;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.UserDto;
 
 namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [ApiController]
-    public class UserController : ControllerBase
+    [Authorize]
+    public class UserController : CustomBaseController
     {
-        public ConfHelper ConfHelper { get; }
-        public UserController(ConfHelper confHelper)
+        private readonly IUserService _userService;
+
+        public UserController(IUserService userService)
         {
-            ConfHelper = confHelper;
+            _userService = userService;
         }
+
 
         [HttpGet]
-        public async Task<ApiResult> GetUsers([FromHeader] string token)
-        {
-            return await new EntityLogic(ConfHelper).GetUserList(token );
-        }
+        public async Task<IActionResult> GetUserByToken([FromHeader] string authToken)
+            => CreateActionResult(await _userService.GetUserByTokenAsync(authToken));
 
-        [HttpGet("{groupId}")]
-        public async Task<ApiResult> GetUsersForGroup([FromHeader] string token, int groupId)
-        {
-            return await new EntityLogic(ConfHelper).GetUserListForGroup(token, groupId);
-        }
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser(UserDto dto)
+            => CreateActionResult(await _userService.UpdateAsync(dto));
+
+        [HttpDelete]
+        public async Task<IActionResult> RemoveUser([FromHeader] string authToken)
+            => CreateActionResult(await _userService.RemoveUserByTokenAsync(authToken));
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllUsers()
+            => CreateActionResult(await _userService.GetAllAsync());
+
+        //[HttpGet("{groupId}")]
+        //public async Task<ApiResponse<UserDto>> GetUsersForGroup(int groupId)
+        //{
+        //    return _userService.Get
+        //}
     }
 }

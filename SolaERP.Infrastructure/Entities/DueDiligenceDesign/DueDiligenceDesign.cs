@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Infrastructure.Entities.DueDiligenceDesign
+﻿namespace SolaERP.Infrastructure.Entities.DueDiligenceDesign
 {
     public class DueDiligenceDesign : BaseEntity
     {
@@ -28,6 +22,8 @@ namespace SolaERP.Infrastructure.Entities.DueDiligenceDesign
         public int GridColumnCount { get; set; }
         public bool HasAgreement { get; set; }
         public string AgreementText { get; set; }
+        public VendorDueDiligence.VendorDueDiligence VendorDueDiligence { get; set; }
+        public Attachment.Attachment Attachments { get; set; }
 
     }
 }

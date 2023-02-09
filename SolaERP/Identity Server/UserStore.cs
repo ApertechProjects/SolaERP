@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
+
+using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Repositories;
 
 namespace SolaERP.Application.Identity_Server
 {
     public class UserStore : IUserStore<User>,
                              IUserRoleStore<User>,
                              IUserPasswordStore<User>
+
 
     {
         private readonly IUserRepository _userRepository;
@@ -35,7 +37,7 @@ namespace SolaERP.Application.Identity_Server
 
         public async Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByUserNameAsync(normalizedUserName);
+            var user = await _userRepository.GetUserByUsernameAsync(normalizedUserName);
             return user;
         }
 
@@ -123,6 +125,46 @@ namespace SolaERP.Application.Identity_Server
         public void Dispose()
         {
         }
+
+
+        #endregion
+
+        #region IUserEmailStore Implementation 
+        //public Task SetEmailAsync(User user, string email, CancellationToken cancellationToken)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task<string> GetEmailAsync(User user, CancellationToken cancellationToken)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task<bool> GetEmailConfirmedAsync(User user, CancellationToken cancellationToken)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task SetEmailConfirmedAsync(User user, bool confirmed, CancellationToken cancellationToken)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public async Task<User> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+        {
+            var user = await _userRepository.GetUserByEmailAsync(normalizedEmail);
+            return user;
+        }
+
+        //public Task<string> GetNormalizedEmailAsync(User user, CancellationToken cancellationToken)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task SetNormalizedEmailAsync(User user, string normalizedEmail, CancellationToken cancellationToken)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
 
         #endregion

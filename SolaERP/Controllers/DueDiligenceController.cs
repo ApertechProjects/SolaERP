@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SolaERP.Business.CommonLogic;
 using SolaERP.Business.Models;
-using SolaERP.Business.CommonLogic;
 
 namespace SolaERP.Controllers
 {
@@ -18,9 +16,9 @@ namespace SolaERP.Controllers
         public ConfHelper conf { get; }
 
         [HttpGet("{vendorId}")]
-        public async Task<ApiResult> GetDue([FromHeader] string token,int vendorId)
+        public async Task<ApiResult> GetDue([FromHeader] string token, int vendorId)
         {
-            return await new EntityLogic(conf).GetDueDiligence(token,vendorId);
+            return await new EntityLogic(conf).GetDueDiligence(token, vendorId);
         }
     }
 }

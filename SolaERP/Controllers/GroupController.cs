@@ -1,40 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SolaERP.Business.CommonLogic;
-using SolaERP.Business.Dtos.EntityDtos.Group;
-using SolaERP.Business.Dtos.Wrappers;
-using SolaERP.Business.Models;
-
+using SolaERP.Infrastructure.Contracts.Services;
 
 namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [ApiController]
-    public class GroupController : ControllerBase
+    public class GroupController : CustomBaseController
     {
-
-        public GroupController(ConfHelper confHelper)
+        private readonly IGroupService _groupService;
+        public GroupController(IGroupService groupService)
         {
-            ConfHelper = confHelper;
+            _groupService = groupService;
         }
-
-        public ConfHelper ConfHelper { get; }
 
         [HttpGet]
-        public async Task<ApiResult> GetGroups([FromHeader] string token)
-        {
-            return await new EntityLogic(ConfHelper).GetGroups(token);
-        }
+        public async Task<IActionResult> GetGroups()
+            => CreateActionResult(await _groupService.GetAllAsync());
 
-        [HttpPost]
-        public async Task<ApiResult> SaveGroup([FromHeader] string token, GroupSaveWrapper groupSave)
-        {
-            return await new EntityLogic(ConfHelper).SaveGroup(token, groupSave);
-        }
-
-        [HttpDelete("{groupId}")]
-        public async Task<ApiResult> DeleteGroups([FromHeader] string token, int groupId)
-        {
-            return await new EntityLogic(ConfHelper).DeleteGroups(token, groupId);
-        }
+        [HttpDelete]
+        public async Task<IActionResult> DeleteGroup(int Id)
+            => CreateActionResult(await _groupService.RemoveAsync(Id));
     }
 }
