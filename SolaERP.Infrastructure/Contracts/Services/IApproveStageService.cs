@@ -11,7 +11,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<ApprovalStageSaveVM>> SaveApproveStageMainAsync(string authToken, ApprovalStageSaveVM approvalStageSaveVM);
         Task<ApiResponse<ApproveStagesMainDto>> GetApproveStageMainByApprovalStageMainId(int approveStageMainId);
         Task<ApiResponse<List<ApproveStagesMainDto>>> GetByBusinessUnitId(int buId);
-        Task<ApiResponse<List<AprroveSatusDto>>> GetApproveStatuses();
+        Task<ApiResponse<List<ApprovalStatusDto>>> GetApproveStatuses();
         #endregion
         //
         #region Details
