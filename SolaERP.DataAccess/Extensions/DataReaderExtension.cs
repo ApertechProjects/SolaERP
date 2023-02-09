@@ -30,7 +30,7 @@ namespace SolaERP.DataAccess.Extensions
         public static T GetByEntityStructure<T>(this IDataReader reader) where T : BaseEntity, new()
         {
             var obj = new T();
-            var properties = typeof(T).GetProperties();
+            var properties = typeof(T).GetProperties(); 
 
             foreach (var item in properties)
             {
