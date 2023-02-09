@@ -138,10 +138,11 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<RequestMainDraftDto>>.Fail("Error not found", 404);
         }
 
-        public async Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(RequestApproveAmendmentGetParametersDto requestParametersDto)
+        public async Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentGetParametersDto requestParametersDto)
         {
-            var userId = await _userRepository.GetUserIdByTokenAsync(requestParametersDto.FinderToken);
+            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
             var mainRequest = await _requestMainRepository.GetApproveAmendmentRequestsAsync(userId, requestParametersDto);
+            //var mainRequestDto = _mapper.Map<List<RequestApproveAmendmentDto>>(mainRequest);
             var mainRequestDto = _mapper.Map<List<RequestApproveAmendmentDto>>(mainRequest);
 
             if (mainRequestDto != null && mainRequestDto.Count > 0)
