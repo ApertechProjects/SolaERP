@@ -1,6 +1,7 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.ApproveStage;
+using SolaERP.Infrastructure.Entities.ApproveStages;
 using SolaERP.Infrastructure.Entities.Procedure;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
@@ -61,6 +62,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<List<ApprovalStatus>> GetApprovalStatusList()
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SELECT * FROM VW_ApprovalStatus_List";
+                using var reader = await command.ExecuteReaderAsync();
+
+                List<ApprovalStatus> approvalStatuses = new();
+                while (await reader.ReadAsync())
+                {
+                    approvalStatuses.Add(reader.GetByEntityStructure<ApprovalStatus>());
+                }
+                return approvalStatuses;
+            }
+
+        }
+
         public async Task<List<ApproveStagesMain>> GetByBusinessUnitId(int buId)
         {
             List<ApproveStagesMain> approveStagesMain = new List<ApproveStagesMain>();
@@ -72,21 +90,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
                 while (reader.Read())
                 {
-                    approveStagesMain.Add(GetFromReader(reader));
+                    approveStagesMain.Add(reader.GetByEntityStructure<ApproveStagesMain>());
                 }
                 return approveStagesMain;
             }
         }
 
-        public Task<ApproveStagesMain> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool RemoveAsync(int Id)
-        {
-            throw new NotImplementedException();
-        }
 
         public Task<int> UpdateAsync(ApproveStagesMain entity, int userId)
         {
@@ -105,7 +114,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 {
                     ProcedureId = reader.Get<int>("ProcedureId"),
                     ProcedureName = reader.Get<string>("ProcedureName"),
-
                 }
             };
         }
