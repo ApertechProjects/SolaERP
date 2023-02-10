@@ -16,7 +16,7 @@ namespace SolaERP.Middlewares
                     handler.Response.ContentType = "application/json";
 
                     var errorFeatures = handler.Features.Get<IExceptionHandlerFeature>();
-                    var statusCode = errorFeatures.Error switch
+                     var statusCode = errorFeatures.Error switch
                     {
                         UserException => 400,
                         _ => 500
