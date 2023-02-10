@@ -31,6 +31,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<List<ItemCodeWithImages>> GetItemCodesWithImagesAsync()
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SELECT * FROM VW_UNI_ItemImagesList";
+                List<ItemCodeWithImages> result = new();
+
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                    result.Add(reader.GetByEntityStructure<ItemCodeWithImages>());
+
+                return result;
+            }
+        }
+
         private ItemCode GetItemCodeFromReader(IDataReader reader)
         {
             return new()

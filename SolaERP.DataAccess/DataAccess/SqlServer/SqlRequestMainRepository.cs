@@ -3,6 +3,7 @@ using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.Enums;
+using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
@@ -223,7 +224,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<RequestAmendment>> GetApproveAmendmentRequestsAsync(int userId, RequestApproveAmendmentGetParametersDto requestParametersDto)
+        public async Task<List<RequestAmendment>> GetApproveAmendmentRequestsAsync(int userId, RequestApproveAmendmentGetModel requestParametersDto)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -250,9 +251,43 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+
+        public async Task<RequestMain> GetRequesMainHeaderAsync(int requestMainId, int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RequestHeader_Load @RequestMainId,@UserId";
+                command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+
+                RequestMain result = null;
+                using var reader = await command.ExecuteReaderAsync();
+
+                if (reader.Read()) result = GetWaitingForApprovalFromReader(reader);
+
+                return result;
+            }
+        }
+
+        public async Task<List<RequestApprovalInfo>> GetRequestApprovalInfoAsync(int requestMainId, int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RequestApprovalInfo @RequestMainId,@UserId";
+                command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                List<RequestApprovalInfo> resultList = new();
+                while (await reader.ReadAsync()) resultList.Add(reader.GetByEntityStructure<RequestApprovalInfo>());
+
+                return resultList;
+            }
+        }
+
         private RequestMain GetAllFromReader(IDataReader reader)
         {
-            return new RequestMain
+            return new()
             {
                 RequestMainId = reader.Get<int>("RequestMainId"),
                 Status = reader.Get<int>("Status"),
@@ -273,7 +308,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         private RequestMain GetWaitingForApprovalFromReader(IDataReader reader)
         {
-            return new RequestMain
+            return new()
             {
                 RequestMainId = reader.Get<int>("RequestMainId"),
                 BusinessUnitId = reader.Get<int>("BusinessUnitId"),
@@ -296,7 +331,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         private RequestMain GetFromReader(IDataReader reader)
         {
-            return new RequestMain
+            return new()
             {
                 RequestMainId = reader.Get<int>("RequestMainId"),
                 Status = reader.Get<int>("Status"),
@@ -341,7 +376,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         private RequestMainDraft GetMainDraftFromReader(DbDataReader reader)
         {
-            return new RequestMainDraft()
+            return new()
             {
                 RequestMainId = reader.Get<int>("RequestMainId"),
                 BusinessUnitCode = reader.Get<string>("BusinessunitCode"),
@@ -363,7 +398,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         private RequestMain GetRequestMainFromReader(DbDataReader reader)
         {
-            return new RequestMain
+            return new()
             {
                 RequestMainId = reader.Get<int>("RequestMainId"),
                 Status = reader.Get<int>("Status"),
@@ -382,6 +417,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 ApproveStatus = reader.Get<string>("ApproveStatus"),
             };
         }
+
 
     }
 

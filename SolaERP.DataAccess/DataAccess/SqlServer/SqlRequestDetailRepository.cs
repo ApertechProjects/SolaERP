@@ -2,13 +2,8 @@
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.UnitOfWork;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data.Common;
 using System.Data;
+using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -164,6 +159,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task UpdateAsync(RequestDetail entity)
         {
             await AddAsync(entity);
+        }
+
+        public async Task<List<RequestDetailWithAnalysisCode>> GetRequestDetailsByMainIdWithAnalysisCodeAsync(int requestMainId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RequestDetails_Load @RequestMainId";
+                command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                List<RequestDetailWithAnalysisCode> resultList = new();
+
+                while (await reader.ReadAsync()) resultList.Add(reader.GetByEntityStructure<RequestDetailWithAnalysisCode>());
+                return resultList;
+            }
         }
     }
 }

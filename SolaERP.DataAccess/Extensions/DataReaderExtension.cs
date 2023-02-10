@@ -41,6 +41,14 @@ namespace SolaERP.DataAccess.Extensions
                 string propName = item.Name;
                 object objectResult = null;
 
+                // Check if the property has a DbColumnAttribute attribute, if so, Get DbColumn name from it
+                var columnName = item.GetCustomAttributes(typeof(DbColumnAttribute), true)[0];
+                if (columnName is not null)
+                {
+                    DbColumnAttribute columnActualName = columnName as DbColumnAttribute;
+                    if (columnActualName != null) { propName = columnActualName.ColumnName; }
+                }
+
                 // Check if the property type is a subclass of BaseEntity
                 if (item.PropertyType.IsSubclassOf(typeof(BaseEntity)))
                 {
