@@ -15,5 +15,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<int> GetUserIdByTokenAsync(string finderToken);
         Task<ApiResponse<bool>> RemoveUserByTokenAsync(string finderToken);
         Task<ApiResponse<bool>> ResetPasswordAsync(ResetPasswordRequestDto resetPasswordRequestDto);
+        Task<ApiResponse<List<ActiveUserDto>>> GetActiveUsersAsync();
     }
 }

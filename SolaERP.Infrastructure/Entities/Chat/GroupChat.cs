@@ -7,6 +7,6 @@ namespace SolaERP.Infrastructure.Entities.Chat
         public int Id { get; set; }
         public string Groupname { get; set; }
         public int UserId { get; set; }
-        public User User { get; set; }
+        public SolaERP.Infrastructure.Entities.Auth.User User { get; set; }
     }
 }

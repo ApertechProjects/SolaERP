@@ -1,6 +1,7 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Entities.User;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
@@ -204,6 +205,22 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 var result = await command.ExecuteNonQueryAsync();
 
                 return result > 0;
+            }
+        }
+
+        public async Task<List<ActiveUser>> GetActiveUsersAsync()
+        {
+            List<ActiveUser> activeUser = new List<ActiveUser>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "Select * from [dbo].[VW_User_List]";
+
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    activeUser.Add(reader.GetByEntityStructure<ActiveUser>());
+                }
+                return activeUser;
             }
         }
         #endregion

@@ -1,4 +1,5 @@
 ﻿using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Entities.User;
 
 namespace SolaERP.Infrastructure.Contracts.Repositories
 {
@@ -11,5 +12,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<int> GetUserIdByTokenAsync(string finderToken);
         Task<bool> UpdateUserTokenAsync(int userId, Guid token);
         Task<bool> ResetUserPasswordAsync(string email, string passwordHash);
+        Task<List<ActiveUser>> GetActiveUsersAsync();
     }
 }
