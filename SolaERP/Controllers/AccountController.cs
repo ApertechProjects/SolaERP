@@ -5,9 +5,9 @@ using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos;
 using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Controllers
 {
@@ -88,7 +88,7 @@ namespace SolaERP.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> ResetPassword(ResetPasswordRequestDto resetPasswordrequestDto)
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel resetPasswordrequestDto)
             => CreateActionResult(await _userService.ResetPasswordAsync(resetPasswordrequestDto));
     }
 }

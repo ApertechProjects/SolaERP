@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.LogInfo;
+using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Controllers
 {
@@ -16,11 +16,11 @@ namespace SolaERP.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetAllLogInformationsAsync(LogInfoGetDto getParameters)
+        public async Task<IActionResult> GetAllLogInformationsAsync(LogInfoGetModel getParameters)
             => CreateActionResult(await _logInformationService.GetAllLogInformationAsync(getParameters));
 
         [HttpPost]
-        public async Task<IActionResult> GetSingleLogInformationsAsync(LogInfoGetDto getParameters)
+        public async Task<IActionResult> GetSingleLogInformationsAsync(LogInfoGetModel getParameters)
             => CreateActionResult(await _logInformationService.GetSingleLogInformationAsync(getParameters));
     }
 }
