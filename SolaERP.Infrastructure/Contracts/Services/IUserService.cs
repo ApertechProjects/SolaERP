@@ -1,6 +1,7 @@
 ﻿using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
+using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Infrastructure.Contracts.Services
 {
@@ -14,6 +15,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<bool>> SendResetPasswordEmail(string email, string templatePath);
         Task<int> GetUserIdByTokenAsync(string finderToken);
         Task<ApiResponse<bool>> RemoveUserByTokenAsync(string finderToken);
-        Task<ApiResponse<bool>> ResetPasswordAsync(ResetPasswordRequestDto resetPasswordRequestDto);
+        Task<ApiResponse<bool>> ResetPasswordAsync(ResetPasswordModel resetPasswordRequestDto);
     }
 }
