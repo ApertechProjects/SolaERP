@@ -4,6 +4,7 @@ using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Entities.Request;
+using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 
 namespace SolaERP.Application.Services
@@ -139,7 +140,7 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<RequestMainDraftDto>>.Fail("Error not found", 404);
         }
 
-        public async Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentGetParametersDto requestParametersDto)
+        public async Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentGetModel requestParametersDto)
         {
             var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
             var mainRequest = await _requestMainRepository.GetApproveAmendmentRequestsAsync(userId, requestParametersDto);
@@ -151,6 +152,34 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<RequestApproveAmendmentDto>>.Fail("Bad Request", 404);
         }
 
+        public async Task<ApiResponse<List<RequestApprovalInfoDto>>> GetRequestApprovalInfoAsync(string finderToken, int requestMainId)
+        {
+            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            var approvalInfo = await _requestMainRepository.GetRequestApprovalInfoAsync(userId, requestMainId);
+            var approvalInfoResult = _mapper.Map<List<RequestApprovalInfoDto>>(approvalInfo);
+
+            return approvalInfoResult.Count > 0 ? ApiResponse<List<RequestApprovalInfoDto>>.Success(approvalInfoResult, 200) :
+                ApiResponse<List<RequestApprovalInfoDto>>.Fail("Bad requestFrom GetRequestApprovalInfo", 404);
+        }
+
+        public async Task<ApiResponse<RequestMainDto>> GetRequestHeaderAsync(string finderToken, int requestMainId)
+        {
+            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            var requestHeader = await _requestMainRepository.GetRequesMainHeaderAsync(userId, requestMainId);
+            var requestHeaderResult = _mapper.Map<RequestMainDto>(requestHeader);
+
+            return requestHeaderResult != null ? ApiResponse<RequestMainDto>.Success(requestHeaderResult, 200) :
+                ApiResponse<RequestMainDto>.Fail("Bad requestFrom GetRequestHeaderAsync", 404);
+        }
+
+        public async Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetRequestDetails(int requestmainId)
+        {
+            var requestDetails = await _requestDetailRepository.GetRequestDetailsByMainIdWithAnalysisCodeAsync(requestmainId);
+            var requestDetailsResult = _mapper.Map<List<RequestDetailsWithAnalysisCodeDto>>(requestDetails);
+
+            return requestDetailsResult.Count > 0 ? ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>.Success(requestDetailsResult, 200) :
+                ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>.Fail("Request details is empty", 404);
+        }
     }
 
 }

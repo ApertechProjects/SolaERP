@@ -7,6 +7,7 @@ using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 
 namespace SolaERP.Application.Services
@@ -84,7 +85,7 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(200);
         }
 
-        public async Task<ApiResponse<bool>> ResetPasswordAsync(ResetPasswordRequestDto resetPasswordRequestDto)
+        public async Task<ApiResponse<bool>> ResetPasswordAsync(ResetPasswordModel resetPasswordRequestDto)
         {
             var user = await _userRepository.GetUserByEmailAsync(resetPasswordRequestDto.Email);
 
