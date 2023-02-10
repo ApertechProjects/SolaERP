@@ -26,7 +26,7 @@ builder.Services.AddControllers(options => { options.Filters.Add(new ValidationF
 .AddFluentValidationClientsideAdapters();
 
 builder.UseIdentityService();
-builder.UseDataAccesServices();
+builder.ConfigureServices();
 builder.UseValidationExtension();
 
 builder.Services.AddEndpointsApiExplorer();

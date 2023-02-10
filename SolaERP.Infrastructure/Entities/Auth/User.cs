@@ -1,5 +1,7 @@
 ﻿using SolaERP.Infrastructure.Attributes;
 
+using SolaERP.Infrastructure.Attributes;
+
 namespace SolaERP.Infrastructure.Entities.Auth
 {
     public class User : BaseEntity

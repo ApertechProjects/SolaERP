@@ -1,6 +1,6 @@
 ﻿using SolaERP.Infrastructure.Enums;
 
-namespace SolaERP.Infrastructure.Dtos.Request
+namespace SolaERP.Infrastructure.Models
 {
     public class RequestMainGetParametersDto
     {

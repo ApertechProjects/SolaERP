@@ -1,8 +1,8 @@
 ﻿using SolaERP.Infrastructure.Enums;
 
-namespace SolaERP.Infrastructure.Dtos.LogInfo
+namespace SolaERP.Infrastructure.Models
 {
-    public class LogInfoGetDto
+    public class LogInfoGetModel
     {
         public int Id { get; set; }
         public LogType LogType { get; set; }

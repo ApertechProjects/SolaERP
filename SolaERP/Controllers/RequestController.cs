@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Request;
+using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Controllers
 {
@@ -32,16 +33,28 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _requestService.ChangeRequestStatus(requestChangeStatusParametersDtos));
 
         [HttpPost]
-        public async Task<IActionResult> GetApproveAmendmentRequestsAsync([FromHeader] string authToken, RequestApproveAmendmentGetParametersDto requestParametersDto)
+        public async Task<IActionResult> GetApproveAmendmentRequestsAsync([FromHeader] string authToken, RequestApproveAmendmentGetModel requestParametersDto)
             => CreateActionResult(await _requestService.GetApproveAmendmentRequests(authToken, requestParametersDto));
 
         [HttpPost]
-        public async Task<IActionResult> GetWaitingForApprovalsRequest(RequestWFAGetParametersDto requestWFAGetParametersDto)
-            => CreateActionResult(await _requestService.GetWaitingForApprovalsAsync(requestWFAGetParametersDto));
+        public async Task<IActionResult> GetWaitingForApprovalsRequest([FromHeader] string authToken, RequestWFAGetParametersDto requestWFAGetParametersDto)
+            => CreateActionResult(await _requestService.GetWaitingForApprovalsAsync(authToken, requestWFAGetParametersDto));
 
         [HttpGet("{requestMainId}")]
         public async Task<IActionResult> GetRequestCardByMainId(int requestMainId)
              => CreateActionResult(await _requestService.GetRequestByRequestMainId(requestMainId));
+
+        [HttpGet("{requestMainId}")]
+        public async Task<IActionResult> GetRequestHeaderAsync([FromHeader] string authToken, int requestMainId)
+            => CreateActionResult(await _requestService.GetRequestHeaderAsync(authToken, requestMainId));
+
+        [HttpGet("{requestMainId}")]
+        public async Task<IActionResult> GetRequestApprovalInfo([FromHeader] string authToken, int requestMainId)
+            => CreateActionResult(await _requestService.GetRequestApprovalInfoAsync(authToken, requestMainId));
+
+        [HttpGet("{requestMainId}")]
+        public async Task<IActionResult> GetRequestDetailsAsync(int requestMainId)
+            => CreateActionResult(await _requestService.GetRequestDetails(requestMainId));
     }
 }
 

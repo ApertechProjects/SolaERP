@@ -1,10 +1,10 @@
-﻿namespace SolaERP.Infrastructure.Dtos.Request
+﻿namespace SolaERP.Infrastructure.Models
 {
-    public class RequestMainDraftGetDto
+    public class RequestApproveAmendmentGetModel
     {
         public int BusinessUnitId { get; set; }
-        public string ItemCode { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
+        public string ItemCode { get; set; }
     }
 }

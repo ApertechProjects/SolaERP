@@ -1,6 +1,6 @@
-﻿namespace SolaERP.Infrastructure.Dtos.User
+﻿namespace SolaERP.Infrastructure.Models
 {
-    public class ResetPasswordRequestDto
+    public class ResetPasswordModel
     {
         public string Email { get; set; }
         public string Password { get; set; }

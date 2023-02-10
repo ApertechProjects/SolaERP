@@ -2,6 +2,7 @@
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Dtos.Item_Code;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.UnitOfWork;
 
@@ -26,6 +27,15 @@ namespace SolaERP.Application.Services
             var dto = _mapper.Map<List<ItemCodeDto>>(entity);
 
             return ApiResponse<List<ItemCodeDto>>.Success(dto, 200);
+        }
+
+        public async Task<ApiResponse<List<ItemCodeWithImagesDto>>> GetItemCodesWithImagesAsync()
+        {
+            var itemCodes = await _itemCodeRepository.GetItemCodesWithImagesAsync();
+            var itemCodeResult = _mapper.Map<List<ItemCodeWithImagesDto>>(itemCodes);
+
+            return itemCodeResult.Count > 0 ? ApiResponse<List<ItemCodeWithImagesDto>>.Success(itemCodeResult, 200) :
+                ApiResponse<List<ItemCodeWithImagesDto>>.Fail("Bad rquest from GetItemCodesWithImages", 404);
         }
     }
 }

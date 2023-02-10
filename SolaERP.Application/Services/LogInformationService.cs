@@ -3,6 +3,7 @@ using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.LogInfo;
 using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 
 namespace SolaERP.Application.Services
@@ -20,7 +21,7 @@ namespace SolaERP.Application.Services
             _logInfoRepository = logInfoRepository;
         }
 
-        public async Task<ApiResponse<List<LogInfoDto>>> GetAllLogInformationAsync(LogInfoGetDto logGetparameters)
+        public async Task<ApiResponse<List<LogInfoDto>>> GetAllLogInformationAsync(LogInfoGetModel logGetparameters)
         {
             var entity = await _logInfoRepository.GetAllLogInformationAsync(logGetparameters.Id, logGetparameters.LogType);
             var dto = _mapper.Map<List<LogInfoDto>>(entity);
@@ -30,7 +31,7 @@ namespace SolaERP.Application.Services
 
         }
 
-        public async Task<ApiResponse<LogInfoDto>> GetSingleLogInformationAsync(LogInfoGetDto logGetparameters)
+        public async Task<ApiResponse<LogInfoDto>> GetSingleLogInformationAsync(LogInfoGetModel logGetparameters)
         {
             var entity = await _logInfoRepository.GetSingleLogInformationAsync(logGetparameters.Id, logGetparameters.LogType);
             var dto = _mapper.Map<LogInfoDto>(entity);

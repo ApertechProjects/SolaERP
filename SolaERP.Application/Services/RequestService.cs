@@ -4,6 +4,7 @@ using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Entities.Request;
+using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 
 namespace SolaERP.Application.Services
@@ -106,15 +107,16 @@ namespace SolaERP.Application.Services
             return result ? ApiResponse<bool>.Success(204) : ApiResponse<bool>.Fail("Requst not approved", 400);
         }
 
-        public async Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(RequestWFAGetParametersDto requestWFAGetParametersDto)
+        public async Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(string finderToken, RequestWFAGetParametersDto requestWFAGetParametersDto)
         {
-            var mainRequest = await _requestMainRepository.GetWaitingForApprovalsAsync(requestWFAGetParametersDto.UserId, requestWFAGetParametersDto.BusinessUnitId, requestWFAGetParametersDto.DateFrom, requestWFAGetParametersDto.DateTo, requestWFAGetParametersDto.ItemCode);
+            int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            var mainRequest = await _requestMainRepository.GetWaitingForApprovalsAsync(userId, requestWFAGetParametersDto.BusinessUnitId, requestWFAGetParametersDto.DateFrom, requestWFAGetParametersDto.DateTo, requestWFAGetParametersDto.ItemCode);
             var mainRequestDto = _mapper.Map<List<RequestWFADto>>(mainRequest);
 
             if (mainRequestDto != null && mainRequestDto.Count > 0)
                 return ApiResponse<List<RequestWFADto>>.Success(mainRequestDto, 200);
 
-            return ApiResponse<List<RequestWFADto>>.Fail("Bad Request", 404);
+            return ApiResponse<List<RequestWFADto>>.Fail("Waiting for approval list is empty", 404);
         }
 
         public async Task<ApiResponse<RequestMainWithDetailsDto>> GetRequestByRequestMainId(int requestMainId)
@@ -135,22 +137,49 @@ namespace SolaERP.Application.Services
             if (mainDraftEntites.Count > 0)
                 return ApiResponse<List<RequestMainDraftDto>>.Success(mainDraftDto, 200);
 
-            return ApiResponse<List<RequestMainDraftDto>>.Fail("Error not found", 404);
+            return ApiResponse<List<RequestMainDraftDto>>.Fail("Main drafts is empty", 404);
         }
 
-        public async Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentGetParametersDto requestParametersDto)
+        public async Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentGetModel requestParametersDto)
         {
             var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
             var mainRequest = await _requestMainRepository.GetApproveAmendmentRequestsAsync(userId, requestParametersDto);
-            //var mainRequestDto = _mapper.Map<List<RequestApproveAmendmentDto>>(mainRequest);
             var mainRequestDto = _mapper.Map<List<RequestApproveAmendmentDto>>(mainRequest);
 
             if (mainRequestDto != null && mainRequestDto.Count > 0)
                 return ApiResponse<List<RequestApproveAmendmentDto>>.Success(mainRequestDto, 200);
 
-            return ApiResponse<List<RequestApproveAmendmentDto>>.Fail("Bad Request", 404);
+            return ApiResponse<List<RequestApproveAmendmentDto>>.Fail("Bad Request amendment is empty", 404);
         }
 
+        public async Task<ApiResponse<List<RequestApprovalInfoDto>>> GetRequestApprovalInfoAsync(string finderToken, int requestMainId)
+        {
+            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            var approvalInfo = await _requestMainRepository.GetRequestApprovalInfoAsync(userId, requestMainId);
+            var approvalInfoResult = _mapper.Map<List<RequestApprovalInfoDto>>(approvalInfo);
+
+            return approvalInfoResult.Count > 0 ? ApiResponse<List<RequestApprovalInfoDto>>.Success(approvalInfoResult, 200) :
+                ApiResponse<List<RequestApprovalInfoDto>>.Fail("Bad request Request Approval info is empty", 404);
+        }
+
+        public async Task<ApiResponse<RequestMainDto>> GetRequestHeaderAsync(string finderToken, int requestMainId)
+        {
+            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            var requestHeader = await _requestMainRepository.GetRequesMainHeaderAsync(userId, requestMainId);
+            var requestHeaderResult = _mapper.Map<RequestMainDto>(requestHeader);
+
+            return requestHeaderResult != null ? ApiResponse<RequestMainDto>.Success(requestHeaderResult, 200) :
+                ApiResponse<RequestMainDto>.Fail("Bad request request header is null", 404);
+        }
+
+        public async Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetRequestDetails(int requestmainId)
+        {
+            var requestDetails = await _requestDetailRepository.GetRequestDetailsByMainIdWithAnalysisCodeAsync(requestmainId);
+            var requestDetailsResult = _mapper.Map<List<RequestDetailsWithAnalysisCodeDto>>(requestDetails);
+
+            return requestDetailsResult.Count > 0 ? ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>.Success(requestDetailsResult, 200) :
+                ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>.Fail("Request details is empty", 404);
+        }
     }
 
 }
