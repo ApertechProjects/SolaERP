@@ -4,11 +4,11 @@
     {
         public int RequestDetailId { get; set; }
         public int RequestMainId { get; set; }
-        public int LineNo { get; set; }
+        public string LineNo { get; set; }
         public DateTime RequestDate { get; set; }
         public DateTime RequestDeadline { get; set; }
         public DateTime RequestedDate { get; set; }
-        public int ItemCode { get; set; }
+        public string ItemCode { get; set; }
         public decimal Quantity { get; set; }
         public string UOM { get; set; }
         public string Description { get; set; }
@@ -20,19 +20,20 @@
         public decimal TotalBudget { get; set; }
         public decimal RemainingBudget { get; set; }
         public decimal Amount { get; set; }
-        public string ConnectedOrderReferance { get; set; }
-        public int ConnectecOrderLineNo { get; set; }
+        public string ConnectedOrderReference { get; set; }
+        public decimal ConnectedOrderLineNo { get; set; }
         public string AccountCode { get; set; }
-        public int RequestAnalysisCode1Id { get; set; }
-        public int RequestAnalysisCode2Id { get; set; }
-        public int RequestAnalysisCode3Id { get; set; }
-        public int RequestAnalysisCode4Id { get; set; }
-        public int RequestAnalysisCode5Id { get; set; }
-        public int RequestAnalysisCode6Id { get; set; }
-        public int RequestAnalysisCode7Id { get; set; }
-        public int RequestAnalysisCode8Id { get; set; }
-        public int RequestAnalysisCode9Id { get; set; }
-        public int RequestAnalysisCode10Id { get; set; }
+        public int RequestAnalysisId { get; set; }
+        public int AnalysisCode1Id { get; set; }
+        public int AnalysisCode2Id { get; set; }
+        public int AnalysisCode3Id { get; set; }
+        public int AnalysisCode4Id { get; set; }
+        public int AnalysisCode5Id { get; set; }
+        public int AnalysisCode6Id { get; set; }
+        public int AnalysisCode7Id { get; set; }
+        public int AnalysisCode8Id { get; set; }
+        public int AnalysisCode9Id { get; set; }
+        public int AnalysisCode10Id { get; set; }
 
     }
 }

@@ -30,7 +30,7 @@ namespace SolaERP.DataAccess.Extensions
         public static T GetByEntityStructure<T>(this IDataReader reader) where T : BaseEntity, new()
         {
             var obj = new T();
-            var properties = typeof(T).GetProperties(); 
+            var properties = typeof(T).GetProperties();
 
             foreach (var item in properties)
             {
@@ -42,7 +42,7 @@ namespace SolaERP.DataAccess.Extensions
                 object objectResult = null;
 
                 // Check if the property has a DbColumnAttribute attribute, if so, Get DbColumn name from it
-                var columnName = item.GetCustomAttributes(typeof(DbColumnAttribute), true)[0];
+                var columnName = item.GetCustomAttribute(typeof(DbColumnAttribute), true);
                 if (columnName is not null)
                 {
                     DbColumnAttribute columnActualName = columnName as DbColumnAttribute;

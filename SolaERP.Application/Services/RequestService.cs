@@ -116,7 +116,7 @@ namespace SolaERP.Application.Services
             if (mainRequestDto != null && mainRequestDto.Count > 0)
                 return ApiResponse<List<RequestWFADto>>.Success(mainRequestDto, 200);
 
-            return ApiResponse<List<RequestWFADto>>.Fail("Bad Request", 404);
+            return ApiResponse<List<RequestWFADto>>.Fail("Waiting for approval list is empty", 404);
         }
 
         public async Task<ApiResponse<RequestMainWithDetailsDto>> GetRequestByRequestMainId(int requestMainId)
@@ -137,7 +137,7 @@ namespace SolaERP.Application.Services
             if (mainDraftEntites.Count > 0)
                 return ApiResponse<List<RequestMainDraftDto>>.Success(mainDraftDto, 200);
 
-            return ApiResponse<List<RequestMainDraftDto>>.Fail("Error not found", 404);
+            return ApiResponse<List<RequestMainDraftDto>>.Fail("Main drafts is empty", 404);
         }
 
         public async Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentGetModel requestParametersDto)
@@ -149,7 +149,7 @@ namespace SolaERP.Application.Services
             if (mainRequestDto != null && mainRequestDto.Count > 0)
                 return ApiResponse<List<RequestApproveAmendmentDto>>.Success(mainRequestDto, 200);
 
-            return ApiResponse<List<RequestApproveAmendmentDto>>.Fail("Bad Request", 404);
+            return ApiResponse<List<RequestApproveAmendmentDto>>.Fail("Bad Request amendment is empty", 404);
         }
 
         public async Task<ApiResponse<List<RequestApprovalInfoDto>>> GetRequestApprovalInfoAsync(string finderToken, int requestMainId)
@@ -159,7 +159,7 @@ namespace SolaERP.Application.Services
             var approvalInfoResult = _mapper.Map<List<RequestApprovalInfoDto>>(approvalInfo);
 
             return approvalInfoResult.Count > 0 ? ApiResponse<List<RequestApprovalInfoDto>>.Success(approvalInfoResult, 200) :
-                ApiResponse<List<RequestApprovalInfoDto>>.Fail("Bad requestFrom GetRequestApprovalInfo", 404);
+                ApiResponse<List<RequestApprovalInfoDto>>.Fail("Bad request Request Approval info is empty", 404);
         }
 
         public async Task<ApiResponse<RequestMainDto>> GetRequestHeaderAsync(string finderToken, int requestMainId)
@@ -169,7 +169,7 @@ namespace SolaERP.Application.Services
             var requestHeaderResult = _mapper.Map<RequestMainDto>(requestHeader);
 
             return requestHeaderResult != null ? ApiResponse<RequestMainDto>.Success(requestHeaderResult, 200) :
-                ApiResponse<RequestMainDto>.Fail("Bad requestFrom GetRequestHeaderAsync", 404);
+                ApiResponse<RequestMainDto>.Fail("Bad request request header is null", 404);
         }
 
         public async Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetRequestDetails(int requestmainId)
