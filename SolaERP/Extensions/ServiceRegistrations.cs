@@ -43,6 +43,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IMailService, MailService>();
             builder.Services.AddScoped<IItemService, ItemService>();
             builder.Services.AddScoped<ILogInformationService, LogInformationService>();
+            builder.Services.AddScoped<IAnalysisCodeService, AnalysisCodeService>();
         }
         private static void UseRepositories(this WebApplicationBuilder builder)
         {
@@ -59,6 +60,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IRequestDetailRepository, SqlRequestDetailRepository>();
             builder.Services.AddScoped<ILogInformationRepository, SqlLogInformationRepository>();
             builder.Services.AddScoped<IItemCodeRepository, SqlItemCodeRepository>();
+            builder.Services.AddScoped<IAnalysisCodeRepository, SqlAnalysisCodeRepository>();
         }
         public static void UseValidationExtension(this WebApplicationBuilder builder)
         {
@@ -73,7 +75,7 @@ namespace SolaERP.Extensions
             builder.Services.AddSingleton<IRoleStore<Role>, RoleStore>();
             builder.Services.AddSingleton<IPasswordHasher<User>, CustomPasswordHasher>();
         }
-        public static void UseDataAccesServices(this WebApplicationBuilder builder)
+        public static void ConfigureServices(this WebApplicationBuilder builder)
         {
             builder.UseRepositories();
             builder.UseServices();

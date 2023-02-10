@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using SolaERP.Infrastructure.Dtos.User;
+using SolaERP.Infrastructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Infrastructure.ValidationRules.UserValidation
 {
-    public class UserCheckVerifyCodeDtoValidation:AbstractValidator<UserCheckVerifyCodeDto>
+    public class UserCheckVerifyCodeDtoValidation:AbstractValidator<UserCheckVerifyCodeModel>
     {
         public UserCheckVerifyCodeDtoValidation()
         {

@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using SolaERP.Infrastructure.Dtos.User;
+using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Application.Validations.UserValidation
 {
-    public class ResetPasswordRequestValidation : AbstractValidator<ResetPasswordRequestDto>
+    public class ResetPasswordRequestValidation : AbstractValidator<ResetPasswordModel>
     {
         public ResetPasswordRequestValidation()
         {

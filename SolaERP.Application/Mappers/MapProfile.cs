@@ -1,15 +1,18 @@
 ﻿using AutoMapper;
 using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Dtos.AnalysisCode;
 using SolaERP.Infrastructure.Dtos.ApproveRole;
 using SolaERP.Infrastructure.Dtos.ApproveStage;
 using SolaERP.Infrastructure.Dtos.ApproveStages;
 using SolaERP.Infrastructure.Dtos.BusinessUnit;
 using SolaERP.Infrastructure.Dtos.Group;
+using SolaERP.Infrastructure.Dtos.Item_Code;
 using SolaERP.Infrastructure.Dtos.LogInfo;
 using SolaERP.Infrastructure.Dtos.Menu;
 using SolaERP.Infrastructure.Dtos.Procedure;
 using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Dtos.UserDto;
+using SolaERP.Infrastructure.Entities;
 using SolaERP.Infrastructure.Entities.ApproveRole;
 using SolaERP.Infrastructure.Entities.ApproveStage;
 using SolaERP.Infrastructure.Entities.Auth;
@@ -52,6 +55,10 @@ namespace SolaERP.Application.Mappers
             CreateMap<LogInfo, LogInfoDto>().ReverseMap();
             CreateMap<ItemCode, ItemCodeDto>().ReverseMap();
             CreateMap<RequestAmendment, RequestApproveAmendmentDto>().ReverseMap();
+            CreateMap<AnalysisCode, AnalysisCodeDto>().ReverseMap();
+            CreateMap<RequestApprovalInfo, RequestApprovalInfoDto>().ReverseMap();
+            CreateMap<RequestDetailWithAnalysisCode, RequestDetailsWithAnalysisCodeDto>().ReverseMap();
+            CreateMap<ItemCodeWithImages, ItemCodeWithImagesDto>().ReverseMap();
         }
     }
 }
