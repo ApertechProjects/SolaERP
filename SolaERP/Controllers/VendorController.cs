@@ -2,6 +2,7 @@
 using SolaERP.Business.CommonLogic;
 using SolaERP.Business.Dtos.EntityDtos.Vendor;
 using SolaERP.Business.Models;
+using SolaERP.Infrastructure.Contracts.Repositories;
 
 namespace SolaERP.Controllers
 {
@@ -10,9 +11,11 @@ namespace SolaERP.Controllers
     public class VendorController : ControllerBase
     {
         private ConfHelper ConfHelper { get; }
-        public VendorController(ConfHelper confHelper)
+        private readonly IUserRepository _userRepository;
+        public VendorController(ConfHelper confHelper,IUserRepository userRepository)
         {
             ConfHelper = confHelper;
+            _userRepository= userRepository;
         }
 
 
@@ -40,6 +43,13 @@ namespace SolaERP.Controllers
         public async Task<ApiResult> VendorSendToApprove([FromHeader] string token, VendorSendToApprove vendorSendToApprove)
         {
             return await new EntityLogic(ConfHelper).VendorSendToApprove(token, vendorSendToApprove);
+        }
+
+
+        [HttpGet("{businessUnitId}")]
+        public async Task<ApiResult> GetActiveVendor([FromHeader] string authToken, int businessUnitId)
+        {
+            return await new EntityLogic(ConfHelper,_userRepository).GetActiveVendors(authToken, businessUnitId);
         }
     }
 }

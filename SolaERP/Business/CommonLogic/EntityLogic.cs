@@ -15,15 +15,19 @@ using SolaERP.Business.Dtos.EntityDtos.Vendor;
 using SolaERP.Business.Dtos.GeneralDtos;
 using SolaERP.Business.Dtos.Wrappers;
 using SolaERP.Business.Models;
+using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Dtos.Auth;
 using System.Data;
 
 namespace SolaERP.Business.CommonLogic
 {
     public class EntityLogic
     {
-        public EntityLogic(ConfHelper confHelper)
+        private readonly IUserRepository _userRepository;
+        public EntityLogic(ConfHelper confHelper, IUserRepository userRepository = null)
         {
             ConfHelper = confHelper;
+            _userRepository = userRepository;
         }
 
         private ConfHelper ConfHelper { get; }
@@ -47,7 +51,7 @@ namespace SolaERP.Business.CommonLogic
         {
             if (await UserIsAuthorized(token))
             {
-                int userId = await new EntityLogic(ConfHelper).GetUserIdByToken(token);
+                int userId = await _userRepository.GetUserIdByTokenAsync(token);
                 var vendorList = new VendorListWrapper
                 {
                     WFAVendor = (await GetData.FromQuery($"EXEC dbo.SP_VendorWFA {userId},{BU}", ConfHelper.DevelopmentUrl)).ConvertToClassListModel<VendorWFA>(),
@@ -936,6 +940,27 @@ namespace SolaERP.Business.CommonLogic
 
             }
             return UnAuthorizedUserResult();
+        }
+
+        public async Task<ApiResult> GetActiveVendors(string authToken, int businessUnitId)
+        {
+            int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
+            if (await UserIsAuthorized(authToken))
+            {
+                var data = await GetData.FromQuery($"exec SP_VendorList {userId},{businessUnitId}"
+                    , ConfHelper.DevelopmentUrl);
+
+
+                return new ApiResult
+                {
+                    Data = data.ConvertToClassListModel<VendorList>(),
+                    OperationIsSuccess = true,
+                    IsAuthorized = true
+                };
+
+            }
+            return UnAuthorizedUserResult();
+
         }
     }
 }
