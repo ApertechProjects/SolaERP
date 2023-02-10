@@ -5,5 +5,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
 {
     public interface IItemCodeRepository : IReadableAsync<ItemCode>
     {
+        public Task<List<ItemCodeWithImages>> GetItemCodesWithImagesAsync();
     }
 }
