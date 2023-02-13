@@ -18,9 +18,9 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetItemCodesAsync()
             => CreateActionResult(await _itemService.GetAllAsync());
 
-        [HttpGet]
-        public async Task<IActionResult> GetItemCodesWithImagesAsync()
-            => CreateActionResult(await _itemService.GetItemCodesWithImagesAsync());
+        [HttpPost]
+        public async Task<IActionResult> GetItemCodesByItemCodeAsync(string itemCode)
+            => CreateActionResult(await _itemService.GetItemCodeByItemCodeAsync(itemCode));
 
     }
 }

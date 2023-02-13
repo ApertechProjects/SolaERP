@@ -6,5 +6,6 @@
         public string Description { get; set; }
         public string LongDescription { get; set; }
         public string UnitOfPurch { get; set; }
+        public byte[] ItemImage { get; set; }
     }
 }

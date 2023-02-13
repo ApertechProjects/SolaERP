@@ -31,6 +31,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<ItemCode> GetItemCodeByItemCodeAsync(string itemCode)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SELECT * FROM [dbo].[GET_ITEM_BY_ITEM_CODE](@ItemCode)";
+                command.Parameters.AddWithValue(command, "@ItemCode", itemCode);
+                ItemCode result = new();
+
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                    result = reader.GetByEntityStructure<ItemCode>();
+
+                return result;
+            }
+        }
+
         public async Task<List<ItemCodeWithImages>> GetItemCodesWithImagesAsync()
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -50,10 +66,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return new()
             {
-                Item_Code = reader.Get<string>("ITEM_CODE"),
-                Description = reader.Get<string>("DESCR"),
-                LongDescription = reader.Get<string>("LONG_DESCR"),
-                UnitOfPurch = reader.Get<string>("UNIT_OF_PURCH")
+                Item_Code = reader.Get<string>("ItemCode").Trim(),
+                Description = reader.Get<string>("Description"),
+                LongDescription = reader.Get<string>("LongDescription"),
+                UnitOfPurch = reader.Get<string>("UnitOfPurch")
             };
         }
 
