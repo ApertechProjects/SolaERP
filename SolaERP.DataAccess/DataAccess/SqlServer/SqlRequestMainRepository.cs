@@ -19,7 +19,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-
         public async Task<List<RequestMain>> GetAllAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo, ApproveStatuses approveStatus, Statuss status)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -45,8 +44,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return mainRequests;
             }
         }
-
-
 
         public async Task<int> DeleteAsync(int Id)
         {
@@ -161,8 +158,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-
-
         public async Task<bool> SendRequestToApproveAsync(int userId, int requestMainId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -175,10 +170,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
-
-
-
-
 
         public async Task<RequestMain> GetRequestByRequestMainIdAsync(int requestMainId)
         {

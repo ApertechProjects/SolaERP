@@ -119,10 +119,11 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<RequestWFADto>>.Fail("Waiting for approval list is empty", 404);
         }
 
-        public async Task<ApiResponse<RequestMainWithDetailsDto>> GetRequestByRequestMainId(int requestMainId)
+        public async Task<ApiResponse<RequestMainWithDetailsDto>> GetRequestByRequestMainId(string authToken, int requestMainId)
         {
-            var requestMain = await _requestMainRepository.GetRequestByRequestMainIdAsync(requestMainId);
-            requestMain.Details = await _requestDetailRepository.GetAllDetailsByRequestMainIdAsync(requestMainId);
+            int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
+            var requestMain = await _requestMainRepository.GetRequesMainHeaderAsync(requestMainId, userId);
+            requestMain.Details = await _requestDetailRepository.GetRequestDetailsByMainIdWithAnalysisCodeAsync(requestMainId);
 
             var requestDto = _mapper.Map<RequestMainWithDetailsDto>(requestMain);
 
