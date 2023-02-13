@@ -243,7 +243,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
-        public async Task<RequestMain> GetRequesMainHeaderAsync(int requestMainId, int userId)
+        public async Task<RequestCardMain> GetRequesMainHeaderAsync(int requestMainId, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -251,10 +251,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
-                RequestMain result = null;
+                RequestCardMain result = null;
                 using var reader = await command.ExecuteReaderAsync();
 
-                if (reader.Read()) result = GetWaitingForApprovalFromReader(reader);
+                if (reader.Read()) result = GetRequestCardFromReader(reader);
 
                 return result;
             }
@@ -308,6 +308,30 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 EntryDate = reader.Get<DateTime>("EntryDate"),
                 RequestDate = reader.Get<DateTime>("RequestDate"),
                 RequsetDeadline = reader.Get<DateTime>("RequestDeadline"),
+                UserId = reader.Get<int>("UserId"),
+                Requester = reader.Get<int>("Requester"),
+                Status = reader.Get<int>("Status"),
+                SupplierCode = reader.Get<string>("SupplierCode"),
+                RequestComment = reader.Get<string>("RequestComment"),
+                OperatorComment = reader.Get<string>("OperatorComment"),
+                QualityRequired = reader.Get<string>("QualityRequired"),
+                CurrencyCode = reader.Get<string>("CurrencyCode"),
+                LogisticsTotal = reader.Get<decimal>("LogisticsTotal"),
+            };
+        }
+
+        private RequestCardMain GetRequestCardFromReader(IDataReader reader)
+        {
+            return new()
+            {
+                RequestMainId = reader.Get<int>("RequestMainId"),
+                BusinessUnitId = reader.Get<int>("BusinessUnitId"),
+                BusinessUnitCode = reader.Get<string>("BusinessUnitCode"),
+                RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
+                RequestTypeId = reader.Get<int>("RequestTypeId"),
+                RequestNo = reader.Get<string>("RequestNo"),
+                EntryDate = reader.Get<DateTime>("EntryDate"),
+                RequestDate = reader.Get<DateTime>("RequestDate"),
                 UserId = reader.Get<int>("UserId"),
                 Requester = reader.Get<int>("Requester"),
                 Status = reader.Get<int>("Status"),

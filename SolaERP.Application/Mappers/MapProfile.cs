@@ -66,9 +66,11 @@ namespace SolaERP.Application.Mappers
             CreateMap<ActiveUser, ActiveUserDto>().ReverseMap();
             CreateMap<AnalysisCode, AnalysisCodeDto>().ReverseMap();
             CreateMap<RequestApprovalInfo, RequestApprovalInfoDto>().ReverseMap();
-            CreateMap<RequestDetailWithAnalysisCode, RequestDetailsWithAnalysisCodeDto>().ReverseMap();
+            CreateMap<RequestDetail, RequestDetailsWithAnalysisCodeDto>().ReverseMap();
             CreateMap<ItemCodeWithImages, ItemCodeWithImagesDto>().ReverseMap();
             CreateMap<ApprovalStatusDto, ApprovalStatus>().ReverseMap();
+            CreateMap<RequestCardMain, RequestCardMainDto>().ReverseMap();
+            CreateMap<RequestCardDetail, RequestCardDetailDto>().ReverseMap();
         }
     }
 }

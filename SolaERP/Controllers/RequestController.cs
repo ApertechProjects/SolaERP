@@ -45,16 +45,9 @@ namespace SolaERP.Controllers
              => CreateActionResult(await _requestService.GetRequestByRequestMainId(authToken, requestMainId));
 
         [HttpGet("{requestMainId}")]
-        public async Task<IActionResult> GetRequestHeaderAsync([FromHeader] string authToken, int requestMainId)
-            => CreateActionResult(await _requestService.GetRequestHeaderAsync(authToken, requestMainId));
-
-        [HttpGet("{requestMainId}")]
         public async Task<IActionResult> GetRequestApprovalInfo([FromHeader] string authToken, int requestMainId)
             => CreateActionResult(await _requestService.GetRequestApprovalInfoAsync(authToken, requestMainId));
 
-        [HttpGet("{requestMainId}")]
-        public async Task<IActionResult> GetRequestDetailsAsync(int requestMainId)
-            => CreateActionResult(await _requestService.GetRequestDetails(requestMainId));
     }
 }
 

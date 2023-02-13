@@ -119,15 +119,15 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<RequestWFADto>>.Fail("Waiting for approval list is empty", 404);
         }
 
-        public async Task<ApiResponse<RequestMainWithDetailsDto>> GetRequestByRequestMainId(string authToken, int requestMainId)
+        public async Task<ApiResponse<RequestCardMainDto>> GetRequestByRequestMainId(string authToken, int requestMainId)
         {
             int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
             var requestMain = await _requestMainRepository.GetRequesMainHeaderAsync(requestMainId, userId);
-            requestMain.Details = await _requestDetailRepository.GetRequestDetailsByMainIdWithAnalysisCodeAsync(requestMainId);
+            requestMain.requestCardDetails = await _requestDetailRepository.GetRequestDetailsByMainIdAsync(requestMainId);
 
-            var requestDto = _mapper.Map<RequestMainWithDetailsDto>(requestMain);
+            var requestDto = _mapper.Map<RequestCardMainDto>(requestMain);
 
-            return ApiResponse<RequestMainWithDetailsDto>.Success(requestDto, 200);
+            return ApiResponse<RequestCardMainDto>.Success(requestDto, 200);
         }
 
         public async Task<ApiResponse<List<RequestMainDraftDto>>> GetAllRequestMainDraftsAsync(RequestMainDraftGetDto getMainDraftParameters)
@@ -175,7 +175,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetRequestDetails(int requestmainId)
         {
-            var requestDetails = await _requestDetailRepository.GetRequestDetailsByMainIdWithAnalysisCodeAsync(requestmainId);
+            var requestDetails = await _requestDetailRepository.GetRequestDetailsByMainIdAsync(requestmainId);
             var requestDetailsResult = _mapper.Map<List<RequestDetailsWithAnalysisCodeDto>>(requestDetails);
 
             return requestDetailsResult.Count > 0 ? ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>.Success(requestDetailsResult, 200) :

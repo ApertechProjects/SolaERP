@@ -161,7 +161,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             await AddAsync(entity);
         }
 
-        public async Task<List<RequestDetailWithAnalysisCode>> GetRequestDetailsByMainIdWithAnalysisCodeAsync(int requestMainId)
+        public async Task<List<RequestCardDetail>> GetRequestDetailsByMainIdAsync(int requestMainId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -169,9 +169,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
 
                 using var reader = await command.ExecuteReaderAsync();
-                List<RequestDetailWithAnalysisCode> resultList = new();
+                List<RequestCardDetail> resultList = new();
 
-                while (await reader.ReadAsync()) resultList.Add(reader.GetByEntityStructure<RequestDetailWithAnalysisCode>());
+                while (await reader.ReadAsync()) resultList.Add(reader.GetByEntityStructure<RequestCardDetail>());
                 return resultList;
             }
         }
