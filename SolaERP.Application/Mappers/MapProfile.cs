@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Dtos.Account;
 using SolaERP.Infrastructure.Dtos.AnalysisCode;
 using SolaERP.Infrastructure.Dtos.ApproveRole;
 using SolaERP.Infrastructure.Dtos.ApproveStage;
@@ -17,6 +18,7 @@ using SolaERP.Infrastructure.Dtos.Status;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities;
+using SolaERP.Infrastructure.Entities.Account;
 using SolaERP.Infrastructure.Entities.ApproveRole;
 using SolaERP.Infrastructure.Entities.ApproveStage;
 using SolaERP.Infrastructure.Entities.ApproveStages;
@@ -74,6 +76,7 @@ namespace SolaERP.Application.Mappers
             CreateMap<RequestCardMain, RequestCardMainDto>().ReverseMap();
             CreateMap<RequestCardDetail, RequestCardDetailDto>().ReverseMap();
             CreateMap<Location, LocationDto>().ReverseMap();
+            CreateMap<AccountCode, AccountCodeDto>().ReverseMap();
         }
     }
 }
