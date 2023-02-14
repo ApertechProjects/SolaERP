@@ -172,6 +172,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 List<RequestCardDetail> resultList = new();
 
                 while (await reader.ReadAsync()) resultList.Add(reader.GetByEntityStructure<RequestCardDetail>());
+                if (resultList.Count == 0)
+                    resultList.Add(new RequestCardDetail { Amount = 0 });
                 return resultList;
             }
         }

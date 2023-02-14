@@ -255,7 +255,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 if (reader.Read()) result = GetRequestCardFromReader(reader);
-
+                else
+                    result = new();
                 return result;
             }
         }

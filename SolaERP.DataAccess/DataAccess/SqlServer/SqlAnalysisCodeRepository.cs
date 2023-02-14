@@ -29,6 +29,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 while (reader.Read())
                     resultList.Add(reader.GetByEntityStructure<AnalysisCode>());
+                if (resultList.Count == 0)
+                    resultList.Add(new());
                 return resultList;
             }
         }
