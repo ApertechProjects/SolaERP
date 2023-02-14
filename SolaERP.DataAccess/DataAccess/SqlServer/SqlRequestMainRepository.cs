@@ -76,7 +76,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                 @SupplierCode,@RequestComment,
                                                                 @OperatorComment,
                                                                 @QualityRequired,@CurrencyCode,
-                                                                @LogisticTotal,@NewRequestmainId = @NewRequestmainId OUTPUT select @NewRequestmainId as NewRequestmainId";
+                                                                @LogisticTotal,@NewRequestmainId = @NewRequestmainId OUTPUT 
+                                                                select @NewRequestmainId as NewRequestmainId";
 
                 command.Parameters.AddWithValue(command, "@RequestMainId", model.RequestMainId);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
@@ -252,7 +253,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 }
 
                 if (mainRequestsForAmendment.Count == 0)
-                    mainRequestsForAmendment.Add(new() { BusinessUnitId = 1, RequestComment = "Tessst", Requester = "ShaSha", RequestMainId = 1, Status = 1 });
+                    mainRequestsForAmendment.Add(new() { BusinessUnitId = 1, RequestComment = "Tessst", Requester = 1405, RequestMainId = 1, Status = 1 });
 
                 return mainRequestsForAmendment;
             }
@@ -369,7 +370,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 EntryDate = reader.Get<DateTime>("EntryDate"),
                 RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
                 UserId = reader.Get<int>("UserId"),
-                Requester = reader.Get<string>("Requester"),
+                Requester = reader.Get<int>("Requester"),
                 Status = reader.Get<int>("Status"),
                 SupplierCode = reader.Get<string>("SupplierCode"),
                 RequestComment = reader.Get<string>("RequestComment"),

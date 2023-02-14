@@ -1,7 +1,10 @@
-﻿namespace SolaERP.Infrastructure.Entities.Item_Code
+﻿using SolaERP.Infrastructure.Attributes;
+
+namespace SolaERP.Infrastructure.Entities.Item_Code
 {
     public class ItemCode : BaseEntity
     {
+        [DbColumn("ItemCode")]
         public string Item_Code { get; set; }
         public string Description { get; set; }
         public string LongDescription { get; set; }
