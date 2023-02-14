@@ -69,14 +69,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText = @"EXEC SP_RequestMain_IUD @RequestMainId,@BusinessUnitId,
-                                                                @RequestNo,@RequestTypeId,
+                                                                @RequestTypeId, @RequestNo,
                                                                 @EntryDate,@RequestDate,
                                                                 @RequestDeadline,@UserID,
                                                                 @Requester,@Status,
                                                                 @SupplierCode,@RequestComment,
                                                                 @OperatorComment,
                                                                 @QualityRequired,@CurrencyCode,
-                                                                @LogisticTotal";
+                                                                @LogisticTotal,@NewRequestmainId = @NewRequestmainId OUTPUT select @NewRequestmainId as NewRequestmainId";
 
                 command.Parameters.AddWithValue(command, "@RequestMainId", model.RequestMainId);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
@@ -95,15 +95,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@CurrencyCode", model.CurrencyCode);
                 command.Parameters.AddWithValue(command, "@LogisticTotal", model.LogisticTotal);
 
+                command.Parameters.Add("@NewRequestmainId", SqlDbType.Int);
+                command.Parameters["@NewRequestmainId"].Direction = ParameterDirection.Output;
 
-                var newRequestmainId = new SqlParameter("@NewRequestmainId", SqlDbType.Int);
-                newRequestmainId.Direction = ParameterDirection.Output;
-                command.Parameters.Add(newRequestmainId);
+                using var reader = await command.ExecuteReaderAsync();
+                int returnValue = 0;
+                if (reader.Read())
+                {
+                    returnValue = reader.Get<int>("NewRequestmainId");
+                }
+                //await command.ExecuteNonQueryAsync();
+                //var returnValue = command.Parameters["@NewRequestmainId"].Value;
 
-                await command.ExecuteNonQueryAsync();
-                var returnValue = command.Parameters["@NewRequestmainId"].Value;
-
-                return returnValue != DBNull.Value && returnValue != null ? Convert.ToInt32(returnValue) : 0;
+                return returnValue; //= DBNull.Value && returnValue != null ? Convert.ToInt32(returnValue) : 0;
             }
         }
 
