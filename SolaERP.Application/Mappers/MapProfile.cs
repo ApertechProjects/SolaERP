@@ -34,6 +34,7 @@ using SolaERP.Infrastructure.Entities.Procedure;
 using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.Entities.Status;
 using SolaERP.Infrastructure.Entities.User;
+using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Application.Mappers
 {
