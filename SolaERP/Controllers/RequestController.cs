@@ -21,8 +21,8 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _requestService.GetAllAsync(requestMainParameters));
 
         [HttpPost]
-        public async Task<IActionResult> SaveRequestAsync(RequestMainWithDetailsDto requestMainDto)
-        => CreateActionResult(await _requestService.AddOrUpdateAsync(requestMainDto));
+        public async Task<IActionResult> SaveRequestAsync([FromHeader] string authToken, RequestSaveModel model)
+        => CreateActionResult(await _requestService.AddOrUpdateAsync(authToken, model));
 
         [HttpGet("{businessUnitId}")]
         public async Task<IActionResult> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId)

@@ -24,6 +24,7 @@ using SolaERP.Infrastructure.Entities.LogInfo;
 using SolaERP.Infrastructure.Entities.Menu;
 using SolaERP.Infrastructure.Entities.Procedure;
 using SolaERP.Infrastructure.Entities.Request;
+using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Application.Mappers
 {
@@ -60,6 +61,7 @@ namespace SolaERP.Application.Mappers
             CreateMap<RequestDetailWithAnalysisCode, RequestDetailsWithAnalysisCodeDto>().ReverseMap();
             CreateMap<ItemCodeWithImages, ItemCodeWithImagesDto>().ReverseMap();
             CreateMap<ApprovalStatusDto, ApprovalStatus>().ReverseMap();
+            CreateMap<RequestSaveModel, RequestMainSaveModel>().ReverseMap();
         }
     }
 }

@@ -61,15 +61,16 @@ namespace SolaERP.Application.Services
                 ApiResponse<List<RequestTypesDto>>.Fail("Request types not found", 404);
         }
 
-        public async Task<ApiResponse<RequestMainWithDetailsDto>> AddOrUpdateAsync(RequestMainWithDetailsDto requestMainDto)
+        public async Task<ApiResponse<bool>> AddOrUpdateAsync(string finderToken, RequestSaveModel model)
         {
-            var mainId = await _requestMainRepository.AddOrUpdateAsync(_mapper.Map<RequestMain>(requestMainDto));
+            model.UserId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            var mainId = await _requestMainRepository.AddOrUpdateAsync(_mapper.Map<RequestMainSaveModel>(model));
 
             if (mainId != 0)
             {
-                for (int i = 0; i < requestMainDto.Details.Count; i++)
+                for (int i = 0; i < model.Details.Count; i++)
                 {
-                    var requestDetailDto = requestMainDto.Details[i];
+                    var requestDetailDto = model.Details[i];
                     requestDetailDto.RequestMainId = mainId;
                     if (requestDetailDto.Type == "remove")
                     {
@@ -80,9 +81,9 @@ namespace SolaERP.Application.Services
                         await SaveRequestDetailsAsync(requestDetailDto);
                     }
                 }
-                return ApiResponse<RequestMainWithDetailsDto>.Success(requestMainDto, 200);
+                return ApiResponse<bool>.Success(true, 200);
             }
-            return ApiResponse<RequestMainWithDetailsDto>.Fail("Not Found", 404);
+            return ApiResponse<bool>.Fail("Not Found", 404);
         }
 
         public async Task<ApiResponse<bool>> ChangeRequestStatus(List<RequestChangeStatusParametersDto> changeStatusParametersDtos)
@@ -155,11 +156,11 @@ namespace SolaERP.Application.Services
         public async Task<ApiResponse<List<RequestApprovalInfoDto>>> GetRequestApprovalInfoAsync(string finderToken, int requestMainId)
         {
             var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
-            var approvalInfo = await _requestMainRepository.GetRequestApprovalInfoAsync(userId, requestMainId);
+            var approvalInfo = await _requestMainRepository.GetRequestApprovalInfoAsync(requestMainId, userId);
             var approvalInfoResult = _mapper.Map<List<RequestApprovalInfoDto>>(approvalInfo);
 
             return approvalInfoResult.Count > 0 ? ApiResponse<List<RequestApprovalInfoDto>>.Success(approvalInfoResult, 200) :
-                ApiResponse<List<RequestApprovalInfoDto>>.Fail("Bad request Request Approval info is empty", 404);
+                ApiResponse<List<RequestApprovalInfoDto>>.Fail("Bad Request Approval info is empty", 404);
         }
 
         public async Task<ApiResponse<RequestMainDto>> GetRequestHeaderAsync(string finderToken, int requestMainId)
@@ -169,7 +170,7 @@ namespace SolaERP.Application.Services
             var requestHeaderResult = _mapper.Map<RequestMainDto>(requestHeader);
 
             return requestHeaderResult != null ? ApiResponse<RequestMainDto>.Success(requestHeaderResult, 200) :
-                ApiResponse<RequestMainDto>.Fail("Bad request request header is null", 404);
+                ApiResponse<RequestMainDto>.Fail("Bad request header is null", 404);
         }
 
         public async Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetRequestDetails(int requestmainId)

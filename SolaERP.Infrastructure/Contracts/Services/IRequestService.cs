@@ -5,7 +5,7 @@ using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Infrastructure.Contracts.Services
 {
-    public interface IRequestService : IDeleteableAsync, IReturnableServiceMethodAsync<RequestMainWithDetailsDto>
+    public interface IRequestService : IDeleteableAsync
     {
         Task<ApiResponse<List<RequestMainDto>>> GetAllAsync(RequestMainGetParametersDto requestMainGet);
         Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(string finderToken, RequestWFAGetParametersDto requestWFAGetParametersDto);
@@ -16,7 +16,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<List<RequestMainDraftDto>>> GetAllRequestMainDraftsAsync(RequestMainDraftGetDto getMainDraftParameters);
         Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentGetModel requestParametersDto);
         Task<ApiResponse<RequestMainWithDetailsDto>> GetRequestByRequestMainId(int requestMainId);
-        Task<ApiResponse<RequestMainWithDetailsDto>> AddOrUpdateAsync(RequestMainWithDetailsDto requestMainDto);
+        Task<ApiResponse<bool>> AddOrUpdateAsync(string finderToken, RequestSaveModel model);
         Task<ApiResponse<List<RequestApprovalInfoDto>>> GetRequestApprovalInfoAsync(string finderToken, int requestMainId);
         Task<ApiResponse<RequestMainDto>> GetRequestHeaderAsync(string finderToken, int requestMainId);
         Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetRequestDetails(int requestmainId);
