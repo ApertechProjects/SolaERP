@@ -8,6 +8,7 @@ using SolaERP.Infrastructure.Dtos.BusinessUnit;
 using SolaERP.Infrastructure.Dtos.Buyer;
 using SolaERP.Infrastructure.Dtos.Group;
 using SolaERP.Infrastructure.Dtos.Item_Code;
+using SolaERP.Infrastructure.Dtos.Location;
 using SolaERP.Infrastructure.Dtos.LogInfo;
 using SolaERP.Infrastructure.Dtos.Menu;
 using SolaERP.Infrastructure.Dtos.Procedure;
@@ -24,6 +25,7 @@ using SolaERP.Infrastructure.Entities.BusinessUnits;
 using SolaERP.Infrastructure.Entities.Buyer;
 using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Entities.Item_Code;
+using SolaERP.Infrastructure.Entities.Location;
 using SolaERP.Infrastructure.Entities.LogInfo;
 using SolaERP.Infrastructure.Entities.Menu;
 using SolaERP.Infrastructure.Entities.Procedure;
@@ -71,6 +73,7 @@ namespace SolaERP.Application.Mappers
             CreateMap<ApprovalStatusDto, ApprovalStatus>().ReverseMap();
             CreateMap<RequestCardMain, RequestCardMainDto>().ReverseMap();
             CreateMap<RequestCardDetail, RequestCardDetailDto>().ReverseMap();
+            CreateMap<Location, LocationDto>().ReverseMap();
         }
     }
 }
