@@ -1,9 +1,11 @@
-﻿namespace SolaERP.Infrastructure.Dtos.AnalysisCode
+﻿using SolaERP.Infrastructure.Attributes;
+
+namespace SolaERP.Infrastructure.Dtos.AnalysisCode
 {
     public class AnalysisCodeDto
     {
-        public int AnalysisCodeId { get; set; }
-        public string AnalysisCode { get; set; }
+        public int AnalysisCodesId { get; set; }
+        public string AnalyticCode { get; set; }
         public string AnalysisName { get; set; }
     }
 }

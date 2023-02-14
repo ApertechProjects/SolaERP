@@ -27,7 +27,7 @@ namespace SolaERP.Application.Services
             var analysisCodeResult = _mapper.Map<List<AnalysisCodeDto>>(analysisCodes);
 
             return analysisCodeResult.Count > 0 ? ApiResponse<List<AnalysisCodeDto>>.Success(analysisCodeResult, 200) :
-                ApiResponse<List<AnalysisCodeDto>>.Fail("Bad request from GetAnalysisCodesAsync", 404);
+                 ApiResponse<List<AnalysisCodeDto>>.Success(new List<AnalysisCodeDto>(), 200);
         }
     }
 }

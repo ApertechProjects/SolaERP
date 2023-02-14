@@ -1,6 +1,6 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities;
+using SolaERP.Infrastructure.Entities.AnalysisCode;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data.Common;
 
@@ -27,7 +27,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
                 List<AnalysisCode> resultList = new();
 
-                while (await reader.ReadAsync()) resultList.Add(reader.GetByEntityStructure<AnalysisCode>());
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<AnalysisCode>());
                 return resultList;
             }
         }

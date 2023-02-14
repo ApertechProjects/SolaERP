@@ -1,4 +1,4 @@
-﻿using SolaERP.Infrastructure.Entities;
+﻿using SolaERP.Infrastructure.Entities.AnalysisCode;
 
 namespace SolaERP.Infrastructure.Contracts.Repositories
 {
