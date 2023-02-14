@@ -77,6 +77,7 @@ namespace SolaERP.Application.Mappers
             CreateMap<RequestCardDetail, RequestCardDetailDto>().ReverseMap();
             CreateMap<Location, LocationDto>().ReverseMap();
             CreateMap<AccountCode, AccountCodeDto>().ReverseMap();
+            CreateMap<RequestSaveModel, RequestMainSaveModel>().ReverseMap();
         }
     }
 }
