@@ -96,12 +96,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@LogisticTotal", model.LogisticTotal);
 
 
-                var newRequestmainId = new SqlParameter("@NewRequestMainId", SqlDbType.Int);
+                var newRequestmainId = new SqlParameter("@NewRequestmainId", SqlDbType.Int);
                 newRequestmainId.Direction = ParameterDirection.Output;
                 command.Parameters.Add(newRequestmainId);
 
                 await command.ExecuteNonQueryAsync();
-                var returnValue = command.Parameters["@NewRequestMainId"].Value;
+                var returnValue = command.Parameters["@NewRequestmainId"].Value;
 
                 return returnValue != DBNull.Value && returnValue != null ? Convert.ToInt32(returnValue) : 0;
             }
