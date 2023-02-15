@@ -131,9 +131,9 @@ namespace SolaERP.Application.Services
             return ApiResponse<RequestCardMainDto>.Success(requestDto, 200);
         }
 
-        public async Task<ApiResponse<List<RequestMainDraftDto>>> GetAllRequestMainDraftsAsync(RequestMainDraftGetDto getMainDraftParameters)
+        public async Task<ApiResponse<List<RequestMainDraftDto>>> GetRequestMainDraftsAsync(RequestMainDraftModel getMainDraftParameters)
         {
-            var mainDraftEntites = await _requestMainRepository.GetAllMainRequestDraftsAsync(getMainDraftParameters.BusinessUnitId, getMainDraftParameters.ItemCode, getMainDraftParameters.DateFrom, getMainDraftParameters.DateTo);
+            var mainDraftEntites = await _requestMainRepository.GetMainRequestDraftsAsync(getMainDraftParameters.BusinessUnitId, getMainDraftParameters.ItemCode, getMainDraftParameters.DateFrom, getMainDraftParameters.DateTo);
             var mainDraftDto = _mapper.Map<List<RequestMainDraftDto>>(mainDraftEntites);
 
             if (mainDraftEntites.Count > 0)
@@ -142,7 +142,7 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<RequestMainDraftDto>>.Fail("Main drafts is empty", 404);
         }
 
-        public async Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentGetModel requestParametersDto)
+        public async Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentModel requestParametersDto)
         {
             var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
             var mainRequest = await _requestMainRepository.GetApproveAmendmentRequestsAsync(userId, requestParametersDto);

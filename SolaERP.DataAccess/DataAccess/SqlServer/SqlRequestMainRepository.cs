@@ -144,7 +144,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<RequestMainDraft>> GetAllMainRequestDraftsAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo)
+        public async Task<List<RequestMainDraft>> GetMainRequestDraftsAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -223,7 +223,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<RequestAmendment>> GetApproveAmendmentRequestsAsync(int userId, RequestApproveAmendmentGetModel requestParametersDto)
+        public async Task<List<RequestAmendment>> GetApproveAmendmentRequestsAsync(int userId, RequestApproveAmendmentModel requestParametersDto)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

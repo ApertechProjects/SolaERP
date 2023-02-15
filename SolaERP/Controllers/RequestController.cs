@@ -32,7 +32,7 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _requestService.ChangeRequestStatus(authToken, requestChangeStatusParametersDtos));
 
         [HttpPost]
-        public async Task<IActionResult> GetApproveAmendmentRequestsAsync([FromHeader] string authToken, RequestApproveAmendmentGetModel requestParametersDto)
+        public async Task<IActionResult> GetApproveAmendmentRequestsAsync([FromHeader] string authToken, RequestApproveAmendmentModel requestParametersDto)
             => CreateActionResult(await _requestService.GetApproveAmendmentRequests(authToken, requestParametersDto));
 
         [HttpPost]
@@ -46,6 +46,10 @@ namespace SolaERP.Controllers
         [HttpGet("{requestMainId}")]
         public async Task<IActionResult> GetRequestApprovalInfo([FromHeader] string authToken, int requestMainId)
             => CreateActionResult(await _requestService.GetRequestApprovalInfoAsync(authToken, requestMainId));
+
+        [HttpPost]
+        public async Task<IActionResult> GetRequesMainDraftsAsync(RequestMainDraftModel model)
+            => CreateActionResult(await _requestService.GetRequestMainDraftsAsync(model));
 
 
 
