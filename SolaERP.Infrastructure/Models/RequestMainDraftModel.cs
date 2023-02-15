@@ -1,6 +1,6 @@
 ﻿namespace SolaERP.Infrastructure.Models
 {
-    public class RequestMainDraftGetDto
+    public class RequestMainDraftModel
     {
         public int BusinessUnitId { get; set; }
         public string ItemCode { get; set; }

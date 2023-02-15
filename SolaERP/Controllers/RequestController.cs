@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Controllers
@@ -29,11 +28,11 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _requestService.GetRequestTypesByBusinessUnitIdAsync(businessUnitId));
 
         [HttpPost]
-        public async Task<IActionResult> ChangeRequestStatusAsync(List<RequestChangeStatusParametersDto> requestChangeStatusParametersDtos)
-            => CreateActionResult(await _requestService.ChangeRequestStatus(requestChangeStatusParametersDtos));
+        public async Task<IActionResult> ChangeRequestStatusAsync([FromHeader] string authToken, List<RequestChangeStatusModel> requestChangeStatusParametersDtos)
+            => CreateActionResult(await _requestService.ChangeRequestStatus(authToken, requestChangeStatusParametersDtos));
 
         [HttpPost]
-        public async Task<IActionResult> GetApproveAmendmentRequestsAsync([FromHeader] string authToken, RequestApproveAmendmentGetModel requestParametersDto)
+        public async Task<IActionResult> GetApproveAmendmentRequestsAsync([FromHeader] string authToken, RequestApproveAmendmentModel requestParametersDto)
             => CreateActionResult(await _requestService.GetApproveAmendmentRequests(authToken, requestParametersDto));
 
         [HttpPost]
@@ -48,8 +47,9 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetRequestApprovalInfo([FromHeader] string authToken, int requestMainId)
             => CreateActionResult(await _requestService.GetRequestApprovalInfoAsync(authToken, requestMainId));
 
-
-
+        [HttpPost]
+        public async Task<IActionResult> GetRequestDraftsAsync(RequestMainDraftModel model)
+            => CreateActionResult(await _requestService.GetRequestMainDraftsAsync(model));
     }
 }
 

@@ -86,9 +86,9 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Fail("Not Found", 404);
         }
 
-        public async Task<ApiResponse<bool>> ChangeRequestStatus(List<RequestChangeStatusParametersDto> changeStatusParametersDtos)
+        public async Task<ApiResponse<bool>> ChangeRequestStatus(string finderToken, List<RequestChangeStatusModel> changeStatusParametersDtos)
         {
-            var userId = await _userRepository.GetUserIdByTokenAsync(changeStatusParametersDtos[0].FinderToken);
+            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
             for (int i = 0; i < changeStatusParametersDtos.Count; i++)
             {
                 changeStatusParametersDtos[i].UserId = userId;
@@ -132,6 +132,7 @@ namespace SolaERP.Application.Services
         }
 
         public async Task<ApiResponse<List<RequestMainDraftDto>>> GetDraftRequestAsync(RequestMainDraftGetDto getMainDraftParameters)
+        public async Task<ApiResponse<List<RequestMainDraftDto>>> GetRequestMainDraftsAsync(RequestMainDraftModel getMainDraftParameters)
         {
             var mainDraftEntites = await _requestMainRepository.GetDraftRequestAsync(getMainDraftParameters.BusinessUnitId, getMainDraftParameters.ItemCode, getMainDraftParameters.DateFrom, getMainDraftParameters.DateTo);
             var mainDraftDto = _mapper.Map<List<RequestMainDraftDto>>(mainDraftEntites);
@@ -142,7 +143,7 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<RequestMainDraftDto>>.Fail("Main drafts is empty", 404);
         }
 
-        public async Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentGetModel requestParametersDto)
+        public async Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentModel requestParametersDto)
         {
             var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
             var mainRequest = await _requestMainRepository.GetApproveAmendmentRequestsAsync(userId, requestParametersDto);

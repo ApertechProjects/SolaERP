@@ -1,6 +1,5 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.Enums;
 using SolaERP.Infrastructure.Models;
@@ -73,7 +72,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                 @SupplierCode,@RequestComment,
                                                                 @OperatorComment,
                                                                 @QualityRequired,@CurrencyCode,
-                                                                @LogisticTotal,@NewRequestmainId = @NewRequestmainId OUTPUT select @NewRequestmainId as NewRequestmainId";
+                                                                @LogisticTotal,@NewRequestmainId = @NewRequestmainId OUTPUT 
+                                                                select @NewRequestmainId as NewRequestmainId";
 
                 command.Parameters.AddWithValue(command, "@RequestMainId", model.RequestMainId);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
@@ -126,7 +126,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         }
 
-        public async Task<bool> ChangeRequestStatusAsync(RequestChangeStatusParametersDto changeStatusParametersDto)
+        public async Task<bool> ChangeRequestStatusAsync(RequestChangeStatusModel changeStatusParametersDto)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -135,6 +135,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@RequestMainId", changeStatusParametersDto.RequestMainId);
                 command.Parameters.AddWithValue(command, "@RequestDetailId", changeStatusParametersDto.RequestDetailId);
                 command.Parameters.AddWithValue(command, "@UserId", changeStatusParametersDto.UserId);
+                command.Parameters.AddWithValue(command, "@ApproveStatus", changeStatusParametersDto.ApproveStatus);
                 command.Parameters.AddWithValue(command, "@Sequence", changeStatusParametersDto.Sequence);
                 command.Parameters.AddWithValue(command, "@Status", changeStatusParametersDto.Status);
                 command.Parameters.AddWithValue(command, "@Comment", changeStatusParametersDto.Comment);
@@ -143,7 +144,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<RequestMainDraft>> GetDraftRequestAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo)
+        public async Task<List<RequestMainDraft>> GetMainRequestDraftsAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -222,7 +223,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<RequestAmendment>> GetApproveAmendmentRequestsAsync(int userId, RequestApproveAmendmentGetModel requestParametersDto)
+        public async Task<List<RequestAmendment>> GetApproveAmendmentRequestsAsync(int userId, RequestApproveAmendmentModel requestParametersDto)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -243,7 +244,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 }
 
                 if (mainRequestsForAmendment.Count == 0)
-                    mainRequestsForAmendment.Add(new() { BusinessUnitId = 1, RequestComment = "Tessst", Requester = "ShaSha", RequestMainId = 1, Status = 1 });
+                    mainRequestsForAmendment.Add(new() { BusinessUnitId = 1, RequestComment = "Tessst", Requester = 1405, RequestMainId = 1, Status = 1 });
 
                 return mainRequestsForAmendment;
             }
@@ -385,7 +386,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 EntryDate = reader.Get<DateTime>("EntryDate"),
                 RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
                 UserId = reader.Get<int>("UserId"),
-                Requester = reader.Get<string>("Requester"),
+                Requester = reader.Get<int>("Requester"),
                 Status = reader.Get<int>("Status"),
                 SupplierCode = reader.Get<string>("SupplierCode"),
                 RequestComment = reader.Get<string>("RequestComment"),

@@ -1,6 +1,6 @@
 ﻿namespace SolaERP.Infrastructure.Models
 {
-    public class RequestApproveAmendmentGetModel
+    public class RequestApproveAmendmentModel
     {
         public int BusinessUnitId { get; set; }
         public DateTime DateFrom { get; set; }
