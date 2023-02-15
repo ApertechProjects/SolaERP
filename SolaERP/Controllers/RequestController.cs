@@ -48,7 +48,7 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _requestService.GetRequestApprovalInfoAsync(authToken, requestMainId));
 
         [HttpPost]
-        public async Task<IActionResult> GetRequesMainDraftsAsync(RequestMainDraftModel model)
+        public async Task<IActionResult> GetRequestDraftsAsync(RequestMainDraftModel model)
             => CreateActionResult(await _requestService.GetRequestMainDraftsAsync(model));
     }
 }
