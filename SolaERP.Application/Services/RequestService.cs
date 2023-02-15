@@ -131,9 +131,9 @@ namespace SolaERP.Application.Services
             return ApiResponse<RequestCardMainDto>.Success(requestDto, 200);
         }
 
-        public async Task<ApiResponse<List<RequestMainDraftDto>>> GetAllRequestMainDraftsAsync(RequestMainDraftGetDto getMainDraftParameters)
+        public async Task<ApiResponse<List<RequestMainDraftDto>>> GetDraftRequestAsync(RequestMainDraftGetDto getMainDraftParameters)
         {
-            var mainDraftEntites = await _requestMainRepository.GetAllMainRequestDraftsAsync(getMainDraftParameters.BusinessUnitId, getMainDraftParameters.ItemCode, getMainDraftParameters.DateFrom, getMainDraftParameters.DateTo);
+            var mainDraftEntites = await _requestMainRepository.GetDraftRequestAsync(getMainDraftParameters.BusinessUnitId, getMainDraftParameters.ItemCode, getMainDraftParameters.DateFrom, getMainDraftParameters.DateTo);
             var mainDraftDto = _mapper.Map<List<RequestMainDraftDto>>(mainDraftEntites);
 
             if (mainDraftEntites.Count > 0)
