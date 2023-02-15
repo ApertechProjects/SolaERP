@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Controllers
@@ -29,8 +28,8 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _requestService.GetRequestTypesByBusinessUnitIdAsync(businessUnitId));
 
         [HttpPost]
-        public async Task<IActionResult> ChangeRequestStatusAsync(List<RequestChangeStatusParametersDto> requestChangeStatusParametersDtos)
-            => CreateActionResult(await _requestService.ChangeRequestStatus(requestChangeStatusParametersDtos));
+        public async Task<IActionResult> ChangeRequestStatusAsync([FromHeader] string authToken, List<RequestChangeStatusModel> requestChangeStatusParametersDtos)
+            => CreateActionResult(await _requestService.ChangeRequestStatus(authToken, requestChangeStatusParametersDtos));
 
         [HttpPost]
         public async Task<IActionResult> GetApproveAmendmentRequestsAsync([FromHeader] string authToken, RequestApproveAmendmentGetModel requestParametersDto)

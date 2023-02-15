@@ -86,9 +86,9 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Fail("Not Found", 404);
         }
 
-        public async Task<ApiResponse<bool>> ChangeRequestStatus(List<RequestChangeStatusParametersDto> changeStatusParametersDtos)
+        public async Task<ApiResponse<bool>> ChangeRequestStatus(string finderToken, List<RequestChangeStatusModel> changeStatusParametersDtos)
         {
-            var userId = await _userRepository.GetUserIdByTokenAsync(changeStatusParametersDtos[0].FinderToken);
+            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
             for (int i = 0; i < changeStatusParametersDtos.Count; i++)
             {
                 changeStatusParametersDtos[i].UserId = userId;

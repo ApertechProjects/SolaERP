@@ -1,10 +1,9 @@
-﻿namespace SolaERP.Infrastructure.Dtos.Request
+﻿namespace SolaERP.Infrastructure.Models
 {
-    public class RequestChangeStatusParametersDto
+    public class RequestChangeStatusModel
     {
         public int RequestMainId { get; set; }
         public int RequestDetailId { get; set; }
-        public string FinderToken { get; set; }
         public int Sequence { get; set; }
         public int UserId { get; set; }
         public int Status { get; set; }

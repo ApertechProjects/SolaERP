@@ -1,5 +1,4 @@
 ﻿using SolaERP.Infrastructure.Contracts.Common;
-using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.Enums;
 using SolaERP.Infrastructure.Models;
@@ -8,7 +7,7 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
 {
     public interface IRequestMainRepository : IDeleteableAsync, IReturnableRepoMethodAsync<RequestMainSaveModel>
     {
-        Task<bool> ChangeRequestStatusAsync(RequestChangeStatusParametersDto requestChangeStatusParametersDto);
+        Task<bool> ChangeRequestStatusAsync(RequestChangeStatusModel requestChangeStatusParametersDto);
         Task<List<RequestMain>> GetAllAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo, ApproveStatuses ApproveStatus, Statuss Status);
         Task<RequestMain> GetRequestByRequestMainIdAsync(int requestMainId);
         Task<List<RequestTypes>> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId);
