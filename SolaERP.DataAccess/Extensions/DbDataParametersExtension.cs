@@ -19,5 +19,14 @@ namespace SolaERP.DataAccess.Extensions
             parameter.Value = value == null ? DBNull.Value : value;
             command.Parameters.Add(parameter);
         }
+
+        public static void AddOutPutParameter(this IDataParameterCollection parameters, IDbCommand command, string parameterName)
+        {
+            IDbDataParameter parameter = command.CreateParameter();
+            parameter.ParameterName = parameterName;
+            parameter.Direction = ParameterDirection.Output;
+            parameter.DbType = DbType.Int32;
+            command.Parameters.Add(parameter);
+        }
     }
 }
