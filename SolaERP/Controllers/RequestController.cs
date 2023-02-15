@@ -50,9 +50,6 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> GetRequesMainDraftsAsync(RequestMainDraftModel model)
             => CreateActionResult(await _requestService.GetRequestMainDraftsAsync(model));
-
-
-
     }
 }
 
