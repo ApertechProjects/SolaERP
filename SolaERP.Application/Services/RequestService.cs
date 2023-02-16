@@ -1,4 +1,13 @@
-﻿namespace SolaERP.Application.Services
+﻿using AutoMapper;
+using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.Request;
+using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Entities.Request;
+using SolaERP.Infrastructure.Models;
+using SolaERP.Infrastructure.UnitOfWork;
+
+namespace SolaERP.Application.Services
 {
     public class RequestService : IRequestService
     {
@@ -203,6 +212,7 @@
         {
             throw new NotImplementedException();
         }
+
     }
 
 }
