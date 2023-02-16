@@ -1,13 +1,4 @@
-﻿using AutoMapper;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Request;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Entities.Request;
-using SolaERP.Infrastructure.Models;
-using SolaERP.Infrastructure.UnitOfWork;
-
-namespace SolaERP.Application.Services
+﻿namespace SolaERP.Application.Services
 {
     public class RequestService : IRequestService
     {
@@ -63,15 +54,15 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<bool>> AddOrUpdateAsync(string finderToken, RequestSaveModel model)
         {
-            model.UserId = await _userRepository.GetUserIdByTokenAsync(finderToken);
-            var mainId = await _requestMainRepository.AddOrUpdateAsync(_mapper.Map<RequestMainSaveModel>(model));
+            int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            RequestSaveResultModel resultModel = await _requestMainRepository.AddOrUpdateRequestAsync(userId, _mapper.Map<RequestMainSaveModel>(model));
 
-            if (mainId != 0)
+            if (resultModel != null)
             {
                 for (int i = 0; i < model.Details.Count; i++)
                 {
                     var requestDetailDto = model.Details[i];
-                    requestDetailDto.RequestMainId = mainId;
+                    requestDetailDto.RequestMainId = resultModel.RequestMainId;
                     if (requestDetailDto.Type == "remove")
                     {
                         await RemoveRequestDetailAsync(requestDetailDto);
@@ -181,6 +172,31 @@ namespace SolaERP.Application.Services
 
             return requestDetailsResult.Count > 0 ? ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>.Success(requestDetailsResult, 200) :
                 ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>.Fail("Request details is empty", 404);
+        }
+
+        public async Task<ApiResponse<RequestSaveResultModel>> AddOrUpdateRequestAsync(string finderToken, RequestSaveModel model)
+        {
+            int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            RequestSaveResultModel resultModel = await _requestMainRepository.AddOrUpdateRequestAsync(userId, _mapper.Map<RequestMainSaveModel>(model));
+
+            if (resultModel != null)
+            {
+                for (int i = 0; i < model.Details.Count; i++)
+                {
+                    var requestDetailDto = model.Details[i];
+                    requestDetailDto.RequestMainId = resultModel.RequestMainId;
+                    if (requestDetailDto.Type == "remove")
+                    {
+                        await RemoveRequestDetailAsync(requestDetailDto);
+                    }
+                    else
+                    {
+                        await SaveRequestDetailsAsync(requestDetailDto);
+                    }
+                }
+                return ApiResponse<RequestSaveResultModel>.Success(resultModel, 200);
+            }
+            return ApiResponse<RequestSaveResultModel>.Fail("Not Found", 404);
         }
 
         public Task<ApiResponse<int>> DeleteRequestAsync(int requestMainId)

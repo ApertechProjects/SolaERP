@@ -570,7 +570,6 @@ namespace SolaERP.Business.CommonLogic
 
                     if (gs.AdditionalPrivilege != null)
                     {
-
                         _ = await GetData.FromQuery($"EXEC SP_GroupAdditionalPrivileges_IUD  {gs.AdditionalPrivilege.GroupAdditionalPrivilegeId}", ConfHelper.DevelopmentUrl);
 
                         _ = await GetData.FromQuery($"EXEC SP_GroupAdditionalPrivileges_IUD  {gs.AdditionalPrivilege.GroupAdditionalPrivilegeId},{gs.GroupId},{Convert.ToInt16(gs.AdditionalPrivilege.VendorDraft)}", ConfHelper.DevelopmentUrl);
