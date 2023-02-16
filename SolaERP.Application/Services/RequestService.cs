@@ -182,6 +182,11 @@ namespace SolaERP.Application.Services
             return requestDetailsResult.Count > 0 ? ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>.Success(requestDetailsResult, 200) :
                 ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>.Fail("Request details is empty", 404);
         }
+
+        public Task<ApiResponse<int>> DeleteRequestAsync(int requestMainId)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }
