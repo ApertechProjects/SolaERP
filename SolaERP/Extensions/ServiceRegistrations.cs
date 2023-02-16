@@ -48,6 +48,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IBuyerService, BuyerService>();
             builder.Services.AddScoped<ILocationService, LocationService>();
             builder.Services.AddScoped<IAccountCodeService, AccountCodeService>();
+            builder.Services.AddScoped<ICurrencyCodeService, CurrencyCodeService>();
         }
         private static void UseRepositories(this WebApplicationBuilder builder)
         {
@@ -69,6 +70,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IBuyerRepository, SqlBuyerRepository>();
             builder.Services.AddScoped<ILocationRepository, SqlLocationRepository>();
             builder.Services.AddScoped<IAccountCodeRepository, SqlAccountCodeRepository>();
+            builder.Services.AddScoped<ICurrencyCodeRepository, SqlCurrencyCodeRepository>();
         }
         public static void UseValidationExtension(this WebApplicationBuilder builder)
         {
