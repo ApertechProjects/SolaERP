@@ -3,6 +3,7 @@ using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Menu;
 using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Dtos.User;
 
 namespace SolaERP.Application.Services
 {
@@ -100,6 +101,14 @@ namespace SolaERP.Application.Services
             }
             response.PrivillageList = groupMenusWithPrivList;
             return ApiResponse<GroupMenuResponseDto>.Success(response, 200);
+        }
+
+        public async Task<ApiResponse<AdditionalPrivilegeAccessDto>> GetAdditionalPrivilegeAccessAsync(string authToken)
+        {
+            int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
+            var users = await _menuRepository.GetAdditionalPrivilegeAccessAsync(userId);
+            var dto = _mapper.Map<AdditionalPrivilegeAccessDto>(users);
+            return ApiResponse<AdditionalPrivilegeAccessDto>.Success(dto, 200);
         }
     }
 }

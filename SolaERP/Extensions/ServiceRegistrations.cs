@@ -1,18 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Identity;
-using SolaERP.Application.Identity_Server;
-using SolaERP.Application.Services;
-using SolaERP.DataAccess.DataAcces.SqlServer;
-using SolaERP.DataAccess.DataAccess.SqlServer;
-using SolaERP.DataAccess.Factories;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.UnitOfWork;
-using SolaERP.Infrastructure.ValidationRules;
-using SolaERP.Infrastructure.ValidationRules.UserValidation;
-
-namespace SolaERP.Extensions
+﻿namespace SolaERP.Extensions
 {
     /// <summary>
     /// This class is container for DataAcces Services 
@@ -49,6 +35,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<ILocationService, LocationService>();
             builder.Services.AddScoped<IAccountCodeService, AccountCodeService>();
             builder.Services.AddScoped<ICurrencyCodeService, CurrencyCodeService>();
+            builder.Services.AddScoped<IUOMService, UOMService>();
             builder.Services.AddScoped<IAttachmentService, AttachmentService>();
         }
         private static void UseRepositories(this WebApplicationBuilder builder)
@@ -73,6 +60,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IAccountCodeRepository, SqlAccountCodeRepository>();
             builder.Services.AddScoped<ICurrencyCodeRepository, SqlCurrencyCodeRepository>();
             builder.Services.AddScoped<IAttachmentRepository, SqlAttachmentRepository>();
+            builder.Services.AddScoped<IUOMRepository, SqlUOMRepository>();
         }
         public static void UseValidationExtension(this WebApplicationBuilder builder)
         {

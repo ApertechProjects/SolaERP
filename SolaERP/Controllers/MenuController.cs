@@ -26,5 +26,9 @@ namespace SolaERP.Controllers
         [HttpGet]
         public async Task<IActionResult> GetGroupMenuWithPrivillageList([FromHeader] string authToken, int groupId)
             => CreateActionResult(await _menuService.GetGroupMenuWithPrivillageListByGroupIdAsync(authToken, groupId));
+
+        [HttpGet]
+        public async Task<IActionResult> GetAdditionalPrivilegeAccessAsync(string authToken)
+        => CreateActionResult(await _menuService.GetAdditionalPrivilegeAccessAsync(authToken));
     }
 }

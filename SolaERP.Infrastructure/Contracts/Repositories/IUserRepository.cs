@@ -13,5 +13,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<bool> UpdateUserTokenAsync(int userId, Guid token);
         Task<bool> ResetUserPasswordAsync(string email, string passwordHash);
         Task<List<ActiveUser>> GetActiveUsersAsync();
+    
     }
 }

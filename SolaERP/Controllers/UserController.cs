@@ -37,6 +37,8 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetActiveUsersAsync()
             => CreateActionResult(await _userService.GetActiveUsersAsync());
 
+    
+
 
     }
 }
