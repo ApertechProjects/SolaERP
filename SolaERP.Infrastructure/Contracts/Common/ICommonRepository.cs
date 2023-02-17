@@ -1,14 +1,10 @@
-﻿using SolaERP.Infrastructure.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SolaERP.Infrastructure.Entities;
+using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Infrastructure.Contracts.Common
 {
-    public interface ICommonRepository
+    public interface ICommonRepository<TEntity> where TEntity : BaseEntity
     {
-        //Task<bool> ExecQueryWithReplace(string sqlElement, List<ExecuteQueryParamList> paramLists);
+        Task<List<TEntity>> ExecQueryWithReplace(string sqlElement, List<ExecuteQueryParamList> paramListsR, List<ExecuteQueryParamList> paramListsC);
     }
 }
