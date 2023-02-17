@@ -1,4 +1,31 @@
-﻿namespace SolaERP.Application.Mappers
+﻿using SolaERP.Infrastructure.Dtos.Procedure;
+using SolaERP.Infrastructure.Dtos.Request;
+using SolaERP.Infrastructure.Dtos.Status;
+using SolaERP.Infrastructure.Dtos.User;
+using SolaERP.Infrastructure.Dtos.UserDto;
+using SolaERP.Infrastructure.Entities.Account;
+using SolaERP.Infrastructure.Entities.AnalysisCode;
+using SolaERP.Infrastructure.Entities.ApproveRole;
+using SolaERP.Infrastructure.Entities.ApproveStage;
+using SolaERP.Infrastructure.Entities.ApproveStages;
+using SolaERP.Infrastructure.Entities.Attachment;
+using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Entities.BusinessUnits;
+using SolaERP.Infrastructure.Entities.Buyer;
+using SolaERP.Infrastructure.Entities.Currency;
+using SolaERP.Infrastructure.Entities.Groups;
+using SolaERP.Infrastructure.Entities.Item_Code;
+using SolaERP.Infrastructure.Entities.Location;
+using SolaERP.Infrastructure.Entities.LogInfo;
+using SolaERP.Infrastructure.Entities.Menu;
+using SolaERP.Infrastructure.Entities.Procedure;
+using SolaERP.Infrastructure.Entities.Request;
+using SolaERP.Infrastructure.Entities.Status;
+using SolaERP.Infrastructure.Entities.User;
+using SolaERP.Infrastructure.Models;
+
+
+namespace SolaERP.Application.Mappers
 {
     public class MapProfile : Profile
     {
