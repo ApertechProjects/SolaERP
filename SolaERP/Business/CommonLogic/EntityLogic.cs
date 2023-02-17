@@ -16,7 +16,6 @@ using SolaERP.Business.Dtos.GeneralDtos;
 using SolaERP.Business.Dtos.Wrappers;
 using SolaERP.Business.Models;
 using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Dtos.Auth;
 using System.Data;
 
 namespace SolaERP.Business.CommonLogic
@@ -547,6 +546,7 @@ namespace SolaERP.Business.CommonLogic
                         for (int i = 0; i < gs.Users.Count; i++)
                         {
                             _ = await GetData.FromQuery($"EXEC SP_GroupUsers_ID  {gs.GroupId},{gs.Users[i]}", ConfHelper.DevelopmentUrl);
+                            //What happens if user ads its self in our situtation?
                         }
                     }
 
