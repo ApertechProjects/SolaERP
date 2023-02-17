@@ -12,7 +12,6 @@ namespace SolaERP.Infrastructure.Models
         public DateTime RequestDeadline { get; set; }
         public int Requester { get; set; }
         public int Status { get; set; }
-        public string SupplierCode { get; set; }
         public string RequestComment { get; set; }
         public string OperatorComment { get; set; }
         public string QualityRequired { get; set; }

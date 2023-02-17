@@ -2,6 +2,7 @@
 using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Menu;
+using SolaERP.Infrastructure.Entities.User;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
@@ -74,6 +75,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public Task UpdateAsync(Menu entity)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<AdditionalPrivilegeAccess> GetAdditionalPrivilegeAccessAsync(int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec dbo.SP_AdditionalPrivilegesAccess @UserId";
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                using var reader = await command.ExecuteReaderAsync();
+
+                AdditionalPrivilegeAccess user = new AdditionalPrivilegeAccess();
+                if (reader.Read())
+                {
+                    user = reader.GetByEntityStructure<AdditionalPrivilegeAccess>();
+                }
+                return user;
+            }
         }
     }
 }

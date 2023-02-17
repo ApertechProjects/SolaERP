@@ -16,6 +16,7 @@ using SolaERP.Infrastructure.Dtos.Menu;
 using SolaERP.Infrastructure.Dtos.Procedure;
 using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Dtos.Status;
+using SolaERP.Infrastructure.Dtos.UOM;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Account;
@@ -35,6 +36,7 @@ using SolaERP.Infrastructure.Entities.Menu;
 using SolaERP.Infrastructure.Entities.Procedure;
 using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.Entities.Status;
+using SolaERP.Infrastructure.Entities.UOM;
 using SolaERP.Infrastructure.Entities.User;
 using SolaERP.Infrastructure.Models;
 
@@ -82,6 +84,8 @@ namespace SolaERP.Application.Mappers
             CreateMap<AccountCode, AccountCodeDto>().ReverseMap();
             CreateMap<RequestSaveModel, RequestMainSaveModel>().ReverseMap();
             CreateMap<Currency, CurrencyDto>().ReverseMap();
+            CreateMap<UOM, UOMDto>().ReverseMap();
+            CreateMap<AdditionalPrivilegeAccess, AdditionalPrivilegeAccessDto>().ReverseMap();
         }
     }
 }

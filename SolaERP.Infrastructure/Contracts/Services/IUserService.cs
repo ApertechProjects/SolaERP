@@ -1,6 +1,7 @@
 ﻿using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
+using SolaERP.Infrastructure.Entities.User;
 using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Infrastructure.Contracts.Services
@@ -17,5 +18,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<bool>> RemoveUserByTokenAsync(string finderToken);
         Task<ApiResponse<bool>> ResetPasswordAsync(ResetPasswordModel resetPasswordRequestDto);
         Task<ApiResponse<List<ActiveUserDto>>> GetActiveUsersAsync();
+     
     }
 }

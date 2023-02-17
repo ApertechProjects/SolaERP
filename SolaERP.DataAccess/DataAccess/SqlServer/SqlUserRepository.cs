@@ -223,6 +223,8 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 return activeUser;
             }
         }
+
+      
         #endregion
     }
 }

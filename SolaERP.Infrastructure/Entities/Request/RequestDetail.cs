@@ -29,5 +29,15 @@ namespace SolaERP.Infrastructure.Entities.Request
         public string ConnectedOrderReference { get; set; }
         public decimal ConnectedOrderLineNo { get; set; }
         public string AccountCode { get; set; }
+        public string AnalysisCode1Id { get; set; }
+        public string AnalysisCode2Id { get; set; }
+        public string AnalysisCode3Id { get; set; }
+        public string AnalysisCode4Id { get; set; }
+        public string AnalysisCode5Id { get; set; }
+        public string AnalysisCode6Id { get; set; }
+        public string AnalysisCode7Id { get; set; }
+        public string AnalysisCode8Id { get; set; }
+        public string AnalysisCode9Id { get; set; }
+        public string AnalysisCode10Id { get; set; }
     }
 }
