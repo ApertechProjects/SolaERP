@@ -29,7 +29,7 @@ namespace SolaERP.Infrastructure.Entities.Attachment
                     if (propertyInfo != null)
                     {
                         DbIgnoreAttribute ignoreAttribute = new();
-                        propertyInfo.CustomAttributes.ToList().Add(ignoreAttribute);
+                        //propertyInfo.CustomAttributes.ToList().Add(ignoreAttribute);
                     }
                 }
             }
