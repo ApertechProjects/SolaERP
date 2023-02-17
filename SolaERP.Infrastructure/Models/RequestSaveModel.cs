@@ -10,6 +10,7 @@ namespace SolaERP.Infrastructure.Models
         public DateTime EntryDate { get; set; }
         public DateTime RequestDate { get; set; }
         public DateTime RequestDeadline { get; set; }
+        public string SupplierCode { get; set; }
         public int Requester { get; set; }
         public int Status { get; set; }
         public string RequestComment { get; set; }

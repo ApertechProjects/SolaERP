@@ -8,5 +8,6 @@ namespace SolaERP.Infrastructure.Contracts.Common
 {
     public interface ICommonRepository
     {
+
     }
 }
