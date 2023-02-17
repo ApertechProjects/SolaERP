@@ -5,6 +5,7 @@ using SolaERP.Infrastructure.Dtos.AnalysisCode;
 using SolaERP.Infrastructure.Dtos.ApproveRole;
 using SolaERP.Infrastructure.Dtos.ApproveStage;
 using SolaERP.Infrastructure.Dtos.ApproveStages;
+using SolaERP.Infrastructure.Dtos.Attachment;
 using SolaERP.Infrastructure.Dtos.BusinessUnit;
 using SolaERP.Infrastructure.Dtos.Buyer;
 using SolaERP.Infrastructure.Dtos.Currency;
@@ -23,6 +24,7 @@ using SolaERP.Infrastructure.Entities.AnalysisCode;
 using SolaERP.Infrastructure.Entities.ApproveRole;
 using SolaERP.Infrastructure.Entities.ApproveStage;
 using SolaERP.Infrastructure.Entities.ApproveStages;
+using SolaERP.Infrastructure.Entities.Attachment;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Entities.BusinessUnits;
 using SolaERP.Infrastructure.Entities.Buyer;
@@ -82,6 +84,8 @@ namespace SolaERP.Application.Mappers
             CreateMap<AccountCode, AccountCodeDto>().ReverseMap();
             CreateMap<RequestSaveModel, RequestMainSaveModel>().ReverseMap();
             CreateMap<Currency, CurrencyDto>().ReverseMap();
+            CreateMap<Attachment, AttachmentWithFileDto>().ReverseMap();
+            CreateMap<Attachment, AttachmentDto>().ReverseMap();
         }
     }
 }

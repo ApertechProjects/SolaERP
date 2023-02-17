@@ -83,7 +83,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "  @GroupId,@GroupName,@Description,@UserId,@NewId OUTPUT"; //UserIs cant be null or 0
+                command.CommandText = "EXEC SP_Groups_IUD @GroupId,@GroupName,@Description,@UserId,@NewId OUTPUT";//User id cnat be null or 0
 
                 command.Parameters.AddWithValue(command, "@GroupId", entity.GroupId);
                 command.Parameters.AddWithValue(command, "@GroupName", entity.GroupName);

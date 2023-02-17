@@ -76,15 +76,14 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<bool>> SaveGroupAsync(string finderToken, GroupSaveModel model)
         {
-            //using var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
             var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
             model.GroupId = await _groupRepository.AddUpdateOrDeleteGroupAsync(userId, new() { GroupId = model.GroupId, GroupName = model.GroupName, Description = model.Description });
 
             if (model.Users != null)
             {
                 model.Users.Add(userId);
-                await _groupRepository.AddUserToGroupOrDeleteAsync(new() { GroupId = model.GroupId });
+
+                if (model.GroupId == 0) await _groupRepository.AddUserToGroupOrDeleteAsync(new() { GroupId = model.GroupId });
                 foreach (var user in model.Users)
                 {
                     await _groupRepository.AddUserToGroupOrDeleteAsync(new() { GroupId = model.GroupId, UserId = user });
@@ -93,7 +92,7 @@ namespace SolaERP.Application.Services
 
             if (model.BusinessUnitIds != null)
             {
-                await _groupRepository.AddBusiessUnitToGroupOrDeleteAsync(model.GroupId, 0); // for delete operation buid is 0
+                if (model.GroupId == 0) await _groupRepository.AddBusiessUnitToGroupOrDeleteAsync(model.GroupId, 0); // for delete operation buid is 0
                 foreach (var buId in model.BusinessUnitIds)
                 {
                     await _groupRepository.AddBusiessUnitToGroupOrDeleteAsync(model.GroupId, buId);
@@ -102,7 +101,7 @@ namespace SolaERP.Application.Services
 
             if (model.ApproveRoles != null)
             {
-                await _groupRepository.AddApproveRoleToGroupOrDelete(model.GroupId, 0); // for delete operation approvalId is 0
+                if (model.GroupId == 0) await _groupRepository.AddApproveRoleToGroupOrDelete(model.GroupId, 0); // for delete operation approvalId is 0
                 foreach (var approveRole in model.ApproveRoles)
                 {
                     await _groupRepository.AddApproveRoleToGroupOrDelete(model.GroupId, approveRole);
@@ -123,13 +122,14 @@ namespace SolaERP.Application.Services
             if (model.Menus != null)
             {
                 var menuIds = model.Menus.GetAllUnionMenuIds(); // gets all menu ids in a union list
-                await _groupRepository.AddMenuToGroupOrDeleteAsync(new() { GroupId = model.GroupId });
+                if (model.GroupId == 0) await _groupRepository.AddMenuToGroupOrDeleteAsync(new() { GroupId = model.GroupId });
 
                 foreach (var menuId in menuIds)
                 {
                     await _groupRepository.AddMenuToGroupOrDeleteAsync(new()
                     {
                         GroupId = model.GroupId,
+                        MenuId = menuId,
                         Create = GetMenuIdforAction(model.Menus, MenuAction.Create, menuId),
                         Edit = GetMenuIdforAction(model.Menus, MenuAction.Edit, menuId),
                         Delete = GetMenuIdforAction(model.Menus, MenuAction.Delete, menuId),

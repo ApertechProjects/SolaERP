@@ -82,7 +82,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     AttachmentSubTypeId = reader.Get<int>("AttachmentSubTypeId"),
                     AttachmentTypeId = reader.Get<int>("AttachmentTypeId"),
                     ExtensionType = reader.Get<string>("ExtensionType"),
-                    FileData = reader.Get<byte>("FileData"),
+                    FileData = reader.Get<byte[]>("FileData"),
                     FileName = reader.Get<string>("FileName"),
                     Reference = reader.Get<string>("Reference"),
                     Size = reader.Get<int>("Size"),

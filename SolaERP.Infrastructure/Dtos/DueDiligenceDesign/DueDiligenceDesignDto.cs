@@ -23,6 +23,6 @@
         public bool HasAgreement { get; set; }
         public string AgreementText { get; set; }
         public VendorDueDiligence.VendorDueDiligenceDto VendorDueDiligence { get; set; }
-        public Attachment.AttachmentDto Attachments { get; set; }
+        public Attachment.AttachmentWithFileDto Attachments { get; set; }
     }
 }
