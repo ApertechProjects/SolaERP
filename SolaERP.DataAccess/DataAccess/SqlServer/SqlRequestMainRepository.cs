@@ -45,14 +45,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<int> DeleteAsync(int Id)
+        public async Task<int> DeleteAsync(int userId, int Id)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = "EXEC SP_RequestMain_IUD @RequestMainId";
+                command.CommandText = "EXEC SP_RequestMain_IUD @RequestMainId,NULL,NULL,NULL,NULL,NULL,@UserId, @NewRequestmainId = @NewRequestmainId OUTPUT, @NewRequestNo = @NewRequestNo OUTPUT select @NewRequestmainId as NewRequestmainId, @NewRequestNo as NewRequestNo";
                 command.Parameters.AddWithValue(command, "@RequestMainId", Id);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.Add("@NewRequestMainId", SqlDbType.Int);
                 command.Parameters["@NewRequestMainId"].Direction = ParameterDirection.Output;
+                command.Parameters.Add("@NewRequestNo", SqlDbType.NVarChar, 20);
+                command.Parameters["@NewRequestNo"].Direction = ParameterDirection.Output;
 
                 await command.ExecuteNonQueryAsync();
 

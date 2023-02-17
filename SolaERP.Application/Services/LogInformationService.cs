@@ -31,13 +31,5 @@ namespace SolaERP.Application.Services
 
         }
 
-        public async Task<ApiResponse<LogInfoDto>> GetSingleLogInformationAsync(LogInfoGetModel logGetparameters)
-        {
-            var entity = await _logInfoRepository.GetSingleLogInformationAsync(logGetparameters.Id, logGetparameters.LogType);
-            var dto = _mapper.Map<LogInfoDto>(entity);
-
-            return dto != null ? ApiResponse<LogInfoDto>.Success(dto, 200) :
-                ApiResponse<LogInfoDto>.Fail("Something went wrong", 400);
-        }
     }
 }

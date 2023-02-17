@@ -208,11 +208,17 @@ namespace SolaERP.Application.Services
             return ApiResponse<RequestSaveResultModel>.Fail("Not Found", 404);
         }
 
-        public Task<ApiResponse<int>> DeleteRequestAsync(int requestMainId)
+        public async Task<ApiResponse<bool>> DeleteRequestAsync(string authToken, int requestMainId)
+        {
+            int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
+            int requestId = await _requestMainRepository.DeleteAsync(userId, requestMainId);
+            return ApiResponse<bool>.Success(requestId);
+        }
+
+        public Task<int> DeleteAsync(int userId, int Id)
         {
             throw new NotImplementedException();
         }
-
     }
 
 }

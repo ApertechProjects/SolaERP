@@ -51,9 +51,9 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetRequestDraftsAsync(RequestMainDraftModel model)
             => CreateActionResult(await _requestService.GetRequestMainDraftsAsync(model));
 
-        //[HttpPost("{requestMainId}")]
-        //public async Task<IActionResult> DeleteRequest(int requestMainId)
-        //    => CreateActionResult(await _requestService.DeleteRequestAsync(requestMainId));
+        [HttpDelete("{requestMainId}")]
+        public async Task<IActionResult> DeleteRequest([FromHeader] string authToken, int requestMainId)
+            => CreateActionResult(await _requestService.DeleteRequestAsync(authToken, requestMainId));
     }
 }
 

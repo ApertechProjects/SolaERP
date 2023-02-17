@@ -19,8 +19,5 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetAllLogInformationsAsync(LogInfoGetModel getParameters)
             => CreateActionResult(await _logInformationService.GetAllLogInformationAsync(getParameters));
 
-        [HttpPost]
-        public async Task<IActionResult> GetSingleLogInformationsAsync(LogInfoGetModel getParameters)
-            => CreateActionResult(await _logInformationService.GetSingleLogInformationAsync(getParameters));
     }
 }

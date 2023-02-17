@@ -6,7 +6,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
 {
     public interface ILogInformationService
     {
-        public Task<ApiResponse<LogInfoDto>> GetSingleLogInformationAsync(LogInfoGetModel logGetparameters);
         public Task<ApiResponse<List<LogInfoDto>>> GetAllLogInformationAsync(LogInfoGetModel logGetparameters);
     }
 }
