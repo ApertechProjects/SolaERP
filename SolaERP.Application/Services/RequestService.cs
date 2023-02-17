@@ -81,8 +81,10 @@ namespace SolaERP.Application.Services
                         await SaveRequestDetailsAsync(requestDetailDto);
                     }
                 }
+                await _unitOfWork.SaveChangesAsync();
                 return ApiResponse<bool>.Success(true, 200);
             }
+
             return ApiResponse<bool>.Fail("Not Found", 404);
         }
 

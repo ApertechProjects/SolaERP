@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Controllers
 {
@@ -16,8 +17,13 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetGroups()
             => CreateActionResult(await _groupService.GetAllAsync());
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteGroup(int Id)
-            => CreateActionResult(await _groupService.RemoveAsync(Id));
+        [HttpPost]
+        public async Task<IActionResult> SaveGroup([FromHeader] string authToken, GroupSaveModel model)
+            => CreateActionResult(await _groupService.SaveGroupAsync(authToken, model));
+
+
+        //[HttpDelete]
+        //public async Task<IActionResult> DeleteGroup(int Id)
+        //    => CreateActionResult(await _groupService.RemoveAsync(Id));
     }
 }
