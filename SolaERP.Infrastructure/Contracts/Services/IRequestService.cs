@@ -20,5 +20,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<List<RequestApprovalInfoDto>>> GetRequestApprovalInfoAsync(string finderToken, int requestMainId);
         Task<ApiResponse<RequestMainDto>> GetRequestHeaderAsync(string finderToken, int requestMainId);
         Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetRequestDetails(int requestmainId);
+        Task<ApiResponse<RequestSaveResultModel>> AddOrUpdateRequestAsync(string finderToken, RequestSaveModel model);
+        Task<ApiResponse<bool>> DeleteRequestAsync(string authToken,int requestMainId);
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface IDeleteableAsync
     {
-        public Task<int> DeleteAsync(int Id);
+        public Task<int> DeleteAsync(int userId, int Id);
     }
 }

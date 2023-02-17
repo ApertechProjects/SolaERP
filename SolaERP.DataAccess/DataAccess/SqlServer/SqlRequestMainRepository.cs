@@ -4,6 +4,7 @@ using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.Enums;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
+using System;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
@@ -44,14 +45,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<int> DeleteAsync(int Id)
+        public async Task<int> DeleteAsync(int userId, int Id)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = "EXEC SP_RequestMain_IUD @RequestMainId";
+                command.CommandText = "EXEC SP_RequestMain_IUD @RequestMainId,NULL,NULL,NULL,NULL,NULL,@UserId, @NewRequestmainId = @NewRequestmainId OUTPUT, @NewRequestNo = @NewRequestNo OUTPUT select @NewRequestmainId as NewRequestmainId, @NewRequestNo as NewRequestNo";
                 command.Parameters.AddWithValue(command, "@RequestMainId", Id);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.Add("@NewRequestMainId", SqlDbType.Int);
                 command.Parameters["@NewRequestMainId"].Direction = ParameterDirection.Output;
+                command.Parameters.Add("@NewRequestNo", SqlDbType.NVarChar, 20);
+                command.Parameters["@NewRequestNo"].Direction = ParameterDirection.Output;
 
                 await command.ExecuteNonQueryAsync();
 
@@ -62,50 +66,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<int> AddOrUpdateAsync(RequestMainSaveModel model)
         {
-            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
-            {
-                command.CommandText = @"EXEC SP_RequestMain_IUD @RequestMainId,@BusinessUnitId,
-                                                                @RequestTypeId, @RequestNo,
-                                                                @EntryDate,@RequestDate,
-                                                                @RequestDeadline,@UserID,
-                                                                @Requester,@Status,
-                                                                @SupplierCode,@RequestComment,
-                                                                @OperatorComment,
-                                                                @QualityRequired,@CurrencyCode,
-                                                                @LogisticTotal,@NewRequestmainId = @NewRequestmainId OUTPUT 
-                                                                select @NewRequestmainId as NewRequestmainId";
-
-                command.Parameters.AddWithValue(command, "@RequestMainId", model.RequestMainId);
-                command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
-                command.Parameters.AddWithValue(command, "@RequestNo", model.RequestNo);
-                command.Parameters.AddWithValue(command, "@RequestTypeId", model.RequestTypeId);
-                command.Parameters.AddWithValue(command, "@EntryDate", model.EntryDate);
-                command.Parameters.AddWithValue(command, "@RequestDate", model.RequestDate);
-                command.Parameters.AddWithValue(command, "@RequestDeadline", model.RequestDeadline);
-                command.Parameters.AddWithValue(command, "@UserID", model.UserId);
-                command.Parameters.AddWithValue(command, "@Requester", model.Requester);
-                command.Parameters.AddWithValue(command, "@Status", model.Status);
-                command.Parameters.AddWithValue(command, "@SupplierCode", model.CurrencyCode);
-                command.Parameters.AddWithValue(command, "@RequestComment", model.RequestComment);
-                command.Parameters.AddWithValue(command, "@OperatorComment", model.OperatorComment);
-                command.Parameters.AddWithValue(command, "@QualityRequired", model.QualityRequired);
-                command.Parameters.AddWithValue(command, "@CurrencyCode", model.CurrencyCode);
-                command.Parameters.AddWithValue(command, "@LogisticTotal", model.LogisticTotal);
-
-                command.Parameters.Add("@NewRequestmainId", SqlDbType.Int);
-                command.Parameters["@NewRequestmainId"].Direction = ParameterDirection.Output;
-
-                using var reader = await command.ExecuteReaderAsync();
-                int returnValue = 0;
-                if (reader.Read())
-                {
-                    returnValue = reader.Get<int>("NewRequestmainId");
-                }
-                //await command.ExecuteNonQueryAsync();
-                //var returnValue = command.Parameters["@NewRequestmainId"].Value;
-
-                return returnValue; //= DBNull.Value && returnValue != null ? Convert.ToInt32(returnValue) : 0;
-            }
+            throw new NotImplementedException();
         }
 
         public async Task<List<RequestTypes>> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId)
@@ -442,7 +403,60 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             };
         }
 
+        public async Task<RequestSaveResultModel> AddOrUpdateRequestAsync(int userId, RequestMainSaveModel model)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = @"EXEC SP_RequestMain_IUD @RequestMainId,@BusinessUnitId,
+                                                                @RequestTypeId,
+                                                                @EntryDate,@RequestDate,
+                                                                @RequestDeadline,@UserID,
+                                                                @Requester,@Status,
+                                                                @SupplierCode,@RequestComment,
+                                                                @OperatorComment,
+                                                                @QualityRequired,@CurrencyCode,
+                                                                @LogisticTotal,
+                                                                @NewRequestmainId = @NewRequestmainId OUTPUT,
+                                                                @NewRequestNo = @NewRequestNo OUTPUT 
+                                                                select @NewRequestmainId as NewRequestmainId,
+                                                               
+                                                                @NewRequestNo as NewRequestNo
+";
 
+                command.Parameters.AddWithValue(command, "@RequestMainId", model.RequestMainId);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@RequestTypeId", model.RequestTypeId);
+                command.Parameters.AddWithValue(command, "@EntryDate", model.EntryDate);
+                command.Parameters.AddWithValue(command, "@RequestDate", model.RequestDate);
+                command.Parameters.AddWithValue(command, "@RequestDeadline", model.RequestDeadline);
+                command.Parameters.AddWithValue(command, "@UserID", userId);
+                command.Parameters.AddWithValue(command, "@Requester", model.Requester);
+                command.Parameters.AddWithValue(command, "@Status", model.Status);
+                command.Parameters.AddWithValue(command, "@SupplierCode", model.SupplierCode);
+                command.Parameters.AddWithValue(command, "@RequestComment", model.RequestComment);
+                command.Parameters.AddWithValue(command, "@OperatorComment", model.OperatorComment);
+                command.Parameters.AddWithValue(command, "@QualityRequired", model.QualityRequired);
+                command.Parameters.AddWithValue(command, "@CurrencyCode", model.CurrencyCode);
+                command.Parameters.AddWithValue(command, "@LogisticTotal", model.LogisticTotal);
+
+                command.Parameters.Add("@NewRequestmainId", SqlDbType.Int);
+                command.Parameters["@NewRequestmainId"].Direction = ParameterDirection.Output;
+
+                command.Parameters.Add("@NewRequestNo", SqlDbType.NVarChar, 50);
+                command.Parameters["@NewRequestNo"].Direction = ParameterDirection.Output;
+
+                using var reader = await command.ExecuteReaderAsync();
+                int requestId = 0;
+                string requestNo = "";
+                if (reader.Read())
+                {
+                    requestId = reader.Get<int>("NewRequestmainId");
+                    requestNo = reader.Get<string>("NewRequestNo");
+                }
+
+                return new RequestSaveResultModel { RequestMainId = requestId, RequestNo = requestNo };
+            }
+        }
     }
 
 }

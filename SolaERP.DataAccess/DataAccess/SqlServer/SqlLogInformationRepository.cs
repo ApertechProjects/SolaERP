@@ -24,7 +24,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = "EXEC SP_LogsLoad @Id,@LogTypeId";
 
                 command.Parameters.AddWithValue(command, "@Id", id);
-                command.Parameters.AddWithValue(command, "@LogTypeId", logType);
+                command.Parameters.AddWithValue(command, "@LogTypeId", Convert.ToInt16(logType));
 
                 using var reader = await command.ExecuteReaderAsync();
 
@@ -35,24 +35,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 }
 
                 return logInformations;
-            }
-        }
-
-        public async Task<LogInfo> GetSingleLogInformationAsync(int id, LogType logType)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "EXEC SP_LogsLoad @Id,@LogTypeId";
-
-                command.Parameters.AddWithValue(command, "@Id", id);
-                command.Parameters.AddWithValue(command, "@LogTypeId", logType);
-
-                using var reader = await command.ExecuteReaderAsync();
-
-                if (reader.Read())
-                    return reader.GetByEntityStructure<LogInfo>();
-
-                return null;
             }
         }
 
