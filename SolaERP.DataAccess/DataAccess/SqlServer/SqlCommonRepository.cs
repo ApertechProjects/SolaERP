@@ -1,44 +1,25 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Common;
+using SolaERP.Infrastructure.Entities;
 using SolaERP.Infrastructure.Entities.Item_Code;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
+using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlCommonRepository : ICommonRepository<ItemCodeWithImages>
+    public class SqlCommonRepository<TEntity> : ICommonRepository<ItemCodeWithImages> where TEntity : BaseEntity
     {
         private readonly IUnitOfWork _unitOfWork;
         public SqlCommonRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<List<ItemCodeWithImages>> ExecQueryWithReplace(string sqlElement, List<ExecuteQueryParamList> paramListR, List<ExecuteQueryParamList> paramListC)
+        public async Task<List<ItemCodeWithImages>> ExecQueryWithReplace(string sqlElement, List<ExecuteQueryParamList> paramListReplaced, List<ExecuteQueryParamList> paramListCommon)
         {
-            #region
-            //string newWord = "newWord";
-            //string connectionString = "YourConnectionString";
-            //string storedProcedureName = "dbo.SP_RequestMain_IUD";
+            List<ItemCodeWithImages> result = new List<ItemCodeWithImages>();
 
-            //using (SqlConnection connection = new SqlConnection(connectionString))
-            //{
-            //    connection.Open();
-            //    using (SqlCommand command = new SqlCommand("SELECT definition FROM sys.sql_modules WHERE object_id = OBJECT_ID(@storedProcedureName)", connection))
-            //    {
-            //        command.Parameters.AddWithValue("@storedProcedureName", storedProcedureName);
-            //        string storedProcedureDefinition = (string)command.ExecuteScalar();
-
-            //        string updatedStoredProcedureDefinition = storedProcedureDefinition.Replace("APT", newWord);
-
-            //        using (SqlCommand updateCommand = new SqlCommand(updatedStoredProcedureDefinition, connection))
-            //        {
-            //            updateCommand.ExecuteNonQuery();
-            //        }
-            //    }
-            //}
-            #endregion
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "SELECT definition FROM sys.sql_modules WHERE object_id = OBJECT_ID(@storedProcedureName)";
@@ -48,24 +29,35 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 string scriptText = GetSqlElementScript(storedProcedureDefinition, sqlElement);
                 string updatedStoredProcedureDefinition = scriptText;
 
-                for (int i = 0; i < paramListR.Count; i++)
-                    updatedStoredProcedureDefinition = scriptText.Replace(paramListR[i].ParamName,
-                        paramListR[i].Value == null ? "NULL" : paramListR[i].Value.ToString());
+                for (int i = 0; i < paramListReplaced.Count; i++)
+                    updatedStoredProcedureDefinition = updatedStoredProcedureDefinition.Replace(paramListReplaced[i].ParamName,
+                        paramListReplaced[i].Value == null ? "NULL" : paramListReplaced[i].Value.ToString());
 
-                using (SqlCommand updateCommand = new SqlCommand(updatedStoredProcedureDefinition))
+                using (var updateCommand = _unitOfWork.CreateCommand() as DbCommand)
                 {
-                    for (int i = 0; i < paramListC.Count; i++)
-                        updateCommand.Parameters.AddWithValue(updateCommand, paramListC[i].ParamName, paramListC[i].Value);
+                    updateCommand.CommandText = updatedStoredProcedureDefinition;
+                    for (int i = 0; i < paramListCommon.Count; i++)
+                        updateCommand.Parameters.AddWithValue(updateCommand, paramListCommon[i].ParamName, paramListCommon[i].Value);
 
-                    ItemCodeWithImages result = new();
-                    using var reader = await command.ExecuteReaderAsync();
+                    using var reader = await updateCommand.ExecuteReaderAsync();
                     while (reader.Read())
                     {
-                        result = reader.GetByEntityStructure<ItemCodeWithImages>();
+                        result.Add(reader.GetByEntityStructure<ItemCodeWithImages>());
                     }
                 }
             }
-            return new();
+            return result;
+        }
+
+        private ItemCodeWithImages GetItemCodeFromReader(IDataReader reader)
+        {
+            return new()
+            {
+                Item_Code = reader.Get<string>("ItemCode").Trim(),
+                Description = reader.Get<string>("Description"),
+                LongDescription = reader.Get<string>("LongDescription"),
+                UnitOfPurch = reader.Get<string>("UnitOfPurch")
+            };
         }
 
         public static string GetSqlElementScript(string scriptText, string sqlElementName)

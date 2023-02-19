@@ -7,7 +7,7 @@ using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlItemCodeRepository : SqlCommonRepository, IItemCodeRepository
+    public class SqlItemCodeRepository : SqlCommonRepository<ItemCodeWithImages>, IItemCodeRepository
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -15,32 +15,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             this._unitOfWork = unitOfWork;
         }
-
-        //public async Task<List<ItemCode>> ExecQueryWithReplace(string sqlElement, List<ExecuteQueryParamList> paramListsR, List<ExecuteQueryParamList> paramListsC)
-        //{
-        //    using (var command = _unitOfWork.CreateCommand() as DbCommand)
-        //    {
-        //        command.CommandText = "SELECT definition FROM sys.sql_modules WHERE object_id = OBJECT_ID(@storedProcedureName)";
-        //        command.Parameters.AddWithValue(command, "@storedProcedureName", sqlElement);
-        //        string storedProcedureDefinition = (string)command.ExecuteScalar();
-
-        //        string updatedStoredProcedureDefinition = storedProcedureDefinition;
-
-        //        for (int i = 0; i < paramListsR.Count; i++)
-        //            updatedStoredProcedureDefinition = storedProcedureDefinition.Replace(paramListsR[i].ParamName,
-        //                paramListsR[i].Value == null ? "NULL" : paramListsR[i].Value.ToString());
-
-        //        using (SqlCommand updateCommand = new SqlCommand(updatedStoredProcedureDefinition))
-        //        {
-        //            for (int i = 0; i < paramListsC.Count; i++)
-        //                updateCommand.Parameters.AddWithValue(updateCommand, paramListsC[i].ParamName, paramListsC[i].Value);
-
-
-        //            using var reader = await command.ExecuteReaderAsync();
-        //        }
-        //    }
-        //    return new();
-        //}
 
         public async Task<List<ItemCode>> GetAllAsync()
         {
