@@ -1,4 +1,4 @@
-﻿namespausing AutoMapper;
+﻿using AutoMapper;
 using SolaERP.Infrastructure.Dtos;
 using SolaERP.Infrastructure.Dtos.Account;
 using SolaERP.Infrastructure.Dtos.AnalysisCode;
@@ -42,6 +42,8 @@ using SolaERP.Infrastructure.Entities.Status;
 using SolaERP.Infrastructure.Entities.Supplier;
 using SolaERP.Infrastructure.Entities.UOM;
 using SolaERP.Infrastructure.Entities.User;
+using SolaERP.Infrastructure.Models;
+
 namespace SolaERP.Application.Mappers
 {
     public class MapProfile : Profile
