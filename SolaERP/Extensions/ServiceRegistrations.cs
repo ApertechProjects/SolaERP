@@ -52,6 +52,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<ICurrencyCodeService, CurrencyCodeService>();
             builder.Services.AddScoped<IUOMService, UOMService>();
             builder.Services.AddScoped<IAttachmentService, AttachmentService>();
+            builder.Services.AddScoped<ISupplierService, SupplierService>();
         }
         private static void UseRepositories(this WebApplicationBuilder builder)
         {
@@ -76,6 +77,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<ICurrencyCodeRepository, SqlCurrencyCodeRepository>();
             builder.Services.AddScoped<IAttachmentRepository, SqlAttachmentRepository>();
             builder.Services.AddScoped<IUOMRepository, SqlUOMRepository>();
+            builder.Services.AddScoped<ISupplierRepository, SqlSupplierRepository>();
         }
         public static void UseValidationExtension(this WebApplicationBuilder builder)
         {

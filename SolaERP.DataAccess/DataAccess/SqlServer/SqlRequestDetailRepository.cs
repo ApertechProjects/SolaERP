@@ -1,8 +1,8 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Request;
+using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
-using System.Data;
 using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
@@ -89,15 +89,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public Task<List<RequestDetail>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<RequestDetail> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<bool> RemoveAsync(int Id)
         {
@@ -132,5 +123,48 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return resultList;
             }
         }
+
+        public async Task<RequestDetailApprovalInfo> GetDetailApprovalInfoAsync(int requestDetailId)
+        {
+            RequestDetailApprovalInfo result = null;
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RequestApprovals @RequestDetailId";
+                command.Parameters.AddWithValue(command, "@RequestDetailId", requestDetailId);
+                using var reader = await command.ExecuteReaderAsync();
+
+                if (await reader.ReadAsync()) result = reader.GetByEntityStructure<RequestDetailApprovalInfo>();
+                return result;
+            }
+        }
+
+        public async Task<bool> SendToApproveAsync(RequestDetailSendToApproveModel model)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RequestApprove @RequestDetailId,@UserId,@ApproveStatusId,@Comment,@Sequence";
+
+                command.Parameters.AddWithValue(command, "@RequestDetailId", model.RequestDetailId);
+                command.Parameters.AddWithValue(command, "@UserId", model.UserId);
+                command.Parameters.AddWithValue(command, "@ApproveStatusId", model.ApproveStatusId);
+                command.Parameters.AddWithValue(command, "@Comment", model.Comment);
+                command.Parameters.AddWithValue(command, "@Sequence", model.Sequence);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+
+        }
+
+
+        public Task<List<RequestDetail>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<RequestDetail> GetByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

@@ -1,6 +1,24 @@
-﻿using SolaERP.Infrastructure.Dtos.Procedure;
+﻿using AutoMapper;
+using SolaERP.Infrastructure.Dtos;
+using SolaERP.Infrastructure.Dtos.Account;
+using SolaERP.Infrastructure.Dtos.AnalysisCode;
+using SolaERP.Infrastructure.Dtos.ApproveRole;
+using SolaERP.Infrastructure.Dtos.ApproveStage;
+using SolaERP.Infrastructure.Dtos.ApproveStages;
+using SolaERP.Infrastructure.Dtos.Attachment;
+using SolaERP.Infrastructure.Dtos.BusinessUnit;
+using SolaERP.Infrastructure.Dtos.Buyer;
+using SolaERP.Infrastructure.Dtos.Currency;
+using SolaERP.Infrastructure.Dtos.Group;
+using SolaERP.Infrastructure.Dtos.Item_Code;
+using SolaERP.Infrastructure.Dtos.Location;
+using SolaERP.Infrastructure.Dtos.LogInfo;
+using SolaERP.Infrastructure.Dtos.Menu;
+using SolaERP.Infrastructure.Dtos.Procedure;
 using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Dtos.Status;
+using SolaERP.Infrastructure.Dtos.Supplier;
+using SolaERP.Infrastructure.Dtos.UOM;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Account;
@@ -21,6 +39,8 @@ using SolaERP.Infrastructure.Entities.Menu;
 using SolaERP.Infrastructure.Entities.Procedure;
 using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.Entities.Status;
+using SolaERP.Infrastructure.Entities.Supplier;
+using SolaERP.Infrastructure.Entities.UOM;
 using SolaERP.Infrastructure.Entities.User;
 using SolaERP.Infrastructure.Models;
 
@@ -73,6 +93,18 @@ namespace SolaERP.Application.Mappers
             CreateMap<Attachment, AttachmentDto>().ReverseMap();
             CreateMap<UOM, UOMDto>().ReverseMap();
             CreateMap<AdditionalPrivilegeAccess, AdditionalPrivilegeAccessDto>().ReverseMap();
+            CreateMap<RequestDetailApprovalInfo, RequestDetailApprovalInfoDto>().
+                ForMember(dest => dest.ApproveDate, opt => opt.MapFrom(src => src.ApproveDate)).
+                ForMember(dest => dest.ApprovedBy, opt => opt.MapFrom(src => src.FullName)).
+                ForMember(dest => dest.ApproveStatusName, opt => opt.MapFrom(src => src.ApproveStatusName)).
+                ForMember(dest => dest.ApproveStageDetailsName, opt => opt.MapFrom(src => src.ApproveStageDetailsName)).
+                ForMember(dest => dest.Comment, opt => opt.MapFrom(src => src.Comment)).
+                ForMember(dest => dest.Sequence, opt => opt.MapFrom(src => src.Sequence)).ReverseMap();
+
+            CreateMap<SupplierCode, SupplierCodeDto>().ForMember(dest => dest.SupplierCode, opt => opt.MapFrom(src => src.SuppCode)).
+                ForMember(dest => dest.TaxId, opt => opt.MapFrom(src => src.TaxId)).
+                ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name)).ReverseMap();
+
         }
     }
 }

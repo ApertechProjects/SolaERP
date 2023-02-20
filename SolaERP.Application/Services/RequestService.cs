@@ -61,33 +61,6 @@ namespace SolaERP.Application.Services
                 ApiResponse<List<RequestTypesDto>>.Fail("Request types not found", 404);
         }
 
-        public async Task<ApiResponse<bool>> AddOrUpdateAsync(string finderToken, RequestSaveModel model)
-        {
-            int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
-            RequestSaveResultModel resultModel = await _requestMainRepository.AddOrUpdateRequestAsync(userId, _mapper.Map<RequestMainSaveModel>(model));
-
-            if (resultModel != null)
-            {
-                for (int i = 0; i < model.Details.Count; i++)
-                {
-                    var requestDetailDto = model.Details[i];
-                    requestDetailDto.RequestMainId = resultModel.RequestMainId;
-                    if (requestDetailDto.Type == "remove")
-                    {
-                        await RemoveRequestDetailAsync(requestDetailDto);
-                    }
-                    else
-                    {
-                        await SaveRequestDetailsAsync(requestDetailDto);
-                    }
-                }
-                await _unitOfWork.SaveChangesAsync();
-                return ApiResponse<bool>.Success(true, 200);
-            }
-
-            return ApiResponse<bool>.Fail("Not Found", 404);
-        }
-
         public async Task<ApiResponse<bool>> ChangeRequestStatus(string finderToken, List<RequestChangeStatusModel> changeStatusParametersDtos)
         {
             var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
@@ -97,11 +70,6 @@ namespace SolaERP.Application.Services
                 await _requestMainRepository.ChangeRequestStatusAsync(changeStatusParametersDtos[i]);
             }
             return ApiResponse<bool>.Success(200);
-        }
-
-        public Task<int> DeleteAsync(int Id)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<ApiResponse<bool>> SendMainToApproveAsync(RequestMainSendToApproveDto sendToApproveModel)
@@ -217,10 +185,29 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(requestId);
         }
 
+        public async Task<ApiResponse<RequestDetailApprovalInfoDto>> GetRequestDetailApprvalInfoAsync(int requestDetaildId)
+        {
+            var entity = await _requestDetailRepository.GetDetailApprovalInfoAsync(requestDetaildId);
+            var result = _mapper.Map<RequestDetailApprovalInfoDto>(entity);
+
+            return result != null ? ApiResponse<RequestDetailApprovalInfoDto>.Success(result, 200) : ApiResponse<RequestDetailApprovalInfoDto>.Success(new(), 200);
+        }
+
+        public async Task<ApiResponse<NoContentDto>> RequestDetailSendToApprove(string finderToken, RequestDetailSendToApproveModel model)
+        {
+            int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            model.UserId = userId;
+
+            await _requestDetailRepository.SendToApproveAsync(model);
+            await _unitOfWork.SaveChangesAsync();
+
+            return ApiResponse<NoContentDto>.Success(200);
+        }
+
+
         public Task<int> DeleteAsync(int userId, int Id)
         {
             throw new NotImplementedException();
         }
     }
-
 }

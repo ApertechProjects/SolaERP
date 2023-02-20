@@ -16,11 +16,12 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<List<RequestMainDraftDto>>> GetRequestMainDraftsAsync(RequestMainDraftModel getMainDraftParameters);
         Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentModel requestParametersDto);
         Task<ApiResponse<RequestCardMainDto>> GetRequestByRequestMainId(string authToken, int requestMainId);
-        Task<ApiResponse<bool>> AddOrUpdateAsync(string finderToken, RequestSaveModel model);
         Task<ApiResponse<List<RequestApprovalInfoDto>>> GetRequestApprovalInfoAsync(string finderToken, int requestMainId);
         Task<ApiResponse<RequestMainDto>> GetRequestHeaderAsync(string finderToken, int requestMainId);
         Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetRequestDetails(int requestmainId);
         Task<ApiResponse<RequestSaveResultModel>> AddOrUpdateRequestAsync(string finderToken, RequestSaveModel model);
-        Task<ApiResponse<bool>> DeleteRequestAsync(string authToken,int requestMainId);
+        Task<ApiResponse<bool>> DeleteRequestAsync(string authToken, int requestMainId);
+        Task<ApiResponse<RequestDetailApprovalInfoDto>> GetRequestDetailApprvalInfoAsync(int requestDetaildId);
+        Task<ApiResponse<NoContentDto>> RequestDetailSendToApprove(string finderToken, RequestDetailSendToApproveModel model);
     }
 }
