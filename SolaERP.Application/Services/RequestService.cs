@@ -121,7 +121,7 @@ namespace SolaERP.Application.Services
             if (mainRequestDto != null && mainRequestDto.Count > 0)
                 return ApiResponse<List<RequestApproveAmendmentDto>>.Success(mainRequestDto, 200);
 
-            return ApiResponse<List<RequestApproveAmendmentDto>>.Fail("Bad Request amendment is empty", 404);
+            return ApiResponse<List<RequestApproveAmendmentDto>>.Fail("Amendment is empty", 404);
         }
 
         public async Task<ApiResponse<List<RequestApprovalInfoDto>>> GetRequestApprovalInfoAsync(string finderToken, int requestMainId)

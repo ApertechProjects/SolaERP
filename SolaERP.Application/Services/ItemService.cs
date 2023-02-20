@@ -4,6 +4,7 @@ using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos;
 using SolaERP.Infrastructure.Dtos.Item_Code;
 using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 
 namespace SolaERP.Application.Services
@@ -21,6 +22,13 @@ namespace SolaERP.Application.Services
             _itemCodeRepository = itemCodeRepository;
             _userRepository = userRepository;
             _mapper = mapper;
+        }
+
+        public async Task<ApiResponse<List<ItemCodeDto>>> ExecQueryWithReplace(string sqlElement, List<ExecuteQueryParamList> paramListsR, List<ExecuteQueryParamList> paramListsC)
+        {
+            var ttt = await _itemCodeRepository.ExecQueryWithReplace(sqlElement, paramListsR, paramListsC);
+            var dto = _mapper.Map<List<ItemCodeDto>>(ttt);
+            return ApiResponse<List<ItemCodeDto>>.Success(dto, 200);
         }
 
         public async Task<ApiResponse<List<ItemCodeDto>>> GetAllAsync()
