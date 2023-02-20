@@ -74,6 +74,15 @@ namespace SolaERP.Controllers
         [HttpDelete("{requestMainId}")]
         public async Task<IActionResult> DeleteRequest([FromHeader] string authToken, int requestMainId)
             => CreateActionResult(await _requestService.DeleteRequestAsync(authToken, requestMainId));
+
+        [HttpGet("{reqeustDetailId}")]
+        public async Task<IActionResult> GetDetailApprovalInfoAsync(int reqeustDetailId)
+            => CreateActionResult(await _requestService.GetRequestDetailApprvalInfoAsync(reqeustDetailId));
+
+        [HttpPost]
+        public async Task<IActionResult> SendDetailToApprove([FromHeader] string authToken, RequestDetailSendToApproveModel model)
+            => CreateActionResult(await _requestService.RequestDetailSendToApprove(authToken, model));
+
     }
 }
 
