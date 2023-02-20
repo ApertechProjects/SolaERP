@@ -4,7 +4,6 @@ using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.Enums;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
-using System;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
@@ -161,11 +160,26 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<RequestMain>> GetWaitingForApprovalsAsync(int userId, int businessUnitId, DateTime dateFrom, DateTime dateTo, string itemCode)
         {
+            //List<RequestMain> requestMains = new List<RequestMain>();
+            //List<ExecuteQueryParamList> paramListReplace = new List<ExecuteQueryParamList>();
+            //paramListReplace.Add(new ExecuteQueryParamList { ParamName = "@ItemCode", Value = "'01070201001','01070201002'" });
+
+            //List<ExecuteQueryParamList> paramListOrdinary = new List<ExecuteQueryParamList>();
+            //paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@BusinessUnitId", Value = businessUnitId });
+            //paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@DateFrom", Value = DateTime.Now.Date });
+            //paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@DateTo", Value = DateTime.Now.Date.AddDays(-5) });
+            //paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@UserId", Value = userId });
+
+
+            //requestMains = await ExecQueryWithReplace2("[dbo].[SP_RequestMainWFA1]", paramListReplace, paramListOrdinary);
+
+            ////requestMains.Add(GetWaitingForApprovalFromReader(reader));
+            //return requestMains;
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "EXEC SP_RequestMainWFA @UserId,@BusinessUnitId,@DateFrom,@DateTo,@ItemCode";
 
-                command.Parameters.AddWithValue(command, "@UserId", itemCode);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
                 command.Parameters.AddWithValue(command, "@DateFrom", dateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", dateTo);

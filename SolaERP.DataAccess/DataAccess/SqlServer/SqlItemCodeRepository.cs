@@ -10,7 +10,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
     public class SqlItemCodeRepository : IItemCodeRepository
     {
         private readonly IUnitOfWork _unitOfWork;
-        public SqlItemCodeRepository(IUnitOfWork unitOfWork) 
+        public SqlItemCodeRepository(IUnitOfWork unitOfWork)
         {
             this._unitOfWork = unitOfWork;
         }

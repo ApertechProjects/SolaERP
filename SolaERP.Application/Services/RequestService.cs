@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using SolaERP.Infrastructure.Contracts.Common;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Request;
@@ -83,6 +82,11 @@ namespace SolaERP.Application.Services
             int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
             var mainRequest = await _requestMainRepository.GetWaitingForApprovalsAsync(userId, requestWFAGetParametersDto.BusinessUnitId, requestWFAGetParametersDto.DateFrom, requestWFAGetParametersDto.DateTo, requestWFAGetParametersDto.ItemCode);
             var mainRequestDto = _mapper.Map<List<RequestWFADto>>(mainRequest);
+            //int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            //var mainreq = await _requestMainRepository.GetWaitingForApprovalsAsync(userId, requestWFAGetParametersDto.BusinessUnitId, requestWFAGetParametersDto.DateFrom, requestWFAGetParametersDto.DateTo, requestWFAGetParametersDto.ItemCode);
+
+            ////var mainRequest = await _requestMainRepository.GetWaitingForApprovalsAsync(userId, requestWFAGetParametersDto.BusinessUnitId, requestWFAGetParametersDto.DateFrom, requestWFAGetParametersDto.DateTo, requestWFAGetParametersDto.ItemCode);
+            //var mainRequestDto = _mapper.Map<List<RequestWFADto>>(mainreq);
 
             if (mainRequestDto != null && mainRequestDto.Count > 0)
                 return ApiResponse<List<RequestWFADto>>.Success(mainRequestDto, 200);
@@ -210,7 +214,7 @@ namespace SolaERP.Application.Services
             throw new NotImplementedException();
         }
 
-       
-        
+
+
     }
 }

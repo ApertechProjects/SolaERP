@@ -2,11 +2,12 @@
 using SolaERP.Infrastructure.Contracts.Common;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Entities;
-using SolaERP.Infrastructure.Entities.Item_Code;
 using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Application.Services
 {
+    //public class CommonService<TEntity, TEntityDto> where TEntity : BaseEntity
+    //    //ICommonService<TEntityDto> where TEntity : BaseEntity
     public class CommonService<TEntity, TEntityDto> : ICommonService<TEntityDto> where TEntity : BaseEntity
     {
         private ICommonRepository<TEntity> _commonRepository;
