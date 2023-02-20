@@ -7,11 +7,10 @@ using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlItemCodeRepository : SqlCommonRepository<ItemCodeWithImages>, IItemCodeRepository
+    public class SqlItemCodeRepository : IItemCodeRepository
     {
         private readonly IUnitOfWork _unitOfWork;
-
-        public SqlItemCodeRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public SqlItemCodeRepository(IUnitOfWork unitOfWork) 
         {
             this._unitOfWork = unitOfWork;
         }

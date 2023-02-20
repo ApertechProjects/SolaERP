@@ -11,10 +11,10 @@ using System.Data.SqlClient;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlRequestMainRepository : IRequestMainRepository
+    public class SqlRequestMainRepository : SqlCommonRepository<RequestMain>, IRequestMainRepository
     {
         private readonly IUnitOfWork _unitOfWork;
-        public SqlRequestMainRepository(IUnitOfWork unitOfWork)
+        public SqlRequestMainRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -432,11 +432,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@UserID", userId);
                 command.Parameters.AddWithValue(command, "@Requester", model.Requester);
                 command.Parameters.AddWithValue(command, "@Status", model.Status);
-                command.Parameters.AddWithValue(command, "@SupplierCode", model.SupplierCode);
-                command.Parameters.AddWithValue(command, "@RequestComment", model.RequestComment);
-                command.Parameters.AddWithValue(command, "@OperatorComment", model.OperatorComment);
+                command.Parameters.AddWithValue(command, "@SupplierCode", model.SupplierCode.Trim());
+                command.Parameters.AddWithValue(command, "@RequestComment", model.RequestComment.Trim());
+                command.Parameters.AddWithValue(command, "@OperatorComment", model.OperatorComment.Trim());
                 command.Parameters.AddWithValue(command, "@QualityRequired", model.QualityRequired);
-                command.Parameters.AddWithValue(command, "@CurrencyCode", model.CurrencyCode);
+                command.Parameters.AddWithValue(command, "@CurrencyCode", model.CurrencyCode.Trim());
                 command.Parameters.AddWithValue(command, "@LogisticTotal", model.LogisticTotal);
 
                 command.Parameters.Add("@NewRequestmainId", SqlDbType.Int);

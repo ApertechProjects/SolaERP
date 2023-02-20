@@ -1,5 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SolaERP.Application.Services;
+using SolaERP.Infrastructure.Contracts.Common;
+using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.Request;
+using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Controllers
@@ -9,10 +14,12 @@ namespace SolaERP.Controllers
     public class RequestController : CustomBaseController
     {
         private readonly IRequestService _requestService;
+        private ICommonService<RequestWFADto> _commonServiceForWFA;
 
-        public RequestController(IRequestService requestService)
+        public RequestController(IRequestService requestService, ICommonService<RequestWFADto> commonServiceForWFA)
         {
             _requestService = requestService;
+            _commonServiceForWFA = commonServiceForWFA;
         }
 
         [HttpPost]
@@ -37,7 +44,20 @@ namespace SolaERP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> GetWaitingForApprovalsRequest([FromHeader] string authToken, RequestWFAGetParametersDto requestWFAGetParametersDto)
-            => CreateActionResult(await _requestService.GetWaitingForApprovalsAsync(authToken, requestWFAGetParametersDto));
+        {
+            //List<ExecuteQueryParamList> paramListReplace = new List<ExecuteQueryParamList>();
+            //paramListReplace.Add(new ExecuteQueryParamList { ParamName = "@ItemCode", Value = requestWFAGetParametersDto.ItemCode });
+
+            ////int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
+
+            //List<ExecuteQueryParamList> paramListOrdinary = new List<ExecuteQueryParamList>();
+            //paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@BusinessUnitId", Value = requestWFAGetParametersDto.BusinessUnitId });
+            //paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@DateFrom", Value = requestWFAGetParametersDto.DateFrom });
+            //paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@DateTo", Value = requestWFAGetParametersDto.DateTo });
+
+            //return CreateActionResult(await _commonServiceForWFA.ExecQueryWithReplace("[dbo].[SP_RequestMainWFA]", paramListReplace, paramListOrdinary));
+            return CreateActionResult(await _requestService.GetWaitingForApprovalsAsync(authToken, requestWFAGetParametersDto));
+        }
 
         [HttpPost]
         public async Task<IActionResult> GetRequestCardByMainId([FromHeader] string authToken, int requestMainId)

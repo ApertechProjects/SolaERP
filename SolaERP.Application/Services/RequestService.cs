@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SolaERP.Infrastructure.Contracts.Common;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Request;
@@ -16,7 +17,6 @@ namespace SolaERP.Application.Services
         public IRequestMainRepository _requestMainRepository;
         private IRequestDetailRepository _requestDetailRepository;
         private IUserRepository _userRepository;
-
         public RequestService(IUnitOfWork unitOfWork, IMapper mapper, IRequestMainRepository requestMainRepository, IRequestDetailRepository requestDetailRepository, IUserRepository userRepository)
         {
             _unitOfWork = unitOfWork;
@@ -221,6 +221,9 @@ namespace SolaERP.Application.Services
         {
             throw new NotImplementedException();
         }
+
+       
+        
     }
 
 }

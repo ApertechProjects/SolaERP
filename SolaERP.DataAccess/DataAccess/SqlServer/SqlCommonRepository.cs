@@ -1,4 +1,5 @@
 ﻿using SolaERP.DataAccess.Extensions;
+using SolaERP.Infrastructure.Attributes;
 using SolaERP.Infrastructure.Contracts.Common;
 using SolaERP.Infrastructure.Entities;
 using SolaERP.Infrastructure.Entities.Item_Code;
@@ -6,19 +7,20 @@ using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
+using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlCommonRepository<TEntity> : ICommonRepository<ItemCodeWithImages> where TEntity : BaseEntity
+    public class SqlCommonRepository<TEntity> : ICommonRepository<TEntity> where TEntity : BaseEntity, new()
     {
         private readonly IUnitOfWork _unitOfWork;
         public SqlCommonRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<List<ItemCodeWithImages>> ExecQueryWithReplace(string sqlElement, List<ExecuteQueryParamList> paramListReplaced, List<ExecuteQueryParamList> paramListCommon)
+        public async Task<List<TEntity>> ExecQueryWithReplace(string sqlElement, List<ExecuteQueryParamList> paramListReplaced, List<ExecuteQueryParamList> paramListCommon)
         {
-            List<ItemCodeWithImages> result = new List<ItemCodeWithImages>();
+            List<TEntity> result = new List<TEntity>();
 
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -42,22 +44,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     using var reader = await updateCommand.ExecuteReaderAsync();
                     while (reader.Read())
                     {
-                        result.Add(reader.GetByEntityStructure<ItemCodeWithImages>());
+                        result.Add(reader.GetByEntityStructure<TEntity>());
                     }
                 }
             }
             return result;
-        }
-
-        private ItemCodeWithImages GetItemCodeFromReader(IDataReader reader)
-        {
-            return new()
-            {
-                Item_Code = reader.Get<string>("ItemCode").Trim(),
-                Description = reader.Get<string>("Description"),
-                LongDescription = reader.Get<string>("LongDescription"),
-                UnitOfPurch = reader.Get<string>("UnitOfPurch")
-            };
         }
 
         public static string GetSqlElementScript(string scriptText, string sqlElementName)
@@ -73,5 +64,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return scriptText;
         }
+
     }
 }

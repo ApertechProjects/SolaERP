@@ -1,5 +1,6 @@
 ﻿using SolaERP.Infrastructure.Entities;
 using SolaERP.Infrastructure.Models;
+using System.Data;
 
 namespace SolaERP.Infrastructure.Contracts.Common
 {

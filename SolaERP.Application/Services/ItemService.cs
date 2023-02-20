@@ -24,12 +24,6 @@ namespace SolaERP.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<ApiResponse<List<ItemCodeDto>>> ExecQueryWithReplace(string sqlElement, List<ExecuteQueryParamList> paramListsR, List<ExecuteQueryParamList> paramListsC)
-        {
-            var ttt = await _itemCodeRepository.ExecQueryWithReplace(sqlElement, paramListsR, paramListsC);
-            var dto = _mapper.Map<List<ItemCodeDto>>(ttt);
-            return ApiResponse<List<ItemCodeDto>>.Success(dto, 200);
-        }
 
         public async Task<ApiResponse<List<ItemCodeDto>>> GetAllAsync()
         {
