@@ -18,6 +18,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             _unitOfWork = unitOfWork;
         }
+
         public async Task<List<TEntity>> ExecQueryWithReplace(string sqlElement, List<ExecuteQueryParamList> paramListReplaced, List<ExecuteQueryParamList> paramListCommon)
         {
             List<TEntity> result = new List<TEntity>();
