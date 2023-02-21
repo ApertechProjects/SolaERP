@@ -6,12 +6,13 @@ using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
+using System.Text;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlCommonRepository<TEntity> : ICommonRepository<TEntity> where TEntity : BaseEntity, new()
-        //public class SqlCommonRepository<TEntity> where TEntity : BaseEntity, new()
-        //    //ICommonRepository<TEntity> where TEntity : BaseEntity, new()
+    //public class SqlCommonRepository<TEntity> : ICommonRepository<TEntity> where TEntity : BaseEntity, new()
+    public class SqlCommonRepository<TEntity> where TEntity : BaseEntity, new()
+        //ICommonRepository<TEntity> where TEntity : BaseEntity, new()
     {
         private readonly IUnitOfWork _unitOfWork;
         public SqlCommonRepository(IUnitOfWork unitOfWork)
@@ -52,9 +53,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return result;
         }
 
-        public async Task<List<RequestMain>> ExecQueryWithReplace2(string sqlElement, List<ExecuteQueryParamList> paramListReplaced, List<ExecuteQueryParamList> paramListCommon)
+        public string ExecQueryWithReplace2Async(string sqlElement, List<ExecuteQueryParamList> paramListReplaced)
         {
-            List<RequestMain> result = new List<RequestMain>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "SELECT definition FROM sys.sql_modules WHERE object_id = OBJECT_ID(@storedProcedureName)";
@@ -62,58 +62,52 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 string storedProcedureDefinition = (string)command.ExecuteScalar();
 
                 string scriptText = GetSqlElementScript(storedProcedureDefinition, sqlElement);
-                string updatedStoredProcedureDefinition = scriptText;
 
                 for (int i = 0; i < paramListReplaced.Count; i++)
-                    updatedStoredProcedureDefinition = updatedStoredProcedureDefinition.Replace(paramListReplaced[i].ParamName,
+                    scriptText = scriptText.Replace(paramListReplaced[i].ParamName,
                         paramListReplaced[i].Value == null ? "NULL" : paramListReplaced[i].Value.ToString());
 
-                using (var updateCommand = _unitOfWork.CreateCommand() as DbCommand)
-                {
-                    updateCommand.CommandText = updatedStoredProcedureDefinition;
-                    for (int i = 0; i < paramListCommon.Count; i++)
-                        updateCommand.Parameters.AddWithValue(updateCommand, paramListCommon[i].ParamName, paramListCommon[i].Value);
-
-                    using var reader = await updateCommand.ExecuteReaderAsync();
-                    while (reader.Read())
-                    {
-                        result.Add(GetWaitingForApprovalFromReader(reader));
-                    }
-                    return result;
-                }
+                return scriptText;
             }
         }
 
-        private RequestMain GetWaitingForApprovalFromReader(IDataReader reader)
+
+        protected string DeclareVariablesForScript(Dictionary<string, string> paramList, string scriptText)
         {
-            return new()
+            StringBuilder scriptBuilder = new StringBuilder("DECLARE ");
+
+            KeyValuePair<string, string> elementAt = default;
+
+            for (int i = 0; i < paramList.Count; i++)
             {
-                RequestMainId = reader.Get<int>("RequestMainId"),
-                BusinessUnitId = reader.Get<int>("BusinessUnitId"),
-                RequestTypeId = reader.Get<int>("RequestTypeId"),
-                RequestNo = reader.Get<string>("RequestNo"),
-                EntryDate = reader.Get<DateTime>("EntryDate"),
-                RequestDate = reader.Get<DateTime>("RequestDate"),
-                RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
-                UserId = reader.Get<int>("UserId"),
-                Requester = reader.Get<int>("Requester"),
-                Status = reader.Get<int>("Status"),
-                SupplierCode = reader.Get<string>("SupplierCode"),
-                RequestComment = reader.Get<string>("RequestComment"),
-                OperatorComment = reader.Get<string>("OperatorComment"),
-                QualityRequired = reader.Get<string>("QualityRequired"),
-                CurrencyCode = reader.Get<string>("CurrencyCode"),
-                LogisticsTotal = reader.Get<decimal>("LogisticsTotal"),
-            };
+                elementAt = paramList.ElementAt(i);
+                scriptBuilder.Append(elementAt.Key + " " + elementAt.Value + ",\n");
+            }
+
+            scriptBuilder =scriptBuilder.Remove(scriptBuilder.Length - 2, 1);
+            return scriptBuilder.Append(scriptText).ToString();
         }
 
-        //public async Task<List<TEntity>> GetDatas(TEntity entity)
-        //{
-        //    List<TEntity> result = new List<TEntity>();
 
-        //    while (reader.Read())
+        protected string DeclareVariablesForScript(string scriptText)
+        {
+            return scriptText;
+        }
+        //public async Task<List<RequestMain>> ExecQueryWithReplace3Async(string sqlElement, string scriptText, List<ExecuteQueryParamList> paramListCommon)
+        //{
+        //    List<RequestMain> result = new List<RequestMain>();
+        //    using (var updateCommand = _unitOfWork.CreateCommand() as DbCommand)
         //    {
-        //        result.Add(reader.GetByEntityStructure<TEntity>());
+        //        updateCommand.CommandText = scriptText;
+        //        for (int i = 0; i < paramListCommon.Count; i++)
+        //            updateCommand.Parameters.AddWithValue(updateCommand, paramListCommon[i].ParamName, paramListCommon[i].Value);
+
+        //        using var reader = await updateCommand.ExecuteReaderAsync();
+        //        while (reader.Read())
+        //        {
+        //            result.Add(GetWaitingForApprovalFromReader(reader));
+        //        }
+        //        return result;
         //    }
         //}
 

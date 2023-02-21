@@ -77,10 +77,10 @@ namespace SolaERP.Application.Services
             return result ? ApiResponse<bool>.Success(204) : ApiResponse<bool>.Fail("Requst not approved", 400);
         }
 
-        public async Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(string finderToken, RequestWFAGetParametersDto requestWFAGetParametersDto)
+        public async Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync2(string finderToken, RequestWFAGetParametersDto requestWFAGetParametersDto)
         {
             int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
-            var mainRequest = await _requestMainRepository.GetWaitingForApprovalsAsync(userId, requestWFAGetParametersDto.BusinessUnitId, requestWFAGetParametersDto.DateFrom, requestWFAGetParametersDto.DateTo, requestWFAGetParametersDto.ItemCode);
+            var mainRequest = await _requestMainRepository.GetWaitingForApprovalsAsync2(userId, requestWFAGetParametersDto.BusinessUnitId, requestWFAGetParametersDto.DateFrom, requestWFAGetParametersDto.DateTo, requestWFAGetParametersDto.ItemCode);
             var mainRequestDto = _mapper.Map<List<RequestWFADto>>(mainRequest);
             //int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
             //var mainreq = await _requestMainRepository.GetWaitingForApprovalsAsync(userId, requestWFAGetParametersDto.BusinessUnitId, requestWFAGetParametersDto.DateFrom, requestWFAGetParametersDto.DateTo, requestWFAGetParametersDto.ItemCode);
@@ -214,7 +214,18 @@ namespace SolaERP.Application.Services
             throw new NotImplementedException();
         }
 
+        public async Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(string finderToken, RequestWFAGetParametersDto requestWFAGetParametersDto)
+        {
+            int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            var mainreq = await _requestMainRepository.GetWaitingForApprovalsAsync(userId, requestWFAGetParametersDto.BusinessUnitId, requestWFAGetParametersDto.DateFrom, requestWFAGetParametersDto.DateTo, requestWFAGetParametersDto.ItemCode);
 
+            //var mainRequest = await _requestMainRepository.GetWaitingForApprovalsAsync(userId, requestWFAGetParametersDto.BusinessUnitId, requestWFAGetParametersDto.DateFrom, requestWFAGetParametersDto.DateTo, requestWFAGetParametersDto.ItemCode);
+            var mainRequestDto = _mapper.Map<List<RequestWFADto>>(mainreq);
 
+            if (mainRequestDto != null && mainRequestDto.Count > 0)
+                return ApiResponse<List<RequestWFADto>>.Success(mainRequestDto, 200);
+
+            return ApiResponse<List<RequestWFADto>>.Fail("Waiting for approval list is empty", 404);
+        }
     }
 }

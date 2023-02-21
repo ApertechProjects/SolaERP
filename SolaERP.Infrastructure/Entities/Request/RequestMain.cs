@@ -12,15 +12,17 @@
         public int UserId { get; set; }
         public int Requester { get; set; }
         public int Status { get; set; }
+        public int Sequence { get; set; }//new
+        public string ApproveStatus { get; set; }
+        public string EmployeeCode { get; set; }
+        public string EmployeeName { get; set; }
         public string SupplierCode { get; set; }
         public string RequestComment { get; set; }
         public string OperatorComment { get; set; }
         public string QualityRequired { get; set; }
         public string CurrencyCode { get; set; }
         public int RowNum { get; set; }
-        public string Buyer { get; set; }
         public decimal LogisticsTotal { get; set; }
-        public string ApproveStatus { get; set; }
         public List<RequestDetailWithAnalysisCode> Details { get; set; }
     }
 }

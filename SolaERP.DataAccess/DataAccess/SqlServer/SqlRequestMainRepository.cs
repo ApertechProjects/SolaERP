@@ -1,4 +1,5 @@
-﻿using SolaERP.DataAccess.Extensions;
+﻿using Microsoft.AspNetCore.Mvc;
+using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.Enums;
@@ -7,6 +8,7 @@ using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Xml;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -160,22 +162,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<RequestMain>> GetWaitingForApprovalsAsync(int userId, int businessUnitId, DateTime dateFrom, DateTime dateTo, string itemCode)
         {
-            //List<RequestMain> requestMains = new List<RequestMain>();
-            //List<ExecuteQueryParamList> paramListReplace = new List<ExecuteQueryParamList>();
-            //paramListReplace.Add(new ExecuteQueryParamList { ParamName = "@ItemCode", Value = "'01070201001','01070201002'" });
-
-            //List<ExecuteQueryParamList> paramListOrdinary = new List<ExecuteQueryParamList>();
-            //paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@BusinessUnitId", Value = businessUnitId });
-            //paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@DateFrom", Value = DateTime.Now.Date });
-            //paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@DateTo", Value = DateTime.Now.Date.AddDays(-5) });
-            //paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@UserId", Value = userId });
-
-
-            //requestMains = await ExecQueryWithReplace2("[dbo].[SP_RequestMainWFA1]", paramListReplace, paramListOrdinary);
-
-            ////requestMains.Add(GetWaitingForApprovalFromReader(reader));
-            //return requestMains;
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+           using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "EXEC SP_RequestMainWFA @UserId,@BusinessUnitId,@DateFrom,@DateTo,@ItemCode";
 
@@ -301,6 +288,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 QualityRequired = reader.Get<string>("QualityRequired"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 LogisticsTotal = reader.Get<decimal>("LogisticsTotal"),
+                ApproveStatus = reader.Get<string>("ApproveStatus"),
+                EmployeeCode = reader.Get<string>("EmployeeCode"),
+                EmployeeName = reader.Get<string>("EmployeeName"),
+                Sequence = reader.Get<int>("Sequence")
             };
         }
 
@@ -341,7 +332,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 EntryDate = reader.Get<DateTime>("EntryDate"),
                 RequestDate = reader.Get<DateTime>("RequestDate"),
                 RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
-                Buyer = reader.Get<string>("Buyer"),
+                //Buyer = reader.Get<string>("Buyer"),
                 Requester = reader.Get<int>("Requester"),
                 RequestComment = reader.Get<string>("RequestComment"),
                 OperatorComment = reader.Get<string>("OperatorComment"),
@@ -408,7 +399,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 EntryDate = reader.Get<DateTime>("EntryDate"),
                 RequestDate = reader.Get<DateTime>("RequestDate"),
                 RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
-                Buyer = reader.Get<string>("Buyer"),
+                //Buyer = reader.Get<string>("Buyer"),
                 Requester = reader.Get<int>("Requester"),
                 RequestComment = reader.Get<string>("RequestComment"),
                 OperatorComment = reader.Get<string>("OperatorComment"),
@@ -471,6 +462,46 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return new RequestSaveResultModel { RequestMainId = requestId, RequestNo = requestNo };
             }
         }
+
+        public async Task<List<RequestMain>> GetWaitingForApprovalsAsync2(int userId, int businessUnitId, DateTime dateFrom, DateTime dateTo, string itemCode)
+        {
+            List<RequestMain> requestMains = new List<RequestMain>();
+            List<ExecuteQueryParamList> paramListReplace = new List<ExecuteQueryParamList>();
+            paramListReplace.Add(new ExecuteQueryParamList { ParamName = "@ItemCode", Value = "'01070201001','01070201002'" });
+
+            List<ExecuteQueryParamList> paramListOrdinary = new List<ExecuteQueryParamList>();
+            paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@BusinessUnitId", Value = businessUnitId });
+            paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@DateFrom", Value = DateTime.Now.Date });
+            paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@DateTo", Value = DateTime.Now.Date.AddDays(-5) });
+            paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@UserId", Value = userId });
+
+
+            Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+            keyValuePairs.Add("@BusinessUnitId", "INT");
+            keyValuePairs.Add("@DateFrom", "DateTime");
+            keyValuePairs.Add("@DateTo", "DateTime");
+            keyValuePairs.Add("@UserId", "INT");
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.Parameters.Clear();
+                command.CommandText = DeclareVariablesForScript(keyValuePairs,ExecQueryWithReplace2Async("[dbo].[SP_RequestMainWFA1]", paramListReplace));
+                for (int i = 0; i < paramListOrdinary.Count; i++)
+                {
+                    command.Parameters.AddWithValue(command, paramListOrdinary[i].ParamName, paramListOrdinary[i].Value);
+                }
+
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    requestMains.Add(GetWaitingForApprovalFromReader(reader));
+                }
+            }
+
+            return requestMains;
+
+        }
+
+
     }
 
 }

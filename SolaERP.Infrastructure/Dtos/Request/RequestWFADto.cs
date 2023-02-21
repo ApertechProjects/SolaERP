@@ -18,13 +18,16 @@ namespace SolaERP.Infrastructure.Dtos.Request
         public int UserId { get; set; }
         public int Requester { get; set; }
         public int Status { get; set; }
+        public int Sequence { get; set; }
         public string ApproveStatus { get; set; }
+        public string EmployeeCode { get; set; }
+        public string EmployeeName { get; set; }
         public string SupplierCode { get; set; }
         public string RequestComment { get; set; }
         public string OperatorComment { get; set; }
         public string QualityRequired { get; set; }
         public string CurrencyCode { get; set; }
-        public decimal LogisticTotal { get; set; }
+        public decimal LogisticsTotal { get; set; }
         public List<RequestDetailDto> RequestDetailDtos { get; set; }
     }
 }
