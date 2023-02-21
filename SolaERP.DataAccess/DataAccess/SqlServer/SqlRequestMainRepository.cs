@@ -12,7 +12,7 @@ using System.Xml;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlRequestMainRepository : SqlCommonRepository<RequestMain>, IRequestMainRepository
+    public class SqlRequestMainRepository : SqlBaseRepository<RequestMain>, IRequestMainRepository
     {
         private readonly IUnitOfWork _unitOfWork;
         public SqlRequestMainRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
@@ -179,8 +179,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 {
                     mainRequests.Add(GetWaitingForApprovalFromReader(reader));
                 }
-                //if (mainRequests.Count == 0)
-                //    mainRequests.Add(new RequestMain { BusinessUnitId = 0 });
                 return mainRequests;
             }
         }

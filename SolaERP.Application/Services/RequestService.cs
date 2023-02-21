@@ -82,9 +82,7 @@ namespace SolaERP.Application.Services
             int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
             var requestMain = await _requestMainRepository.GetRequesMainHeaderAsync(requestMainId, userId);
             requestMain.requestCardDetails = await _requestDetailRepository.GetRequestDetailsByMainIdAsync(requestMainId);
-
             var requestDto = _mapper.Map<RequestCardMainDto>(requestMain);
-
             return ApiResponse<RequestCardMainDto>.Success(requestDto, 200);
         }
 
@@ -202,7 +200,6 @@ namespace SolaERP.Application.Services
             int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
             var mainreq = await _requestMainRepository.GetWaitingForApprovalsAsync(userId, requestWFAGetParametersDto.BusinessUnitId, requestWFAGetParametersDto.DateFrom, requestWFAGetParametersDto.DateTo, requestWFAGetParametersDto.ItemCode);
 
-            //var mainRequest = await _requestMainRepository.GetWaitingForApprovalsAsync(userId, requestWFAGetParametersDto.BusinessUnitId, requestWFAGetParametersDto.DateFrom, requestWFAGetParametersDto.DateTo, requestWFAGetParametersDto.ItemCode);
             var mainRequestDto = _mapper.Map<List<RequestWFADto>>(mainreq);
 
             if (mainRequestDto != null && mainRequestDto.Count > 0)

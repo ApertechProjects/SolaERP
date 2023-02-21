@@ -10,12 +10,10 @@ using System.Text;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    //public class SqlCommonRepository<TEntity> : ICommonRepository<TEntity> where TEntity : BaseEntity, new()
-    public class SqlCommonRepository<TEntity> where TEntity : BaseEntity, new()
-        //ICommonRepository<TEntity> where TEntity : BaseEntity, new()
+    public class SqlBaseRepository<TEntity> where TEntity : BaseEntity, new()
     {
         private readonly IUnitOfWork _unitOfWork;
-        public SqlCommonRepository(IUnitOfWork unitOfWork)
+        public SqlBaseRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
