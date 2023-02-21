@@ -44,15 +44,8 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetWaitingForApprovalsRequest([FromHeader] string authToken, RequestWFAGetParametersDto requestWFAGetParametersDto)
         {
             return CreateActionResult(await _requestService.GetWaitingForApprovalsAsync(authToken, requestWFAGetParametersDto));
-            //return CreateActionResult(await _requestService.GetWaitingForApprovalsAsync(authToken, requestWFAGetParametersDto));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> GetWaitingForApprovalsRequest2([FromHeader] string authToken, RequestWFAGetParametersDto requestWFAGetParametersDto)
-        {
-            return CreateActionResult(await _requestService.GetWaitingForApprovalsAsync2(authToken, requestWFAGetParametersDto));
-            //return CreateActionResult(await _requestService.GetWaitingForApprovalsAsync(authToken, requestWFAGetParametersDto));
-        }
 
         [HttpPost]
         public async Task<IActionResult> GetRequestCardByMainId([FromHeader] string authToken, int requestMainId)

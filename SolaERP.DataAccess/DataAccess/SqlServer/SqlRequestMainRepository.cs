@@ -162,7 +162,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<RequestMain>> GetWaitingForApprovalsAsync(int userId, int businessUnitId, DateTime dateFrom, DateTime dateTo, string itemCode)
         {
-           using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "EXEC SP_RequestMainWFA @UserId,@BusinessUnitId,@DateFrom,@DateTo,@ItemCode";
 
@@ -424,7 +424,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                 @NewRequestmainId = @NewRequestmainId OUTPUT,
                                                                 @NewRequestNo = @NewRequestNo OUTPUT 
                                                                 select @NewRequestmainId as NewRequestmainId,
-                                                               
                                                                 @NewRequestNo as NewRequestNo
 ";
 
@@ -463,43 +462,37 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<RequestMain>> GetWaitingForApprovalsAsync2(int userId, int businessUnitId, DateTime dateFrom, DateTime dateTo, string itemCode)
-        {
-            List<RequestMain> requestMains = new List<RequestMain>();
-            List<ExecuteQueryParamList> paramListReplace = new List<ExecuteQueryParamList>();
-            paramListReplace.Add(new ExecuteQueryParamList { ParamName = "@ItemCode", Value = "'01070201001','01070201002'" });
+        //public async Task<List<RequestMain>> GetWaitingForApprovalsAsync2(int userId, int businessUnitId, DateTime dateFrom, DateTime dateTo, string itemCode)
+        //{
+        //    List<RequestMain> requestMains = new List<RequestMain>();
 
-            List<ExecuteQueryParamList> paramListOrdinary = new List<ExecuteQueryParamList>();
-            paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@BusinessUnitId", Value = businessUnitId });
-            paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@DateFrom", Value = DateTime.Now.Date });
-            paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@DateTo", Value = DateTime.Now.Date.AddDays(-5) });
-            paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@UserId", Value = userId });
+        //    List<ExecuteQueryParamList> paramListOrdinary = new List<ExecuteQueryParamList>();
+        //    paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@BusinessUnitId", Value = businessUnitId });
+        //    paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@DateFrom", Value = DateTime.Now.Date });
+        //    paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@DateTo", Value = DateTime.Now});
+        //    paramListOrdinary.Add(new ExecuteQueryParamList { ParamName = "@UserId", Value = 1405 });
+
+        //    using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+        //    {
+        //        command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainWFA]", new() { ParamName}));
 
 
-            Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
-            keyValuePairs.Add("@BusinessUnitId", "INT");
-            keyValuePairs.Add("@DateFrom", "DateTime");
-            keyValuePairs.Add("@DateTo", "DateTime");
-            keyValuePairs.Add("@UserId", "INT");
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.Parameters.Clear();
-                command.CommandText = DeclareVariablesForScript(keyValuePairs,ExecQueryWithReplace2Async("[dbo].[SP_RequestMainWFA1]", paramListReplace));
-                for (int i = 0; i < paramListOrdinary.Count; i++)
-                {
-                    command.Parameters.AddWithValue(command, paramListOrdinary[i].ParamName, paramListOrdinary[i].Value);
-                }
+        //        for (int i = 0; i < paramListOrdinary.Count; i++)
+        //        {
+        //            command.Parameters.AddWithValue(paramListOrdinary[i].ParamName, paramListOrdinary[i].Value);
+        //        }
 
-                using var reader = await command.ExecuteReaderAsync();
-                while (reader.Read())
-                {
-                    requestMains.Add(GetWaitingForApprovalFromReader(reader));
-                }
-            }
+        //        using var reader = await command.ExecuteReaderAsync();
 
-            return requestMains;
+        //        while (reader.Read())
+        //        {
+        //            requestMains.Add(GetWaitingForApprovalFromReader(reader));
+        //        }
+        //    }
 
-        }
+        //    return requestMains;
+
+        //}
 
 
     }
