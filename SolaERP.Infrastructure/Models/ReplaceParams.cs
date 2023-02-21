@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Infrastructure.Models
 {
-    public class ExecuteQueryParamList
+    public class ReplaceParams
     {
         public string ParamName { get; set; }
         public object Value { get; set; }

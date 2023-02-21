@@ -9,5 +9,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
 {
     public interface IAccountCodeRepository : ICrudOperations<AccountCode>
     {
+        Task<List<AccountCode>> GetAccountCodesByBusinessUnit(string businessUnit);
     }
 }

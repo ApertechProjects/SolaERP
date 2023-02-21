@@ -18,7 +18,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public string ReplaceQuery(string sqlElement, ExecuteQueryParamList paramListReplaced)
+        public string ReplaceQuery(string sqlElement, ReplaceParams paramListReplaced)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

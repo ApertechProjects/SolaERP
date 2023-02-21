@@ -29,6 +29,13 @@ namespace SolaERP.Application.Services
             throw new NotImplementedException();
         }
 
+        public async Task<ApiResponse<List<AccountCodeDto>>> GetAccountCodesByBusinessUnit(string businessUnit)
+        {
+            var accountCodes = await _accountCodeRepository.GetAccountCodesByBusinessUnit(businessUnit);
+            var dto = _mapper.Map<List<AccountCodeDto>>(accountCodes);
+            return ApiResponse<List<AccountCodeDto>>.Success(dto, 200); 
+        }
+
         public async Task<ApiResponse<List<AccountCodeDto>>> GetAllAsync()
         {
             var accountCodes = await _accountCodeRepository.GetAllAsync();

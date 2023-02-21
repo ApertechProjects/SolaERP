@@ -6,6 +6,6 @@ namespace SolaERP.Infrastructure.Contracts.Common
 {
     public interface IBaseRepository<TEntity> where TEntity : BaseEntity
     {
-        Task<List<TEntity>> ExecQueryWithReplace(string sqlElement, List<ExecuteQueryParamList> paramListsR, List<ExecuteQueryParamList> paramListsC);
+        Task<List<TEntity>> ExecQueryWithReplace(string sqlElement, List<ReplaceParams> paramListsR, List<ReplaceParams> paramListsC);
     }
 }

@@ -18,5 +18,9 @@ namespace SolaERP.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAccountCodeList()
           => CreateActionResult(await _accountCodeService.GetAllAsync());
+
+        [HttpGet]
+        public async Task<IActionResult> GetAccountCodesByBusinessUnitId(string businessUnit)
+          => CreateActionResult(await _accountCodeService.GetAccountCodesByBusinessUnit(businessUnit));
     }
 }
