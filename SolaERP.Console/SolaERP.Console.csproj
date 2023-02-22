@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DataAcces\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="System.CodeDom" Version="7.0.0" />
   </ItemGroup>
 
