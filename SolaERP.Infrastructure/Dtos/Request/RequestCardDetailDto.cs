@@ -15,11 +15,14 @@ namespace SolaERP.Infrastructure.Dtos.Request
         public DateTime RequestDeadline { get; set; }
         public DateTime RequestedDate { get; set; }
         public string ItemCode { get; set; }
+        public string ItemName1 { get; set; }
+        public string ItemName2 { get; set; }
+        public decimal AvailableInMainStock { get; set; }
         public decimal Quantity { get; set; }
         public string UOM { get; set; }
         public string Description { get; set; }
         public string Location { get; set; }
-        public string Buyer { get; set; }
+        //public string Buyer { get; set; }
         public decimal AvailableQuantity { get; set; }
         public decimal QuantityFromStock { get; set; }
         public decimal OriginalQuantity { get; set; }

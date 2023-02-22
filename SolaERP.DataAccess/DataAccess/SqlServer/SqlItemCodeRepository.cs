@@ -7,7 +7,7 @@ using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlItemCodeRepository : SqlCommonRepository<ItemCodeWithImages>, IItemCodeRepository
+    public class SqlItemCodeRepository : SqlBaseRepository<ItemCodeWithImages>, IItemCodeRepository
     {
         private readonly IUnitOfWork _unitOfWork;
 
