@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP", "SolaERP\SolaERP.csproj", "{9E1D639B-9689-4F00-B5AB-3EAA8E325BF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.API", "SolaERP\SolaERP.API.csproj", "{9E1D639B-9689-4F00-B5AB-3EAA8E325BF0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.Infrastructure", "SolaERP.Infrastructure\SolaERP.Infrastructure.csproj", "{2F345001-FDA9-4C29-8875-2F052C7B704F}"
 EndProject
