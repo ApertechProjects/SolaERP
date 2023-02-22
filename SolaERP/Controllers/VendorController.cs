@@ -12,10 +12,10 @@ namespace SolaERP.Controllers
     {
         private ConfHelper ConfHelper { get; }
         private readonly IUserRepository _userRepository;
-        public VendorController(ConfHelper confHelper,IUserRepository userRepository)
+        public VendorController(ConfHelper confHelper, IUserRepository userRepository)
         {
             ConfHelper = confHelper;
-            _userRepository= userRepository;
+            _userRepository = userRepository;
         }
 
 
@@ -49,7 +49,7 @@ namespace SolaERP.Controllers
         [HttpGet("{businessUnitId}")]
         public async Task<ApiResult> GetActiveVendor([FromHeader] string authToken, int businessUnitId)
         {
-            return await new EntityLogic(ConfHelper,_userRepository).GetActiveVendors(authToken, businessUnitId);
+            return await new EntityLogic(ConfHelper, _userRepository).GetActiveVendors(authToken, businessUnitId);
         }
     }
 }
