@@ -22,5 +22,17 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetItemCodesByItemCodeAsync(string itemCode)
             => CreateActionResult(await _itemService.GetItemCodeByItemCodeAsync(itemCode));
 
+        [HttpGet]
+        public async Task<IActionResult> GetItemCodesTestAsync([FromHeader] string authToken)
+        {
+            List<ExecuteQueryParamList> executeQueryParamLists = new List<ExecuteQueryParamList>();
+            executeQueryParamLists.Add(new ExecuteQueryParamList { ParamName = "APT", Value = "APT" });
+
+            List<ExecuteQueryParamList> executeQueryParamLists2 = new List<ExecuteQueryParamList>();
+            executeQueryParamLists2.Add(new ExecuteQueryParamList { ParamName = "@ItemCodes", Value = "01070201001" });
+            return CreateActionResult(await _itemService.ExecQueryWithReplace("[dbo].[GET_ITEM_BY_ITEM_CODE]"
+                                                                            , executeQueryParamLists, executeQueryParamLists2));
+        }
+
     }
 }

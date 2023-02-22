@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Text.Json.Serialization;
 
 namespace SolaERP.Infrastructure.Models
 {
@@ -9,7 +9,7 @@ namespace SolaERP.Infrastructure.Models
         public string Comment { get; set; }
         public int Sequence { get; set; }
 
-        [NotMapped]
+        [JsonIgnore]
         public int UserId { get; set; }
     }
 }

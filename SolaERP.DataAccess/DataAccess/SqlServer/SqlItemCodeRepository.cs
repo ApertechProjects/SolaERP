@@ -7,10 +7,11 @@ using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlItemCodeRepository : IItemCodeRepository
+    public class SqlItemCodeRepository : SqlCommonRepository<ItemCodeWithImages>, IItemCodeRepository
     {
         private readonly IUnitOfWork _unitOfWork;
-        public SqlItemCodeRepository(IUnitOfWork unitOfWork)
+
+        public SqlItemCodeRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             this._unitOfWork = unitOfWork;
         }
@@ -34,8 +35,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SELECT * FROM [dbo].[GET_ITEM_BY_ITEM_CODE](@ItemCode)";
-                command.Parameters.AddWithValue(command, "@ItemCode", itemCode);
+                command.CommandText = "SELECT * FROM [dbo].[GET_ITEM_BY_ITEM_CODE](@ItemCodes)";
+                command.Parameters.AddWithValue(command, "@ItemCodes", itemCode);
                 ItemCode result = new();
 
                 using var reader = await command.ExecuteReaderAsync();
@@ -65,7 +66,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return new()
             {
-                Item_Code = reader.Get<string>("ItemCode").Trim(),
+                Item_Code = reader.Get<string>("ItemCodes").Trim(),
                 Description = reader.Get<string>("Description"),
                 LongDescription = reader.Get<string>("LongDescription"),
                 UnitOfPurch = reader.Get<string>("UnitOfPurch")

@@ -2,10 +2,10 @@
 
 namespace SolaERP.Infrastructure.Models
 {
-    public class RequestMainGetParametersDto
+    public class RequestMainGetModel
     {
         public int BusinessUnitId { get; set; }
-        public string ItemCode { get; set; }
+        public List<string> ItemCodes { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
         public ApproveStatuses ApproveStatus { get; set; }

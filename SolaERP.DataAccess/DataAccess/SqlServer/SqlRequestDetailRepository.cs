@@ -25,7 +25,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                     @RequestDate, 
                                                                     @RequestDeadline, 
                                                                     @RequestedDate, 
-                                                                    @ItemCode, 
+                                                                    @ItemCodes, 
                                                                     @Quantity, 
                                                                     @UOM, 
                                                                     @Description, 
@@ -58,7 +58,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@RequestDate", entity.RequestDate);
                 command.Parameters.AddWithValue(command, "@RequestDeadline", entity.RequestDeadline);
                 command.Parameters.AddWithValue(command, "@RequestedDate", entity.RequestedDate);
-                command.Parameters.AddWithValue(command, "@ItemCode", entity.ItemCode.Trim());
+                command.Parameters.AddWithValue(command, "@ItemCodes", entity.ItemCode.Trim());
                 command.Parameters.AddWithValue(command, "@Quantity", entity.Quantity);
                 command.Parameters.AddWithValue(command, "@UOM", entity.UOM.Trim());
                 command.Parameters.AddWithValue(command, "@Description", entity.Description.Trim());

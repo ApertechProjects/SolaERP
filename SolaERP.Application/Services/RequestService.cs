@@ -32,9 +32,9 @@ namespace SolaERP.Application.Services
             return result;
         }
 
-        public async Task<ApiResponse<List<RequestMainDto>>> GetAllAsync(RequestMainGetParametersDto getParametersDto)
+        public async Task<ApiResponse<List<RequestMainDto>>> GetAllAsync(RequestMainGetModel model)
         {
-            var mainRequest = await _requestMainRepository.GetAllAsync(getParametersDto.BusinessUnitId, getParametersDto.ItemCode, getParametersDto.DateFrom, getParametersDto.DateTo, getParametersDto.ApproveStatus, getParametersDto.Status);
+            var mainRequest = await _requestMainRepository.GetAllAsync(model.BusinessUnitId, string.Join(',', model.ItemCodes), model.DateFrom, model.DateTo, model.ApproveStatus, model.Status);
             var mainRequestDto = _mapper.Map<List<RequestMainDto>>(mainRequest);
 
             if (mainRequestDto != null && mainRequestDto.Count > 0)
@@ -88,7 +88,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<List<RequestMainDraftDto>>> GetRequestMainDraftsAsync(RequestMainDraftModel getMainDraftParameters)
         {
-            var mainDraftEntites = await _requestMainRepository.GetMainRequestDraftsAsync(getMainDraftParameters.BusinessUnitId, getMainDraftParameters.ItemCode, getMainDraftParameters.DateFrom, getMainDraftParameters.DateTo);
+            var mainDraftEntites = await _requestMainRepository.GetMainRequestDraftsAsync(getMainDraftParameters.BusinessUnitId, string.Join(',', getMainDraftParameters.ItemCodes), getMainDraftParameters.DateFrom, getMainDraftParameters.DateTo);
             var mainDraftDto = _mapper.Map<List<RequestMainDraftDto>>(mainDraftEntites);
 
             if (mainDraftEntites.Count > 0)
@@ -195,10 +195,10 @@ namespace SolaERP.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(string finderToken, RequestWFAGetParametersDto requestWFAGetParametersDto)
+        public async Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(string finderToken, RequestWFAGetModel requestWFAGetParametersDto)
         {
             int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
-            var mainreq = await _requestMainRepository.GetWaitingForApprovalsAsync(userId, requestWFAGetParametersDto.BusinessUnitId, requestWFAGetParametersDto.DateFrom, requestWFAGetParametersDto.DateTo, requestWFAGetParametersDto.ItemCode);
+            var mainreq = await _requestMainRepository.GetWaitingForApprovalsAsync(userId, requestWFAGetParametersDto.BusinessUnitId, requestWFAGetParametersDto.DateFrom, requestWFAGetParametersDto.DateTo, string.Join(',', requestWFAGetParametersDto.ItemCode));
 
             var mainRequestDto = _mapper.Map<List<RequestWFADto>>(mainreq);
 
