@@ -69,7 +69,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Item_Code = reader.Get<string>("ItemCode").Trim(),
                 Description = reader.Get<string>("Description"),
                 LongDescription = reader.Get<string>("LongDescription"),
-                UnitOfPurch = reader.Get<string>("UnitOfPurch")
+                UnitOfPurch = reader.Get<string>("UnitOfPurch").Trim()
             };
         }
 

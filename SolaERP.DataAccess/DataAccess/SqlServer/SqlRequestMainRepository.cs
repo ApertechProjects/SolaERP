@@ -38,8 +38,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 {
                     mainRequests.Add(GetRequestMainFromReader(reader));
                 }
-                if (mainRequests.Count == 0)
-                    mainRequests.Add(new RequestMain { BusinessUnitId = 0 });
                 return mainRequests;
             }
         }
