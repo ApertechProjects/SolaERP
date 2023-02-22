@@ -15,7 +15,10 @@ namespace SolaERP.Infrastructure.Entities.Request
         public DateTime RequestDeadline { get; set; }
         public DateTime RequestedDate { get; set; }
         public string ItemCode { get; set; }
+        public string ItemName1 { get; set; }
+        public string ItemName2 { get; set; }
         public decimal Quantity { get; set; }
+        public decimal AvailableInMainStock { get; set; }
         public string UOM { get; set; }
         public string Description { get; set; }
         public string Location { get; set; }
