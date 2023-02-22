@@ -7,7 +7,7 @@ using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlItemCodeRepository : SqlCommonRepository<ItemCodeWithImages>, IItemCodeRepository
+    public class SqlItemCodeRepository : SqlBaseRepository<ItemCodeWithImages>, IItemCodeRepository
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -66,7 +66,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return new()
             {
-                Item_Code = reader.Get<string>("ItemCodes").Trim(),
+                Item_Code = reader.Get<string>("ItemCode").Trim(),
                 Description = reader.Get<string>("Description"),
                 LongDescription = reader.Get<string>("LongDescription"),
                 UnitOfPurch = reader.Get<string>("UnitOfPurch")

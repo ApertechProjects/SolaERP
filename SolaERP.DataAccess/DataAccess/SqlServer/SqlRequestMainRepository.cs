@@ -164,7 +164,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 command.CommandText = "EXEC SP_RequestMainWFA @UserId,@BusinessUnitId,@DateFrom,@DateTo,@ItemCodes";
 
-                command.Parameters.AddWithValue(command, "@UserId", itemCode);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
                 command.Parameters.AddWithValue(command, "@DateFrom", dateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", dateTo);
@@ -256,7 +256,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RequestNo = reader.Get<string>("RequestNo"),
                 EntryDate = reader.Get<DateTime>("EntryDate"),
                 RequestDate = reader.Get<DateTime>("RequestDate"),
-                RequsetDeadline = reader.Get<DateTime>("RequestDeadline"),
+                RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
                 Requester = reader.Get<int>("Requester"),
                 RequestComment = reader.Get<string>("RequestComment"),
                 OperatorComment = reader.Get<string>("OperatorComment"),
@@ -276,7 +276,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RequestNo = reader.Get<string>("RequestNo"),
                 EntryDate = reader.Get<DateTime>("EntryDate"),
                 RequestDate = reader.Get<DateTime>("RequestDate"),
-                RequsetDeadline = reader.Get<DateTime>("RequestDeadline"),
+                RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
                 UserId = reader.Get<int>("UserId"),
                 Requester = reader.Get<int>("Requester"),
                 Status = reader.Get<int>("Status"),
@@ -325,8 +325,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RequestNo = reader.Get<string>("RequestNo"),
                 EntryDate = reader.Get<DateTime>("EntryDate"),
                 RequestDate = reader.Get<DateTime>("RequestDate"),
-                RequsetDeadline = reader.Get<DateTime>("RequestDeadline"),
-                Buyer = reader.Get<string>("Buyer"),
+                RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
+                EmployeeCode = reader.Get<string>("EmployeeCode"),
+                EmployeeName = reader.Get<string>("EmployeeName"),
                 Requester = reader.Get<int>("Requester"),
                 RequestComment = reader.Get<string>("RequestComment"),
                 OperatorComment = reader.Get<string>("OperatorComment"),
@@ -392,8 +393,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RequestNo = reader.Get<string>("RequestNo"),
                 EntryDate = reader.Get<DateTime>("EntryDate"),
                 RequestDate = reader.Get<DateTime>("RequestDate"),
-                RequsetDeadline = reader.Get<DateTime>("RequestDeadline"),
-                Buyer = reader.Get<string>("Buyer"),
+                RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
+                EmployeeCode = reader.Get<string>("EmployeeCode"),
+                EmployeeName = reader.Get<string>("EmployeeName"),
                 Requester = reader.Get<int>("Requester"),
                 RequestComment = reader.Get<string>("RequestComment"),
                 OperatorComment = reader.Get<string>("OperatorComment"),
