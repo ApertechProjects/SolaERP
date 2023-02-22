@@ -27,7 +27,7 @@ namespace SolaERP.DataAccess.Extensions
         /// <typeparam name="T">The type of the entity object to return.</typeparam>
         /// <param name="reader">The IDataReader to convert.</param>
         /// <returns>An entity object of type T.</returns>
-        public static T GetByEntityStructure<T>(this IDataReader reader) where T : BaseEntity, new()
+        public static T GetByEntityStructure<T>(this IDataReader reader, params string[] ignoredProperties) where T : BaseEntity, new()
         {
             var obj = new T();
             var properties = typeof(T).GetProperties();
@@ -37,6 +37,8 @@ namespace SolaERP.DataAccess.Extensions
                 // Check if the property has a DbIgnoreAttribute attribute, if so, skip it
                 if (item.GetCustomAttributes(typeof(DbIgnoreAttribute), true).Any())
                     continue;
+
+                if (ignoredProperties.Contains(item.Name)) continue;
 
                 string propName = item.Name;
                 object objectResult = null;

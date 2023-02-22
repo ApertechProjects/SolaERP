@@ -1,6 +1,4 @@
-﻿using SolaERP.Infrastructure.Attributes;
-
-namespace SolaERP.Infrastructure.Entities.Attachment
+﻿namespace SolaERP.Infrastructure.Entities.Attachment
 {
     public class Attachment : BaseEntity
     {
@@ -15,24 +13,5 @@ namespace SolaERP.Infrastructure.Entities.Attachment
         public int AttachmentSubTypeId { get; set; }
         public DateTime UploadDateTime { get; set; }
         public int Size { get; set; }
-
-
-        public static void SetIgnoredProperty(params string[] properties)
-        {
-            if (properties != null && properties.Length > 0)
-            {
-                foreach (var property in properties)
-                {
-                    var propertyInfo = typeof(Attachment).GetProperty(property);
-                    var props = typeof(Attachment).GetProperties();
-
-                    if (propertyInfo != null)
-                    {
-                        DbIgnoreAttribute ignoreAttribute = new();
-                        //propertyInfo.CustomAttributes.ToList().Add(ignoreAttribute);
-                    }
-                }
-            }
-        }
     }
 }

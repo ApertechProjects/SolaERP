@@ -41,10 +41,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 using var reader = await command.ExecuteReaderAsync();
 
-                Attachment.SetIgnoredProperty("FileData");
                 List<Attachment> attachments = new List<Attachment>();
 
-                while (await reader.ReadAsync()) { attachments.Add(reader.GetByEntityStructure<Attachment>()); }
+                while (await reader.ReadAsync()) { attachments.Add(reader.GetByEntityStructure<Attachment>("FileData")); }
                 return attachments;
             }
         }
