@@ -88,14 +88,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_RequestMain_IUD @RequestMainId,@RequestDetailId,@UserId,@Sequence,@Status,@ApproveStatus,@Comment";
+                command.CommandText = "EXEC SP_RequestMainApprove @UserId,@RequestMainId,@ApproveStatus,@Comment";
 
                 command.Parameters.AddWithValue(command, "@RequestMainId", changeStatusParametersDto.RequestMainId);
-                command.Parameters.AddWithValue(command, "@RequestDetailId", changeStatusParametersDto.RequestDetailId);
                 command.Parameters.AddWithValue(command, "@UserId", changeStatusParametersDto.UserId);
                 command.Parameters.AddWithValue(command, "@ApproveStatus", changeStatusParametersDto.ApproveStatus);
-                command.Parameters.AddWithValue(command, "@Sequence", changeStatusParametersDto.Sequence);
-                command.Parameters.AddWithValue(command, "@Status", changeStatusParametersDto.Status);
                 command.Parameters.AddWithValue(command, "@Comment", changeStatusParametersDto.Comment);
 
                 return await command.ExecuteNonQueryAsync() > 0;

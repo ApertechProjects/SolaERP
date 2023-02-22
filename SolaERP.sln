@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.Application", "Sola
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.SignalR", "SolaERP.SignalR\SolaERP.SignalR.csproj", "{9296A16F-A3C7-482E-B0FD-3C43F2216926}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolaERP.Console", "SolaERP.Console\SolaERP.Console.csproj", "{CA97EFA2-87E1-4A63-9193-17B0C2642DF2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{9296A16F-A3C7-482E-B0FD-3C43F2216926}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9296A16F-A3C7-482E-B0FD-3C43F2216926}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9296A16F-A3C7-482E-B0FD-3C43F2216926}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA97EFA2-87E1-4A63-9193-17B0C2642DF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA97EFA2-87E1-4A63-9193-17B0C2642DF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA97EFA2-87E1-4A63-9193-17B0C2642DF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA97EFA2-87E1-4A63-9193-17B0C2642DF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
