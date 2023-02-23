@@ -73,16 +73,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@ConnectedOrderReference", entity.ConnectedOrderReference);
                 command.Parameters.AddWithValue(command, "@ConnectedOrderLineNo", entity.ConnectedOrderLineNo);
                 command.Parameters.AddWithValue(command, "@AccountCode", entity.AccountCode.Trim());
-                command.Parameters.AddWithValue(command, "@AnalysisCode1Id", entity.AnalysisCode1Id.Trim());
-                command.Parameters.AddWithValue(command, "@AnalysisCode2Id", entity.AnalysisCode2Id.Trim());
-                command.Parameters.AddWithValue(command, "@AnalysisCode3Id", entity.AnalysisCode3Id.Trim());
-                command.Parameters.AddWithValue(command, "@AnalysisCode4Id", entity.AnalysisCode4Id.Trim());
-                command.Parameters.AddWithValue(command, "@AnalysisCode5Id", entity.AnalysisCode5Id.Trim());
-                command.Parameters.AddWithValue(command, "@AnalysisCode6Id", entity.AnalysisCode6Id.Trim());
-                command.Parameters.AddWithValue(command, "@AnalysisCode7Id", entity.AnalysisCode7Id.Trim());
-                command.Parameters.AddWithValue(command, "@AnalysisCode8Id", entity.AnalysisCode8Id.Trim());
-                command.Parameters.AddWithValue(command, "@AnalysisCode9Id", entity.AnalysisCode9Id.Trim());
-                command.Parameters.AddWithValue(command, "@AnalysisCode10Id", entity.AnalysisCode10Id.Trim());
+                command.Parameters.AddWithValue(command, "@AnalysisCode1Id", entity.AnalysisCode1Id);
+                command.Parameters.AddWithValue(command, "@AnalysisCode2Id", entity.AnalysisCode2Id);
+                command.Parameters.AddWithValue(command, "@AnalysisCode3Id", entity.AnalysisCode3Id);
+                command.Parameters.AddWithValue(command, "@AnalysisCode4Id", entity.AnalysisCode4Id);
+                command.Parameters.AddWithValue(command, "@AnalysisCode5Id", entity.AnalysisCode5Id);
+                command.Parameters.AddWithValue(command, "@AnalysisCode6Id", entity.AnalysisCode6Id);
+                command.Parameters.AddWithValue(command, "@AnalysisCode7Id", entity.AnalysisCode7Id);
+                command.Parameters.AddWithValue(command, "@AnalysisCode8Id", entity.AnalysisCode8Id);
+                command.Parameters.AddWithValue(command, "@AnalysisCode9Id", entity.AnalysisCode9Id);
+                command.Parameters.AddWithValue(command, "@AnalysisCode10Id", entity.AnalysisCode10Id);
                 command.Parameters.AddOutPutParameter(command, "@NewRequestDetailsId");
 
                 return await command.ExecuteNonQueryAsync() > 0;
