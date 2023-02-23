@@ -7,7 +7,7 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
 {
     public interface IRequestMainRepository : IDeleteableAsync, IReturnableRepoMethodAsync<RequestMainSaveModel>
     {
-        Task<bool> ChangeRequestStatusAsync(RequestChangeStatusModel requestChangeStatusParametersDto);
+        Task<bool> ChangeRequestStatusAsync(int userId,RequestChangeStatusModel requestChangeStatusParametersDto);
         Task<List<RequestMain>> GetAllAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo, ApproveStatuses ApproveStatus, Statuss Status);
         Task<RequestMain> GetRequestByRequestMainIdAsync(int requestMainId);
         Task<List<RequestTypes>> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId);

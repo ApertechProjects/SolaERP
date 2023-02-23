@@ -20,6 +20,7 @@ namespace SolaERP.Infrastructure.Dtos.Shared
         {
             return new ApiResponse<T> { StatusCode = statusCode };
         }
+
         public static ApiResponse<T> Fail(List<string> errors, int statusCode)
         {
             return new ApiResponse<T> { Errors = errors, StatusCode = statusCode };

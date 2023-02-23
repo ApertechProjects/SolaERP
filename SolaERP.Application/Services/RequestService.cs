@@ -65,10 +65,9 @@ namespace SolaERP.Application.Services
             var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
             for (int i = 0; i < changeStatusParametersDtos.Count; i++)
             {
-                changeStatusParametersDtos[i].UserId = userId;
-                await _requestMainRepository.ChangeRequestStatusAsync(changeStatusParametersDtos[i]);
+                await _requestMainRepository.ChangeRequestStatusAsync(userId,changeStatusParametersDtos[i]);
             }
-            return ApiResponse<bool>.Success(200);
+            return ApiResponse<bool>.Success(true, 200);
         }
 
         public async Task<ApiResponse<bool>> SendMainToApproveAsync(RequestMainSendToApproveDto sendToApproveModel)
