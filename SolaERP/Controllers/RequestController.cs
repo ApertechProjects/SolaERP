@@ -68,6 +68,10 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> SendDetailToApprove([FromHeader] string authToken, RequestDetailSendToApproveModel model)
             => CreateActionResult(await _requestService.RequestDetailSendToApprove(authToken, model));
 
+        [HttpPost]
+        public async Task<IActionResult> UpdateBuyerAsync(RequestSetBuyer requestSetBuyer)
+            => CreateActionResult(await _requestService.UpdateBuyerAsync(requestSetBuyer));
+
     }
 }
 

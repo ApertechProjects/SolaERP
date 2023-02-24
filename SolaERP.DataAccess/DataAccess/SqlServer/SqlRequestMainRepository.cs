@@ -1,11 +1,13 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -16,31 +18,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             _unitOfWork = unitOfWork;
         }
-
-        //public async Task<List<RequestMainAll>> GetAllAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo, ApproveStatuses[] approveStatuses, Statuss[] status)
-        //{
-        //    using (var command = _unitOfWork.CreateCommand() as DbCommand)
-        //    {
-        //        command.CommandText = "EXEC SP_RequestMainAll @BusinessUnitId,@ItemCodes,@DateFrom,@DateTo,@ApproveStatus,@Status";
-
-        //        command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
-        //        command.Parameters.AddWithValue(command, "@ItemCodes", itemCode);
-        //        command.Parameters.AddWithValue(command, "@DateFrom", dateFrom);
-        //        command.Parameters.AddWithValue(command, "DateTo", dateTo);
-        //        command.Parameters.AddWithValue(command, "@ApproveStatus", string.Join(',', approveStatuses));
-        //        command.Parameters.AddWithValue(command, "@Status", string.Join(',', status));
-
-        //        using var reader = await command.ExecuteReaderAsync();
-
-        //        List<RequestMainAll> mainRequests = new List<RequestMainAll>();
-        //        while (reader.Read())
-        //        {
-        //            mainRequests.Add(reader.GetByEntityStructure<RequestMainAll>());
-        //        }
-        //        return mainRequests;
-        //    }
-        //}
-
 
         public async Task<int> DeleteAsync(int userId, int Id)
         {
@@ -405,7 +382,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 RequestMainId = reader.Get<int>("RequestMainId"),
                 Status = reader.Get<int>("Status"),
-                BusinessUnitCode = reader.Get<string>("BusinessUnitCode"),
+                BusinessUnitId = reader.Get<int>("BusinessUnitId"),
                 RowNum = reader.Get<int>("RowNum"),
                 RequestTypeId = reader.Get<int>("RequestType"),
                 RequestNo = reader.Get<string>("RequestNo"),
@@ -500,6 +477,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return mainRequests;
             }
         }
-    }
 
+        public async Task<bool> UpdateBuyerAsync(string requestNo, string buyer)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF exec SP_SET_BUYER @RequestNO,@BUYER";
+
+                command.Parameters.AddWithValue(command, "@RequestNO", requestNo.Trim());
+                command.Parameters.AddWithValue(command, "@BUYER", buyer.Trim());
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+    }
 }

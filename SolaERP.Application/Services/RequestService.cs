@@ -65,7 +65,7 @@ namespace SolaERP.Application.Services
             var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
             for (int i = 0; i < changeStatusParametersDtos.Count; i++)
             {
-                await _requestMainRepository.ChangeRequestStatusAsync(userId,changeStatusParametersDtos[i]);
+                await _requestMainRepository.ChangeRequestStatusAsync(userId, changeStatusParametersDtos[i]);
             }
             return ApiResponse<bool>.Success(true, 200);
         }
@@ -205,6 +205,14 @@ namespace SolaERP.Application.Services
                 return ApiResponse<List<RequestWFADto>>.Success(mainRequestDto, 200);
 
             return ApiResponse<List<RequestWFADto>>.Fail("Waiting for approval list is empty", 404);
+        }
+
+        public async Task<ApiResponse<bool>> UpdateBuyerAsync(RequestSetBuyer requestSetBuyer)
+        {
+            var data = await _requestMainRepository.UpdateBuyerAsync(requestSetBuyer.RequestNo, requestSetBuyer.Buyer);
+
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(data, 200);
         }
     }
 }
