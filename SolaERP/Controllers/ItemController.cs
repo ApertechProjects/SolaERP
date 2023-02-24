@@ -18,11 +18,11 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetItemCodesAsync()
             => CreateActionResult(await _itemService.GetAllAsync());
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> GetItemCodesByItemCodeAsync(string itemCode)
             => CreateActionResult(await _itemService.GetItemCodeByItemCodeAsync(itemCode));
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> GetItemCodeInfoByItemCodeAsync(string itemCode)
             => CreateActionResult(await _itemService.GetItemCodeInfoByItemCodeAsync(itemCode));
 

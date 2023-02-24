@@ -32,17 +32,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<ItemCode> GetItemCodeByItemCodeAsync(string itemCode)
+        public async Task<ItemCodeWithImages> GetItemCodeByItemCodeAsync(string itemCode)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "SELECT * FROM [dbo].[GET_ITEM_BY_ITEM_CODE](@ItemCodes)";
                 command.Parameters.AddWithValue(command, "@ItemCodes", itemCode);
-                ItemCode result = new();
+                ItemCodeWithImages result = new();
 
                 using var reader = await command.ExecuteReaderAsync();
                 while (reader.Read())
-                    result = reader.GetByEntityStructure<ItemCode>();
+                    result = reader.GetByEntityStructure<ItemCodeWithImages>();
 
                 return result;
             }
