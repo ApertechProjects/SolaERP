@@ -1,5 +1,6 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Dtos.Item_Code;
 using SolaERP.Infrastructure.Entities.Item_Code;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
@@ -42,6 +43,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
                 while (reader.Read())
                     result = reader.GetByEntityStructure<ItemCode>();
+
+                return result;
+            }
+        }
+
+        public async Task<ItemCodeInfo> GetItemCodeInfoByItemCodeAsync(string itemCode)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec SP_ItemInfo @ItemCode";
+                command.Parameters.AddWithValue(command, "@ItemCode", itemCode);
+                ItemCodeInfo result = new();
+
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                    result = reader.GetByEntityStructure<ItemCodeInfo>();
 
                 return result;
             }
