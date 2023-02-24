@@ -23,17 +23,17 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "Select * from Config.AppUser where IsDeleted = 0";
+                command.CommandText = "SELECT * FROM [dbo].[VW_User_List]";
                 using var reader = await command.ExecuteReaderAsync();
 
                 List<User> users = new List<User>();
                 while (reader.Read())
-                {
-                    users.Add(reader.GetByEntityStructure<User>());
-                }
+                    users.Add(GetFromReader(reader));
+
                 return users;
             }
         }
+
         public async Task<User> GetUserByIdAsync(int userId)
         {
             User user = null;
@@ -224,7 +224,16 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-      
+
+        #endregion
+        //
+        #region Readers
+        private User GetFromReader(IDataReader reader)
+        {
+            return new() { Id = reader.Get<int>("Id"), FullName = reader.Get<string>("FullName") };
+        }
+
+
         #endregion
     }
 }

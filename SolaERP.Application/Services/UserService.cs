@@ -171,6 +171,12 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<ActiveUserDto>>.Success(dto, 200);
         }
 
-    
+        public async Task<ApiResponse<List<UserListDto>>> GetUserListAsync()
+        {
+            var users = await _userRepository.GetAllAsync();
+            var dto = _mapper.Map<List<UserListDto>>(users);
+
+            return ApiResponse<List<UserListDto>>.Success(dto, 200);
+        }
     }
 }

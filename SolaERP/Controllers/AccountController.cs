@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos;
 using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.UserDto;
@@ -35,7 +34,7 @@ namespace SolaERP.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginRequestDto dto)
+        public async Task<IActionResult> Login(LoginRequestModel dto)
         {
             var user = await _userManager.FindByNameAsync(dto.Email);
             if (user == null)
@@ -82,9 +81,11 @@ namespace SolaERP.Controllers
             return CreateActionResult(ApiResponse<bool>.Success(true, 200));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SendResetPasswordEmail(EmailDto dto)
-            => CreateActionResult(await _userService.SendResetPasswordEmail(dto.Email, @"C:\Users\HP\source\repos\SolaERP\SolaERP\Templates\EmailTemplate.html"));
+
+
+        [HttpGet("{email}")]
+        public async Task<IActionResult> SendResetPasswordEmail(string email)
+            => CreateActionResult(await _userService.SendResetPasswordEmail(email, @"C:\Users\HP\source\repos\SolaERP\SolaERP\Templates\EmailTemplate.html"));
 
 
         [HttpPost]

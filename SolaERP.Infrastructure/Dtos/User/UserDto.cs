@@ -16,6 +16,6 @@ namespace SolaERP.Infrastructure.Dtos.UserDto
         public string ConfirmPassword { get; set; }
         [JsonIgnore]
         public Guid UserToken { get; set; }
-        public UserRegisterType UserTypeId { get; set; }
+        public UserRegisterType UserType { get; set; }
     }
 }
