@@ -25,12 +25,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 List<ItemCode> result = new();
 
                 using var reader = await command.ExecuteReaderAsync();
-                while (reader.Read())
+                while (await reader.ReadAsync())
                     result.Add(GetItemCodeFromReader(reader));
 
                 return result;
             }
         }
+
 
         public async Task<ItemCodeWithImages> GetItemCodeByItemCodeAsync(string itemCode)
         {
