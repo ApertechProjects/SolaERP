@@ -67,12 +67,14 @@ namespace SolaERP.Application.Services
             {
                 await _requestMainRepository.ChangeRequestStatusAsync(userId, changeStatusParametersDtos[i]);
             }
+            await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(true, 200);
         }
 
         public async Task<ApiResponse<bool>> SendMainToApproveAsync(RequestMainSendToApproveDto sendToApproveModel)
         {
             var result = await _requestMainRepository.SendRequestToApproveAsync(sendToApproveModel.UserId, sendToApproveModel.RequestMainId);
+            await _unitOfWork.SaveChangesAsync();
             return result ? ApiResponse<bool>.Success(204) : ApiResponse<bool>.Fail("Requst not approved", 400);
         }
 
@@ -166,6 +168,7 @@ namespace SolaERP.Application.Services
         {
             int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
             int requestId = await _requestMainRepository.DeleteAsync(userId, requestMainId);
+            await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(requestId);
         }
 
