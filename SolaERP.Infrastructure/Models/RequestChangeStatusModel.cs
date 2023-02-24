@@ -2,7 +2,6 @@
 {
     public class RequestChangeStatusModel
     {
-        public int UserId { get; set; }
         public int RequestMainId { get; set; }
         public int ApproveStatus { get; set; }
         public string Comment { get; set; }
