@@ -1,6 +1,4 @@
-﻿using SolaERP.Infrastructure.Enums;
-
-namespace SolaERP.Infrastructure.Models
+﻿namespace SolaERP.Infrastructure.Models
 {
     public class RequestMainGetModel
     {
@@ -8,7 +6,7 @@ namespace SolaERP.Infrastructure.Models
         public List<string> ItemCodes { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
-        public ApproveStatuses ApproveStatus { get; set; }
-        public Statuss Status { get; set; }
+        public int[] ApproveStatus { get; set; }
+        public int[] Status { get; set; }
     }
 }

@@ -1,10 +1,10 @@
-﻿namespace SolaERP.Infrastructure.Dtos.Request
+﻿namespace SolaERP.Infrastructure.Entities.Request
 {
-    public class RequestMainDto
+    public class RequestMainAll : BaseEntity
     {
         public int RequestMainID { get; set; }
         public string BusinessUnitCode { get; set; }
-        public int RowNum { get; set; }
+        //public int RowNum { get; set; }
         public string RequestType { get; set; }
         public string RequestNo { get; set; }
         public DateTime EntryDate { get; set; }

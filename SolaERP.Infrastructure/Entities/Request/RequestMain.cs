@@ -4,6 +4,7 @@
     {
         public int RequestMainId { get; set; }
         public int BusinessUnitId { get; set; }
+        public string BusinessUnitCode { get; set; }
         public int RequestTypeId { get; set; }
         public string RequestNo { get; set; }
         public DateTime EntryDate { get; set; }

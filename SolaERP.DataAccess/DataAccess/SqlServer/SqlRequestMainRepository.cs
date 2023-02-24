@@ -1,7 +1,6 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Request;
-using SolaERP.Infrastructure.Enums;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
@@ -18,29 +17,30 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<List<RequestMain>> GetAllAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo, ApproveStatuses approveStatus, Statuss status)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "EXEC SP_RequestMainAll @BusinessUnitId,@ItemCodes,@DateFrom,@DateTo,@ApproveStatus,@Status";
+        //public async Task<List<RequestMainAll>> GetAllAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo, ApproveStatuses[] approveStatuses, Statuss[] status)
+        //{
+        //    using (var command = _unitOfWork.CreateCommand() as DbCommand)
+        //    {
+        //        command.CommandText = "EXEC SP_RequestMainAll @BusinessUnitId,@ItemCodes,@DateFrom,@DateTo,@ApproveStatus,@Status";
 
-                command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
-                command.Parameters.AddWithValue(command, "@ItemCodes", itemCode);
-                command.Parameters.AddWithValue(command, "@DateFrom", dateFrom);
-                command.Parameters.AddWithValue(command, "DateTo", dateTo);
-                command.Parameters.AddWithValue(command, "@ApproveStatus", (byte)approveStatus);
-                command.Parameters.AddWithValue(command, "@Status", (byte)status);
+        //        command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+        //        command.Parameters.AddWithValue(command, "@ItemCodes", itemCode);
+        //        command.Parameters.AddWithValue(command, "@DateFrom", dateFrom);
+        //        command.Parameters.AddWithValue(command, "DateTo", dateTo);
+        //        command.Parameters.AddWithValue(command, "@ApproveStatus", string.Join(',', approveStatuses));
+        //        command.Parameters.AddWithValue(command, "@Status", string.Join(',', status));
 
-                using var reader = await command.ExecuteReaderAsync();
+        //        using var reader = await command.ExecuteReaderAsync();
 
-                List<RequestMain> mainRequests = new List<RequestMain>();
-                while (reader.Read())
-                {
-                    mainRequests.Add(GetRequestMainFromReader(reader));
-                }
-                return mainRequests;
-            }
-        }
+        //        List<RequestMainAll> mainRequests = new List<RequestMainAll>();
+        //        while (reader.Read())
+        //        {
+        //            mainRequests.Add(reader.GetByEntityStructure<RequestMainAll>());
+        //        }
+        //        return mainRequests;
+        //    }
+        //}
+
 
         public async Task<int> DeleteAsync(int userId, int Id)
         {
@@ -84,7 +84,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         }
 
-        public async Task<bool> ChangeRequestStatusAsync(int userId,RequestChangeStatusModel changeStatusParametersDto)
+        public async Task<bool> ChangeRequestStatusAsync(int userId, RequestChangeStatusModel changeStatusParametersDto)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -399,6 +399,29 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             };
         }
 
+        private RequestMain GetRequestMainFromReaderA(DbDataReader reader)
+        {
+            return new()
+            {
+                RequestMainId = reader.Get<int>("RequestMainId"),
+                Status = reader.Get<int>("Status"),
+                BusinessUnitCode = reader.Get<string>("BusinessUnitCode"),
+                RowNum = reader.Get<int>("RowNum"),
+                RequestTypeId = reader.Get<int>("RequestType"),
+                RequestNo = reader.Get<string>("RequestNo"),
+                EntryDate = reader.Get<DateTime>("EntryDate"),
+                RequestDate = reader.Get<DateTime>("RequestDate"),
+                RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
+                EmployeeCode = reader.Get<string>("EmployeeCode"),
+                EmployeeName = reader.Get<string>("EmployeeName"),
+                Requester = reader.Get<int>("Requester"),
+                RequestComment = reader.Get<string>("RequestComment"),
+                OperatorComment = reader.Get<string>("OperatorComment"),
+                QualityRequired = reader.Get<string>("QualityRequired"),
+                ApproveStatus = reader.Get<string>("ApproveStatus"),
+            };
+        }
+
         public async Task<RequestSaveResultModel> AddOrUpdateRequestAsync(int userId, RequestMainSaveModel model)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
@@ -451,6 +474,30 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 }
 
                 return new RequestSaveResultModel { RequestMainId = requestId, RequestNo = requestNo };
+            }
+        }
+
+        public async Task<List<RequestMainAll>> GetAllAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo, int[] ApproveStatus, int[] Status)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RequestMainAll @BusinessUnitId,@ItemCodes,@DateFrom,@DateTo,@ApproveStatus,@Status";
+
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+                command.Parameters.AddWithValue(command, "@ItemCodes", itemCode);
+                command.Parameters.AddWithValue(command, "@DateFrom", dateFrom);
+                command.Parameters.AddWithValue(command, "DateTo", dateTo);
+                command.Parameters.AddWithValue(command, "@ApproveStatus", string.Join(',', ApproveStatus));
+                command.Parameters.AddWithValue(command, "@Status", string.Join(',', Status));
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                List<RequestMainAll> mainRequests = new List<RequestMainAll>();
+                while (reader.Read())
+                {
+                    mainRequests.Add(reader.GetByEntityStructure<RequestMainAll>());
+                }
+                return mainRequests;
             }
         }
     }

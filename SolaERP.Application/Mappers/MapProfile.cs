@@ -105,7 +105,7 @@ namespace SolaERP.Application.Mappers
                 ForMember(dest => dest.TaxId, opt => opt.MapFrom(src => src.TaxId)).
                 ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name)).ReverseMap();
 
-            CreateMap<User, UserListDto>().ReverseMap();
+            CreateMap<RequestMainDto, RequestMainAll>().ReverseMap();
         }
     }
 }

@@ -1,14 +1,14 @@
 ﻿using SolaERP.Infrastructure.Contracts.Common;
 using SolaERP.Infrastructure.Entities.Request;
-using SolaERP.Infrastructure.Enums;
 using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Infrastructure.Contracts.Repositories
 {
     public interface IRequestMainRepository : IDeleteableAsync, IReturnableRepoMethodAsync<RequestMainSaveModel>
     {
-        Task<bool> ChangeRequestStatusAsync(int userId,RequestChangeStatusModel requestChangeStatusParametersDto);
-        Task<List<RequestMain>> GetAllAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo, ApproveStatuses ApproveStatus, Statuss Status);
+        Task<bool> ChangeRequestStatusAsync(int userId, RequestChangeStatusModel requestChangeStatusParametersDto);
+        //Task<List<RequestMain>> GetAllAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo, int[] ApproveStatus, int[] Status);
+        Task<List<RequestMainAll>> GetAllAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo, int[] ApproveStatus, int[] Status);
         Task<RequestMain> GetRequestByRequestMainIdAsync(int requestMainId);
         Task<List<RequestTypes>> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId);
         Task<List<RequestMain>> GetWaitingForApprovalsAsync(int userId, int businessUnitId, DateTime dateFrom, DateTime dateTo, string itemCode);
