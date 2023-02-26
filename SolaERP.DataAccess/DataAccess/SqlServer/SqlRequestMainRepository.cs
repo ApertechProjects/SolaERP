@@ -1,13 +1,11 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -285,29 +283,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             };
         }
 
-        private RequestMain GetFromReader(IDataReader reader)
-        {
-            return new()
-            {
-                RequestMainId = reader.Get<int>("RequestMainId"),
-                Status = reader.Get<int>("Status"),
-                BusinessUnitId = reader.Get<int>("BusinessUnitId"),
-                RowNum = reader.Get<int>("RowNum"),
-                RequestTypeId = reader.Get<int>("RequestType"),
-                RequestNo = reader.Get<string>("RequestNo"),
-                EntryDate = reader.Get<DateTime>("EntryDate"),
-                RequestDate = reader.Get<DateTime>("RequestDate"),
-                RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
-                EmployeeCode = reader.Get<string>("EmployeeCode"),
-                EmployeeName = reader.Get<string>("EmployeeName"),
-                Requester = reader.Get<int>("Requester"),
-                RequestComment = reader.Get<string>("RequestComment"),
-                OperatorComment = reader.Get<string>("OperatorComment"),
-                QualityRequired = reader.Get<string>("QualityRequired"),
-                ApproveStatus = reader.Get<string>("ApproveStatus"),
-            };
-        }
-
         private RequestAmendment GetRequestAmendmentFromReader(IDataReader reader)
         {
             return new()
@@ -349,53 +324,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 OperatorComment = reader.Get<string>("OperatorComment"),
                 QualityRequired = reader.Get<string>("QualitiyRequired"),
                 ApproveStatus = reader.Get<string>("ApproveStatus")
-            };
-        }
-
-
-        private RequestMain GetRequestMainFromReader(DbDataReader reader)
-        {
-            return new()
-            {
-                RequestMainId = reader.Get<int>("RequestMainId"),
-                Status = reader.Get<int>("Status"),
-                BusinessUnitId = reader.Get<int>("BusinessUnitId"),
-                RowNum = reader.Get<int>("RowNum"),
-                RequestTypeId = reader.Get<int>("RequestType"),
-                RequestNo = reader.Get<string>("RequestNo"),
-                EntryDate = reader.Get<DateTime>("EntryDate"),
-                RequestDate = reader.Get<DateTime>("RequestDate"),
-                RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
-                EmployeeCode = reader.Get<string>("EmployeeCode"),
-                EmployeeName = reader.Get<string>("EmployeeName"),
-                Requester = reader.Get<int>("Requester"),
-                RequestComment = reader.Get<string>("RequestComment"),
-                OperatorComment = reader.Get<string>("OperatorComment"),
-                QualityRequired = reader.Get<string>("QualityRequired"),
-                ApproveStatus = reader.Get<string>("ApproveStatus"),
-            };
-        }
-
-        private RequestMain GetRequestMainFromReaderA(DbDataReader reader)
-        {
-            return new()
-            {
-                RequestMainId = reader.Get<int>("RequestMainId"),
-                Status = reader.Get<int>("Status"),
-                BusinessUnitId = reader.Get<int>("BusinessUnitId"),
-                RowNum = reader.Get<int>("RowNum"),
-                RequestTypeId = reader.Get<int>("RequestType"),
-                RequestNo = reader.Get<string>("RequestNo"),
-                EntryDate = reader.Get<DateTime>("EntryDate"),
-                RequestDate = reader.Get<DateTime>("RequestDate"),
-                RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
-                EmployeeCode = reader.Get<string>("EmployeeCode"),
-                EmployeeName = reader.Get<string>("EmployeeName"),
-                Requester = reader.Get<int>("Requester"),
-                RequestComment = reader.Get<string>("RequestComment"),
-                OperatorComment = reader.Get<string>("OperatorComment"),
-                QualityRequired = reader.Get<string>("QualityRequired"),
-                ApproveStatus = reader.Get<string>("ApproveStatus"),
             };
         }
 
@@ -486,6 +414,41 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@RequestNO", requestNo.Trim());
                 command.Parameters.AddWithValue(command, "@BUYER", buyer.Trim());
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<List<RequestFollow>> RequestFollowUserLoadAsync(int requestMainId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RequestFollow_Load @RequestMainId";
+
+                command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                List<RequestFollow> followUsers = new List<RequestFollow>();
+                while (reader.Read())
+                {
+                    followUsers.Add(reader.GetByEntityStructure<RequestFollow>());
+                }
+                return followUsers;
+            }
+        }
+
+        public async Task<bool> RequestFollowAddOrUpdateAsync(RequestFollowSaveModel saveModel)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_RequestFollow_IUD @RequestFollowId,@UserId,
+                                                                @RequestMainId"
+                ;
+
+                command.Parameters.AddWithValue(command, "@RequestFollowId", saveModel.RequestFollowId);
+                command.Parameters.AddWithValue(command, "@UserId", saveModel.UserId);
+                command.Parameters.AddWithValue(command, "@RequestMainId", saveModel.RequestMainId);
+
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }

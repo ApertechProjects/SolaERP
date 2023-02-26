@@ -72,6 +72,15 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> UpdateBuyerAsync(RequestSetBuyer requestSetBuyer)
             => CreateActionResult(await _requestService.UpdateBuyerAsync(requestSetBuyer));
 
+        [HttpGet]
+        public async Task<IActionResult> RequestFollowUsersLoadAsync(int requestMainId)
+            => CreateActionResult(await _requestService.RequestFollowUserLoadAsync(requestMainId));
+
+        [HttpPost]
+        public async Task<IActionResult> RequestFollowAddOrUpdateAsync(List<RequestFollowSaveModel> saveModel)
+            => CreateActionResult(await _requestService.RequestFollowAddOrUpdateAsync(saveModel));
+
+
     }
 }
 

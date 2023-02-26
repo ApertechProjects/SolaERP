@@ -75,7 +75,7 @@ namespace SolaERP.Application.Mappers
             CreateMap<LogInfo, LogInfoDto>().ReverseMap();
             CreateMap<ItemCode, ItemCodeDto>().ReverseMap();
             CreateMap<ItemCodeInfo, ItemCodeInfoDto>().ReverseMap();
-
+            CreateMap<RequestFollow, RequestFollowDto>().ReverseMap();
             CreateMap<Status, StatusDto>().ReverseMap();
             CreateMap<Buyer, BuyerDto>().ReverseMap();
             CreateMap<ActiveUser, ActiveUserDto>().ReverseMap();
