@@ -437,7 +437,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> RequestFollowAddOrUpdateAsync(RequestFollowSaveModel saveModel)
+        public async Task<bool> RequestFollowAddOrUpdateUserAsync(RequestFollowSaveModel saveModel)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
@@ -452,5 +452,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
+
+        public async Task<bool> RequestFollowDeleteUserAsync(RequestFollowSaveModel requestFollowSaveModel)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_RequestFollow_IUD @RequestFollowId"
+                ;
+
+                command.Parameters.AddWithValue(command, "@RequestFollowId", requestFollowSaveModel.RequestFollowId);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
     }
 }

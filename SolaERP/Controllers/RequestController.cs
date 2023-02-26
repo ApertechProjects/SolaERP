@@ -77,10 +77,12 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _requestService.RequestFollowUserLoadAsync(requestMainId));
 
         [HttpPost]
-        public async Task<IActionResult> RequestFollowAddOrUpdateAsync(List<RequestFollowSaveModel> saveModel)
-            => CreateActionResult(await _requestService.RequestFollowAddOrUpdateAsync(saveModel));
+        public async Task<IActionResult> RequestFollowAddOrUpdateUserAsync(List<RequestFollowSaveModel> saveModel)
+            => CreateActionResult(await _requestService.RequestFollowAddOrUpdateUserAsync(saveModel));
 
-
+        [HttpDelete]
+        public async Task<IActionResult> RequestFollowDeleteUserAsync(List<RequestFollowSaveModel> saveModel)
+       => CreateActionResult(await _requestService.RequestFollowDeleteUserAsync(saveModel));
     }
 }
 
