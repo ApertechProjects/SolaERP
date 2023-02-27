@@ -59,16 +59,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         }
 
-        public async Task<bool> ChangeRequestStatusAsync(int userId, RequestChangeStatusModel changeStatusParametersDto)
+        public async Task<bool> RequestMainChangeStatus(int userId, int requestMainId, int approveStatus, string comment)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "EXEC SP_RequestMainApprove @UserId,@RequestMainId,@ApproveStatus,@Comment";
 
-                command.Parameters.AddWithValue(command, "@RequestMainId", changeStatusParametersDto.RequestMainId);
+                command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
-                command.Parameters.AddWithValue(command, "@ApproveStatus", changeStatusParametersDto.ApproveStatus);
-                command.Parameters.AddWithValue(command, "@Comment", changeStatusParametersDto.Comment);
+                command.Parameters.AddWithValue(command, "@ApproveStatus", approveStatus);
+                command.Parameters.AddWithValue(command, "@Comment", comment);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }

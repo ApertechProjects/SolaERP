@@ -2,7 +2,7 @@
 
 namespace SolaERP.Infrastructure.Models
 {
-    public class RequestDetailSendToApproveModel
+    public class RequestDetailApproveModel
     {
         public int RequestDetailId { get; set; }
         public int ApproveStatusId { get; set; }

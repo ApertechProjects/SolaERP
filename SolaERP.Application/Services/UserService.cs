@@ -178,5 +178,10 @@ namespace SolaERP.Application.Services
 
             return ApiResponse<List<UserListDto>>.Success(dto, 200);
         }
+
+        public Task<string> GetUserNameByTokenAsync(string finderToken)
+        {
+            return _userRepository.GetUserNameByTokenAsync(finderToken);
+        }
     }
 }

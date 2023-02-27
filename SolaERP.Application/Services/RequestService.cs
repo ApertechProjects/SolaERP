@@ -11,18 +11,20 @@ namespace SolaERP.Application.Services
 {
     public class RequestService : IRequestService
     {
-        public IUnitOfWork _unitOfWork;
-        public IMapper _mapper;
-        public IRequestMainRepository _requestMainRepository;
+        private IUnitOfWork _unitOfWork;
+        private IMapper _mapper;
+        private IRequestMainRepository _requestMainRepository;
         private IRequestDetailRepository _requestDetailRepository;
         private IUserRepository _userRepository;
-        public RequestService(IUnitOfWork unitOfWork, IMapper mapper, IRequestMainRepository requestMainRepository, IRequestDetailRepository requestDetailRepository, IUserRepository userRepository)
+        private IMailService _mailService;
+        public RequestService(IUnitOfWork unitOfWork, IMapper mapper, IRequestMainRepository requestMainRepository, IRequestDetailRepository requestDetailRepository, IUserRepository userRepository, IMailService mailService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _requestMainRepository = requestMainRepository;
             _requestDetailRepository = requestDetailRepository;
             _userRepository = userRepository;
+            _mailService = mailService;
         }
 
         public async Task<bool> RemoveRequestDetailAsync(RequestDetailDto requestDetailDto)
@@ -60,22 +62,33 @@ namespace SolaERP.Application.Services
                 ApiResponse<List<RequestTypesDto>>.Fail("Request types not found", 404);
         }
 
-        public async Task<ApiResponse<bool>> ChangeRequestStatus(string finderToken, List<RequestChangeStatusModel> changeStatusParametersDtos)
+        public async Task<ApiResponse<bool>> RequestMainChangeStatus(string finderToken, RequestChangeStatusModel changeStatusParametersDtos)
         {
             var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
-            for (int i = 0; i < changeStatusParametersDtos.Count; i++)
+            for (int i = 0; i < changeStatusParametersDtos.RequestMainIds.Count; i++)
             {
-                await _requestMainRepository.ChangeRequestStatusAsync(userId, changeStatusParametersDtos[i]);
+                await _requestMainRepository.RequestMainChangeStatus(userId, changeStatusParametersDtos.RequestMainIds[i], changeStatusParametersDtos.ApproveStatus, changeStatusParametersDtos.Comment);
             }
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(true, 200);
         }
 
-        public async Task<ApiResponse<bool>> SendMainToApproveAsync(RequestMainSendToApproveDto sendToApproveModel)
+        public async Task<ApiResponse<bool>> RequestSendToApproveAsync(string finderToken, int requestMainId)
         {
-            var result = await _requestMainRepository.SendRequestToApproveAsync(sendToApproveModel.UserId, sendToApproveModel.RequestMainId);
+            int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            string userName = await _userRepository.GetUserNameByTokenAsync(finderToken);
+            var result = await _requestMainRepository.SendRequestToApproveAsync(userId, requestMainId);
             await _unitOfWork.SaveChangesAsync();
-            return result ? ApiResponse<bool>.Success(204) : ApiResponse<bool>.Fail("Requst not approved", 400);
+
+            string messageBody = "Request sended to approve by " + userName;
+
+
+            var users = GetFollowUserEmailsForRequestAsync(requestMainId);
+
+            await _mailService.SendMailAsync(await GetFollowUserEmailsForRequestAsync(requestMainId), "Request Information", messageBody, false);
+
+
+            return null;
         }
 
         public async Task<ApiResponse<RequestCardMainDto>> GetRequestByRequestMainId(string authToken, int requestMainId)
@@ -180,12 +193,12 @@ namespace SolaERP.Application.Services
             return result != null ? ApiResponse<RequestDetailApprovalInfoDto>.Success(result, 200) : ApiResponse<RequestDetailApprovalInfoDto>.Success(new(), 200);
         }
 
-        public async Task<ApiResponse<NoContentDto>> RequestDetailSendToApprove(string finderToken, RequestDetailSendToApproveModel model)
+        public async Task<ApiResponse<NoContentDto>> RequestDetailChangeStatus(string finderToken, RequestDetailApproveModel model)
         {
             int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
             model.UserId = userId;
 
-            await _requestDetailRepository.SendToApproveAsync(model);
+            await _requestDetailRepository.RequestDetailChangeStatus(model);
             await _unitOfWork.SaveChangesAsync();
 
             return ApiResponse<NoContentDto>.Success(200);
@@ -227,7 +240,7 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<RequestFollowDto>>.Fail("Request Follow User List is empty", 400);
         }
 
-        public async Task<ApiResponse<bool>> RequestFollowAddOrUpdateUserAsync(List<RequestFollowSaveModel> saveModel)
+        public async Task<ApiResponse<bool>> AddOrUpdateUserForRequestFollowAsync(List<RequestFollowSaveModel> saveModel)
         {
             bool result = false;
             for (int i = 0; i < saveModel.Count; i++)
@@ -238,7 +251,7 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(result, 200);
         }
 
-        public async Task<ApiResponse<bool>> RequestFollowDeleteUserAsync(List<RequestFollowSaveModel> saveModel)
+        public async Task<ApiResponse<bool>> DeleteUserForRequestFollowAsync(List<RequestFollowSaveModel> saveModel)
         {
             bool result = false;
             for (int i = 0; i < saveModel.Count; i++)
@@ -248,6 +261,21 @@ namespace SolaERP.Application.Services
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(result, 200);
         }
+
+        public Task SendFollowMailForRequest(string[] tos, string messageBody, string subject)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        private async Task<string[]> GetFollowUserEmailsForRequestAsync(int requestMainId)
+        {
+            var data = await _requestMainRepository.RequestFollowUserLoadAsync(requestMainId);
+            return data.Select(x => x.Email).ToArray();
+        }
+
+
+
 
     }
 }

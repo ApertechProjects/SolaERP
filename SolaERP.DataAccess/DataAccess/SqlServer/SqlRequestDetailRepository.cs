@@ -138,7 +138,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> SendToApproveAsync(RequestDetailSendToApproveModel model)
+        public async Task<bool> RequestDetailChangeStatus(RequestDetailApproveModel model)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

@@ -7,6 +7,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
     {
         Task<List<RequestCardDetail>> GetRequestDetailsByMainIdAsync(int requestMainId);
         Task<RequestDetailApprovalInfo> GetDetailApprovalInfoAsync(int requestDetailId);
-        Task<bool> SendToApproveAsync(RequestDetailSendToApproveModel model);
+        Task<bool> RequestDetailChangeStatus(RequestDetailApproveModel model);
     }
 }

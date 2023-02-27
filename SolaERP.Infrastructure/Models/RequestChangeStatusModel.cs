@@ -2,7 +2,7 @@
 {
     public class RequestChangeStatusModel
     {
-        public int RequestMainId { get; set; }
+        public List<int> RequestMainIds { get; set; }
         public int ApproveStatus { get; set; }
         public string Comment { get; set; }
     }

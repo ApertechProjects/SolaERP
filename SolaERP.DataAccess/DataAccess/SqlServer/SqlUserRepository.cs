@@ -127,6 +127,21 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             return userId;
         }
 
+        public async Task<string> GetUserNameByTokenAsync(string finderToken)
+        {
+            string userName = string.Empty;
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SELECT FullName FROM CONFIG.APPUSER WHERE USERTOKEN = @USERTOKEN";
+                command.Parameters.AddWithValue(command, "@USERTOKEN", finderToken == null ? DBNull.Value : finderToken);
+
+                using var reader = await command.ExecuteReaderAsync();
+                if (reader.Read())
+                    userName = reader.Get<string>("FullName");
+            }
+            return userName;
+        }
+
         #endregion
         //
         #region DML Operations 
