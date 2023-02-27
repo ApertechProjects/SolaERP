@@ -138,13 +138,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> RequestDetailChangeStatus(RequestDetailApproveModel model)
+        public async Task<bool> RequestDetailChangeStatusAsync(int requestDetailId, int userId, int approveStatusId, string comment, int sequence)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "EXEC SP_RequestApprove @RequestDetailId,@UserId,@ApproveStatusId,@Comment,@Sequence";
 
-                command.Parameters.AddWithValue(command, "@RequestDetailId", model.RequestDetailId);
+                command.Parameters.AddWithValue(command, "@RequestDetailId", requestDetailId);
                 command.Parameters.AddWithValue(command, "@UserId", model.UserId);
                 command.Parameters.AddWithValue(command, "@ApproveStatusId", model.ApproveStatusId);
                 command.Parameters.AddWithValue(command, "@Comment", model.Comment);

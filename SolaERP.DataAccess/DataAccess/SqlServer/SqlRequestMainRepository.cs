@@ -59,7 +59,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         }
 
-        public async Task<bool> RequestMainChangeStatus(int userId, int requestMainId, int approveStatus, string comment)
+        public async Task<bool> RequestMainChangeStatusAsync(int userId, int requestMainId, int approveStatus, string comment)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

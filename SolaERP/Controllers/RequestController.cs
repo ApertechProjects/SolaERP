@@ -63,12 +63,12 @@ namespace SolaERP.Controllers
         => CreateActionResult(await _requestService.AddOrUpdateRequestAsync(authToken, model));
 
         [HttpPost]
-        public async Task<IActionResult> RequestMainChangeStatus([FromHeader] string authToken, RequestChangeStatusModel requestChangeStatusParametersDto)
-            => CreateActionResult(await _requestService.RequestMainChangeStatus(authToken, requestChangeStatusParametersDto));
+        public async Task<IActionResult> RequestMainChangeStatusAsync([FromHeader] string authToken, RequestChangeStatusModel requestChangeStatusParametersDto)
+            => CreateActionResult(await _requestService.RequestMainChangeStatusAsync(authToken, requestChangeStatusParametersDto));
 
         [HttpPost]
-        public async Task<IActionResult> RequestDetailChangeStatus([FromHeader] string authToken, RequestDetailApproveModel model)
-            => CreateActionResult(await _requestService.RequestDetailChangeStatus(authToken, model));
+        public async Task<IActionResult> RequestDetailChangeStatusAsync([FromHeader] string authToken, RequestDetailApproveModel model)
+            => CreateActionResult(await _requestService.RequestDetailChangeStatusAsync(authToken, model));
 
         //[HttpPost]
         //public async Task<IActionResult> RequestSendToApprove([FromHeader]string authToken,)

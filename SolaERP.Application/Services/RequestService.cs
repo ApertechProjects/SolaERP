@@ -62,12 +62,15 @@ namespace SolaERP.Application.Services
                 ApiResponse<List<RequestTypesDto>>.Fail("Request types not found", 404);
         }
 
-        public async Task<ApiResponse<bool>> RequestMainChangeStatus(string finderToken, RequestChangeStatusModel changeStatusParametersDtos)
+        public async Task<ApiResponse<bool>> RequestMainChangeStatusAsync(string finderToken, RequestChangeStatusModel changeStatusParametersDtos)
         {
             var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            if (changeStatusParametersDtos.RequestMainIds == null && changeStatusParametersDtos.RequestMainIds.Count == 0)
+                return ApiResponse<bool>.Fail("Request must be selected", 200);
+
             for (int i = 0; i < changeStatusParametersDtos.RequestMainIds.Count; i++)
             {
-                await _requestMainRepository.RequestMainChangeStatus(userId, changeStatusParametersDtos.RequestMainIds[i], changeStatusParametersDtos.ApproveStatus, changeStatusParametersDtos.Comment);
+                await _requestMainRepository.RequestMainChangeStatusAsync(userId, changeStatusParametersDtos.RequestMainIds[i], changeStatusParametersDtos.ApproveStatus, changeStatusParametersDtos.Comment);
             }
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(true, 200);
@@ -193,12 +196,16 @@ namespace SolaERP.Application.Services
             return result != null ? ApiResponse<RequestDetailApprovalInfoDto>.Success(result, 200) : ApiResponse<RequestDetailApprovalInfoDto>.Success(new(), 200);
         }
 
-        public async Task<ApiResponse<NoContentDto>> RequestDetailChangeStatus(string finderToken, RequestDetailApproveModel model)
+        public async Task<ApiResponse<NoContentDto>> RequestDetailChangeStatusAsync(string finderToken, RequestDetailApproveModel model)
         {
             int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
-            model.UserId = userId;
+            if (model.RequestDetailIds == null && model.RequestDetailIds.Count == 0)
+                return ApiResponse<NoContentDto>.Fail("Request must be selected", 200);
 
-            await _requestDetailRepository.RequestDetailChangeStatus(model);
+            for (int i = 0; i < model.RequestDetailIds.Count; i++)
+            {
+                await _requestDetailRepository.RequestDetailChangeStatusAsync(userId, model.RequestDetailIds[i], model.ApproveStatusId, model.Comment, model.Sequence);
+            }
             await _unitOfWork.SaveChangesAsync();
 
             return ApiResponse<NoContentDto>.Success(200);

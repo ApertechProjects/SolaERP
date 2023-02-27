@@ -20,6 +20,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<List<RequestFollow>> RequestFollowUserLoadAsync(int requestMainId);
         Task<bool> RequestFollowAddOrUpdateUserAsync(RequestFollowSaveModel saveModel);
         Task<bool> RequestFollowDeleteUserAsync(RequestFollowSaveModel requestFollowSaveModel);
-        Task<bool> RequestMainChangeStatus(int userId, int requestMainId, int approveStatus, string comment);
+        Task<bool> RequestMainChangeStatusAsync(int userId, int requestMainId, int approveStatus, string comment);
     }
 }
