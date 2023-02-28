@@ -96,7 +96,7 @@ namespace SolaERP.Application.Services
                     smtpClient.Credentials = basicCredential;
 
                     message.From = fromAddress;
-                    message.Subject = "Problem detected";
+                    message.Subject = subject;
                     // Set IsBodyHtml to true means you can send HTML email.
                     message.IsBodyHtml = true;
                     message.Body = body;
@@ -104,15 +104,18 @@ namespace SolaERP.Application.Services
                     {
                         try
                         {
-                            message.To.Add(item);
+                            message.CC.Clear();
+                            message.CC.Add(item);
                             smtpClient.Send(message);
                         }
-                        catch (Exception ex)
+                        catch (SmtpFailedRecipientException ex)
                         {
-                            failedList.Add(item);
+                            string failedRecipient = ex.FailedRecipient;
+                            failedList.Add(failedRecipient);
                         }
-
                     }
+
+
                 }
             }
             return failedList;
