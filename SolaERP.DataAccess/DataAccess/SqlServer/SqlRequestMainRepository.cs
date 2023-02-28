@@ -391,7 +391,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
                 command.Parameters.AddWithValue(command, "@ItemCodes", itemCode);
                 command.Parameters.AddWithValue(command, "@DateFrom", dateFrom);
-                command.Parameters.AddWithValue(command, "DateTo", dateTo);
+                command.Parameters.AddWithValue(command, "@DateTo", dateTo);
                 command.Parameters.AddWithValue(command, "@ApproveStatus", string.Join(',', ApproveStatus));
                 command.Parameters.AddWithValue(command, "@Status", string.Join(',', Status));
 
