@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Infrastructure.Dtos.Request
+﻿namespace SolaERP.Infrastructure.Dtos.Request
 {
     public class RequestWFADto
     {
