@@ -8,6 +8,8 @@ namespace SolaERP.Infrastructure.Contracts.Services
     {
         Task<ApiResponse<List<AttachmentWithFileDto>>> GetAttachmentWithFilesAsync(int attachmentId);
         Task<ApiResponse<List<AttachmentDto>>> GetAttachmentsAsync(AttachmentListGetModel model);
+        Task<ApiResponse<string>> SaveAttachmentAsync(AttachmentSaveModel model);
+        Task<ApiResponse<string>> DeleteAttachmentAsync(int attachmentId);
 
     }
 }

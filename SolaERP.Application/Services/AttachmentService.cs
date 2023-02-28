@@ -21,6 +21,11 @@ namespace SolaERP.Application.Services
             _mapper = mapper;
         }
 
+        public async Task<ApiResponse<string>> DeleteAttachmentAsync(int attachmentId)
+        {
+            return await SaveAttachmentAsync(new() { AttachmentId = attachmentId });
+        }
+
         public async Task<ApiResponse<List<AttachmentDto>>> GetAttachmentsAsync(AttachmentListGetModel model)
         {
             var entity = await _attachmentRepository.GetAttachmentListAsync(model);
@@ -35,6 +40,14 @@ namespace SolaERP.Application.Services
             var result = _mapper.Map<List<AttachmentWithFileDto>>(entity);
 
             return ApiResponse<List<AttachmentWithFileDto>>.Success(result, 200);
+        }
+
+        public async Task<ApiResponse<string>> SaveAttachmentAsync(AttachmentSaveModel model)
+        {
+            bool result = await _attachmentRepository.SaveAttachmentAsync(model);
+            await _unitOfWork.SaveChangesAsync();
+
+            return result ? ApiResponse<string>.Success("Operation is succesfull", 200) : ApiResponse<string>.Fail("Operation failed", 400);
         }
     }
 }

@@ -23,6 +23,12 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetAttachmentsAsync(AttachmentListGetModel model)
             => CreateActionResult(await _attachmentService.GetAttachmentsAsync(model));
 
+        [HttpDelete("{attachmentId}")]
+        public async Task<IActionResult> DeleteAttachmentAsync(int attachmentId)
+            => CreateActionResult(await _attachmentService.DeleteAttachmentAsync(attachmentId));
 
+        [HttpPut]
+        public async Task<IActionResult> SaveAttachmentAsync(AttachmentSaveModel model)
+            => CreateActionResult(await _attachmentService.SaveAttachmentAsync(model));
     }
 }
