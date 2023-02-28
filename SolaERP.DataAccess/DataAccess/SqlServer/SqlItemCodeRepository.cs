@@ -1,5 +1,6 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Dtos.Item_Code;
 using SolaERP.Infrastructure.Entities.Item_Code;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
@@ -24,24 +25,41 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 List<ItemCode> result = new();
 
                 using var reader = await command.ExecuteReaderAsync();
-                while (reader.Read())
+                while (await reader.ReadAsync())
                     result.Add(GetItemCodeFromReader(reader));
 
                 return result;
             }
         }
 
-        public async Task<ItemCode> GetItemCodeByItemCodeAsync(string itemCode)
+
+        public async Task<ItemCodeWithImages> GetItemCodeByItemCodeAsync(string itemCode)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "SELECT * FROM [dbo].[GET_ITEM_BY_ITEM_CODE](@ItemCodes)";
                 command.Parameters.AddWithValue(command, "@ItemCodes", itemCode);
-                ItemCode result = new();
+                ItemCodeWithImages result = new();
 
                 using var reader = await command.ExecuteReaderAsync();
                 while (reader.Read())
-                    result = reader.GetByEntityStructure<ItemCode>();
+                    result = reader.GetByEntityStructure<ItemCodeWithImages>();
+
+                return result;
+            }
+        }
+
+        public async Task<ItemCodeInfo> GetItemCodeInfoByItemCodeAsync(string itemCode)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec SP_ItemInfo @ItemCode";
+                command.Parameters.AddWithValue(command, "@ItemCode", itemCode);
+                ItemCodeInfo result = new();
+
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                    result = reader.GetByEntityStructure<ItemCodeInfo>();
 
                 return result;
             }

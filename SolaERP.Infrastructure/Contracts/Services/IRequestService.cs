@@ -11,8 +11,8 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(string finderToken, RequestWFAGetModel requestWFAGetParametersDto);
         Task<bool> RemoveRequestDetailAsync(RequestDetailDto requestDetailDto);
         Task<ApiResponse<List<RequestTypesDto>>> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId);
-        Task<ApiResponse<bool>> ChangeRequestStatus(string finderToken, List<RequestChangeStatusModel> changeStatusParametersDtos);
-        Task<ApiResponse<bool>> SendMainToApproveAsync(RequestMainSendToApproveDto sendToApproveModel);
+        Task<ApiResponse<bool>> RequestMainChangeStatusAsync(string finderToken, RequestChangeStatusModel changeStatusParametersDto);
+        Task<ApiResponse<bool>> RequestSendToApproveAsync(string authToken, int requestMainId);
         Task<ApiResponse<List<RequestMainDraftDto>>> GetRequestMainDraftsAsync(RequestMainDraftModel getMainDraftParameters);
         Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentModel requestParametersDto);
         Task<ApiResponse<RequestCardMainDto>> GetRequestByRequestMainId(string authToken, int requestMainId);
@@ -22,6 +22,12 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<RequestSaveResultModel>> AddOrUpdateRequestAsync(string finderToken, RequestSaveModel model);
         Task<ApiResponse<bool>> DeleteRequestAsync(string authToken, int requestMainId);
         Task<ApiResponse<RequestDetailApprovalInfoDto>> GetRequestDetailApprvalInfoAsync(int requestDetaildId);
-        Task<ApiResponse<NoContentDto>> RequestDetailSendToApprove(string finderToken, RequestDetailSendToApproveModel model);
+        Task<ApiResponse<NoContentDto>> RequestDetailChangeStatusAsync(string finderToken, RequestDetailApproveModel model);
+        Task<ApiResponse<bool>> UpdateBuyerAsync(RequestSetBuyer requestSetBuyer);
+        Task<ApiResponse<List<RequestFollowDto>>> RequestFollowUserLoadAsync(int requestMainId);
+        Task<ApiResponse<bool>> AddOrUpdateUserForRequestFollowAsync(List<RequestFollowSaveModel> saveModel);
+        Task<ApiResponse<bool>> DeleteUserForRequestFollowAsync(List<RequestFollowSaveModel> saveModel);
+        Task SendFollowMailForRequest(string[] tos, string messageBody, string subject);
+
     }
 }

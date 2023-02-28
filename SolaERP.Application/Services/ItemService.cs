@@ -33,13 +33,22 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<ItemCodeDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<ItemCodeDto>> GetItemCodeByItemCodeAsync(string itemCode)
+        public async Task<ApiResponse<ItemCodeWithImagesDto>> GetItemCodeByItemCodeAsync(string itemCode)
         {
             var itemCodes = await _itemCodeRepository.GetItemCodeByItemCodeAsync(itemCode);
-            var itemCodeResult = _mapper.Map<ItemCodeDto>(itemCodes);
+            var itemCodeResult = _mapper.Map<ItemCodeWithImagesDto>(itemCodes);
 
-            return itemCodeResult != null ? ApiResponse<ItemCodeDto>.Success(itemCodeResult, 200) :
-                ApiResponse<ItemCodeDto>.Fail("Bad request from GetItemCodesByItemCode", 404);
+            return itemCodeResult != null ? ApiResponse<ItemCodeWithImagesDto>.Success(itemCodeResult, 200) :
+                ApiResponse<ItemCodeWithImagesDto>.Fail("Bad request from GetItemCodesByItemCode", 404);
+        }
+
+        public async Task<ApiResponse<ItemCodeInfoDto>> GetItemCodeInfoByItemCodeAsync(string itemCode)
+        {
+            var itemCodes = await _itemCodeRepository.GetItemCodeInfoByItemCodeAsync(itemCode);
+            var itemCodeResult = _mapper.Map<ItemCodeInfoDto>(itemCodes);
+
+            return itemCodeResult != null ? ApiResponse<ItemCodeInfoDto>.Success(itemCodeResult, 200) :
+                ApiResponse<ItemCodeInfoDto>.Fail("Bad request from GetItemCodesByItemCode", 404);
         }
 
         public async Task<ApiResponse<List<ItemCodeWithImagesDto>>> GetItemCodesWithImagesAsync()

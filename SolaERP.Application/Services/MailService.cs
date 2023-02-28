@@ -11,11 +11,12 @@ namespace SolaERP.Application.Services
     public class MailService : IMailService
     {
         private readonly IConfiguration _configuration;
-
         public MailService(IConfiguration configuration)
         {
             _configuration = configuration;
         }
+
+
 
         public async Task SendMailAsync(string to, string subject, string body, bool isBodyHtml = true)
         {
@@ -26,19 +27,23 @@ namespace SolaERP.Application.Services
         {
             MailMessage mail = new();
             mail.IsBodyHtml = isBodyHtml;
+
             foreach (var to in tos)
                 mail.To.Add(to);
+
             mail.Subject = subject;
             mail.Body = body;
-            mail.From = new(_configuration["Mail:Email"], "Apertech", System.Text.Encoding.UTF8);
+            mail.From = new(_configuration["Mail:UserName"], "Apertech", System.Text.Encoding.UTF8);
 
             SmtpClient smtp = new();
-            smtp.Credentials = new NetworkCredential(_configuration["Mail:Email"], _configuration["Mail:Password"]);
+            smtp.Credentials = new NetworkCredential(_configuration["Mail:UserName"], _configuration["Mail:Password"]);
             smtp.Port = 587;
             smtp.EnableSsl = true;
             smtp.Host = _configuration["Mail:Host"];
+
             await smtp.SendMailAsync(mail);
         }
+
 
         /// <summary>
         /// Sends Password Reset email 
@@ -51,10 +56,10 @@ namespace SolaERP.Application.Services
             using StreamReader reader = new StreamReader(templatePath);
             using (SmtpClient smtpClient = new SmtpClient())
             {
-                var basicCredential = new NetworkCredential(_configuration["Mail:Username"], _configuration["Mail:Password"]);
+                var basicCredential = new NetworkCredential(_configuration["Mail:UserName"], _configuration["Mail:Password"]);
                 using (MailMessage message = new MailMessage())
                 {
-                    MailAddress fromAddress = new MailAddress(_configuration["Mail:Username"]);
+                    MailAddress fromAddress = new MailAddress(_configuration["Mail:UserName"]);
 
                     smtpClient.Host = _configuration["Mail:Host"];
                     smtpClient.Port = 587;
@@ -73,5 +78,45 @@ namespace SolaERP.Application.Services
                 }
             }
         }
+
+        public async Task<List<string>> SendSafeMailAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
+        {
+            List<string> failedList = new List<string>();
+            using (SmtpClient smtpClient = new SmtpClient())
+            {
+                var basicCredential = new NetworkCredential(_configuration["Mail:UserName"], _configuration["Mail:Password"]);
+                using (MailMessage message = new MailMessage())
+                {
+                    MailAddress fromAddress = new MailAddress("test@apertech.com");
+
+                    smtpClient.Host = "mail.apertech.net";
+                    smtpClient.Port = 587;
+                    smtpClient.EnableSsl = true;
+                    smtpClient.UseDefaultCredentials = false;
+                    smtpClient.Credentials = basicCredential;
+
+                    message.From = fromAddress;
+                    message.Subject = "Problem detected";
+                    // Set IsBodyHtml to true means you can send HTML email.
+                    message.IsBodyHtml = true;
+                    message.Body = body;
+                    foreach (string item in tos)
+                    {
+                        try
+                        {
+                            message.To.Add(item);
+                            smtpClient.Send(message);
+                        }
+                        catch (Exception ex)
+                        {
+                            failedList.Add(item);
+                        }
+
+                    }
+                }
+            }
+            return failedList;
+        }
+
     }
 }

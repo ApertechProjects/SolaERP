@@ -33,6 +33,10 @@ namespace SolaERP.Controllers
         }
 
 
+        [HttpGet("{email}")]
+        public async Task<IActionResult> SendResetPasswordEmail(string email)
+            => CreateActionResult(await _userService.SendResetPasswordEmail(email, @"C:\Users\HP\source\repos\SolaERP\SolaERP\Templates\EmailTemplate.html"));
+
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequestModel dto)
         {
@@ -80,13 +84,6 @@ namespace SolaERP.Controllers
 
             return CreateActionResult(ApiResponse<bool>.Success(true, 200));
         }
-
-
-
-        [HttpGet("{email}")]
-        public async Task<IActionResult> SendResetPasswordEmail(string email)
-            => CreateActionResult(await _userService.SendResetPasswordEmail(email, @"C:\Users\HP\source\repos\SolaERP\SolaERP\Templates\EmailTemplate.html"));
-
 
         [HttpPost]
         public async Task<IActionResult> ResetPassword(ResetPasswordModel resetPasswordrequestDto)

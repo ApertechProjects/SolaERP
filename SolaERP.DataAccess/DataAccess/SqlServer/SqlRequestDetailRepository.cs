@@ -138,17 +138,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> SendToApproveAsync(RequestDetailSendToApproveModel model)
+        public async Task<bool> RequestDetailChangeStatusAsync(int requestDetailId, int userId, int approveStatusId, string comment, int sequence)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_RequestApprove @RequestDetailId,@UserId,@ApproveStatusId,@Comment,@Sequence";
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_RequestApprove @RequestDetailId,@UserId,@ApproveStatusId,@Comment,@Sequence";
 
-                command.Parameters.AddWithValue(command, "@RequestDetailId", model.RequestDetailId);
-                command.Parameters.AddWithValue(command, "@UserId", model.UserId);
-                command.Parameters.AddWithValue(command, "@ApproveStatusId", model.ApproveStatusId);
-                command.Parameters.AddWithValue(command, "@Comment", model.Comment);
-                command.Parameters.AddWithValue(command, "@Sequence", model.Sequence);
+                command.Parameters.AddWithValue(command, "@RequestDetailId", requestDetailId);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                command.Parameters.AddWithValue(command, "@ApproveStatusId", approveStatusId);
+                command.Parameters.AddWithValue(command, "@Comment", comment);
+                command.Parameters.AddWithValue(command, "@Sequence", sequence);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
