@@ -9,6 +9,4 @@ namespace SolaERP.Infrastructure.Dtos
         public string LongDescription { get; set; }
         public string UnitOfPurch { get; set; }
     }
-
-
 }

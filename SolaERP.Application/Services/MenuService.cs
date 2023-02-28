@@ -60,7 +60,7 @@ namespace SolaERP.Application.Services
             if (menus.Count > 0)
                 return ApiResponse<List<ParentMenuDto>>.Success(menus, 200);
 
-            return ApiResponse<List<ParentMenuDto>>.Fail("BadRequest", 400);
+            return ApiResponse<List<ParentMenuDto>>.Fail("This user doesn't have any privileges in our system", 400);
         }
         public async Task<ApiResponse<List<MenuWithPrivilagesDto>>> GetUserMenusWithPrivilagesAsync(string finderToken)
         {
@@ -70,7 +70,7 @@ namespace SolaERP.Application.Services
             if (menusDto != null)
                 return ApiResponse<List<MenuWithPrivilagesDto>>.Success(menusDto, 200);
 
-            return ApiResponse<List<MenuWithPrivilagesDto>>.Fail("BadRequest", 400);
+            return ApiResponse<List<MenuWithPrivilagesDto>>.Fail("This user doesn't have any privileges in our system", 400);
         }
         public async Task<ApiResponse<GroupMenuResponseDto>> GetGroupMenuWithPrivillageListByGroupIdAsync(string finderToken, int groupId)
         {

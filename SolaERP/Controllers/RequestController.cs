@@ -10,13 +10,11 @@ namespace SolaERP.Controllers
     public class RequestController : CustomBaseController
     {
         private readonly IRequestService _requestService;
-        //private ICommonService<RequestWFADto> _commonServiceForWFA;
         private IUserRepository _userRepository;
 
         public RequestController(IRequestService requestService, IUserRepository userRepository)
         {
             _requestService = requestService;
-            //_commonServiceForWFA = commonServiceForWFA;
             _userRepository = userRepository;
         }
 
