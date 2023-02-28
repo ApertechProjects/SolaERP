@@ -68,12 +68,18 @@ namespace SolaERP.Application.Services
             if (changeStatusParametersDtos.RequestMainIds == null && changeStatusParametersDtos.RequestMainIds.Count == 0)
                 return ApiResponse<bool>.Fail("Request must be selected", 200);
 
+            List<string> failedMailList = new List<string>();
+            string userName = await _userRepository.GetUserNameByTokenAsync(finderToken);
             for (int i = 0; i < changeStatusParametersDtos.RequestMainIds.Count; i++)
             {
                 await _requestMainRepository.RequestMainChangeStatusAsync(userId, changeStatusParametersDtos.RequestMainIds[i], changeStatusParametersDtos.ApproveStatus, changeStatusParametersDtos.Comment);
+                string messageBody = "Request sended to approve by " + userName;
+                failedMailList = await _mailService.SendSafeMailAsync(await GetFollowUserEmailsForRequestAsync(changeStatusParametersDtos.RequestMainIds[i]), "Request Information", messageBody, false);
+
             }
             await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<bool>.Success(true, 200);
+
+            return ApiResponse<bool>.Success(true, failedMailList, 200);
         }
 
         public async Task<ApiResponse<bool>> RequestSendToApproveAsync(string finderToken, int requestMainId)
@@ -84,7 +90,6 @@ namespace SolaERP.Application.Services
             await _unitOfWork.SaveChangesAsync();
 
             string messageBody = "Request sended to approve by " + userName;
-
 
             var users = GetFollowUserEmailsForRequestAsync(requestMainId);
 
@@ -204,7 +209,7 @@ namespace SolaERP.Application.Services
 
             for (int i = 0; i < model.RequestDetailIds.Count; i++)
             {
-                await _requestDetailRepository.RequestDetailChangeStatusAsync(model.RequestDetailIds[i],userId, model.ApproveStatusId, model.Comment, model.Sequence);
+                await _requestDetailRepository.RequestDetailChangeStatusAsync(model.RequestDetailIds[i], userId, model.ApproveStatusId, model.Comment, model.Sequence);
             }
             await _unitOfWork.SaveChangesAsync();
 

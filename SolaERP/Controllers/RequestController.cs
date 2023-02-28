@@ -10,13 +10,11 @@ namespace SolaERP.Controllers
     public class RequestController : CustomBaseController
     {
         private readonly IRequestService _requestService;
-        //private ICommonService<RequestWFADto> _commonServiceForWFA;
         private IUserRepository _userRepository;
 
         public RequestController(IRequestService requestService, IUserRepository userRepository)
         {
             _requestService = requestService;
-            //_commonServiceForWFA = commonServiceForWFA;
             _userRepository = userRepository;
         }
 
@@ -61,6 +59,10 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveRequestAsync([FromHeader] string authToken, RequestSaveModel model)
         => CreateActionResult(await _requestService.AddOrUpdateRequestAsync(authToken, model));
+
+        //[HttpPost]
+        //public async Task<IActionResult> RequestSendToApproveAsync([FromHeader] string authToken, int requestChangeStatusParametersDto)
+        //=> CreateActionResult(await _requestService.RequestMainChangeStatusAsync(authToken, requestChangeStatusParametersDto));
 
         [HttpPost]
         public async Task<IActionResult> RequestMainChangeStatusAsync([FromHeader] string authToken, RequestChangeStatusModel requestChangeStatusParametersDto)
