@@ -15,6 +15,7 @@
         public string RequestComment { get; set; }
         public string OperatorComment { get; set; }
         public string QualityRequired { get; set; }
+        public int Status { get; set; }
         public string ApproveStatus { get; set; }
     }
 }
