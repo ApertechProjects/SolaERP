@@ -2,8 +2,10 @@
 {
     public class RequestMain : BaseEntity
     {
+        public Int64 RowNum { get; set; }
         public int RequestMainId { get; set; }
         public int BusinessUnitId { get; set; }
+        public string BusinessUnitCode { get; set; }
         public int RequestTypeId { get; set; }
         public string RequestType { get; set; }
         public string RequestNo { get; set; }
@@ -22,7 +24,6 @@
         public string OperatorComment { get; set; }
         public string QualityRequired { get; set; }
         public string CurrencyCode { get; set; }
-        public int RowNum { get; set; }
         public decimal LogisticsTotal { get; set; }
         public List<RequestDetailWithAnalysisCode> Details { get; set; }
     }

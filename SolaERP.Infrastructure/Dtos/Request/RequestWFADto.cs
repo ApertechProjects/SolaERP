@@ -2,8 +2,9 @@
 {
     public class RequestWFADto
     {
+        public Int64 RowNum { get; set; }
         public int RequestMainId { get; set; }
-        public int BusinessUnitId { get; set; }
+        public string BusinessUnitCode { get; set; }
         public string RequestType { get; set; }
         public string RequestNo { get; set; }
         public DateTime EntryDate { get; set; }

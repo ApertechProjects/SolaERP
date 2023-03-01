@@ -2,9 +2,9 @@
 {
     public class RequestMainAll : BaseEntity
     {
+        public Int64 RowNum { get; set; }
         public int RequestMainID { get; set; }
         public string BusinessUnitCode { get; set; }
-        //public int RowNum { get; set; }
         public string RequestType { get; set; }
         public string RequestNo { get; set; }
         public DateTime EntryDate { get; set; }
