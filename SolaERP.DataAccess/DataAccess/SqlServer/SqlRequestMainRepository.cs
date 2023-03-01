@@ -145,8 +145,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 {
                     mainRequests.Add(GetWaitingForApprovalFromReader(reader));
                 }
-                //if (mainRequests.Count == 0)
-                //    mainRequests.Add(new RequestMain { BusinessUnitId = 0 });
+
                 return mainRequests;
             }
         }
@@ -234,6 +233,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 RequestMainId = reader.Get<int>("RequestMainId"),
                 BusinessUnitId = reader.Get<int>("BusinessUnitId"),
+                RequestTypeId = reader.Get<int>("RequestTypeId"),
+                ApproveStatus = reader.Get<int>("ApproveStatus"),
+                EmployeeCode = reader.Get<string>("EmployeeCode"),
+                EmployeeName = reader.Get<string>("EmployeeName"),
                 RequestType = reader.Get<string>("RequestType"),
                 RequestNo = reader.Get<string>("RequestNo"),
                 EntryDate = reader.Get<DateTime>("EntryDate"),

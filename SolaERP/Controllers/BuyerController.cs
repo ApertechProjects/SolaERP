@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
 
 namespace SolaERP.Controllers
@@ -15,7 +14,7 @@ namespace SolaERP.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetBuyerByUserIdAsync([FromHeader] string authToken)
+        public async Task<IActionResult> GetBuyersByTokenAsync([FromHeader] string authToken)
         => CreateActionResult(await _buyerService.GetBuyerByUserTokenAsync(authToken));
     }
 }
