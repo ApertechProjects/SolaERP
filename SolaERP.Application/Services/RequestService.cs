@@ -73,13 +73,32 @@ namespace SolaERP.Application.Services
             for (int i = 0; i < changeStatusParametersDtos.RequestMainIds.Count; i++)
             {
                 await _requestMainRepository.RequestMainChangeStatusAsync(userId, changeStatusParametersDtos.RequestMainIds[i], changeStatusParametersDtos.ApproveStatus, changeStatusParametersDtos.Comment);
-                string messageBody = "Request sended to approve by " + userName;
-                failedMailList = await _mailService.SendSafeMailAsync(await GetFollowUserEmailsForRequestAsync(changeStatusParametersDtos.RequestMainIds[i]), "Request Information", messageBody, false);
+
+                string messageBody = $"Request {GetMailText(changeStatusParametersDtos.ApproveStatus)} by " + userName;
+                await _mailService.SendSafeMailsAsync(await GetFollowUserEmailsForRequestAsync(changeStatusParametersDtos.RequestMainIds[i]), "Request Information", messageBody, false);
 
             }
             await _unitOfWork.SaveChangesAsync();
 
-            return ApiResponse<bool>.Success(true, failedMailList, 200);
+            return ApiResponse<bool>.Success(true, 200);
+        }
+
+        string GetMailText(int approveStatus)
+        {
+            string text = "";
+            switch (approveStatus)
+            {
+                case 2:
+                    text = "approved";
+                    break;
+                case 3:
+                    text = "rejected";
+                    break;
+                default:
+                    text = "";
+                    break;
+            }
+            return text;
         }
 
         public async Task<ApiResponse<bool>> RequestSendToApproveAsync(string finderToken, int requestMainId)
@@ -91,7 +110,7 @@ namespace SolaERP.Application.Services
 
             string messageBody = "Request sended to approve by " + userName;
 
-            await _mailService.SendMailAsync(await GetFollowUserEmailsForRequestAsync(requestMainId), "Request Information", messageBody, false);
+            await _mailService.SendSafeMailsAsync(await GetFollowUserEmailsForRequestAsync(requestMainId), "Request Information", messageBody, false);
 
             return ApiResponse<bool>.Success(true, 200);
         }

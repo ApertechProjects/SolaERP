@@ -2,6 +2,7 @@
 using SolaERP.Infrastructure.Contracts.Services;
 using System.Net;
 using System.Net.Mail;
+using System.Net.Sockets;
 
 namespace SolaERP.Application.Services
 {
@@ -85,12 +86,58 @@ namespace SolaERP.Application.Services
         public async Task<List<string>> SendSafeMailAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
         {
             List<string> failedList = new List<string>();
+
+            if (tos.Length == 0)
+            {
+                return failedList;
+            }
+
             using (SmtpClient smtpClient = new SmtpClient())
             {
                 var basicCredential = new NetworkCredential(_configuration["Mail:UserName"], _configuration["Mail:Password"]);
+
+                smtpClient.Host = "mail.apertech.net";
+                smtpClient.Port = 587;
+                smtpClient.EnableSsl = true;
+                smtpClient.UseDefaultCredentials = false;
+                smtpClient.Credentials = basicCredential;
+
                 using (MailMessage message = new MailMessage())
                 {
-                    MailAddress fromAddress = new MailAddress("test@apertech.com");
+                    message.From = new MailAddress("test@apertech.com");
+                    message.Subject = subject;
+                    message.IsBodyHtml = isBodyHtml;
+                    message.Body = body;
+
+                    foreach (string item in tos)
+                    {
+                        message.CC.Add(item);
+                    }
+
+                    try
+                    {
+                        await Task.Run(async () =>
+                        {
+                            await smtpClient.SendMailAsync(message);
+                        });
+                    }
+                    catch (SmtpException ex)
+                    {
+                        failedList.Add(ex.Message);
+                    }
+                }
+            }
+
+            return failedList;
+        }
+
+        public async Task SendSafeMailsAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
+        {
+            if (tos.Length != 0)
+            {
+                using (SmtpClient smtpClient = new SmtpClient())
+                {
+                    var basicCredential = new NetworkCredential(_configuration["Mail:UserName"], _configuration["Mail:Password"]);
 
                     smtpClient.Host = "mail.apertech.net";
                     smtpClient.Port = 587;
@@ -98,31 +145,31 @@ namespace SolaERP.Application.Services
                     smtpClient.UseDefaultCredentials = false;
                     smtpClient.Credentials = basicCredential;
 
-                    message.From = fromAddress;
-                    message.Subject = subject;
-                    // Set IsBodyHtml to true means you can send HTML email.
-                    message.IsBodyHtml = true;
-                    message.Body = body;
-                    foreach (string item in tos)
+                    using (MailMessage message = new MailMessage())
                     {
+                        foreach (string item in tos)
+                        {
+                            message.From = new MailAddress("test@apertech.com","Apertech");
+                            message.Subject = subject;
+                            message.IsBodyHtml = isBodyHtml;
+                            message.Body = body;
+
+                            message.To.Add(item);
+                        }
+
                         try
                         {
-                            message.CC.Clear();
-                            message.CC.Add(item);
-                            smtpClient.Send(message);
+                            await Task.Run(async () =>
+                            {
+                                await smtpClient.SendMailAsync(message);
+                            });
                         }
-                        catch (SmtpFailedRecipientException ex)
+                        catch (Exception ex)
                         {
-                            string failedRecipient = ex.FailedRecipient;
-                            failedList.Add(failedRecipient);
                         }
                     }
-
-
                 }
             }
-            return failedList;
         }
-
     }
 }
