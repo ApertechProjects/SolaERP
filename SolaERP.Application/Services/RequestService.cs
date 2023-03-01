@@ -91,12 +91,9 @@ namespace SolaERP.Application.Services
 
             string messageBody = "Request sended to approve by " + userName;
 
-            var users = GetFollowUserEmailsForRequestAsync(requestMainId);
-
             await _mailService.SendMailAsync(await GetFollowUserEmailsForRequestAsync(requestMainId), "Request Information", messageBody, false);
 
-
-            return null;
+            return ApiResponse<bool>.Success(true, 200);
         }
 
         public async Task<ApiResponse<RequestCardMainDto>> GetRequestByRequestMainId(string authToken, int requestMainId)
