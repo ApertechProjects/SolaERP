@@ -81,7 +81,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = "EXEC SP_RequestMainDrafts @BusinessUnitId,@ItemCodes,@DateFrom,@DateTo";
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
-                command.Parameters.AddWithValue(command, "@ItemCodes", itemCode);
+                command.Parameters.AddWithValue(command, "@ItemCodes", string.Join(',', itemCode));
                 command.Parameters.AddWithValue(command, "@DateFrom", dateFrom);
                 command.Parameters.AddWithValue(command, "DateTo", dateTo);
 
@@ -90,8 +90,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 List<RequestMainDraft> mainDrafts = new List<RequestMainDraft>();
                 while (reader.Read())
                     mainDrafts.Add(GetMainDraftFromReader(reader));
-                if (mainDrafts.Count == 0)
-                    mainDrafts.Add(new RequestMainDraft { Status = 0 });
                 return mainDrafts;
             }
         }
@@ -138,7 +136,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
                 command.Parameters.AddWithValue(command, "@DateFrom", dateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", dateTo);
-                command.Parameters.AddWithValue(command, "@ItemCodes", itemCode);
+                command.Parameters.AddWithValue(command, "@ItemCodes", string.Join(',', itemCode));
 
                 using var reader = await command.ExecuteReaderAsync();
 
@@ -169,13 +167,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 while (await reader.ReadAsync())
-                {
                     mainRequestsForAmendment.Add(GetRequestAmendmentFromReader(reader));
-                }
-
-                if (mainRequestsForAmendment.Count == 0)
-                    mainRequestsForAmendment.Add(new() { BusinessUnitId = 1, RequestComment = "Tessst", Requester = 1405, RequestMainId = 1, Status = 1 });
-
                 return mainRequestsForAmendment;
             }
         }
@@ -289,8 +281,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 RequestMainId = reader.Get<int>("RequestMainId"),
                 BusinessUnitId = reader.Get<int>("BusinessUnitId"),
-                RequetsTypeId = reader.Get<int>("RequetsTypeId"),
-                RequestNo = reader.Get<int>("RequestNo"),
+                RequestTypeId = reader.Get<int>("RequestTypeId"),
+                RequestNo = reader.Get<string>("RequestNo"),
                 EntryDate = reader.Get<DateTime>("EntryDate"),
                 RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
                 UserId = reader.Get<int>("UserId"),
@@ -311,19 +303,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return new()
             {
                 RequestMainId = reader.Get<int>("RequestMainId"),
-                BusinessUnitCode = reader.Get<string>("BusinessunitCode"),
-                RowNum = reader.Get<int>("RowNum"),
+                BusinessUnitCode = reader.Get<string>("BusinessUnitCode"),
+                RowNum = reader.Get<Int64>("RowNum"),
                 RequestType = reader.Get<string>("RequestType"),
-                RequetsNo = reader.Get<int>("RequestNo"),
-                EntryDate = reader.Get<DateTime>("EntrDate"),
+                RequetsNo = reader.Get<string>("RequestNo"),
+                EntryDate = reader.Get<DateTime>("EntryDate"),
                 RequestDate = reader.Get<DateTime>("RequestDate"),
                 RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
                 Buyer = reader.Get<string>("Buyer"),
-                Requester = reader.Get<string>("Requester"),
+                Requester = reader.Get<int>("Requester"),
                 RequestComment = reader.Get<string>("RequestComment"),
                 OperatorComment = reader.Get<string>("OperatorComment"),
-                QualityRequired = reader.Get<string>("QualitiyRequired"),
-                ApproveStatus = reader.Get<string>("ApproveStatus")
+                QualityRequired = reader.Get<string>("QualityRequired"),
+                ApproveStatus = reader.Get<int>("ApproveStatus")
             };
         }
 

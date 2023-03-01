@@ -4,8 +4,8 @@
     {
         public int RequestMainId { get; set; }
         public int BusinessUnitId { get; set; }
-        public int RequetsTypeId { get; set; }
-        public int RequestNo { get; set; }
+        public int RequestTypeId { get; set; }
+        public string RequestNo { get; set; }
         public DateTime EntryDate { get; set; }
         public DateTime RequestDeadline { get; set; }
         public int UserId { get; set; }

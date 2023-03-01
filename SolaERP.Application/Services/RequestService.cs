@@ -91,12 +91,9 @@ namespace SolaERP.Application.Services
 
             string messageBody = "Request sended to approve by " + userName;
 
-            var users = GetFollowUserEmailsForRequestAsync(requestMainId);
-
             await _mailService.SendMailAsync(await GetFollowUserEmailsForRequestAsync(requestMainId), "Request Information", messageBody, false);
 
-
-            return null;
+            return ApiResponse<bool>.Success(true, 200);
         }
 
         public async Task<ApiResponse<RequestCardMainDto>> GetRequestByRequestMainId(string authToken, int requestMainId)
@@ -119,16 +116,16 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<RequestMainDraftDto>>.Fail("Main drafts is empty", 404);
         }
 
-        public async Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentModel requestParametersDto)
+        public async Task<ApiResponse<List<RequestAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentModel requestParametersDto)
         {
             var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
             var mainRequest = await _requestMainRepository.GetApproveAmendmentRequestsAsync(userId, requestParametersDto);
-            var mainRequestDto = _mapper.Map<List<RequestApproveAmendmentDto>>(mainRequest);
+            var mainRequestDto = _mapper.Map<List<RequestAmendmentDto>>(mainRequest);
 
             if (mainRequestDto != null && mainRequestDto.Count > 0)
-                return ApiResponse<List<RequestApproveAmendmentDto>>.Success(mainRequestDto, 200);
+                return ApiResponse<List<RequestAmendmentDto>>.Success(mainRequestDto, 200);
 
-            return ApiResponse<List<RequestApproveAmendmentDto>>.Fail("Amendment is empty", 404);
+            return ApiResponse<List<RequestAmendmentDto>>.Fail("Amendment is empty", 404);
         }
 
         public async Task<ApiResponse<List<RequestApprovalInfoDto>>> GetRequestApprovalInfoAsync(string finderToken, int requestMainId)

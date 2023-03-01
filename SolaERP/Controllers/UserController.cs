@@ -21,6 +21,10 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetUserByToken([FromHeader] string authToken)
             => CreateActionResult(await _userService.GetUserByTokenAsync(authToken));
 
+        [HttpGet]
+        public async Task<string> GetUserNameByToken([FromHeader] string authToken)
+          => await _userService.GetUserNameByTokenAsync(authToken);
+
         [HttpPut]
         public async Task<IActionResult> UpdateUser(UserDto dto)
             => CreateActionResult(await _userService.UpdateAsync(dto));

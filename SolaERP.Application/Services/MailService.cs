@@ -25,23 +25,26 @@ namespace SolaERP.Application.Services
 
         public async Task SendMailAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
         {
-            MailMessage mail = new();
-            mail.IsBodyHtml = isBodyHtml;
+            if (tos.Length != 0)
+            {
+                MailMessage mail = new();
+                mail.IsBodyHtml = isBodyHtml;
 
-            foreach (var to in tos)
-                mail.To.Add(to);
+                foreach (var to in tos)
+                    mail.To.Add(to);
 
-            mail.Subject = subject;
-            mail.Body = body;
-            mail.From = new(_configuration["Mail:UserName"], "Apertech", System.Text.Encoding.UTF8);
+                mail.Subject = subject;
+                mail.Body = body;
+                mail.From = new(_configuration["Mail:UserName"], "Apertech", System.Text.Encoding.UTF8);
 
-            SmtpClient smtp = new();
-            smtp.Credentials = new NetworkCredential(_configuration["Mail:UserName"], _configuration["Mail:Password"]);
-            smtp.Port = 587;
-            smtp.EnableSsl = true;
-            smtp.Host = _configuration["Mail:Host"];
+                SmtpClient smtp = new();
+                smtp.Credentials = new NetworkCredential(_configuration["Mail:UserName"], _configuration["Mail:Password"]);
+                smtp.Port = 587;
+                smtp.EnableSsl = true;
+                smtp.Host = _configuration["Mail:Host"];
 
-            await smtp.SendMailAsync(mail);
+                await smtp.SendMailAsync(mail);
+            }
         }
 
 
@@ -96,7 +99,7 @@ namespace SolaERP.Application.Services
                     smtpClient.Credentials = basicCredential;
 
                     message.From = fromAddress;
-                    message.Subject = "Problem detected";
+                    message.Subject = subject;
                     // Set IsBodyHtml to true means you can send HTML email.
                     message.IsBodyHtml = true;
                     message.Body = body;
@@ -104,15 +107,18 @@ namespace SolaERP.Application.Services
                     {
                         try
                         {
-                            message.To.Add(item);
+                            message.CC.Clear();
+                            message.CC.Add(item);
                             smtpClient.Send(message);
                         }
-                        catch (Exception ex)
+                        catch (SmtpFailedRecipientException ex)
                         {
-                            failedList.Add(item);
+                            string failedRecipient = ex.FailedRecipient;
+                            failedList.Add(failedRecipient);
                         }
-
                     }
+
+
                 }
             }
             return failedList;
