@@ -18,5 +18,6 @@
         public int Status { get; set; }
         public int ApproveStatus { get; set; }
         public string ApproveStatusName { get; set; }
+        public string CurrencyCode { get; set; }
     }
 }
