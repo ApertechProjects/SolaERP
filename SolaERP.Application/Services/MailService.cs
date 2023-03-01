@@ -149,7 +149,7 @@ namespace SolaERP.Application.Services
                     {
                         foreach (string item in tos)
                         {
-                            message.From = new MailAddress("test@apertech.com","Apertech");
+                            message.From = new MailAddress("test@apertech.com", "Apertech");
                             message.Subject = subject;
                             message.IsBodyHtml = isBodyHtml;
                             message.Body = body;
@@ -159,10 +159,11 @@ namespace SolaERP.Application.Services
 
                         try
                         {
-                            await Task.Run(async () =>
-                            {
-                                await smtpClient.SendMailAsync(message);
-                            });
+                            await smtpClient.SendMailAsync(message);
+                            // Task.Run(async () =>
+                            //{
+                            //    await smtpClient.SendMailAsync(message);
+                            //});
                         }
                         catch (Exception ex)
                         {
