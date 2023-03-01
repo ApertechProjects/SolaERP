@@ -281,8 +281,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 RequestMainId = reader.Get<int>("RequestMainId"),
                 BusinessUnitId = reader.Get<int>("BusinessUnitId"),
-                RequetsTypeId = reader.Get<int>("RequetsTypeId"),
-                RequestNo = reader.Get<int>("RequestNo"),
+                RequestTypeId = reader.Get<int>("RequestTypeId"),
+                RequestNo = reader.Get<string>("RequestNo"),
                 EntryDate = reader.Get<DateTime>("EntryDate"),
                 RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
                 UserId = reader.Get<int>("UserId"),

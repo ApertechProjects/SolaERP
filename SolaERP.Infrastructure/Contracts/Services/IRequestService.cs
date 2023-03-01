@@ -14,7 +14,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<bool>> RequestMainChangeStatusAsync(string finderToken, RequestChangeStatusModel changeStatusParametersDto);
         Task<ApiResponse<bool>> RequestSendToApproveAsync(string authToken, int requestMainId);
         Task<ApiResponse<List<RequestMainDraftDto>>> GetRequestMainDraftsAsync(RequestMainDraftModel getMainDraftParameters);
-        Task<ApiResponse<List<RequestApproveAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentModel requestParametersDto);
+        Task<ApiResponse<List<RequestAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentModel requestParametersDto);
         Task<ApiResponse<RequestCardMainDto>> GetRequestByRequestMainId(string authToken, int requestMainId);
         Task<ApiResponse<List<RequestApprovalInfoDto>>> GetRequestApprovalInfoAsync(string finderToken, int requestMainId);
         Task<ApiResponse<RequestMainDto>> GetRequestHeaderAsync(string finderToken, int requestMainId);

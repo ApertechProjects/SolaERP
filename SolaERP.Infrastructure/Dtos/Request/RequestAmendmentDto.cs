@@ -1,6 +1,6 @@
 ﻿namespace SolaERP.Infrastructure.Dtos.Request
 {
-    public class RequestApproveAmendmentDto
+    public class RequestAmendmentDto
     {
         public int RequestMainId { get; set; }
         public int BusinessUnitId { get; set; }

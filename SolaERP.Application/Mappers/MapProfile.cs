@@ -67,8 +67,8 @@ namespace SolaERP.Application.Mappers
             CreateMap<RequestMain, RequestMainDto>().ReverseMap();
             CreateMap<RequestMain, RequestWFADto>().ReverseMap();
             CreateMap<RequestMain, RequestMainWithDetailsDto>().ReverseMap();
-            CreateMap<RequestMain, RequestApproveAmendmentDto>().ReverseMap();
-            CreateMap<RequestAmendment, RequestApproveAmendmentDto>().ReverseMap();
+            CreateMap<RequestMain, RequestAmendmentDto>().ReverseMap();
+            CreateMap<RequestAmendment, RequestAmendmentDto>().ReverseMap();
             CreateMap<RequestDetail, RequestDetailDto>().ReverseMap();
             CreateMap<RequestTypes, RequestTypesDto>().ReverseMap();
             CreateMap<RequestMainDraftDto, RequestMainDraft>().ReverseMap();
