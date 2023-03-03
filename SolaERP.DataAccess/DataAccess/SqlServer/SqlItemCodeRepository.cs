@@ -2,13 +2,14 @@
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Dtos.Item_Code;
 using SolaERP.Infrastructure.Entities.Item_Code;
+using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlItemCodeRepository : SqlBaseRepository<ItemCodeWithImages>, IItemCodeRepository
+    public class SqlItemCodeRepository : SqlBaseRepository, IItemCodeRepository
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -32,12 +33,27 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-
-        public async Task<ItemCodeWithImages> GetItemCodeByItemCodeAsync(string itemCode)
+        public async Task<List<ItemCode>> GetAllAsync(string businessUnit)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SELECT * FROM [dbo].[GET_ITEM_BY_ITEM_CODE](@ItemCodes)";
+                command.CommandText = ReplaceQuery("[dbo].[VW_UNI_ItemList]", new ReplaceParams { ParamName = "APT", Value = businessUnit });
+                List<ItemCode> result = new();
+
+                using var reader = await command.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
+                    result.Add(GetItemCodeFromReader(reader));
+
+                return result;
+            }
+        }
+
+
+        public async Task<ItemCodeWithImages> GetItemCodeByItemCodeAsync(string businessUnitCode, string itemCode)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = ReplaceQuery("[dbo].[GET_ITEM_BY_ITEM_CODE](@ItemCodes)", new ReplaceParams { ParamName = "APT", Value = businessUnitCode });
                 command.Parameters.AddWithValue(command, "@ItemCodes", itemCode);
                 ItemCodeWithImages result = new();
 
