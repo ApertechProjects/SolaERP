@@ -25,17 +25,17 @@ namespace SolaERP.Application.Services
         }
 
 
-        public async Task<ApiResponse<List<ItemCodeDto>>> GetAllAsync()
+        public async Task<ApiResponse<List<ItemCodeDto>>> GetAllAsync(string businessUnitCode)
         {
-            var entity = await _itemCodeRepository.GetAllAsync();
+            var entity = await _itemCodeRepository.GetAllAsync(businessUnitCode);
             var dto = _mapper.Map<List<ItemCodeDto>>(entity);
 
             return ApiResponse<List<ItemCodeDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<ItemCodeWithImagesDto>> GetItemCodeByItemCodeAsync(string itemCode)
+        public async Task<ApiResponse<ItemCodeWithImagesDto>> GetItemCodeByItemCodeAsync(string businessUnitCode, string itemCode)
         {
-            var itemCodes = await _itemCodeRepository.GetItemCodeByItemCodeAsync(itemCode);
+            var itemCodes = await _itemCodeRepository.GetItemCodeByItemCodeAsync(businessUnitCode, itemCode);
             var itemCodeResult = _mapper.Map<ItemCodeWithImagesDto>(itemCodes);
 
             return itemCodeResult != null ? ApiResponse<ItemCodeWithImagesDto>.Success(itemCodeResult, 200) :

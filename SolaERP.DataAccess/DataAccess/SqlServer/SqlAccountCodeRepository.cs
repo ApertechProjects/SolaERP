@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlAccountCodeRepository : SqlBaseRepository<AccountCode>, IAccountCodeRepository
+    public class SqlAccountCodeRepository : SqlBaseRepository, IAccountCodeRepository
     {
         private readonly IUnitOfWork _unitOfWork;
         public SqlAccountCodeRepository(IUnitOfWork unitOfWork) : base(unitOfWork)

@@ -26,9 +26,9 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetRequestApprovalInfo([FromHeader] string authToken, int requestMainId)
             => CreateActionResult(await _requestService.GetRequestApprovalInfoAsync(authToken, requestMainId));
 
-        [HttpGet("{reqeustDetailId}")]
-        public async Task<IActionResult> GetDetailApprovalInfoAsync(int reqeustDetailId)
-            => CreateActionResult(await _requestService.GetRequestDetailApprvalInfoAsync(reqeustDetailId));
+        [HttpGet("{requestDetailId}")]
+        public async Task<IActionResult> GetDetailApprovalInfoAsync(int requestDetailId)
+            => CreateActionResult(await _requestService.GetRequestDetailApprvalInfoAsync(requestDetailId));
 
         [HttpGet]
         public async Task<IActionResult> RequestFollowUsersLoadAsync(int requestMainId)

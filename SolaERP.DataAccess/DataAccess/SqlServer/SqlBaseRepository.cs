@@ -10,7 +10,7 @@ using System.Text;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlBaseRepository<TEntity> where TEntity : BaseEntity, new()
+    public class SqlBaseRepository
     {
         private readonly IUnitOfWork _unitOfWork;
         public SqlBaseRepository(IUnitOfWork unitOfWork)
