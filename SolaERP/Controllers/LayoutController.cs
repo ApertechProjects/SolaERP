@@ -16,9 +16,9 @@ namespace SolaERP.API.Controllers
             _layoutService = layoutService;
         }
 
-        [HttpGet("{layoutKey}")]
-        public async Task<IActionResult> GetUserLayout([FromHeader] string authToken, string layoutKey)
-            => CreateActionResult(await _layoutService.GetUserLayoutAsync(authToken, layoutKey));
+        [HttpGet("{key}")]
+        public async Task<IActionResult> GetUserLayout([FromHeader] string authToken, string key)
+            => CreateActionResult(await _layoutService.GetUserLayoutAsync(authToken, key));
 
         [HttpPost]
         public async Task<IActionResult> SaveLayout([FromHeader] string authToken, LayoutDto layout)

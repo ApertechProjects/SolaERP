@@ -6,6 +6,5 @@ namespace SolaERP.Infrastructure.Models
     {
         public int RequestMainId { get; set; }
         public int UserId { get; set; }
-        public CrudType Type { get; set; }
     }
 }
