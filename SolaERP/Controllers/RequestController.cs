@@ -55,7 +55,7 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetRequestCardByMainId([FromHeader] string authToken, int requestMainId)
              => CreateActionResult(await _requestService.GetRequestByRequestMainId(authToken, requestMainId));
 
- 
+
         [HttpPost]
         public async Task<IActionResult> SaveRequestAsync([FromHeader] string authToken, RequestSaveModel model)
         => CreateActionResult(await _requestService.AddOrUpdateRequestAsync(authToken, model));
@@ -78,17 +78,17 @@ namespace SolaERP.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> RequestFollowAddOrUpdateUserAsync(List<RequestFollowSaveModel> saveModel)
-            => CreateActionResult(await _requestService.AddOrUpdateUserForRequestFollowAsync(saveModel));
+        public async Task<IActionResult> RequestFollowSaveAsync(List<RequestFollowSaveModel> saveModel)
+            => CreateActionResult(await _requestService.RequestFollowSaveAsync(saveModel));
 
         [HttpDelete("{requestMainId}")]
         public async Task<IActionResult> DeleteRequest([FromHeader] string authToken, int requestMainId)
             => CreateActionResult(await _requestService.DeleteRequestAsync(authToken, requestMainId));
 
 
-        [HttpDelete]
-        public async Task<IActionResult> RequestFollowDeleteUserAsync(List<RequestFollowSaveModel> saveModel)
-            => CreateActionResult(await _requestService.DeleteUserForRequestFollowAsync(saveModel));
+        [HttpDelete("{requestFollowId}")]
+        public async Task<IActionResult> RequestFollowDeleteAsync(int requestFollowId)
+            => CreateActionResult(await _requestService.RequestFollowDeleteAsync(requestFollowId));
     }
 }
 
