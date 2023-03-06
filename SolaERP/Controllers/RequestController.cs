@@ -78,8 +78,8 @@ namespace SolaERP.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> RequestFollowSaveAsync([FromHeader] string authToken, RequestFollowSaveModel saveModel)
-            => CreateActionResult(await _requestService.RequestFollowSaveAsync(authToken, saveModel));
+        public async Task<IActionResult> RequestFollowSaveAsync(RequestFollowSaveModel saveModel)
+            => CreateActionResult(await _requestService.RequestFollowSaveAsync(saveModel));
 
         [HttpDelete("{requestMainId}")]
         public async Task<IActionResult> DeleteRequest([FromHeader] string authToken, int requestMainId)
