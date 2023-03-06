@@ -50,7 +50,7 @@ namespace SolaERP.Controllers
             if (signInResult.Succeeded)
             {
                 var newtoken = Guid.NewGuid();
-                await _userService.UpdateUserIdentifierAsync(user.UserToken.ToString(), newtoken);
+                await _userService.UpdateUserIdentifierAsync(user.Email, newtoken);
 
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(
                     new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, userdto), UserIdentifier = newtoken.ToString() }, 200));
@@ -75,12 +75,12 @@ namespace SolaERP.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Logout([FromHeader] string authToken)
+        public async Task<IActionResult> Logout(string userEmail)
         {
             await _signInManager.SignOutAsync();
 
-            var userId = await _userService.GetUserIdByTokenAsync(authToken);
-            await _userService.UpdateUserIdentifierAsync(authToken, new Guid());
+            //var userId = await _userService.GetUserIdByTokenAsync(authToken);
+            await _userService.UpdateUserIdentifierAsync(userEmail, new Guid());
 
             return CreateActionResult(ApiResponse<bool>.Success(true, 200));
         }

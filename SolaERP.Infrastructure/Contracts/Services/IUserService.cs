@@ -12,7 +12,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<UserDto>> GetUserByTokenAsync(string finderToken);
         Task<UserDto> GetUserByEmailAsync(string email);
         Task<ApiResponse<bool>> UpdateUserAsync(UserUpdateDto userUpdateDto);
-        Task<ApiResponse<NoContentDto>> UpdateUserIdentifierAsync(string finderToken, Guid newToken);
+        Task<ApiResponse<NoContentDto>> UpdateUserIdentifierAsync(string userName, Guid newToken);
         Task<ApiResponse<bool>> SendResetPasswordEmail(string email, string templatePath);
         Task<int> GetUserIdByTokenAsync(string finderToken);
         Task<string> GetUserNameByTokenAsync(string finderToken);
