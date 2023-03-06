@@ -268,8 +268,14 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<RequestFollowDto>>.Fail("Request Follow User List is empty", 400);
         }
 
-        public async Task<ApiResponse<bool>> RequestFollowSaveAsync(RequestFollowSaveModel saveModel)
+        public async Task<ApiResponse<bool>> RequestFollowSaveAsync(string finderToken, RequestFollowSaveModel saveModel)
         {
+            if (!string.IsNullOrWhiteSpace(finderToken))
+            {
+                int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+                saveModel.UserId = userId;
+            }
+
             bool result = await _requestMainRepository.RequestFollowCheckUserExistAsync(saveModel);
             if (!result)
             {
