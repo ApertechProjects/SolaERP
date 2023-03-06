@@ -11,6 +11,7 @@ using SolaERP.Infrastructure.Dtos.Buyer;
 using SolaERP.Infrastructure.Dtos.Currency;
 using SolaERP.Infrastructure.Dtos.Group;
 using SolaERP.Infrastructure.Dtos.Item_Code;
+using SolaERP.Infrastructure.Dtos.Layout;
 using SolaERP.Infrastructure.Dtos.Location;
 using SolaERP.Infrastructure.Dtos.LogInfo;
 using SolaERP.Infrastructure.Dtos.Menu;
@@ -33,6 +34,7 @@ using SolaERP.Infrastructure.Entities.Buyer;
 using SolaERP.Infrastructure.Entities.Currency;
 using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Entities.Item_Code;
+using SolaERP.Infrastructure.Entities.Layout;
 using SolaERP.Infrastructure.Entities.Location;
 using SolaERP.Infrastructure.Entities.LogInfo;
 using SolaERP.Infrastructure.Entities.Menu;
@@ -105,6 +107,11 @@ namespace SolaERP.Application.Mappers
             CreateMap<SupplierCode, SupplierCodeDto>().ForMember(dest => dest.SupplierCode, opt => opt.MapFrom(src => src.SuppCode)).
                 ForMember(dest => dest.TaxId, opt => opt.MapFrom(src => src.TaxId)).
                 ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name)).ReverseMap();
+
+            CreateMap<Layout, LayoutDto>().ForMember(dest => dest.Layout, opt => opt.MapFrom(src => src.UserLayout)).
+                ForMember(dest => dest.TabIndex, opt => opt.MapFrom(src => src.TabIndex)).
+                ForMember(dest => dest.UserLayoutId, opt => opt.MapFrom(src => src.UserLayoutId)).
+                ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.Key)).ReverseMap();
 
             CreateMap<RequestMainDto, RequestMainAll>().ReverseMap();
         }

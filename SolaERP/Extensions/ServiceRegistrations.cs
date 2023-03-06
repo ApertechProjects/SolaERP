@@ -5,12 +5,9 @@ using SolaERP.Application.Services;
 using SolaERP.DataAccess.DataAcces.SqlServer;
 using SolaERP.DataAccess.DataAccess.SqlServer;
 using SolaERP.DataAccess.Factories;
-using SolaERP.Infrastructure.Contracts.Common;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.UnitOfWork;
 using SolaERP.Infrastructure.ValidationRules;
 using SolaERP.Infrastructure.ValidationRules.UserValidation;
@@ -56,6 +53,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IUOMService, UOMService>();
             builder.Services.AddScoped<IAttachmentService, AttachmentService>();
             builder.Services.AddScoped<ISupplierService, SupplierService>();
+            builder.Services.AddScoped<ILayoutService, LayoutService>();
         }
         private static void UseRepositories(this WebApplicationBuilder builder)
         {
@@ -81,6 +79,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IAttachmentRepository, SqlAttachmentRepository>();
             builder.Services.AddScoped<IUOMRepository, SqlUOMRepository>();
             builder.Services.AddScoped<ISupplierRepository, SqlSupplierRepository>();
+            builder.Services.AddScoped<ILayoutRepository, SqlLayoutRepository>();
         }
         public static void UseValidationExtension(this WebApplicationBuilder builder)
         {
