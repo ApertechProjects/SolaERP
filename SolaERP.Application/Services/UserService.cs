@@ -114,9 +114,9 @@ namespace SolaERP.Application.Services
             return ApiResponse<NoContentDto>.Success(200);
         }
 
-        public Task<int> GetUserIdByTokenAsync(string finderToken)
+        public async Task<int> GetUserIdByTokenAsync(string finderToken)
         {
-            return _userRepository.GetUserIdByTokenAsync(finderToken);
+            return await _userRepository.GetUserIdByTokenAsync(finderToken);
         }
 
         public async Task<UserDto> GetUserByEmailAsync(string email)
