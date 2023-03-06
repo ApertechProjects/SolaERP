@@ -1,11 +1,13 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -461,5 +463,25 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<bool> RequestFollowCheckUserExistAsync(RequestFollowSaveModel saveModel)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = @"select dbo.SF_RequestFollowCheckExistUser (@UserId,@RequestMainId) AS Result ";
+
+                command.Parameters.AddWithValue(command, "@UserId", saveModel.UserId);
+                command.Parameters.AddWithValue(command, "@RequestMainId", saveModel.RequestMainId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                bool res = false;
+                string requestNo = "";
+                if (reader.Read())
+                {
+                    res = reader.Get<bool>("Result");
+                }
+
+                return res;
+            }
+        }
     }
 }

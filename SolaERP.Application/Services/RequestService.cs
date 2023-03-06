@@ -268,15 +268,16 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<RequestFollowDto>>.Fail("Request Follow User List is empty", 400);
         }
 
-        public async Task<ApiResponse<bool>> RequestFollowSaveAsync(List<RequestFollowSaveModel> saveModel)
+        public async Task<ApiResponse<bool>> RequestFollowSaveAsync(RequestFollowSaveModel saveModel)
         {
-            bool result = false;
-            for (int i = 0; i < saveModel.Count; i++)
+            bool result = await _requestMainRepository.RequestFollowCheckUserExistAsync(saveModel);
+            if (!result)
             {
-                result = await _requestMainRepository.RequestFollowSaveAsync(saveModel[i]);
+                result = await _requestMainRepository.RequestFollowSaveAsync(saveModel);
+                await _unitOfWork.SaveChangesAsync();
+                return ApiResponse<bool>.Success(result, 200);
             }
-            await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<bool>.Success(result, 200);
+            return ApiResponse<bool>.Fail("This user already exist for this request", 200);
         }
 
         public async Task<ApiResponse<bool>> RequestFollowDeleteAsync(int requestFollowId)
@@ -298,9 +299,6 @@ namespace SolaERP.Application.Services
             var data = await _requestMainRepository.RequestFollowUserLoadAsync(requestMainId);
             return data.Select(x => x.Email).ToArray();
         }
-
-
-
 
     }
 }

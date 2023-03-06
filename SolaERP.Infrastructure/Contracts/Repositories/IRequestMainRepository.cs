@@ -21,5 +21,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<bool> RequestFollowSaveAsync(RequestFollowSaveModel saveModel);
         Task<bool> RequestFollowDeleteAsync(int requestFollowId);
         Task<bool> RequestMainChangeStatusAsync(int userId, int requestMainId, int approveStatus, string comment);
+        Task<bool> RequestFollowCheckUserExistAsync(RequestFollowSaveModel saveModel);
     }
 }
