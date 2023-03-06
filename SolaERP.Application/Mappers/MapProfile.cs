@@ -108,10 +108,11 @@ namespace SolaERP.Application.Mappers
                 ForMember(dest => dest.TaxId, opt => opt.MapFrom(src => src.TaxId)).
                 ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name)).ReverseMap();
 
-            CreateMap<Layout, LayoutDto>().ForMember(dest => dest.Layout, opt => opt.MapFrom(src => src.UserLayout)).
-                ForMember(dest => dest.TabIndex, opt => opt.MapFrom(src => src.TabIndex)).
-                ForMember(dest => dest.UserLayoutId, opt => opt.MapFrom(src => src.UserLayoutId)).
-                ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.Key)).ReverseMap();
+            CreateMap<Layout, LayoutDto>().ReverseMap();
+                //ForMember(dest => dest.Layout, opt => opt.MapFrom(src => src.UserLayout)).
+                //ForMember(dest => dest.TabIndex, opt => opt.MapFrom(src => src.TabIndex)).
+                //ForMember(dest => dest.UserLayoutId, opt => opt.MapFrom(src => src.UserLayoutId)).
+                //ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.Key)).ReverseMap();
 
             CreateMap<RequestMainDto, RequestMainAll>().ReverseMap();
         }

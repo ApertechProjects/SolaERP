@@ -40,8 +40,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 using var reader = await commmand.ExecuteReaderAsync();
                 Layout result = new();
 
-                if (await reader.ReadAsync())
-                    reader.GetByEntityStructure<Layout>();
+                if (reader.Read())
+                    result = reader.GetByEntityStructure<Layout>();
 
                 return result;
             }

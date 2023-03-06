@@ -5,9 +5,6 @@ namespace SolaERP.Infrastructure.Entities.Layout
     public class Layout : BaseEntity
     {
         [DbIgnore]
-        public int UserLayoutId { get; set; }
-
-        [DbIgnore]
         public int UserId { get; set; }
 
         [DbIgnore]
