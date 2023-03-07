@@ -7,6 +7,7 @@ namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [Authorize]
+    [Authorize]
     public class UserController : CustomBaseController
     {
         private readonly IUserService _userService;

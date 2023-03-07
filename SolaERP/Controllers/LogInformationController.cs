@@ -7,6 +7,7 @@ namespace SolaERP.Controllers
 {
     [ApiController]
     [Authorize]
+    [Authorize]
     public class LogInformationController : CustomBaseController
     {
         private readonly ILogInformationService _logInformationService;

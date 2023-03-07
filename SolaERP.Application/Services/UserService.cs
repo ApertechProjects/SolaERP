@@ -104,11 +104,11 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Fail("Password does not match with ConfirmPassword", 400);
         }
 
-        public async Task<ApiResponse<NoContentDto>> UpdateUserIdentifierAsync(string userName, Guid newToken)
+        public async Task<ApiResponse<NoContentDto>> UpdateUserIdentifierAsync(string finderToken, Guid newToken)
         {
-            var user = await _userRepository.GetUserByEmailAsync(userName);
+            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
 
-            var isSuccessfull = await _userRepository.UpdateUserTokenAsync(user.Id, newToken);
+            var isSuccessfull = await _userRepository.UpdateUserTokenAsync(userId, newToken);
             await _unitOfWork.SaveChangesAsync();
 
             return ApiResponse<NoContentDto>.Success(200);

@@ -6,6 +6,7 @@ namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [Authorize]
+    [Authorize]
     public class MenuController : CustomBaseController
     {
         private readonly IMenuService _menuService;

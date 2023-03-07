@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SolaERP.Business.CommonLogic;
 using SolaERP.Business.Dtos.Wrappers;
 using SolaERP.Business.Models;
@@ -7,6 +8,7 @@ namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class GeneralController : ControllerBase
     {
         public GeneralController(ConfHelper confHelper)

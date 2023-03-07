@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
+    [Authorize]
     public class GroupController : CustomBaseController
     {
         private readonly IGroupService _groupService;
