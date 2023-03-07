@@ -33,7 +33,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public async Task<List<MenuWithPrivilages>> GetUserMenuWithPrivillagesAsync(int userId)
+        public async Task<List<MenuWithPrivilages>> GetUserMenuWithPrivilegesAsync(int userId)
         {
             List<MenuWithPrivilages> userMenus = new List<MenuWithPrivilages>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)

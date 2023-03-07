@@ -15,17 +15,24 @@ namespace SolaERP.Controllers
             _menuService = menuService;
         }
 
+        /// <summary>
+        /// Gets the list of users.
+        /// </summary>
+        /// <remarks>
+        /// This endpoint returns the list of all users in the system.
+        /// </remarks>
+        /// <returns>The list of users.</returns>
         [HttpGet]
-        public async Task<IActionResult> GetUserMenusWithChilds([FromHeader] string authToken)
-            => CreateActionResult(await _menuService.GetUserMenusWithChildsAsync(authToken));
+        public async Task<IActionResult> GetUserMenusWithChildren([FromHeader] string authToken)
+            => CreateActionResult(await _menuService.GetUserMenusWithChildrenAsync(authToken));
 
         [HttpGet]
-        public async Task<IActionResult> GetUserMenusWithPrivilages([FromHeader] string authToken)
-            => CreateActionResult(await _menuService.GetUserMenusWithPrivilagesAsync(authToken));
+        public async Task<IActionResult> GetUserMenusWithPrivileges([FromHeader] string authToken)
+            => CreateActionResult(await _menuService.GetUserMenusWithPrivilegesAsync(authToken));
 
         [HttpGet]
-        public async Task<IActionResult> GetGroupMenuWithPrivillageList([FromHeader] string authToken, int groupId)
-            => CreateActionResult(await _menuService.GetGroupMenuWithPrivillageListByGroupIdAsync(authToken, groupId));
+        public async Task<IActionResult> GetGroupMenuWithPrivilegeList([FromHeader] string authToken, int groupId)
+            => CreateActionResult(await _menuService.GetGroupMenuWithPrivilegeListByGroupIdAsync(authToken, groupId));
 
         [HttpGet]
         public async Task<IActionResult> GetAdditionalPrivilegeAccessAsync(string authToken)

@@ -6,9 +6,9 @@ namespace SolaERP.Infrastructure.Contracts.Services
 {
     public interface IMenuService
     {
-        Task<ApiResponse<List<ParentMenuDto>>> GetUserMenusWithChildsAsync(string finderToken);
-        Task<ApiResponse<List<MenuWithPrivilagesDto>>> GetUserMenusWithPrivilagesAsync(string finderToken);
-        Task<ApiResponse<GroupMenuResponseDto>> GetGroupMenuWithPrivillageListByGroupIdAsync(string finderToken, int groupId);
+        Task<ApiResponse<List<ParentMenuDto>>> GetUserMenusWithChildrenAsync(string finderToken);
+        Task<ApiResponse<List<MenuWithPrivilagesDto>>> GetUserMenusWithPrivilegesAsync(string finderToken);
+        Task<ApiResponse<GroupMenuResponseDto>> GetGroupMenuWithPrivilegeListByGroupIdAsync(string finderToken, int groupId);
         Task<ApiResponse<AdditionalPrivilegeAccessDto>> GetAdditionalPrivilegeAccessAsync(string authToken);
     }
 }

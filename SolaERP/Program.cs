@@ -88,6 +88,10 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Description = "Our test swagger client",
     });
+
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, "ApiDoc.xml");
+    c.IncludeXmlComments(xmlPath);
+
     var jwtSecurityScheme = new OpenApiSecurityScheme
     {
         Scheme = "bearer",

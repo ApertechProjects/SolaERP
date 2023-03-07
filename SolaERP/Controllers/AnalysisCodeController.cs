@@ -15,6 +15,10 @@ namespace SolaERP.Controllers
             _analysisCodeService = analysisCodeService;
         }
 
+        /// <summary>
+        ///Retrieve a list of all analysis codes
+        /// </summary>
+        /// <remarks>This endpoint retrieves a list of all analysis codes in the system.</remarks>
         [HttpPost]
         public async Task<IActionResult> GetAnalysisCodes(AnalysisCodeGetModel getRequest)
             => CreateActionResult(await _analysisCodeService.GetAnalysisCodesAsync(getRequest));

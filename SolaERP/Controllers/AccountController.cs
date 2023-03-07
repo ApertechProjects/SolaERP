@@ -33,10 +33,16 @@ namespace SolaERP.Controllers
         }
 
 
+        /// <summary>
+        /// Sends Reset Password message template to given email.Then redirects to ResetPassword
+        /// </summary>
         [HttpGet("{email}")]
         public async Task<IActionResult> SendResetPasswordEmail(string email)
             => CreateActionResult(await _userService.SendResetPasswordEmail(email, @"C:\Users\HP\source\repos\SolaERP\SolaERP\Templates\EmailTemplate.html"));
 
+        /// <summary>
+        /// Logs user into system and returns token
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequestModel dto)
         {
@@ -58,6 +64,9 @@ namespace SolaERP.Controllers
             return CreateActionResult(ApiResponse<AccountResponseDto>.Fail("Email or password is incorrect", 400));
         }
 
+        /// <summary>
+        /// Creates a user with given input
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> Register(UserDto dto)
         {
@@ -73,7 +82,6 @@ namespace SolaERP.Controllers
             return CreateActionResult(ApiResponse<AccountResponseDto>.Fail("This email is already exsist", 400));
         }
 
-
         [HttpPost]
         public async Task<IActionResult> Logout(string userEmail)
         {
@@ -85,6 +93,9 @@ namespace SolaERP.Controllers
             return CreateActionResult(ApiResponse<bool>.Success(true, 200));
         }
 
+        /// <summary>
+        /// Allows users to reset their password if they forget it.
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> ResetPassword(ResetPasswordModel resetPasswordrequestDto)
             => CreateActionResult(await _userService.ResetPasswordAsync(resetPasswordrequestDto));

@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SolaERP.Business.CommonLogic;
 using SolaERP.Business.Models;
-using static SolaERP.Business.CommonLogic.GetData;
 
 namespace SolaERP.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]/[action]")]
-    public class OptionController : ControllerBase
+    //[ApiController]
+    //[Route("api/[controller]/[action]")]
+    public class OptionController
     {
         public ConfHelper ConfHelper { get; }
         public OptionController(ConfHelper confHelper)
@@ -25,9 +24,9 @@ namespace SolaERP.Controllers
         [HttpDelete]
         public async void SetClassStructureSP()
         {
-            string result =(await GetData.FromQuery($"EXEC SP_ApproveStageRoles_Load 0", ConfHelper.DevelopmentUrl)).GetDataTableColumNames();
+            string result = (await GetData.FromQuery($"EXEC SP_ApproveStageRoles_Load 0", ConfHelper.DevelopmentUrl)).GetDataTableColumNames();
         }
-         
+
         #endregion
 
         [HttpGet]
