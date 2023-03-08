@@ -12,15 +12,21 @@ namespace SolaERP.DataAccess.Extensions
             return parameter;
         }
 
-        public static IDataParameterCollection AddWithValue(this IDataParameterCollection parameters, IDbCommand command, string parameterName, object value)
+        public static void AddWithValue(this IDataParameterCollection parameters, IDbCommand command, string parameterName, object value)
         {
             IDbDataParameter parameter = command.CreateParameter();
             parameter.ParameterName = parameterName;
-            parameter.Value = value;
+            parameter.Value = value == null ? DBNull.Value : value;
             command.Parameters.Add(parameter);
-
-            return command.Parameters;
         }
 
+        public static void AddOutPutParameter(this IDataParameterCollection parameters, IDbCommand command, string parameterName)
+        {
+            IDbDataParameter parameter = command.CreateParameter();
+            parameter.ParameterName = parameterName;
+            parameter.Direction = ParameterDirection.Output;
+            parameter.DbType = DbType.Int32;
+            command.Parameters.Add(parameter);
+        }
     }
 }

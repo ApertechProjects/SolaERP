@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>C:\Users\DELL\Desktop\solaerp\SolaERP\bin\Debug\net6.0\ApiDoc.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Templates\images\animated_header.gif" />
+    <None Remove="Templates\images\bee.png" />
+    <None Remove="Templates\images\body_background_2.png" />
+    <None Remove="Templates\images\bottom_img.png" />
+    <None Remove="Templates\images\instagram2x.png" />
+    <None Remove="Templates\images\logo.png" />
+    <None Remove="Templates\images\twitter2x.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11" />
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="6.0.1" />
+    <PackageReference Include="Roc.Serilog.Sinks.MSSqlServer" Version="5.1.6" />
+    <PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+    <PackageReference Include="System.Security.Cryptography.Cng" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SolaERP.Application\SolaERP.Application.csproj" />
+    <ProjectReference Include="..\SolaERP.SignalR\SolaERP.SignalR.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Templates\images\animated_header.gif" />
+    <Resource Include="Templates\images\bee.png" />
+    <Resource Include="Templates\images\body_background_2.png" />
+    <Resource Include="Templates\images\bottom_img.png" />
+    <Resource Include="Templates\images\instagram2x.png" />
+    <Resource Include="Templates\images\logo.png" />
+    <Resource Include="Templates\images\twitter2x.png" />
+  </ItemGroup>
+
+</Project>

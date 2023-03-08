@@ -1,0 +1,22 @@
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SolaERP.Infrastructure.Contracts.Services;
+
+namespace SolaERP.Controllers
+{
+    [Route("api/[controller]/[action]")]
+    [ApiController]
+    [Authorize]
+    public class StatusController : CustomBaseController
+    {
+        private readonly IStatusService _statusService;
+        public StatusController(IStatusService statusService)
+        {
+            _statusService = statusService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllAsync()
+            => CreateActionResult(await _statusService.GetAllAsync());
+    }
+}

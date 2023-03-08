@@ -1,8 +1,7 @@
 ﻿using SolaERP.Infrastructure.Attributes;
 using SolaERP.Infrastructure.Entities;
-using System;
 using System.Data;
-using System.Linq;
+using System.Reflection;
 
 namespace SolaERP.DataAccess.Extensions
 {
@@ -19,25 +18,64 @@ namespace SolaERP.DataAccess.Extensions
             return returnType;
         }
 
-        public static T GetByEntityStructure<T>(this IDataReader reader) where T : BaseEntity, new()
+        /// <summary>
+        ///This code implements a method that reads data from an IDataReader and returns an object of type T, where T is a subclass of BaseEntity.
+        ///The method uses reflection to access the properties of the T type, and it checks each property to see if it has the DbIgnoreAttribute attribute.
+        ///If it does, the property is skipped. If the property is a subclass of BaseEntity, the method invokes itself recursively to get the values for the properties of the sub-entity. 
+        ///Finally, the values from the IDataReader are set to the properties of the returned object.
+        ///</summary>
+        /// <typeparam name="T">The type of the entity object to return.</typeparam>
+        /// <param name="reader">The IDataReader to convert.</param>
+        /// <returns>An entity object of type T.</returns>
+        public static T GetByEntityStructure<T>(this IDataReader reader, params string[] ignoredProperties) where T : BaseEntity, new()
         {
             var obj = new T();
-            var type = typeof(T);
-            var properties = type.GetProperties();
+            var properties = typeof(T).GetProperties();
+
             foreach (var item in properties)
             {
-                var itemAttribute = item.GetCustomAttributes(typeof(DbIgnoreAttribute), true);
-                var dbIgnore = itemAttribute.Select(x => x.GetType() == typeof(DbIgnoreAttribute)).Count();
-                string propName = item.Name;
+                // Check if the property has a DbIgnoreAttribute attribute, if so, skip it
+                if (item.GetCustomAttributes(typeof(DbIgnoreAttribute), true).Any())
+                    continue;
 
-                if (dbIgnore == 0)
+                if (ignoredProperties.Contains(item.Name)) continue;
+
+                string propName = item.Name;
+                object objectResult = null;
+
+                // Check if the property has a DbColumnAttribute attribute, if so, Get DbColumn name from it
+                var columnName = item.GetCustomAttribute(typeof(DbColumnAttribute), true);
+                if (columnName is not null)
                 {
-                    var value = reader[propName];
-                    if (value != DBNull.Value && value != null)
-                        item.SetValue(obj, value);
+                    DbColumnAttribute columnActualName = columnName as DbColumnAttribute;
+                    if (columnActualName != null) { propName = columnActualName.ColumnName; }
+                }
+
+                // Check if the property type is a subclass of BaseEntity
+                if (item.PropertyType.IsSubclassOf(typeof(BaseEntity)))
+                {
+                    var methodInfo = typeof(DataReaderExtension).GetMethod("GetByEntityStructure", BindingFlags.Static | BindingFlags.Public);
+                    // If the method was found, invoke it and store the result
+                    if (methodInfo != null)
+                    {
+                        objectResult = methodInfo.MakeGenericMethod(item.PropertyType).Invoke(null, new object[] { reader });
+                        CheckObjectResultAndSetToEntity(item, obj, objectResult);
+                    }
+                }
+                else
+                {
+                    // If the property type is not a subclass of BaseEntity, get the value from the reader
+                    objectResult = reader[propName];
+                    CheckObjectResultAndSetToEntity(item, obj, objectResult);
                 }
             }
             return obj;
+        }
+
+        private static void CheckObjectResultAndSetToEntity(PropertyInfo property, object entity, object objectResult)
+        {
+            if (objectResult != DBNull.Value && objectResult != null)
+                property.SetValue(entity, objectResult);
         }
 
     }

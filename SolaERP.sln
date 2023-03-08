@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolaERP", "SolaERP\SolaERP.csproj", "{9E1D639B-9689-4F00-B5AB-3EAA8E325BF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.API", "SolaERP\SolaERP.API.csproj", "{9E1D639B-9689-4F00-B5AB-3EAA8E325BF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolaERP.Infrastructure", "SolaERP.Infrastructure\SolaERP.Infrastructure.csproj", "{2F345001-FDA9-4C29-8875-2F052C7B704F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.Infrastructure", "SolaERP.Infrastructure\SolaERP.Infrastructure.csproj", "{2F345001-FDA9-4C29-8875-2F052C7B704F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolaERP.DataAccess", "SolaERP.DataAccess\SolaERP.DataAccess.csproj", "{5658310C-0DAA-4F09-935E-7ABDD9EF0BB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.DataAccess", "SolaERP.DataAccess\SolaERP.DataAccess.csproj", "{5658310C-0DAA-4F09-935E-7ABDD9EF0BB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolaERP.Application", "SolaERP.Application\SolaERP.Application.csproj", "{C9CB4045-DAF3-49FD-B253-118F94C21BDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.Application", "SolaERP.Application\SolaERP.Application.csproj", "{C9CB4045-DAF3-49FD-B253-118F94C21BDA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.SignalR", "SolaERP.SignalR\SolaERP.SignalR.csproj", "{9296A16F-A3C7-482E-B0FD-3C43F2216926}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolaERP.Console", "SolaERP.Console\SolaERP.Console.csproj", "{CA97EFA2-87E1-4A63-9193-17B0C2642DF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{C9CB4045-DAF3-49FD-B253-118F94C21BDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9CB4045-DAF3-49FD-B253-118F94C21BDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9CB4045-DAF3-49FD-B253-118F94C21BDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9296A16F-A3C7-482E-B0FD-3C43F2216926}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9296A16F-A3C7-482E-B0FD-3C43F2216926}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9296A16F-A3C7-482E-B0FD-3C43F2216926}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9296A16F-A3C7-482E-B0FD-3C43F2216926}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA97EFA2-87E1-4A63-9193-17B0C2642DF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA97EFA2-87E1-4A63-9193-17B0C2642DF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA97EFA2-87E1-4A63-9193-17B0C2642DF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA97EFA2-87E1-4A63-9193-17B0C2642DF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
