@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SolaERP.API</name>
+    </assembly>
+    <members>
+        <member name="M:SolaERP.Business.CommonLogic.Utility.GetMaxId(System.String,SolaERP.Business.Models.ConfHelper)">
+            <summary>
+               TableNameWithSchema param format = "SchemaName.TableName" 
+            </summary>
+            <param name="TableNameWithSchema"></param>
+            <param name="confHelper"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SolaERP.Controllers.AccountCodeController.GetAccountCodeList">
+            <summary>
+            Get a list of all account codes
+            </summary>
+            <remarks>This endpoint returns a list of all account codes in the accounting system.</remarks>
+        </member>
+        <member name="M:SolaERP.Controllers.AccountCodeController.GetAccountCodesByBusinessUnitId(System.String)">
+             <summary>
+            Get a list of account codes for a specific business unit
+             </summary>
+             <remarks>This endpoint returns a list of account codes that are associated with a specific business unit in the accounting system.</remarks>
+             <param name="businessUnit">The unique identifier of the business unit for which to retrieve account codes.</param>
+        </member>
+        <member name="M:SolaERP.Controllers.AccountController.SendResetPasswordEmail(System.String)">
+            <summary>
+            Sends Reset Password message template to given email.Then redirects to ResetPassword
+            </summary>
+        </member>
+        <member name="M:SolaERP.Controllers.AccountController.Login(SolaERP.Infrastructure.Dtos.Auth.LoginRequestModel)">
+            <summary>
+            Logs user into system and returns token
+            </summary>
+        </member>
+        <member name="M:SolaERP.Controllers.AccountController.Register(SolaERP.Infrastructure.Dtos.UserDto.UserDto)">
+            <summary>
+            Creates a user with given input
+            </summary>
+        </member>
+        <member name="M:SolaERP.Controllers.AccountController.ResetPassword(SolaERP.Infrastructure.Models.ResetPasswordModel)">
+            <summary>
+            Allows users to reset their password if they forget it.
+            </summary>
+        </member>
+        <member name="M:SolaERP.Controllers.AnalysisCodeController.GetAnalysisCodes(SolaERP.Infrastructure.Models.AnalysisCodeGetModel)">
+             <summary>
+            Retrieve a list of all analysis codes
+             </summary>
+             <remarks>This endpoint retrieves a list of all analysis codes in the system.</remarks>
+        </member>
+        <member name="M:SolaERP.Controllers.AttachmentController.GetAttachmentsWithFilesAsync(System.Int32)">
+             <summary>
+            Retrieve attachment details with file data by ID
+             </summary>
+             <param name="attachmentId">ID of the attachment to retrieve.</param>
+        </member>
+        <member name="M:SolaERP.Controllers.AttachmentController.GetAttachmentsAsync(SolaERP.Infrastructure.Models.AttachmentListGetModel)">
+             <summary>
+            Get a list of attachments based on the specified criteria.
+             </summary>
+             <remarks>This endpoint allows you to retrieve a list of attachments based on the specified parameters.The attachments can be filtered by source ID, source type ID, attachment type and attachment sub-type ID.</remarks>
+        </member>
+        <member name="M:SolaERP.Controllers.BusinessUnitController.GetBusinessUnitList">
+             <summary>
+            Gets all Business unit List
+             </summary>
+        </member>
+        <member name="M:SolaERP.Controllers.BusinessUnitController.GetBusinessUnitListByUser(System.String)">
+             <summary>
+            Gets all Business units for User
+             </summary>
+             <remarks>Returns all business unit list which available for given User. (authToken = userIdentifier)</remarks>
+             <param name="authToken">user identifier token</param>
+        </member>
+        <member name="M:SolaERP.Controllers.BusinessUnitController.GetBusinessUnitListForGroups(System.Int32)">
+            <summary>
+            Gets all Business units for Group
+            </summary>
+            <remarks>Returns All Business Unit List which available for given groupId</remarks>
+            <param name="groupId">groupd id for check</param>
+        </member>
+        <member name="M:SolaERP.Controllers.MenuController.GetUserMenusWithChildren(System.String)">
+            <summary>
+            Gets the list of users.
+            </summary>
+            <remarks>
+            This endpoint returns the list of all users in the system.
+            </remarks>
+            <returns>The list of users.</returns>
+        </member>
+        <member name="M:SolaERP.Controllers.UserController.UpdateUser(SolaERP.Infrastructure.Dtos.UserDto.UserDto)">
+             <summary>
+            Updates the given user by id
+             </summary>
+             <remarks>Users who are authenticated and authorized to perform the action will be able to access the endpoint.</remarks>
+        </member>
+        <member name="M:SolaERP.Controllers.UserController.RemoveUser(System.String)">
+             <summary>
+            Removes the user which referenced with authToken
+             </summary>
+             <remarks>Users who are authenticated and authorized to perform the action will be able to access the</remarks>
+             <param name="authToken">userIdentifier which returns in Login or Register.</param>
+        </member>
+        <member name="M:SolaERP.Controllers.UserController.GetActiveUsersAsync">
+             <summary>
+            Gets all active users for user list
+             </summary>
+        </member>
+        <member name="T:SolaERP.Extensions.ServiceRegistrations">
+            <summary>
+            This class is container for DataAcces Services 
+            </summary>
+        </member>
+    </members>
+</doc>
