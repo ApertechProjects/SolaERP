@@ -1,6 +1,6 @@
 ﻿namespace SolaERP.Infrastructure.Enums
 {
-    public enum ApproveStatuses
+    public enum ApproveStatus
     {
         Approved = 1,
         Rejected = 2,

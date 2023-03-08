@@ -60,8 +60,8 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _approveStageMainService.SaveApproveStageMainAsync(authToken, approvalStageSaveVM));
 
         [HttpGet]
-        public async Task<IActionResult> GetApprovalStutuses()
-            => CreateActionResult(await _approveStageMainService.GetApproveStatuses());
+        public async Task<IActionResult> GetApprovalStatus()
+            => CreateActionResult(await _approveStageMainService.GetApproveStatus());
     }
 
 }

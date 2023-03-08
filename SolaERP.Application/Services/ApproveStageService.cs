@@ -138,7 +138,7 @@ namespace SolaERP.Application.Services
             return ApiResponse<ApprovalStageSaveVM>.Success(approvalStageSaveVM, 200);
         }
 
-        public async Task<ApiResponse<List<ApprovalStatusDto>>> GetApproveStatuses()
+        public async Task<ApiResponse<List<ApprovalStatusDto>>> GetApproveStatus()
         {
             var approvalStatuses = await _approveStageMainRepository.GetApprovalStatusList();
             var approvalStatusDto = _mapper.Map<List<ApprovalStatusDto>>(approvalStatuses);
