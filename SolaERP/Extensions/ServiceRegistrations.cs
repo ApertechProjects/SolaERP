@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using SolaERP.Application.Identity_Server;
 using SolaERP.Application.Services;
+using SolaERP.Application.Validations.AttachmentValidation;
 using SolaERP.DataAccess.DataAcces.SqlServer;
 using SolaERP.DataAccess.DataAccess.SqlServer;
 using SolaERP.DataAccess.Factories;
@@ -84,6 +85,7 @@ namespace SolaERP.Extensions
         public static void UseValidationExtension(this WebApplicationBuilder builder)
         {
             builder.Services.AddValidatorsFromAssemblyContaining<UserValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<AttachmentValidation>();
             builder.Services.AddScoped<ValidationFilter>();
         }
         public static void UseIdentityService(this WebApplicationBuilder builder)
