@@ -5,7 +5,7 @@
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DocumentationFile>C:\Users\DELL\Desktop\solaerp\SolaERP\bin\Debug\net6.0\ApiDoc.xml</DocumentationFile>
+    <DocumentationFile>ApiDoc.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
