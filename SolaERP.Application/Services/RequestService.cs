@@ -36,7 +36,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<List<RequestMainDto>>> GetAllAsync(RequestMainGetModel model)
         {
-            var mainRequest = await _requestMainRepository.GetAllAsync(model.BusinessUnitId, string.Join(',', model.ItemCodes), model.DateFrom, model.DateTo, model.ApproveStatus, model.Status);
+            var mainRequest = await _requestMainRepository.GetAllAsync(model);
             var mainRequestDto = _mapper.Map<List<RequestMainDto>>(mainRequest);
 
             if (mainRequestDto != null && mainRequestDto.Count > 0)
@@ -241,7 +241,7 @@ namespace SolaERP.Application.Services
         public async Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(string finderToken, RequestWFAGetModel requestWFAGetParametersDto)
         {
             int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
-            var mainreq = await _requestMainRepository.GetWaitingForApprovalsAsync(userId, requestWFAGetParametersDto.BusinessUnitId, requestWFAGetParametersDto.DateFrom, requestWFAGetParametersDto.DateTo, string.Join(',', requestWFAGetParametersDto.ItemCode));
+            var mainreq = await _requestMainRepository.GetWaitingForApprovalsAsync(userId, requestWFAGetParametersDto);
 
             var mainRequestDto = _mapper.Map<List<RequestWFADto>>(mainreq);
 

@@ -1,20 +1,18 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlRequestMainRepository : IRequestMainRepository
+    public class SqlRequestMainRepository : SqlBaseRepository, IRequestMainRepository
     {
         private readonly IUnitOfWork _unitOfWork;
-        public SqlRequestMainRepository(IUnitOfWork unitOfWork)
+        public SqlRequestMainRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -128,17 +126,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<RequestMain>> GetWaitingForApprovalsAsync(int userId, int businessUnitId, DateTime dateFrom, DateTime dateTo, string itemCode)
+        public async Task<List<RequestMain>> GetWaitingForApprovalsAsync(int userId, RequestWFAGetModel requestWFA)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_RequestMainWFA @UserId,@BusinessUnitId,@DateFrom,@DateTo,@ItemCodes";
+                command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainWFA]", new ReplaceParams { ParamName = "APT", Value = requestWFA.BusinessUnitCode });
 
                 command.Parameters.AddWithValue(command, "@UserId", userId);
-                command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
-                command.Parameters.AddWithValue(command, "@DateFrom", dateFrom);
-                command.Parameters.AddWithValue(command, "@DateTo", dateTo);
-                command.Parameters.AddWithValue(command, "@ItemCodes", string.Join(',', itemCode));
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", requestWFA.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@DateFrom", requestWFA.DateFrom);
+                command.Parameters.AddWithValue(command, "@DateTo", requestWFA.DateTo);
+                command.Parameters.AddWithValue(command, "@ItemCode", string.Join(',', requestWFA.ItemCode));
 
                 using var reader = await command.ExecuteReaderAsync();
 
@@ -237,8 +235,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RequestMainId = reader.Get<int>("RequestMainId"),
                 BusinessUnitCode = reader.Get<string>("BusinessUnitCode"),
                 ApproveStatus = reader.Get<int>("ApproveStatus"),
-                EmployeeCode = reader.Get<string>("EmployeeCode"),
-                EmployeeName = reader.Get<string>("EmployeeName"),
+                Buyer = reader.Get<string>("Buyer"),
+                BuyerName = reader.Get<string>("BuyerName"),
                 RequestType = reader.Get<string>("RequestType"),
                 RequestNo = reader.Get<string>("RequestNo"),
                 EntryDate = reader.Get<DateTime>("EntryDate"),
@@ -379,18 +377,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<RequestMainAll>> GetAllAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo, int[] ApproveStatus, int[] Status)
+        public async Task<List<RequestMainAll>> GetAllAsync(RequestMainGetModel requestMain)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_RequestMainAll @BusinessUnitId,@ItemCodes,@DateFrom,@DateTo,@ApproveStatus,@Status";
+                command.CommandText = "exec [dbo].[SP_RequestMainAll] @BusinessUnitId,@ItemCode,@DateFrom,@DateTo,@ApproveStatus,@Status";
 
-                command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
-                command.Parameters.AddWithValue(command, "@ItemCodes", itemCode);
-                command.Parameters.AddWithValue(command, "@DateFrom", dateFrom);
-                command.Parameters.AddWithValue(command, "@DateTo", dateTo);
-                command.Parameters.AddWithValue(command, "@ApproveStatus", string.Join(',', ApproveStatus));
-                command.Parameters.AddWithValue(command, "@Status", string.Join(',', Status));
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", requestMain.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@ItemCode", requestMain.ItemCodes);
+                command.Parameters.AddWithValue(command, "@DateFrom", requestMain.DateFrom);
+                command.Parameters.AddWithValue(command, "@DateTo", requestMain.DateTo);
+                command.Parameters.AddWithValue(command, "@ApproveStatus", string.Join(',', requestMain.ApproveStatus));
+                command.Parameters.AddWithValue(command, "@Status", string.Join(',', requestMain.Status));
 
                 using var reader = await command.ExecuteReaderAsync();
 
