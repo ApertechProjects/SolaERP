@@ -9,7 +9,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
     {
         Task<ApiResponse<List<RequestMainDto>>> GetAllAsync(RequestMainGetModel requestMainGet);
         Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(string finderToken, RequestWFAGetModel requestWFAGetParametersDto);
-        Task<bool> RemoveRequestDetailAsync(RequestDetailDto requestDetailDto);
+        Task<bool> RemoveRequestDetailAsync(int requestDetailId);
         Task<ApiResponse<List<RequestTypesDto>>> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId);
         Task<ApiResponse<bool>> RequestMainChangeStatusAsync(string finderToken, RequestChangeStatusModel changeStatusParametersDto);
         Task<ApiResponse<bool>> RequestSendToApproveAsync(string authToken, int requestMainId);

@@ -87,7 +87,7 @@ namespace SolaERP.Extensions
         {
             builder.Services.AddValidatorsFromAssemblyContaining<UserValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<AttachmentValidation>();
-            builder.Services.AddValidatorsFromAssemblyContaining<RequestValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<RequestMainValidation>();
             builder.Services.AddScoped<ValidationFilter>();
         }
         public static void UseIdentityService(this WebApplicationBuilder builder)

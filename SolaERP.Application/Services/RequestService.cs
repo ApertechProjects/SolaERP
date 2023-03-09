@@ -27,10 +27,9 @@ namespace SolaERP.Application.Services
             _mailService = mailService;
         }
 
-        public async Task<bool> RemoveRequestDetailAsync(RequestDetailDto requestDetailDto)
+        public async Task<bool> RemoveRequestDetailAsync(int requestDetailId)
         {
-            var entity = _mapper.Map<RequestDetail>(requestDetailDto);
-            var result = await _requestDetailRepository.RemoveAsync(entity.RequestDetailId);
+            var result = await _requestDetailRepository.RemoveAsync(requestDetailId);
             return result;
         }
 
@@ -189,7 +188,7 @@ namespace SolaERP.Application.Services
                     requestDetailDto.RequestMainId = resultModel.RequestMainId;
                     if (requestDetailDto.Type == "remove")
                     {
-                        await RemoveRequestDetailAsync(requestDetailDto);
+                        await RemoveRequestDetailAsync(requestDetailDto.RequestDetailId);
                     }
                     else
                     {

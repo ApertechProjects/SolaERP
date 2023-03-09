@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Validations.RequestValidation
 {
-    public class RequestValidation : AbstractValidator<RequestSaveModel>
+    public class RequestMainValidation : AbstractValidator<RequestSaveModel>
     {
-        public RequestValidation()
+        public RequestMainValidation()
         {
             RuleFor(x => x.RequestTypeId).NotNull().WithMessage("{PropertyName}: Please enter {PropertyName}").GreaterThanOrEqualTo(0).WithMessage("{PropertyName}: Please enter valid data");
             RuleFor(x => x.BusinessUnitId).NotNull().WithMessage("{PropertyName}: Please enter {PropertyName}").GreaterThanOrEqualTo(0).WithMessage("{PropertyName}: Please enter valid data");

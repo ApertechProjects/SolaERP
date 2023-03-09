@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SolaERP.Controllers;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Layout;
+using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.API.Controllers
 {
@@ -27,7 +28,7 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _layoutService.SaveLayoutAsync(authToken, layout));
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteLayout([FromHeader] string authToken, LayoutDto layout)
+        public async Task<IActionResult> DeleteLayout([FromHeader] string authToken, LayoutDeleteModel layout)
             => CreateActionResult(await _layoutService.DeleteLayoutAsync(authToken, layout));
     }
 }

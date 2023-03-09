@@ -4,6 +4,7 @@ using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Layout;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Entities.Layout;
+using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 
 namespace SolaERP.Application.Services
@@ -23,7 +24,7 @@ namespace SolaERP.Application.Services
             _layoutRepository = layoutRepository;
         }
 
-        public async Task<ApiResponse<bool>> DeleteLayoutAsync(string finderToken, LayoutDto layout)
+        public async Task<ApiResponse<bool>> DeleteLayoutAsync(string finderToken, LayoutDeleteModel layout)
         {
             var entity = _mapper.Map<Layout>(layout);
             entity.UserId = await _userRepository.GetUserIdByTokenAsync(finderToken);
