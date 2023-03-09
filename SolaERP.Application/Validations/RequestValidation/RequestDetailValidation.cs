@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Models;
 using System;
 using System.Collections.Generic;
@@ -8,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Validations.RequestValidation
 {
-    public class RequestDetailValidation : AbstractValidator<RequestSaveModel>
+    public class RequestDetailValidation : AbstractValidator<RequestDetailDto>
     {
         public RequestDetailValidation()
         {
-            RuleFor(x=)
+            //RuleFor(x=)
         }
     }
 }
