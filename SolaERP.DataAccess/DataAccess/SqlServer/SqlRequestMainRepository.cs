@@ -74,16 +74,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<RequestMainDraft>> GetMainRequestDraftsAsync(int businessUnitId, string itemCode, DateTime dateFrom, DateTime dateTo)
+        public async Task<List<RequestMainDraft>> GetMainRequestDraftsAsync(RequestMainDraftModel requestMain)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_RequestMainDrafts @BusinessUnitId,@ItemCodes,@DateFrom,@DateTo";
+                command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainDrafts]", new ReplaceParams { ParamName = "APT", Value = requestMain.BusinessUnitCode });
 
-                command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
-                command.Parameters.AddWithValue(command, "@ItemCodes", string.Join(',', itemCode));
-                command.Parameters.AddWithValue(command, "@DateFrom", dateFrom);
-                command.Parameters.AddWithValue(command, "DateTo", dateTo);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", requestMain.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@ItemCode", string.Join(',', requestMain.ItemCodes));
+                command.Parameters.AddWithValue(command, "@DateFrom", requestMain.DateFrom);
+                command.Parameters.AddWithValue(command, "DateTo", requestMain.DateTo);
 
                 using var reader = await command.ExecuteReaderAsync();
 
@@ -154,13 +154,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC dbo.SP_RequestMainApproveAmendment @UserId,@BusinessUnitId,@DateFrom,@DateTo,@ItemCodes";
+                command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainApproveAmendment]", new ReplaceParams { ParamName = "APT", Value = requestParametersDto.BusinessUnitCode });
 
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", requestParametersDto.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@DateFrom", requestParametersDto.DateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", requestParametersDto.DateTo);
-                command.Parameters.AddWithValue(command, "@ItemCodes", string.Join(',', requestParametersDto.ItemCodes));
+                command.Parameters.AddWithValue(command, "@ItemCode", string.Join(',', requestParametersDto.ItemCodes));
 
                 List<RequestAmendment> mainRequestsForAmendment = new();
                 using var reader = await command.ExecuteReaderAsync();
@@ -381,10 +381,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec [dbo].[SP_RequestMainAll] @BusinessUnitId,@ItemCode,@DateFrom,@DateTo,@ApproveStatus,@Status";
+                command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainAll]", new ReplaceParams { ParamName = "APT", Value = requestMain.BusinessUnitCode });
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", requestMain.BusinessUnitId);
-                command.Parameters.AddWithValue(command, "@ItemCode", requestMain.ItemCodes);
+                command.Parameters.AddWithValue(command, "@ItemCode", string.Join(',', requestMain.ItemCodes));
                 command.Parameters.AddWithValue(command, "@DateFrom", requestMain.DateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", requestMain.DateTo);
                 command.Parameters.AddWithValue(command, "@ApproveStatus", string.Join(',', requestMain.ApproveStatus));
