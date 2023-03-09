@@ -15,8 +15,8 @@ namespace SolaERP.Controllers
             _uomService = uomService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllUOMList()
-            => CreateActionResult(await _uomService.GetAllAsync());
+        [HttpGet("{businessUnitCode}")]
+        public async Task<IActionResult> GetUOMListBusinessUnitCode(string businessUnitCode)
+            => CreateActionResult(await _uomService.GetUOMListBusinessUnitCode(businessUnitCode));
     }
 }

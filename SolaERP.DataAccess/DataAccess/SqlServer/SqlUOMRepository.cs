@@ -2,6 +2,7 @@
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.BusinessUnits;
 using SolaERP.Infrastructure.Entities.UOM;
+using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,10 @@ using System.Threading.Tasks;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlUOMRepository : IUOMRepository
+    public class SqlUOMRepository : SqlBaseRepository, IUOMRepository
     {
         private readonly IUnitOfWork _unitOfWork;
-        public SqlUOMRepository(IUnitOfWork unitOfWork)
+        public SqlUOMRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -45,6 +46,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public Task<UOM> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<UOM>> GetUOMListBusinessUnitCode(string businessUnitCode)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = ReplaceQuery("[dbo].[VW_UNI_UOM_List]", new ReplaceParams { ParamName = "APT", Value = businessUnitCode });
+                using var reader = await command.ExecuteReaderAsync();
+
+                List<UOM> UOMs = new List<UOM>();
+
+                while (reader.Read())
+                {
+                    UOMs.Add(reader.GetByEntityStructure<UOM>());
+                }
+                return UOMs;
+            }
         }
 
         public Task<bool> RemoveAsync(int Id)

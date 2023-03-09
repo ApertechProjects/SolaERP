@@ -33,6 +33,13 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<UOMDto>>.Success(dto, 200);
         }
 
+        public async Task<ApiResponse<List<UOMDto>>> GetUOMListBusinessUnitCode(string businessUnitCode)
+        {
+            var uoms = await _uomRepository.GetUOMListBusinessUnitCode(businessUnitCode);
+            var dto = _mapper.Map<List<UOMDto>>(uoms);
+            return ApiResponse<List<UOMDto>>.Success(dto, 200);
+        }
+
         public Task<ApiResponse<bool>> RemoveAsync(int Id)
         {
             throw new NotImplementedException();

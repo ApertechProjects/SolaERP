@@ -5,6 +5,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
 {
     public interface ICurrencyCodeService : ICrudService<CurrencyDto>
     {
-        Task<ApiResponse<List<CurrencyDto>>> GetCurrencyCodesByBusinessUnitId(string businessUnitCode);
+        Task<ApiResponse<List<CurrencyDto>>> GetCurrencyCodesByBusinessUnitCode(string businessUnitCode);
     }
 }

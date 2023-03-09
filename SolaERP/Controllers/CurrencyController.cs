@@ -16,7 +16,7 @@ namespace SolaERP.Controllers
         }
 
         [HttpGet("{businessUnitCode}")]
-        public async Task<IActionResult> GetCurrencyCodesByBusinessUnitId([FromHeader] string authToken, string businessUnitCode)
-            => CreateActionResult(await _currencyService.GetCurrencyCodesByBusinessUnitId(businessUnitCode));
+        public async Task<IActionResult> GetCurrencyCodesByBusinessUnitCode([FromHeader] string authToken, string businessUnitCode)
+            => CreateActionResult(await _currencyService.GetCurrencyCodesByBusinessUnitCode(businessUnitCode));
     }
 }
