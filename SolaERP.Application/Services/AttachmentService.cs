@@ -5,6 +5,7 @@ using SolaERP.Infrastructure.Dtos.Attachment;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
+using System.Reflection;
 
 namespace SolaERP.Application.Services
 {
@@ -23,7 +24,10 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<string>> DeleteAttachmentAsync(int attachmentId)
         {
-            return await SaveAttachmentAsync(new() { AttachmentId = attachmentId });
+            bool result = await _attachmentRepository.DeleteAttachmentAsync(attachmentId);
+            await _unitOfWork.SaveChangesAsync();
+
+            return result ? ApiResponse<string>.Success("Operation is succesfull", 200) : ApiResponse<string>.Fail("Operation failed", 400);
         }
 
         public async Task<ApiResponse<List<AttachmentDto>>> GetAttachmentsAsync(AttachmentListGetModel model)

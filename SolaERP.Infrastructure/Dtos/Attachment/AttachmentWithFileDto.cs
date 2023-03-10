@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 
 namespace SolaERP.Infrastructure.Dtos.Attachment
 {
@@ -7,7 +8,8 @@ namespace SolaERP.Infrastructure.Dtos.Attachment
         public int AttachmentId { get; set; }
         public string FileName { get; set; }
         public string Filebase64 { get; set; }
-        public byte[] FileData { get => Encoding.UTF8.GetBytes(Filebase64); }
+        [NotMapped]
+        public byte[] FileData { get; set; }
         public int SourceId { get; set; }
         public int SourceTypeId { get; set; }
         public string Reference { get; set; }
