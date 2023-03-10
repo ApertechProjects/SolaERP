@@ -20,14 +20,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                //byte[] binaryData = Encoding.UTF8.GetBytes(attachment.Filebase64);
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_Attachments_IUD @AttachmentId,@FileName,@FileData,@SourceId,@SourceType,@Reference,@ExtensionType,@AttachmentTypeId,@AttachmentSubTypeId,@UploadDateTime,@Size";
                 command.Parameters.AddWithValue(command, "@AttachmentId", attachment.AttachmentId);
                 command.Parameters.AddWithValue(command, "@FileName", attachment.FileName);
                 command.Parameters.AddWithValue(command, "@FileData", attachment.FileData);
                 command.Parameters.AddWithValue(command, "@SourceId", attachment.SourceId);
                 command.Parameters.AddWithValue(command, "@SourceType", attachment.SourceType);
-                command.Parameters.AddWithValue(command, "@Reference", attachment.Reference);
+                command.Parameters.AddWithValue(command, "@Reference", null);
                 command.Parameters.AddWithValue(command, "@ExtensionType", attachment.ExtensionType);
                 command.Parameters.AddWithValue(command, "@AttachmentTypeId", attachment.AttachmentTypeId);
                 command.Parameters.AddWithValue(command, "@AttachmentSubTypeId", attachment.AttachmentSubTypeId);
@@ -60,7 +59,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = "EXEC SP_AttachmentList_Load @SourceId,@Reference,@SourceType";
                 command.Parameters.AddWithValue(command, "@SourceId", model.SourceId);
                 command.Parameters.AddWithValue(command, "@Reference", model.Reference);
-                command.Parameters.AddWithValue(command, "@SourceType", model.Sorucetype);
+                command.Parameters.AddWithValue(command, "@SourceType", model.Sourcetype);
 
                 using var reader = await command.ExecuteReaderAsync();
 
@@ -68,6 +67,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 while (await reader.ReadAsync()) { attachments.Add(reader.GetByEntityStructure<Attachment>("FileData")); }
                 return attachments;
+            }
+        }
+
+        public async Task<bool> DeleteAttachmentAsync(int attachmentId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_Attachments_IUD @AttachmentId";
+                command.Parameters.AddWithValue(command, "@AttachmentId", attachmentId);
+
+                return await command.ExecuteNonQueryAsync() > 0;
             }
         }
     }
