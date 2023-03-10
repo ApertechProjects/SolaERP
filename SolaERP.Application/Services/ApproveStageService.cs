@@ -19,13 +19,18 @@ namespace SolaERP.Application.Services
         private IMapper _mapper;
         private IUnitOfWork _unitOfWork;
 
-        public ApproveStageService(IApproveStageMainRepository approveStageMainRepository, IApproveStageDetailRepository approveStageDetailRepository, IUserRepository userRepository, IMapper mapper, IUnitOfWork unitOfWork)
+        public ApproveStageService(IApproveStageMainRepository approveStageMainRepository,
+                                   IApproveStageDetailRepository approveStageDetailRepository,
+                                   IUserRepository userRepository,
+                                   IMapper mapper, IUnitOfWork unitOfWork,
+                                   IApproveStageRoleRepository approveStageRoleRepository)
         {
             _approveStageMainRepository = approveStageMainRepository;
             _approveStageDetailRepository = approveStageDetailRepository;
             _userRepository = userRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _approveStageRoleRepository = approveStageRoleRepository;
         }
 
         public Task<ApiResponse<List<ApproveStagesMainDto>>> GetAllAsync()
@@ -72,7 +77,7 @@ namespace SolaERP.Application.Services
         public async Task<int> SaveApproveStageDetailsAsync(ApproveStagesDetailDto detail)
         {
             var entity = _mapper.Map<ApproveStagesDetail>(detail);
-            var approveStageDetail = await _approveStageDetailRepository.AddAsync(entity);
+            var approveStageDetail = await _approveStageDetailRepository.SaveDetailsAsync(entity);
             return approveStageDetail;
         }
 
@@ -135,6 +140,7 @@ namespace SolaERP.Application.Services
                 }
             }
 
+            await _unitOfWork.SaveChangesAsync();
             return ApiResponse<ApprovalStageSaveVM>.Success(approvalStageSaveVM, 200);
         }
 

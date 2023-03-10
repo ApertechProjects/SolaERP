@@ -86,9 +86,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        Task<int> IReturnableAddAsync<ApproveStagesDetail>.AddAsync(ApproveStagesDetail entity)
+        public async Task<int> SaveDetailsAsync(ApproveStagesDetail entity)
         {
-            throw new NotImplementedException();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_ApproveStagesDetails_IUD @ApproveStageDetailsId,@ApproveStageMainId,@ApproveStageDetailsName,@Sequence";
+
+                command.Parameters.AddWithValue(command, "@ApproveStageDetailsId", entity.ApproveStageDetailsId);
+                command.Parameters.AddWithValue(command, "@ApproveStageMainId", entity.ApproveStageMainId);
+                command.Parameters.AddWithValue(command, "@ApproveStageDetailsName", entity.ApproveStageDetailsName);
+                command.Parameters.AddWithValue(command, "@Sequence", entity.Sequence);
+
+                using var reader = await command.ExecuteReaderAsync();
+                return await reader.ReadAsync() ? reader.Get<int>("NewApproveStageDetailsId") : -1;
+            }
         }
     }
 }
