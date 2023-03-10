@@ -4,6 +4,7 @@ using SolaERP.Infrastructure.Entities.Attachment;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data.Common;
+using System.Text;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -19,11 +20,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                byte[] binaryData = Convert.FromBase64String(attachment.FileData);
+                //byte[] binaryData = Encoding.UTF8.GetBytes(attachment.Filebase64);
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_Attachments_IUD @AttachmentId,@FileName,@FileData,@SourceId,@SourceType,@Reference,@ExtensionType,@AttachmentTypeId,@AttachmentSubTypeId,@UploadDateTime,@Size";
                 command.Parameters.AddWithValue(command, "@AttachmentId", attachment.AttachmentId);
                 command.Parameters.AddWithValue(command, "@FileName", attachment.FileName);
-                command.Parameters.AddWithValue(command, "@FileData", binaryData);
+                command.Parameters.AddWithValue(command, "@FileData", attachment.FileData);
                 command.Parameters.AddWithValue(command, "@SourceId", attachment.SourceId);
                 command.Parameters.AddWithValue(command, "@SourceType", attachment.SourceType);
                 command.Parameters.AddWithValue(command, "@Reference", attachment.Reference);
