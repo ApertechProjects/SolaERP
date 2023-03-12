@@ -1,15 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
-
-namespace SolaERP.Infrastructure.Dtos.Attachment
+﻿namespace SolaERP.Infrastructure.Dtos.Attachment
 {
     public class AttachmentWithFileDto
     {
         public int AttachmentId { get; set; }
         public string FileName { get; set; }
-        public string Filebase64 { get; set; }
-        [NotMapped]
         public byte[] FileData { get; set; }
+        public string Base64 { get; set; }
         public int SourceId { get; set; }
         public int SourceTypeId { get; set; }
         public string Reference { get; set; }

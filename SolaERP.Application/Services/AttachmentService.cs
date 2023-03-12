@@ -5,7 +5,6 @@ using SolaERP.Infrastructure.Dtos.Attachment;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
-using System.Reflection;
 
 namespace SolaERP.Application.Services
 {
@@ -42,7 +41,10 @@ namespace SolaERP.Application.Services
         {
             var entity = await _attachmentRepository.GetAttachmenListWithFileDataAsync(attachmentId);
             var result = _mapper.Map<List<AttachmentWithFileDto>>(entity);
-
+            for (int i = 0; i < result.Count; i++)
+            {
+                result[i].Base64 = $"data:{result[i].ExtensionType};base64," + Convert.ToBase64String(result[i].FileData);
+            }
             return ApiResponse<List<AttachmentWithFileDto>>.Success(result, 200);
         }
 
