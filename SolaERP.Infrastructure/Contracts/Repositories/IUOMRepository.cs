@@ -10,5 +10,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
 {
     public interface IUOMRepository : ICrudOperations<UOM>
     {
+        Task<List<UOM>> GetUOMListBusinessUnitCode(string businessUnitCode);
     }
 }

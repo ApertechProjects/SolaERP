@@ -17,8 +17,8 @@
         public int Status { get; set; }
         public int Sequence { get; set; }//new
         public int ApproveStatus { get; set; }
-        public string EmployeeCode { get; set; }
-        public string EmployeeName { get; set; }
+        public string Buyer { get; set; }
+        public string BuyerName { get; set; }
         public string SupplierCode { get; set; }
         public string RequestComment { get; set; }
         public string OperatorComment { get; set; }

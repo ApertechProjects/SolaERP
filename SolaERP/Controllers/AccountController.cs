@@ -61,7 +61,9 @@ namespace SolaERP.Controllers
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(
                     new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, userdto), UserIdentifier = newtoken.ToString() }, 200));
             }
-            return CreateActionResult(ApiResponse<AccountResponseDto>.Fail("Email or password is incorrect", 400));
+
+
+            return CreateActionResult(ApiResponse<AccountResponseDto>.Fail("Email: Email or password is incorrect", 400));
         }
 
         /// <summary>

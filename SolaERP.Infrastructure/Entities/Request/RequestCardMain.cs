@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Infrastructure.Entities.Request
+﻿namespace SolaERP.Infrastructure.Entities.Request
 {
     public class RequestCardMain : BaseEntity
     {
@@ -19,6 +13,8 @@ namespace SolaERP.Infrastructure.Entities.Request
         public int UserId { get; set; }
         public int Requester { get; set; }
         public int Status { get; set; }
+        public int Destination { get; set; }
+        public string ApproveStatus { get; set; }
         public string SupplierCode { get; set; }
         public string RequestComment { get; set; }
         public string OperatorComment { get; set; }

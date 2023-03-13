@@ -1,6 +1,7 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Buyer;
+using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,10 @@ using System.Threading.Tasks;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlBuyerRepository : IBuyerRepository
+    public class SqlBuyerRepository : SqlBaseRepository, IBuyerRepository
     {
         private readonly IUnitOfWork _unitOfWork;
-        public SqlBuyerRepository(IUnitOfWork unitOfWork)
+        public SqlBuyerRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -29,11 +30,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public async Task<List<Buyer>> GetBuyerByUserTokenAsync(int userId)
+        public async Task<List<Buyer>> GetBuyerByUserTokenAsync(int userId, string businessUnitCode)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec dbo.SP_UNI_Buyer_List";
+                command.CommandText = ReplaceQuery("[dbo].[SP_UNI_Buyer_List]", new ReplaceParams { ParamName = "APT", Value = businessUnitCode });
                 using var reader = await command.ExecuteReaderAsync();
 
                 List<Buyer> status = new List<Buyer>();

@@ -3,7 +3,7 @@
     public class RequestMainAll : BaseEntity
     {
         public Int64 RowNum { get; set; }
-        public int RequestMainID { get; set; }
+        public int RequestMainId { get; set; }
         public string BusinessUnitCode { get; set; }
         public string RequestType { get; set; }
         public string RequestNo { get; set; }
@@ -18,6 +18,6 @@
         public int Status { get; set; }
         public int ApproveStatus { get; set; }
         public string ApproveStatusName { get; set; }
-        public string CurrencyCode { get; set; }
+        //public string CurrencyCode { get; set; }
     }
 }

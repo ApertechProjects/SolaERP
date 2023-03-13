@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Identity;
 using SolaERP.Application.Identity_Server;
 using SolaERP.Application.Services;
+using SolaERP.Application.Validations.ApproveRoleValidation;
+using SolaERP.Application.Validations.ApproveStageValidation;
+using SolaERP.Application.Validations.AttachmentValidation;
+using SolaERP.Application.Validations.RequestValidation;
 using SolaERP.DataAccess.DataAcces.SqlServer;
 using SolaERP.DataAccess.DataAccess.SqlServer;
 using SolaERP.DataAccess.Factories;
@@ -84,6 +88,14 @@ namespace SolaERP.Extensions
         public static void UseValidationExtension(this WebApplicationBuilder builder)
         {
             builder.Services.AddValidatorsFromAssemblyContaining<UserValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<AttachmentValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<RequestMainValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<ApproveRoleValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<ApprovalStageSaveValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<ApproveStageMainValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<ApproveStageDetailValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<ApproveStageRoleValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<ApprovalStatusValidation>();
             builder.Services.AddScoped<ValidationFilter>();
         }
         public static void UseIdentityService(this WebApplicationBuilder builder)

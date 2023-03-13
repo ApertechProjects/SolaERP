@@ -7,9 +7,9 @@ namespace SolaERP.Application.Validations.UserValidation
     {
         public ResetPasswordRequestValidation()
         {
-            RuleFor(x => x.Email).NotNull().NotEmpty().MaximumLength(80);
-            RuleFor(x => x.Password).MinimumLength(7);
-            RuleFor(x => x.ConfirmPassword).MinimumLength(7);
+            RuleFor(x => x.Email).NotNull().NotEmpty().WithMessage("{PropertyName}: Please enter {PropertyName}").MaximumLength(80).WithMessage("{PropertyName}: Email length can not be greater than 80 symbol");
+            RuleFor(x => x.Password).NotEmpty().WithMessage("{PropertyName}: Please enter password").MinimumLength(7).WithMessage("{ProperyName}: Password minimum length must be 7 symbol");
+            RuleFor(x => x.ConfirmPassword).NotEmpty().WithMessage("{PropertyName}: Please enter password").MinimumLength(7).WithMessage("{ProperyName}: Password minimum length must be 7 symbol");
         }
     }
 }

@@ -17,7 +17,7 @@ namespace SolaERP.Application.Services
         private readonly IBuyerRepository _buyerRepository;
         private readonly IUserRepository _userRepository;
         private IMapper _mapper;
-        public BuyerService(IBuyerRepository buyerRepository,IUserRepository userRepository, IMapper mapper)
+        public BuyerService(IBuyerRepository buyerRepository, IUserRepository userRepository, IMapper mapper)
         {
             _buyerRepository = buyerRepository;
             _userRepository = userRepository;
@@ -36,9 +36,9 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<BuyerDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<List<BuyerDto>>> GetBuyerByUserTokenAsync(string authToken)
+        public async Task<ApiResponse<List<BuyerDto>>> GetBuyerByUserTokenAsync(string authToken, string businessUnitCode)
         {
-            var buyer = await _buyerRepository.GetBuyerByUserTokenAsync(await _userRepository.GetUserIdByTokenAsync(authToken));
+            var buyer = await _buyerRepository.GetBuyerByUserTokenAsync(await _userRepository.GetUserIdByTokenAsync(authToken), businessUnitCode);
             var buyerDto = _mapper.Map<List<BuyerDto>>(buyer);
 
             if (buyerDto != null)

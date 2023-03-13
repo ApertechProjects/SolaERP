@@ -1,0 +1,20 @@
+﻿using FluentValidation;
+using SolaERP.Infrastructure.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SolaERP.Application.Validations.ApproveStageValidation
+{
+    public class ApprovalStageSaveValidation : AbstractValidator<ApprovalStageSaveVM>
+    {
+        public ApprovalStageSaveValidation()
+        {
+            RuleFor(x => x.ApproveStagesMainDto).SetValidator(new ApproveStageMainValidation());
+            RuleForEach(x => x.ApproveStagesDetailDtos).SetValidator(new ApproveStageDetailValidation());
+        }
+    }
+
+}

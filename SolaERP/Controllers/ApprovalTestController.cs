@@ -1,67 +1,69 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.ViewModels;
+using SolaERP.Business.CommonLogic;
+using SolaERP.Business.Models;
 
 namespace SolaERP.Controllers
 {
-    [Route("api/[controller]/[action]")]
-    [ApiController]
-    [Authorize]
-    public class ApprovalTestController : CustomBaseController
+    //[Route("api/[controller]/[action]")]
+    //[ApiController]
+    //[Authorize]
+    public class ApprovalTestController 
     {
-        private readonly IApproveStageService _approveStageMainService;
-        private readonly IApproveStageDetailService _approveStageDetailService;
-        private readonly IApproveStageRoleService _approveStageRoleService;
-        private readonly IApproveRoleService _approveRoleService;
-        private readonly IProcedureService _procedureService;
-        private readonly IUserService _userService;
-        public ApprovalTestController(IApproveStageService approveStageMainService,
-                                      IApproveStageDetailService approveStageDetailService,
-                                      IApproveStageRoleService approveStageRoleService,
-                                      IApproveRoleService approveRoleService,
-                                      IProcedureService procedureService,
-                                      IUserService userService)
+        public ApprovalTestController(ConfHelper confHelper)
         {
-            _approveStageMainService = approveStageMainService;
-            _approveStageDetailService = approveStageDetailService;
-            _approveStageRoleService = approveStageRoleService;
-            _approveRoleService = approveRoleService;
-            _procedureService = procedureService;
-            _userService = userService;
+            ConfHelper = confHelper;
         }
 
-        [HttpGet("{buId}")]
-        public async Task<IActionResult> GetApproveStageMainByBuId(int buId)
-            => CreateActionResult(await _approveStageMainService.GetByBusinessUnitId(buId));
+        public ConfHelper ConfHelper { get; }
 
-        [HttpGet("{approveStageMainId}")]
-        public async Task<IActionResult> GetApproveStageMainByApprovalStageMainId(int approveStageMainId)
-            => CreateActionResult(await _approveStageMainService.GetApproveStageMainByApprovalStageMainId(approveStageMainId));
+        //[HttpGet]
+        //public async Task<ApiResult> GetBUList([FromHeader] string token)
+        //{
+        //    return await new EntityLogic(ConfHelper).GetBusinessUnitList(token);
+        //}
 
-        [HttpGet("{approveStageMainId}")]
-        public async Task<IActionResult> GetApproveStageDetailsByApprovalStageMainId(int approveStageMainId)
-            => CreateActionResult(await _approveStageDetailService.GetApproveStageDetailsByApproveStageMainId(approveStageMainId));
+        //[HttpGet("{buId}")]
+        //public async Task<ApiResult> GetApprovalStageLoad([FromHeader] string token, int buId) //start
+        //{
+        //    return await new EntityLogic(ConfHelper).GetApprovalStageLoad(token, buId);
+        //}
 
-        [HttpGet("{approveStageDetailId}")]
-        public async Task<IActionResult> GetApproveStageRolesByApproveStageDetailId(int approveStageDetailId)
-            => CreateActionResult(await _approveStageRoleService.GetApproveStageRolesByApproveStageDetailId(approveStageDetailId));
+        //[HttpGet("{approvalStageMainId}")]
+        //public async Task<ApiResult> GetApprovalStageHeaderLoad([FromHeader] string token, int approvalStageMainId) // start
+        //{
+        //    return await new EntityLogic(ConfHelper).GetApprovalStageHeaderLoad(token, approvalStageMainId);
+        //}
 
-        [HttpGet]
-        public async Task<IActionResult> GetApproveRoles()
-            => CreateActionResult(await _approveRoleService.GetAllAsync());
+        //[HttpGet("{approvalStageMainId}")]
+        //public async Task<ApiResult> GetApprovalStageDetailsLoad([FromHeader] string token, int approvalStageMainId)
+        //{
+        //    return await new EntityLogic(ConfHelper).GetApprovalStageDetailsLoad(token, approvalStageMainId);
+        //}
 
-        [HttpGet]
-        public async Task<IActionResult> GetProcedures()
-            => CreateActionResult(await _procedureService.GetAllAsync());
+        //[HttpGet("{approvalStageDetailId}")]
+        //public async Task<ApiResult> GetApproveStageRoles_Load([FromHeader] string token, int approvalStageDetailId)
+        //{
+        //    return await new EntityLogic(ConfHelper).GetApprovalStageRolesLoad(token, approvalStageDetailId);
+        //}
 
-        [HttpPost]
-        public async Task<IActionResult> ApprovalStageSave([FromHeader] string authToken, ApprovalStageSaveVM approvalStageSaveVM)
-            => CreateActionResult(await _approveStageMainService.SaveApproveStageMainAsync(authToken, approvalStageSaveVM));
+        //[HttpGet]
+        //public async Task<ApiResult> GetApproveRoles([FromHeader] string token)
+        //{
+        //    return await new EntityLogic(ConfHelper).GetApproveRoles(token);
+        //}
 
-        [HttpGet]
-        public async Task<IActionResult> GetApprovalStatus()
-            => CreateActionResult(await _approveStageMainService.GetApproveStatus());
+        //[HttpGet]
+        //public async Task<ApiResult> GetProceduresList([FromHeader] string token)
+        //{
+        //    return await new EntityLogic(ConfHelper).GetProceduresList(token);
+        //}
+
+        //[HttpPost]
+        //public async Task<ApiResult> SaveApprovalStage([FromHeader] string token, SaveApprovalStageWrapper saveApprovalStageWrapper)
+        //{
+        //    return await new EntityLogic(ConfHelper).SaveApprovalStage(token, saveApprovalStageWrapper);
+        //}
+
     }
-
 }

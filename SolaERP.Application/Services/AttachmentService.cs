@@ -23,7 +23,10 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<string>> DeleteAttachmentAsync(int attachmentId)
         {
-            return await SaveAttachmentAsync(new() { AttachmentId = attachmentId });
+            bool result = await _attachmentRepository.DeleteAttachmentAsync(attachmentId);
+            await _unitOfWork.SaveChangesAsync();
+
+            return result ? ApiResponse<string>.Success("Operation is succesfull", 200) : ApiResponse<string>.Fail("Operation failed", 400);
         }
 
         public async Task<ApiResponse<List<AttachmentDto>>> GetAttachmentsAsync(AttachmentListGetModel model)
@@ -38,7 +41,10 @@ namespace SolaERP.Application.Services
         {
             var entity = await _attachmentRepository.GetAttachmenListWithFileDataAsync(attachmentId);
             var result = _mapper.Map<List<AttachmentWithFileDto>>(entity);
-
+            for (int i = 0; i < result.Count; i++)
+            {
+                result[i].Base64 = $"data:{result[i].ExtensionType};base64," + Convert.ToBase64String(result[i].FileData);
+            }
             return ApiResponse<List<AttachmentWithFileDto>>.Success(result, 200);
         }
 

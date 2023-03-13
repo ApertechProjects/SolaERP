@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Infrastructure.Dtos.Request
+﻿namespace SolaERP.Infrastructure.Dtos.Request
 {
     public class RequestCardMainDto
     {
         public int RequestMainId { get; set; }
         public int BusinessUnitId { get; set; }
+        public string BuyerName { get; set; }
         public string BusinessUnitCode { get; set; }
         public int RequestTypeId { get; set; }
         public string RequestNo { get; set; }
+        public int Destination { get; set; }
+        public string ApproveStatus { get; set; }
         public DateTime EntryDate { get; set; }
         public DateTime RequestDate { get; set; }
         public DateTime RequestDeadline { get; set; }

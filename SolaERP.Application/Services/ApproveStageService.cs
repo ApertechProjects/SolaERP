@@ -19,19 +19,21 @@ namespace SolaERP.Application.Services
         private IMapper _mapper;
         private IUnitOfWork _unitOfWork;
 
-        public ApproveStageService(IApproveStageMainRepository approveStageMainRepository, IApproveStageDetailRepository approveStageDetailRepository, IUserRepository userRepository, IMapper mapper, IUnitOfWork unitOfWork)
+        public ApproveStageService(IApproveStageMainRepository approveStageMainRepository,
+                                   IApproveStageDetailRepository approveStageDetailRepository,
+                                   IUserRepository userRepository,
+                                   IMapper mapper, IUnitOfWork unitOfWork,
+                                   IApproveStageRoleRepository approveStageRoleRepository)
         {
             _approveStageMainRepository = approveStageMainRepository;
             _approveStageDetailRepository = approveStageDetailRepository;
             _userRepository = userRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _approveStageRoleRepository = approveStageRoleRepository;
         }
 
-        public Task<ApiResponse<List<ApproveStagesMainDto>>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
+
 
         public async Task<ApiResponse<ApproveStagesMainDto>> GetApproveStageMainByApprovalStageMainId(int approvalStageMainId)
         {
@@ -47,94 +49,30 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<ApproveStagesMainDto>>.Success(dto, 200);
         }
 
-        public Task<ApiResponse<bool>> RemoveAsync(int Id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<int> UpdateAsync(string authToken, ApproveStagesMainDto entity)
-        {
-            var userId = await _userRepository.GetUserIdByTokenAsync(authToken);
-            var model = _mapper.Map<ApproveStagesMain>(entity);
-            var approveStageMain = await _approveStageMainRepository.UpdateAsync(model, userId);
-            return approveStageMain;
-        }
-
-        public async Task<int> AddAsync(string authToken, ApproveStagesMainDto entity)
-        {
-            var userId = await _userRepository.GetUserIdByTokenAsync(authToken);
-            var model = _mapper.Map<ApproveStagesMain>(entity);
-            var approveStageMain = await _approveStageMainRepository.AddAsync(model, userId);
-            await _unitOfWork.SaveChangesAsync();
-            return approveStageMain;
-        }
-
-        public async Task<int> SaveApproveStageDetailsAsync(ApproveStagesDetailDto detail)
-        {
-            var entity = _mapper.Map<ApproveStagesDetail>(detail);
-            var approveStageDetail = await _approveStageDetailRepository.AddAsync(entity);
-            return approveStageDetail;
-        }
-
-        public async Task<bool> RemoveApproveStageDetailsAsync(int approveStageDetailsId)
-        {
-            var approveDetail = await _approveStageDetailRepository.RemoveAsync(approveStageDetailsId);
-            return approveDetail;
-        }
-
-        public async Task<ApiResponse<List<ApproveStagesDetailDto>>> GetApproveStageDetailsByApproveStageMainId(int approveStageMainId)
-        {
-            var approveDetailById = await _approveStageDetailRepository.GetApproveStageDetailsByApproveStageMainId(approveStageMainId);
-            var dto = _mapper.Map<List<ApproveStagesDetailDto>>(approveDetailById);
-            return ApiResponse<List<ApproveStagesDetailDto>>.Success(dto, 200);
-        }
-
-        public async Task<int> SaveApproveStageRolesAsync(ApproveStageRoleDto role)
-        {
-            var entity = _mapper.Map<ApproveStageRole>(role);
-            var model = await _approveStageRoleRepository.AddAsync(entity);
-            return model;
-        }
-
-        public async Task<bool> RemoveApproveStageRolesAsync(int roleId)
-        {
-            var approveStageRole = await _approveStageRoleRepository.RemoveAsync(roleId);
-            return approveStageRole;
-        }
-
-        public Task<ApiResponse<List<ApproveStageRoleDto>>> GetApproveStageRolesByApproveStageDetailId(int approveStageDetailsId)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<ApiResponse<ApprovalStageSaveVM>> SaveApproveStageMainAsync(string authToken, ApprovalStageSaveVM approvalStageSaveVM)
         {
-            string typeOfDetail = string.Empty;
-            string typeOfRole = string.Empty;
-
-            await AddAsync(authToken, approvalStageSaveVM.ApproveStagesMainDto);
+            var userId = await _userRepository.GetUserIdByTokenAsync(authToken);
+            await _approveStageMainRepository.AddAsync(_mapper.Map<ApproveStagesMain>(approvalStageSaveVM.ApproveStagesMainDto), userId);
 
             for (int i = 0; i < approvalStageSaveVM.ApproveStagesDetailDtos.Count; i++)
             {
-                typeOfDetail = approvalStageSaveVM.ApproveStagesDetailDtos[i].Type;
-                if (typeOfDetail == "remove")
-                    await RemoveApproveStageDetailsAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageDetailsId); //+
+                if (approvalStageSaveVM.ApproveStagesDetailDtos[i].Type == "remove")
+                    await _approveStageDetailRepository.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageDetailsId);
                 else
                 {
-                    await SaveApproveStageDetailsAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i]);
+                    await _approveStageDetailRepository.SaveDetailsAsync(_mapper.Map<ApproveStagesDetail>(approvalStageSaveVM.ApproveStagesDetailDtos[i]));
 
                     for (int j = 0; j < approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto.Count; j++)
                     {
-                        typeOfRole = approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].Type;
-
-                        if (typeOfRole == "remove")
-                            await RemoveApproveStageRolesAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].ApproveStageRoleId);
+                        if (approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].Type == "remove")
+                            await _approveStageRoleRepository.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].ApproveStageRoleId);
                         else
-                            await SaveApproveStageRolesAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j]);
+                            await _approveStageRoleRepository.AddAsync(_mapper.Map<ApproveStageRole>(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j]));
                     }
                 }
             }
 
+            await _unitOfWork.SaveChangesAsync();
             return ApiResponse<ApprovalStageSaveVM>.Success(approvalStageSaveVM, 200);
         }
 

@@ -58,7 +58,7 @@ namespace SolaERP.DataAccess.Extensions
                     // If the method was found, invoke it and store the result
                     if (methodInfo != null)
                     {
-                        objectResult = methodInfo.MakeGenericMethod(item.PropertyType).Invoke(null, new object[] { reader });
+                        objectResult = methodInfo.MakeGenericMethod(item.PropertyType).Invoke(null, new object[] { reader, ignoredProperties });
                         CheckObjectResultAndSetToEntity(item, obj, objectResult);
                     }
                 }

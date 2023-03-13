@@ -5,7 +5,7 @@ using SolaERP.Infrastructure.ViewModels;
 
 namespace SolaERP.Infrastructure.Contracts.Services
 {
-    public interface IApproveStageService : ILoggableCrudService<ApproveStagesMainDto>
+    public interface IApproveStageService
     {
         #region Main
         Task<ApiResponse<ApprovalStageSaveVM>> SaveApproveStageMainAsync(string authToken, ApprovalStageSaveVM approvalStageSaveVM);
@@ -14,16 +14,5 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<List<ApprovalStatusDto>>> GetApproveStatus();
         #endregion
         //
-        #region Details
-        Task<int> SaveApproveStageDetailsAsync(ApproveStagesDetailDto details);
-        Task<bool> RemoveApproveStageDetailsAsync(int approveStageDetailsId);
-        Task<ApiResponse<List<ApproveStagesDetailDto>>> GetApproveStageDetailsByApproveStageMainId(int approveStageMainId);
-        #endregion
-        //
-        #region Roles
-        Task<int> SaveApproveStageRolesAsync(ApproveStageRoleDto role);
-        Task<bool> RemoveApproveStageRolesAsync(int roleId);
-        Task<ApiResponse<List<ApproveStageRoleDto>>> GetApproveStageRolesByApproveStageDetailId(int approveStageDetailsId);
-        #endregion
     }
 }

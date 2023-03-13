@@ -32,7 +32,7 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetDetailApprovalInfoAsync(int requestDetailId)
             => CreateActionResult(await _requestService.GetRequestDetailApprvalInfoAsync(requestDetailId));
 
-        [HttpGet]
+        [HttpGet("{requestMainId}")]
         public async Task<IActionResult> RequestFollowUsersLoadAsync(int requestMainId)
             => CreateActionResult(await _requestService.RequestFollowUserLoadAsync(requestMainId));
 
@@ -53,7 +53,7 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetRequestDraftsAsync(RequestMainDraftModel model)
             => CreateActionResult(await _requestService.GetRequestMainDraftsAsync(model));
 
-        [HttpPost]
+        [HttpGet("{requestMainId}")]
         public async Task<IActionResult> GetRequestCardByMainId([FromHeader] string authToken, int requestMainId)
              => CreateActionResult(await _requestService.GetRequestByRequestMainId(authToken, requestMainId));
 
