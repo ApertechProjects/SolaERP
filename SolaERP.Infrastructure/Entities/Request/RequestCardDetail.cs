@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Infrastructure.Entities.Request
+﻿namespace SolaERP.Infrastructure.Entities.Request
 {
     public class RequestCardDetail : BaseEntity
     {
@@ -22,7 +16,8 @@ namespace SolaERP.Infrastructure.Entities.Request
         public string UOM { get; set; }
         public string Description { get; set; }
         public string Location { get; set; }
-        //public string Buyer { get; set; }
+        public string Buyer { get; set; }
+        public string BuyerName { get; set; }
         public decimal AvailableQuantity { get; set; }
         public decimal QuantityFromStock { get; set; }
         public decimal OriginalQuantity { get; set; }

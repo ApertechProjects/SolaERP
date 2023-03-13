@@ -334,7 +334,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                 @SupplierCode,@RequestComment,
                                                                 @OperatorComment,
                                                                 @QualityRequired,@CurrencyCode,
-                                                                @LogisticTotal,
+                                                                @LogisticTotal,@Buyer,@Destination
                                                                 @NewRequestmainId = @NewRequestmainId OUTPUT,
                                                                 @NewRequestNo = @NewRequestNo OUTPUT 
                                                                 select @NewRequestmainId as NewRequestmainId,
