@@ -7,7 +7,7 @@ namespace SolaERP.Application.Validations.UserValidation
     {
         public UserUpdateValidation()
         {
-            RuleFor(x => x.FullName).NotEmpty().WithMessage("{PropertyName}: Please, enter {PropertyName}");
+            RuleFor(x => x.FullName).NotEmpty().WithMessage("Please, enter {PropertyName}");
         }
     }
 }
