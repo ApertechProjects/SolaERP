@@ -275,6 +275,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 QualityRequired = reader.Get<string>("QualityRequired"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 LogisticsTotal = reader.Get<decimal>("LogisticsTotal"),
+                Destination = reader.Get<int>("Destination"),
+                ApproveStatus = reader.Get<string>("ApproveStatus")
+
             };
         }
 
@@ -355,7 +358,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@RequestComment", model.RequestComment);
                 command.Parameters.AddWithValue(command, "@OperatorComment", model.OperatorComment);
                 command.Parameters.AddWithValue(command, "@QualityRequired", model.QualityRequired);
+                command.Parameters.AddWithValue(command, "@Destination", model.Destination);
                 command.Parameters.AddWithValue(command, "@CurrencyCode", model.CurrencyCode);
+                command.Parameters.AddWithValue(command, "@Buyer", model.Buyer);
                 command.Parameters.AddWithValue(command, "@LogisticTotal", model.LogisticTotal);
 
                 command.Parameters.Add("@NewRequestmainId", SqlDbType.Int);

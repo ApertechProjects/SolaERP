@@ -8,6 +8,8 @@
         public string BusinessUnitCode { get; set; }
         public int RequestTypeId { get; set; }
         public string RequestNo { get; set; }
+        public int Destination { get; set; }
+        public string ApproveStatus { get; set; }
         public DateTime EntryDate { get; set; }
         public DateTime RequestDate { get; set; }
         public DateTime RequestDeadline { get; set; }
