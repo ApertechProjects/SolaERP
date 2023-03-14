@@ -30,12 +30,10 @@ namespace SolaERP.Infrastructure.Dtos.Shared
 
         public static ApiResponse<T> Fail(string propertyName, string error, int statusCode)
         {
-            error = error.Replace("\"", "\\\""); // escape double quotes
-
             var errorss = new Dictionary<string, string>
-{
-    { propertyName, error }
-};
+            {
+                { propertyName, error }
+            };
 
             var jsonResult = JsonConvert.SerializeObject(errorss);
 
