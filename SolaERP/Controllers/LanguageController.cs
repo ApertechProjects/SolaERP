@@ -23,6 +23,10 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> GetLanguagesLoadAsync()
             => CreateActionResult(await _languageService.GetLanguagesLoadAsync());
 
+        [HttpGet]
+        public async Task<IActionResult> GetTranslatesLoadAsync()
+        => CreateActionResult(await _languageService.GetTranslatesLoadAsync());
+
         [HttpGet("{code}")]
         public async Task<IActionResult> GetTranslatesLoadByLanguageCodeAsync(string code)
           => CreateActionResult(await _languageService.GetTranslatesLoadByLanguageCodeAsync(code));

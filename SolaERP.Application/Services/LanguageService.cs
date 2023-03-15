@@ -56,6 +56,13 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<LanguageDto>>.Success(dto, 200);
         }
 
+        public async Task<ApiResponse<List<TranslateDto>>> GetTranslatesLoadAsync()
+        {
+            var translates = await _languageRepository.GetTranslatesLoadAsync();
+            var dto = _mapper.Map<List<TranslateDto>>(translates);
+            return ApiResponse<List<TranslateDto>>.Success(dto, 200);
+        }
+
         public async Task<ApiResponse<List<TranslateDto>>> GetTranslatesLoadByLanguageCodeAsync(string code)
         {
             var translates = await _languageRepository.GetTranslatesLoadByLanguageCodeAsync(code);

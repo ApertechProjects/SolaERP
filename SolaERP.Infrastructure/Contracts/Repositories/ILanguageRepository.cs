@@ -21,5 +21,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<List<Translate>> GetTranslatesLoadByLanguageCodeAsync(string code);
         Task<bool> SaveTranslateAsync(Translate translate);
         Task<bool> DeleteTranslateAsync(int id);
+        Task<List<Translate>> GetTranslatesLoadAsync();
     }
 }

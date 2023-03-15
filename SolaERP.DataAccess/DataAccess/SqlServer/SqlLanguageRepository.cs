@@ -68,6 +68,24 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<List<Translate>> GetTranslatesLoadAsync()
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "select * from [dbo].[VW_Translate_List]";
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                List<Translate> translates = new List<Translate>();
+
+                while (await reader.ReadAsync())
+                {
+                    translates.Add(reader.GetByEntityStructure<Translate>());
+                }
+                return translates;
+            }
+        }
+
         public async Task<List<Translate>> GetTranslatesLoadByLanguageCodeAsync(string code)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)

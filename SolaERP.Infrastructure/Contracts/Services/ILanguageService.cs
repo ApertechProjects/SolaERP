@@ -19,5 +19,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<List<TranslateDto>>> GetTranslatesLoadByLanguageCodeAsync(string code);
         Task<ApiResponse<bool>> SaveTranslateAsync(TranslateDto translate);
         Task<ApiResponse<bool>> DeleteTranslateAsync(int id);
+        Task<ApiResponse<List<TranslateDto>>> GetTranslatesLoadAsync();
     }
 }
