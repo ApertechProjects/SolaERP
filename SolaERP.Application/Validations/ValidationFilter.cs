@@ -17,11 +17,7 @@ namespace SolaERP.Application.Validations
             if (!modelState.IsValid)
             {
                 var errorText = modelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList()[0][0].ErrorMessage;
-                var property = modelState
-                .Where(x => x.Value.Errors.Count > 0)
-                .Select(x => x.Key.Split(".").Last())
-                .ToList()[0];
-                context.Result = new ObjectResult(ApiResponse<bool>.Fail(property, errorText, 422));
+                context.Result = new ObjectResult(ApiResponse<bool>.Fail(errorText, 400));
             }
         }
     }
