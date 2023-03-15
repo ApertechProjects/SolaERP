@@ -28,11 +28,11 @@ namespace SolaERP.API.Controllers
           => CreateActionResult(await _languageService.GetTranslatesLoadByLanguageCodeAsync(code));
 
         [HttpPost]
-        public async Task<IActionResult> SaveLanguageAsync(LanguageDto language)
+        public async Task<IActionResult> AddOrUpdateLanguageAsync(LanguageDto language)
             => CreateActionResult(await _languageService.SaveLanguageAsync(language));
 
         [HttpPost]
-        public async Task<IActionResult> SaveTranslateAsync(TranslateDto translate)
+        public async Task<IActionResult> AddOrUpdateTranslateAsync(TranslateDto translate)
          => CreateActionResult(await _languageService.SaveTranslateAsync(translate));
 
         [HttpPost]
