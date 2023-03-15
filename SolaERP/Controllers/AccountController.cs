@@ -63,7 +63,7 @@ namespace SolaERP.Controllers
             }
 
 
-            return CreateActionResult(ApiResponse<AccountResponseDto>.Fail("Email: Email or password is incorrect", 400));
+            return CreateActionResult(ApiResponse<AccountResponseDto>.Fail("Email", "Email or password is incorrect", 422));
         }
 
         /// <summary>

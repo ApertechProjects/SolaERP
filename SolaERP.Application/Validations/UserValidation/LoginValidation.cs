@@ -7,8 +7,8 @@ namespace SolaERP.Application.Validations.UserValidation
     {
         public LoginValidation()
         {
-            RuleFor(x => x.Email).NotEmpty().WithMessage("{PropertyName}: Please enter {PropertyName}");
-            RuleFor(x => x.Password).NotEmpty().WithMessage("{PropertyName}: Please enter {PropertyName}").MinimumLength(7).WithMessage("{PropertyName}: Password minimum length must be 7 symbol");
+            RuleFor(x => x.Email).NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.Password).NotEmpty().WithMessage("Please, enter {PropertyName}").MinimumLength(7).WithMessage("Password minimum length must be 7 symbol");
         }
     }
 }

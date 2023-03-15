@@ -6,7 +6,7 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
     public interface IRequestDetailRepository : ICrudOperations<RequestDetail>
     {
         Task<List<RequestCardDetail>> GetRequestDetailsByMainIdAsync(int requestMainId);
-        Task<RequestDetailApprovalInfo> GetDetailApprovalInfoAsync(int requestDetailId);
-        Task<bool> RequestDetailChangeStatusAsync(int requestDetailId,int userId,int approveStatusid,string comment,int sequence);
+        Task<List<RequestDetailApprovalInfo>> GetDetailApprovalInfoAsync(int requestDetailId);
+        Task<bool> RequestDetailChangeStatusAsync(int requestDetailId, int userId, int approveStatusid, string comment, int sequence);
     }
 }

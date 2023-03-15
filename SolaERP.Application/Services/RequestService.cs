@@ -208,12 +208,12 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(requestId);
         }
 
-        public async Task<ApiResponse<RequestDetailApprovalInfoDto>> GetRequestDetailApprvalInfoAsync(int requestDetaildId)
+        public async Task<ApiResponse<List<RequestDetailApprovalInfoDto>>> GetRequestDetailApprvalInfoAsync(int requestDetaildId)
         {
             var entity = await _requestDetailRepository.GetDetailApprovalInfoAsync(requestDetaildId);
-            var result = _mapper.Map<RequestDetailApprovalInfoDto>(entity);
+            var result = _mapper.Map<List<RequestDetailApprovalInfoDto>>(entity);
 
-            return result != null ? ApiResponse<RequestDetailApprovalInfoDto>.Success(result, 200) : ApiResponse<RequestDetailApprovalInfoDto>.Success(new(), 200);
+            return result != null ? ApiResponse<List<RequestDetailApprovalInfoDto>>.Success(result, 200) : ApiResponse<List<RequestDetailApprovalInfoDto>>.Success(new(), 200);
         }
 
         public async Task<ApiResponse<NoContentDto>> RequestDetailChangeStatusAsync(string finderToken, RequestDetailApproveModel model)

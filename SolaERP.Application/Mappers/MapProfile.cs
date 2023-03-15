@@ -11,6 +11,7 @@ using SolaERP.Infrastructure.Dtos.Buyer;
 using SolaERP.Infrastructure.Dtos.Currency;
 using SolaERP.Infrastructure.Dtos.Group;
 using SolaERP.Infrastructure.Dtos.Item_Code;
+using SolaERP.Infrastructure.Dtos.Language;
 using SolaERP.Infrastructure.Dtos.Layout;
 using SolaERP.Infrastructure.Dtos.Location;
 using SolaERP.Infrastructure.Dtos.LogInfo;
@@ -19,6 +20,7 @@ using SolaERP.Infrastructure.Dtos.Procedure;
 using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Dtos.Status;
 using SolaERP.Infrastructure.Dtos.Supplier;
+using SolaERP.Infrastructure.Dtos.Translate;
 using SolaERP.Infrastructure.Dtos.UOM;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
@@ -34,6 +36,7 @@ using SolaERP.Infrastructure.Entities.Buyer;
 using SolaERP.Infrastructure.Entities.Currency;
 using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Entities.Item_Code;
+using SolaERP.Infrastructure.Entities.Language;
 using SolaERP.Infrastructure.Entities.Layout;
 using SolaERP.Infrastructure.Entities.Location;
 using SolaERP.Infrastructure.Entities.LogInfo;
@@ -42,6 +45,7 @@ using SolaERP.Infrastructure.Entities.Procedure;
 using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.Entities.Status;
 using SolaERP.Infrastructure.Entities.Supplier;
+using SolaERP.Infrastructure.Entities.Translate;
 using SolaERP.Infrastructure.Entities.UOM;
 using SolaERP.Infrastructure.Entities.User;
 using SolaERP.Infrastructure.Models;
@@ -109,8 +113,9 @@ namespace SolaERP.Application.Mappers
                 ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name)).ReverseMap();
 
             CreateMap<Layout, LayoutDto>().ReverseMap();
-
             CreateMap<RequestMainDto, RequestMainAll>().ReverseMap();
+            CreateMap<Language, LanguageDto>().ReverseMap();
+            CreateMap<Translate, TranslateDto>().ReverseMap();
         }
     }
 }
