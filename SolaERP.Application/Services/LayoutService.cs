@@ -24,12 +24,12 @@ namespace SolaERP.Application.Services
             _layoutRepository = layoutRepository;
         }
 
-        public async Task<ApiResponse<bool>> DeleteLayoutAsync(string finderToken, LayoutDeleteModel layout)
+        public async Task<ApiResponse<bool>> DeleteLayoutAsync(string finderToken, string key)
         {
-            var entity = _mapper.Map<Layout>(layout);
-            entity.UserId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
 
-            var response = await _layoutRepository.DeleteLayoutAsync(entity);
+            var response = await _layoutRepository.DeleteLayoutAsync(userId, key);
+            _unitOfWork.SaveChangesAsync();
             return response ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Fail("Failed to delete user layout", 400);
         }
 
