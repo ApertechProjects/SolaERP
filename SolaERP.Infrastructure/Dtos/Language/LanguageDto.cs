@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Entities.Language
+namespace SolaERP.Infrastructure.Dtos.Language
 {
-    public class Language : BaseEntity
+    public class LanguageDto
     {
         public Int64 LanguageId { get; set; }
         public string LanguageCode { get; set; }
