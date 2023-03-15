@@ -124,16 +124,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<RequestDetailApprovalInfo> GetDetailApprovalInfoAsync(int requestDetailId)
+        public async Task<List<RequestDetailApprovalInfo>> GetDetailApprovalInfoAsync(int requestDetailId)
         {
-            RequestDetailApprovalInfo result = null;
+            List<RequestDetailApprovalInfo> result = new List<RequestDetailApprovalInfo>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "EXEC SP_RequestApprovals @RequestDetailId";
                 command.Parameters.AddWithValue(command, "@RequestDetailId", requestDetailId);
                 using var reader = await command.ExecuteReaderAsync();
 
-                if (await reader.ReadAsync()) result = reader.GetByEntityStructure<RequestDetailApprovalInfo>();
+                if (await reader.ReadAsync()) result.Add(reader.GetByEntityStructure<RequestDetailApprovalInfo>());
                 return result;
             }
         }
