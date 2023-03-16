@@ -13,7 +13,10 @@ namespace SolaERP.Application.Validations.RequestValidation
     {
         public RequestDetailValidation()
         {
-            //RuleFor(x=)
+            RuleFor(x => x.ItemCode).NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.RequestDeadline).NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.RequestDate).NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.LineNo).NotEmpty().WithMessage("Please, enter {PropertyName}");
         }
     }
 }

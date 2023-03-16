@@ -59,7 +59,7 @@ namespace SolaERP.Controllers
                 await _userService.UpdateUserIdentifierAsync(user.UserToken.ToString(), newtoken);
 
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(
-                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, userdto), UserIdentifier = newtoken.ToString() }, 200));
+                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(1, userdto), UserIdentifier = newtoken.ToString() }, 200));
             }
 
 

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using SolaERP.Application.Validations.ApproveStageValidation;
 using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Application.Validations.RequestValidation
@@ -13,6 +14,9 @@ namespace SolaERP.Application.Validations.RequestValidation
             RuleFor(x => x.RequestDate).NotNull().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.RequestDeadline).NotNull().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.Requester).NotNull().WithMessage("Please, enter {PropertyName}");
+
+            RuleForEach(x => x.Details).SetValidator(new RequestDetailValidation());
+
         }
     }
 }
