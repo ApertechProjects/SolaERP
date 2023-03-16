@@ -5,6 +5,7 @@ using SolaERP.Infrastructure.Dtos.AnalysisCode;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
+using System.Collections.Generic;
 
 namespace SolaERP.Application.Services
 {
@@ -21,13 +22,18 @@ namespace SolaERP.Application.Services
             _analysisCodeRepository = analysisCodeRepository;
         }
 
-        public async Task<ApiResponse<List<AnalysisCodeDto>>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest)
+        public async Task<ApiResponse<List<IGrouping<int, AnalysisCodeDto>>>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest)
         {
-            var analysisCodes = await _analysisCodeRepository.GetAnalysisCodesAsync(getRequest.Businessunitid, getRequest.ProcedureName, getRequest.Sequence);
+            var analysisCodes = await _analysisCodeRepository.GetAnalysisCodesAsync(getRequest.Businessunitid, getRequest.ProcedureName);
+            List<AnalysisCodeDto> analysis = _mapper.Map<List<AnalysisCodeDto>>(analysisCodes);
+
+            var groupingReult = analysis.GroupBy(x => x.Sequence).ToList();
+
+
             var analysisCodeResult = _mapper.Map<List<AnalysisCodeDto>>(analysisCodes);
 
-            return analysisCodeResult.Count > 0 ? ApiResponse<List<AnalysisCodeDto>>.Success(analysisCodeResult, 200) :
-                 ApiResponse<List<AnalysisCodeDto>>.Success(new List<AnalysisCodeDto>(), 200);
+            return analysisCodeResult.Count > 0 ? ApiResponse<List<IGrouping<int, AnalysisCodeDto>>>.Success(groupingReult, 200) :
+                  ApiResponse<List<IGrouping<int, AnalysisCodeDto>>>.Fail("Bad request", 400);
         }
     }
 }

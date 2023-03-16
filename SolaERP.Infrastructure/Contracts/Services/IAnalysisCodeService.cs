@@ -6,6 +6,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
 {
     public interface IAnalysisCodeService
     {
-        public Task<ApiResponse<List<AnalysisCodeDto>>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest);
+        public Task<ApiResponse<List<IGrouping<int, AnalysisCodeDto>>>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest);
     }
 }
