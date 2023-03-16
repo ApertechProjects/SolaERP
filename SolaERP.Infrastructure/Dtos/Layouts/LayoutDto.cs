@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace SolaERP.Infrastructure.Dtos.Layout
 {
@@ -7,7 +8,7 @@ namespace SolaERP.Infrastructure.Dtos.Layout
     {
         public string Key { get; set; }
         public string Filebase64 { get; set; }
-        [NotMapped]
+        [JsonIgnore]
         public byte[] Layout
         {
             get => Encoding.UTF8.GetBytes(Filebase64);
