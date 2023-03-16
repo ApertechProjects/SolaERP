@@ -23,15 +23,15 @@
         public string ConnectedOrderReference { get; set; }
         public decimal ConnectedOrderLineNo { get; set; }
         public string AccountCode { get; set; }
-        public int AnalysisCode1Id { get; set; }
-        public int AnalysisCode2Id { get; set; }
-        public int AnalysisCode3Id { get; set; }
-        public int AnalysisCode4Id { get; set; }
-        public int AnalysisCode5Id { get; set; }
-        public int AnalysisCode6Id { get; set; }
-        public int AnalysisCode7Id { get; set; }
-        public int AnalysisCode8Id { get; set; }
-        public int AnalysisCode9Id { get; set; }
-        public int AnalysisCode10Id { get; set; }
+        public int? AnalysisCode1Id { get; set; }
+        public int? AnalysisCode2Id { get; set; }
+        public int? AnalysisCode3Id { get; set; }
+        public int? AnalysisCode4Id { get; set; }
+        public int? AnalysisCode5Id { get; set; }
+        public int? AnalysisCode6Id { get; set; }
+        public int? AnalysisCode7Id { get; set; }
+        public int? AnalysisCode8Id { get; set; }
+        public int? AnalysisCode9Id { get; set; }
+        public int? AnalysisCode10Id { get; set; }
     }
 }
