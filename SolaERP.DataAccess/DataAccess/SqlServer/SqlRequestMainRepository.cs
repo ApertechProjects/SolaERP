@@ -323,7 +323,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RequestComment = reader.Get<string>("RequestComment"),
                 OperatorComment = reader.Get<string>("OperatorComment"),
                 QualityRequired = reader.Get<string>("QualityRequired"),
-                ApproveStatus = reader.Get<int>("ApproveStatus")
+                ApproveStatus = reader.Get<int>("ApproveStatus"),
+                ApproveStatusName = reader.Get<string>("ApproveStatusName"),
+                Status = reader.Get<int>("Status"),
+                StatusName = reader.Get<string>("ApproveStatusName")
             };
         }
 
