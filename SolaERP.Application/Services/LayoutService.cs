@@ -46,7 +46,8 @@ namespace SolaERP.Application.Services
         {
             var entity = _mapper.Map<Layout>(layout);
             entity.UserId = await _userRepository.GetUserIdByTokenAsync(finderToken);
-
+            await _unitOfWork.SaveChangesAsync();
+            await _layoutRepository.DeleteLayoutAsync(entity.UserId, layout.Key);
             var response = await _layoutRepository.SaveLayoutAsync(entity);
             await _unitOfWork.SaveChangesAsync();
             return response ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Fail("Failed to save user layout", 400);
