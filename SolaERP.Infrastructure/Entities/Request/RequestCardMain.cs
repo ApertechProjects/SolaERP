@@ -13,10 +13,8 @@
         public int UserId { get; set; }
         public int Requester { get; set; }
         public int Status { get; set; }
-        public string StatusName { get; set; }
         public int Destination { get; set; }
-        public int ApproveStatus { get; set; }
-        public string ApproveStatusName { get; set; }
+        public string ApproveStatus { get; set; }
         public string SupplierCode { get; set; }
         public string RequestComment { get; set; }
         public string OperatorComment { get; set; }
