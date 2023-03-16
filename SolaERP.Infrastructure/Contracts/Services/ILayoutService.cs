@@ -8,6 +8,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
     {
         Task<ApiResponse<LayoutDto>> GetUserLayoutAsync(string finderToken, string layoutKey);
         Task<ApiResponse<bool>> SaveLayoutAsync(string finderToken, LayoutDto layout);
-        Task<ApiResponse<bool>> DeleteLayoutAsync(string finderToken, LayoutDeleteModel layout);
+        Task<ApiResponse<bool>> DeleteLayoutAsync(string finderToken, string key);
     }
 }

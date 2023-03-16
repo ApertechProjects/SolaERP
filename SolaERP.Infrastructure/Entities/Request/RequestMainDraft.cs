@@ -4,6 +4,7 @@
     {
         public int RequestMainId { get; set; }
         public int Status { get; set; }
+        public string StatusName { get; set; }
         public string BusinessUnitCode { get; set; }
         public Int64 RowNum { get; set; }
         public string RequestType { get; set; }
@@ -17,5 +18,6 @@
         public string OperatorComment { get; set; }
         public string QualityRequired { get; set; }
         public int ApproveStatus { get; set; }
+        public string ApproveStatusName { get; set; }
     }
 }

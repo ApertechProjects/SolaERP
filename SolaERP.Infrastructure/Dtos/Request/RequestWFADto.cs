@@ -13,8 +13,10 @@
         public int UserId { get; set; }
         public int Requester { get; set; }
         public int Status { get; set; }
+        public string StatusName { get; set; }
         public int Sequence { get; set; }
         public int ApproveStatus { get; set; }
+        public string ApproveStatusName { get; set; }
         public string Buyer { get; set; }
         public string BuyerName { get; set; }
         public string SupplierCode { get; set; }

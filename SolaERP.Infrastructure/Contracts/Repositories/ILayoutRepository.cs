@@ -6,6 +6,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
     {
         Task<Layout> GetUserLayoutAsync(int userId, string layoutKey);
         Task<bool> SaveLayoutAsync(Layout layout);
-        Task<bool> DeleteLayoutAsync(Layout layout);
+        Task<bool> DeleteLayoutAsync(int userId, string layoutKey);
     }
 }

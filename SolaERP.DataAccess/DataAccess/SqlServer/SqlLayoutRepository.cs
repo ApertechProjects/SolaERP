@@ -14,15 +14,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> DeleteLayoutAsync(Layout layout)
+        public async Task<bool> DeleteLayoutAsync(int userId, string layoutKey)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_SaveLayout_D @UserId,@Key,@TabIndex";
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_SaveLayout_D @UserId,@Key";
 
-                command.Parameters.AddWithValue(command, "@UserId", layout.UserId);
-                command.Parameters.AddWithValue(command, "@Key", layout.Key);
-                command.Parameters.AddWithValue(command, "@TabIndex", layout.TabIndex);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                command.Parameters.AddWithValue(command, "@Key", layoutKey);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
@@ -41,7 +40,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Layout result = new();
 
                 if (reader.Read())
-                    result = reader.GetByEntityStructure<Layout>();
+                    result = reader.GetByEntityStructure<Layout>("Filebase64");
 
                 return result;
             }
