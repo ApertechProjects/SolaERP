@@ -29,12 +29,8 @@ namespace SolaERP.Application.Services
 
         public async Task<bool> RemoveRequestDetailAsync(int requestDetailId)
         {
-            if (requestDetailId > 0)
-            {
-                var result = await _requestDetailRepository.RemoveAsync(requestDetailId);
-                return result;
-            }
-            return true;
+            var result = await _requestDetailRepository.RemoveAsync(requestDetailId);
+            return result;
         }
 
         public async Task<ApiResponse<List<RequestMainDto>>> GetAllAsync(RequestMainGetModel model)
@@ -190,7 +186,7 @@ namespace SolaERP.Application.Services
                 {
                     var requestDetailDto = model.Details[i];
                     requestDetailDto.RequestMainId = resultModel.RequestMainId;
-                    if (requestDetailDto.Type == "remove")
+                    if (requestDetailDto.Type == "remove" && requestDetailDto.RequestDetailId > 0)
                     {
                         await RemoveRequestDetailAsync(requestDetailDto.RequestDetailId);
                     }
