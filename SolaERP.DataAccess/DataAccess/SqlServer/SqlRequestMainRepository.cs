@@ -278,8 +278,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 LogisticsTotal = reader.Get<decimal>("LogisticsTotal"),
                 Destination = reader.Get<int>("Destination"),
-                ApproveStatus = reader.Get<string>("ApproveStatus")
-
+                ApproveStatus = reader.Get<string>("ApproveStatus"),
+                AccountCode = reader.Get<string>("AccountCode"),
+                AccountName = reader.Get<string>("AccountName")
             };
         }
 

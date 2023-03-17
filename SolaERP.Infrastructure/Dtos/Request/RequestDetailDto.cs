@@ -23,6 +23,7 @@
         public string ConnectedOrderReference { get; set; }
         public decimal ConnectedOrderLineNo { get; set; }
         public string AccountCode { get; set; }
+        //public string AccountName { get; set; }
         public string Type { get; set; } 
         public int? AnalysisCode1Id { get; set; }
         public int? AnalysisCode2Id { get; set; }
