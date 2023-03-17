@@ -19,7 +19,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"Exec SP_RequestDetails_IUD  @RequestDetailId,  
+                command.CommandText = @"Exec SP_RequestDetails_IU  @RequestDetailId,  
                                                                     @RequestMainId, 
                                                                     @LineNo, 
                                                                     @RequestDate, 
@@ -94,11 +94,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = $"exec SP_RequestDetails_IUD @RequestDetailId";
-                command.Parameters.AddWithValue(command, "@RequestDetailId", Id);
-                var value = await command.ExecuteNonQueryAsync();
+                command.CommandText = $@"SET NOCOUNT OFF Exec SP_RequestDetails_D  @RequestDetailId";
 
-                return value > 0;
+                command.Parameters.AddWithValue(command, "@RequestDetailId", Id);
+
+                return await command.ExecuteNonQueryAsync() > 0;
             }
         }
 
