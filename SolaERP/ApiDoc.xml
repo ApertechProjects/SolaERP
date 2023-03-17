@@ -82,6 +82,29 @@
             <remarks>Returns All Business Unit List which available for given groupId</remarks>
             <param name="groupId">groupd id for check</param>
         </member>
+        <member name="M:SolaERP.Controllers.BuyerController.GetBuyersByTokenAsync(System.String,System.String)">
+             <summary>
+            Get a list of buyers for the current user and business Unit Code
+             </summary>
+             <remarks>This endpoint returns a list of buyers that are associated with the currently authenticated user.</remarks>
+            <param name="authToken">The token used to authenticate the user who performs the operation</param>
+            <param name="businessUnitCode">The unique identifier of the business unit for which to retrieve account codes.</param>
+        </member>
+        <member name="M:SolaERP.Controllers.CurrencyController.GetCurrencyCodesByBusinessUnitCode(System.String,System.String)">
+             <summary>
+            Retrieves a list of all available currency codes.
+             </summary>
+             <remarks>The GetCurrencyCodes endpoint provided by the Currency controller retrieves a list of all available currency codes</remarks>
+            <param name="authToken">The token used to authenticate the user who performs the operation</param>
+            <param name="businessUnitCode">The unique identifier of the business unit for which to retrieve currency codes.</param>
+        </member>
+        <member name="M:SolaERP.Controllers.DueDiligenceController.GetDue(System.String,System.Int32)">
+             <summary>
+            Retrieves all due diligence tasks for a given vendor.
+             </summary>
+             <remarks>The GetDue endpoint retrieves a list of all due diligence tasks for a given vendor, identified by the vendorId parameter.</remarks>
+            <param name="token">The token used to authenticate the user who performs the operation</param>
+        </member>
         <member name="M:SolaERP.Controllers.MenuController.GetUserMenusWithChildren(System.String)">
             <summary>
             Gets the list of users.
@@ -90,6 +113,20 @@
             This endpoint returns the list of all users in the system.
             </remarks>
             <returns>The list of users.</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:SolaERP.Controllers.StatusController.GetAllAsync" -->
+        <member name="M:SolaERP.Controllers.SupplierController.GetSupplierCodes">
+             <summary>
+            Gets a list of all supplier codes.
+             </summary>
+             <remarks>This endpoint returns a list of all supplier codes in the system. The response includes an array of SupplierCodeDto objects, each of which contains the supplier code and supplier name.</remarks>
+        </member>
+        <member name="M:SolaERP.Controllers.UOMController.GetUOMListBusinessUnitCode(System.String)">
+             <summary>
+            This endpoint returns a list of all available unit of measure codes.
+             </summary>
+             <remarks>The GetAllUOMList endpoint returns a list of all the available unit of measure codes in the system. This endpoint can be used to retrieve the list of available UOM codes and their descriptions for use in other parts of the system.</remarks>
+            <param name="businessUnitCode">The unique identifier of the business unit for which to retrieve currency codes.</param>
         </member>
         <member name="M:SolaERP.Controllers.UserController.UpdateUser(SolaERP.Infrastructure.Dtos.UserDto.UserDto)">
              <summary>
