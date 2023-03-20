@@ -17,6 +17,11 @@ namespace SolaERP.Controllers
 
         public ConfHelper conf { get; }
 
+        /// <summary>
+        ///Retrieves all due diligence tasks for a given vendor.
+        /// </summary>
+        /// <remarks>The GetDue endpoint retrieves a list of all due diligence tasks for a given vendor, identified by the vendorId parameter.</remarks>
+        ///<param name="token">The token used to authenticate the user who performs the operation</param>
         [HttpGet("{vendorId}")]
         public async Task<ApiResult> GetDue([FromHeader] string token, int vendorId)
         {
