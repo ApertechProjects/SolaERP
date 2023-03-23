@@ -59,6 +59,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<ISupplierService, SupplierService>();
             builder.Services.AddScoped<ILayoutService, LayoutService>();
             builder.Services.AddScoped<ILanguageService, LanguageService>();
+            builder.Services.AddScoped<IVendorService, VendorService>();
         }
         private static void UseRepositories(this WebApplicationBuilder builder)
         {
@@ -86,6 +87,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<ISupplierRepository, SqlSupplierRepository>();
             builder.Services.AddScoped<ILayoutRepository, SqlLayoutRepository>();
             builder.Services.AddScoped<ILanguageRepository, SqlLanguageRepository>();
+            builder.Services.AddScoped<IVendorRepository, SqlVendorRepository>();
         }
         public static void UseValidationExtension(this WebApplicationBuilder builder)
         {

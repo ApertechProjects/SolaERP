@@ -2,6 +2,7 @@
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Entities.User;
+using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
@@ -248,6 +249,93 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             return new() { Id = reader.Get<int>("Id"), FullName = reader.Get<string>("FullName") };
         }
 
+        public async Task<List<UserMain>> GetUserWFAAsync(int userId, UserGetModel model)
+        {
+            List<UserMain> users = new List<UserMain>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec SP_UsersWFA @UserType,@UserStatus,@UserId";
+                if (model.AllUserTypes)
+                    command.Parameters.AddWithValue(command, "@UserType", "%");
+                else
+                    command.Parameters.AddWithValue(command, "@UserType", string.Join(',', model.UserType));
+                if (model.AllUserStatus)
+                    command.Parameters.AddWithValue(command, "@UserStatus", "%");
+                else
+                    command.Parameters.AddWithValue(command, "@UserStatus", string.Join(',', model.UserStatus));
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    users.Add(reader.GetByEntityStructure<UserMain>());
+                }
+                return users;
+            }
+        }
+
+        public async Task<List<UserMain>> GetUserAllAsync(int userId, UserGetModel model)
+        {
+            List<UserMain> users = new List<UserMain>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec SP_UsersAll @UserType,@UserStatus,@UserId";
+                if (model.AllUserTypes)
+                    command.Parameters.AddWithValue(command, "@UserType", "%");
+                else
+                    command.Parameters.AddWithValue(command, "@UserType", string.Join(',', model.UserType));
+                if (model.AllUserStatus)
+                    command.Parameters.AddWithValue(command, "@UserStatus", "%");
+                else
+                    command.Parameters.AddWithValue(command, "@UserStatus", string.Join(',', model.UserStatus));
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    users.Add(reader.GetByEntityStructure<UserMain>());
+                }
+                return users;
+            }
+        }
+
+        public async Task<List<UserMain>> GetUserCompanyAsync(int userId, List<int> userStatus, bool all)
+        {
+            List<UserMain> users = new List<UserMain>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec SP_UsersCompany @UserStatus,@UserId";
+                if (all)
+                    command.Parameters.AddWithValue(command, "@UserStatus", "%");
+                else
+                    command.Parameters.AddWithValue(command, "@UserStatus", string.Join(',', userStatus));
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    users.Add(reader.GetByEntityStructure<UserMain>());
+                }
+                return users;
+            }
+        }
+
+        public async Task<List<UserMain>> GetUserVendorAsync(int userId, List<int> userStatus, bool all)
+        {
+            List<UserMain> users = new List<UserMain>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec SP_UsersVendor @UserStatus,@UserId";
+                if (all)
+                    command.Parameters.AddWithValue(command, "@UserStatus", "%");
+                else
+                    command.Parameters.AddWithValue(command, "@UserStatus", string.Join(',', userStatus));
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    users.Add(reader.GetByEntityStructure<UserMain>());
+                }
+                return users;
+            }
+        }
 
         #endregion
     }

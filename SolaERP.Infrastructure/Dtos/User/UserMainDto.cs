@@ -1,0 +1,21 @@
+﻿namespace SolaERP.Infrastructure.Dtos.User
+{
+    public class UserMainDto
+    {
+        public int Id { get; set; }
+        public byte[] Photo { get; set; }
+        public string FullName { get; set; }
+        public string ApproveStatus { get; set; }
+        public Int64 RowNum { get; set; }
+        public string Status { get; set; }
+        public DateTime LastActivity { get; set; }
+        public string UserName { get; set; }
+        public string Descr { get; set; }
+        public int Gender { get; set; }
+        public string Buyer { get; set; }
+        public string VendorCode { get; set; }
+        public string VendorName { get; set; }
+        public string TaxId { get; set; }
+        public string PhoneNumber { get; set; }
+    }
+}
