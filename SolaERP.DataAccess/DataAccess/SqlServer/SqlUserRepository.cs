@@ -149,7 +149,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public async Task<bool> AddAsync(User entity)
         {
-            string query = "Exec SP_User_insert @FullName,@StatusId,@UserName,@Email ,@EmailConfirmed ,@PasswordHash,@UserTypeId,@UserToken";
+            string query = "Exec SP_User_insert @FullName,@StatusId,@UserName,@Email ,@EmailConfirmed ,@PasswordHash,@UserTypeId,@Gender,@UserToken";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = query;
@@ -160,6 +160,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@EmailConfirmed", entity.EmailConfirmed);
                 command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
                 command.Parameters.AddWithValue(command, "@UserTypeId", entity.UserTypeId);
+                command.Parameters.AddWithValue(command, "@Gender", entity.Gender);
                 command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken.ToString());
 
                 var value = await command.ExecuteNonQueryAsync();
@@ -334,6 +335,22 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     users.Add(reader.GetByEntityStructure<UserMain>());
                 }
                 return users;
+            }
+        }
+
+        public async Task<bool> UserChangeStatusAsync(int userId, UserChangeStatusModel model)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_UserApprove @Id,@Sequence,@ApproveStatus,,@UserId,@Comment";
+
+                command.Parameters.AddWithValue(command, "@Id", model.Id);
+                command.Parameters.AddWithValue(command, "@Sequence", model.Sequence);
+                command.Parameters.AddWithValue(command, "@ApproveStatus", model.ApproveStatus);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                command.Parameters.AddWithValue(command, "@Comment", model.Comment);
+
+                return await command.ExecuteNonQueryAsync() > 0;
             }
         }
 

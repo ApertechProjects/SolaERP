@@ -23,5 +23,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string authToken, UserGetModel model);
         Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string authToken, List<int> userStatus, bool all);
         Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string authToken, List<int> userStatus, bool all);
+        Task<ApiResponse<bool>> UserChangeStatusAsync(string authToken, UserChangeStatusModel model);
     }
 }

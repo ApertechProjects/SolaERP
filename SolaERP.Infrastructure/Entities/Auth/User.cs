@@ -1,7 +1,5 @@
 ﻿using SolaERP.Infrastructure.Attributes;
 
-using SolaERP.Infrastructure.Attributes;
-
 namespace SolaERP.Infrastructure.Entities.Auth
 {
     public class User : BaseEntity
@@ -42,6 +40,7 @@ namespace SolaERP.Infrastructure.Entities.Auth
         public int CompanyId { get; set; }
         public string Position { get; set; }
         public int VendorId { get; set; }
+        public bool Gender { get; set; }
         public Guid UserToken { get; set; }
     }
 }
