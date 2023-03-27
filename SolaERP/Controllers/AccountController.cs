@@ -50,7 +50,7 @@ namespace SolaERP.Controllers
             if (user == null)
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Fail($"User: {dto.Email} not found", 400));
 
-            var userdto = _mapper.Map<UserDto>(user);
+            var userdto = _mapper.Map<UserRegisterModel>(user);
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
 
             if (signInResult.Succeeded)
@@ -70,14 +70,14 @@ namespace SolaERP.Controllers
         /// Creates a user with given input
         /// </summary>
         [HttpPost]
-        public async Task<IActionResult> Register(UserDto dto)
+        public async Task<IActionResult> Register(UserRegisterModel dto)
         {
             var user = await _userManager.FindByNameAsync(dto.Email);
 
             if (user is null)
             {
                 dto.UserToken = Guid.NewGuid();
-                await _userService.AddAsync(dto);
+                await _userService.UserRegisterAsync(dto);
 
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto), UserIdentifier = dto.UserToken.ToString() }, 200));
             }

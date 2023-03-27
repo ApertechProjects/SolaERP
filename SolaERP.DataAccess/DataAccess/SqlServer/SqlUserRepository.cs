@@ -149,23 +149,32 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public async Task<bool> AddAsync(User entity)
         {
-            string query = "Exec SP_User_insert @FullName,@StatusId,@UserName,@Email ,@EmailConfirmed ,@PasswordHash,@UserTypeId,@Gender,@UserToken";
+            string query = "Exec SP_AppUser_IUD @FullName,@ChangePassword,@StatusId,@Theme,@LastActivity,@UserName,@Email,@PasswordHash,@PhoneNumber ,@UserTypeId,@VendorId,@UserToken,@Gender,@Buyer,@Description,@ERPUser";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = query;
                 command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
+                command.Parameters.AddWithValue(command, "@ChangePassword", entity.ChangePassword);
                 command.Parameters.AddWithValue(command, "@StatusId", entity.StatusId);
+                command.Parameters.AddWithValue(command, "@Theme", entity.Theme);
+                command.Parameters.AddWithValue(command, "@LastActivity", entity.LastActivity);
                 command.Parameters.AddWithValue(command, "@UserName", entity.UserName);
                 command.Parameters.AddWithValue(command, "@Email", entity.Email);
                 command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
+                command.Parameters.AddWithValue(command, "@PhoneNumber", entity.PhoneNumber);
                 command.Parameters.AddWithValue(command, "@UserTypeId", entity.UserTypeId);
+                command.Parameters.AddWithValue(command, "@VendorId", entity.VendorId);
                 command.Parameters.AddWithValue(command, "@Gender", entity.Gender);
+                command.Parameters.AddWithValue(command, "@Buyer", entity.Buyer);
+                command.Parameters.AddWithValue(command, "@Description", entity.Description);
+                command.Parameters.AddWithValue(command, "@ERPUser", entity.ERPUser);
                 command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken.ToString());
 
                 var value = await command.ExecuteNonQueryAsync();
                 return value > 0;
             }
         }
+
         public async Task<bool> RemoveAsync(int Id)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -348,6 +357,34 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@Comment", model.Comment);
 
                 return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> SaveUserAsync(int userId, User entity)
+        {
+            string query = "Exec SP_AppUser_IUD @FullName,@ChangePassword,@StatusId,@Theme,@LastActivity,@UserName,@Email,@PasswordHash,@PhoneNumber ,@UserTypeId,@VendorId,@UserToken,@Gender,@Buyer,@Description,@ERPUser";
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = query;
+                command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
+                command.Parameters.AddWithValue(command, "@ChangePassword", entity.ChangePassword);
+                command.Parameters.AddWithValue(command, "@StatusId", entity.StatusId);
+                command.Parameters.AddWithValue(command, "@Theme", entity.Theme);
+                command.Parameters.AddWithValue(command, "@LastActivity", entity.LastActivity);
+                command.Parameters.AddWithValue(command, "@UserName", entity.UserName);
+                command.Parameters.AddWithValue(command, "@Email", entity.Email);
+                command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
+                command.Parameters.AddWithValue(command, "@PhoneNumber", entity.PhoneNumber);
+                command.Parameters.AddWithValue(command, "@UserTypeId", entity.UserTypeId);
+                command.Parameters.AddWithValue(command, "@VendorId", entity.VendorId);
+                command.Parameters.AddWithValue(command, "@Gender", entity.Gender);
+                command.Parameters.AddWithValue(command, "@Buyer", entity.Buyer);
+                command.Parameters.AddWithValue(command, "@Description", entity.Description);
+                command.Parameters.AddWithValue(command, "@ERPUser", entity.ERPUser);
+                command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken.ToString());
+
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
             }
         }
 
