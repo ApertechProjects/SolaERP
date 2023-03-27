@@ -109,8 +109,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     Id = reader.Get<int>("Id"),
                     FullName = reader.Get<string>("Fullname"),
                     StatusId = reader.Get<int>("StatusId"),
-                    Position = reader.Get<string>("Position"),
-                    Sessions = reader.Get<int>("Sessions"),
                     LastActivity = reader.Get<DateTime>("LastActivity"),
                     UserName = reader.Get<string>("UserName"),
                 },

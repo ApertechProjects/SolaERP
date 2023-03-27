@@ -6,7 +6,7 @@ namespace SolaERP.Controllers
 {
     //[ApiController]
     //[Route("api/[controller]/[action]")]
-    public class OptionController
+    public class OptionController : CustomBaseController
     {
         public ConfHelper ConfHelper { get; }
         public OptionController(ConfHelper confHelper)
@@ -18,7 +18,7 @@ namespace SolaERP.Controllers
         [HttpDelete]
         public async Task SetClassStructureFN()
         {
-            string result = (await GetData.FromQuery($"SELECT * FROM dbo.VW_Procedures_List", ConfHelper.DevelopmentUrl)).GetDataTableColumNames();
+            string result = (await GetData.FromQuery($"SELECT * FROM Config.AppUser", ConfHelper.DevelopmentUrl)).GetDataTableColumNames();
         }
 
         [HttpDelete]

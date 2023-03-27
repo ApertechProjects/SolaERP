@@ -157,7 +157,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@StatusId", entity.StatusId);
                 command.Parameters.AddWithValue(command, "@UserName", entity.UserName);
                 command.Parameters.AddWithValue(command, "@Email", entity.Email);
-                command.Parameters.AddWithValue(command, "@EmailConfirmed", entity.EmailConfirmed);
                 command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
                 command.Parameters.AddWithValue(command, "@UserTypeId", entity.UserTypeId);
                 command.Parameters.AddWithValue(command, "@Gender", entity.Gender);
@@ -185,9 +184,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             {
                 command.Parameters.AddWithValue(command, "@UserId", entity.Id);
                 command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
-                command.Parameters.AddWithValue(command, "@Position", entity.Position);
                 command.Parameters.AddWithValue(command, "@PhoneNumber", entity.PhoneNumber);
-                command.Parameters.AddWithValue(command, "@Photo", entity.Photo);
                 command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
                 command.CommandText = query;
                 //TODO: Handle Procedure Convert Error When Updateing User
