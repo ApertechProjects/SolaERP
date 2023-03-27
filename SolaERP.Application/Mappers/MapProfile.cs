@@ -24,6 +24,7 @@ using SolaERP.Infrastructure.Dtos.Translate;
 using SolaERP.Infrastructure.Dtos.UOM;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
+using SolaERP.Infrastructure.Dtos.Venndors;
 using SolaERP.Infrastructure.Entities.Account;
 using SolaERP.Infrastructure.Entities.AnalysisCode;
 using SolaERP.Infrastructure.Entities.ApproveRole;
@@ -48,6 +49,7 @@ using SolaERP.Infrastructure.Entities.Supplier;
 using SolaERP.Infrastructure.Entities.Translate;
 using SolaERP.Infrastructure.Entities.UOM;
 using SolaERP.Infrastructure.Entities.User;
+using SolaERP.Infrastructure.Entities.Vendors;
 using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Application.Mappers
@@ -119,6 +121,8 @@ namespace SolaERP.Application.Mappers
             CreateMap<RequestMainDto, RequestMainAll>().ReverseMap();
             CreateMap<Language, LanguageDto>().ReverseMap();
             CreateMap<Translate, TranslateDto>().ReverseMap();
+            CreateMap<VendorInfo, VendorInfoDto>().ReverseMap();
+            CreateMap<UserMain, UserMainDto>().ReverseMap();
         }
     }
 }

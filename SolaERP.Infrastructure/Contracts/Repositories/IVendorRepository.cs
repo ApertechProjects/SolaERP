@@ -6,6 +6,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
     {
         public Task<List<Vendors>> GetVendorDrafts(int userId, int businessUnitId);
         public Task<List<Vendors>> GetVendorWFA(int userId, int businessUnitId);
-
+        public Task<VendorInfo> GetVendorByTaxIdAsync(string taxId);
     }
 }

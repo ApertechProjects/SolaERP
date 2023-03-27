@@ -4,20 +4,23 @@ using SolaERP.Business.CommonLogic;
 using SolaERP.Business.Dtos.EntityDtos.Vendor;
 using SolaERP.Business.Models;
 using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Contracts.Services;
 
 namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
-    public class VendorController : ControllerBase
+    public class VendorController : CustomBaseController
     {
         private ConfHelper ConfHelper { get; }
         private readonly IUserRepository _userRepository;
-        public VendorController(ConfHelper confHelper, IUserRepository userRepository)
+        private readonly IVendorService _vendorService;
+        public VendorController(ConfHelper confHelper, IUserRepository userRepository, IVendorService vendorService)
         {
             ConfHelper = confHelper;
             _userRepository = userRepository;
+            _vendorService = vendorService;
         }
 
 
@@ -52,6 +55,12 @@ namespace SolaERP.Controllers
         public async Task<ApiResult> GetActiveVendor([FromHeader] string authToken, int businessUnitId)
         {
             return await new EntityLogic(ConfHelper, _userRepository).GetActiveVendors(authToken, businessUnitId);
+        }
+
+        [HttpGet("{taxId}")]
+        public async Task<IActionResult> GetVendorByTaxIdAsync(string taxId)
+        {
+            return CreateActionResult(await _vendorService.GetVendorByTaxIdAsync(taxId));
         }
     }
 }

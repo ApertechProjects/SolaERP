@@ -12,7 +12,7 @@ namespace SolaERP.Business.CommonLogic
             string columNames = string.Empty;
             foreach (DataColumn columnName in dataTable.Columns)
             {
-                columNames += $"public {columnName.DataType} {columnName.ColumnName.Replace(" ", "").Replace("/", "")}" + " " + "{ get; set; }";
+                columNames += $"public {columnName.DataType} {columnName.ColumnName.Replace(" ", "").Replace("/", "").Replace("System.","")}" + " " + "{ get; set; }";
             }
             return columNames;
         }

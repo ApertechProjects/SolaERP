@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Newtonsoft.Json;
 using JsonIgnoreAttribute = Newtonsoft.Json.JsonIgnoreAttribute;
 
 namespace SolaERP.Infrastructure.Dtos.Shared
@@ -40,5 +41,21 @@ namespace SolaERP.Infrastructure.Dtos.Shared
             return new ApiResponse<T> { Errors = jsonResult, StatusCode = statusCode };
         }
 
+        public static ApiResponse<T> Fail(List<string> propertyName, List<ModelErrorCollection> error, int statusCode)
+        {
+            var errorss = new Dictionary<string, string>();
+            for (int i = 0; i < propertyName.Count; i++)
+            {
+                errorss.Add(propertyName[i], error[i][0].ErrorMessage);
+            }
+
+            string jsonResult = JsonConvert.SerializeObject(errorss);
+
+            return new ApiResponse<T>
+            {
+                Errors = jsonResult,
+                StatusCode = statusCode
+            };
+        }
     }
 }

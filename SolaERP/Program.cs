@@ -14,6 +14,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers(options => { options.Filters.Add(new ValidationFilter()); })
@@ -35,7 +36,7 @@ builder.Services.Configure<ApiBehaviorOptions>(config => { config.SuppressModelS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
-        corsBuilder => corsBuilder.WithOrigins(builder.Configuration["Cors:Origins"])
+        corsBuilder => corsBuilder.WithOrigins(builder.Configuration["Cors:OriginsSSL"])
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowAnyOrigin()
@@ -131,6 +132,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 }
 app.UseHttpLogging();
 app.UseCors("CorsPolicy");
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.MapHub<ChatHub>("/ChatHub");

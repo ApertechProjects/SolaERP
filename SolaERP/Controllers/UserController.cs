@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.UserDto;
+using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Controllers
 {
@@ -11,10 +12,11 @@ namespace SolaERP.Controllers
     public class UserController : CustomBaseController
     {
         private readonly IUserService _userService;
-
-        public UserController(IUserService userService)
+        private readonly IVendorService _vendorService;
+        public UserController(IUserService userService, IVendorService vendorService)
         {
             _userService = userService;
+            _vendorService = vendorService;
         }
 
 
@@ -54,8 +56,25 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetActiveUsersAsync()
             => CreateActionResult(await _userService.GetActiveUsersAsync());
 
+        [HttpPost]
+        public async Task<IActionResult> GetUserWFAAsync([FromHeader] string authToken, UserGetModel model)
+            => CreateActionResult(await _userService.GetUserWFAAsync(authToken, model));
 
+        [HttpPost]
+        public async Task<IActionResult> GetUserAllAsync([FromHeader] string authToken, UserGetModel model)
+            => CreateActionResult(await _userService.GetUserAllAsync(authToken, model));
 
+        [HttpPost]
+        public async Task<IActionResult> GetUserCompanyAsync([FromHeader] string authToken, List<int> userStatus, bool allStatus = false)
+            => CreateActionResult(await _userService.GetUserCompanyAsync(authToken, userStatus, allStatus));
+
+        [HttpPost]
+        public async Task<IActionResult> GetUserVendorAsync([FromHeader] string authToken, List<int> userStatus, bool allStatus = false)
+            => CreateActionResult(await _userService.GetUserVendorAsync(authToken, userStatus, allStatus));
+
+        [HttpPost]
+        public async Task<IActionResult> UserChangeStatusAsync([FromHeader] string authToken, UserChangeStatusModel model)
+            => CreateActionResult(await _userService.UserChangeStatusAsync(authToken, model));
 
     }
 }

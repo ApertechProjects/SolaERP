@@ -31,6 +31,9 @@ namespace SolaERP.Application.Services
 
         public async Task AddAsync(UserDto model)
         {
+            if (model.UserType == Infrastructure.Enums.UserRegisterType.SupplierUser && model.VendorId == false)
+                throw new UserException("Company name required for Supplier user");
+
             if (model.Password != model.ConfirmPassword)
                 throw new UserException("Password doesn't match with confirm password");
 
@@ -182,6 +185,54 @@ namespace SolaERP.Application.Services
         public Task<string> GetUserNameByTokenAsync(string finderToken)
         {
             return _userRepository.GetUserNameByTokenAsync(finderToken);
+        }
+
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserWFAAsync(string authToken, UserGetModel model)
+        {
+            int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
+            var users = await _userRepository.GetUserWFAAsync(userId, model);
+            var dto = _mapper.Map<List<UserMainDto>>(users);
+            return ApiResponse<List<UserMainDto>>.Success(dto, 200);
+        }
+
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string authToken, UserGetModel model)
+        {
+            int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
+            var users = await _userRepository.GetUserAllAsync(userId, model);
+            var dto = _mapper.Map<List<UserMainDto>>(users);
+            return ApiResponse<List<UserMainDto>>.Success(dto, 200);
+        }
+
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string authToken, List<int> userStatus, bool all)
+        {
+            int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
+            var users = await _userRepository.GetUserCompanyAsync(userId, userStatus, all);
+            var dto = _mapper.Map<List<UserMainDto>>(users);
+            return ApiResponse<List<UserMainDto>>.Success(dto, 200);
+        }
+
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string authToken, List<int> userStatus, bool all)
+        {
+            int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
+            var users = await _userRepository.GetUserVendorAsync(userId, userStatus, all);
+            var dto = _mapper.Map<List<UserMainDto>>(users);
+            return ApiResponse<List<UserMainDto>>.Success(dto, 200);
+        }
+
+        public async Task<ApiResponse<bool>> UserChangeStatusAsync(string authToken, UserChangeStatusModel model)
+        {
+            var userId = await _userRepository.GetUserIdByTokenAsync(authToken);
+            if (model.Id == 0)
+                return ApiResponse<bool>.Fail("User must be selected", 200);
+
+            List<string> failedMailList = new List<string>();
+            string userName = await _userRepository.GetUserNameByTokenAsync(authToken);
+
+            await _userRepository.UserChangeStatusAsync(userId, model);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return ApiResponse<bool>.Success(true, 200);
         }
     }
 }

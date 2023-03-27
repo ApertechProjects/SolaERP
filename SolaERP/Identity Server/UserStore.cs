@@ -41,11 +41,6 @@ namespace SolaERP.Application.Identity_Server
             return user;
         }
 
-        public async Task<string> GetNormalizedUserNameAsync(User user, CancellationToken cancellationToken)
-        {
-            return await Task.Run(() => { return user.NormalizedUserName; });
-        }
-
         public async Task<string> GetPasswordHashAsync(User user, CancellationToken cancellationToken)
         {
             return await Task.Run(() => { return user.PasswordHash; });
@@ -154,6 +149,11 @@ namespace SolaERP.Application.Identity_Server
         {
             var user = await _userRepository.GetUserByEmailAsync(normalizedEmail);
             return user;
+        }
+
+        public Task<string> GetNormalizedUserNameAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
         //public Task<string> GetNormalizedEmailAsync(User user, CancellationToken cancellationToken)
