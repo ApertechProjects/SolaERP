@@ -262,20 +262,16 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "exec SP_UsersWFA @UserType,@UserStatus,@UserId";
-                if (model.AllUserTypes)
-                    command.Parameters.AddWithValue(command, "@UserType", "%");
-                else
-                    command.Parameters.AddWithValue(command, "@UserType", string.Join(',', model.UserType));
-                if (model.AllUserStatus)
-                    command.Parameters.AddWithValue(command, "@UserStatus", "%");
-                else
-                    command.Parameters.AddWithValue(command, "@UserStatus", string.Join(',', model.UserStatus));
+
+                command.Parameters.AddWithValue(command, "@UserType", model.UserType is null ? "%" : string.Join(',', model.UserType));
+                command.Parameters.AddWithValue(command, "@UserStatus", model.UserStatus is null ? "%" : string.Join(',', model.UserStatus));
                 command.Parameters.AddWithValue(command, "@UserId", userId);
+
                 using var reader = await command.ExecuteReaderAsync();
+
                 while (reader.Read())
-                {
                     users.Add(reader.GetByEntityStructure<UserMain>());
-                }
+
                 return users;
             }
         }
@@ -286,20 +282,16 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "exec SP_UsersAll @UserType,@UserStatus,@UserId";
-                if (model.AllUserTypes)
-                    command.Parameters.AddWithValue(command, "@UserType", "%");
-                else
-                    command.Parameters.AddWithValue(command, "@UserType", string.Join(',', model.UserType));
-                if (model.AllUserStatus)
-                    command.Parameters.AddWithValue(command, "@UserStatus", "%");
-                else
-                    command.Parameters.AddWithValue(command, "@UserStatus", string.Join(',', model.UserStatus));
+
+                command.Parameters.AddWithValue(command, "@UserType", model.UserType is null ? "%" : string.Join(',', model.UserType));
+                command.Parameters.AddWithValue(command, "@UserStatus", model.UserStatus is null ? "%" : string.Join(',', model.UserStatus));
                 command.Parameters.AddWithValue(command, "@UserId", userId);
+
                 using var reader = await command.ExecuteReaderAsync();
+
                 while (reader.Read())
-                {
                     users.Add(reader.GetByEntityStructure<UserMain>());
-                }
+
                 return users;
             }
         }
