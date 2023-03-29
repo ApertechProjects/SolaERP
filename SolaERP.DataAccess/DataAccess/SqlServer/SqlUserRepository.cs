@@ -157,7 +157,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@ChangePassword", entity.ChangePassword);
                 command.Parameters.AddWithValue(command, "@StatusId", entity.StatusId);
                 command.Parameters.AddWithValue(command, "@Theme", entity.Theme);
-                command.Parameters.AddWithValue(command, "@LastActivity", entity.LastActivity);
+                command.Parameters.AddWithValue(command, "@LastActivity", DateTime.Now);
                 command.Parameters.AddWithValue(command, "@UserName", entity.UserName);
                 command.Parameters.AddWithValue(command, "@Email", entity.Email);
                 command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);

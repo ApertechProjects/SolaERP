@@ -46,7 +46,7 @@ namespace SolaERP.Application.Services
 
         public async Task UserRegisterAsync(UserRegisterModel model)
         {
-            if (model.UserType == Infrastructure.Enums.UserRegisterType.SupplierUser && model.VendorId == false)
+            if (model.UserType == Infrastructure.Enums.UserRegisterType.SupplierUser && model.VendorId == 0)
                 throw new UserException("Company name required for Supplier user");
 
             if (model.Password != model.ConfirmPassword)
