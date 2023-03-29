@@ -149,7 +149,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public async Task<bool> AddAsync(User entity)
         {
-            string query = "Exec SP_AppUser_IUD @FullName,@ChangePassword,@StatusId,@Theme,@LastActivity,@UserName,@Email,@PasswordHash,@PhoneNumber ,@UserTypeId,@VendorId,@UserToken,@Gender,@Buyer,@Description,@ERPUser";
+            string query = "Exec SP_AppUser_IUD @FullName,@ChangePassword,@StatusId,@Theme,@UserName,@Email,@PasswordHash,@PhoneNumber ,@UserTypeId,@VendorId,@UserToken,@Gender,@Buyer,@Description,@ERPUser";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = query;
@@ -157,7 +157,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@ChangePassword", entity.ChangePassword);
                 command.Parameters.AddWithValue(command, "@StatusId", entity.StatusId);
                 command.Parameters.AddWithValue(command, "@Theme", entity.Theme);
-                command.Parameters.AddWithValue(command, "@LastActivity", entity.LastActivity);
                 command.Parameters.AddWithValue(command, "@UserName", entity.UserName);
                 command.Parameters.AddWithValue(command, "@Email", entity.Email);
                 command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
