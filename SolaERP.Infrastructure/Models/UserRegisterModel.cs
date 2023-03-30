@@ -1,9 +1,14 @@
 ﻿using SolaERP.Infrastructure.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Dtos.UserDto
+namespace SolaERP.Infrastructure.Models
 {
-    public class UserDto
+    public class UserRegisterModel
     {
         public int Id { get; set; }
         public string FullName { get; set; }
@@ -12,6 +17,7 @@ namespace SolaERP.Infrastructure.Dtos.UserDto
         public string Email { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
+        public bool ChangePassword { get; set; }
         public bool Gender { get; set; }
         public int VendorId { get; set; }
         [JsonIgnore]
