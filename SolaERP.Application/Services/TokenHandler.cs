@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.UserDto;
+using SolaERP.Infrastructure.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -19,7 +20,7 @@ namespace SolaERP.Application.Services
             _configuration = configuration;
         }
 
-        public async Task<Token> GenerateJwtTokenAsync(int minutes, UserDto user)
+        public async Task<Token> GenerateJwtTokenAsync(int minutes, UserRegisterModel user)
         {
             Token result = await Task.Run(async () =>
             {
@@ -49,7 +50,7 @@ namespace SolaERP.Application.Services
             return result;
         }
 
-        public async Task<List<Claim>> GetUserClaimsAsync(UserDto user)
+        public async Task<List<Claim>> GetUserClaimsAsync(UserRegisterModel user)
         {
             var claims = await Task.Run(() =>
             {

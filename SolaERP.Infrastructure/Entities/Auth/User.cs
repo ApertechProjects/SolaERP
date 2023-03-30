@@ -44,10 +44,22 @@ namespace SolaERP.Infrastructure.Entities.Auth
         //public Guid UserToken { get; set; }
         [DbColumn("Id")]
         public int UserId { get; set; }
+        private string theme = "light";
+        public int Id { get; set; }
         public string FullName { get; set; }
         public bool ChangePassword { get; set; }
         public int StatusId { get; set; }
-        public string Theme { get; set; }
+        public string Theme
+        {
+            get
+            {
+                return theme;
+            }
+            set
+            {
+                theme = value;
+            }
+        }
         public DateTime LastActivity { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }

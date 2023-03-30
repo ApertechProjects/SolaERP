@@ -76,12 +76,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<RequestMainDraft>> GetMainRequestDraftsAsync(RequestMainDraftModel requestMain)
         {
+            string itemCode = string.Join(',', requestMain.ItemCodes);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainDrafts]", new ReplaceParams { ParamName = "APT", Value = requestMain.BusinessUnitCode });
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", requestMain.BusinessUnitId);
-                command.Parameters.AddWithValue(command, "@ItemCode", string.Join(',', requestMain.ItemCodes));
+                command.Parameters.AddWithValue(command, "@ItemCode", itemCode == "all" ? "%" : itemCode);
                 command.Parameters.AddWithValue(command, "@DateFrom", requestMain.DateFrom);
                 command.Parameters.AddWithValue(command, "DateTo", requestMain.DateTo);
 
@@ -128,6 +129,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<RequestMain>> GetWaitingForApprovalsAsync(int userId, RequestWFAGetModel requestWFA)
         {
+            string itemCode = string.Join(',', requestWFA.ItemCode);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainWFA]", new ReplaceParams { ParamName = "APT", Value = requestWFA.BusinessUnitCode });
@@ -136,7 +138,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", requestWFA.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@DateFrom", requestWFA.DateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", requestWFA.DateTo);
-                command.Parameters.AddWithValue(command, "@ItemCode", string.Join(',', requestWFA.ItemCode));
+                command.Parameters.AddWithValue(command, "@ItemCode", itemCode == "all" ? "%" : itemCode);
 
                 using var reader = await command.ExecuteReaderAsync();
 
@@ -152,6 +154,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<RequestAmendment>> GetApproveAmendmentRequestsAsync(int userId, RequestApproveAmendmentModel requestParametersDto)
         {
+            string itemCode = string.Join(',', requestParametersDto.ItemCodes);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainApproveAmendment]", new ReplaceParams { ParamName = "APT", Value = requestParametersDto.BusinessUnitCode });
@@ -160,7 +163,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", requestParametersDto.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@DateFrom", requestParametersDto.DateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", requestParametersDto.DateTo);
-                command.Parameters.AddWithValue(command, "@ItemCode", string.Join(',', requestParametersDto.ItemCodes));
+                command.Parameters.AddWithValue(command, "@ItemCode", itemCode == "all" ? "%" : itemCode);
 
                 List<RequestAmendment> mainRequestsForAmendment = new();
                 using var reader = await command.ExecuteReaderAsync();
@@ -390,12 +393,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<RequestMainAll>> GetAllAsync(RequestMainGetModel requestMain)
         {
+            string itemCode = string.Join(',', requestMain.ItemCodes);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainAll]", new ReplaceParams { ParamName = "APT", Value = requestMain.BusinessUnitCode });
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", requestMain.BusinessUnitId);
-                command.Parameters.AddWithValue(command, "@ItemCode", string.Join(',', requestMain.ItemCodes));
+                command.Parameters.AddWithValue(command, "@ItemCode", itemCode == "all" ? "%" : itemCode);
                 command.Parameters.AddWithValue(command, "@DateFrom", requestMain.DateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", requestMain.DateTo);
                 command.Parameters.AddWithValue(command, "@ApproveStatus", string.Join(',', requestMain.ApproveStatus));

@@ -35,7 +35,7 @@
             Logs user into system and returns token
             </summary>
         </member>
-        <member name="M:SolaERP.Controllers.AccountController.Register(SolaERP.Infrastructure.Dtos.UserDto.UserDto)">
+        <member name="M:SolaERP.Controllers.AccountController.Register(SolaERP.Infrastructure.Models.UserRegisterModel)">
             <summary>
             Creates a user with given input
             </summary>
