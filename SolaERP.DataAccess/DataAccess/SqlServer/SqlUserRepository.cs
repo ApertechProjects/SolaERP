@@ -149,10 +149,11 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public async Task<bool> AddAsync(User entity)
         {
-            string query = "Exec SP_AppUser_IUD @FullName,@ChangePassword,@StatusId,@Theme,@UserName,@Email,@PasswordHash,@PhoneNumber ,@UserTypeId,@VendorId,@UserToken,@Gender,@Buyer,@Description,@ERPUser";
+            string query = "SET NOCOUNT OFF Exec SP_AppUser_IUD @Id,@FullName,@ChangePassword,@StatusId,@Theme,@UserName,@Email,@PasswordHash,@PhoneNumber ,@UserTypeId,@VendorId,@UserToken,@Gender,@Buyer,@Description,@ERPUser";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = query;
+                command.Parameters.AddWithValue(command, "@Id", entity.Id);
                 command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
                 command.Parameters.AddWithValue(command, "@ChangePassword", entity.ChangePassword);
                 command.Parameters.AddWithValue(command, "@StatusId", entity.StatusId);
