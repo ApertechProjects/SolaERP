@@ -56,6 +56,10 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetActiveUsersAsync()
             => CreateActionResult(await _userService.GetActiveUsersAsync());
 
+        [HttpGet]
+        public async Task<IActionResult> GetActiveUsersWithoutCurrentUserAsync([FromHeader] string authToken)
+          => CreateActionResult(await _userService.GetActiveUsersWithoutCurrentUserAsync(authToken));
+
         [HttpPost]
         public async Task<IActionResult> GetUserWFAAsync([FromHeader] string authToken, UserGetModel model)
             => CreateActionResult(await _userService.GetUserWFAAsync(authToken, model));
