@@ -1,11 +1,13 @@
-﻿using SolaERP.Infrastructure.Enums;
+﻿using SolaERP.Infrastructure.Attributes;
+using SolaERP.Infrastructure.Enums;
 using System.Text.Json.Serialization;
 
 namespace SolaERP.Infrastructure.Dtos.UserDto
 {
     public class UserDto
     {
-        public int Id { get; set; }
+        [DbColumn("Id")]
+        public int UserId { get; set; }
         public string FullName { get; set; }
         public int StatusId { get; set; }
         public string UserName { get; set; }

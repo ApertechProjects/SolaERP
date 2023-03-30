@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SolaERP.Infrastructure.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,8 @@ namespace SolaERP.Infrastructure.Entities.User
 {
     public class ActiveUser : BaseEntity
     {
-        public int Id { get; set; }
+        [DbColumn("Id")]
+        public int UserId { get; set; }
         public string FullName { get; set; }
     }
 }

@@ -42,8 +42,8 @@ namespace SolaERP.Infrastructure.Entities.Auth
         //public int VendorId { get; set; }
         //public bool Gender { get; set; }
         //public Guid UserToken { get; set; }
-
-        public int Id { get; set; }
+        [DbColumn("Id")]
+        public int UserId { get; set; }
         public string FullName { get; set; }
         public bool ChangePassword { get; set; }
         public int StatusId { get; set; }

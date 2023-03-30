@@ -8,7 +8,7 @@ namespace SolaERP.Infrastructure.Dtos.User
 {
     public class ActiveUserDto
     {
-        public int Id { get; set; }
+        public int UserId { get; set; }
         public string FullName { get; set; }
     }
 }
