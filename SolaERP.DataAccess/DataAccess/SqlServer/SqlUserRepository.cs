@@ -256,15 +256,15 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             return new() { Id = reader.Get<int>("Id"), FullName = reader.Get<string>("FullName") };
         }
 
-        public async Task<List<UserMain>> GetUserWFAAsync(int userId, UserGetModel model)
+        public async Task<List<UserMain>> GetUserWFAAsync(int userId, UserWFAGetRequest model)
         {
             List<UserMain> users = new List<UserMain>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "exec SP_UsersWFA @UserType,@UserStatus,@UserId";
 
-                command.Parameters.AddWithValue(command, "@UserType", model.UserType is null ? "%" : string.Join(',', model.UserType));
-                command.Parameters.AddWithValue(command, "@UserStatus", model.UserStatus is null ? "%" : string.Join(',', model.UserStatus));
+                command.Parameters.AddWithValue(command, "@UserType", model.UserType is -1 ? "%" : string.Join(',', model.UserType));
+                command.Parameters.AddWithValue(command, "@UserStatus", model.UserStatus is -1 ? "%" : string.Join(',', model.UserStatus));
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 using var reader = await command.ExecuteReaderAsync();
@@ -276,15 +276,15 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<List<UserMain>> GetUserAllAsync(int userId, UserGetModel model)
+        public async Task<List<UserMain>> GetUserAllAsync(int userId, UserAllQueryRequest model)
         {
             List<UserMain> users = new List<UserMain>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "exec SP_UsersAll @UserType,@UserStatus,@UserId";
 
-                command.Parameters.AddWithValue(command, "@UserType", model.UserType is null ? "%" : string.Join(',', model.UserType));
-                command.Parameters.AddWithValue(command, "@UserStatus", model.UserStatus is null ? "%" : string.Join(',', model.UserStatus));
+                command.Parameters.AddWithValue(command, "@UserType", model.UserType is -1 ? "%" : string.Join(',', model.UserType));
+                command.Parameters.AddWithValue(command, "@UserStatus", model.UserStatus is -1 ? "%" : string.Join(',', model.UserStatus));
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 using var reader = await command.ExecuteReaderAsync();
@@ -355,9 +355,9 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<bool> SaveUserAsync(int userId, User entity)
+        public async Task<bool> SaveUserAsync(User entity)
         {
-            string query = "Exec SP_AppUser_IUD @FullName,@ChangePassword,@StatusId,@Theme,@LastActivity,@UserName,@Email,@PasswordHash,@PhoneNumber ,@UserTypeId,@VendorId,@UserToken,@Gender,@Buyer,@Description,@ERPUser";
+            string query = "Exec SP_AppUser_IUD @FullName,@ChangePassword,@StatusId,@Theme,@UserName,@Email,@PasswordHash,@PhoneNumber ,@UserTypeId,@VendorId,@UserToken,@Gender,@Buyer,@Description,@ERPUser";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = query;
@@ -365,7 +365,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@ChangePassword", entity.ChangePassword);
                 command.Parameters.AddWithValue(command, "@StatusId", entity.StatusId);
                 command.Parameters.AddWithValue(command, "@Theme", entity.Theme);
-                command.Parameters.AddWithValue(command, "@LastActivity", entity.LastActivity);
                 command.Parameters.AddWithValue(command, "@UserName", entity.UserName);
                 command.Parameters.AddWithValue(command, "@Email", entity.Email);
                 command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);

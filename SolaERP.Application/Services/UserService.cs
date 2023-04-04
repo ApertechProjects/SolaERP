@@ -249,5 +249,15 @@ namespace SolaERP.Application.Services
 
             return ApiResponse<bool>.Success(true, 200);
         }
+
+        public async Task<bool> SaveUserAsync(User user)
+        {
+            user.PasswordHash = SecurityUtil.ComputeSha256Hash(user.Password);
+            var result = await _userRepository.SaveUserAsync(user);
+
+            return result ?
+                     true : false;
+        }
+
     }
 }
