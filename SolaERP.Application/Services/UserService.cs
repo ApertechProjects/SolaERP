@@ -255,6 +255,8 @@ namespace SolaERP.Application.Services
             user.PasswordHash = SecurityUtil.ComputeSha256Hash(user.Password);
             var result = await _userRepository.SaveUserAsync(user);
 
+            await _unitOfWork.SaveChangesAsync();
+
             return result ?
                      true : false;
         }

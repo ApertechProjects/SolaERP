@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using SolaERP.Infrastructure.Attributes;
+﻿using SolaERP.Infrastructure.Attributes;
+using System.Text.Json.Serialization;
 
 namespace SolaERP.Infrastructure.Entities.Auth
 {
