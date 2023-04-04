@@ -306,12 +306,15 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     command.Parameters.AddWithValue(command, "@UserStatus", "%");
                 else
                     command.Parameters.AddWithValue(command, "@UserStatus", string.Join(',', userStatus));
+
                 command.Parameters.AddWithValue(command, "@UserId", userId);
+
                 using var reader = await command.ExecuteReaderAsync();
                 while (reader.Read())
                 {
-                    users.Add(reader.GetByEntityStructure<UserMain>());
+                    users.Add(reader.GetByEntityStructure<UserMain>("Photo"));
                 }
+
                 return users;
             }
         }
