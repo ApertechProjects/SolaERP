@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Infrastructure.Dtos.User
 {
-    public class ActiveUserDto
+    public class ERPUserDto
     {
-        public int UserId { get; set; }
-        public string FullName { get; set; }
+        public string Code { get; set; }
+        public string Name { get; set; }
     }
 }

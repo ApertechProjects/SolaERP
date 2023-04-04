@@ -69,7 +69,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 SenderConnectionId = reader.Get<string>("SenderConnectionId"),
                 Sender = new()
                 {
-                    Id = reader.Get<int>("Sender_Id"),
+                    UserId = reader.Get<int>("Sender_Id"),
                     FullName = reader.Get<string>("SenderFullname"),
                     UserName = reader.Get<string>("SenderUsername"),
                     Email = reader.Get<string>("SenderEmail"),
@@ -77,7 +77,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 },
                 Receiver = new()
                 {
-                    Id = reader.Get<int>("Receiver_Id"),
+                    UserId = reader.Get<int>("Receiver_Id"),
                     FullName = reader.Get<string>("ReceiverFullname"),
                     UserName = reader.Get<string>("ReceiverUsername"),
                     Email = reader.Get<string>("ReceiverEmail"),

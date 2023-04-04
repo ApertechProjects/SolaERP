@@ -80,5 +80,13 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> UserChangeStatusAsync([FromHeader] string authToken, UserChangeStatusModel model)
             => CreateActionResult(await _userService.UserChangeStatusAsync(authToken, model));
 
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetUserInfo(int userId)
+            => CreateActionResult(await _userService.GetUserInfo(userId));
+
+        [HttpGet]
+        public async Task<IActionResult> GetERPUser()
+            => CreateActionResult(await _userService.GetERPUser());
+
     }
 }

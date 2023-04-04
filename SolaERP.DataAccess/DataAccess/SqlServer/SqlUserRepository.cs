@@ -191,7 +191,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             string query = "Exec [dbo].[SP_UserData_U] @UserId,@FullName,@Position,@PhoneNumber,@Photo,@PasswordHash";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.Parameters.AddWithValue(command, "@UserId", entity.Id);
+                command.Parameters.AddWithValue(command, "@UserId", entity.UserId);
                 command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
                 command.Parameters.AddWithValue(command, "@PhoneNumber", entity.PhoneNumber);
                 command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
@@ -268,7 +268,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         #region Readers
         private User GetFromReader(IDataReader reader)
         {
-            return new() { Id = reader.Get<int>("Id"), FullName = reader.Get<string>("FullName") };
+            return new() { UserId = reader.Get<int>("Id"), FullName = reader.Get<string>("FullName") };
         }
 
         public async Task<List<UserMain>> GetUserWFAAsync(int userId, UserGetModel model)
@@ -400,6 +400,37 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
                 var value = await command.ExecuteNonQueryAsync();
                 return value > 0;
+            }
+        }
+
+        public async Task<UserLoad> GetUserInfoAsync(int userId)
+        {
+            UserLoad user = new UserLoad();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec SP_UserLoad @Id";
+                command.Parameters.AddWithValue(command, "@Id", userId);
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    user = reader.GetByEntityStructure<UserLoad>();
+                }
+                return user;
+            }
+        }
+
+        public async Task<List<ERPUser>> GetERPUser()
+        {
+            List<ERPUser> user = new List<ERPUser>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "select * from VW_ERPUserList ";
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    user.Add(reader.GetByEntityStructure<ERPUser>());
+                }
+                return user;
             }
         }
 
