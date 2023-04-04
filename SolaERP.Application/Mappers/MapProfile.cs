@@ -124,6 +124,8 @@ namespace SolaERP.Application.Mappers
             CreateMap<Translate, TranslateDto>().ReverseMap();
             CreateMap<VendorInfo, VendorInfoDto>().ReverseMap();
             CreateMap<UserMain, UserMainDto>().ReverseMap();
+            CreateMap<UserLoad, UserLoadDto>().ReverseMap();
+            CreateMap<ERPUser, ERPUserDto>().ReverseMap();
         }
     }
 }

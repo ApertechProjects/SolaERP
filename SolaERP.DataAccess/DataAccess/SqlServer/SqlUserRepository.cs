@@ -403,6 +403,37 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
+        public async Task<UserLoad> GetUserInfoAsync(int userId)
+        {
+            UserLoad user = new UserLoad();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec SP_UserLoad @Id";
+                command.Parameters.AddWithValue(command, "@Id", userId);
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    user = reader.GetByEntityStructure<UserLoad>();
+                }
+                return user;
+            }
+        }
+
+        public async Task<List<ERPUser>> GetERPUser()
+        {
+            List<ERPUser> user = new List<ERPUser>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "select * from VW_ERPUserList ";
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    user.Add(reader.GetByEntityStructure<ERPUser>());
+                }
+                return user;
+            }
+        }
+
         #endregion
     }
 }

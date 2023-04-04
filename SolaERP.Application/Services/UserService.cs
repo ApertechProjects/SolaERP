@@ -9,6 +9,7 @@ using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
+using System.Collections.Generic;
 
 namespace SolaERP.Application.Services
 {
@@ -257,6 +258,20 @@ namespace SolaERP.Application.Services
             await _unitOfWork.SaveChangesAsync();
 
             return ApiResponse<bool>.Success(true, 200);
+        }
+
+        public async Task<ApiResponse<UserLoadDto>> GetUserInfo(int userId)
+        {
+            var user = await _userRepository.GetUserInfoAsync(userId);
+            var dto = _mapper.Map<UserLoadDto>(user);
+            return ApiResponse<UserLoadDto>.Success(dto, 200);
+        }
+
+        public async Task<ApiResponse<List<ERPUserDto>>> GetERPUser()
+        {
+            var user = await _userRepository.GetERPUser();
+            var dto = _mapper.Map<List<ERPUserDto>>(user);
+            return ApiResponse<List<ERPUserDto>>.Success(dto, 200);
         }
     }
 }

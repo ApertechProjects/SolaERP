@@ -22,5 +22,7 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<List<UserMain>> GetUserVendorAsync(int userId, List<int> userStatus, bool all);
         Task<bool> UserChangeStatusAsync(int userId, UserChangeStatusModel model);
         Task<bool> SaveUserAsync(int userId, User model);
+        Task<UserLoad> GetUserInfoAsync(int userId);
+        Task<List<ERPUser>> GetERPUser();
     }
 }
