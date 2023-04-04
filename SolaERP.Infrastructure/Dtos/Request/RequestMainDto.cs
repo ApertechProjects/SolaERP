@@ -17,7 +17,7 @@
         public string QualityRequired { get; set; }
         public int Status { get; set; }
         public string StatusName { get; set; }
-        public int ApproveStatus { get; set; }
+        public string ApproveStatus { get; set; }
         public string ApproveStatusName { get; set; }
         //public string CurrencyCode { get; set; }
     }

@@ -2,7 +2,6 @@
 {
     public class ApprovalStatus : BaseEntity
     {
-        public int ApprovalStatusId { get; set; }
-        public string ApprovalStatusName { get; set; }
+        public string ApproveStageDetailsName { get; set; }
     }
 }
