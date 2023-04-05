@@ -20,7 +20,7 @@ namespace SolaERP.Infrastructure.Entities.User
         public int UserTypeId { get; set; }
         public int VendorId { get; set; }
         public bool IsDeleted { get; set; }
-        public bool Gender { get; set; }
+        public int Gender { get; set; }
         public string Buyer { get; set; }
         public string Description { get; set; }
         public string ERPUser { get; set; }

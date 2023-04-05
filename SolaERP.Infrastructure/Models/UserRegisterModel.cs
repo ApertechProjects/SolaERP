@@ -18,7 +18,7 @@ namespace SolaERP.Infrastructure.Models
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
         public bool ChangePassword { get; set; }
-        public bool Gender { get; set; }
+        public int Gender { get; set; }
         public int VendorId { get; set; }
         [JsonIgnore]
         public Guid UserToken { get; set; }

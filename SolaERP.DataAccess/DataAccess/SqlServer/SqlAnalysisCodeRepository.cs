@@ -1,6 +1,9 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Entities;
 using SolaERP.Infrastructure.Entities.AnalysisCode;
+using SolaERP.Infrastructure.Entities.AnalysisDimension;
+using SolaERP.Infrastructure.Entities.BusinessUnits;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data.Common;
 
@@ -28,6 +31,39 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 while (reader.Read())
                     resultList.Add(reader.GetByEntityStructure<AnalysisCode>());
+
+                return resultList;
+            }
+        }
+
+        public async Task<List<GroupAnalysisCode>> GetAnalysisCodesByGroupIdAsync(int groupId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_GroupAnalysisCodes_Load @GroupId";
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                List<GroupAnalysisCode> resultList = new();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<GroupAnalysisCode>());
+
+                return resultList;
+            }
+        }
+
+        public async Task<List<AnalysisDimension>> GetAnalysisDimensionAsync()
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "select * from VW_AnalysisDimension_List";
+
+                using var reader = await command.ExecuteReaderAsync();
+                List<AnalysisDimension> resultList = new();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<AnalysisDimension>());
 
                 return resultList;
             }

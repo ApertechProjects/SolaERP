@@ -14,7 +14,7 @@ namespace SolaERP.Infrastructure.Dtos.UserDto
         public string Email { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
-        public bool Gender { get; set; }
+        public int Gender { get; set; }
         public int VendorId { get; set; }
         [JsonIgnore]
         public Guid UserToken { get; set; }
