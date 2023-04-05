@@ -7,6 +7,7 @@ using SolaERP.Infrastructure.Entities.BusinessUnits;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data.Common;
+using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -17,6 +18,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public SqlAnalysisCodeRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+        }
+
+        public async Task<bool> DeleteAnalysisCodeAsync(int groupAnalysisCodeId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF Exec SP_GroupAnalysisCodes_IUD  @GroupAnalysisCodeId";
+                command.Parameters.AddWithValue(command, "@GroupAnalysisCodeId", groupAnalysisCodeId);
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
         }
 
         public async Task<List<AnalysisCode>> GetAnalysisCodesAsync(int businessUnitId, string procedureName)
@@ -70,9 +81,25 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public Task<bool> SaveAnalysisCodeAsync(AnalysisCodeSaveModel model)
+        public async Task<bool> SaveAnalysisCodeAsync(AnalysisCodeSaveModel model)
         {
-            throw new NotImplementedException();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF Exec SP_GroupAnalysisCodes_IUD  @GroupAnalysisCodeId,
+                                                                       @GroupId,  
+                                                                       @BusinessUnitId, 
+                                                                       @AnalysisDimensionId, 
+                                                                       @AnalysisCodesId";
+
+                command.Parameters.AddWithValue(command, "@GroupAnalysisCodeId", model.GroupAnalysisCodeId);
+                command.Parameters.AddWithValue(command, "@GroupId", model.GroupId);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@AnalysisDimensionId", model.AnalysisDimensionId);
+                command.Parameters.AddWithValue(command, "@AnalysisCodesId", model.AnalysisCodesId);
+
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
         }
     }
 }
