@@ -73,7 +73,7 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetUserCompanyAsync([FromHeader] string authToken, [FromQuery] int userStatus)
             => CreateActionResult(await _userService.GetUserCompanyAsync(authToken, userStatus));
 
-        [HttpGet("{userStatus}")]
+        [HttpGet]
         public async Task<IActionResult> GetUserVendorAsync([FromHeader] string authToken,[FromQuery] int userStatus)
             => CreateActionResult(await _userService.GetUserVendorAsync(authToken, userStatus));
 
