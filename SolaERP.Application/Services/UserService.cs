@@ -212,7 +212,7 @@ namespace SolaERP.Application.Services
             return _userRepository.GetUserNameByTokenAsync(finderToken);
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserWFAAsync(string authToken, UserGetModel model)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserWFAAsync(string authToken, UserWFAGetRequest model)
         {
             int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
             var users = await _userRepository.GetUserWFAAsync(userId, model);
@@ -220,7 +220,7 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<UserMainDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string authToken, UserGetModel model)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string authToken, UserAllQueryRequest model)
         {
             int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
             var users = await _userRepository.GetUserAllAsync(userId, model);
@@ -273,5 +273,17 @@ namespace SolaERP.Application.Services
             var dto = _mapper.Map<List<ERPUserDto>>(user);
             return ApiResponse<List<ERPUserDto>>.Success(dto, 200);
         }
+
+        public async Task<bool> SaveUserAsync(User user)
+        {
+            user.PasswordHash = SecurityUtil.ComputeSha256Hash(user.Password);
+            var result = await _userRepository.SaveUserAsync(user);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return result ?
+                     true : false;
+        }
+
     }
 }
