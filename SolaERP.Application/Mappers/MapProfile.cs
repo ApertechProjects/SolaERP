@@ -2,6 +2,7 @@
 using SolaERP.Infrastructure.Dtos;
 using SolaERP.Infrastructure.Dtos.Account;
 using SolaERP.Infrastructure.Dtos.AnalysisCode;
+using SolaERP.Infrastructure.Dtos.AnaysisDimension;
 using SolaERP.Infrastructure.Dtos.ApproveRole;
 using SolaERP.Infrastructure.Dtos.ApproveStage;
 using SolaERP.Infrastructure.Dtos.ApproveStages;
@@ -25,8 +26,10 @@ using SolaERP.Infrastructure.Dtos.UOM;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Dtos.Venndors;
+using SolaERP.Infrastructure.Entities;
 using SolaERP.Infrastructure.Entities.Account;
 using SolaERP.Infrastructure.Entities.AnalysisCode;
+using SolaERP.Infrastructure.Entities.AnalysisDimension;
 using SolaERP.Infrastructure.Entities.ApproveRole;
 using SolaERP.Infrastructure.Entities.ApproveStage;
 using SolaERP.Infrastructure.Entities.ApproveStages;
@@ -126,6 +129,7 @@ namespace SolaERP.Application.Mappers
             CreateMap<UserMain, UserMainDto>().ReverseMap();
             CreateMap<UserLoad, UserLoadDto>().ReverseMap();
             CreateMap<ERPUser, ERPUserDto>().ReverseMap();
+            CreateMap<AnalysisDimension, AnalysisDimensionDto>().ReverseMap();
         }
     }
 }

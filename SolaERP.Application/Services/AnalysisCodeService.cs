@@ -2,7 +2,9 @@
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.AnalysisCode;
+using SolaERP.Infrastructure.Dtos.AnaysisDimension;
 using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Entities;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Collections.Generic;
@@ -34,6 +36,31 @@ namespace SolaERP.Application.Services
 
             return analysisCodeResult.Count > 0 ? ApiResponse<List<IGrouping<int, AnalysisCodeDto>>>.Success(groupingReult, 200) :
                   ApiResponse<List<IGrouping<int, AnalysisCodeDto>>>.Fail("Bad request", 400);
+        }
+
+        public async Task<ApiResponse<List<GroupAnalysisCodeDto>>> GetAnalysisCodesByGroupIdAsync(int groupId)
+        {
+            var codes = await _analysisCodeRepository.GetAnalysisCodesByGroupIdAsync(groupId);
+            var dto = _mapper.Map<List<GroupAnalysisCodeDto>>(codes);
+            return ApiResponse<List<GroupAnalysisCodeDto>>.Success(dto, 200);
+        }
+
+        public async Task<ApiResponse<List<AnalysisDimensionDto>>> GetAnalysisDimensionAsync()
+        {
+            var codes = await _analysisCodeRepository.GetAnalysisDimensionAsync();
+            var dto = _mapper.Map<List<AnalysisDimensionDto>>(codes);
+            return ApiResponse<List<AnalysisDimensionDto>>.Success(dto, 200);
+        }
+
+        public async Task<ApiResponse<bool>> SaveAnalysisCodeAsync(AnalysisCodeSaveModel model)
+        {
+            var save = await _analysisCodeRepository.SaveAnalysisCodeAsync(model);
+            _unitOfWork.SaveChanges();
+            if (save) return ApiResponse<bool>.Success(200);
+            else return ApiResponse<bool>.Fail("Data can not be saved", 400);
+
+
+
         }
     }
 }
