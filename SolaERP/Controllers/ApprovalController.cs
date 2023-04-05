@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.ViewModels;
+using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Controllers
 {
@@ -56,7 +56,7 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _procedureService.GetAllAsync());
 
         [HttpPost]
-        public async Task<IActionResult> ApprovalStageSave([FromHeader] string authToken, ApprovalStageSaveVM approvalStageSaveVM)
+        public async Task<IActionResult> ApprovalStageSave([FromHeader] string authToken, ApprovalStageSaveModel approvalStageSaveVM)
             => CreateActionResult(await _approveStageMainService.SaveApproveStageMainAsync(authToken, approvalStageSaveVM));
 
         [HttpGet]

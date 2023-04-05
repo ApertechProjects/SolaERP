@@ -33,5 +33,9 @@ namespace SolaERP.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAnalysisDimensionAsync()
             => CreateActionResult(await _analysisCodeService.GetAnalysisDimensionAsync());
+
+        [HttpPost]
+        public async Task<IActionResult> SaveAnalysisCode(AnalysisCodeSaveModel model)
+            => CreateActionResult(await _analysisCodeService.SaveAnalysisCodeAsync(model));
     }
 }

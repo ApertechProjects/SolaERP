@@ -52,5 +52,15 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<AnalysisDimensionDto>>.Success(dto, 200);
         }
 
+        public async Task<ApiResponse<bool>> SaveAnalysisCodeAsync(AnalysisCodeSaveModel model)
+        {
+            var save = await _analysisCodeRepository.SaveAnalysisCodeAsync(model);
+            _unitOfWork.SaveChanges();
+            if (save) return ApiResponse<bool>.Success(200);
+            else return ApiResponse<bool>.Fail("Data can not be saved", 400);
+
+
+
+        }
     }
 }
