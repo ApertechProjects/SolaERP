@@ -270,7 +270,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             return new() { UserId = reader.Get<int>("Id"), FullName = reader.Get<string>("FullName") };
         }
 
-        public async Task<List<UserMain>> GetUserWFAAsync(int userId, UserWFAGetRequest model)
+        public async Task<List<UserMain>> GetUserWFAAsync(int userId, UserGetModel model)
         {
             List<UserMain> users = new List<UserMain>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -290,7 +290,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<List<UserMain>> GetUserAllAsync(int userId, UserAllQueryRequest model)
+        public async Task<List<UserMain>> GetUserAllAsync(int userId, UserGetModel model)
         {
             List<UserMain> users = new List<UserMain>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
