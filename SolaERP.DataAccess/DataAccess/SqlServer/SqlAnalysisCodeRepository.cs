@@ -4,6 +4,7 @@ using SolaERP.Infrastructure.Entities;
 using SolaERP.Infrastructure.Entities.AnalysisCode;
 using SolaERP.Infrastructure.Entities.AnalysisDimension;
 using SolaERP.Infrastructure.Entities.BusinessUnits;
+using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data.Common;
 
@@ -67,6 +68,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 return resultList;
             }
+        }
+
+        public Task<bool> SaveAnalysisCodeAsync(AnalysisCodeSaveModel model)
+        {
+            throw new NotImplementedException();
         }
     }
 }
