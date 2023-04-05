@@ -16,16 +16,12 @@ namespace SolaERP.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetGroups()
+        public async Task<IActionResult> GetGroupsAsync()
             => CreateActionResult(await _groupService.GetAllAsync());
 
         [HttpPost]
-        public async Task<IActionResult> SaveGroup([FromHeader] string authToken, GroupSaveModel model)
+        public async Task<IActionResult> SaveGroupAsync([FromHeader] string authToken, GroupSaveModel model)
             => CreateActionResult(await _groupService.SaveGroupAsync(authToken, model));
 
-
-        //[HttpDelete]
-        //public async Task<IActionResult> DeleteGroup(int Id)
-        //    => CreateActionResult(await _groupService.RemoveAsync(Id));
     }
 }
