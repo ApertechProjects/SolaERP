@@ -88,7 +88,5 @@ namespace SolaERP.Controllers
 
             return BadRequest(result);
         }
-
-
     }
 }
