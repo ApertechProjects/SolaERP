@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using SolaERP.Infrastructure.ViewModels;
+using SolaERP.Infrastructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Validations.ApproveStageValidation
 {
-    public class ApprovalStageSaveValidation : AbstractValidator<ApprovalStageSaveVM>
+    public class ApprovalStageSaveValidation : AbstractValidator<ApprovalStageSaveModel>
     {
         public ApprovalStageSaveValidation()
         {

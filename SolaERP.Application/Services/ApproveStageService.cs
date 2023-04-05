@@ -5,8 +5,8 @@ using SolaERP.Infrastructure.Dtos.ApproveStage;
 using SolaERP.Infrastructure.Dtos.ApproveStages;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Entities.ApproveStage;
+using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
-using SolaERP.Infrastructure.ViewModels;
 
 namespace SolaERP.Application.Services
 {
@@ -49,7 +49,7 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<ApproveStagesMainDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<ApprovalStageSaveVM>> SaveApproveStageMainAsync(string authToken, ApprovalStageSaveVM approvalStageSaveVM)
+        public async Task<ApiResponse<ApprovalStageSaveModel>> SaveApproveStageMainAsync(string authToken, ApprovalStageSaveModel approvalStageSaveVM)
         {
             var userId = await _userRepository.GetUserIdByTokenAsync(authToken);
             await _approveStageMainRepository.AddAsync(_mapper.Map<ApproveStagesMain>(approvalStageSaveVM.ApproveStagesMainDto), userId);
@@ -73,7 +73,7 @@ namespace SolaERP.Application.Services
             }
 
             await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<ApprovalStageSaveVM>.Success(approvalStageSaveVM, 200);
+            return ApiResponse<ApprovalStageSaveModel>.Success(approvalStageSaveVM, 200);
         }
 
         public async Task<ApiResponse<List<ApprovalStatusDto>>> GetApproveStatus()
