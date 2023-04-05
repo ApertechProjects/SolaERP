@@ -8,6 +8,7 @@ using SolaERP.Infrastructure.Entities;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace SolaERP.Application.Services
 {
@@ -22,6 +23,14 @@ namespace SolaERP.Application.Services
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _analysisCodeRepository = analysisCodeRepository;
+        }
+
+        public async Task<ApiResponse<bool>> DeleteAnalysisCodeAsync(int groupAnalysisCodeId)
+        {
+            var result = await _analysisCodeRepository.DeleteAnalysisCodeAsync(groupAnalysisCodeId);
+            await _unitOfWork.SaveChangesAsync();
+            if (result) return ApiResponse<bool>.Success(true, 200);
+            else return ApiResponse<bool>.Fail("Data can not be deleted", 400);
         }
 
         public async Task<ApiResponse<List<IGrouping<int, AnalysisCodeDto>>>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest)
@@ -55,12 +64,9 @@ namespace SolaERP.Application.Services
         public async Task<ApiResponse<bool>> SaveAnalysisCodeAsync(AnalysisCodeSaveModel model)
         {
             var save = await _analysisCodeRepository.SaveAnalysisCodeAsync(model);
-            _unitOfWork.SaveChanges();
-            if (save) return ApiResponse<bool>.Success(200);
+            await _unitOfWork.SaveChangesAsync();
+            if (save) return ApiResponse<bool>.Success(true, 200);
             else return ApiResponse<bool>.Fail("Data can not be saved", 400);
-
-
-
         }
     }
 }
