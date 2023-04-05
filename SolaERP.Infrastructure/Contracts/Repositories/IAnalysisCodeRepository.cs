@@ -11,6 +11,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         public Task<List<AnalysisCode>> GetAnalysisCodesAsync(int businessUnitId, string procedureName);
         Task<List<GroupAnalysisCode>> GetAnalysisCodesByGroupIdAsync(int groupId);
         Task<List<AnalysisDimension>> GetAnalysisDimensionAsync();
-        Task SaveAnalysisCodeAsync(AnalysisCodeSaveModel model);
+        Task<bool> SaveAnalysisCodeAsync(AnalysisCodeSaveModel model);
     }
 }
