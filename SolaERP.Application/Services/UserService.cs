@@ -250,10 +250,10 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<UserMainDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string authToken, List<int> userStatus, bool all)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string authToken, int userStatus)
         {
             int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
-            var users = await _userRepository.GetUserCompanyAsync(userId, userStatus, all);
+            var users = await _userRepository.GetUserCompanyAsync(userId, userStatus);
             var dto = _mapper.Map<List<UserMainDto>>(users);
 
             for (int i = 0; i < dto.Count; i++)
@@ -269,10 +269,10 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<UserMainDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string authToken, List<int> userStatus, bool all)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string authToken, int userStatus)
         {
             int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
-            var users = await _userRepository.GetUserVendorAsync(userId, userStatus, all);
+            var users = await _userRepository.GetUserVendorAsync(userId, userStatus);
             var dto = _mapper.Map<List<UserMainDto>>(users);
 
             for (int i = 0; i < dto.Count; i++)
