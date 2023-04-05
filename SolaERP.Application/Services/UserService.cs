@@ -285,5 +285,11 @@ namespace SolaERP.Application.Services
                      true : false;
         }
 
+        public async Task<bool> CheckTokenAsync(string authToken)
+        {
+            var check = await _userRepository.CheckTokenAsync(authToken);
+            if (check) return true;
+            else return false;
+        }
     }
 }

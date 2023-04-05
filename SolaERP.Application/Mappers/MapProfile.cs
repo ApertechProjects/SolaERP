@@ -131,6 +131,7 @@ namespace SolaERP.Application.Mappers
             CreateMap<ERPUser, ERPUserDto>().ReverseMap();
             CreateMap<AnalysisDimension, AnalysisDimensionDto>().ReverseMap();
             CreateMap<GroupAnalysisCode, GroupAnalysisCodeDto>().ReverseMap();
+            CreateMap<GroupBuyer, GroupBuyerDto>().ReverseMap();
 
         }
     }

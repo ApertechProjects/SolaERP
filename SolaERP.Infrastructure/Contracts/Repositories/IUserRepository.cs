@@ -24,5 +24,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<bool> SaveUserAsync(User model);
         Task<UserLoad> GetUserInfoAsync(int userId);
         Task<List<ERPUser>> GetERPUser();
+        Task<bool> CheckTokenAsync(string authToken);
     }
 }

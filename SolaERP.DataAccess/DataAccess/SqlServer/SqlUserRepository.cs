@@ -427,6 +427,18 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
+        public async Task<bool> CheckTokenAsync(string authToken)
+        {
+            string query = "SET NOCOUNT OFF Exec SP_CheckToken @UserToken";
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = query;
+                command.Parameters.AddWithValue(command, "@UserToken", authToken);
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
+            }
+        }
+
         #endregion
     }
 }

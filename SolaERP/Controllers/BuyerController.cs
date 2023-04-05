@@ -25,5 +25,8 @@ namespace SolaERP.Controllers
         [HttpGet("{businessUnitCode}")]
         public async Task<IActionResult> GetBuyersByTokenAsync([FromHeader] string authToken, string businessUnitCode)
         => CreateActionResult(await _buyerService.GetBuyerByUserTokenAsync(authToken, businessUnitCode));
+
+        [HttpGet("{groupId}")]
+        public async Task<IActionResult> GetBuyersByGroup
     }
 }
