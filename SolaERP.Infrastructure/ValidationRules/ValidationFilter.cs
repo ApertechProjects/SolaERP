@@ -18,13 +18,28 @@ namespace SolaERP.Infrastructure.ValidationRules
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
+            //var modelState = context.ModelState;
+            //if (!modelState.IsValid)
+            //{
+            //    var errorTex = modelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
+            //    var propert = modelState
+            //   .Where(x => x.Value.Errors.Count > 0)
+            //   .Select(x => x.Key.Split(".").Last())
+            //   .ToList();
+            //    context.Result = new ObjectResult(ApiResponse<bool>.Fail(propert, errorTex, 422));
+            //}
+
+
+
             var modelState = context.ModelState;
             if (!modelState.IsValid)
             {
                 var errorText = modelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList()[0][0].ErrorMessage;
-                context.Result = new ObjectResult(ApiResponse<bool>.Fail(errorText, 400));
-
-                //var errorText = modelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();
+                var property = modelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .Select(x => x.Key.Split(".").Last())
+                .ToList()[0];
+                context.Result = new ObjectResult(ApiResponse<bool>.Fail(property, errorText, 422));
 
             }
         }
