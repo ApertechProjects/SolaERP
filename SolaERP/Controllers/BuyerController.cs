@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
-using System.Collections.Generic;
 
 namespace SolaERP.Controllers
 {
@@ -26,7 +25,5 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetBuyersByTokenAsync([FromHeader] string authToken, string businessUnitCode)
         => CreateActionResult(await _buyerService.GetBuyerByUserTokenAsync(authToken, businessUnitCode));
 
-        [HttpGet("{groupId}")]
-        public async Task<IActionResult> GetBuyersByGroup
     }
 }

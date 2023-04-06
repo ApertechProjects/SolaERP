@@ -33,9 +33,6 @@ namespace SolaERP.Application.Services
 
             if (result != 0)
             {
-                //System.Windows.Forms.MessageBox.Show("Problem detected", "Warning", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
-                //MailOperations.SendMail("User or password not correct");
-                //SqlOperations.ErrorLog(new Win32Exception(result));
             }
         }
 

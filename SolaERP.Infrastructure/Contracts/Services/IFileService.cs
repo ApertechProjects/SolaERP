@@ -1,10 +1,11 @@
-﻿namespace SolaERP.Infrastructure.Contracts.Services
+﻿using SolaERP.Infrastructure.Models;
+
+namespace SolaERP.Infrastructure.Contracts.Services
 {
     public interface IFileService
     {
-        Task UploadBase64PhotoToFtpAsync(string base64Photo, string ftpServerAdress, string ftpUserName, string ftpPassword, string outPutFolderPath);
-        Task UploadBase64PhotoWithNetworkAsync(string base64Photo, string ftpServerAdress, string ftpUserName, string ftpPassword, string outPutFolderPath);
+        Task<string> UploadBase64PhotoWithNetworkAsync(PhotoUploadModel model);
+        Task<string> DownloadPhotoWithNetworkAsBase64Async(string fileName);
         byte[] ResizeImage(byte[] imageData, int width, int height);
-        Task<byte[]> DownloadPhotoFromFtpAsync(string ftpServerAddress, string ftpUsername, string ftpPassword, string ftpFilePath, string localFolderPath, string fileName);
     }
 }

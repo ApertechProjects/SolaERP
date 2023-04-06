@@ -1,23 +1,21 @@
 ﻿using SixLabors.ImageSharp.Formats.Jpeg;
 using SolaERP.Infrastructure.Contracts.Services;
-using System.Net;
+using SolaERP.Infrastructure.Extensions;
+using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Application.Services
 {
     public class FileService : IFileService
     {
-        public async Task<byte[]> DownloadPhotoFromFtpAsync(string ftpServerAddress, string ftpUsername, string ftpPassword, string ftpFilePath, string localFolderPath, string fileName)
+        public async Task<string> DownloadPhotoWithNetworkAsBase64Async(string filePath)
         {
-            FtpWebRequest ftpWebRequest = WebRequest.Create(new Uri($"{ftpServerAddress}/{ftpFilePath}/{fileName}")) as FtpWebRequest;
-            ftpWebRequest.Method = WebRequestMethods.Ftp.DownloadFile;
-            ftpWebRequest.Credentials = new NetworkCredential(ftpUsername, ftpPassword);
-
-            using FtpWebResponse ftpWebResponse = await ftpWebRequest.GetResponseAsync() as FtpWebResponse;
-            using Stream ftpWebResponseStream = ftpWebResponse.GetResponseStream();
+            using NetworkConnection networkConnection = new(RemoteFileServer.FolderPath, RemoteFileServer.Credential);
+            using FileStream fileStream = new(filePath, FileMode.Open, FileAccess.Read);
             using MemoryStream memoryStream = new();
 
-            await ftpWebResponseStream.CopyToAsync(memoryStream);
-            return memoryStream.ToArray();
+            await fileStream.CopyToAsync(memoryStream);
+
+            return Convert.ToBase64String(memoryStream.ToArray());
         }
 
         public byte[] ResizeImage(byte[] imageData, int width, int height)
@@ -40,37 +38,18 @@ namespace SolaERP.Application.Services
             return outPutMemoryStream.ToArray();
         }
 
-        public async Task UploadBase64PhotoToFtpAsync(string base64Photo, string ftpServerAdress, string ftpUserName, string ftpPassword, string outPutFolderPath)
+        public async Task<string> UploadBase64PhotoWithNetworkAsync(PhotoUploadModel model)
         {
-            byte[] imageBytes = Convert.FromBase64String(base64Photo);
-            var uri = string.Format("{0}/{1}", ftpServerAdress, outPutFolderPath);
-            FtpWebRequest ftpWebRequest = WebRequest.Create(new Uri("ftp://" + string.Format("{0}", ftpServerAdress))) as FtpWebRequest;
-            ftpWebRequest.Method = WebRequestMethods.Ftp.UploadFile;
-            ftpWebRequest.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
-            ftpWebRequest.KeepAlive = true;
+            using NetworkConnection networkConnection = new(RemoteFileServer.FolderPath, RemoteFileServer.Credential);
+            byte[] imageBytes = Convert.FromBase64String(model.base64Photo);
 
-            using Stream requestStream = ftpWebRequest.GetRequestStream();
-            requestStream.Write(imageBytes, 0, imageBytes.Length);
+            if (!File.Exists(RemoteFileServer.FolderPath))
+                Directory.CreateDirectory(RemoteFileServer.FolderPath);
 
-            using FtpWebResponse ftResponse = await ftpWebRequest.GetResponseAsync() as FtpWebResponse;
-            Console.WriteLine($"Upload File Complete, status: {ftResponse.StatusDescription}");
-        }
+            string remoteFilePath = Path.Combine(RemoteFileServer.FolderPath, $"{Guid.NewGuid() + model.FileName}.{model.Extension.ToString()}");
+            await File.WriteAllBytesAsync(remoteFilePath, imageBytes);
 
-        //public async Task UploadBase64PhotoToFtpAsync(string base64Photo, string ftpServerAdress, string ftpUserName, string ftpPassword, string outPutFolderPath)
-        //{
-
-        //}
-
-
-
-        public async Task UploadBase64PhotoWithNetworkAsync(string base64Photo, string ftpServerAdress, string ftpUserName, string ftpPassword, string outPutFolderPath)
-        {
-            //\\192.168.1.102\g$" + "\\"
-            NetworkConnection networkConnection = new(@"\\116.203.90.202\shared folder Dev", new(ftpServerAdress, ftpPassword));
-            byte[] imageBytes = Convert.FromBase64String(base64Photo);
-
-            using FileStream stream = new(@"\\116.203.90.202\shared folder Dev", FileMode.Create, FileAccess.ReadWrite);
-            await stream.WriteAsync(imageBytes);
+            return remoteFilePath;
         }
     }
 }
