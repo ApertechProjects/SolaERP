@@ -56,9 +56,9 @@ namespace SolaERP.Application.Services
             {
                 var value = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name,user.Id.ToString()),
+                    new Claim(ClaimTypes.Name,user.UserId.ToString()),
                     new Claim(ClaimTypes.Email,user.Email),
-                    new Claim(ClaimTypes.NameIdentifier,user.Id.ToString())
+                    new Claim(ClaimTypes.NameIdentifier,user.UserId.ToString())
                 };
                 return value;
             });

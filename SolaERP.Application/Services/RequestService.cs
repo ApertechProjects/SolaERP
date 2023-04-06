@@ -43,7 +43,8 @@ namespace SolaERP.Application.Services
             if (mainRequestDto != null && mainRequestDto.Count > 0)
                 return ApiResponse<List<RequestMainDto>>.Success(mainRequestDto, 200);
 
-            return ApiResponse<List<RequestMainDto>>.Fail("Bad Request", 404);
+            return ApiResponse<List<RequestMainDto>>.Success(mainRequestDto, 200);
+            //return ApiResponse<List<RequestMainDto>>.Fail("Bad Request", 404);
         }
 
         public async Task<bool> SaveRequestDetailsAsync(RequestDetailDto requestDetailDto)
@@ -133,7 +134,8 @@ namespace SolaERP.Application.Services
             if (mainDraftEntites.Count > 0)
                 return ApiResponse<List<RequestMainDraftDto>>.Success(mainDraftDto, 200);
 
-            return ApiResponse<List<RequestMainDraftDto>>.Fail("Main drafts is empty", 404);
+            return ApiResponse<List<RequestMainDraftDto>>.Success(mainDraftDto, 200);
+            //return ApiResponse<List<RequestMainDraftDto>>.Fail("Main drafts is empty", 404);
         }
 
         public async Task<ApiResponse<List<RequestAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentModel requestParametersDto)
@@ -145,7 +147,8 @@ namespace SolaERP.Application.Services
             if (mainRequestDto != null && mainRequestDto.Count > 0)
                 return ApiResponse<List<RequestAmendmentDto>>.Success(mainRequestDto, 200);
 
-            return ApiResponse<List<RequestAmendmentDto>>.Fail("Amendment is empty", 404);
+            return ApiResponse<List<RequestAmendmentDto>>.Success(mainRequestDto, 200);
+            //return ApiResponse<List<RequestAmendmentDto>>.Fail("Amendment is empty", 404);
         }
 
         public async Task<ApiResponse<List<RequestApprovalInfoDto>>> GetRequestApprovalInfoAsync(string finderToken, int requestMainId)
@@ -249,7 +252,9 @@ namespace SolaERP.Application.Services
             if (mainRequestDto != null && mainRequestDto.Count > 0)
                 return ApiResponse<List<RequestWFADto>>.Success(mainRequestDto, 200);
 
-            return ApiResponse<List<RequestWFADto>>.Fail("Waiting for approval list is empty", 404);
+            //
+            //return ApiResponse<List<RequestWFADto>>.Success(mainRequestDto, 200);
+            return ApiResponse<List<RequestWFADto>>.Success(mainRequestDto, 200);
         }
 
         public async Task<ApiResponse<bool>> UpdateBuyerAsync(RequestSetBuyer requestSetBuyer)

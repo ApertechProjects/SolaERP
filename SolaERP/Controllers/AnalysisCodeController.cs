@@ -24,5 +24,22 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> GetAnalysisCodes(AnalysisCodeGetModel getRequest)
             => CreateActionResult(await _analysisCodeService.GetAnalysisCodesAsync(getRequest));
+
+        [HttpGet("{groupId}")]
+        public async Task<IActionResult> GetAnalysisCodesByGroupIdAsync(int groupId)
+            => CreateActionResult(await _analysisCodeService.GetAnalysisCodesByGroupIdAsync(groupId));
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetAnalysisDimensionAsync()
+            => CreateActionResult(await _analysisCodeService.GetAnalysisDimensionAsync());
+
+        [HttpPost]
+        public async Task<IActionResult> SaveAnalysisCodeAsync(AnalysisCodeSaveModel model)
+            => CreateActionResult(await _analysisCodeService.SaveAnalysisCodeAsync(model));
+
+        [HttpDelete("{groupAnalysisCodeId}")]
+        public async Task<IActionResult> DeleteAnalysisCodeAsync(int groupAnalysisCodeId)
+            => CreateActionResult(await _analysisCodeService.DeleteAnalysisCodeAsync(groupAnalysisCodeId));
     }
 }
