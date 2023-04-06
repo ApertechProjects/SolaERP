@@ -20,7 +20,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> DeleteAnalysisCodeAsync(int groupAnalysisCodeId)
+        public async Task<bool> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -81,7 +81,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> SaveAnalysisCodeAsync(AnalysisCodeSaveModel model)
+        public async Task<bool> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SolaERP.Application.Services;
 using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Models;
 using System.Collections.Generic;
 
 namespace SolaERP.Controllers
@@ -24,6 +26,19 @@ namespace SolaERP.Controllers
         ///<param name="businessUnitCode">The unique identifier of the business unit for which to retrieve account codes.</param>
         [HttpGet("{businessUnitCode}")]
         public async Task<IActionResult> GetBuyersByTokenAsync([FromHeader] string authToken, string businessUnitCode)
-        => CreateActionResult(await _buyerService.GetBuyerByUserTokenAsync(authToken, businessUnitCode));
+            => CreateActionResult(await _buyerService.GetBuyerByUserTokenAsync(authToken, businessUnitCode));
+
+
+        [HttpGet("{groupId}")]
+        public async Task<IActionResult> GetBuyersByGroupIdAsync(int groupId)
+            => CreateActionResult(await _buyerService.GetBuyersByGroupIdAsync(groupId));
+
+        [HttpPost]
+        public async Task<IActionResult> SaveBuyerByGroupAsync(GroupBuyerSaveModel model)
+            => CreateActionResult(await _buyerService.SaveBuyerByGroupAsync(model));
+
+        //[HttpDelete("{groupBuyerId}")]
+        //public async Task<IActionResult> DeleteBuyerByGroupIdAsync(int groupBuyerId)
+        //    => CreateActionResult(await _buyerService.DeleteBuyerCodeByGroupAsync(groupAnalysisCodeId));
     }
 }

@@ -25,9 +25,9 @@ namespace SolaERP.Application.Services
             _analysisCodeRepository = analysisCodeRepository;
         }
 
-        public async Task<ApiResponse<bool>> DeleteAnalysisCodeAsync(int groupAnalysisCodeId)
+        public async Task<ApiResponse<bool>> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId)
         {
-            var result = await _analysisCodeRepository.DeleteAnalysisCodeAsync(groupAnalysisCodeId);
+            var result = await _analysisCodeRepository.DeleteAnalysisCodeByGroupIdAsync(groupAnalysisCodeId);
             await _unitOfWork.SaveChangesAsync();
             if (result) return ApiResponse<bool>.Success(true, 200);
             else return ApiResponse<bool>.Fail("Data can not be deleted", 400);
@@ -61,9 +61,9 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<AnalysisDimensionDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<bool>> SaveAnalysisCodeAsync(AnalysisCodeSaveModel model)
+        public async Task<ApiResponse<bool>> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model)
         {
-            var save = await _analysisCodeRepository.SaveAnalysisCodeAsync(model);
+            var save = await _analysisCodeRepository.SaveAnalysisCodeByGroupAsync(model);
             await _unitOfWork.SaveChangesAsync();
             if (save) return ApiResponse<bool>.Success(true, 200);
             else return ApiResponse<bool>.Fail("Data can not be saved", 400);
