@@ -4,6 +4,7 @@ using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Buyer;
 using SolaERP.Infrastructure.Dtos.Menu;
 using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Entities.AnalysisCode;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System;
@@ -31,6 +32,14 @@ namespace SolaERP.Application.Services
         public Task AddAsync(BuyerDto model)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<ApiResponse<bool>> DeleteBuyerByGroupIdAsync(int groupBuyerId)
+        {
+            var result = await _buyerRepository.DeleteBuyerByGroupIdAsync(groupBuyerId);
+            await _unitOfWork.SaveChangesAsync();
+            if (result) return ApiResponse<bool>.Success(true, 200);
+            else return ApiResponse<bool>.Fail("Data can not be deleted", 400);
         }
 
         public async Task<ApiResponse<List<BuyerDto>>> GetAllAsync()

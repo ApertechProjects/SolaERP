@@ -10,6 +10,7 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
 {
     public interface IBuyerRepository : ICrudOperations<Buyer>
     {
+        Task<bool> DeleteBuyerByGroupIdAsync(int groupBuyerId);
         public Task<List<Buyer>> GetBuyerByUserTokenAsync(int userId, string businessUnitCode);
         public Task<List<GroupBuyer>> GetBuyersByGroupIdAsync(int groupId);
         Task<bool> SaveBuyerByGroupAsync(GroupBuyerSaveModel model);

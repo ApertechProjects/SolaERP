@@ -1,5 +1,6 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Entities.AnalysisCode;
 using SolaERP.Infrastructure.Entities.Buyer;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
@@ -23,6 +24,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public Task<bool> AddAsync(Buyer entity)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<bool> DeleteBuyerByGroupIdAsync(int groupBuyerId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF Exec SP_GroupBuyers_IUD @GroupBuyerId";
+                command.Parameters.AddWithValue(command, "@GroupBuyerId", groupBuyerId);
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
         }
 
         public async Task<List<Buyer>> GetAllAsync()
