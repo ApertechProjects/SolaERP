@@ -60,6 +60,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<ILayoutService, LayoutService>();
             builder.Services.AddScoped<ILanguageService, LanguageService>();
             builder.Services.AddScoped<IVendorService, VendorService>();
+            builder.Services.AddScoped<IFileService, FileService>();
         }
         private static void UseRepositories(this WebApplicationBuilder builder)
         {
