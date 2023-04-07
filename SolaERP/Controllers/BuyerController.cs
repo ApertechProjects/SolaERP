@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SolaERP.Application.Services;
 using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Models;
+using System.Collections.Generic;
 
 namespace SolaERP.Controllers
 {
@@ -23,7 +26,9 @@ namespace SolaERP.Controllers
         ///<param name="businessUnitCode">The unique identifier of the business unit for which to retrieve account codes.</param>
         [HttpGet("{businessUnitCode}")]
         public async Task<IActionResult> GetBuyersByTokenAsync([FromHeader] string authToken, string businessUnitCode)
-        => CreateActionResult(await _buyerService.GetBuyerByUserTokenAsync(authToken, businessUnitCode));
+            => CreateActionResult(await _buyerService.GetBuyerByUserTokenAsync(authToken, businessUnitCode));
 
+
+       
     }
 }

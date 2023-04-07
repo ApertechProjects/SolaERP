@@ -25,14 +25,6 @@ namespace SolaERP.Application.Services
             _analysisCodeRepository = analysisCodeRepository;
         }
 
-        public async Task<ApiResponse<bool>> DeleteAnalysisCodeAsync(int groupAnalysisCodeId)
-        {
-            var result = await _analysisCodeRepository.DeleteAnalysisCodeAsync(groupAnalysisCodeId);
-            await _unitOfWork.SaveChangesAsync();
-            if (result) return ApiResponse<bool>.Success(true, 200);
-            else return ApiResponse<bool>.Fail("Data can not be deleted", 400);
-        }
-
         public async Task<ApiResponse<List<IGrouping<int, AnalysisCodeDto>>>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest)
         {
             var analysisCodes = await _analysisCodeRepository.GetAnalysisCodesAsync(getRequest.Businessunitid, getRequest.ProcedureName);
@@ -47,12 +39,6 @@ namespace SolaERP.Application.Services
                   ApiResponse<List<IGrouping<int, AnalysisCodeDto>>>.Fail("Bad request", 400);
         }
 
-        public async Task<ApiResponse<List<GroupAnalysisCodeDto>>> GetAnalysisCodesByGroupIdAsync(int groupId)
-        {
-            var codes = await _analysisCodeRepository.GetAnalysisCodesByGroupIdAsync(groupId);
-            var dto = _mapper.Map<List<GroupAnalysisCodeDto>>(codes);
-            return ApiResponse<List<GroupAnalysisCodeDto>>.Success(dto, 200);
-        }
 
         public async Task<ApiResponse<List<AnalysisDimensionDto>>> GetAnalysisDimensionAsync()
         {
@@ -61,12 +47,5 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<AnalysisDimensionDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<bool>> SaveAnalysisCodeAsync(AnalysisCodeSaveModel model)
-        {
-            var save = await _analysisCodeRepository.SaveAnalysisCodeAsync(model);
-            await _unitOfWork.SaveChangesAsync();
-            if (save) return ApiResponse<bool>.Success(true, 200);
-            else return ApiResponse<bool>.Fail("Data can not be saved", 400);
-        }
     }
 }

@@ -10,7 +10,8 @@
         public DateTime EntryDate { get; set; }
         public DateTime RequestDate { get; set; }
         public DateTime RequestDeadline { get; set; }
-        public string Buyer { get; set; }
+        public string EmployeeCode { get; set; }
+        public string EmployeeName { get; set; }
         public int Requester { get; set; }
         public string RequestComment { get; set; }
         public string OperatorComment { get; set; }
@@ -19,6 +20,5 @@
         public string StatusName { get; set; }
         public string ApproveStatus { get; set; }
         public string ApproveStatusName { get; set; }
-        //public string CurrencyCode { get; set; }
     }
 }

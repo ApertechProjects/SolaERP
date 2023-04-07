@@ -1,14 +1,4 @@
-﻿using AutoMapper;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Group;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Entities.Groups;
-using SolaERP.Infrastructure.Enums;
-using SolaERP.Infrastructure.Models;
-using SolaERP.Infrastructure.UnitOfWork;
-
-namespace SolaERP.Application.Services
+﻿namespace SolaERP.Application.Services
 {
     public class GroupService : IGroupService
     {
@@ -37,7 +27,23 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(isSucces, 200);
         }
 
-        public async Task<ApiResponse<List<GroupAdditionalPrivilage>>> GetAdditionalPrivilegesForGroupAsync(int groupId)
+        public async Task<ApiResponse<bool>> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId)
+        {
+            var result = await _groupRepository.DeleteAnalysisCodeByGroupIdAsync(groupAnalysisCodeId);
+            await _unitOfWork.SaveChangesAsync();
+            if (result) return ApiResponse<bool>.Success(true, 200);
+            else return ApiResponse<bool>.Fail("Data can not be deleted", 400);
+        }
+
+        public async Task<ApiResponse<bool>> DeleteBuyerByGroupIdAsync(int groupBuyerId)
+        {
+            var result = await _groupRepository.DeleteBuyerByGroupIdAsync(groupBuyerId);
+            await _unitOfWork.SaveChangesAsync();
+            if (result) return ApiResponse<bool>.Success(true, 200);
+            else return ApiResponse<bool>.Fail("Data can not be deleted", 400);
+        }
+
+        public Task<ApiResponse<List<GroupAdditionalPrivilage>>> GetAdditionalPrivilegesForGroupAsync(int groupId)
         {
             return ApiResponse<List<GroupAdditionalPrivilage>>.Success(await _groupRepository.GetAdditionalPrivilegesForGroupAsync(groupId), 200);
         }
@@ -48,6 +54,46 @@ namespace SolaERP.Application.Services
             var dto = _mapper.Map<List<GroupsDto>>(groups);
 
             return ApiResponse<List<GroupsDto>>.Success(dto, 200);
+        }
+
+        public async Task<ApiResponse<List<GroupAnalysisCodeDto>>> GetAnalysisCodesByGroupIdAsync(int groupId)
+        {
+            var buyers = await _groupRepository.GetBuyersByGroupIdAsync(groupId);
+            var dto = _mapper.Map<List<GroupAnalysisCodeDto>>(buyers);
+            if (dto != null)
+                return ApiResponse<List<GroupAnalysisCodeDto>>.Success(dto, 200);
+            else
+                return ApiResponse<List<GroupAnalysisCodeDto>>.Fail("Analysis list is empty", 400);
+        }
+
+        public async Task<ApiResponse<List<GroupBuyerDto>>> GetBuyersByGroupIdAsync(int groupId)
+        {
+            var buyers = await _groupRepository.GetBuyersByGroupIdAsync(groupId);
+            var dto = _mapper.Map<List<GroupBuyerDto>>(buyers);
+            if (dto != null)
+                return ApiResponse<List<GroupBuyerDto>>.Success(dto, 200);
+            else
+                return ApiResponse<List<GroupBuyerDto>>.Fail("Buyer list is empty", 400);
+        }
+
+        public async Task<ApiResponse<bool>> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model)
+        {
+            var res = await _groupRepository.SaveAnalysisCodeByGroupAsync(model);
+            await _unitOfWork.SaveChangesAsync();
+            if (res)
+                return ApiResponse<bool>.Success(res, 200);
+            else
+                return ApiResponse<bool>.Fail("Data can not be saved", 400);
+        }
+
+        public async Task<ApiResponse<bool>> SaveBuyerByGroupAsync(GroupBuyerSaveModel model)
+        {
+            var res = await _groupRepository.SaveBuyerByGroupAsync(model);
+            await _unitOfWork.SaveChangesAsync();
+            if (res)
+                return ApiResponse<bool>.Success(res, 200);
+            else
+                return ApiResponse<bool>.Fail("Data can not be saved", 400);
         }
 
         public async Task<ApiResponse<bool>> SaveGroupAsync(string finderToken, GroupSaveModel model)

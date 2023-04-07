@@ -1,5 +1,6 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Entities.AnalysisCode;
 using SolaERP.Infrastructure.Entities.Buyer;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;

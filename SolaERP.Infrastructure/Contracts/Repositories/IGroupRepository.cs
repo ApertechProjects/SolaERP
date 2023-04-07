@@ -1,4 +1,6 @@
-﻿using SolaERP.Infrastructure.Entities.Groups;
+﻿using SolaERP.Infrastructure.Entities.AnalysisCode;
+using SolaERP.Infrastructure.Entities.Buyer;
+using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Infrastructure.Contracts.Repositories
@@ -13,5 +15,11 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<bool> AddMenuToGroupOrDeleteAsync(GroupMenuIDSaveModel saveOrDeleteModel);
         Task AddBusiessUnitToGroupOrDeleteAsync(int groupId, int busiessUnitId);
         Task AddApproveRoleToGroupOrDelete(int groupId, int approveRoleId);
+        Task<bool> DeleteBuyerByGroupIdAsync(int groupBuyerId);
+        public Task<List<GroupBuyer>> GetBuyersByGroupIdAsync(int groupId);
+        Task<bool> SaveBuyerByGroupAsync(GroupBuyerSaveModel model);
+        Task<List<GroupAnalysisCode>> GetAnalysisCodesByGroupIdAsync(int groupId);
+        Task<bool> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId);
+        Task<bool> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SolaERP.Infrastructure.Entities.Buyer;
+using SolaERP.Infrastructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
     public interface IBuyerRepository : ICrudOperations<Buyer>
     {
         public Task<List<Buyer>> GetBuyerByUserTokenAsync(int userId, string businessUnitCode);
+       
     }
 }
