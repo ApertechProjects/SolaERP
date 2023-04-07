@@ -220,14 +220,14 @@ namespace SolaERP.Application.Services
             var users = await _userRepository.GetUserWFAAsync(userId, model);
             var dto = _mapper.Map<List<UserMainDto>>(users);
 
-            //for (int i = 0; i < dto.Count; i++)
-            //{
-            //    var user = dto.FirstOrDefault(x => x.UserName == users[i].UserName);
-            //    if (!string.IsNullOrEmpty(users[i].UserPhoto))
-            //    {
-            //        user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users[i].UserPhoto);
-            //    }
-            //}
+            for (int i = 0; i < dto.Count; i++)
+            {
+                var user = dto.FirstOrDefault(x => x.UserName == users[i].UserName);
+                if (!string.IsNullOrEmpty(users[i].UserPhoto))
+                {
+                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users[i].UserPhoto);
+                }
+            }
 
 
             return ApiResponse<List<UserMainDto>>.Success(dto, 200);
@@ -239,14 +239,14 @@ namespace SolaERP.Application.Services
             var users = await _userRepository.GetUserAllAsync(userId, model);
             var dto = _mapper.Map<List<UserMainDto>>(users);
 
-            //for (int i = 0; i < dto.Count; i++)
-            //{
-            //    var user = dto.FirstOrDefault(x => x.UserName == users[i].UserName);
-            //    if (!string.IsNullOrEmpty(users[i].UserPhoto))
-            //    {
-            //        user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users[i].UserPhoto);
-            //    }
-            //}
+            for (int i = 0; i < dto.Count; i++)
+            {
+                var user = dto.FirstOrDefault(x => x.UserName == users[i].UserName);
+                if (!string.IsNullOrEmpty(users[i].UserPhoto))
+                {
+                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users[i].UserPhoto);
+                }
+            }
 
 
             return ApiResponse<List<UserMainDto>>.Success(dto, 200);
@@ -258,15 +258,14 @@ namespace SolaERP.Application.Services
             var users = await _userRepository.GetUserCompanyAsync(userId, userStatus);
             var dto = _mapper.Map<List<UserMainDto>>(users);
 
-            //for (int i = 0; i < dto.Count; i++)
-            //{
-            //    var user = dto.FirstOrDefault(x => x.UserName == users[i].UserName);
-            //    if (!string.IsNullOrEmpty(users[i].UserPhoto))
-            //    {
-            //        user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users[i].UserPhoto);
-            //    }
-            //}
-
+            for (int i = 0; i < dto.Count; i++)
+            {
+                var user = dto.FirstOrDefault(x => x.UserName == users[i].UserName);
+                if (!string.IsNullOrEmpty(users[i].UserPhoto))
+                {
+                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users[i].UserPhoto);
+                }
+            }
 
             return ApiResponse<List<UserMainDto>>.Success(dto, 200);
         }
@@ -277,14 +276,14 @@ namespace SolaERP.Application.Services
             var users = await _userRepository.GetUserVendorAsync(userId, userStatus);
             var dto = _mapper.Map<List<UserMainDto>>(users);
 
-            //for (int i = 0; i < dto.Count; i++)
-            //{
-            //    var user = dto.FirstOrDefault(x => x.UserName == users[i].UserName);
-            //    if (!string.IsNullOrEmpty(users[i].UserPhoto))
-            //    {
-            //        user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users[i].UserPhoto);
-            //    }
-            //}
+            for (int i = 0; i < dto.Count; i++)
+            {
+                var user = dto.FirstOrDefault(x => x.UserName == users[i].UserName);
+                if (!string.IsNullOrEmpty(users[i].UserPhoto))
+                {
+                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users[i].UserPhoto);
+                }
+            }
 
             return ApiResponse<List<UserMainDto>>.Success(dto, 200);
         }
