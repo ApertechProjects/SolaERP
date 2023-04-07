@@ -6,6 +6,8 @@ using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
+using System.Reflection;
+using System.Windows.Input;
 
 namespace SolaERP.DataAccess.DataAcces.SqlServer
 {
@@ -284,7 +286,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 while (reader.Read())
-                    users.Add(reader.GetByEntityStructure<UserMain>());
+                    users.Add(reader.GetByEntityStructure<UserMain>("Photo"));
 
                 return users;
             }
@@ -310,16 +312,13 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<List<UserMain>> GetUserCompanyAsync(int userId, List<int> userStatus, bool all)
+        public async Task<List<UserMain>> GetUserCompanyAsync(int userId, int userStatus)
         {
             List<UserMain> users = new List<UserMain>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "exec SP_UsersCompany @UserStatus,@UserId";
-                if (all)
-                    command.Parameters.AddWithValue(command, "@UserStatus", "%");
-                else
-                    command.Parameters.AddWithValue(command, "@UserStatus", string.Join(',', userStatus));
+                command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
 
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
@@ -333,16 +332,14 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<List<UserMain>> GetUserVendorAsync(int userId, List<int> userStatus, bool all)
+        public async Task<List<UserMain>> GetUserVendorAsync(int userId, int userStatus)
         {
             List<UserMain> users = new List<UserMain>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "exec SP_UsersVendor @UserStatus,@UserId";
-                if (all)
-                    command.Parameters.AddWithValue(command, "@UserStatus", "%");
-                else
-                    command.Parameters.AddWithValue(command, "@UserStatus", string.Join(',', userStatus));
+                command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
+
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 using var reader = await command.ExecuteReaderAsync();
                 while (reader.Read())

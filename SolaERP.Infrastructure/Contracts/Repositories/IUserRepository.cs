@@ -18,8 +18,8 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<List<ActiveUser>> GetActiveUsersWithoutCurrentUserAsync(int userId);
         Task<List<UserMain>> GetUserWFAAsync(int userId, UserGetModel model);
         Task<List<UserMain>> GetUserAllAsync(int userId, UserGetModel model);
-        Task<List<UserMain>> GetUserCompanyAsync(int userId, List<int> userStatus, bool all);
-        Task<List<UserMain>> GetUserVendorAsync(int userId, List<int> userStatus, bool all);
+        Task<List<UserMain>> GetUserCompanyAsync(int userId, int userStatus);
+        Task<List<UserMain>> GetUserVendorAsync(int userId, int userStatus);
         Task<bool> UserChangeStatusAsync(int userId, UserChangeStatusModel model);
         Task<bool> SaveUserAsync(User model);
         Task<UserLoad> GetUserInfoAsync(int userId);

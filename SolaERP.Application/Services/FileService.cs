@@ -9,7 +9,8 @@ namespace SolaERP.Application.Services
     {
         public async Task<string> DownloadPhotoWithNetworkAsBase64Async(string filePath)
         {
-            using NetworkConnection networkConnection = new(RemoteFileServer.FolderPath, RemoteFileServer.Credential);
+            RemoteFileServer fileServer = new();
+            using NetworkConnection networkConnection = new(fileServer.FolderPath,fileServer.Credential);
             using FileStream fileStream = new(filePath, FileMode.Open, FileAccess.Read);
             using MemoryStream memoryStream = new();
 
@@ -40,13 +41,14 @@ namespace SolaERP.Application.Services
 
         public async Task<string> UploadBase64PhotoWithNetworkAsync(string base64File, FileExtension extension, string fileName)
         {
-            using NetworkConnection networkConnection = new(RemoteFileServer.FolderPath, RemoteFileServer.Credential);
+            RemoteFileServer fileServer = new();
+            using NetworkConnection networkConnection = new(fileServer.FolderPath, fileServer.Credential);
             byte[] imageBytes = Convert.FromBase64String(base64File);
 
-            if (!File.Exists(RemoteFileServer.FolderPath))
-                Directory.CreateDirectory(RemoteFileServer.FolderPath);
+            if (!File.Exists(fileServer.FolderPath))
+                Directory.CreateDirectory(fileServer.FolderPath);
 
-            string remoteFilePath = Path.Combine(RemoteFileServer.FolderPath, $"{Guid.NewGuid() + fileName}.{extension.ToString()}");
+            string remoteFilePath = Path.Combine(fileServer.FolderPath, $"{Guid.NewGuid() + fileName}.{extension.ToString()}");
             await File.WriteAllBytesAsync(remoteFilePath, imageBytes);
 
             return remoteFilePath;

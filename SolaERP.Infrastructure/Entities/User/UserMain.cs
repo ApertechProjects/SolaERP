@@ -1,4 +1,6 @@
-﻿namespace SolaERP.Infrastructure.Entities.User
+﻿using SolaERP.Infrastructure.Attributes;
+
+namespace SolaERP.Infrastructure.Entities.User
 {
     public class UserMain : BaseEntity
     {
