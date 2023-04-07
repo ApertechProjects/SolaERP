@@ -18,7 +18,7 @@
         public string Buyer { get; set; }
         public string Description { get; set; }
         public string ERPUser { get; set; }
-        public bool IsDeleted
+        public bool IsDeleted { get; set; }
         public PhotoUploadModel Files { get; set; }
     }
 }

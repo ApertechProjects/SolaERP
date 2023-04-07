@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Extensions;
 
 namespace SolaERP.API.Controllers
 {
@@ -17,10 +18,8 @@ namespace SolaERP.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Test()
         {
-            var photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(@"\\116.203.90.202\shared folder Dev\SolaErpSRC\920e1c06-0f76-42d6-88e2-c4bbc1c058cfc#.png");
-            var resizedImage = _fileService.ResizeImage(Convert.FromBase64String(photo), 50, 50);
-
-            return Ok(Convert.ToBase64String(resizedImage));
+            var a = new RemoteFileServer();
+            return Ok(a.FolderPath);
         }
     }
 }

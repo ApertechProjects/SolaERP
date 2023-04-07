@@ -22,12 +22,14 @@ namespace SolaERP.Application.Services
         public UserService(IUserRepository userRepository,
                            IUnitOfWork unitOfWork,
                            IMapper mapper,
-                           IMailService mailService)
+                           IMailService mailService,
+                           IFileService fileService)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _mailService = mailService;
             _mapper = mapper;
+            _fileService = fileService;
         }
 
         public async Task AddAsync(UserDto model)

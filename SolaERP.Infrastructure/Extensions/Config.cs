@@ -8,18 +8,21 @@ namespace SolaERP.Infrastructure.Extensions
     //    public static RemoteFileServer FileServer { get=> new(); }
     //}
 
-    public abstract class RemoteFileServer
+    public class RemoteFileServer
     {
-        static ConfigurationManager _configuration = new();
-        private RemoteFileServer()
+        private static ConfigurationManager _configuration;
+        private object _serverLock = new object();
+
+        public RemoteFileServer()
         {
+            _configuration = CreateSingleConfigurationInstance();
             _configuration.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../SolaERP.API"));
             _configuration.AddJsonFile("appsettings.json");
         }
 
-        private static NetworkCredential _networkCredential;
-        public static string IP { get => _configuration["RemoteFileServer:ServerAdress"]; }
-        public static NetworkCredential Credential
+        private  NetworkCredential _networkCredential;
+        public  string IP { get => _configuration["RemoteFileServer:ServerAdress"]; }
+        public  NetworkCredential Credential
         {
             get
             {
@@ -28,6 +31,23 @@ namespace SolaERP.Infrastructure.Extensions
             }
         }
 
-        public static string FolderPath { get => _configuration["RemoteFileServer:FolderPath"]; }
+        public  string FolderPath { get => _configuration["RemoteFileServer:FolderPath"]; }
+
+        private ConfigurationManager CreateSingleConfigurationInstance()
+        {
+            if (_configuration == null)
+            {
+                lock (_serverLock)
+                {
+                    if (_configuration is null)
+                        _configuration = new();
+                }
+            }
+
+            return _configuration;  
+        }
+
+
+
     }
 }
