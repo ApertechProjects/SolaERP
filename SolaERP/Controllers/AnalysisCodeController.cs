@@ -35,11 +35,11 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _analysisCodeService.GetAnalysisDimensionAsync());
 
         [HttpPost]
-        public async Task<IActionResult> SaveAnalysisCodeAsync(AnalysisCodeSaveModel model)
-            => CreateActionResult(await _analysisCodeService.SaveAnalysisCodeAsync(model));
+        public async Task<IActionResult> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model)
+            => CreateActionResult(await _analysisCodeService.SaveAnalysisCodeByGroupAsync(model));
 
         [HttpDelete("{groupAnalysisCodeId}")]
-        public async Task<IActionResult> DeleteAnalysisCodeAsync(int groupAnalysisCodeId)
-            => CreateActionResult(await _analysisCodeService.DeleteAnalysisCodeAsync(groupAnalysisCodeId));
+        public async Task<IActionResult> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId)
+            => CreateActionResult(await _analysisCodeService.DeleteAnalysisCodeByGroupIdAsync(groupAnalysisCodeId));
     }
 }
