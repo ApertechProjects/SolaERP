@@ -232,5 +232,48 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
+
+        public async Task<List<GroupRole>> GetGroupRolesAsync(int groupId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_GroupApproveRoles_Load @GroupId";
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                List<GroupRole> resultList = new();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<GroupRole>());
+
+                return resultList;
+            }
+        }
+
+        public async Task<bool> SaveGroupRoleByGroupAsync(GroupRoleSaveModel model)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF Exec SP_GroupApproveRoles_IUD  @GroupApproveRoleId,
+                                                                       @GroupId,  
+                                                                       @ApproveRoleId";
+
+                command.Parameters.AddWithValue(command, "@GroupApproveRoleId", model.GroupApproveRoleId);
+                command.Parameters.AddWithValue(command, "@GroupId", model.GroupId);
+                command.Parameters.AddWithValue(command, "@ApproveRoleId", model.ApproveRoleId);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF Exec SP_GroupApproveRoles_IUD @GroupApproveRoleId";
+                command.Parameters.AddWithValue(command, "@GroupApproveRoleId", groupApproveRoleId);
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
     }
 }

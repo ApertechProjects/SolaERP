@@ -252,8 +252,6 @@ namespace SolaERP.Application.Services
             if (mainRequestDto != null && mainRequestDto.Count > 0)
                 return ApiResponse<List<RequestWFADto>>.Success(mainRequestDto, 200);
 
-            //
-            //return ApiResponse<List<RequestWFADto>>.Success(mainRequestDto, 200);
             return ApiResponse<List<RequestWFADto>>.Success(mainRequestDto, 200);
         }
 

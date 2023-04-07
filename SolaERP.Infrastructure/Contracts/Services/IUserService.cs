@@ -28,5 +28,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task UserRegisterAsync(UserRegisterModel model);
         Task<ApiResponse<UserLoadDto>> GetUserInfo(int userId);
         Task<ApiResponse<List<ERPUserDto>>> GetERPUser();
+        Task<ApiResponse<bool>> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel);
     }
 }

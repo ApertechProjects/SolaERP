@@ -40,7 +40,7 @@
             Creates a user with given input
             </summary>
         </member>
-        <member name="M:SolaERP.Controllers.AccountController.ResetPassword(SolaERP.Infrastructure.Models.ResetPasswordModel)">
+        <member name="M:SolaERP.Controllers.AccountController.ResetPasswordAsync(SolaERP.Infrastructure.Models.ResetPasswordModel)">
             <summary>
             Allows users to reset their password if they forget it.
             </summary>

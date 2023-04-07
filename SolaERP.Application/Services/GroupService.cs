@@ -5,6 +5,7 @@ using SolaERP.Infrastructure.Dtos.AnalysisCode;
 using SolaERP.Infrastructure.Dtos.Buyer;
 using SolaERP.Infrastructure.Dtos.Group;
 using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Entities.AnalysisCode;
 using SolaERP.Infrastructure.Entities.Buyer;
 using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Enums;
@@ -56,6 +57,14 @@ namespace SolaERP.Application.Services
             else return ApiResponse<bool>.Fail("Data can not be deleted", 400);
         }
 
+        public async Task<ApiResponse<bool>> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId)
+        {
+            var result = await _groupRepository.DeleteGroupRoleByGroupIdAsync(groupApproveRoleId);
+            await _unitOfWork.SaveChangesAsync();
+            if (result) return ApiResponse<bool>.Success(true, 200);
+            else return ApiResponse<bool>.Fail("Data can not be deleted", 400);
+        }
+
         public Task<ApiResponse<List<GroupAdditionalPrivilage>>> GetAdditionalPrivilegesForGroupAsync(int groupId)
         {
             throw new NotImplementedException();
@@ -87,6 +96,16 @@ namespace SolaERP.Application.Services
                 return ApiResponse<List<GroupBuyerDto>>.Success(dto, 200);
             else
                 return ApiResponse<List<GroupBuyerDto>>.Fail("Buyer list is empty", 400);
+        }
+
+        public async Task<ApiResponse<List<GroupRoleDto>>> GetGroupRolesAsync(int groupId)
+        {
+            var buyers = await _groupRepository.GetGroupRolesAsync(groupId);
+            var dto = _mapper.Map<List<GroupRoleDto>>(buyers);
+            if (dto != null)
+                return ApiResponse<List<GroupRoleDto>>.Success(dto, 200);
+            else
+                return ApiResponse<List<GroupRoleDto>>.Fail("Group Role list is empty", 400);
         }
 
         public async Task<ApiResponse<bool>> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model)
@@ -174,6 +193,16 @@ namespace SolaERP.Application.Services
             }
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(true, 200);
+        }
+
+        public async Task<ApiResponse<bool>> SaveGroupRoleByGroupAsync(GroupRoleSaveModel model)
+        {
+            var res = await _groupRepository.SaveGroupRoleByGroupAsync(model);
+            await _unitOfWork.SaveChangesAsync();
+            if (res)
+                return ApiResponse<bool>.Success(res, 200);
+            else
+                return ApiResponse<bool>.Fail("Data can not be saved", 400);
         }
 
         /// <summary>

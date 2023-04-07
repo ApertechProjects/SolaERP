@@ -99,7 +99,11 @@ namespace SolaERP.Controllers
         /// Allows users to reset their password if they forget it.
         /// </summary>
         [HttpPost]
-        public async Task<IActionResult> ResetPassword(ResetPasswordModel resetPasswordrequestDto)
+        public async Task<IActionResult> ResetPasswordAsync(ResetPasswordModel resetPasswordrequestDto)
             => CreateActionResult(await _userService.ResetPasswordAsync(resetPasswordrequestDto));
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel)
+            => CreateActionResult(await _userService.ChangeUserPasswordAsync(passwordModel));
     }
 }

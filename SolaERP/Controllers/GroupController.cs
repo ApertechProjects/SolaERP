@@ -48,5 +48,19 @@ namespace SolaERP.Controllers
         [HttpDelete("{groupAnalysisCodeId}")]
         public async Task<IActionResult> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId)
             => CreateActionResult(await _groupService.DeleteAnalysisCodeByGroupIdAsync(groupAnalysisCodeId));
+
+        [HttpGet]
+        public async Task<IActionResult> GetGroupRolesAsync(int groupId)
+            => CreateActionResult(await _groupService.GetGroupRolesAsync(groupId));
+
+        [HttpPost]
+        public async Task<IActionResult> SaveGroupRoleByGroupAsync(GroupRoleSaveModel model)
+         => CreateActionResult(await _groupService.SaveGroupRoleByGroupAsync(model));
+
+        [HttpDelete("{groupApproveRoleId}")]
+        public async Task<IActionResult> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId)
+            => CreateActionResult(await _groupService.DeleteGroupRoleByGroupIdAsync(groupApproveRoleId));
+
+
     }
 }

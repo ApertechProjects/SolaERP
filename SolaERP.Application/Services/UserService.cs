@@ -10,6 +10,7 @@ using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace SolaERP.Application.Services
 {
@@ -272,6 +273,19 @@ namespace SolaERP.Application.Services
             var user = await _userRepository.GetERPUser();
             var dto = _mapper.Map<List<ERPUserDto>>(user);
             return ApiResponse<List<ERPUserDto>>.Success(dto, 200);
+        }
+
+        public async Task<ApiResponse<bool>> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel)
+        {
+            if (passwordModel.Password != passwordModel.ConfirmPassword)
+                return ApiResponse<bool>.Fail("Password and Confirm Password must be equalent", 422);
+
+            passwordModel.Password = SecurityUtil.ComputeSha256Hash(passwordModel.Password);
+            var user = await _userRepository.ChangeUserPasswordAsync(passwordModel);
+            await _unitOfWork.SaveChangesAsync();
+            if (user)
+                return ApiResponse<bool>.Success(user, 200);
+            return ApiResponse<bool>.Fail("User must be selected", 200);
         }
     }
 }

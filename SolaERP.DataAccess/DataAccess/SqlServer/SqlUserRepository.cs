@@ -433,6 +433,20 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
+        public async Task<bool> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel)
+        {
+            string query = "Exec [dbo].[SP_UserPassword_Change] @Id,@PasswordHash";
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.Parameters.AddWithValue(command, "@Id", passwordModel.UserId);
+                command.Parameters.AddWithValue(command, "@PasswordHash", passwordModel.Password);
+                command.CommandText = query;
+
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
+            }
+        }
+
         #endregion
     }
 }
