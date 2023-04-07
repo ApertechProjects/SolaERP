@@ -1,12 +1,10 @@
-﻿using SolaERP.Infrastructure.Attributes;
-
-namespace SolaERP.Infrastructure.Entities.User
+﻿namespace SolaERP.Infrastructure.Entities.User
 {
     public class UserMain : BaseEntity
     {
         public int Id { get; set; }
-        public string UserPhoto { get; set; }
-        public string UserSignature { get; set; }
+        //public string UserPhoto { get; set; }
+        //public string UserSignature { get; set; }
         public string FullName { get; set; }
         public string ApproveStatus { get; set; }
         public Int64 RowNum { get; set; }

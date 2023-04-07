@@ -16,13 +16,15 @@ namespace SolaERP.Infrastructure.Extensions
         public RemoteFileServer()
         {
             _configuration = CreateSingleConfigurationInstance();
-            _configuration.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../SolaERP.API"));
+            //_configuration.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../SolaERP.API/"));
+            _configuration.SetBasePath(Directory.GetCurrentDirectory());
+
             _configuration.AddJsonFile("appsettings.json");
         }
 
-        private  NetworkCredential _networkCredential;
-        public  string IP { get => _configuration["RemoteFileServer:ServerAdress"]; }
-        public  NetworkCredential Credential
+        private NetworkCredential _networkCredential;
+        public string IP { get => _configuration["RemoteFileServer:ServerAdress"]; }
+        public NetworkCredential Credential
         {
             get
             {
@@ -31,7 +33,7 @@ namespace SolaERP.Infrastructure.Extensions
             }
         }
 
-        public  string FolderPath { get => _configuration["RemoteFileServer:FolderPath"]; }
+        public string FolderPath { get => _configuration["RemoteFileServer:FolderPath"]; }
 
         private ConfigurationManager CreateSingleConfigurationInstance()
         {
@@ -44,7 +46,7 @@ namespace SolaERP.Infrastructure.Extensions
                 }
             }
 
-            return _configuration;  
+            return _configuration;
         }
 
 
