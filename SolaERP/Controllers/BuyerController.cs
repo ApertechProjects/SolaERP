@@ -29,16 +29,6 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _buyerService.GetBuyerByUserTokenAsync(authToken, businessUnitCode));
 
 
-        [HttpGet("{groupId}")]
-        public async Task<IActionResult> GetBuyersByGroupIdAsync(int groupId)
-            => CreateActionResult(await _buyerService.GetBuyersByGroupIdAsync(groupId));
-
-        [HttpPost]
-        public async Task<IActionResult> SaveBuyerByGroupAsync(GroupBuyerSaveModel model)
-            => CreateActionResult(await _buyerService.SaveBuyerByGroupAsync(model));
-
-        [HttpDelete("{groupBuyerId}")]
-        public async Task<IActionResult> DeleteBuyerByGroupIdAsync(int groupBuyerId)
-            => CreateActionResult(await _buyerService.DeleteBuyerByGroupIdAsync(groupBuyerId));
+       
     }
 }

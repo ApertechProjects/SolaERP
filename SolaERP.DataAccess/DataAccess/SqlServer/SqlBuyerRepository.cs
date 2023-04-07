@@ -26,16 +26,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public async Task<bool> DeleteBuyerByGroupIdAsync(int groupBuyerId)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = @"SET NOCOUNT OFF Exec SP_GroupBuyers_IUD @GroupBuyerId";
-                command.Parameters.AddWithValue(command, "@GroupBuyerId", groupBuyerId);
-                return await command.ExecuteNonQueryAsync() > 0;
-            }
-        }
-
         public async Task<List<Buyer>> GetAllAsync()
         {
             throw new NotImplementedException();
@@ -58,24 +48,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<GroupBuyer>> GetBuyersByGroupIdAsync(int groupId)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "exec SP_GroupBuyers_Load @GroupId";
-                command.Parameters.AddWithValue(command, "@GroupId", groupId);
-                using var reader = await command.ExecuteReaderAsync();
-
-                List<GroupBuyer> buyers = new List<GroupBuyer>();
-
-                while (reader.Read())
-                {
-                    buyers.Add(reader.GetByEntityStructure<GroupBuyer>());
-                }
-                return buyers;
-            }
-        }
-
         public Task<Buyer> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
@@ -84,25 +56,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public Task<bool> RemoveAsync(int Id)
         {
             throw new NotImplementedException();
-        }
-
-        public async Task<bool> SaveBuyerByGroupAsync(GroupBuyerSaveModel model)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = @"SET NOCOUNT OFF Exec SP_GroupBuyers_IUD  @GroupBuyerId,
-                                                                       @GroupId,  
-                                                                       @BusinessUnitId, 
-                                                                       @BuyerCode";
-
-                command.Parameters.AddWithValue(command, "@GroupBuyerId", model.GroupBuyerId);
-                command.Parameters.AddWithValue(command, "@GroupId", model.GroupId);
-                command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
-                command.Parameters.AddWithValue(command, "@BuyerCode", model.BuyerCode);
-
-
-                return await command.ExecuteNonQueryAsync() > 0;
-            }
         }
 
         public Task UpdateAsync(Buyer entity)

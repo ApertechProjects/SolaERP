@@ -8,10 +8,7 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
 {
     public interface IAnalysisCodeRepository
     {
-        Task<bool> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId);
         public Task<List<AnalysisCode>> GetAnalysisCodesAsync(int businessUnitId, string procedureName);
-        Task<List<GroupAnalysisCode>> GetAnalysisCodesByGroupIdAsync(int groupId);
         Task<List<AnalysisDimension>> GetAnalysisDimensionAsync();
-        Task<bool> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model);
     }
 }
