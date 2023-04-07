@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SolaERP.Application.Services;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Models;
 
@@ -23,5 +24,29 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> SaveGroupAsync([FromHeader] string authToken, GroupSaveModel model)
             => CreateActionResult(await _groupService.SaveGroupAsync(authToken, model));
 
+        [HttpGet("{groupId}")]
+        public async Task<IActionResult> GetBuyersByGroupIdAsync(int groupId)
+           => CreateActionResult(await _groupService.GetBuyersByGroupIdAsync(groupId));
+
+        [HttpPost]
+        public async Task<IActionResult> SaveBuyerByGroupAsync(GroupBuyerSaveModel model)
+            => CreateActionResult(await _groupService.SaveBuyerByGroupAsync(model));
+
+        [HttpDelete("{groupBuyerId}")]
+        public async Task<IActionResult> DeleteBuyerByGroupIdAsync(int groupBuyerId)
+            => CreateActionResult(await _groupService.DeleteBuyerByGroupIdAsync(groupBuyerId));
+
+        [HttpGet("{groupId}")]
+        public async Task<IActionResult> GetAnalysisCodesByGroupIdAsync(int groupId)
+          => CreateActionResult(await _groupService.GetAnalysisCodesByGroupIdAsync(groupId));
+
+
+        [HttpPost]
+        public async Task<IActionResult> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model)
+            => CreateActionResult(await _groupService.SaveAnalysisCodeByGroupAsync(model));
+
+        [HttpDelete("{groupAnalysisCodeId}")]
+        public async Task<IActionResult> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId)
+            => CreateActionResult(await _groupService.DeleteAnalysisCodeByGroupIdAsync(groupAnalysisCodeId));
     }
 }

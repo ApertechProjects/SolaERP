@@ -4,6 +4,9 @@ using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Buyer;
 using SolaERP.Infrastructure.Dtos.Menu;
 using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Entities.AnalysisCode;
+using SolaERP.Infrastructure.Models;
+using SolaERP.Infrastructure.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,11 +19,13 @@ namespace SolaERP.Application.Services
     {
         private readonly IBuyerRepository _buyerRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private IMapper _mapper;
-        public BuyerService(IBuyerRepository buyerRepository, IUserRepository userRepository, IMapper mapper)
+        public BuyerService(IBuyerRepository buyerRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _buyerRepository = buyerRepository;
             _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -44,7 +49,7 @@ namespace SolaERP.Application.Services
             if (buyerDto != null)
                 return ApiResponse<List<BuyerDto>>.Success(buyerDto, 200);
 
-            return ApiResponse<List<BuyerDto>>.Fail("BadRequest", 400);
+            return ApiResponse<List<BuyerDto>>.Fail("Buyer is empty", 400);
         }
 
         public Task<ApiResponse<bool>> RemoveAsync(int Id)

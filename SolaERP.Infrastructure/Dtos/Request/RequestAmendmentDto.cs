@@ -6,6 +6,8 @@
         public int BusinessUnitId { get; set; }
         public int RequestTypeId { get; set; }
         public int RequestNo { get; set; }
+        public string EmployeeCode { get; set; }
+        public string EmployeeName { get; set; }
         public DateTime EntryDate { get; set; }
         public DateTime RequestDate { get; set; }
         public DateTime RequestDeadline { get; set; }

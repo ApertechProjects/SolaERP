@@ -1,5 +1,7 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Entities.AnalysisCode;
+using SolaERP.Infrastructure.Entities.Buyer;
 using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
@@ -133,6 +135,101 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@ApproveRoleId", approveRoleId);
 
                 await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        public async Task<bool> DeleteBuyerByGroupIdAsync(int groupBuyerId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF Exec SP_GroupBuyers_IUD @GroupBuyerId";
+                command.Parameters.AddWithValue(command, "@GroupBuyerId", groupBuyerId);
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<List<GroupBuyer>> GetBuyersByGroupIdAsync(int groupId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec SP_GroupBuyers_Load @GroupId";
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+                using var reader = await command.ExecuteReaderAsync();
+
+                List<GroupBuyer> buyers = new List<GroupBuyer>();
+
+                while (reader.Read())
+                {
+                    buyers.Add(reader.GetByEntityStructure<GroupBuyer>());
+                }
+                return buyers;
+            }
+        }
+
+        public async Task<bool> SaveBuyerByGroupAsync(GroupBuyerSaveModel model)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF Exec SP_GroupBuyers_IUD  @GroupBuyerId,
+                                                                       @GroupId,  
+                                                                       @BusinessUnitId, 
+                                                                       @BuyerCode";
+
+                command.Parameters.AddWithValue(command, "@GroupBuyerId", model.GroupBuyerId);
+                command.Parameters.AddWithValue(command, "@GroupId", model.GroupId);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@BuyerCode", model.BuyerCode);
+
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<List<GroupAnalysisCode>> GetAnalysisCodesByGroupIdAsync(int groupId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_GroupAnalysisCodes_Load @GroupId";
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                List<GroupAnalysisCode> resultList = new();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<GroupAnalysisCode>());
+
+                return resultList;
+            }
+        }
+
+        public async Task<bool> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF Exec SP_GroupAnalysisCodes_IUD  @GroupAnalysisCodeId";
+                command.Parameters.AddWithValue(command, "@GroupAnalysisCodeId", groupAnalysisCodeId);
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF Exec SP_GroupAnalysisCodes_IUD  @GroupAnalysisCodeId,
+                                                                       @GroupId,  
+                                                                       @BusinessUnitId, 
+                                                                       @AnalysisDimensionId, 
+                                                                       @AnalysisCodesId";
+
+                command.Parameters.AddWithValue(command, "@GroupAnalysisCodeId", model.GroupAnalysisCodeId);
+                command.Parameters.AddWithValue(command, "@GroupId", model.GroupId);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@AnalysisDimensionId", model.AnalysisDimensionId);
+                command.Parameters.AddWithValue(command, "@AnalysisCodesId", model.AnalysisCodesId);
+
+
+                return await command.ExecuteNonQueryAsync() > 0;
             }
         }
     }
