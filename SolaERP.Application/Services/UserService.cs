@@ -319,5 +319,39 @@ namespace SolaERP.Application.Services
             var dto = _mapper.Map<List<ERPUserDto>>(user);
             return ApiResponse<List<ERPUserDto>>.Success(dto, 200);
         }
+
+        public async Task<bool> SaveUserAsync(UserSaveModel user)
+        {
+            var userEntry = _mapper.Map<User>(user);
+            string serverFilePath = string.Empty;
+            string serverSignaturePath = string.Empty;
+
+            if (!string.IsNullOrEmpty(user.Files?.Base64Photo))
+                serverFilePath = await _fileService.UploadBase64PhotoWithNetworkAsync(user.Files.Base64Photo, user.Files.Extension, user.Files.PhotoFileName);
+
+            if (!string.IsNullOrEmpty(user.Files?.Base64Signature))
+                serverSignaturePath = await _fileService.UploadBase64PhotoWithNetworkAsync(user.Files.Base64Signature, user.Files.Extension, user.Email + "signature");
+
+            userEntry.SignaturePhoto = serverSignaturePath;
+            userEntry.UserPhoto = serverFilePath;
+
+            userEntry.PasswordHash = SecurityUtil.ComputeSha256Hash(user.Password);
+            var result = await _userRepository.SaveUserAsync(userEntry);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return result ?
+                     true : false;
+        }
+
+        public Task<bool> CheckTokenAsync(string authToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApiResponse<bool>> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
