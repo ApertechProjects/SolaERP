@@ -324,10 +324,10 @@ namespace SolaERP.Application.Services
             string serverFilePath = string.Empty;
             string serverSignaturePath = string.Empty;
 
-            if (!string.IsNullOrEmpty(user.Files.Base64Photo))
+            if (!string.IsNullOrEmpty(user.Files?.Base64Photo))
                 serverFilePath = await _fileService.UploadBase64PhotoWithNetworkAsync(user.Files.Base64Photo, user.Files.Extension, user.Files.PhotoFileName);
 
-            if (!string.IsNullOrEmpty(user.Files.Base64Signature))
+            if (!string.IsNullOrEmpty(user.Files?.Base64Signature))
                 serverSignaturePath = await _fileService.UploadBase64PhotoWithNetworkAsync(user.Files.Base64Signature, user.Files.Extension, user.Email + "signature");
 
             userEntry.SignaturePhoto = serverSignaturePath;
