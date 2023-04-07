@@ -9,8 +9,6 @@ using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
-using System.Collections.Generic;
-using System.Reflection;
 
 namespace SolaERP.Application.Services
 {
@@ -299,11 +297,12 @@ namespace SolaERP.Application.Services
             List<string> failedMailList = new List<string>();
             string userName = await _userRepository.GetUserNameByTokenAsync(authToken);
 
-            await _userRepository.UserChangeStatusAsync(userId, model);
+            var user = await _userRepository.UserChangeStatusAsync(userId, model);
 
             await _unitOfWork.SaveChangesAsync();
-
-            return ApiResponse<bool>.Success(true, 200);
+            if (user)
+                return ApiResponse<bool>.Success(true, 200);
+            return ApiResponse<bool>.Fail("Problem detected", 400);
         }
 
         public async Task<ApiResponse<UserLoadDto>> GetUserInfo(int userId)
