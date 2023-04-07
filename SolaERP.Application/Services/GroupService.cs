@@ -25,30 +25,6 @@ namespace SolaERP.Application.Services
             _mapper = mapper;
         }
 
-        //public async Task AddAsync(GroupsDto model)
-        //{
-        //    if (model != null)
-        //    {
-        //        var entity = _mapper.Map<Groups>(model);
-        //        await _groupRepository.AddUpdateOrDeleteGroupAsync(entity);
-
-        //        await _unitOfWork.SaveChangesAsync();
-        //    }
-        //}
-
-        //public async Task<ApiResponse<bool>> RemoveAsync(int Id)
-        //{
-        //    await _groupRepository.RemoveAsync(Id);
-        //    await _unitOfWork.SaveChangesAsync();
-        //    return ApiResponse<bool>.Success(200);
-        //}
-
-        //public async Task<ApiResponse<bool>> UpdateAsync(GroupsDto model)
-        //{
-        //    await AddAsync(model);
-        //}
-
-
         public async Task<ApiResponse<bool>> AddOrUpdateAsync(GroupAdditionalPrivelegeDto additionalPrivilage)
         {
             bool isSucces = false;
@@ -61,9 +37,9 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(isSucces, 200);
         }
 
-        public Task<ApiResponse<List<GroupAdditionalPrivilage>>> GetAdditionalPrivilegesForGroupAsync(int groupId)
+        public async Task<ApiResponse<List<GroupAdditionalPrivilage>>> GetAdditionalPrivilegesForGroupAsync(int groupId)
         {
-            throw new NotImplementedException();
+            return ApiResponse<List<GroupAdditionalPrivilage>>.Success(await _groupRepository.GetAdditionalPrivilegesForGroupAsync(groupId), 200);
         }
 
         public async Task<ApiResponse<List<GroupsDto>>> GetAllAsync()

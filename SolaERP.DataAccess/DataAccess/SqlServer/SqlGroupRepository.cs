@@ -57,7 +57,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 List<GroupAdditionalPrivilage> resultList = new();
-                while (reader.Read()) resultList.Add(reader.GetByEntityStructure<GroupAdditionalPrivilage>());
+                while (reader.Read()) resultList.Add(reader.GetByEntityStructure<GroupAdditionalPrivilage>("RequestAttachment", "RequestSendToApprove"));
 
                 return resultList;
             }
