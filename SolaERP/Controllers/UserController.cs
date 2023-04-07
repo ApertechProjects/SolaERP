@@ -74,7 +74,7 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _userService.GetUserCompanyAsync(authToken, userStatus));
 
         [HttpGet]
-        public async Task<IActionResult> GetUserVendorAsync([FromHeader] string authToken,[FromQuery] int userStatus)
+        public async Task<IActionResult> GetUserVendorAsync([FromHeader] string authToken, [FromQuery] int userStatus)
             => CreateActionResult(await _userService.GetUserVendorAsync(authToken, userStatus));
 
         [HttpPost]
@@ -91,6 +91,11 @@ namespace SolaERP.Controllers
 
             return BadRequest(result);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeUserPasswordAsync(ChangeUserPasswordModel user)
+            => CreateActionResult(await _userService.ChangeUserPasswordAsync(user));
+
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUserInfo(int userId)
             => CreateActionResult(await _userService.GetUserInfo(userId));

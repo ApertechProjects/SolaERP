@@ -344,14 +344,21 @@ namespace SolaERP.Application.Services
                      true : false;
         }
 
-        public Task<bool> CheckTokenAsync(string authToken)
+        public async Task<bool> CheckTokenAsync(string authToken)
         {
-            throw new NotImplementedException();
+            var check = await _userRepository.CheckTokenAsync(authToken);
+            if (check) return true;
+            else return false;
         }
 
-        public Task<ApiResponse<bool>> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel)
+        public async Task<ApiResponse<bool>> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel)
         {
-            throw new NotImplementedException();
+            if (passwordModel.Password != passwordModel.ConfirmPassword)
+                return ApiResponse<bool>.Fail("Password must be equal to Confirm password", 422);
+            passwordModel.Password = SecurityUtil.ComputeSha256Hash(passwordModel.Password);
+            var pass = await _userRepository.ChangeUserPasswordAsync(passwordModel);
+            if (pass) return ApiResponse<bool>.Success(200);
+            else return ApiResponse<bool>.Success(400);
         }
     }
 }
