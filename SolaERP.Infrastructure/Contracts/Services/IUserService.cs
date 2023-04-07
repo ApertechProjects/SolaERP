@@ -1,7 +1,6 @@
 ﻿using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
-using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Infrastructure.Contracts.Services
@@ -26,7 +25,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string authToken, List<int> userStatus, bool all);
         Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string authToken, List<int> userStatus, bool all);
         Task<ApiResponse<bool>> UserChangeStatusAsync(string authToken, UserChangeStatusModel model);
-        Task<bool> SaveUserAsync(User user);
+        Task<bool> SaveUserAsync(UserSaveModel user);
         Task UserRegisterAsync(UserRegisterModel model);
         Task<ApiResponse<UserLoadDto>> GetUserInfo(int userId);
         Task<ApiResponse<List<ERPUserDto>>> GetERPUser();

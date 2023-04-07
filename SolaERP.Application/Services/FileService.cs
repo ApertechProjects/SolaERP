@@ -1,7 +1,7 @@
 ﻿using SixLabors.ImageSharp.Formats.Jpeg;
 using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Enums;
 using SolaERP.Infrastructure.Extensions;
-using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Application.Services
 {
@@ -38,15 +38,15 @@ namespace SolaERP.Application.Services
             return outPutMemoryStream.ToArray();
         }
 
-        public async Task<string> UploadBase64PhotoWithNetworkAsync(PhotoUploadModel model)
+        public async Task<string> UploadBase64PhotoWithNetworkAsync(string base64File, FileExtension extension, string fileName)
         {
             using NetworkConnection networkConnection = new(RemoteFileServer.FolderPath, RemoteFileServer.Credential);
-            byte[] imageBytes = Convert.FromBase64String(model.base64Photo);
+            byte[] imageBytes = Convert.FromBase64String(base64File);
 
             if (!File.Exists(RemoteFileServer.FolderPath))
                 Directory.CreateDirectory(RemoteFileServer.FolderPath);
 
-            string remoteFilePath = Path.Combine(RemoteFileServer.FolderPath, $"{Guid.NewGuid() + model.FileName}.{model.Extension.ToString()}");
+            string remoteFilePath = Path.Combine(RemoteFileServer.FolderPath, $"{Guid.NewGuid() + fileName}.{extension.ToString()}");
             await File.WriteAllBytesAsync(remoteFilePath, imageBytes);
 
             return remoteFilePath;

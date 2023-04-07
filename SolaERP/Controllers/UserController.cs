@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.UserDto;
-using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Controllers
@@ -83,7 +82,7 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _userService.UserChangeStatusAsync(authToken, model));
 
         [HttpPost]
-        public async Task<IActionResult> SaveUser(User user)
+        public async Task<IActionResult> SaveUser(UserSaveModel user)
         {
             var result = await _userService.SaveUserAsync(user);
 

@@ -9,7 +9,6 @@ using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
-using System.Collections.Generic;
 
 namespace SolaERP.Application.Services
 {
@@ -18,6 +17,7 @@ namespace SolaERP.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMailService _mailService;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
         public UserService(IUserRepository userRepository,
                            IUnitOfWork unitOfWork,
@@ -217,6 +217,17 @@ namespace SolaERP.Application.Services
             int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
             var users = await _userRepository.GetUserWFAAsync(userId, model);
             var dto = _mapper.Map<List<UserMainDto>>(users);
+
+            for (int i = 0; i < dto.Count; i++)
+            {
+                var user = dto.FirstOrDefault(x => x.UserName == users[i].UserName);
+                if (!string.IsNullOrEmpty(users[i].UserPhoto))
+                {
+                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users[i].UserPhoto);
+                }
+            }
+
+
             return ApiResponse<List<UserMainDto>>.Success(dto, 200);
         }
 
@@ -225,6 +236,17 @@ namespace SolaERP.Application.Services
             int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
             var users = await _userRepository.GetUserAllAsync(userId, model);
             var dto = _mapper.Map<List<UserMainDto>>(users);
+
+            for (int i = 0; i < dto.Count; i++)
+            {
+                var user = dto.FirstOrDefault(x => x.UserName == users[i].UserName);
+                if (!string.IsNullOrEmpty(users[i].UserPhoto))
+                {
+                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users[i].UserPhoto);
+                }
+            }
+
+
             return ApiResponse<List<UserMainDto>>.Success(dto, 200);
         }
 
@@ -233,6 +255,17 @@ namespace SolaERP.Application.Services
             int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
             var users = await _userRepository.GetUserCompanyAsync(userId, userStatus, all);
             var dto = _mapper.Map<List<UserMainDto>>(users);
+
+            for (int i = 0; i < dto.Count; i++)
+            {
+                var user = dto.FirstOrDefault(x => x.UserName == users[i].UserName);
+                if (!string.IsNullOrEmpty(users[i].UserPhoto))
+                {
+                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users[i].UserPhoto);
+                }
+            }
+
+
             return ApiResponse<List<UserMainDto>>.Success(dto, 200);
         }
 
@@ -241,6 +274,16 @@ namespace SolaERP.Application.Services
             int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
             var users = await _userRepository.GetUserVendorAsync(userId, userStatus, all);
             var dto = _mapper.Map<List<UserMainDto>>(users);
+
+            for (int i = 0; i < dto.Count; i++)
+            {
+                var user = dto.FirstOrDefault(x => x.UserName == users[i].UserName);
+                if (!string.IsNullOrEmpty(users[i].UserPhoto))
+                {
+                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users[i].UserPhoto);
+                }
+            }
+
             return ApiResponse<List<UserMainDto>>.Success(dto, 200);
         }
 
@@ -274,10 +317,23 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<ERPUserDto>>.Success(dto, 200);
         }
 
-        public async Task<bool> SaveUserAsync(User user)
+        public async Task<bool> SaveUserAsync(UserSaveModel user)
         {
-            user.PasswordHash = SecurityUtil.ComputeSha256Hash(user.Password);
-            var result = await _userRepository.SaveUserAsync(user);
+            var userEntry = _mapper.Map<User>(user);
+            string serverFilePath = string.Empty;
+            string serverSignaturePath = string.Empty;
+
+            if (!string.IsNullOrEmpty(user.Files.Base64Photo))
+                serverFilePath = await _fileService.UploadBase64PhotoWithNetworkAsync(user.Files.Base64Photo, user.Files.Extension, user.Files.PhotoFileName);
+
+            if (!string.IsNullOrEmpty(user.Files.Base64Photo))
+                serverSignaturePath = await _fileService.UploadBase64PhotoWithNetworkAsync(user.Files.Base64Signature, user.Files.Extension, user.Email + "signature");
+
+            userEntry.SignaturePhoto = serverSignaturePath;
+            userEntry.UserPhoto = serverFilePath;
+
+            userEntry.PasswordHash = SecurityUtil.ComputeSha256Hash(user.Password);
+            var result = await _userRepository.SaveUserAsync(userEntry);
 
             await _unitOfWork.SaveChangesAsync();
 
