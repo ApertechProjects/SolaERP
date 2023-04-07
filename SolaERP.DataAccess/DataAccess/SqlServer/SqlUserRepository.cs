@@ -6,8 +6,6 @@ using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
-using System.Reflection;
-using System.Windows.Input;
 
 namespace SolaERP.DataAccess.DataAcces.SqlServer
 {
@@ -354,7 +352,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_UserApprove @Id,@Sequence,@ApproveStatus,,@UserId,@Comment";
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_UserApprove @Id,@Sequence,@ApproveStatus,@UserId,@Comment";
 
                 command.Parameters.AddWithValue(command, "@Id", model.Id);
                 command.Parameters.AddWithValue(command, "@Sequence", model.Sequence);
@@ -368,7 +366,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public async Task<bool> SaveUserAsync(User entity)
         {
-            string query = "SET NOCOUNT OFF Exec SP_AppUser_IUD2 @Id,@FullName,@ChangePassword,@Theme,@UserName,@Email,@PasswordHash,@PhoneNumber ,@UserTypeId,@VendorId,@UserToken,@Gender,@Buyer,@Description,@ERPUser,@UserPhoto,@SignaturePhoto";
+            string query = "SET NOCOUNT OFF Exec SP_AppUser_IUD @Id,@FullName,@ChangePassword,@Theme,@UserName,@Email,@PasswordHash,@PhoneNumber ,@UserTypeId,@VendorId,@UserToken,@Gender,@Buyer,@Description,@ERPUser,@UserPhoto,@SignaturePhoto";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = query;

@@ -132,6 +132,8 @@ namespace SolaERP.Application.Mappers
             CreateMap<AnalysisDimension, AnalysisDimensionDto>().ReverseMap();
             CreateMap<GroupAnalysisCode, GroupAnalysisCodeDto>().ReverseMap();
             CreateMap<GroupBuyer, GroupBuyerDto>().ReverseMap();
+<<<<<<<<< Temporary merge branch 1
+=========
             CreateMap<UserSaveModel, User>().ReverseMap();
 
         }
