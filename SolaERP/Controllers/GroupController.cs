@@ -1,4 +1,7 @@
-﻿namespace SolaERP.Controllers
+﻿using Microsoft.AspNetCore.Authorization;
+using SolaERP.Infrastructure.Contracts.Services;
+
+namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [Authorize]

@@ -1,4 +1,16 @@
-﻿namespace SolaERP.Application.Services
+﻿using AutoMapper;
+using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.AnalysisCode;
+using SolaERP.Infrastructure.Dtos.Buyer;
+using SolaERP.Infrastructure.Dtos.Group;
+using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Entities.Groups;
+using SolaERP.Infrastructure.Enums;
+using SolaERP.Infrastructure.Models;
+using SolaERP.Infrastructure.UnitOfWork;
+
+namespace SolaERP.Application.Services
 {
     public class GroupService : IGroupService
     {
@@ -43,7 +55,7 @@
             else return ApiResponse<bool>.Fail("Data can not be deleted", 400);
         }
 
-        public Task<ApiResponse<List<GroupAdditionalPrivilage>>> GetAdditionalPrivilegesForGroupAsync(int groupId)
+        public async Task<ApiResponse<List<GroupAdditionalPrivilage>>> GetAdditionalPrivilegesForGroupAsync(int groupId)
         {
             return ApiResponse<List<GroupAdditionalPrivilage>>.Success(await _groupRepository.GetAdditionalPrivilegesForGroupAsync(groupId), 200);
         }
