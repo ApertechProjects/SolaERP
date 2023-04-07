@@ -16,7 +16,7 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<List<RequestApprovalInfo>> GetRequestApprovalInfoAsync(int requestMainId, int userId);
         Task<List<RequestAmendment>> GetApproveAmendmentRequestsAsync(int userId, RequestApproveAmendmentModel requestParametersDto);
         Task<RequestSaveResultModel> AddOrUpdateRequestAsync(int userId, RequestMainSaveModel model);
-        Task<bool> UpdateBuyerAsync(List<RequestSetBuyer> setBuyers);
+        Task<bool> UpdateBuyerAsync(RequestSetBuyer setBuyers);
         Task<List<RequestFollow>> RequestFollowUserLoadAsync(int requestMainId);
         Task<bool> RequestFollowSaveAsync(RequestFollowSaveModel saveModel);
         Task<bool> RequestFollowDeleteAsync(int requestFollowId);
