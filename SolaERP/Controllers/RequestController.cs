@@ -75,7 +75,7 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _requestService.RequestDetailChangeStatusAsync(authToken, model));
 
         [HttpPost]
-        public async Task<IActionResult> UpdateBuyerAsync(RequestSetBuyer requestSetBuyer)
+        public async Task<IActionResult> UpdateBuyerAsync(List<RequestSetBuyer> requestSetBuyer)
             => CreateActionResult(await _requestService.UpdateBuyerAsync(requestSetBuyer));
 
 

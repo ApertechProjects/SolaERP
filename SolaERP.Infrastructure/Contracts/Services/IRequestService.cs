@@ -23,7 +23,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<bool>> DeleteRequestAsync(string authToken, int requestMainId);
         Task<ApiResponse<List<RequestDetailApprovalInfoDto>>> GetRequestDetailApprvalInfoAsync(int requestDetaildId);
         Task<ApiResponse<NoContentDto>> RequestDetailChangeStatusAsync(string finderToken, RequestDetailApproveModel model);
-        Task<ApiResponse<bool>> UpdateBuyerAsync(RequestSetBuyer requestSetBuyer);
+        Task<ApiResponse<bool>> UpdateBuyerAsync(List<RequestSetBuyer> requestSetBuyer);
         Task<ApiResponse<List<RequestFollowDto>>> RequestFollowUserLoadAsync(int requestMainId);
         Task<ApiResponse<bool>> RequestFollowSaveAsync(RequestFollowSaveModel saveModel);
         Task<ApiResponse<bool>> RequestFollowDeleteAsync(int requestFollowId);

@@ -257,9 +257,13 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<RequestWFADto>>.Success(mainRequestDto, 200);
         }
 
-        public async Task<ApiResponse<bool>> UpdateBuyerAsync(RequestSetBuyer requestSetBuyer)
+        public async Task<ApiResponse<bool>> UpdateBuyerAsync(List<RequestSetBuyer> requestSetBuyer)
         {
-            var data = await _requestMainRepository.UpdateBuyerAsync(requestSetBuyer.RequestNo, requestSetBuyer.Buyer);
+            var data = false;
+            for (int i = 0; i < requestSetBuyer.Count; i++)
+            {
+                data = await _requestMainRepository.UpdateBuyerAsync(requestSetBuyer[0]);
+            }
 
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(data, 200);
