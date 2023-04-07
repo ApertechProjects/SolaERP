@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SolaERP.Application.Services;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Models;
 
@@ -62,5 +61,8 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _groupService.DeleteGroupRoleByGroupIdAsync(groupApproveRoleId));
 
 
+        [HttpGet("{groupId}")]
+        public async Task<IActionResult> GetAdditionalPrevilegesByGroup(int groupId)
+            => CreateActionResult(await _groupService.GetAdditionalPrivilegesForGroupAsync(groupId));
     }
 }

@@ -41,5 +41,7 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveAttachmentAsync(AttachmentSaveModel model)
             => CreateActionResult(await _attachmentService.SaveAttachmentAsync(model));
+
+
     }
 }

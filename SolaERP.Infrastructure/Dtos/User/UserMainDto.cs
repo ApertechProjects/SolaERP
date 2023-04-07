@@ -3,7 +3,7 @@
     public class UserMainDto
     {
         public int Id { get; set; }
-        public byte[] Photo { get; set; }
+        public string Photo { get; set; }
         public string FullName { get; set; }
         public string ApproveStatus { get; set; }
         public Int64 RowNum { get; set; }

@@ -57,6 +57,7 @@ namespace SolaERP.Application.Services
             else return ApiResponse<bool>.Fail("Data can not be deleted", 400);
         }
 
+        public async Task<ApiResponse<List<GroupAdditionalPrivilage>>> GetAdditionalPrivilegesForGroupAsync(int groupId)
         public async Task<ApiResponse<bool>> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId)
         {
             var result = await _groupRepository.DeleteGroupRoleByGroupIdAsync(groupApproveRoleId);
@@ -67,7 +68,7 @@ namespace SolaERP.Application.Services
 
         public Task<ApiResponse<List<GroupAdditionalPrivilage>>> GetAdditionalPrivilegesForGroupAsync(int groupId)
         {
-            throw new NotImplementedException();
+            return ApiResponse<List<GroupAdditionalPrivilage>>.Success(await _groupRepository.GetAdditionalPrivilegesForGroupAsync(groupId), 200);
         }
 
         public async Task<ApiResponse<List<GroupsDto>>> GetAllAsync()

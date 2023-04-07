@@ -276,20 +276,16 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "exec SP_UsersWFA @UserType,@UserStatus,@UserId";
-                if (model.AllUserTypes)
-                    command.Parameters.AddWithValue(command, "@UserType", "%");
-                else
-                    command.Parameters.AddWithValue(command, "@UserType", string.Join(',', model.UserType));
-                if (model.AllUserStatus)
-                    command.Parameters.AddWithValue(command, "@UserStatus", "%");
-                else
-                    command.Parameters.AddWithValue(command, "@UserStatus", string.Join(',', model.UserStatus));
+
+                command.Parameters.AddWithValue(command, "@UserType", model.UserType is -1 ? "%" : string.Join(',', model.UserType));
+                command.Parameters.AddWithValue(command, "@UserStatus", model.UserStatus is -1 ? "%" : string.Join(',', model.UserStatus));
                 command.Parameters.AddWithValue(command, "@UserId", userId);
+
                 using var reader = await command.ExecuteReaderAsync();
+
                 while (reader.Read())
-                {
-                    users.Add(reader.GetByEntityStructure<UserMain>());
-                }
+                    users.Add(reader.GetByEntityStructure<UserMain>("Photo"));
+
                 return users;
             }
         }
@@ -300,54 +296,48 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "exec SP_UsersAll @UserType,@UserStatus,@UserId";
-                if (model.AllUserTypes)
-                    command.Parameters.AddWithValue(command, "@UserType", "%");
-                else
-                    command.Parameters.AddWithValue(command, "@UserType", string.Join(',', model.UserType));
-                if (model.AllUserStatus)
-                    command.Parameters.AddWithValue(command, "@UserStatus", "%");
-                else
-                    command.Parameters.AddWithValue(command, "@UserStatus", string.Join(',', model.UserStatus));
+
+                command.Parameters.AddWithValue(command, "@UserType", model.UserType is -1 ? "%" : string.Join(',', model.UserType));
+                command.Parameters.AddWithValue(command, "@UserStatus", model.UserStatus is -1 ? "%" : string.Join(',', model.UserStatus));
                 command.Parameters.AddWithValue(command, "@UserId", userId);
+
                 using var reader = await command.ExecuteReaderAsync();
+
                 while (reader.Read())
-                {
                     users.Add(reader.GetByEntityStructure<UserMain>());
-                }
+
                 return users;
             }
         }
 
-        public async Task<List<UserMain>> GetUserCompanyAsync(int userId, List<int> userStatus, bool all)
+        public async Task<List<UserMain>> GetUserCompanyAsync(int userId, int userStatus)
         {
             List<UserMain> users = new List<UserMain>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "exec SP_UsersCompany @UserStatus,@UserId";
-                if (all)
-                    command.Parameters.AddWithValue(command, "@UserStatus", "%");
-                else
-                    command.Parameters.AddWithValue(command, "@UserStatus", string.Join(',', userStatus));
+                command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
+
                 command.Parameters.AddWithValue(command, "@UserId", userId);
+
                 using var reader = await command.ExecuteReaderAsync();
                 while (reader.Read())
                 {
-                    users.Add(reader.GetByEntityStructure<UserMain>());
+                    users.Add(reader.GetByEntityStructure<UserMain>("Photo"));
                 }
+
                 return users;
             }
         }
 
-        public async Task<List<UserMain>> GetUserVendorAsync(int userId, List<int> userStatus, bool all)
+        public async Task<List<UserMain>> GetUserVendorAsync(int userId, int userStatus)
         {
             List<UserMain> users = new List<UserMain>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "exec SP_UsersVendor @UserStatus,@UserId";
-                if (all)
-                    command.Parameters.AddWithValue(command, "@UserStatus", "%");
-                else
-                    command.Parameters.AddWithValue(command, "@UserStatus", string.Join(',', userStatus));
+                command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
+
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 using var reader = await command.ExecuteReaderAsync();
                 while (reader.Read())
@@ -362,7 +352,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_UserApprove @Id,@Sequence,@ApproveStatus,,@UserId,@Comment";
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_UserApprove @Id,@Sequence,@ApproveStatus,@UserId,@Comment";
 
                 command.Parameters.AddWithValue(command, "@Id", model.Id);
                 command.Parameters.AddWithValue(command, "@Sequence", model.Sequence);
@@ -374,17 +364,16 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<bool> SaveUserAsync(int userId, User entity)
+        public async Task<bool> SaveUserAsync(User entity)
         {
-            string query = "Exec SP_AppUser_IUD @FullName,@ChangePassword,@StatusId,@Theme,@LastActivity,@UserName,@Email,@PasswordHash,@PhoneNumber ,@UserTypeId,@VendorId,@UserToken,@Gender,@Buyer,@Description,@ERPUser";
+            string query = "SET NOCOUNT OFF Exec SP_AppUser_IUD @Id,@FullName,@ChangePassword,@Theme,@UserName,@Email,@PasswordHash,@PhoneNumber ,@UserTypeId,@VendorId,@UserToken,@Gender,@Buyer,@Description,@ERPUser,@UserPhoto,@SignaturePhoto";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = query;
+                command.Parameters.AddWithValue(command, "@Id", entity.Id);
                 command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
                 command.Parameters.AddWithValue(command, "@ChangePassword", entity.ChangePassword);
-                command.Parameters.AddWithValue(command, "@StatusId", entity.StatusId);
                 command.Parameters.AddWithValue(command, "@Theme", entity.Theme);
-                command.Parameters.AddWithValue(command, "@LastActivity", entity.LastActivity);
                 command.Parameters.AddWithValue(command, "@UserName", entity.UserName);
                 command.Parameters.AddWithValue(command, "@Email", entity.Email);
                 command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
@@ -396,6 +385,8 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@Description", entity.Description);
                 command.Parameters.AddWithValue(command, "@ERPUser", entity.ERPUser);
                 command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken.ToString());
+                command.Parameters.AddWithValue(command, "@UserPhoto", entity.UserPhoto);
+                command.Parameters.AddWithValue(command, "@SignaturePhoto", entity.SignaturePhoto);
 
                 var value = await command.ExecuteNonQueryAsync();
                 return value > 0;
@@ -442,6 +433,18 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@PasswordHash", passwordModel.Password);
                 command.CommandText = query;
 
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
+            }
+        }
+
+        public async Task<bool> CheckTokenAsync(string authToken)
+        {
+            string query = "SET NOCOUNT OFF Exec SP_CheckToken @UserToken";
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = query;
+                command.Parameters.AddWithValue(command, "@UserToken", authToken);
                 var value = await command.ExecuteNonQueryAsync();
                 return value > 0;
             }

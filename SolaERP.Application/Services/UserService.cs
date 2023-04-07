@@ -19,16 +19,19 @@ namespace SolaERP.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMailService _mailService;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
         public UserService(IUserRepository userRepository,
                            IUnitOfWork unitOfWork,
                            IMapper mapper,
-                           IMailService mailService)
+                           IMailService mailService,
+                           IFileService fileService)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _mailService = mailService;
             _mapper = mapper;
+            _fileService = fileService;
         }
 
         public async Task AddAsync(UserDto model)
@@ -218,6 +221,17 @@ namespace SolaERP.Application.Services
             int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
             var users = await _userRepository.GetUserWFAAsync(userId, model);
             var dto = _mapper.Map<List<UserMainDto>>(users);
+
+            for (int i = 0; i < dto.Count; i++)
+            {
+                var user = dto.FirstOrDefault(x => x.UserName == users[i].UserName);
+                if (!string.IsNullOrEmpty(users[i].UserPhoto))
+                {
+                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users[i].UserPhoto);
+                }
+            }
+
+
             return ApiResponse<List<UserMainDto>>.Success(dto, 200);
         }
 
@@ -226,22 +240,53 @@ namespace SolaERP.Application.Services
             int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
             var users = await _userRepository.GetUserAllAsync(userId, model);
             var dto = _mapper.Map<List<UserMainDto>>(users);
+
+            for (int i = 0; i < dto.Count; i++)
+            {
+                var user = dto.FirstOrDefault(x => x.UserName == users[i].UserName);
+                if (!string.IsNullOrEmpty(users[i].UserPhoto))
+                {
+                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users[i].UserPhoto);
+                }
+            }
+
+
             return ApiResponse<List<UserMainDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string authToken, List<int> userStatus, bool all)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string authToken, int userStatus)
         {
             int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
-            var users = await _userRepository.GetUserCompanyAsync(userId, userStatus, all);
+            var users = await _userRepository.GetUserCompanyAsync(userId, userStatus);
             var dto = _mapper.Map<List<UserMainDto>>(users);
+
+            for (int i = 0; i < dto.Count; i++)
+            {
+                var user = dto.FirstOrDefault(x => x.UserName == users[i].UserName);
+                if (!string.IsNullOrEmpty(users[i].UserPhoto))
+                {
+                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users[i].UserPhoto);
+                }
+            }
+
             return ApiResponse<List<UserMainDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string authToken, List<int> userStatus, bool all)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string authToken, int userStatus)
         {
             int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
-            var users = await _userRepository.GetUserVendorAsync(userId, userStatus, all);
+            var users = await _userRepository.GetUserVendorAsync(userId, userStatus);
             var dto = _mapper.Map<List<UserMainDto>>(users);
+
+            for (int i = 0; i < dto.Count; i++)
+            {
+                var user = dto.FirstOrDefault(x => x.UserName == users[i].UserName);
+                if (!string.IsNullOrEmpty(users[i].UserPhoto))
+                {
+                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users[i].UserPhoto);
+                }
+            }
+
             return ApiResponse<List<UserMainDto>>.Success(dto, 200);
         }
 
@@ -273,19 +318,6 @@ namespace SolaERP.Application.Services
             var user = await _userRepository.GetERPUser();
             var dto = _mapper.Map<List<ERPUserDto>>(user);
             return ApiResponse<List<ERPUserDto>>.Success(dto, 200);
-        }
-
-        public async Task<ApiResponse<bool>> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel)
-        {
-            if (passwordModel.Password != passwordModel.ConfirmPassword)
-                return ApiResponse<bool>.Fail("Password and Confirm Password must be equalent", 422);
-
-            passwordModel.Password = SecurityUtil.ComputeSha256Hash(passwordModel.Password);
-            var user = await _userRepository.ChangeUserPasswordAsync(passwordModel);
-            await _unitOfWork.SaveChangesAsync();
-            if (user)
-                return ApiResponse<bool>.Success(user, 200);
-            return ApiResponse<bool>.Fail("User must be selected", 200);
         }
     }
 }
