@@ -147,14 +147,14 @@ namespace SolaERP.Application.Services
             return userDto;
         }
 
-        public async Task<ApiResponse<bool>> SendResetPasswordEmail(string email, string templatePath)
+        public async Task<ApiResponse<bool>> SendResetPasswordEmail(string email)
         {
             var userExsist = await _userRepository.GetUserByEmailAsync(email);
 
             if (userExsist == null)
                 return ApiResponse<bool>.Fail("Email", $"We can't found this email: {email}", 404);
 
-            await _mailService.SendPasswordResetMailAsync(email, templatePath);
+            await _mailService.SendPasswordResetMailAsync(email);
             return ApiResponse<bool>.Success(true, 200);
         }
 

@@ -2,7 +2,6 @@
 using SolaERP.Infrastructure.Contracts.Services;
 using System.Net;
 using System.Net.Mail;
-using System.Net.Sockets;
 
 namespace SolaERP.Application.Services
 {
@@ -55,9 +54,9 @@ namespace SolaERP.Application.Services
         /// <param name="to">Email receiver</param>
         /// <param name="templatePath">Template path for sendin email </param>
         /// <returns></returns>
-        public async Task SendPasswordResetMailAsync(string to, string templatePath)
+        public async Task SendPasswordResetMailAsync(string to)
         {
-            using StreamReader reader = new StreamReader(templatePath);
+
             using (SmtpClient smtpClient = new SmtpClient())
             {
                 var basicCredential = new NetworkCredential(_configuration["Mail:UserName"], _configuration["Mail:Password"]);
@@ -75,7 +74,89 @@ namespace SolaERP.Application.Services
                     message.Subject = "Email Verification for Reset Password";
                     message.IsBodyHtml = true;
 
-                    message.Body = reader.ReadToEnd();
+                    message.Body = @"<!DOCTYPE html>
+<html lang=""en"">
+<head>
+<meta charset=""UTF-8"">
+<meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    background-color: #f5f5f5;
+  }
+  
+  .email-container {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+  }
+  
+  h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 20px;
+  }
+  
+  p {
+    margin-bottom: 15px;
+  }
+  
+  .cta-button {
+    display: inline-block;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 12px 25px;
+    background-color: #0077cc;
+    color: #fff;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+  
+  .cta-button:hover {
+    background-color: #005fa3;
+  }
+  
+  .footer {
+    font-size: 14px;
+    color: #999;
+    margin-top: 30px;
+  }
+</style>
+</head>
+<body>
+  <div class=""email-container"">
+    <h1>Set Your New Password for Sola-Soft Account</h1>
+    
+    <p>Dear Customer,</p>
+    
+    <p>We have received a request to set a new password for your Sola-Soft account. To ensure the security of your account, please follow the steps below to create a new password.</p>
+    
+    <a href=""[Password Reset Link]"" class=""cta-button"">Set New Password</a>
+    
+    <p>If you did not request a new password, please contact our support team immediately at support@apertech.net to secure your account.</p>
+    
+    <p>Thank you for choosing Sola-Soft!</p>
+    
+    <p>Best regards,</p>
+    
+    <p>Apertech Support Team</p>
+    
+    <p class=""footer"">This email was sent to you because a password reset request was made for your Sola-Soft account. If you did not make this request, please contact our support team to secure your account.</p>
+  </div>
+</body>
+</html>
+";
+
+
+
+
+
                     message.To.Add(to);
 
                     await smtpClient.SendMailAsync(message);
