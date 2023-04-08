@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Models;
 
@@ -48,7 +47,7 @@ namespace SolaERP.Controllers
         {
             var user = await _userManager.FindByNameAsync(dto.Email);
             if (user == null)
-                return CreateActionResult(ApiResponse<AccountResponseDto>.Fail($"User: {dto.Email} not found", 400));
+                return CreateActionResult(ApiResponse<AccountResponseDto>.Fail("User", $" {dto.Email} not found", 422));
 
             var userdto = _mapper.Map<UserRegisterModel>(user);
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
@@ -81,7 +80,7 @@ namespace SolaERP.Controllers
 
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto), UserIdentifier = dto.UserToken.ToString() }, 200));
             }
-            return CreateActionResult(ApiResponse<AccountResponseDto>.Fail("This email is already exsist", 400));
+            return CreateActionResult(ApiResponse<AccountResponseDto>.Fail("Email", "This email is already exsist", 400));
         }
 
         [HttpPost]
