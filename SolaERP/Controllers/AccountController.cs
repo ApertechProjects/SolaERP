@@ -37,7 +37,7 @@ namespace SolaERP.Controllers
         /// </summary>
         [HttpGet("{email}")]
         public async Task<IActionResult> SendResetPasswordEmail(string email)
-            => CreateActionResult(await _userService.SendResetPasswordEmail(email, @"C:\Users\HP\source\repos\SolaERP\SolaERP\Templates\EmailTemplate.html"));
+            => CreateActionResult(await _userService.SendResetPasswordEmail(email, ""));
 
         /// <summary>
         /// Logs user into system and returns token

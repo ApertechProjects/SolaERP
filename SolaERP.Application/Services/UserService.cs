@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using SolaERP.Application.Exceptions;
 using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
@@ -35,10 +34,11 @@ namespace SolaERP.Application.Services
         public async Task AddAsync(UserDto model)
         {
             if (model.UserType == Infrastructure.Enums.UserRegisterType.SupplierUser && model.VendorId == 0)
-                throw new UserException("Company name required for Supplier user");
+                ApiResponse<bool>.Fail("Company Name", "Company name required for Supplier user", 422);
 
             if (model.Password != model.ConfirmPassword)
-                throw new UserException("Password doesn't match with confirm password");
+                ApiResponse<bool>.Fail("Password", "Password doesn't match with confirm password", 422);
+
 
             var user = _mapper.Map<User>(model);
             user.PasswordHash = SecurityUtil.ComputeSha256Hash(model.Password);
@@ -50,10 +50,10 @@ namespace SolaERP.Application.Services
         public async Task UserRegisterAsync(UserRegisterModel model)
         {
             if (model.UserType == Infrastructure.Enums.UserRegisterType.SupplierUser && model.VendorId == 0)
-                throw new UserException("Company name required for Supplier user");
+                ApiResponse<bool>.Fail("Company Name", "Company name required for Supplier user", 422);
 
             if (model.Password != model.ConfirmPassword)
-                throw new UserException("Password doesn't match with confirm password");
+                ApiResponse<bool>.Fail("Password", "Password doesn't match with confirm password", 422);
 
             var user = _mapper.Map<User>(model);
             user.PasswordHash = SecurityUtil.ComputeSha256Hash(model.Password);
@@ -73,8 +73,7 @@ namespace SolaERP.Application.Services
         public async Task<ApiResponse<bool>> UpdateAsync(UserDto userUpdateDto)
         {
             if (userUpdateDto.Password != userUpdateDto.ConfirmPassword)
-                throw new UserException("Password doesn't match with confirm password");
-
+                ApiResponse<bool>.Fail("Password", "Password doesn't match with confirm password", 422);
             var user = _mapper.Map<User>(userUpdateDto);
             user.PasswordHash = SecurityUtil.ComputeSha256Hash(userUpdateDto.Password);
             await _userRepository.UpdateAsync(user);
@@ -111,7 +110,7 @@ namespace SolaERP.Application.Services
             var user = await _userRepository.GetUserByEmailAsync(resetPasswordRequestDto.Email);
 
             if (user == null)
-                return ApiResponse<bool>.Fail($"We can't find this email: {resetPasswordRequestDto.Email}", 404);
+                return ApiResponse<bool>.Fail("Email", $"We can't find this email: {resetPasswordRequestDto.Email}", 422);
 
             if (resetPasswordRequestDto.Password == resetPasswordRequestDto.ConfirmPassword)
             {
@@ -122,7 +121,7 @@ namespace SolaERP.Application.Services
                 return ApiResponse<bool>.Success(true, 200);
             }
 
-            return ApiResponse<bool>.Fail("Password does not match with ConfirmPassword", 400);
+            return ApiResponse<bool>.Fail("Password", "Password does not match with ConfirmPassword", 422);
         }
 
         public async Task<ApiResponse<NoContentDto>> UpdateUserIdentifierAsync(string finderToken, Guid newToken)
@@ -153,7 +152,7 @@ namespace SolaERP.Application.Services
             var userExsist = await _userRepository.GetUserByEmailAsync(email);
 
             if (userExsist == null)
-                return ApiResponse<bool>.Fail($"We can't found this email: {email}", 404);
+                return ApiResponse<bool>.Fail("Email", $"We can't found this email: {email}", 404);
 
             await _mailService.SendPasswordResetMailAsync(email, templatePath);
             return ApiResponse<bool>.Success(true, 200);
@@ -176,7 +175,7 @@ namespace SolaERP.Application.Services
             var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
 
             if (userId == 0)
-                return ApiResponse<bool>.Fail("User not found", 404);
+                return ApiResponse<bool>.Fail("Email", "User not found", 404);
 
             var result = _userRepository.RemoveAsync(userId);
             await _unitOfWork.SaveChangesAsync();
@@ -292,7 +291,7 @@ namespace SolaERP.Application.Services
         {
             var userId = await _userRepository.GetUserIdByTokenAsync(authToken);
             if (model.Id == 0)
-                return ApiResponse<bool>.Fail("User must be selected", 200);
+                return ApiResponse<bool>.Fail("User", "User must be selected", 200);
 
             List<string> failedMailList = new List<string>();
             string userName = await _userRepository.GetUserNameByTokenAsync(authToken);
@@ -302,7 +301,7 @@ namespace SolaERP.Application.Services
             await _unitOfWork.SaveChangesAsync();
             if (user)
                 return ApiResponse<bool>.Success(true, 200);
-            return ApiResponse<bool>.Fail("Problem detected", 400);
+            return ApiResponse<bool>.Fail("User", "Problem detected", 400);
         }
 
         public async Task<ApiResponse<UserLoadDto>> GetUserInfo(int userId)
@@ -353,7 +352,7 @@ namespace SolaERP.Application.Services
         public async Task<ApiResponse<bool>> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel)
         {
             if (passwordModel.Password != passwordModel.ConfirmPassword)
-                return ApiResponse<bool>.Fail("Password must be equal to Confirm password", 422);
+                return ApiResponse<bool>.Fail("Password", "Password must be equal to Confirm password", 422);
             passwordModel.Password = SecurityUtil.ComputeSha256Hash(passwordModel.Password);
             var pass = await _userRepository.ChangeUserPasswordAsync(passwordModel);
             if (pass) return ApiResponse<bool>.Success(200);
