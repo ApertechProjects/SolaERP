@@ -4,11 +4,8 @@ using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.AnalysisCode;
 using SolaERP.Infrastructure.Dtos.AnaysisDimension;
 using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Entities;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
-using System.Collections.Generic;
-using System.Reflection;
 
 namespace SolaERP.Application.Services
 {
@@ -36,7 +33,7 @@ namespace SolaERP.Application.Services
             var analysisCodeResult = _mapper.Map<List<AnalysisCodeDto>>(analysisCodes);
 
             return analysisCodeResult.Count > 0 ? ApiResponse<List<IGrouping<int, AnalysisCodeDto>>>.Success(groupingReult, 200) :
-                  ApiResponse<List<IGrouping<int, AnalysisCodeDto>>>.Fail("Bad request", 400);
+                  ApiResponse<List<IGrouping<int, AnalysisCodeDto>>>.Fail("analysisCodes", "Analysis codes is empty", 404, true);
         }
 
 

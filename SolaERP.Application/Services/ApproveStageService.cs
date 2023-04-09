@@ -84,7 +84,7 @@ namespace SolaERP.Application.Services
             if (approvalStatusDto.Any())
                 return ApiResponse<List<ApprovalStatusDto>>.Success(approvalStatusDto, 200);
 
-            return ApiResponse<List<ApprovalStatusDto>>.Fail("Approval statuses is empty", 404);
+            return ApiResponse<List<ApprovalStatusDto>>.Fail("Approval status is empty", 404);
         }
     }
 }

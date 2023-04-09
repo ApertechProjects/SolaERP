@@ -140,7 +140,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 if (reader.Read())
                     userName = reader.Get<string>("FullName");
             }
-            return userName;
+            return null;
         }
 
         #endregion

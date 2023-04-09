@@ -16,14 +16,14 @@ namespace SolaERP.Middlewares
                     handler.Response.ContentType = "application/json";
 
                     var errorFeatures = handler.Features.Get<IExceptionHandlerFeature>();
-                     var statusCode = errorFeatures.Error switch
+                    var statusCode = errorFeatures.Error switch
                     {
                         UserException => 400,
                         _ => 500
                     };
                     handler.Response.StatusCode = statusCode;
                     _logger.LogError(errorFeatures.Error.Message);
-                    var result = ApiResponse<NoContentDto>.Fail(errorFeatures.Error.Message, 200);
+                    var result = ApiResponse<NoContentDto>.Fail(errorFeatures.Error.Message, 400);
                     await handler.Response.WriteAsync(JsonSerializer.Serialize(result));
 
                 });
