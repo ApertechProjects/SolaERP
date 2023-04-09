@@ -48,7 +48,7 @@ namespace SolaERP.Controllers
         {
             var user = await _userManager.FindByNameAsync(dto.Email);
             if (user == null)
-                return CreateActionResult(ApiResponse<bool>.Fail("User", $" {dto.Email} not found", 422));
+                return CreateActionResult(ApiResponse<bool>.Fail("user", $" {dto.Email} not found", 422));
 
             var userdto = _mapper.Map<UserRegisterModel>(user);
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
@@ -63,7 +63,7 @@ namespace SolaERP.Controllers
             }
 
 
-            return CreateActionResult(ApiResponse<bool>.Fail("Email", "Email or password is incorrect", 422));
+            return CreateActionResult(ApiResponse<bool>.Fail("email", "Email or password is incorrect", 422));
         }
 
         /// <summary>
@@ -72,17 +72,17 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterModel dto)
         {
-            bool isValidEmail = RegexEmailCheck(dto.Email);
-            if (!isValidEmail)
-                return CreateActionResult(ApiResponse<bool>.Fail(dto.Email, "Please, enter valid Email", 422));
+            //bool isValidUserName = RegexEmailCheck(dto.UserName);
+            //if (!isValidUserName)
+            //    return CreateActionResult(ApiResponse<bool>.Fail("userName", "Please, enter valid User Name", 422));
 
-            bool isValidFullName = RegexEmailCheck(dto.FullName);
-            if (!isValidEmail)
-                return CreateActionResult(ApiResponse<bool>.Fail(dto.FullName, "Please, enter valid Full Name", 422));
+            //bool isValidEmail = RegexEmailCheck(dto.Email);
+            //if (!isValidEmail)
+            //    return CreateActionResult(ApiResponse<bool>.Fail("email", "Please, enter valid Email", 422));
 
-            bool isValidUserName = RegexEmailCheck(dto.UserName);
-            if (!isValidEmail)
-                return CreateActionResult(ApiResponse<bool>.Fail(dto.UserName, "Please, enter valid User Name", 422));
+            //bool isValidFullName = RegexEmailCheck(dto.FullName);
+            //if (!isValidFullName)
+            //    return CreateActionResult(ApiResponse<bool>.Fail("fullName", "Please, enter valid Full Name", 422));
 
             var user = await _userManager.FindByNameAsync(dto.Email);
 
@@ -93,8 +93,9 @@ namespace SolaERP.Controllers
 
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto), UserIdentifier = dto.UserToken.ToString() }, 200));
             }
-            return CreateActionResult(ApiResponse<bool>.Fail("Email", "This email is already exsist", 422));
+            return CreateActionResult(ApiResponse<bool>.Fail("email", "This email is already exsist", 422));
         }
+
         public static bool RegexEmailCheck(string input)
         {
             // returns true if the input is a valid email
