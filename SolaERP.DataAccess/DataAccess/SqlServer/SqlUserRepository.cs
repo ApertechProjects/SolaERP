@@ -67,6 +67,25 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 return user;
             }
         }
+
+        public async Task<User> GetUserByEmailCode(string token)
+        {
+            User user = null;
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SELECT * FROM Config.AppUser Where EmailVerificationToken = @EmailVerTok";
+                command.Parameters.AddWithValue(command, "@EmailVerTok", token == null ? DBNull.Value : token);
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                if (reader.Read())
+                    user = reader.GetByEntityStructure<User>();
+
+                return user;
+            }
+        }
+
+
         public async Task<User> GetByIdAsync(int id)
         {
             User user = null;
@@ -445,6 +464,19 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             {
                 command.CommandText = query;
                 command.Parameters.AddWithValue(command, "@UserToken", authToken);
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
+            }
+        }
+
+        public async Task<bool> SetUserEmailCode(string token, int id)
+        {
+            string query = "UPDATE Config.AppUser Set EmailVerificationToken = @token where id = @id";
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = query;
+                command.Parameters.AddWithValue(command, "@token", token);
+                command.Parameters.AddWithValue(command, "@id", id);
                 var value = await command.ExecuteNonQueryAsync();
                 return value > 0;
             }

@@ -37,7 +37,7 @@ namespace SolaERP.Controllers
         /// </summary>
         [HttpGet("{email}")]
         public async Task<IActionResult> SendResetPasswordEmail(string email)
-            => CreateActionResult(await _userService.SendResetPasswordEmail(email, ""));
+            => CreateActionResult(await _userService.SendResetPasswordEmail(email));
 
         /// <summary>
         /// Logs user into system and returns token
@@ -104,7 +104,6 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel)
             => CreateActionResult(await _userService.ChangeUserPasswordAsync(passwordModel));
-
 
     }
 }

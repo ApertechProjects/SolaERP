@@ -107,15 +107,17 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<bool>> ResetPasswordAsync(ResetPasswordModel resetPasswordRequestDto)
         {
-            var user = await _userRepository.GetUserByEmailAsync(resetPasswordRequestDto.Email);
+            var user = await _userRepository.GetUserByEmailCode(resetPasswordRequestDto.ResetPasswordCode);
 
             if (user == null)
-                return ApiResponse<bool>.Fail("Email", $"We can't find this email: {resetPasswordRequestDto.Email}", 422);
+                return ApiResponse<bool>.Fail("Security Code", $"You entered wrong Code: ", 422);
+
 
             if (resetPasswordRequestDto.Password == resetPasswordRequestDto.ConfirmPassword)
             {
                 user.PasswordHash = SecurityUtil.ComputeSha256Hash(resetPasswordRequestDto.Password);
-                await _userRepository.ResetUserPasswordAsync(resetPasswordRequestDto.Email, user.PasswordHash);
+                await _userRepository.ResetUserPasswordAsync(user.Email, user.PasswordHash);
+
 
                 await _unitOfWork.SaveChangesAsync();
                 return ApiResponse<bool>.Success(true, 200);
@@ -151,10 +153,17 @@ namespace SolaERP.Application.Services
         {
             var userExsist = await _userRepository.GetUserByEmailAsync(email);
 
+            Random random = new Random();
+            var stringCode = random.Next(0, 99999).ToString();
+
             if (userExsist == null)
                 return ApiResponse<bool>.Fail("Email", $"We can't found this email: {email}", 404);
 
-            await _mailService.SendPasswordResetMailAsync(email);
+            await _userRepository.SetUserEmailCode(stringCode, userExsist.Id);
+
+            await _mailService.SendPasswordResetMailAsync(email, stringCode);
+
+            await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(true, 200);
         }
 

@@ -54,7 +54,7 @@ namespace SolaERP.Application.Services
         /// <param name="to">Email receiver</param>
         /// <param name="templatePath">Template path for sendin email </param>
         /// <returns></returns>
-        public async Task SendPasswordResetMailAsync(string to)
+        public async Task SendPasswordResetMailAsync(string to, string code)
         {
 
             using (SmtpClient smtpClient = new SmtpClient())
@@ -74,7 +74,8 @@ namespace SolaERP.Application.Services
                     message.Subject = "Email Verification for Reset Password";
                     message.IsBodyHtml = true;
 
-                    message.Body = @"<!DOCTYPE html>
+                    #region Template Starts 
+                    string Template = @"<!DOCTYPE html>
 <html lang=""en"">
 <head>
 <meta charset=""UTF-8"">
@@ -135,7 +136,7 @@ namespace SolaERP.Application.Services
     
     <p>Dear Customer,</p>
     
-    <p>We have received a request to set a new password for your Sola-Soft account. To ensure the security of your account, please follow the steps below to create a new password.</p>
+    <p>We have received a request to set a new password for your Sola-Soft account. To ensure the security of your account, please follow the steps below to create a new password. Your security code is : @SecurityCode</p>
     
     <a href=""[Password Reset Link]"" class=""cta-button"">Set New Password</a>
     
@@ -152,13 +153,11 @@ namespace SolaERP.Application.Services
 </body>
 </html>
 ";
+                    #endregion 
 
-
-
-
+                    message.Body = Template.Replace("@SecurityCode", code);
 
                     message.To.Add(to);
-
                     await smtpClient.SendMailAsync(message);
                 }
             }
