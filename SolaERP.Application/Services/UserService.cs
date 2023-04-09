@@ -110,7 +110,7 @@ namespace SolaERP.Application.Services
             var user = await _userRepository.GetUserByEmailCode(resetPasswordRequestDto.ResetPasswordCode);
 
             if (user == null)
-                return ApiResponse<bool>.Fail("Security Code", $"You entered wrong Code: ", 422);
+                return ApiResponse<bool>.Fail("resetPasswordCode", $"You entered wrong Code: ", 422);
 
 
             if (resetPasswordRequestDto.Password == resetPasswordRequestDto.ConfirmPassword)
@@ -154,7 +154,7 @@ namespace SolaERP.Application.Services
             var userExsist = await _userRepository.GetUserByEmailAsync(email);
 
             Random random = new Random();
-            var stringCode = random.Next(0, 99999).ToString();
+            var stringCode = random.Next(0, 999999).ToString();
 
             if (userExsist == null)
                 return ApiResponse<bool>.Fail("email", $"We can't found this email: {email}", 422);
@@ -237,8 +237,10 @@ namespace SolaERP.Application.Services
                 }
             }
 
+            if (dto.Count > 0)
+                return ApiResponse<List<UserMainDto>>.Success(dto, 200);
+            return ApiResponse<List<UserMainDto>>.Fail("user", "List is empty", 404, true);
 
-            return ApiResponse<List<UserMainDto>>.Success(dto, 200);
         }
 
         public async Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string authToken, UserGetModel model)
@@ -256,7 +258,9 @@ namespace SolaERP.Application.Services
                 }
             }
 
-            return ApiResponse<List<UserMainDto>>.Success(dto, 200);
+            if (dto.Count > 0)
+                return ApiResponse<List<UserMainDto>>.Success(dto, 200);
+            return ApiResponse<List<UserMainDto>>.Fail("user", "List is empty", 404, true);
         }
 
         public async Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string authToken, int userStatus)
@@ -274,7 +278,9 @@ namespace SolaERP.Application.Services
                 }
             }
 
-            return ApiResponse<List<UserMainDto>>.Success(dto, 200);
+            if (dto.Count > 0)
+                return ApiResponse<List<UserMainDto>>.Success(dto, 200);
+            return ApiResponse<List<UserMainDto>>.Fail("user", "List is empty", 404, true);
         }
 
         public async Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string authToken, int userStatus)
@@ -292,7 +298,9 @@ namespace SolaERP.Application.Services
                 }
             }
 
-            return ApiResponse<List<UserMainDto>>.Success(dto, 200);
+            if (dto.Count > 0)
+                return ApiResponse<List<UserMainDto>>.Success(dto, 200);
+            return ApiResponse<List<UserMainDto>>.Fail("user", "List is empty", 404, true);
         }
 
         public async Task<ApiResponse<bool>> UserChangeStatusAsync(string authToken, UserChangeStatusModel model)
