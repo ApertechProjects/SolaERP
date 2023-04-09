@@ -10,10 +10,9 @@ namespace SolaERP.Infrastructure.Dtos.Shared
         {
         }
 
-        public T Data { get; set; }
+        public object Data { get; set; }
         [JsonIgnore]
         public int StatusCode { get; set; }
-        //public List<string> Errors { get; set; }
         public string Errors { get; set; }
         public static ApiResponse<T> Success(T data, int statusCode)
         {
@@ -39,6 +38,18 @@ namespace SolaERP.Infrastructure.Dtos.Shared
             var jsonResult = JsonConvert.SerializeObject(errorss);
 
             return new ApiResponse<bool> { Errors = jsonResult, StatusCode = statusCode, Data = false };
+        }
+
+        public static ApiResponse<T> Fail(string propertyName, string error, int statusCode, bool isObject = true)
+        {
+            var errorss = new Dictionary<string, string>
+            {
+                { char.ToLower(propertyName[0]) + propertyName.Substring(1), error }
+            };
+
+            var jsonResult = JsonConvert.SerializeObject(errorss);
+
+            return new ApiResponse<T> { Errors = jsonResult, StatusCode = statusCode, Data = false };
         }
 
         public static ApiResponse<T> Fail(List<string> propertyName, List<ModelErrorCollection> error, int statusCode)

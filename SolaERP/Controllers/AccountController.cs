@@ -6,7 +6,6 @@ using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Models;
-using System.Text.RegularExpressions;
 
 namespace SolaERP.Controllers
 {
@@ -83,13 +82,6 @@ namespace SolaERP.Controllers
             }
             return CreateActionResult(ApiResponse<bool>.Fail("email", "This email is already exsist", 422));
         }
-
-        public static bool RegexEmailCheck(string input)
-        {
-            // returns true if the input is a valid email
-            return Regex.IsMatch(input, @"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$");
-        }
-
 
         [HttpPost]
         public async Task<IActionResult> Logout([FromHeader] string authToken)

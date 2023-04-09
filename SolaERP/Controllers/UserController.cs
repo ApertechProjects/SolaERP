@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Controllers
@@ -33,9 +32,9 @@ namespace SolaERP.Controllers
         ///Updates the given user by id
         /// </summary>
         /// <remarks>Users who are authenticated and authorized to perform the action will be able to access the endpoint.</remarks>
-        [HttpPut]
-        public async Task<IActionResult> UpdateUser(UserDto dto)
-            => CreateActionResult(await _userService.UpdateAsync(dto));
+        //[HttpPut]
+        //public async Task<IActionResult> UpdateUser(UserDto dto)
+        //    => CreateActionResult(await _userService.UpdateAsync(dto));
 
         /// <summary>
         ///Removes the user which referenced with authToken
@@ -46,9 +45,9 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> RemoveUser([FromHeader] string authToken)
             => CreateActionResult(await _userService.RemoveUserByTokenAsync(authToken));
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
-            => CreateActionResult(await _userService.GetAllAsync());
+        //[HttpGet]
+        //public async Task<IActionResult> GetAllUsers()
+        //    => CreateActionResult(await _userService.GetAllAsync());
 
         /// <summary>
         ///Gets all active users for user list

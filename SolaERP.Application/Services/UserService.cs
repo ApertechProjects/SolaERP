@@ -157,7 +157,7 @@ namespace SolaERP.Application.Services
             var stringCode = random.Next(0, 99999).ToString();
 
             if (userExsist == null)
-                return ApiResponse<bool>.Fail("email", $"We can't found this email: {email}", 404);
+                return ApiResponse<bool>.Fail("email", $"We can't found this email: {email}", 422);
 
             await _userRepository.SetUserEmailCode(stringCode, userExsist.Id);
 
@@ -173,7 +173,7 @@ namespace SolaERP.Application.Services
             var user = await _userRepository.GetUserByIdAsync(userId);
 
             if (user is null)
-                return ApiResponse<UserDto>.Fail("User not found", 404);
+                return ApiResponse<UserDto>.Fail("user", "User not found", 422, true);
 
             var dto = _mapper.Map<UserDto>(user);
             return ApiResponse<UserDto>.Success(dto, 200);
@@ -184,7 +184,7 @@ namespace SolaERP.Application.Services
             var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
 
             if (userId == 0)
-                return ApiResponse<bool>.Fail("email", "User not found", 404);
+                return ApiResponse<bool>.Fail("email", "User not found", 422, true);
 
             var result = _userRepository.RemoveAsync(userId);
             await _unitOfWork.SaveChangesAsync();
@@ -198,7 +198,7 @@ namespace SolaERP.Application.Services
             var dto = _mapper.Map<List<ActiveUserDto>>(users);
 
             return ApiResponse<List<ActiveUserDto>>.Success(dto, 200);
-        } //GetActiveUsersWithoutCurrenctUserAsync
+        }
 
         public async Task<ApiResponse<List<ActiveUserDto>>> GetActiveUsersWithoutCurrentUserAsync(string finderToken)
         {
@@ -207,7 +207,7 @@ namespace SolaERP.Application.Services
             var dto = _mapper.Map<List<ActiveUserDto>>(users);
 
             return ApiResponse<List<ActiveUserDto>>.Success(dto, 200);
-        } //GetAct
+        }
 
         public async Task<ApiResponse<List<UserListDto>>> GetUserListAsync()
         {
@@ -256,7 +256,6 @@ namespace SolaERP.Application.Services
                 }
             }
 
-
             return ApiResponse<List<UserMainDto>>.Success(dto, 200);
         }
 
@@ -300,7 +299,7 @@ namespace SolaERP.Application.Services
         {
             var userId = await _userRepository.GetUserIdByTokenAsync(authToken);
             if (model.Id == 0)
-                return ApiResponse<bool>.Fail("user", "User must be selected", 200);
+                return ApiResponse<bool>.Fail("user", "User must be selected", 422);
 
             List<string> failedMailList = new List<string>();
             string userName = await _userRepository.GetUserNameByTokenAsync(authToken);
@@ -310,7 +309,7 @@ namespace SolaERP.Application.Services
             await _unitOfWork.SaveChangesAsync();
             if (user)
                 return ApiResponse<bool>.Success(true, 200);
-            return ApiResponse<bool>.Fail("user", "Problem detected", 400);
+            return ApiResponse<bool>.Fail("user", "Problem detected", 422);
         }
 
         public async Task<ApiResponse<UserLoadDto>> GetUserInfo(int userId)
