@@ -72,18 +72,6 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterModel dto)
         {
-            //bool isValidUserName = RegexEmailCheck(dto.UserName);
-            //if (!isValidUserName)
-            //    return CreateActionResult(ApiResponse<bool>.Fail("userName", "Please, enter valid User Name", 422));
-
-            //bool isValidEmail = RegexEmailCheck(dto.Email);
-            //if (!isValidEmail)
-            //    return CreateActionResult(ApiResponse<bool>.Fail("email", "Please, enter valid Email", 422));
-
-            //bool isValidFullName = RegexEmailCheck(dto.FullName);
-            //if (!isValidFullName)
-            //    return CreateActionResult(ApiResponse<bool>.Fail("fullName", "Please, enter valid Full Name", 422));
-
             var user = await _userManager.FindByNameAsync(dto.Email);
 
             if (user is null)
