@@ -10,7 +10,6 @@ namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
     public class VendorController : CustomBaseController
     {
         private ConfHelper ConfHelper { get; }
@@ -23,7 +22,7 @@ namespace SolaERP.Controllers
             _vendorService = vendorService;
         }
 
-
+        [Authorize]
         [HttpGet("{BU}")]
         public async Task<ApiResult> GetWFAandAllVendorList([FromHeader] string token, int BU)
         {
@@ -31,6 +30,7 @@ namespace SolaERP.Controllers
         }
 
         [HttpGet("{vendorId}")]
+        [Authorize]
         public async Task<ApiResult> GetVendorDetails([FromHeader] string token, int vendorId)
         {
             return await new EntityLogic(ConfHelper).GetVendorDetails(token, vendorId);
@@ -39,18 +39,20 @@ namespace SolaERP.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public async Task<ApiResult> VendorApprove([FromHeader] string token, List<VendorWFAModel> vendorWFAModel)
         {
             return await new EntityLogic(ConfHelper).VendorApprove(token, vendorWFAModel);
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ApiResult> VendorSendToApprove([FromHeader] string token, VendorSendToApprove vendorSendToApprove)
         {
             return await new EntityLogic(ConfHelper).VendorSendToApprove(token, vendorSendToApprove);
         }
 
-
+        [Authorize]
         [HttpGet("{businessUnitId}")]
         public async Task<ApiResult> GetActiveVendor([FromHeader] string authToken, int businessUnitId)
         {
