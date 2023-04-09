@@ -33,7 +33,7 @@ namespace SolaERP.Infrastructure.Dtos.Shared
         {
             var errorss = new Dictionary<string, string>
             {
-                { propertyName, error }
+                { char.ToLower(propertyName[0]) + propertyName.Substring(1), error }
             };
 
             var jsonResult = JsonConvert.SerializeObject(errorss);
@@ -46,7 +46,7 @@ namespace SolaERP.Infrastructure.Dtos.Shared
             var errorss = new Dictionary<string, string>();
             for (int i = 0; i < propertyName.Count; i++)
             {
-                errorss.Add(propertyName[i], error[i][0].ErrorMessage);
+                errorss.Add(char.ToLower(propertyName[i][0]) + propertyName[i].Substring(1), error[i][0].ErrorMessage);
             }
 
             string jsonResult = JsonConvert.SerializeObject(errorss);
