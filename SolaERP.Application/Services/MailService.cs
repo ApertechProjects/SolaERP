@@ -164,6 +164,11 @@ namespace SolaERP.Application.Services
             }
         }
 
+        public Task SendPasswordResetMailAsync(string to, string templatePath)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<string>> SendSafeMailAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
         {
             List<string> failedList = new List<string>();

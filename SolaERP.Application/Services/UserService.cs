@@ -358,5 +358,10 @@ namespace SolaERP.Application.Services
             if (pass) return ApiResponse<bool>.Success(200);
             else return ApiResponse<bool>.Success(400);
         }
+
+        public Task<ApiResponse<bool>> SendResetPasswordEmail(string email, string templatePath)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

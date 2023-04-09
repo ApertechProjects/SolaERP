@@ -6,6 +6,7 @@ using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Models;
+using System.Text.RegularExpressions;
 
 namespace SolaERP.Controllers
 {
@@ -37,7 +38,7 @@ namespace SolaERP.Controllers
         /// </summary>
         [HttpGet("{email}")]
         public async Task<IActionResult> SendResetPasswordEmail(string email)
-            => CreateActionResult(await _userService.SendResetPasswordEmail(email, ""));
+            => CreateActionResult(await _userService.SendResetPasswordEmail(email));
 
         /// <summary>
         /// Logs user into system and returns token
@@ -71,6 +72,18 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterModel dto)
         {
+            bool isValidEmail = RegexEmailCheck(dto.Email);
+            if (!isValidEmail)
+                return CreateActionResult(ApiResponse<bool>.Fail(dto.Email, "Please, enter valid Email", 422));
+
+            bool isValidFullName = RegexEmailCheck(dto.FullName);
+            if (!isValidEmail)
+                return CreateActionResult(ApiResponse<bool>.Fail(dto.FullName, "Please, enter valid Full Name", 422));
+
+            bool isValidUserName = RegexEmailCheck(dto.UserName);
+            if (!isValidEmail)
+                return CreateActionResult(ApiResponse<bool>.Fail(dto.UserName, "Please, enter valid User Name", 422));
+
             var user = await _userManager.FindByNameAsync(dto.Email);
 
             if (user is null)
@@ -80,8 +93,14 @@ namespace SolaERP.Controllers
 
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto), UserIdentifier = dto.UserToken.ToString() }, 200));
             }
-            return CreateActionResult(ApiResponse<bool>.Fail("Email", "This email is already exsist", 400));
+            return CreateActionResult(ApiResponse<bool>.Fail("Email", "This email is already exsist", 422));
         }
+        public static bool RegexEmailCheck(string input)
+        {
+            // returns true if the input is a valid email
+            return Regex.IsMatch(input, @"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$");
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Logout([FromHeader] string authToken)
