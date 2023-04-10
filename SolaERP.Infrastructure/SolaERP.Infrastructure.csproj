@@ -9,14 +9,13 @@
   <ItemGroup>
     <Compile Remove="Entities\ApproveStage\**" />
     <Compile Remove="Entities\Log\**" />
+    <Compile Remove="ViewModels\**" />
     <EmbeddedResource Remove="Entities\ApproveStage\**" />
     <EmbeddedResource Remove="Entities\Log\**" />
+    <EmbeddedResource Remove="ViewModels\**" />
     <None Remove="Entities\ApproveStage\**" />
     <None Remove="Entities\Log\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ViewModels\" />
+    <None Remove="ViewModels\**" />
   </ItemGroup>
 
   <ItemGroup>

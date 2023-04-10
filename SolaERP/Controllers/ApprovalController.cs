@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.ApproveRole;
 using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Controllers
@@ -32,36 +33,43 @@ namespace SolaERP.Controllers
         }
 
         [HttpGet("{buId}")]
-        public async Task<IActionResult> GetApproveStageMainByBuId(int buId)
+        public async Task<IActionResult> GetApproveStageMainByBuIdAsync(int buId)
             => CreateActionResult(await _approveStageMainService.GetByBusinessUnitId(buId));
 
         [HttpGet("{approveStageMainId}")]
-        public async Task<IActionResult> GetApproveStageMainByApprovalStageMainId(int approveStageMainId)
+        public async Task<IActionResult> GetApproveStageMainByApprovalStageMainIdAsync(int approveStageMainId)
             => CreateActionResult(await _approveStageMainService.GetApproveStageMainByApprovalStageMainId(approveStageMainId));
 
         [HttpGet("{approveStageMainId}")]
-        public async Task<IActionResult> GetApproveStageDetailsByApprovalStageMainId(int approveStageMainId)
+        public async Task<IActionResult> GetApproveStageDetailsByApprovalStageMainIdAsync(int approveStageMainId)
             => CreateActionResult(await _approveStageDetailService.GetApproveStageDetailsByApproveStageMainId(approveStageMainId));
 
         [HttpGet("{approveStageDetailId}")]
-        public async Task<IActionResult> GetApproveStageRolesByApproveStageDetailId(int approveStageDetailId)
+        public async Task<IActionResult> GetApproveStageRolesByApproveStageDetailIdAsync(int approveStageDetailId)
             => CreateActionResult(await _approveStageRoleService.GetApproveStageRolesByApproveStageDetailId(approveStageDetailId));
 
         [HttpGet]
-        public async Task<IActionResult> GetApproveRoles()
+        public async Task<IActionResult> GetApproveRolesAsync()
             => CreateActionResult(await _approveRoleService.GetAllAsync());
 
         [HttpGet]
-        public async Task<IActionResult> GetProcedures()
+        public async Task<IActionResult> GetProceduresAsync()
             => CreateActionResult(await _procedureService.GetAllAsync());
 
         [HttpPost]
-        public async Task<IActionResult> ApprovalStageSave([FromHeader] string authToken, ApprovalStageSaveModel approvalStageSaveVM)
+        public async Task<IActionResult> ApprovalStageSaveAsync([FromHeader] string authToken, ApprovalStageSaveModel approvalStageSaveVM)
             => CreateActionResult(await _approveStageMainService.SaveApproveStageMainAsync(authToken, approvalStageSaveVM));
 
         [HttpGet]
-        public async Task<IActionResult> GetApprovalStatus()
+        public async Task<IActionResult> GetApprovalStatusAsync()
             => CreateActionResult(await _approveStageMainService.GetApproveStatus());
-    }
 
+        [HttpPost]
+        public async Task<IActionResult> ApproveRoleSaveAsync(ApproveRoleDto model)
+            => CreateActionResult(await _approveRoleService.ApproveRoleSaveAsync(model));
+
+        [HttpDelete("{approveRoleId}")]
+        public async Task<IActionResult> DeleteApproveRoleAsync(int approveRoleId)
+            => CreateActionResult(await _approveRoleService.DeleteApproveRoleAsync(approveRoleId));
+    }
 }

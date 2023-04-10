@@ -12,7 +12,7 @@ namespace SolaERP.Application.Validations.ApproveRoleValidation
     {
         public ApproveRoleValidation()
         {
-            RuleFor(x => x.ApproveRoleName).NotEmpty().WithMessage("{PropertyName}: Please, enter {PropertyName}");
+            RuleFor(x => x.ApproveRoleName).NotEmpty().WithMessage("Please, enter {PropertyName}");
         }
     }
 }

@@ -3,6 +3,9 @@ using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.ApproveRole;
 using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Entities.ApproveRole;
+using SolaERP.Infrastructure.UnitOfWork;
+using System.Reflection;
 
 namespace SolaERP.Application.Services
 {
@@ -10,15 +13,36 @@ namespace SolaERP.Application.Services
     {
         private readonly IApproveRoleRepository _approveRoleRepository;
         private IMapper _mapper;
-        public ApproveRoleService(IApproveRoleRepository approveRoleRepository, IMapper mapper)
+        private IUnitOfWork _unitOfWork;
+        public ApproveRoleService(IApproveRoleRepository approveRoleRepository, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _approveRoleRepository = approveRoleRepository;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
         public Task AddAsync(ApproveRoleDto model)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<ApiResponse<bool>> ApproveRoleSaveAsync(ApproveRoleDto model)
+        {
+            var dto = _mapper.Map<ApproveRole>(model);
+            var roles = await _approveRoleRepository.ApproveRoleSaveAsync(dto);
+            await _unitOfWork.SaveChangesAsync();
+            if (roles)
+                return ApiResponse<bool>.Success(roles, 200);
+            return ApiResponse<bool>.Fail("approveRole", "Data can not be saved", 500);
+        }
+
+        public async Task<ApiResponse<bool>> DeleteApproveRoleAsync(int approveRoleId)
+        {
+            var roles = await _approveRoleRepository.DeleteApproveRoleAsync(approveRoleId);
+            await _unitOfWork.SaveChangesAsync();
+            if (roles)
+                return ApiResponse<bool>.Success(roles, 200);
+            return ApiResponse<bool>.Fail("approveRole", "Data can not be deleted", 500);
         }
 
         public async Task<ApiResponse<List<ApproveRoleDto>>> GetAllAsync()
