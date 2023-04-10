@@ -11,6 +11,7 @@ using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Enums;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
+using System.Text.RegularExpressions;
 
 namespace SolaERP.Application.Services
 {
@@ -106,6 +107,16 @@ namespace SolaERP.Application.Services
                 return ApiResponse<List<GroupRoleDto>>.Success(dto, 200);
             else
                 return ApiResponse<List<GroupRoleDto>>.Fail("Group Role list is empty", 400);
+        }
+
+        public async Task<ApiResponse<List<GroupUserDto>>> GetGroupsByUserIdAsync(int userId)
+        {
+            var groups = await _groupRepository.GetGroupsByUserIdAsync(userId);
+            var dto = _mapper.Map<List<GroupUserDto>>(groups);
+            if (dto != null)
+                return ApiResponse<List<GroupUserDto>>.Success(dto, 200);
+            else
+                return ApiResponse<List<GroupUserDto>>.Fail("Group User list is empty", 400);
         }
 
         public async Task<ApiResponse<bool>> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model)

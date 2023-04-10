@@ -23,5 +23,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<List<GroupRoleDto>>> GetGroupRolesAsync(int groupId);
         Task<ApiResponse<bool>> SaveGroupRoleByGroupAsync(GroupRoleSaveModel model);
         Task<ApiResponse<bool>> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId);
+        Task<ApiResponse<List<GroupUserDto>>> GetGroupsByUserIdAsync(int userId);
     }
 }
