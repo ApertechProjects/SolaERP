@@ -85,7 +85,7 @@ namespace SolaERP.Controllers
         {
             var result = await _userService.SaveUserAsync(user);
 
-            if (result)
+            if (Convert.ToBoolean(result.Data))
                 return Ok(ApiResponse<NoContentDto>.Success(204));
 
             return BadRequest(result);
