@@ -334,11 +334,14 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<ERPUserDto>>.Success(dto, 200);
         }
 
-        public async Task<bool> SaveUserAsync(UserSaveModel user)
+        public async Task<ApiResponse<b>ool> SaveUserAsync(UserSaveModel user)
         {
             var userEntry = _mapper.Map<User>(user);
             string serverFilePath = string.Empty;
             string serverSignaturePath = string.Empty;
+
+            if (user.Password != user.ConfirmPassword)
+                return ApiResponse<bool>.Fail("Confirm Password", " Confirm Password doesn't match the Password!", 422);
 
             if (!string.IsNullOrEmpty(user.Files?.Base64Photo))
                 serverFilePath = await _fileService.UploadBase64PhotoWithNetworkAsync(user.Files.Base64Photo, user.Files.Extension, user.Files.PhotoFileName);
@@ -354,8 +357,8 @@ namespace SolaERP.Application.Services
 
             await _unitOfWork.SaveChangesAsync();
 
-            return result ?
-                     true : false;
+            return ApiResponse<bool>.Success(result ? true : false, 200);
+
         }
 
         public async Task<bool> CheckTokenAsync(string authToken)
