@@ -99,9 +99,9 @@ namespace SolaERP.Application.Services
                 return ApiResponse<List<GroupBuyerDto>>.Fail("Buyer list is empty", 400);
         }
 
-        public async Task<ApiResponse<List<GroupRoleDto>>> GetGroupRolesAsync(int groupId)
+        public async Task<ApiResponse<List<GroupRoleDto>>> GetGroupRolesByGroupIdAsync(int groupId)
         {
-            var buyers = await _groupRepository.GetGroupRolesAsync(groupId);
+            var buyers = await _groupRepository.GetGroupRolesByGroupIdAsync(groupId);
             var dto = _mapper.Map<List<GroupRoleDto>>(buyers);
             if (dto != null)
                 return ApiResponse<List<GroupRoleDto>>.Success(dto, 200);

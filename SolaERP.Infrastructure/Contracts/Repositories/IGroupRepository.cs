@@ -21,7 +21,7 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<List<GroupAnalysisCode>> GetAnalysisCodesByGroupIdAsync(int groupId);
         Task<bool> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId);
         Task<bool> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model);
-        Task<List<GroupRole>> GetGroupRolesAsync(int groupId);
+        Task<List<GroupRole>> GetGroupRolesByGroupIdAsync(int groupId);
         Task<bool> SaveGroupRoleByGroupAsync(GroupRoleSaveModel model);
         Task<bool> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId);
         Task<List<GroupUser>> GetGroupsByUserIdAsync(int userId);

@@ -234,7 +234,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<GroupRole>> GetGroupRolesAsync(int groupId)
+        public async Task<List<GroupRole>> GetGroupRolesByGroupIdAsync(int groupId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
