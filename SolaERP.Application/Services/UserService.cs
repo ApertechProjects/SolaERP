@@ -334,7 +334,7 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<ERPUserDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<b>ool> SaveUserAsync(UserSaveModel user)
+        public async Task<ApiResponse<bool>> SaveUserAsync(UserSaveModel user)
         {
             var userEntry = _mapper.Map<User>(user);
             string serverFilePath = string.Empty;
@@ -358,7 +358,6 @@ namespace SolaERP.Application.Services
             await _unitOfWork.SaveChangesAsync();
 
             return ApiResponse<bool>.Success(result ? true : false, 200);
-
         }
 
         public async Task<bool> CheckTokenAsync(string authToken)

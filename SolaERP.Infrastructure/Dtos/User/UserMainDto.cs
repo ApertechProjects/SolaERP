@@ -3,6 +3,7 @@
     public class UserMainDto
     {
         public int Id { get; set; }
+        public int StatusId { get; set; }
         public string Photo { get; set; }
         public string FullName { get; set; }
         public string ApproveStatus { get; set; }
