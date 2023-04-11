@@ -20,8 +20,9 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<bool>> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId);
         Task<ApiResponse<List<GroupAnalysisCodeDto>>> GetAnalysisCodesByGroupIdAsync(int groupId);
         Task<ApiResponse<bool>> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model);
-        Task<ApiResponse<List<GroupRoleDto>>> GetGroupRolesAsync(int groupId);
+        Task<ApiResponse<List<GroupRoleDto>>> GetGroupRolesByGroupIdAsync(int groupId);
         Task<ApiResponse<bool>> SaveGroupRoleByGroupAsync(GroupRoleSaveModel model);
         Task<ApiResponse<bool>> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId);
+        Task<ApiResponse<List<GroupUserDto>>> GetGroupsByUserIdAsync(int userId);
     }
 }

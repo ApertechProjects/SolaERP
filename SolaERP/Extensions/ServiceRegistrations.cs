@@ -5,6 +5,7 @@ using SolaERP.Application.Services;
 using SolaERP.Application.Validations.ApproveRoleValidation;
 using SolaERP.Application.Validations.ApproveStageValidation;
 using SolaERP.Application.Validations.AttachmentValidation;
+using SolaERP.Application.Validations.GroupValidation;
 using SolaERP.Application.Validations.RequestValidation;
 using SolaERP.Application.Validations.UserValidation;
 using SolaERP.DataAccess.DataAcces.SqlServer;
@@ -102,6 +103,8 @@ namespace SolaERP.Extensions
             builder.Services.AddValidatorsFromAssemblyContaining<ApproveStageRoleValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<ApprovalStatusValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<UserRegisterValidation>();
+
+            builder.Services.AddValidatorsFromAssemblyContaining<GroupBuyerSaveValidation>();
             builder.Services.AddScoped<ValidationFilter>();
         }
         public static void UseIdentityService(this WebApplicationBuilder builder)

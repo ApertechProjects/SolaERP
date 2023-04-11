@@ -6,6 +6,7 @@ using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data.Common;
+using System.Text.RegularExpressions;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -233,7 +234,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<GroupRole>> GetGroupRolesAsync(int groupId)
+        public async Task<List<GroupRole>> GetGroupRolesByGroupIdAsync(int groupId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -273,6 +274,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = @"SET NOCOUNT OFF Exec SP_GroupApproveRoles_IUD @GroupApproveRoleId";
                 command.Parameters.AddWithValue(command, "@GroupApproveRoleId", groupApproveRoleId);
                 return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<List<GroupUser>> GetGroupsByUserIdAsync(int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_UserGroupList @UserId";
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                List<GroupUser> resultList = new();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<GroupUser>());
+
+                return resultList;
             }
         }
     }

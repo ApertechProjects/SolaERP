@@ -19,6 +19,10 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetGroupsAsync()
             => CreateActionResult(await _groupService.GetAllAsync());
 
+        [HttpGet]
+        public async Task<IActionResult> GetGroupsByUserIdAsync(int userId)
+           => CreateActionResult(await _groupService.GetGroupsByUserIdAsync(userId));
+
         [HttpPost]
         public async Task<IActionResult> SaveGroupAsync([FromHeader] string authToken, GroupSaveModel model)
             => CreateActionResult(await _groupService.SaveGroupAsync(authToken, model));
@@ -49,8 +53,8 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _groupService.DeleteAnalysisCodeByGroupIdAsync(groupAnalysisCodeId));
 
         [HttpGet]
-        public async Task<IActionResult> GetGroupRolesAsync(int groupId)
-            => CreateActionResult(await _groupService.GetGroupRolesAsync(groupId));
+        public async Task<IActionResult> GetGroupRolesByGroupIdAsync(int groupId)
+            => CreateActionResult(await _groupService.GetGroupRolesByGroupIdAsync(groupId));
 
         [HttpPost]
         public async Task<IActionResult> SaveGroupRoleByGroupAsync(GroupRoleSaveModel model)
@@ -62,7 +66,7 @@ namespace SolaERP.Controllers
 
 
         [HttpGet("{groupId}")]
-        public async Task<IActionResult> GetAdditionalPrevilegesByGroup(int groupId)
+        public async Task<IActionResult> GetAdditionalPrivilegesByGroup(int groupId)
             => CreateActionResult(await _groupService.GetAdditionalPrivilegesForGroupAsync(groupId));
     }
 }
