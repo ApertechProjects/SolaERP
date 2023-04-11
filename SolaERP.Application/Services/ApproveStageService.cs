@@ -69,6 +69,7 @@ namespace SolaERP.Application.Services
                             await _approveStageRoleRepository.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].ApproveStageRoleId);
                         else
                         {
+
                             approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].ApproveStageDetailId = detailId;
                             await _approveStageRoleRepository.AddAsync(_mapper.Map<ApproveStageRole>(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j]));
                         }

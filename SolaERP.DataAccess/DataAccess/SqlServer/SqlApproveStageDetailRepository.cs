@@ -4,6 +4,7 @@ using SolaERP.Infrastructure.Entities.ApproveStage;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
+using System.Data.SqlClient;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -88,9 +89,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<int> SaveDetailsAsync(ApproveStagesDetail entity)
         {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = "EXEC SP_ApproveStagesDetails_IUD @ApproveStageDetailsId,@ApproveStageMainId,@ApproveStageDetailsName,@Sequence,@Skip,@SkipDays,@BackToInitiatorOnReject";
+                command.CommandText = "EXEC SP_ApproveStagesDetails_IUD @ApproveStageDetailsId,@ApproveStageMainId,@ApproveStageDetailsName,@Sequence,@Skip,@SkipDays,@BackToInitiatorOnReject," +
+                    "@NewApproveStageDetailsId = @NewApproveStageDetailsId OUTPUT select @NewApproveStageDetailsId as NewApproveStageDetailsId";
 
                 command.Parameters.AddWithValue(command, "@ApproveStageDetailsId", entity.ApproveStageDetailsId);
                 command.Parameters.AddWithValue(command, "@ApproveStageMainId", entity.ApproveStageMainId);
@@ -100,8 +102,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@SkipDays", entity.SkipDays);
                 command.Parameters.AddWithValue(command, "@BackToInitiatorOnReject", entity.BackToInitiatorOnReject);
 
+                command.Parameters.Add("@NewApproveStageDetailsId", SqlDbType.Int);
+                command.Parameters["@NewApproveStageDetailsId"].Direction = ParameterDirection.Output;
+
                 using var reader = await command.ExecuteReaderAsync();
-                return await reader.ReadAsync() ? reader.Get<int>("NewApproveStageDetailsId") : -1;
+                int id = 0;
+                if (reader.Read())
+                {
+                    id = reader.Get<int>("NewApproveStageDetailsId");
+                }
+                return id;
             }
         }
     }
