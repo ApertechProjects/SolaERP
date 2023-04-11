@@ -5,13 +5,10 @@ using SolaERP.Infrastructure.Dtos.AnalysisCode;
 using SolaERP.Infrastructure.Dtos.Buyer;
 using SolaERP.Infrastructure.Dtos.Group;
 using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Entities.AnalysisCode;
-using SolaERP.Infrastructure.Entities.Buyer;
 using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Enums;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
-using System.Text.RegularExpressions;
 
 namespace SolaERP.Application.Services
 {
@@ -117,6 +114,17 @@ namespace SolaERP.Application.Services
                 return ApiResponse<List<GroupUserDto>>.Success(dto, 200);
             else
                 return ApiResponse<List<GroupUserDto>>.Fail("Group User list is empty", 400);
+        }
+
+        public async Task<ApiResponse<List<GroupsDto>>> GetUserGroupsWithoutCurrents(int id)
+        {
+            var groups = await _groupRepository.GetGroupsByUserIdAsync(id);
+            var allGroups = await _groupRepository.GetAllAsync();
+            var allGroupCanUserA = allGroups.Where(x => !allGroups.Any(y => y.GroupId == x.GroupId)).ToList();
+
+            var dto = _mapper.Map<List<GroupsDto>>(allGroupCanUserA);
+
+            return ApiResponse<List<GroupsDto>>.Success(dto, 200);
         }
 
         public async Task<ApiResponse<bool>> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model)

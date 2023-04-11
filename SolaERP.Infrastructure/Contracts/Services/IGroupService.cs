@@ -1,5 +1,4 @@
 ﻿using SolaERP.Infrastructure.Dtos.AnalysisCode;
-using SolaERP.Infrastructure.Dtos.AnaysisDimension;
 using SolaERP.Infrastructure.Dtos.Buyer;
 using SolaERP.Infrastructure.Dtos.Group;
 using SolaERP.Infrastructure.Dtos.Shared;
@@ -24,5 +23,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<bool>> SaveGroupRoleByGroupAsync(GroupRoleSaveModel model);
         Task<ApiResponse<bool>> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId);
         Task<ApiResponse<List<GroupUserDto>>> GetGroupsByUserIdAsync(int userId);
+        Task<ApiResponse<List<GroupsDto>>> GetUserGroupsWithoutCurrents(int id);
     }
 }
