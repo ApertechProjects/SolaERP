@@ -52,22 +52,26 @@ namespace SolaERP.Application.Services
         public async Task<ApiResponse<ApprovalStageSaveModel>> SaveApproveStageMainAsync(string authToken, ApprovalStageSaveModel approvalStageSaveVM)
         {
             var userId = await _userRepository.GetUserIdByTokenAsync(authToken);
-            await _approveStageMainRepository.AddAsync(_mapper.Map<ApproveStagesMain>(approvalStageSaveVM.ApproveStagesMainDto), userId);
-
+            var mainId = await _approveStageMainRepository.AddAsync(_mapper.Map<ApproveStagesMain>(approvalStageSaveVM.ApproveStagesMainDto), userId);
+            approvalStageSaveVM.ApproveStagesMainDto.ApproveStageMainId = mainId;
             for (int i = 0; i < approvalStageSaveVM.ApproveStagesDetailDtos.Count; i++)
             {
                 if (approvalStageSaveVM.ApproveStagesDetailDtos[i].Type == "remove")
                     await _approveStageDetailRepository.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageDetailsId);
                 else
                 {
-                    await _approveStageDetailRepository.SaveDetailsAsync(_mapper.Map<ApproveStagesDetail>(approvalStageSaveVM.ApproveStagesDetailDtos[i]));
+                    approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageMainId = mainId;
+                    var detailId = await _approveStageDetailRepository.SaveDetailsAsync(_mapper.Map<ApproveStagesDetail>(approvalStageSaveVM.ApproveStagesDetailDtos[i]));
 
                     for (int j = 0; j < approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto.Count; j++)
                     {
                         if (approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].Type == "remove")
                             await _approveStageRoleRepository.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].ApproveStageRoleId);
                         else
+                        {
+                            approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].ApproveStageDetailId = detailId;
                             await _approveStageRoleRepository.AddAsync(_mapper.Map<ApproveStageRole>(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j]));
+                        }
                     }
                 }
             }

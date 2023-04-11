@@ -31,8 +31,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@businessUnitId", entity.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@approveStageName", entity.ApproveStageName);
                 command.Parameters.AddWithValue(command, "@userId", userId);
-                var value = await command.ExecuteNonQueryAsync();
-                return value;
+                command.Parameters.AddOutPutParameter(command, "@NewApproveStageMainId");
+
+                int result = 0;
+                using var reader = await command.ExecuteReaderAsync();
+                if (await reader.ReadAsync()) result = reader.Get<int>("NewApproveStageMainId");
+
+                return result;
             }
         }
 

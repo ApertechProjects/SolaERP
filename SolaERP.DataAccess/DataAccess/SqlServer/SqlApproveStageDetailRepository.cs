@@ -90,12 +90,15 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_ApproveStagesDetails_IUD @ApproveStageDetailsId,@ApproveStageMainId,@ApproveStageDetailsName,@Sequence";
+                command.CommandText = "EXEC SP_ApproveStagesDetails_IUD @ApproveStageDetailsId,@ApproveStageMainId,@ApproveStageDetailsName,@Sequence,@Skip,@SkipDays,@BackToInitiatorOnReject";
 
                 command.Parameters.AddWithValue(command, "@ApproveStageDetailsId", entity.ApproveStageDetailsId);
                 command.Parameters.AddWithValue(command, "@ApproveStageMainId", entity.ApproveStageMainId);
                 command.Parameters.AddWithValue(command, "@ApproveStageDetailsName", entity.ApproveStageDetailsName);
                 command.Parameters.AddWithValue(command, "@Sequence", entity.Sequence);
+                command.Parameters.AddWithValue(command, "@Skip", entity.Skip);
+                command.Parameters.AddWithValue(command, "@SkipDays", entity.SkipDays);
+                command.Parameters.AddWithValue(command, "@BackToInitiatorOnReject", entity.BackToInitiatorOnReject);
 
                 using var reader = await command.ExecuteReaderAsync();
                 return await reader.ReadAsync() ? reader.Get<int>("NewApproveStageDetailsId") : -1;
