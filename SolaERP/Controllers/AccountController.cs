@@ -101,9 +101,5 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> ResetPasswordAsync(ResetPasswordModel resetPasswordrequestDto)
             => CreateActionResult(await _userService.ResetPasswordAsync(resetPasswordrequestDto));
 
-        [HttpPost]
-        public async Task<IActionResult> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel)
-            => CreateActionResult(await _userService.ChangeUserPasswordAsync(passwordModel));
-
     }
 }
