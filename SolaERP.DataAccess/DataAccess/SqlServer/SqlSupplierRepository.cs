@@ -18,7 +18,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SELECT * FROM VW_Supplier_List";
+                command.CommandText = "SELECT * FROM VW_Supplier_List ";
                 using var reader = await command.ExecuteReaderAsync();
 
                 List<SupplierCode> result = new();

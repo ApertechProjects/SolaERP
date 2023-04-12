@@ -305,7 +305,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 while (reader.Read())
-                    users.Add(reader.GetByEntityStructure<UserMain>("Photo"));
+                    users.Add(reader.GetByEntityStructure<UserMain>());
 
                 return users;
             }

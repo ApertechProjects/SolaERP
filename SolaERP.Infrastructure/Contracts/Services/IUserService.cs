@@ -2,7 +2,6 @@
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
-using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Infrastructure.Contracts.Services
@@ -33,6 +32,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<List<ERPUserDto>>> GetERPUserAsync();
         Task<bool> CheckTokenAsync(string authToken);
         Task<ApiResponse<bool>> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel);
+        Task<ApiResponse<bool>> DeleteUserAsync(List<int> userIds);
         Task<ApiResponse<List<UsersByGroupDto>>> GetUsersByGroupIdAsync(int groupId);
     }
 }

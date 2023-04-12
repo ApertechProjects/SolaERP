@@ -92,8 +92,8 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetERPUserAsync()
             => CreateActionResult(await _userService.GetERPUserAsync());
 
-        [HttpGet("{groupId}")]
-        public async Task<IActionResult> GetUsersByGroupIdAsync(int groupId)
-        => CreateActionResult(await _userService.GetUsersByGroupIdAsync(groupId));
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser([FromBody] List<int> userIds)
+            => CreateActionResult(await _userService.DeleteUserAsync(userIds));
     }
 }

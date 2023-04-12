@@ -6,9 +6,7 @@ namespace SolaERP.Infrastructure.Dtos.Shared
 {
     public class ApiResponse<T>
     {
-        private ApiResponse()
-        {
-        }
+      
 
         public object Data { get; set; }
         [JsonIgnore]

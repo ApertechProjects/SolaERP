@@ -2,12 +2,10 @@
 using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Group;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 
@@ -345,6 +343,9 @@ namespace SolaERP.Application.Services
             if (user.Password != user.ConfirmPassword)
                 return ApiResponse<bool>.Fail("Confirm Password", " Confirm Password doesn't match the Password!", 422);
 
+            if (!string.IsNullOrEmpty(user.Password))
+                userEntry.PasswordHash = SecurityUtil.ComputeSha256Hash(user?.Password);
+
             if (!string.IsNullOrEmpty(user.Files?.Base64Photo))
                 serverFilePath = await _fileService.UploadBase64PhotoWithNetworkAsync(user.Files.Base64Photo, user.Files.Extension, user.Files.PhotoFileName);
 
@@ -354,13 +355,10 @@ namespace SolaERP.Application.Services
             userEntry.SignaturePhoto = serverSignaturePath;
             userEntry.UserPhoto = serverFilePath;
 
-            userEntry.PasswordHash = SecurityUtil.ComputeSha256Hash(user.Password);
             var result = await _userRepository.SaveUserAsync(userEntry);
-
             await _unitOfWork.SaveChangesAsync();
 
             return ApiResponse<bool>.Success(result ? true : false, 200);
-
         }
 
         public async Task<bool> CheckTokenAsync(string authToken)
@@ -380,13 +378,28 @@ namespace SolaERP.Application.Services
             else return ApiResponse<bool>.Success(400);
         }
 
-        public async Task<ApiResponse<List<UsersByGroupDto>>> GetUsersByGroupIdAsync(int groupId)
+        public async Task<ApiResponse<bool>> DeleteUserAsync(List<int> userIds)
         {
-            var user = await _userRepository.GetUsersByGroupIdAsync(groupId);
-            var dto = _mapper.Map<List<UsersByGroupDto>>(user);
-            if (dto.Count > 0)
-                return ApiResponse<List<UsersByGroupDto>>.Success(dto, 200);
-            return ApiResponse<List<UsersByGroupDto>>.Fail("user", "User list is empty", 404, true);
+            int succesfulCounter = 0;
+            List<Task<bool>> tasks = new List<Task<bool>>();
+
+            userIds.ForEach(x =>
+            {
+                tasks.Add(_userRepository.SaveUserAsync(new() { Id = x }));
+            });
+
+            bool[] results = await Task.WhenAll(tasks);
+
+            foreach (var result in results)
+            {
+                if (result) succesfulCounter++;
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return succesfulCounter == userIds.Count
+                ? ApiResponse<bool>.Success(204)
+                : ApiResponse<bool>.Fail("internal server error something went wrong", 500);
         }
     }
 }
