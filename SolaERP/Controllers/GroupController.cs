@@ -69,7 +69,7 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetAdditionalPrivilegesByGroup(int groupId)
             => CreateActionResult(await _groupService.GetAdditionalPrivilegesForGroupAsync(groupId));
 
-        [HttpGet]
+        [HttpGet("{userId}")]
         public async Task<IActionResult> AvailableGroupsForUser(int userId)
           => CreateActionResult(await _groupService.GetUserGroupsWithoutCurrents(userId));
     }
