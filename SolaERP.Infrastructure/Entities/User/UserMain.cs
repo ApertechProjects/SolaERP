@@ -12,7 +12,7 @@
         public string Status { get; set; }
         public DateTime LastActivity { get; set; }
         public string UserName { get; set; }
-        public string Descr { get; set; }
+        public string Description { get; set; }
         public int Gender { get; set; }
         public string Buyer { get; set; }
         public string VendorCode { get; set; }
