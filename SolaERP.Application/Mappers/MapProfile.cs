@@ -136,6 +136,7 @@ namespace SolaERP.Application.Mappers
             CreateMap<GroupBuyer, GroupBuyerDto>().ReverseMap();
             CreateMap<GroupRole, GroupRoleDto>().ReverseMap();
             CreateMap<UserSaveModel, User>().ReverseMap();
+            CreateMap<UsersByGroup, UsersByGroupDto>().ReverseMap();
 
         }
     }

@@ -28,7 +28,7 @@ namespace SolaERP.Controllers
         public async Task<string> GetUserNameByToken([FromHeader] string authToken)
           => await _userService.GetUserNameByTokenAsync(authToken);
 
-     
+
         /// <summary>
         ///Removes the user which referenced with authToken
         /// </summary>
@@ -89,8 +89,11 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _userService.GetUserInfo(userId));
 
         [HttpGet]
-        public async Task<IActionResult> GetERPUser()
-            => CreateActionResult(await _userService.GetERPUser());
+        public async Task<IActionResult> GetERPUserAsync()
+            => CreateActionResult(await _userService.GetERPUserAsync());
 
+        [HttpGet("{groupId}")]
+        public async Task<IActionResult> GetUsersByGroupIdAsync(int groupId)
+        => CreateActionResult(await _userService.GetUsersByGroupIdAsync(groupId));
     }
 }

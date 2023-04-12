@@ -2,10 +2,12 @@
 using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.Group;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 
@@ -327,7 +329,7 @@ namespace SolaERP.Application.Services
             return ApiResponse<UserLoadDto>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<List<ERPUserDto>>> GetERPUser()
+        public async Task<ApiResponse<List<ERPUserDto>>> GetERPUserAsync()
         {
             var user = await _userRepository.GetERPUser();
             var dto = _mapper.Map<List<ERPUserDto>>(user);
@@ -378,6 +380,13 @@ namespace SolaERP.Application.Services
             else return ApiResponse<bool>.Success(400);
         }
 
-
+        public async Task<ApiResponse<List<UsersByGroupDto>>> GetUsersByGroupIdAsync(int groupId)
+        {
+            var user = await _userRepository.GetUsersByGroupIdAsync(groupId);
+            var dto = _mapper.Map<List<UsersByGroupDto>>(user);
+            if (dto.Count > 0)
+                return ApiResponse<List<UsersByGroupDto>>.Success(dto, 200);
+            return ApiResponse<List<UsersByGroupDto>>.Fail("user", "User list is empty", 404, true);
+        }
     }
 }

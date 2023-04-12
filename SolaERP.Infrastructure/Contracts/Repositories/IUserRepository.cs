@@ -1,4 +1,5 @@
 ﻿using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Entities.User;
 using SolaERP.Infrastructure.Models;
 
@@ -28,5 +29,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<List<ERPUser>> GetERPUser();
         Task<bool> CheckTokenAsync(string authToken);
         Task<bool> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel);
+        Task<List<UsersByGroup>> GetUsersByGroupIdAsync(int groupId);
     }
 }

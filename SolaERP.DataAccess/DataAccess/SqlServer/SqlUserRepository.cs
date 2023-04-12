@@ -1,9 +1,11 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Entities.User;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 
@@ -479,6 +481,24 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@id", id);
                 var value = await command.ExecuteNonQueryAsync();
                 return value > 0;
+            }
+        }
+
+        public async Task<List<UsersByGroup>> GetUsersByGroupIdAsync(int groupId)
+        {
+            List<UsersByGroup> users = new List<UsersByGroup>();
+            string query = "Exec [dbo].[SP_GroupUsers_Load] @groupId";
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.Parameters.AddWithValue(command, "@groupId", groupId);
+                command.CommandText = query;
+
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    users.Add(reader.GetByEntityStructure<UsersByGroup>());
+                }
+                return users;
             }
         }
 
