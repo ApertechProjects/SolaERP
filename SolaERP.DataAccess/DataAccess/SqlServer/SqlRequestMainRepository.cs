@@ -397,6 +397,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<List<RequestMainAll>> GetAllAsync(RequestMainGetModel requestMain)
         {
             string itemCode = string.Join(',', requestMain.ItemCodes);
+            string approveStatus = string.Join(',', requestMain.ApproveStatus);
+            string status = string.Join(',', requestMain.Status);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainAll]", new ReplaceParams { ParamName = "APT", Value = requestMain.BusinessUnitCode });
@@ -405,8 +407,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@ItemCode", itemCode == "all" ? "%" : itemCode);
                 command.Parameters.AddWithValue(command, "@DateFrom", requestMain.DateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", requestMain.DateTo);
-                command.Parameters.AddWithValue(command, "@ApproveStatus", string.Join(',', requestMain.ApproveStatus));
-                command.Parameters.AddWithValue(command, "@Status", string.Join(',', requestMain.Status));
+                command.Parameters.AddWithValue(command, "@ApproveStatus", approveStatus == "all" ? "%" : approveStatus);
+                command.Parameters.AddWithValue(command, "@Status", status == "all" ? "%" : status);
 
                 using var reader = await command.ExecuteReaderAsync();
 
