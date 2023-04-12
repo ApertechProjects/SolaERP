@@ -92,7 +92,8 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetERPUser()
             => CreateActionResult(await _userService.GetERPUser());
 
-
-
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser([FromBody] List<int> userIds)
+            => CreateActionResult(await _userService.DeleteUserAsync(userIds)); 
     }
 }
