@@ -68,8 +68,12 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> ApproveRoleSaveAsync(ApproveRoleDto model)
             => CreateActionResult(await _approveRoleService.ApproveRoleSaveAsync(model));
 
-        [HttpDelete("{approveRoleId}")]
-        public async Task<IActionResult> DeleteApproveRoleAsync(int approveRoleId)
-            => CreateActionResult(await _approveRoleService.DeleteApproveRoleAsync(approveRoleId));
+        [HttpDelete("{approveStageMainId}")]
+        public async Task<IActionResult> DeleteApproveStageAsync(int approveStageMainId)
+            => CreateActionResult(await _approveStageMainService.DeleteApproveStageAsync(approveStageMainId));
+
+        //[HttpDelete("{approveRoleId}")]
+        //public async Task<IActionResult> DeleteApproveRoleAsync(int approveRoleId)
+        //    => CreateActionResult(await _approveRoleService.DeleteApproveRoleAsync(approveRoleId));
     }
 }

@@ -42,7 +42,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var commad = _unitOfWork.CreateCommand() as DbCommand)
             {
-                commad.CommandText = $"exec SP_ApproveStageRoles_ID @roleId";
+                commad.CommandText = $"exec SP_ApproveStageRoles_IUD @roleId";
                 IDbDataParameter dbDataParameter = commad.CreateParameter();
                 dbDataParameter.ParameterName = "@roleId";
                 dbDataParameter.Value = Id;
@@ -59,7 +59,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<int> AddAsync(ApproveStageRole entity)
         {
-            string query = "exec SP_ApproveStageRoles_ID  @approveStageRoleId,@approveStageDetailId,@approveRoleId,@amountFrom,@amountTo";
+            string query = "exec SP_ApproveStageRoles_IUD  @approveStageRoleId,@approveStageDetailId,@approveRoleId,@amountFrom,@amountTo";
 
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

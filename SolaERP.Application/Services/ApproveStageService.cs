@@ -89,7 +89,16 @@ namespace SolaERP.Application.Services
             if (approvalStatusDto.Any())
                 return ApiResponse<List<ApprovalStatusDto>>.Success(approvalStatusDto, 200);
 
-            return ApiResponse<List<ApprovalStatusDto>>.Fail("Approval status is empty", 404);
+            return ApiResponse<List<ApprovalStatusDto>>.Fail("get", "Approval status is empty", 404, true);
+        }
+
+        public async Task<ApiResponse<bool>> DeleteApproveStageAsync(int approveStageMainId)
+        {
+            var data = await _approveStageMainRepository.DeleteApproveStageAsync(approveStageMainId);
+            await _unitOfWork.SaveChangesAsync();
+            if (data)
+                return ApiResponse<bool>.Success(data, 200);
+            return ApiResponse<bool>.Fail("delete", "data can not be deleted", 400);
         }
     }
 }

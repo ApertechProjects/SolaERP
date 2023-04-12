@@ -52,14 +52,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<bool> RemoveAsync(int id)
         {
-            using (var commad = _unitOfWork.CreateCommand() as DbCommand)
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                commad.CommandText = $"exec SP_ApproveStagesDetails_IUD @detailId";
-                IDbDataParameter dbDataParameter = commad.CreateParameter();
+                command.CommandText = $"exec SP_ApproveStagesDetails_IUD @detailId,@NewApproveStageDetailsId = @NewApproveStageDetailsId OUTPUT select @NewApproveStageDetailsId as NewApproveStageDetailsId";
+                IDbDataParameter dbDataParameter = command.CreateParameter();
                 dbDataParameter.ParameterName = "@detailId";
                 dbDataParameter.Value = id;
-                commad.Parameters.Add(dbDataParameter);
-                var value = await commad.ExecuteNonQueryAsync();
+                command.Parameters.Add(dbDataParameter);
+                command.Parameters.Add("@NewApproveStageDetailsId", SqlDbType.Int);
+                command.Parameters["@NewApproveStageDetailsId"].Direction = ParameterDirection.Output;
+                var value = await command.ExecuteNonQueryAsync();
                 return value >= 0;
             }
         }

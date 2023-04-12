@@ -47,6 +47,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<bool> DeleteApproveStageAsync(int approveStageMainId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = $"exec SP_ApproveStagesMain_IUD @ApproveStageMainId,@NewApproveStageMainId = @NewApproveStageMainId OUTPUT select @NewApproveStageMainId as NewApproveStageMainId";
+                IDbDataParameter dbDataParameter = command.CreateParameter();
+                dbDataParameter.ParameterName = "@ApproveStageMainId";
+                dbDataParameter.Value = approveStageMainId;
+                command.Parameters.Add(dbDataParameter);
+                command.Parameters.Add("@NewApproveStageMainId", SqlDbType.Int);
+                command.Parameters["@NewApproveStageMainId"].Direction = ParameterDirection.Output;
+                var value = await command.ExecuteNonQueryAsync();
+                return value >= 0;
+            }
+        }
+
         public Task<int> DeleteAsync(int userId)
         {
             throw new NotImplementedException();
