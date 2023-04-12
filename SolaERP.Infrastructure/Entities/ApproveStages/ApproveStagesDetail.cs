@@ -8,6 +8,9 @@ namespace SolaERP.Infrastructure.Entities.ApproveStage
         public int ApproveStageMainId { get; set; }
         public string ApproveStageDetailsName { get; set; }
         public int Sequence { get; set; }
+        public bool Skip { get; set; }
+        public int SkipDays { get; set; }
+        public bool BackToInitiatorOnReject { get; set; }
         [DbIgnore]
         public List<ApproveStageRole> ApproveStageRoles { get; set; }
     }

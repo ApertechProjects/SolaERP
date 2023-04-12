@@ -6,6 +6,7 @@ using SolaERP.Infrastructure.Entities.Procedure;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
+using System.Data.SqlClient;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -21,9 +22,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<int> AddAsync(ApproveStagesMain entity, int userId = 0)
         {
-            string query = "exec SP_ApproveStagesMain_IUD @approveStageMainId,@procedureId,@businessUnitId,@approveStageName,@userId";
+            string query = "exec SP_ApproveStagesMain_IUD @approveStageMainId,@procedureId,@businessUnitId,@approveStageName,@userId," +
+                "                                         @NewApproveStageMainId = @NewApproveStageMainId OUTPUT select @NewApproveStageMainId as NewApproveStageMainId";
 
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText = query;
                 command.Parameters.AddWithValue(command, "@approveStageMainId", entity.ApproveStageMainId);
@@ -31,8 +33,33 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@businessUnitId", entity.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@approveStageName", entity.ApproveStageName);
                 command.Parameters.AddWithValue(command, "@userId", userId);
+
+                command.Parameters.Add("@NewApproveStageMainId", SqlDbType.Int);
+                command.Parameters["@NewApproveStageMainId"].Direction = ParameterDirection.Output;
+
+                using var reader = await command.ExecuteReaderAsync();
+                int id = 0;
+                if (reader.Read())
+                {
+                    id = reader.Get<int>("NewApproveStageMainId");
+                }
+                return id;
+            }
+        }
+
+        public async Task<bool> DeleteApproveStageAsync(int approveStageMainId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = $"SET NOCOUNT OFF exec SP_ApproveStagesMain_IUD @ApproveStageMainId,@NewApproveStageMainId = @NewApproveStageMainId OUTPUT select @NewApproveStageMainId as NewApproveStageMainId";
+                IDbDataParameter dbDataParameter = command.CreateParameter();
+                dbDataParameter.ParameterName = "@ApproveStageMainId";
+                dbDataParameter.Value = approveStageMainId;
+                command.Parameters.Add(dbDataParameter);
+                command.Parameters.Add("@NewApproveStageMainId", SqlDbType.Int);
+                command.Parameters["@NewApproveStageMainId"].Direction = ParameterDirection.Output;
                 var value = await command.ExecuteNonQueryAsync();
-                return value;
+                return value >= 0;
             }
         }
 

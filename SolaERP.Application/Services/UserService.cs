@@ -1,15 +1,4 @@
-﻿using AutoMapper;
-using SolaERP.Application.Utils;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.User;
-using SolaERP.Infrastructure.Dtos.UserDto;
-using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Models;
-using SolaERP.Infrastructure.UnitOfWork;
-
-namespace SolaERP.Application.Services
+﻿namespace SolaERP.Application.Services
 {
     public class UserService : IUserService
     {
@@ -327,7 +316,7 @@ namespace SolaERP.Application.Services
             return ApiResponse<UserLoadDto>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<List<ERPUserDto>>> GetERPUser()
+        public async Task<ApiResponse<List<ERPUserDto>>> GetERPUserAsync()
         {
             var user = await _userRepository.GetERPUser();
             var dto = _mapper.Map<List<ERPUserDto>>(user);

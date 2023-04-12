@@ -7,6 +7,5 @@ namespace SolaERP.Infrastructure.Contracts.Services
     public interface IApproveRoleService : ICrudService<ApproveRoleDto>
     {
         Task<ApiResponse<bool>> ApproveRoleSaveAsync(ApproveRoleDto approveRole);
-        Task<ApiResponse<bool>> DeleteApproveRoleAsync(int approveRoleId);
     }
 }

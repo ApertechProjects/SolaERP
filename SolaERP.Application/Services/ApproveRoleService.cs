@@ -36,15 +36,6 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Fail("approveRole", "Data can not be saved", 500);
         }
 
-        public async Task<ApiResponse<bool>> DeleteApproveRoleAsync(int approveRoleId)
-        {
-            var roles = await _approveRoleRepository.DeleteApproveRoleAsync(approveRoleId);
-            await _unitOfWork.SaveChangesAsync();
-            if (roles)
-                return ApiResponse<bool>.Success(roles, 200);
-            return ApiResponse<bool>.Fail("approveRole", "Data can not be deleted", 500);
-        }
-
         public async Task<ApiResponse<List<ApproveRoleDto>>> GetAllAsync()
         {
             var approveRoles = await _approveRoleRepository.GetAllAsync();

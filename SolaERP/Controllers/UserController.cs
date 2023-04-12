@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Models;
-
-namespace SolaERP.Controllers
+﻿namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [Authorize]
@@ -89,11 +83,11 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _userService.GetUserInfo(userId));
 
         [HttpGet]
-        public async Task<IActionResult> GetERPUser()
-            => CreateActionResult(await _userService.GetERPUser());
+        public async Task<IActionResult> GetERPUserAsync()
+            => CreateActionResult(await _userService.GetERPUserAsync());
 
         [HttpDelete]
         public async Task<IActionResult> DeleteUser([FromBody] List<int> userIds)
-            => CreateActionResult(await _userService.DeleteUserAsync(userIds)); 
+            => CreateActionResult(await _userService.DeleteUserAsync(userIds));
     }
 }

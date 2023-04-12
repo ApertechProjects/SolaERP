@@ -4,6 +4,7 @@ using SolaERP.Infrastructure.Entities.ApproveStage;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
+using System.Data.SqlClient;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -51,14 +52,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<bool> RemoveAsync(int id)
         {
-            using (var commad = _unitOfWork.CreateCommand() as DbCommand)
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                commad.CommandText = $"exec SP_ApproveStagesDetails_IUD @detailId";
-                IDbDataParameter dbDataParameter = commad.CreateParameter();
+                command.CommandText = $"exec SP_ApproveStagesDetails_IUD @detailId,@NewApproveStageDetailsId = @NewApproveStageDetailsId OUTPUT select @NewApproveStageDetailsId as NewApproveStageDetailsId";
+                IDbDataParameter dbDataParameter = command.CreateParameter();
                 dbDataParameter.ParameterName = "@detailId";
                 dbDataParameter.Value = id;
-                commad.Parameters.Add(dbDataParameter);
-                var value = await commad.ExecuteNonQueryAsync();
+                command.Parameters.Add(dbDataParameter);
+                command.Parameters.Add("@NewApproveStageDetailsId", SqlDbType.Int);
+                command.Parameters["@NewApproveStageDetailsId"].Direction = ParameterDirection.Output;
+                var value = await command.ExecuteNonQueryAsync();
                 return value >= 0;
             }
         }
@@ -88,17 +91,29 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<int> SaveDetailsAsync(ApproveStagesDetail entity)
         {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = "EXEC SP_ApproveStagesDetails_IUD @ApproveStageDetailsId,@ApproveStageMainId,@ApproveStageDetailsName,@Sequence";
+                command.CommandText = "EXEC SP_ApproveStagesDetails_IUD @ApproveStageDetailsId,@ApproveStageMainId,@ApproveStageDetailsName,@Sequence,@Skip,@SkipDays,@BackToInitiatorOnReject," +
+                    "@NewApproveStageDetailsId = @NewApproveStageDetailsId OUTPUT select @NewApproveStageDetailsId as NewApproveStageDetailsId";
 
                 command.Parameters.AddWithValue(command, "@ApproveStageDetailsId", entity.ApproveStageDetailsId);
                 command.Parameters.AddWithValue(command, "@ApproveStageMainId", entity.ApproveStageMainId);
                 command.Parameters.AddWithValue(command, "@ApproveStageDetailsName", entity.ApproveStageDetailsName);
                 command.Parameters.AddWithValue(command, "@Sequence", entity.Sequence);
+                command.Parameters.AddWithValue(command, "@Skip", entity.Skip);
+                command.Parameters.AddWithValue(command, "@SkipDays", entity.SkipDays);
+                command.Parameters.AddWithValue(command, "@BackToInitiatorOnReject", entity.BackToInitiatorOnReject);
+
+                command.Parameters.Add("@NewApproveStageDetailsId", SqlDbType.Int);
+                command.Parameters["@NewApproveStageDetailsId"].Direction = ParameterDirection.Output;
 
                 using var reader = await command.ExecuteReaderAsync();
-                return await reader.ReadAsync() ? reader.Get<int>("NewApproveStageDetailsId") : -1;
+                int id = 0;
+                if (reader.Read())
+                {
+                    id = reader.Get<int>("NewApproveStageDetailsId");
+                }
+                return id;
             }
         }
     }

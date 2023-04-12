@@ -1,9 +1,4 @@
-﻿using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.User;
-using SolaERP.Infrastructure.Dtos.UserDto;
-using SolaERP.Infrastructure.Models;
-
-namespace SolaERP.Infrastructure.Contracts.Services
+﻿namespace SolaERP.Infrastructure.Contracts.Services
 {
     public interface IUserService : ICrudService<UserDto>
     {
@@ -28,9 +23,10 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<bool>> SaveUserAsync(UserSaveModel user);
         Task UserRegisterAsync(UserRegisterModel model);
         Task<ApiResponse<UserLoadDto>> GetUserInfo(int userId);
-        Task<ApiResponse<List<ERPUserDto>>> GetERPUser();
+        Task<ApiResponse<List<ERPUserDto>>> GetERPUserAsync();
         Task<bool> CheckTokenAsync(string authToken);
         Task<ApiResponse<bool>> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel);
         Task<ApiResponse<bool>> DeleteUserAsync(List<int> userIds);
+        Task<ApiResponse<List<UsersByGroupDto>>> GetUsersByGroupIdAsync(int groupId);
     }
 }
