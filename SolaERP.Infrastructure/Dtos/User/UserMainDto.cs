@@ -18,5 +18,10 @@
         public string VendorName { get; set; }
         public string TaxId { get; set; }
         public string PhoneNumber { get; set; }
+        public int UserTypeId { get; set; }
+        public string ERPUser { get; set; }
+        public string Theme { get; set; }
+        public int VendorId { get; set; }
+        public int Sequence { get; set; }
     }
 }
