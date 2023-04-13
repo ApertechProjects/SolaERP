@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Controllers
@@ -72,5 +73,22 @@ namespace SolaERP.Controllers
         [HttpGet("{userId}")]
         public async Task<IActionResult> AvailableGroupsForUser(int userId)
           => CreateActionResult(await _groupService.GetUserGroupsWithoutCurrents(userId));
+
+        [HttpDelete("{groupEmailNotficationId}")]
+        public async Task<IActionResult> DeleteEmailNotfication(int groupEmailNotficationId)
+            => CreateActionResult(await _groupService.DeleteEmailNotficationAsync(groupEmailNotficationId));
+
+        [HttpGet("{groupid}")]
+        public async Task<IActionResult> GetEmailNotfications(int groupid)
+            => CreateActionResult(await _groupService.GetGroupEmailNotficationsAsync(groupid));
+
+        [HttpPost]
+        public async Task<IActionResult> CreateEmailNotfication(CreateGroupEmailNotficationModel model)
+            => CreateActionResult(await _groupService.CreateEmailNotficationAsync(model));
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateEmailNotfication(GroupEmailNotfication model)
+            => CreateActionResult(await _groupService.UpdateEmailNotficationAsync(model));
+
     }
 }
