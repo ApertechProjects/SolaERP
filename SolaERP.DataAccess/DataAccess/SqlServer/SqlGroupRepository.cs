@@ -314,9 +314,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return await SaveEmailNotficationAsync(new()
             {
-                GroupEmailNotficationId = 0,
+                GroupEmailNotificationId = 0,
                 GroupId = entity.GroupId,
-                EmailNotficationId = entity.EmailNotficationId,
+                EmailNotificationId = entity.EmailNotficationId,
             });
         }
 
@@ -327,7 +327,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<bool> DeleteEmailNotficationAsync(int groupEmailNotficationId)
         {
-            return await SaveEmailNotficationAsync(new() { GroupEmailNotficationId = groupEmailNotficationId });
+            return await SaveEmailNotficationAsync(new() { GroupEmailNotificationId = groupEmailNotficationId });
         }
 
         protected override async Task<bool> SaveEmailNotficationAsync(GroupEmailNotfication entity)
@@ -335,9 +335,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = @"SET NOCOUNT OFF Exec SP_GroupEmailNotification_IUD @GroupEmailNotificationId,@GroupId,@EmailNotificationId";
-                command.Parameters.AddWithValue(command, "@GroupEmailNotificationId", entity.GroupEmailNotficationId);
+                command.Parameters.AddWithValue(command, "@GroupEmailNotificationId", entity.GroupEmailNotificationId);
                 command.Parameters.AddWithValue(command, "@GroupId", entity.GroupId);
-                command.Parameters.AddWithValue(command, "@EmailNotificationId", entity.EmailNotficationId);
+                command.Parameters.AddWithValue(command, "@EmailNotificationId", entity.EmailNotificationId);
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }

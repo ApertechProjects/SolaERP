@@ -2,8 +2,8 @@
 {
     public class GroupEmailNotfication : BaseEntity
     {
-        public int GroupEmailNotficationId { get; set; }
+        public int GroupEmailNotificationId { get; set; }
         public int GroupId { get; set; }
-        public int EmailNotficationId { get; set; }
+        public int EmailNotificationId { get; set; }
     }
 }
