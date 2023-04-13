@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public int StatusId { get; set; }
         public string UserPhoto { get; set; }
+        public string Email { get; set; }
         public string UserSignature { get; set; }
         public string FullName { get; set; }
         public string ApproveStatus { get; set; }
