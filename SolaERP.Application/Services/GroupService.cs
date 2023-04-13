@@ -42,6 +42,8 @@ namespace SolaERP.Application.Services
         public async Task<ApiResponse<bool>> CreateEmailNotficationAsync(CreateGroupEmailNotficationModel model)
         {
             var result = await _groupRepository.CreateEmailNotficationAsync(model);
+            await _unitOfWork.SaveChangesAsync();
+
             return result ? ApiResponse<bool>.Success(204)
                           : ApiResponse<bool>.Fail($"Something went wrong. The email notification was not created for the group ID: {model.GroupId}", 500);
         }
@@ -65,6 +67,7 @@ namespace SolaERP.Application.Services
         public async Task<ApiResponse<bool>> DeleteEmailNotficationAsync(int groupEmailNotficationId)
         {
             var result = await _groupRepository.DeleteEmailNotficationAsync(groupEmailNotficationId);
+            await _unitOfWork.SaveChangesAsync();
 
             return result ?
                             ApiResponse<bool>.Success(204)
@@ -249,6 +252,7 @@ namespace SolaERP.Application.Services
         public async Task<ApiResponse<bool>> UpdateEmailNotficationAsync(GroupEmailNotfication model)
         {
             var result = await _groupRepository.UpdateEmailNotficationAsync(model);
+            await _unitOfWork.SaveChangesAsync();
             return result ?
                             ApiResponse<bool>.Success(204)
                           : ApiResponse<bool>.Fail($"Something went wrong. The email notification was not updated.", 500);
