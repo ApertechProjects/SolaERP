@@ -7,5 +7,6 @@ namespace SolaERP.Infrastructure.Entities.Groups
         public int GroupUserId { get; set; }
         public int GroupId { get; set; }
         public string GroupName { get; set; }
+        public bool UserInGroup { get; set; }
     }
 }
