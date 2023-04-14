@@ -39,6 +39,15 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(isSucces, 200);
         }
 
+        public async Task<ApiResponse<bool>> AddUserToGroupAsync(AddUserToGroupModel model)
+        {
+            var data = await _groupRepository.AddUserToGroupAsync(model);
+            await _unitOfWork.SaveChangesAsync();
+            if (data)
+                return ApiResponse<bool>.Success(data, 200);
+            return ApiResponse<bool>.Fail("user", "Data can not be saved", 400);
+        }
+
         public async Task<ApiResponse<bool>> CreateEmailNotficationAsync(CreateGroupEmailNotficationModel model)
         {
             var result = await _groupRepository.CreateEmailNotficationAsync(model);
@@ -79,7 +88,15 @@ namespace SolaERP.Application.Services
             var result = await _groupRepository.DeleteGroupRoleByGroupIdAsync(groupApproveRoleId);
             await _unitOfWork.SaveChangesAsync();
             if (result) return ApiResponse<bool>.Success(true, 200);
-            else return ApiResponse<bool>.Fail("Data can not be deleted", 400);
+            else return ApiResponse<bool>.Fail("role", "Data can not be deleted", 400);
+        }
+
+        public async Task<ApiResponse<bool>> DeleteUserFromGroupAsync(int groupUserId)
+        {
+            var result = await _groupRepository.DeleteUserFromGroupAsync(groupUserId);
+            await _unitOfWork.SaveChangesAsync();
+            if (result) return ApiResponse<bool>.Success(true, 200);
+            else return ApiResponse<bool>.Fail("user", "Data can not be deleted", 400);
         }
 
         public async Task<ApiResponse<List<GroupAdditionalPrivilage>>> GetAdditionalPrivilegesForGroupAsync(int groupId)

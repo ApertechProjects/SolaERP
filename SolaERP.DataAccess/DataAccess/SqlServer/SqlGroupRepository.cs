@@ -6,6 +6,7 @@ using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data.Common;
+using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -101,16 +102,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task AddUserToGroupOrDeleteAsync(UserToGroupModel model)
+        public async Task<bool> AddUserToGroupOrDeleteAsync(UserToGroupModel model)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_GroupUsers_ID @GroupId,@UserId";
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupUsers_ID @GroupId,@UserId";
 
                 command.Parameters.AddWithValue(command, "@GroupId", model.GroupId);
                 command.Parameters.AddWithValue(command, "@UserId", model.UserId);
 
-                await command.ExecuteNonQueryAsync();
+                var result = await command.ExecuteNonQueryAsync();
+                return result > 0;
             }
         }
 
@@ -339,6 +341,33 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@GroupId", entity.GroupId);
                 command.Parameters.AddWithValue(command, "@EmailNotificationId", entity.EmailNotificationId);
                 return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> AddUserToGroupAsync(AddUserToGroupModel model)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupUsers_ID @GroupId,@UserId";
+
+                command.Parameters.AddWithValue(command, "@GroupId", model.GroupId);
+                command.Parameters.AddWithValue(command, "@UserId", model.UserId);
+
+                var result = await command.ExecuteNonQueryAsync();
+                return result > 0;
+            }
+        }
+
+        public async Task<bool> DeleteUserFromGroupAsync(int groupUserId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupUsers_D @groupuserId";
+
+                command.Parameters.AddWithValue(command, "@groupuserId", groupUserId);
+
+                var result = await command.ExecuteNonQueryAsync();
+                return result > 0;
             }
         }
     }

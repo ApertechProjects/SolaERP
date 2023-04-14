@@ -11,7 +11,7 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         public Task<bool> AdditionalPrivilegeAddOrUpdateAsync(GroupAdditionalPrivilage additionalPrivilage);
         Task<List<Groups>> GetAllAsync();
         Task<int> AddUpdateOrDeleteGroupAsync(int userID, Groups entity);
-        Task AddUserToGroupOrDeleteAsync(UserToGroupModel model);
+        Task<bool> AddUserToGroupOrDeleteAsync(UserToGroupModel model);
         Task<bool> AddMenuToGroupOrDeleteAsync(GroupMenuIDSaveModel saveOrDeleteModel);
         Task AddBusiessUnitToGroupOrDeleteAsync(int groupId, int busiessUnitId);
         Task AddApproveRoleToGroupOrDelete(int groupId, int approveRoleId);
@@ -29,5 +29,7 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<bool> CreateEmailNotficationAsync(CreateGroupEmailNotficationModel model);
         Task<bool> UpdateEmailNotficationAsync(GroupEmailNotfication entity);
         Task<bool> DeleteEmailNotficationAsync(int groupEmailNotficationId);
+        Task<bool> AddUserToGroupAsync(AddUserToGroupModel model);
+        Task<bool> DeleteUserFromGroupAsync(int groupUserId);
     }
 }
