@@ -4,6 +4,8 @@
     {
         public int RequestMainId { get; set; }
         public int BusinessUnitId { get; set; }
+        public string BusinessUnitCode { get; set; }
+        public string BusinessUnitName { get; set; }
         public int RequestTypeId { get; set; }
         public int RequestNo { get; set; }
         public string EmployeeCode { get; set; }

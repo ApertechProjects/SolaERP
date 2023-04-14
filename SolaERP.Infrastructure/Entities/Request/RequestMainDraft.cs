@@ -6,6 +6,7 @@
         public int Status { get; set; }
         public string StatusName { get; set; }
         public string BusinessUnitCode { get; set; }
+        public string BusinessUnitName { get; set; }
         public string EmployeeCode { get; set; }
         public string EmployeeName { get; set; }
         public Int64 RowNum { get; set; }
