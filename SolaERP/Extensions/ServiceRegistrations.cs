@@ -11,6 +11,7 @@ using SolaERP.Application.Validations.UserValidation;
 using SolaERP.DataAccess.DataAcces.SqlServer;
 using SolaERP.DataAccess.DataAccess.SqlServer;
 using SolaERP.DataAccess.Factories;
+using SolaERP.Infrastructure;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Entities.Auth;
@@ -90,6 +91,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<ILayoutRepository, SqlLayoutRepository>();
             builder.Services.AddScoped<ILanguageRepository, SqlLanguageRepository>();
             builder.Services.AddScoped<IVendorRepository, SqlVendorRepository>();
+            builder.Services.AddScoped<IEmailNotficationRepository, SqlEmailNotficationRepository>();
         }
         public static void UseValidationExtension(this WebApplicationBuilder builder)
         {
@@ -120,6 +122,7 @@ namespace SolaERP.Extensions
             builder.UseRepositories();
             builder.UseServices();
             builder.UseSqlConnection();
+            builder.Services.AddMediatR();
         }
     }
 }

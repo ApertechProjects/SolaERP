@@ -325,6 +325,12 @@ namespace SolaERP.Application.Services
         {
             var user = await _userRepository.GetUserInfoAsync(userId);
             var dto = _mapper.Map<UserLoadDto>(user);
+            if (!string.IsNullOrEmpty(user.UserPhoto))
+                user.UserPhoto = await _fileService.DownloadPhotoWithNetworkAsBase64Async(user.UserPhoto);
+
+            if (!string.IsNullOrEmpty(user.SignaturePhoto))
+                user.SignaturePhoto = await _fileService.DownloadPhotoWithNetworkAsBase64Async(user.SignaturePhoto);
+
             return ApiResponse<UserLoadDto>.Success(dto, 200);
         }
 

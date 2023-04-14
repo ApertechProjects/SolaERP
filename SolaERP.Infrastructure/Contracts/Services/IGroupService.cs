@@ -24,5 +24,10 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<bool>> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId);
         Task<ApiResponse<List<GroupUserDto>>> GetGroupsByUserIdAsync(int userId);
         Task<ApiResponse<List<GroupsDto>>> GetUserGroupsWithoutCurrents(int id);
+        Task<ApiResponse<bool>> CreateEmailNotficationAsync(CreateGroupEmailNotficationModel model);
+        Task<ApiResponse<bool>> UpdateEmailNotficationAsync(GroupEmailNotfication model);
+        Task<ApiResponse<bool>> DeleteEmailNotficationAsync(int groupEmailNotficationId);
+        Task<ApiResponse<List<GroupEmailNotfication>>> GetGroupEmailNotficationsAsync(int groupId);
+
     }
 }

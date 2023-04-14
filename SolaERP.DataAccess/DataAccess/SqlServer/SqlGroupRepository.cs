@@ -6,11 +6,10 @@ using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data.Common;
-using System.Text.RegularExpressions;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlGroupRepository : IGroupRepository
+    public class SqlGroupRepository : SqlBaseGroupRepository, IGroupRepository
     {
         private readonly IUnitOfWork _unitOfWork;
         public SqlGroupRepository(IUnitOfWork unitOfWork)
@@ -291,6 +290,55 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     resultList.Add(reader.GetByEntityStructure<GroupUser>());
 
                 return resultList;
+            }
+        }
+
+        public async Task<List<GroupEmailNotfication>> GetGroupEmailNotficationsAsync(int groupId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_GroupEmailNotification_Load @GroupId";
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                List<GroupEmailNotfication> resultList = new();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<GroupEmailNotfication>());
+
+                return resultList;
+            }
+        }
+
+        public async Task<bool> CreateEmailNotficationAsync(CreateGroupEmailNotficationModel entity)
+        {
+            return await SaveEmailNotficationAsync(new()
+            {
+                GroupEmailNotificationId = 0,
+                GroupId = entity.GroupId,
+                EmailNotificationId = entity.EmailNotficationId,
+            });
+        }
+
+        public async Task<bool> UpdateEmailNotficationAsync(GroupEmailNotfication entity)
+        {
+            return await SaveEmailNotficationAsync(entity);
+        }
+
+        public async Task<bool> DeleteEmailNotficationAsync(int groupEmailNotficationId)
+        {
+            return await SaveEmailNotficationAsync(new() { GroupEmailNotificationId = groupEmailNotficationId });
+        }
+
+        protected override async Task<bool> SaveEmailNotficationAsync(GroupEmailNotfication entity)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF Exec SP_GroupEmailNotification_IUD @GroupEmailNotificationId,@GroupId,@EmailNotificationId";
+                command.Parameters.AddWithValue(command, "@GroupEmailNotificationId", entity.GroupEmailNotificationId);
+                command.Parameters.AddWithValue(command, "@GroupId", entity.GroupId);
+                command.Parameters.AddWithValue(command, "@EmailNotificationId", entity.EmailNotificationId);
+                return await command.ExecuteNonQueryAsync() > 0;
             }
         }
     }

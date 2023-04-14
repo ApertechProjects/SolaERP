@@ -17,6 +17,8 @@ namespace SolaERP.Infrastructure.Dtos.User
         public bool IsDeleted { get; set; }
         public int Gender { get; set; }
         public string Buyer { get; set; }
+        public string UserPhoto { get; set; }
+        public string SignaturePhoto { get; set; }
         public string Description { get; set; }
         public string ERPUser { get; set; }
     }

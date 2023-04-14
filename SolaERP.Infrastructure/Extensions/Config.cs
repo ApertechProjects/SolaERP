@@ -3,10 +3,6 @@ using System.Net;
 
 namespace SolaERP.Infrastructure.Extensions
 {
-    //public static class Config
-    //{
-    //    public static RemoteFileServer FileServer { get=> new(); }
-    //}
 
     public class RemoteFileServer
     {
@@ -16,7 +12,6 @@ namespace SolaERP.Infrastructure.Extensions
         public RemoteFileServer()
         {
             _configuration = CreateSingleConfigurationInstance();
-            //_configuration.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../SolaERP.API/"));
             _configuration.SetBasePath(Directory.GetCurrentDirectory());
 
             _configuration.AddJsonFile("appsettings.json");
@@ -48,8 +43,6 @@ namespace SolaERP.Infrastructure.Extensions
 
             return _configuration;
         }
-
-
 
     }
 }
