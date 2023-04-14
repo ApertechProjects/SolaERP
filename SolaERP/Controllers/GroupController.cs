@@ -91,12 +91,12 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _groupService.UpdateEmailNotficationAsync(model));
 
         [HttpPost]
-        public async Task<IActionResult> AddUserToGroupAsync(AddUserToGroupModel model)
+        public async Task<IActionResult> AddUserToGroupAsync(List<AddUserToGroupModel> model)
             => CreateActionResult(await _groupService.AddUserToGroupAsync(model));
 
-        [HttpDelete("{groupUserId}")]
-        public async Task<IActionResult> DeleteUserFromGroupAsync(int groupUserId)
-            => CreateActionResult(await _groupService.DeleteUserFromGroupAsync(groupUserId));
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUserFromGroupAsync(List<int> groupUserIds)
+            => CreateActionResult(await _groupService.DeleteUserFromGroupAsync(groupUserIds));
 
     }
 }

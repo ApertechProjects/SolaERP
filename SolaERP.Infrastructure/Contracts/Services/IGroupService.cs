@@ -28,7 +28,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<bool>> UpdateEmailNotficationAsync(GroupEmailNotfication model);
         Task<ApiResponse<bool>> DeleteEmailNotficationAsync(int groupEmailNotficationId);
         Task<ApiResponse<List<GroupEmailNotfication>>> GetGroupEmailNotficationsAsync(int groupId);
-        Task<ApiResponse<bool>> AddUserToGroupAsync(AddUserToGroupModel model);
-        Task<ApiResponse<bool>> DeleteUserFromGroupAsync(int groupUserId);
+        Task<ApiResponse<bool>> AddUserToGroupAsync(List<AddUserToGroupModel> model);
+        Task<ApiResponse<bool>> DeleteUserFromGroupAsync(List<int> groupUserIds);
     }
 }
