@@ -237,6 +237,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RowNum = reader.Get<Int64>("RowNum"),
                 RequestMainId = reader.Get<int>("RequestMainId"),
                 BusinessUnitCode = reader.Get<string>("BusinessUnitCode"),
+                BusinessUnitName = reader.Get<string>("BusinessUnitName"),
                 ApproveStatus = reader.Get<string>("ApproveStatus"),
                 ApproveStatusName = reader.Get<string>("ApproveStatusName"),
                 EmployeeCode = reader.Get<string>("EmployeeCode"),

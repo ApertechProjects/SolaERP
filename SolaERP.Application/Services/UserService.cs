@@ -2,6 +2,7 @@
 using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.Group;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
@@ -400,6 +401,11 @@ namespace SolaERP.Application.Services
             return succesfulCounter == userIds.Count
                 ? ApiResponse<bool>.Success(204)
                 : ApiResponse<bool>.Fail("internal server error something went wrong", 500);
+        }
+
+        public Task<ApiResponse<List<UsersByGroupDto>>> GetUsersByGroupIdAsync(int groupId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
