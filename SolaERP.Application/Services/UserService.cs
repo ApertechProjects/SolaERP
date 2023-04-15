@@ -67,7 +67,8 @@ namespace SolaERP.Application.Services
         {
             var users = await _userRepository.GetAllAsync();
             var dto = _mapper.Map<List<UserDto>>(users);
-
+            if (dto.Count == 0)
+                return ApiResponse<List<UserDto>>.Fail("user", "User list is empty", 404, true);
             return ApiResponse<List<UserDto>>.Success(dto, 200);
         }
 
@@ -158,7 +159,7 @@ namespace SolaERP.Application.Services
             var stringCode = random.Next(0, 999999).ToString();
 
             if (userExsist == null)
-                return ApiResponse<bool>.Fail("email", $"We can't found this email: {email}", 422);
+                return ApiResponse<bool>.Fail("email", $"We can't found this email: {email}", 404);
 
             await _userRepository.SetUserEmailCode(stringCode, userExsist.Id);
 
@@ -174,7 +175,7 @@ namespace SolaERP.Application.Services
             var user = await _userRepository.GetUserByIdAsync(userId);
 
             if (user is null)
-                return ApiResponse<UserDto>.Fail("user", "User not found", 422, true);
+                return ApiResponse<UserDto>.Fail("user", "User not found", 404, true);
 
             var dto = _mapper.Map<UserDto>(user);
             return ApiResponse<UserDto>.Success(dto, 200);
@@ -185,7 +186,7 @@ namespace SolaERP.Application.Services
             var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
 
             if (userId == 0)
-                return ApiResponse<bool>.Fail("email", "User not found", 422, true);
+                return ApiResponse<bool>.Fail("email", "User not found", 404, true);
 
             var result = _userRepository.RemoveAsync(userId);
             await _unitOfWork.SaveChangesAsync();
@@ -240,7 +241,7 @@ namespace SolaERP.Application.Services
 
             if (dto.Count > 0)
                 return ApiResponse<List<UserMainDto>>.Success(dto, 200);
-            return ApiResponse<List<UserMainDto>>.Fail("user", "List is empty", 404, true);
+            return ApiResponse<List<UserMainDto>>.Fail("user", "User list is empty", 404, true);
 
         }
 
@@ -261,7 +262,7 @@ namespace SolaERP.Application.Services
 
             if (dto.Count > 0)
                 return ApiResponse<List<UserMainDto>>.Success(dto, 200);
-            return ApiResponse<List<UserMainDto>>.Fail("user", "List is empty", 404, true);
+            return ApiResponse<List<UserMainDto>>.Fail("user", "User list is empty", 404, true);
         }
 
         public async Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string authToken, int userStatus)
@@ -281,7 +282,7 @@ namespace SolaERP.Application.Services
 
             if (dto.Count > 0)
                 return ApiResponse<List<UserMainDto>>.Success(dto, 200);
-            return ApiResponse<List<UserMainDto>>.Fail("user", "List is empty", 404, true);
+            return ApiResponse<List<UserMainDto>>.Fail("user", "User list is empty", 404, true);
         }
 
         public async Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string authToken, int userStatus)
@@ -301,7 +302,7 @@ namespace SolaERP.Application.Services
 
             if (dto.Count > 0)
                 return ApiResponse<List<UserMainDto>>.Success(dto, 200);
-            return ApiResponse<List<UserMainDto>>.Fail("user", "List is empty", 404, true);
+            return ApiResponse<List<UserMainDto>>.Fail("user", "User list is empty", 404, true);
         }
 
         public async Task<ApiResponse<bool>> UserChangeStatusAsync(string authToken, UserChangeStatusModel model)
@@ -318,7 +319,7 @@ namespace SolaERP.Application.Services
             await _unitOfWork.SaveChangesAsync();
             if (user)
                 return ApiResponse<bool>.Success(true, 200);
-            return ApiResponse<bool>.Fail("user", "Problem detected", 422);
+            return ApiResponse<bool>.Fail("user", "Problem detected", 400);
         }
 
         public async Task<ApiResponse<UserLoadDto>> GetUserInfo(int userId)
@@ -406,7 +407,7 @@ namespace SolaERP.Application.Services
 
             return succesfulCounter == userIds.Count
                 ? ApiResponse<bool>.Success(204)
-                : ApiResponse<bool>.Fail("internal server error something went wrong", 500);
+                : ApiResponse<bool>.Fail("user", "User can not be deleted", 400);
         }
 
         public Task<ApiResponse<List<UsersByGroupDto>>> GetUsersByGroupIdAsync(int groupId)

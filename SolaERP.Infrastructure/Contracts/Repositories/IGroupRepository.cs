@@ -25,9 +25,9 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<bool> SaveGroupRoleByGroupAsync(GroupRoleSaveModel model);
         Task<bool> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId);
         Task<List<GroupUser>> GetGroupsByUserIdAsync(int userId);
-        Task<List<GroupEmailNotfication>> GetGroupEmailNotficationsAsync(int groupId);
-        Task<bool> CreateEmailNotficationAsync(CreateGroupEmailNotficationModel model);
-        Task<bool> UpdateEmailNotficationAsync(GroupEmailNotfication entity);
+        Task<List<GroupEmailNotification>> GetGroupEmailNotficationsAsync(int groupId);
+        Task<bool> CreateEmailNotficationAsync(CreateGroupEmailNotificationModel model);
+        Task<bool> UpdateEmailNotficationAsync(GroupEmailNotification entity);
         Task<bool> DeleteEmailNotficationAsync(int groupEmailNotficationId);
         Task<bool> AddUserToGroupAsync(AddUserToGroupModel model);
         Task<bool> DeleteUserFromGroupAsync(int groupUserId);

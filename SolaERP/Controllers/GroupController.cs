@@ -83,12 +83,12 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _groupService.GetGroupEmailNotficationsAsync(groupid));
 
         [HttpPost]
-        public async Task<IActionResult> CreateEmailNotfication(CreateGroupEmailNotficationModel model)
-            => CreateActionResult(await _groupService.CreateEmailNotficationAsync(model));
+        public async Task<IActionResult> CreateEmailNotification(CreateGroupEmailNotificationModel model)
+            => CreateActionResult(await _groupService.CreateEmailNotificationAsync(model));
 
         [HttpPut]
-        public async Task<IActionResult> UpdateEmailNotfication(GroupEmailNotfication model)
-            => CreateActionResult(await _groupService.UpdateEmailNotficationAsync(model));
+        public async Task<IActionResult> UpdateEmailNotification(GroupEmailNotification model)
+            => CreateActionResult(await _groupService.UpdateEmailNotificationAsync(model));
 
         [HttpPost]
         public async Task<IActionResult> AddUserToGroupAsync(List<AddUserToGroupModel> model)

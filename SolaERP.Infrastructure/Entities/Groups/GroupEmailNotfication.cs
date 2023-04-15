@@ -1,6 +1,6 @@
 ﻿namespace SolaERP.Infrastructure.Entities.Groups
 {
-    public class GroupEmailNotfication : BaseEntity
+    public class GroupEmailNotification : BaseEntity
     {
         public int GroupEmailNotificationId { get; set; }
         public int GroupId { get; set; }

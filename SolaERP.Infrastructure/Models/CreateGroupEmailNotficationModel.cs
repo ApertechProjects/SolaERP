@@ -1,8 +1,8 @@
 ﻿namespace SolaERP.Infrastructure.Models
 {
-    public class CreateGroupEmailNotficationModel
+    public class CreateGroupEmailNotificationModel
     {
         public int GroupId { get; set; }
-        public int EmailNotficationId { get; set; }
+        public int EmailNotificationId { get; set; }
     }
 }

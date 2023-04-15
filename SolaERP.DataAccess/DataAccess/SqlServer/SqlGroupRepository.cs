@@ -295,7 +295,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<GroupEmailNotfication>> GetGroupEmailNotficationsAsync(int groupId)
+        public async Task<List<GroupEmailNotification>> GetGroupEmailNotficationsAsync(int groupId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -303,26 +303,26 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@GroupId", groupId);
 
                 using var reader = await command.ExecuteReaderAsync();
-                List<GroupEmailNotfication> resultList = new();
+                List<GroupEmailNotification> resultList = new();
 
                 while (reader.Read())
-                    resultList.Add(reader.GetByEntityStructure<GroupEmailNotfication>());
+                    resultList.Add(reader.GetByEntityStructure<GroupEmailNotification>());
 
                 return resultList;
             }
         }
 
-        public async Task<bool> CreateEmailNotficationAsync(CreateGroupEmailNotficationModel entity)
+        public async Task<bool> CreateEmailNotficationAsync(CreateGroupEmailNotificationModel entity)
         {
             return await SaveEmailNotficationAsync(new()
             {
                 GroupEmailNotificationId = 0,
                 GroupId = entity.GroupId,
-                EmailNotificationId = entity.EmailNotficationId,
+                EmailNotificationId = entity.EmailNotificationId,
             });
         }
 
-        public async Task<bool> UpdateEmailNotficationAsync(GroupEmailNotfication entity)
+        public async Task<bool> UpdateEmailNotficationAsync(GroupEmailNotification entity)
         {
             return await SaveEmailNotficationAsync(entity);
         }
@@ -332,7 +332,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return await SaveEmailNotficationAsync(new() { GroupEmailNotificationId = groupEmailNotficationId });
         }
 
-        protected override async Task<bool> SaveEmailNotficationAsync(GroupEmailNotfication entity)
+        protected override async Task<bool> SaveEmailNotficationAsync(GroupEmailNotification entity)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

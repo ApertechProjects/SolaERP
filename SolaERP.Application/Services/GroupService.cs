@@ -52,7 +52,7 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Fail("user", "Data can not be saved", 400);
         }
 
-        public async Task<ApiResponse<bool>> CreateEmailNotficationAsync(CreateGroupEmailNotficationModel model)
+        public async Task<ApiResponse<bool>> CreateEmailNotificationAsync(CreateGroupEmailNotificationModel model)
         {
             var result = await _groupRepository.CreateEmailNotficationAsync(model);
             await _unitOfWork.SaveChangesAsync();
@@ -84,7 +84,7 @@ namespace SolaERP.Application.Services
 
             return result ?
                             ApiResponse<bool>.Success(204)
-                          : ApiResponse<bool>.Fail($"The email notification with Id: {groupEmailNotficationId}  was not deleted.", 500);
+                          : ApiResponse<bool>.Fail($"The email notification with Id: {groupEmailNotficationId}  was not deleted.", 400);
         }
 
         public async Task<ApiResponse<bool>> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId)
@@ -127,7 +127,7 @@ namespace SolaERP.Application.Services
             if (dto != null)
                 return ApiResponse<List<GroupAnalysisCodeDto>>.Success(dto, 200);
             else
-                return ApiResponse<List<GroupAnalysisCodeDto>>.Fail("Analysis list is empty", 400);
+                return ApiResponse<List<GroupAnalysisCodeDto>>.Fail("Analysis list is empty", 404);
         }
 
         public async Task<ApiResponse<List<GroupBuyerDto>>> GetBuyersByGroupIdAsync(int groupId)
@@ -137,13 +137,13 @@ namespace SolaERP.Application.Services
             if (dto != null)
                 return ApiResponse<List<GroupBuyerDto>>.Success(dto, 200);
             else
-                return ApiResponse<List<GroupBuyerDto>>.Fail("Buyer list is empty", 400);
+                return ApiResponse<List<GroupBuyerDto>>.Fail("Buyer list is empty", 404);
         }
 
-        public async Task<ApiResponse<List<GroupEmailNotfication>>> GetGroupEmailNotficationsAsync(int groupId)
+        public async Task<ApiResponse<List<GroupEmailNotification>>> GetGroupEmailNotficationsAsync(int groupId)
         {
             var result = await _groupRepository.GetGroupEmailNotficationsAsync(groupId);
-            return ApiResponse<List<GroupEmailNotfication>>.Success(result, 200);
+            return ApiResponse<List<GroupEmailNotification>>.Success(result, 200);
         }
 
         public async Task<ApiResponse<List<GroupRoleDto>>> GetGroupRolesByGroupIdAsync(int groupId)
@@ -153,7 +153,7 @@ namespace SolaERP.Application.Services
             if (dto != null)
                 return ApiResponse<List<GroupRoleDto>>.Success(dto, 200);
             else
-                return ApiResponse<List<GroupRoleDto>>.Fail("Group Role list is empty", 400);
+                return ApiResponse<List<GroupRoleDto>>.Fail("Group Role list is empty", 404);
         }
 
         public async Task<ApiResponse<List<GroupUserDto>>> GetGroupsByUserIdAsync(int userId)
@@ -163,7 +163,7 @@ namespace SolaERP.Application.Services
             if (dto != null)
                 return ApiResponse<List<GroupUserDto>>.Success(dto, 200);
             else
-                return ApiResponse<List<GroupUserDto>>.Fail("Group User list is empty", 400);
+                return ApiResponse<List<GroupUserDto>>.Fail("Group User list is empty", 404);
         }
 
         public async Task<ApiResponse<List<GroupsDto>>> GetUserGroupsWithoutCurrents(int id)
@@ -274,13 +274,13 @@ namespace SolaERP.Application.Services
                 return ApiResponse<bool>.Fail("Data can not be saved", 400);
         }
 
-        public async Task<ApiResponse<bool>> UpdateEmailNotficationAsync(GroupEmailNotfication model)
+        public async Task<ApiResponse<bool>> UpdateEmailNotificationAsync(GroupEmailNotification model)
         {
             var result = await _groupRepository.UpdateEmailNotficationAsync(model);
             await _unitOfWork.SaveChangesAsync();
             return result ?
                             ApiResponse<bool>.Success(204)
-                          : ApiResponse<bool>.Fail($"Something went wrong. The email notification was not updated.", 500);
+                          : ApiResponse<bool>.Fail($"Something went wrong. The email notification was not updated.", 400);
         }
 
         /// <summary>
