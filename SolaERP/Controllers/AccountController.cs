@@ -55,7 +55,9 @@ namespace SolaERP.Controllers
             if (signInResult.Succeeded)
             {
                 var newtoken = Guid.NewGuid();
-                await _userService.UpdateUserIdentifierAsync(user.UserToken.ToString(), newtoken);
+                var checkToken = CheckTokensRecursively(newtoken);
+
+                await _userService.UpdateUserIdentifierAsync(user.UserToken.ToString(), await checkToken);
 
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(
                     new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(1, userdto), UserIdentifier = newtoken.ToString() }, 200));
@@ -65,6 +67,22 @@ namespace SolaERP.Controllers
             return CreateActionResult(ApiResponse<bool>.Fail("email", "Email or password is incorrect", 422));
         }
 
+        async Task<Guid> CheckTokensRecursively(Guid currentToken)
+        {
+            bool isValid = await _userService.CheckTokenAsync(currentToken);
+
+            if (isValid)
+            {
+                // If the token is valid, recursively call this method again with the new token.
+                var newToken = Guid.NewGuid();
+                return await CheckTokensRecursively(newToken);
+            }
+            else
+            {
+                // If the token is not valid, return it.
+                return currentToken;
+            }
+        }
         /// <summary>
         /// Creates a user with given input
         /// </summary>
@@ -75,7 +93,9 @@ namespace SolaERP.Controllers
 
             if (user is null)
             {
-                dto.UserToken = Guid.NewGuid();
+                var newtoken = Guid.NewGuid();
+                var checkToken = CheckTokensRecursively(newtoken);
+                dto.UserToken = await checkToken;
                 await _userService.UserRegisterAsync(dto);
 
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto), UserIdentifier = dto.UserToken.ToString() }, 200));

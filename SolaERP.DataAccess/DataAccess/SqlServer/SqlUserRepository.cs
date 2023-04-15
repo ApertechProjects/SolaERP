@@ -5,7 +5,6 @@ using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Entities.User;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 
@@ -459,15 +458,19 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<bool> CheckTokenAsync(string authToken)
+        public async Task<bool> CheckTokenAsync(Guid authToken)
         {
-            string query = "SET NOCOUNT OFF Exec SP_CheckToken @UserToken";
+            string query = "SET NOCOUNT OFF select [dbo].[SF_CheckToken1] (@UserToken) as 'ReturnInfo'";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = query;
                 command.Parameters.AddWithValue(command, "@UserToken", authToken);
-                var value = await command.ExecuteNonQueryAsync();
-                return value > 0;
+                using var reader = await command.ExecuteReaderAsync();
+                if (reader.Read())
+                {
+                    return reader.Get<bool>("ReturnInfo");
+                }
+                return false;
             }
         }
 

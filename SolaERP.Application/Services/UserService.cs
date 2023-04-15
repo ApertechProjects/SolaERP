@@ -368,7 +368,7 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(result ? true : false, 200);
         }
 
-        public async Task<bool> CheckTokenAsync(string authToken)
+        public async Task<bool> CheckTokenAsync(Guid authToken)
         {
             var check = await _userRepository.CheckTokenAsync(authToken);
             if (check) return true;
