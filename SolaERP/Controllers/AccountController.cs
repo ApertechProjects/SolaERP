@@ -47,7 +47,7 @@ namespace SolaERP.Controllers
         {
             var user = await _userManager.FindByNameAsync(dto.Email);
             if (user == null)
-                return CreateActionResult(ApiResponse<bool>.Fail("user", $" {dto.Email} not found", 422));
+                return CreateActionResult(ApiResponse<bool>.Fail("email", $" {dto.Email} not found", 422));
 
             var userdto = _mapper.Map<UserRegisterModel>(user);
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);

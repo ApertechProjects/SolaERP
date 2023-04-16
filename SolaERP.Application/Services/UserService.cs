@@ -19,17 +19,21 @@ namespace SolaERP.Application.Services
         private readonly IMailService _mailService;
         private readonly IFileService _fileService;
         private readonly IMapper _mapper;
+        private readonly ITokenHandler _tokenHandler;
+
         public UserService(IUserRepository userRepository,
                            IUnitOfWork unitOfWork,
                            IMapper mapper,
                            IMailService mailService,
-                           IFileService fileService)
+                           IFileService fileService,
+                           ITokenHandler tokenHandler)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _mailService = mailService;
             _mapper = mapper;
             _fileService = fileService;
+            _tokenHandler = tokenHandler;
         }
 
         public async Task AddAsync(UserDto model)
@@ -226,6 +230,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<List<UserMainDto>>> GetUserWFAAsync(string authToken, UserGetModel model)
         {
+            //_tokenHandler.DecodeJwtToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiMTQzMCIsImVtYWlsIjoiaHVseWEuZ2FyaWJsaUBhcGVydGVjaC5uZXQiLCJuYW1laWQiOiIxNDMwIiwibmJmIjoxNjgxNTcxMDAxLCJleHAiOjE2ODE2NTc0MDEsImlhdCI6MTY4MTU3MTAwMX0.RGYxxAJi0lH78i6J8CptuE4p8-s1e5wsSG5yuh7tBJo");
             int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
             var users = await _userRepository.GetUserWFAAsync(userId, model);
             var dto = _mapper.Map<List<UserMainDto>>(users);

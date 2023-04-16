@@ -2,7 +2,6 @@
 using Microsoft.IdentityModel.Tokens;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Auth;
-using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -18,6 +17,26 @@ namespace SolaERP.Application.Services
         public JwtTokenHandler(IConfiguration configuration)
         {
             _configuration = configuration;
+        }
+
+        public void DecodeJwtToken(string jwtToken)
+        {
+            // decode JWT token
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwt = tokenHandler.ReadJwtToken(jwtToken);
+
+            // access claims
+            var nameIdClaim = jwt.Claims.FirstOrDefault(c => c.Type == "nameid");
+
+            if (nameIdClaim != null)
+            {
+                string nameIdValue = nameIdClaim.Value;
+                // use nameIdValue as needed
+            }
+            else
+            {
+                // nameid claim not found in token
+            }
         }
 
         public async Task<Token> GenerateJwtTokenAsync(int minutes, UserRegisterModel user)
@@ -56,7 +75,7 @@ namespace SolaERP.Application.Services
             {
                 var value = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name,user.UserId.ToString()),
+                    new Claim(ClaimTypes.Name,user.FullName.ToString()),
                     new Claim(ClaimTypes.Email,user.Email),
                     new Claim(ClaimTypes.NameIdentifier,user.UserId.ToString())
                 };

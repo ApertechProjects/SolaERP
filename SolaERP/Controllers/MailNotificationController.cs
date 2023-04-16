@@ -9,11 +9,11 @@ namespace SolaERP.API.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class MailNotficationController : CustomBaseController
+    public class MailNotificationController : CustomBaseController
     {
         private readonly IMediator _mediator;
 
-        public MailNotficationController(IMediator mediator)
+        public MailNotificationController(IMediator mediator)
         {
             _mediator = mediator;
         }
