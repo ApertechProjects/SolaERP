@@ -2,25 +2,25 @@
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.UnitOfWork;
 
-namespace SolaERP.Infrastructure.Features.Commands.EmailNotfications
+namespace SolaERP.Infrastructure.Features.Commands.EmailNotifications
 {
-    public class UpdateEmaliNotficationCommandHandler : IRequestHandler<UpdateEmailNotficationRequest, bool>
+    public class UpdateEmaliNotificationCommandHandler : IRequestHandler<UpdateEmailNotificationRequest, bool>
     {
         private readonly IUnitOfWork _unitofWork;
-        private readonly IEmailNotficationRepository _repository;
+        private readonly IEmailNotificationRepository _repository;
 
-        public UpdateEmaliNotficationCommandHandler(IEmailNotficationRepository repository, IUnitOfWork unitofWork)
+        public UpdateEmaliNotificationCommandHandler(IEmailNotificationRepository repository, IUnitOfWork unitofWork)
         {
             _repository = repository;
             _unitofWork = unitofWork;
         }
 
-        public async Task<bool> Handle(UpdateEmailNotficationRequest request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(UpdateEmailNotificationRequest request, CancellationToken cancellationToken)
         {
             var result = await _repository.UpdateAsync(new()
             {
-                EmailNotificationId = request.EmailNotficationId,
-                Notification = request.Notfication,
+                EmailNotificationId = request.EmailNotificationId,
+                Notification = request.Notification,
                 Description = request.Description,
                 Check = false
             });

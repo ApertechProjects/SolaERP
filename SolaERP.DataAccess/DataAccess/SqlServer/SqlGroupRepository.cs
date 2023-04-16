@@ -295,7 +295,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<GroupEmailNotification>> GetGroupEmailNotficationsAsync(int groupId)
+        public async Task<List<GroupEmailNotification>> GetGroupEmailNotificationsAsync(int groupId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -312,9 +312,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> CreateEmailNotficationAsync(CreateGroupEmailNotificationModel entity)
+        public async Task<bool> CreateEmailNotificationAsync(CreateGroupEmailNotificationModel entity)
         {
-            return await SaveEmailNotficationAsync(new()
+            return await SaveEmailNotificationAsync(new()
             {
                 GroupEmailNotificationId = 0,
                 GroupId = entity.GroupId,
@@ -322,17 +322,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             });
         }
 
-        public async Task<bool> UpdateEmailNotficationAsync(GroupEmailNotification entity)
+        public async Task<bool> UpdateEmailNotificationAsync(GroupEmailNotification entity)
         {
-            return await SaveEmailNotficationAsync(entity);
+            return await SaveEmailNotificationAsync(entity);
         }
 
-        public async Task<bool> DeleteEmailNotficationAsync(int groupEmailNotficationId)
+        public async Task<bool> DeleteEmailNotificationAsync(int groupEmailNotificationId)
         {
-            return await SaveEmailNotficationAsync(new() { GroupEmailNotificationId = groupEmailNotficationId });
+            return await SaveEmailNotificationAsync(new() { GroupEmailNotificationId = groupEmailNotificationId });
         }
 
-        protected override async Task<bool> SaveEmailNotficationAsync(GroupEmailNotification entity)
+        protected override async Task<bool> SaveEmailNotificationAsync(GroupEmailNotification entity)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

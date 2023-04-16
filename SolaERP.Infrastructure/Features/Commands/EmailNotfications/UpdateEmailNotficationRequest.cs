@@ -1,11 +1,11 @@
 ﻿using MediatR;
 
-namespace SolaERP.Infrastructure.Features.Commands.EmailNotfications
+namespace SolaERP.Infrastructure.Features.Commands.EmailNotifications
 {
-    public class UpdateEmailNotficationRequest : IRequest<bool>
+    public class UpdateEmailNotificationRequest : IRequest<bool>
     {
-        public int EmailNotficationId { get; set; }
-        public string Notfication { get; set; }
+        public int EmailNotificationId { get; set; }
+        public string Notification { get; set; }
         public string Description { get; set; }
     }
 }

@@ -2,11 +2,11 @@
 
 namespace SolaERP.Infrastructure.Contracts.Repositories
 {
-    public interface IEmailNotficationRepository
+    public interface IEmailNotificationRepository
     {
-        Task<List<EmailNotfication>> GetAllEmailNotficationsAsync();
-        Task<bool> CreateAsync(EmailNotfication model);
-        Task<bool> UpdateAsync(EmailNotfication model);
+        Task<List<EmailNotification>> GetAllEmailNotificationsAsync();
+        Task<bool> CreateAsync(EmailNotification model);
+        Task<bool> UpdateAsync(EmailNotification model);
         Task<bool> DeleteAsync(int id);
 
     }

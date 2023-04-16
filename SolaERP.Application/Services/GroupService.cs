@@ -54,7 +54,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<bool>> CreateEmailNotificationAsync(CreateGroupEmailNotificationModel model)
         {
-            var result = await _groupRepository.CreateEmailNotficationAsync(model);
+            var result = await _groupRepository.CreateEmailNotificationAsync(model);
             await _unitOfWork.SaveChangesAsync();
 
             return result ? ApiResponse<bool>.Success(204)
@@ -77,14 +77,14 @@ namespace SolaERP.Application.Services
             else return ApiResponse<bool>.Fail("Data can not be deleted", 400);
         }
 
-        public async Task<ApiResponse<bool>> DeleteEmailNotficationAsync(int groupEmailNotficationId)
+        public async Task<ApiResponse<bool>> DeleteEmailNotificationAsync(int groupEmailNotificationId)
         {
-            var result = await _groupRepository.DeleteEmailNotficationAsync(groupEmailNotficationId);
+            var result = await _groupRepository.DeleteEmailNotificationAsync(groupEmailNotificationId);
             await _unitOfWork.SaveChangesAsync();
 
             return result ?
                             ApiResponse<bool>.Success(204)
-                          : ApiResponse<bool>.Fail($"The email notification with Id: {groupEmailNotficationId}  was not deleted.", 400);
+                          : ApiResponse<bool>.Fail($"The email notification with Id: {groupEmailNotificationId}  was not deleted.", 400);
         }
 
         public async Task<ApiResponse<bool>> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId)
@@ -140,9 +140,9 @@ namespace SolaERP.Application.Services
                 return ApiResponse<List<GroupBuyerDto>>.Fail("Buyer list is empty", 404);
         }
 
-        public async Task<ApiResponse<List<GroupEmailNotification>>> GetGroupEmailNotficationsAsync(int groupId)
+        public async Task<ApiResponse<List<GroupEmailNotification>>> GetGroupEmailNotificationsAsync(int groupId)
         {
-            var result = await _groupRepository.GetGroupEmailNotficationsAsync(groupId);
+            var result = await _groupRepository.GetGroupEmailNotificationsAsync(groupId);
             return ApiResponse<List<GroupEmailNotification>>.Success(result, 200);
         }
 
@@ -276,7 +276,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<bool>> UpdateEmailNotificationAsync(GroupEmailNotification model)
         {
-            var result = await _groupRepository.UpdateEmailNotficationAsync(model);
+            var result = await _groupRepository.UpdateEmailNotificationAsync(model);
             await _unitOfWork.SaveChangesAsync();
             return result ?
                             ApiResponse<bool>.Success(204)

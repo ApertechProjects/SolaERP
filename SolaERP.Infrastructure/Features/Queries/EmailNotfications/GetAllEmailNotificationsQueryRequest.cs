@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SolaERP.Infrastructure.Features.Queries.EmailNotfications
+namespace SolaERP.Infrastructure.Features.Queries.EmailNotifications
 {
     public class GetAllEmailNotificationsQueryRequest : IRequest<GetAllEmailNotificationsQueryResponse>
     {

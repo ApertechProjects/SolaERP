@@ -1,8 +1,8 @@
 ﻿using MediatR;
 
-namespace SolaERP.Infrastructure.Features.Commands.EmailNotfications
+namespace SolaERP.Infrastructure.Features.Commands.EmailNotifications
 {
-    public class DeleteEmailNotficationRequest : IRequest<bool>
+    public class DeleteEmailNotificationRequest : IRequest<bool>
     {
         public int Id { get; set; }
     }

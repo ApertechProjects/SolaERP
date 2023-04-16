@@ -91,7 +91,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<ILayoutRepository, SqlLayoutRepository>();
             builder.Services.AddScoped<ILanguageRepository, SqlLanguageRepository>();
             builder.Services.AddScoped<IVendorRepository, SqlVendorRepository>();
-            builder.Services.AddScoped<IEmailNotficationRepository, SqlEmailNotficationRepository>();
+            builder.Services.AddScoped<IEmailNotificationRepository, SqlEmailNotificationRepository>();
         }
         public static void UseValidationExtension(this WebApplicationBuilder builder)
         {

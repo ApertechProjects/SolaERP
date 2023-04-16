@@ -2,14 +2,14 @@
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.UnitOfWork;
 
-namespace SolaERP.Infrastructure.Features.Queries.EmailNotfications
+namespace SolaERP.Infrastructure.Features.Queries.EmailNotifications
 {
     public class GetAllEmailNotificationsQueryHandler : IRequestHandler<GetAllEmailNotificationsQueryRequest, GetAllEmailNotificationsQueryResponse>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IEmailNotficationRepository _repository;
+        private readonly IEmailNotificationRepository _repository;
 
-        public GetAllEmailNotificationsQueryHandler(IUnitOfWork unitOfWork, IEmailNotficationRepository repository)
+        public GetAllEmailNotificationsQueryHandler(IUnitOfWork unitOfWork, IEmailNotificationRepository repository)
         {
             _unitOfWork = unitOfWork;
             _repository = repository;
@@ -17,14 +17,14 @@ namespace SolaERP.Infrastructure.Features.Queries.EmailNotfications
 
         public async Task<GetAllEmailNotificationsQueryResponse> Handle(GetAllEmailNotificationsQueryRequest request, CancellationToken cancellationToken)
         {
-            var emails = await _repository.GetAllEmailNotficationsAsync();
+            var emails = await _repository.GetAllEmailNotificationsAsync();
 
             if (emails.Count == 0)
                 emails = null;
 
             return new()
             {
-                EmailNotfications = emails,
+                EmailNotifications = emails,
             };
         }
     }

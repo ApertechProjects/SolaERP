@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Controllers;
 using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Features.Commands.EmailNotfications;
-using SolaERP.Infrastructure.Features.Queries.EmailNotfications;
+using SolaERP.Infrastructure.Features.Commands.EmailNotifications;
+using SolaERP.Infrastructure.Features.Queries.EmailNotifications;
 
 namespace SolaERP.API.Controllers
 {
@@ -23,25 +23,25 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(ApiResponse<GetAllEmailNotificationsQueryResponse>.Success(await _mediator.Send(request), 200));
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateEmailNotficationCommandRequest request)
+        public async Task<IActionResult> Create(CreateEmailNotificationCommandRequest request)
         {
             var result = await _mediator.Send(request);
-            return result ? Ok(ApiResponse<bool>.Success(204)) : BadRequest(ApiResponse<bool>.Fail("Something went wrong notfication is not created", 500));
+            return result ? Ok(ApiResponse<bool>.Success(204)) : BadRequest(ApiResponse<bool>.Fail("Something went wrong Notification is not created", 500));
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateEmailNotficationRequest request)
+        public async Task<IActionResult> Update(UpdateEmailNotificationRequest request)
         {
             var result = await _mediator.Send(request);
-            return result ? Ok(ApiResponse<bool>.Success(204)) : BadRequest(ApiResponse<bool>.Fail("Something went wrong notfication is not updated", 500));
+            return result ? Ok(ApiResponse<bool>.Success(204)) : BadRequest(ApiResponse<bool>.Fail("Something went wrong Notification is not updated", 500));
         }
 
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(DeleteEmailNotficationRequest request)
+        public async Task<IActionResult> Delete(DeleteEmailNotificationRequest request)
         {
             var result = await _mediator.Send(request);
-            return result ? Ok(ApiResponse<bool>.Success(204)) : BadRequest(ApiResponse<bool>.Fail("Something went wrong notfication is not deleted", 500));
+            return result ? Ok(ApiResponse<bool>.Success(204)) : BadRequest(ApiResponse<bool>.Fail("Something went wrong Notification is not deleted", 500));
         }
 
     }

@@ -2,20 +2,20 @@
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.UnitOfWork;
 
-namespace SolaERP.Infrastructure.Features.Commands.EmailNotfications
+namespace SolaERP.Infrastructure.Features.Commands.EmailNotifications
 {
-    public class DeleteEmailNotficationCommandHandler : IRequestHandler<DeleteEmailNotficationRequest, bool>
+    public class DeleteEmailNotificationCommandHandler : IRequestHandler<DeleteEmailNotificationRequest, bool>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IEmailNotficationRepository _repository;
+        private readonly IEmailNotificationRepository _repository;
 
-        public DeleteEmailNotficationCommandHandler(IEmailNotficationRepository repository, IUnitOfWork unitOfWork)
+        public DeleteEmailNotificationCommandHandler(IEmailNotificationRepository repository, IUnitOfWork unitOfWork)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> Handle(DeleteEmailNotficationRequest request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DeleteEmailNotificationRequest request, CancellationToken cancellationToken)
         {
             var isDeleted = await _repository.DeleteAsync(request.Id);
 

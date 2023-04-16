@@ -74,13 +74,13 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> AvailableGroupsForUser(int userId)
           => CreateActionResult(await _groupService.GetUserGroupsWithoutCurrents(userId));
 
-        [HttpDelete("{groupEmailNotficationId}")]
-        public async Task<IActionResult> DeleteEmailNotfication(int groupEmailNotficationId)
-            => CreateActionResult(await _groupService.DeleteEmailNotficationAsync(groupEmailNotficationId));
+        [HttpDelete("{groupEmailNotificationId}")]
+        public async Task<IActionResult> DeleteEmailNotification(int groupEmailNotificationId)
+            => CreateActionResult(await _groupService.DeleteEmailNotificationAsync(groupEmailNotificationId));
 
         [HttpGet("{groupid}")]
-        public async Task<IActionResult> GetEmailNotfications(int groupid)
-            => CreateActionResult(await _groupService.GetGroupEmailNotficationsAsync(groupid));
+        public async Task<IActionResult> GetEmailNotifications(int groupid)
+            => CreateActionResult(await _groupService.GetGroupEmailNotificationsAsync(groupid));
 
         [HttpPost]
         public async Task<IActionResult> CreateEmailNotification(CreateGroupEmailNotificationModel model)

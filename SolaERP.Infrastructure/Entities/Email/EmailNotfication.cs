@@ -1,6 +1,6 @@
 ﻿namespace SolaERP.Infrastructure.Entities.Email
 {
-    public class EmailNotfication : BaseEntity
+    public class EmailNotification : BaseEntity
     {
         public bool Check { get; set; }
         public int EmailNotificationId { get; set; }

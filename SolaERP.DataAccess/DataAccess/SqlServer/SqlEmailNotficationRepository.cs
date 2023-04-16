@@ -6,16 +6,16 @@ using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlEmailNotficationRepository : IEmailNotficationRepository
+    public class SqlEmailNotificationRepository : IEmailNotificationRepository
     {
         private IUnitOfWork _unitOfWork;
 
-        public SqlEmailNotficationRepository(IUnitOfWork unitOfWork)
+        public SqlEmailNotificationRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> CreateAsync(EmailNotfication model)
+        public async Task<bool> CreateAsync(EmailNotification model)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = "SET NOCOUNT OFF exec SP_EmailNotification_IUD @EmailNotId,@Notification,@Description";
@@ -27,20 +27,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return await command.ExecuteNonQueryAsync() > 0;
         }
 
-        public async Task<List<EmailNotfication>> GetAllEmailNotficationsAsync()
+        public async Task<List<EmailNotification>> GetAllEmailNotificationsAsync()
         {
-            List<EmailNotfication> emailNotfications = new();
+            List<EmailNotification> emailNotifications = new();
 
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = "exec SP_EmailNotification_Load";
 
             using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync()) emailNotfications.Add(reader.GetByEntityStructure<EmailNotfication>());
+            while (await reader.ReadAsync()) emailNotifications.Add(reader.GetByEntityStructure<EmailNotification>());
 
-            return emailNotfications;
+            return emailNotifications;
         }
 
-        public async Task<bool> UpdateAsync(EmailNotfication model)
+        public async Task<bool> UpdateAsync(EmailNotification model)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = "SET NOCOUNT OFF exec SP_EmailNotification_IUD @EmailNotId,@Notification,@Description";

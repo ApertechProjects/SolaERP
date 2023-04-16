@@ -1,9 +1,9 @@
 ﻿using SolaERP.Infrastructure.Entities.Email;
 
-namespace SolaERP.Infrastructure.Features.Queries.EmailNotfications
+namespace SolaERP.Infrastructure.Features.Queries.EmailNotifications
 {
     public class GetAllEmailNotificationsQueryResponse
     {
-        public ICollection<EmailNotfication> EmailNotfications { get; set; }
+        public ICollection<EmailNotification> EmailNotifications { get; set; }
     }
 }
