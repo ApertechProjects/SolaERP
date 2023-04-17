@@ -226,11 +226,10 @@ namespace SolaERP.Application.Services
             return _userRepository.GetUserNameByTokenAsync(name);
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserWFAAsync(string name, UserGetModel model)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserWFAAsync(string name, int userStatus, int userType)
         {
-            //_tokenHandler.DecodeJwtToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiMTQzMCIsImVtYWlsIjoiaHVseWEuZ2FyaWJsaUBhcGVydGVjaC5uZXQiLCJuYW1laWQiOiIxNDMwIiwibmJmIjoxNjgxNTcxMDAxLCJleHAiOjE2ODE2NTc0MDEsImlhdCI6MTY4MTU3MTAwMX0.RGYxxAJi0lH78i6J8CptuE4p8-s1e5wsSG5yuh7tBJo");
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
-            var users = await _userRepository.GetUserWFAAsync(userId, model);
+            var users = await _userRepository.GetUserWFAAsync(userId, userStatus, userType);
             var dto = _mapper.Map<List<UserMainDto>>(users);
 
             for (int i = 0; i < dto.Count; i++)
@@ -248,10 +247,10 @@ namespace SolaERP.Application.Services
 
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string name, UserGetModel model)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string name, int userStatus, int userType)
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
-            var users = await _userRepository.GetUserAllAsync(userId, model);
+            var users = await _userRepository.GetUserAllAsync(userId, userStatus, userType);
             var dto = _mapper.Map<List<UserMainDto>>(users);
 
             for (int i = 0; i < dto.Count; i++)

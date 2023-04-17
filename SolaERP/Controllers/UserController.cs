@@ -49,15 +49,15 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetActiveUsersWithoutCurrentUserAsync()
           => CreateActionResult(await _userService.GetActiveUsersWithoutCurrentUserAsync(User.Identity.Name));
 
-        [HttpPost]
-        public async Task<IActionResult> GetUserWFAAsync(UserGetModel model)
+        [HttpGet]
+        public async Task<IActionResult> GetUserWFAAsync(int userStatus, int userType)
         {
-            return CreateActionResult(await _userService.GetUserWFAAsync(User.Identity.Name, model));
+            return CreateActionResult(await _userService.GetUserWFAAsync(User.Identity.Name, userStatus, userType));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> GetUserAllAsync(UserGetModel model)
-            => CreateActionResult(await _userService.GetUserAllAsync(User.Identity.Name, model));
+        [HttpGet]
+        public async Task<IActionResult> GetUserAllAsync(int userStatus, int userType)
+            => CreateActionResult(await _userService.GetUserAllAsync(User.Identity.Name, userStatus, userType));
 
         [HttpGet]
         public async Task<IActionResult> GetUserCompanyAsync([FromQuery] int userStatus)

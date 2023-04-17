@@ -19,8 +19,8 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<bool> ResetUserPasswordAsync(string email, string passwordHash);
         Task<List<ActiveUser>> GetActiveUsersAsync();
         Task<List<ActiveUser>> GetActiveUsersWithoutCurrentUserAsync(int userId);
-        Task<List<UserMain>> GetUserWFAAsync(int userId, UserGetModel model);
-        Task<List<UserMain>> GetUserAllAsync(int userId, UserGetModel model);
+        Task<List<UserMain>> GetUserWFAAsync(int userId, int userStatus, int userType);
+        Task<List<UserMain>> GetUserAllAsync(int userId, int userStatus, int userType);
         Task<List<UserMain>> GetUserCompanyAsync(int userId, int userStatus);
         Task<List<UserMain>> GetUserVendorAsync(int userId, int userStatus);
         Task<bool> UserChangeStatusAsync(int userId, UserChangeStatusModel model);
