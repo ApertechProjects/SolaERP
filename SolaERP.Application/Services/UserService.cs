@@ -314,7 +314,6 @@ namespace SolaERP.Application.Services
                 return ApiResponse<bool>.Fail("User not found", 404);
 
             List<string> failedMailList = new List<string>();
-            string userName = await _userRepository.GetUserNameByTokenAsync(name);
 
             var user = await _userRepository.UserChangeStatusAsync(userId, model);
 

@@ -20,13 +20,13 @@ namespace SolaERP.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> GetUserByToken()
-            => CreateActionResult(await _userService.GetUserByTokenAsync(User.Identity.Name));
+        //[HttpGet]
+        //public async Task<IActionResult> GetUserByToken()
+        //    => CreateActionResult(await _userService.GetUserByTokenAsync(User.Identity.Name));
 
-        [HttpGet]
-        public async Task<string> GetUserNameByToken()
-          => await _userService.GetUserNameByTokenAsync(User.Identity.Name);
+        //[HttpGet]
+        //public async Task<string> GetUserNameByToken()
+        //  => await _userService.GetUserNameByTokenAsync(User.Identity.Name);
 
 
         /// <summary>
