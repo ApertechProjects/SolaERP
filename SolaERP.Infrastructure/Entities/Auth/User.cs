@@ -43,5 +43,6 @@ namespace SolaERP.Infrastructure.Entities.Auth
         public string ERPUser { get; set; }
         public string UserPhoto { get; set; }
         public string SignaturePhoto { get; set; }
+        public bool InActive { get; set; }
     }
 }
