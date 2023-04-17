@@ -199,7 +199,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<bool>> SaveGroupAsync(string finderToken, GroupSaveModel model)
         {
-            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            var userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
             model.GroupId = await _groupRepository.AddUpdateOrDeleteGroupAsync(userId, new() { GroupId = model.GroupId, GroupName = model.GroupName, Description = model.Description });
 
             if (model.Users != null)

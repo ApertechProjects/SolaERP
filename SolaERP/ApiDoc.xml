@@ -68,7 +68,7 @@
             Gets all Business unit List
              </summary>
         </member>
-        <member name="M:SolaERP.Controllers.BusinessUnitController.GetBusinessUnitListByUser(System.String)">
+        <member name="M:SolaERP.Controllers.BusinessUnitController.GetBusinessUnitListByUser">
              <summary>
             Gets all Business units for User
              </summary>
@@ -82,7 +82,7 @@
             <remarks>Returns All Business Unit List which available for given groupId</remarks>
             <param name="groupId">groupd id for check</param>
         </member>
-        <member name="M:SolaERP.Controllers.BuyerController.GetBuyersByTokenAsync(System.String,System.String)">
+        <member name="M:SolaERP.Controllers.BuyerController.GetBuyersByTokenAsync(System.String)">
              <summary>
             Get a list of buyers for the current user and business Unit Code
              </summary>
@@ -90,7 +90,7 @@
             <param name="authToken">The token used to authenticate the user who performs the operation</param>
             <param name="businessUnitCode">The unique identifier of the business unit for which to retrieve account codes.</param>
         </member>
-        <member name="M:SolaERP.Controllers.CurrencyController.GetCurrencyCodesByBusinessUnitCode(System.String,System.String)">
+        <member name="M:SolaERP.Controllers.CurrencyController.GetCurrencyCodesByBusinessUnitCode(System.String)">
              <summary>
             Retrieves a list of all available currency codes.
              </summary>
@@ -98,7 +98,7 @@
             <param name="authToken">The token used to authenticate the user who performs the operation</param>
             <param name="businessUnitCode">The unique identifier of the business unit for which to retrieve currency codes.</param>
         </member>
-        <member name="M:SolaERP.Controllers.DueDiligenceController.GetDue(System.String,System.Int32)">
+        <member name="M:SolaERP.Controllers.DueDiligenceController.GetDue(System.Int32)">
              <summary>
             Retrieves all due diligence tasks for a given vendor.
              </summary>

@@ -28,8 +28,8 @@ namespace SolaERP.Controllers
         /// <remarks>Returns all business unit list which available for given User. (authToken = userIdentifier)</remarks>
         /// <param name="authToken">user identifier token</param>
         [HttpGet]
-        public async Task<IActionResult> GetBusinessUnitListByUser([FromHeader] string authToken)
-            => CreateActionResult(await _businessUnitService.GetBusinessUnitListByUserToken(authToken));
+        public async Task<IActionResult> GetBusinessUnitListByUser()
+            => CreateActionResult(await _businessUnitService.GetBusinessUnitListByUserToken(User.Identity.Name));
 
         /// <summary>
         /// Gets all Business units for Group

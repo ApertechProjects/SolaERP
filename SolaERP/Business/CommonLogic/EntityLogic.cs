@@ -50,7 +50,7 @@ namespace SolaERP.Business.CommonLogic
         {
             if (await UserIsAuthorized(token))
             {
-                int userId = await _userRepository.GetUserIdByTokenAsync(token);
+                int userId = await _userRepository.GetIdentityNameAsIntAsync(token);
                 var vendorList = new VendorListWrapper
                 {
                     WFAVendor = (await GetData.FromQuery($"EXEC dbo.SP_VendorWFA {userId},{BU}", ConfHelper.DevelopmentUrl)).ConvertToClassListModel<VendorWFA>(),
@@ -943,7 +943,7 @@ namespace SolaERP.Business.CommonLogic
 
         public async Task<ApiResult> GetActiveVendors(string authToken, int businessUnitId)
         {
-            int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(authToken);
             if (await UserIsAuthorized(authToken))
             {
                 var data = await GetData.FromQuery($"exec SP_VendorList {userId},{businessUnitId}"

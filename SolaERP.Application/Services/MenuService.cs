@@ -24,7 +24,7 @@ namespace SolaERP.Application.Services
         public async Task<ApiResponse<List<ParentMenuDto>>> GetUserMenusWithChildrenAsync(string finderToken)
         {
             var menusWithPrivilages = await _menuRepository.GetUserMenuWithPrivilegesAsync(
-                await _userRepository.GetUserIdByTokenAsync(finderToken));
+                await _userRepository.GetIdentityNameAsIntAsync(finderToken));
 
             var parentMenusWithPrivilages = menusWithPrivilages.Where(m => m.ParentId == 0).ToList();//For getting ParentMenus
 
@@ -64,7 +64,7 @@ namespace SolaERP.Application.Services
         }
         public async Task<ApiResponse<List<MenuWithPrivilagesDto>>> GetUserMenusWithPrivilegesAsync(string finderToken)
         {
-            var menus = await _menuRepository.GetUserMenuWithPrivilegesAsync(await _userRepository.GetUserIdByTokenAsync(finderToken));
+            var menus = await _menuRepository.GetUserMenuWithPrivilegesAsync(await _userRepository.GetIdentityNameAsIntAsync(finderToken));
             var menusDto = _mapper.Map<List<MenuWithPrivilagesDto>>(menus);
 
             if (menusDto != null)
@@ -74,7 +74,7 @@ namespace SolaERP.Application.Services
         }
         public async Task<ApiResponse<GroupMenuResponseDto>> GetGroupMenuWithPrivilegeListByGroupIdAsync(string finderToken, int groupId)
         {
-            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            var userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
             var menus = await _menuRepository.GetUserMenuWithPrivilegesAsync(userId);
 
             GroupMenuResponseDto response = new() { Menus = _mapper.Map<List<MenuWithPrivilagesDto>>(menus) };
@@ -105,7 +105,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<AdditionalPrivilegeAccessDto>> GetAdditionalPrivilegeAccessAsync(string authToken)
         {
-            int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(authToken);
             var users = await _menuRepository.GetAdditionalPrivilegeAccessAsync(userId);
             var dto = _mapper.Map<AdditionalPrivilegeAccessDto>(users);
             return ApiResponse<AdditionalPrivilegeAccessDto>.Success(dto, 200);

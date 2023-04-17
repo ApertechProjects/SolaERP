@@ -26,7 +26,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<bool>> DeleteLayoutAsync(string finderToken, string key)
         {
-            int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
 
             var response = await _layoutRepository.DeleteLayoutAsync(userId, key);
             _unitOfWork.SaveChangesAsync();
@@ -36,7 +36,7 @@ namespace SolaERP.Application.Services
         public async Task<ApiResponse<LayoutDto>> GetUserLayoutAsync(string finderToken, string layoutKey)
         {
             var entity = await _layoutRepository.GetUserLayoutAsync(await
-                 _userRepository.GetUserIdByTokenAsync(finderToken), layoutKey);
+                 _userRepository.GetIdentityNameAsIntAsync(finderToken), layoutKey);
 
             var responseContent = _mapper.Map<LayoutDto>(entity);
             return responseContent is not null ? ApiResponse<LayoutDto>.Success(responseContent, 200) : ApiResponse<LayoutDto>.Fail("Failed to load user layout", 400);
@@ -45,7 +45,7 @@ namespace SolaERP.Application.Services
         public async Task<ApiResponse<bool>> SaveLayoutAsync(string finderToken, LayoutDto layout)
         {
             var entity = _mapper.Map<Layout>(layout);
-            entity.UserId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            entity.UserId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
             var response = await _layoutRepository.SaveLayoutAsync(entity);
             await _unitOfWork.SaveChangesAsync();
             return response ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Fail("Failed to save user layout", 400);

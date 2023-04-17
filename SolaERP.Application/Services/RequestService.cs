@@ -66,7 +66,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<bool>> RequestMainChangeStatusAsync(string finderToken, RequestChangeStatusModel changeStatusParametersDtos)
         {
-            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            var userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
             if (changeStatusParametersDtos.RequestMainIds == null && changeStatusParametersDtos.RequestMainIds.Count == 0)
                 return ApiResponse<bool>.Fail("Request must be selected", 200);
 
@@ -105,7 +105,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<bool>> RequestSendToApproveAsync(string finderToken, int requestMainId)
         {
-            int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
             string userName = await _userRepository.GetUserNameByTokenAsync(finderToken);
             var result = await _requestMainRepository.SendRequestToApproveAsync(userId, requestMainId);
             await _unitOfWork.SaveChangesAsync();
@@ -119,7 +119,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<RequestCardMainDto>> GetRequestByRequestMainId(string authToken, int requestMainId)
         {
-            int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(authToken);
             var requestMain = await _requestMainRepository.GetRequesMainHeaderAsync(requestMainId, userId);
             requestMain.requestCardDetails = await _requestDetailRepository.GetRequestDetailsByMainIdAsync(requestMainId);
             var requestDto = _mapper.Map<RequestCardMainDto>(requestMain);
@@ -140,7 +140,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<List<RequestAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentModel requestParametersDto)
         {
-            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            var userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
             var mainRequest = await _requestMainRepository.GetApproveAmendmentRequestsAsync(userId, requestParametersDto);
             var mainRequestDto = _mapper.Map<List<RequestAmendmentDto>>(mainRequest);
 
@@ -153,7 +153,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<List<RequestApprovalInfoDto>>> GetRequestApprovalInfoAsync(string finderToken, int requestMainId)
         {
-            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            var userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
             var approvalInfo = await _requestMainRepository.GetRequestApprovalInfoAsync(requestMainId, userId);
             var approvalInfoResult = _mapper.Map<List<RequestApprovalInfoDto>>(approvalInfo);
 
@@ -163,7 +163,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<RequestMainDto>> GetRequestHeaderAsync(string finderToken, int requestMainId)
         {
-            var userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            var userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
             var requestHeader = await _requestMainRepository.GetRequesMainHeaderAsync(userId, requestMainId);
             var requestHeaderResult = _mapper.Map<RequestMainDto>(requestHeader);
 
@@ -182,7 +182,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<RequestSaveResultModel>> AddOrUpdateRequestAsync(string finderToken, RequestSaveModel model)
         {
-            int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
             RequestSaveResultModel resultModel = await _requestMainRepository.AddOrUpdateRequestAsync(userId, _mapper.Map<RequestMainSaveModel>(model));
 
             if (resultModel != null)
@@ -207,7 +207,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<bool>> DeleteRequestAsync(string authToken, int requestMainId)
         {
-            int userId = await _userRepository.GetUserIdByTokenAsync(authToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(authToken);
             int requestId = await _requestMainRepository.DeleteAsync(userId, requestMainId);
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(requestId);
@@ -223,7 +223,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<NoContentDto>> RequestDetailChangeStatusAsync(string finderToken, RequestDetailApproveModel model)
         {
-            int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
             if (model.RequestDetailIds == null && model.RequestDetailIds.Count == 0)
                 return ApiResponse<NoContentDto>.Fail("Request must be selected", 200);
 
@@ -244,7 +244,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(string finderToken, RequestWFAGetModel requestWFAGetParametersDto)
         {
-            int userId = await _userRepository.GetUserIdByTokenAsync(finderToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
             var mainreq = await _requestMainRepository.GetWaitingForApprovalsAsync(userId, requestWFAGetParametersDto);
 
             var mainRequestDto = _mapper.Map<List<RequestWFADto>>(mainreq);

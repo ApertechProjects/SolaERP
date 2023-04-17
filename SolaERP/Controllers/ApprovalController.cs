@@ -57,8 +57,8 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _procedureService.GetAllAsync());
 
         [HttpPost]
-        public async Task<IActionResult> ApprovalStageSaveAsync([FromHeader] string authToken, ApprovalStageSaveModel approvalStageSaveVM)
-            => CreateActionResult(await _approveStageMainService.SaveApproveStageMainAsync(authToken, approvalStageSaveVM));
+        public async Task<IActionResult> ApprovalStageSaveAsync(ApprovalStageSaveModel approvalStageSaveVM)
+            => CreateActionResult(await _approveStageMainService.SaveApproveStageMainAsync(User.Identity.Name, approvalStageSaveVM));
 
         [HttpGet]
         public async Task<IActionResult> GetApprovalStatusAsync()
@@ -72,8 +72,5 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> DeleteApproveStageAsync(int approveStageMainId)
             => CreateActionResult(await _approveStageMainService.DeleteApproveStageAsync(approveStageMainId));
 
-        //[HttpDelete("{approveRoleId}")]
-        //public async Task<IActionResult> DeleteApproveRoleAsync(int approveRoleId)
-        //    => CreateActionResult(await _approveRoleService.DeleteApproveRoleAsync(approveRoleId));
     }
 }

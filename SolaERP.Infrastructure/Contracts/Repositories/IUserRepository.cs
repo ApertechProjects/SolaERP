@@ -13,7 +13,7 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<User> GetUserByIdAsync(int userId);
         Task<User> GetUserByEmailCode(string token);
         Task<bool> SetUserEmailCode(string token, int id);
-        Task<int> GetUserIdByTokenAsync(string finderToken);
+        Task<int> GetIdentityNameAsIntAsync(string name);
         Task<string> GetUserNameByTokenAsync(string finderToken);
         Task<bool> UpdateUserTokenAsync(int userId, Guid token);
         Task<bool> ResetUserPasswordAsync(string email, string passwordHash);

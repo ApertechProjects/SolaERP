@@ -133,18 +133,9 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 return user;
             }
         }
-        public async Task<int> GetUserIdByTokenAsync(string finderToken)
+        public async Task<int> GetIdentityNameAsIntAsync(string name)
         {
-            int userId = 0;
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "SELECT ID FROM CONFIG.APPUSER WHERE USERTOKEN = @USERTOKEN";
-                command.Parameters.AddWithValue(command, "@USERTOKEN", finderToken == null ? DBNull.Value : finderToken);
-
-                using var reader = await command.ExecuteReaderAsync();
-                if (reader.Read())
-                    userId = reader.Get<int>("Id");
-            }
+            int userId = Convert.ToInt32(name);
             return userId;
         }
 

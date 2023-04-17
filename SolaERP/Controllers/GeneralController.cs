@@ -19,9 +19,9 @@ namespace SolaERP.Controllers
         public ConfHelper ConfHelper { get; }
 
         [HttpGet]
-        public async Task<ApiResult> GetBUList([FromHeader] string token)
+        public async Task<ApiResult> GetBUList()
         {
-            return await new EntityLogic(ConfHelper).GetBUList(token);
+            return await new EntityLogic(ConfHelper).GetBUList(User.Identity.Name);
         }
 
         [HttpGet("{groupId}")]

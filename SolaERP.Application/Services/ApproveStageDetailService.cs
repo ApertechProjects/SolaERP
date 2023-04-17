@@ -28,7 +28,7 @@ namespace SolaERP.Application.Services
 
         public async Task<int> AddAsync(string authToken, ApproveStagesDetailDto entity)
         {
-            var userId = await _userRepository.GetUserIdByTokenAsync(authToken);
+            var userId = await _userRepository.GetIdentityNameAsIntAsync(authToken);
             var model = _mapper.Map<ApproveStagesDetail>(entity);
             var approveStageDetail = await _approveStageDetailsRepository.SaveDetailsAsync(model);
             return 0;

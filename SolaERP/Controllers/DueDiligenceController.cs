@@ -23,9 +23,9 @@ namespace SolaERP.Controllers
         /// <remarks>The GetDue endpoint retrieves a list of all due diligence tasks for a given vendor, identified by the vendorId parameter.</remarks>
         ///<param name="token">The token used to authenticate the user who performs the operation</param>
         [HttpGet("{vendorId}")]
-        public async Task<ApiResult> GetDue([FromHeader] string token, int vendorId)
+        public async Task<ApiResult> GetDue(int vendorId)
         {
-            return await new EntityLogic(conf).GetDueDiligence(token, vendorId);
+            return await new EntityLogic(conf).GetDueDiligence(User.Identity.Name, vendorId);
         }
     }
 }

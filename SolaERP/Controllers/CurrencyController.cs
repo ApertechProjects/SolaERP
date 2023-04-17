@@ -22,7 +22,7 @@ namespace SolaERP.Controllers
         ///<param name="authToken">The token used to authenticate the user who performs the operation</param>
         ///<param name="businessUnitCode">The unique identifier of the business unit for which to retrieve currency codes.</param>
         [HttpGet("{businessUnitCode}")]
-        public async Task<IActionResult> GetCurrencyCodesByBusinessUnitCode([FromHeader] string authToken, string businessUnitCode)
+        public async Task<IActionResult> GetCurrencyCodesByBusinessUnitCode(string businessUnitCode)
             => CreateActionResult(await _currencyService.GetCurrencyCodesByBusinessUnitCode(businessUnitCode));
     }
 }
