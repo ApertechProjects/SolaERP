@@ -60,7 +60,7 @@ namespace SolaERP.Controllers
                 await _userService.UpdateUserIdentifierAsync(user.Id, await checkToken);
 
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(
-                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(1, userdto), UserIdentifier = newtoken.ToString() }, 200));
+                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(1, userdto)}, 200));
             }
 
 
@@ -98,7 +98,7 @@ namespace SolaERP.Controllers
                 dto.UserToken = await checkToken;
                 await _userService.UserRegisterAsync(dto);
 
-                return CreateActionResult(ApiResponse<AccountResponseDto>.Success(new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto), UserIdentifier = dto.UserToken.ToString() }, 200));
+                return CreateActionResult(ApiResponse<AccountResponseDto>.Success(new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto)}, 200));
             }
             return CreateActionResult(ApiResponse<bool>.Fail("email", "This email is already exsist", 422));
         }

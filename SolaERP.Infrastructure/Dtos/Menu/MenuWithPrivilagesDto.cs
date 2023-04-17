@@ -8,6 +8,7 @@
         public string Url { get; set; }
         public string Icon { get; set; }
         public string MenuCode { get; set; }
+        public bool ReadAccess { get; set; }
         public bool CreateAccess { get; set; }
         public bool EditAccess { get; set; }
         public bool DeleteAccess { get; set; }
