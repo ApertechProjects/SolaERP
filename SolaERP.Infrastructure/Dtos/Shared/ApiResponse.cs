@@ -6,15 +6,20 @@ namespace SolaERP.Infrastructure.Dtos.Shared
 {
     public class ApiResponse<T>
     {
-      
+
 
         public object Data { get; set; }
         [JsonIgnore]
         public int StatusCode { get; set; }
         public string Errors { get; set; }
+        public int TotalData { get; set; }
         public static ApiResponse<T> Success(T data, int statusCode)
         {
             return new ApiResponse<T> { Data = data, StatusCode = statusCode };
+        }
+        public static ApiResponse<T> Success(T data, int statusCode, int totalData)
+        {
+            return new ApiResponse<T> { Data = data, StatusCode = statusCode, TotalData = totalData };
         }
         public static ApiResponse<T> Success(int statusCode)
         {

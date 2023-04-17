@@ -242,7 +242,7 @@ namespace SolaERP.Application.Services
             }
 
             if (dto.Count > 0)
-                return ApiResponse<List<UserMainDto>>.Success(dto, 200);
+                return ApiResponse<List<UserMainDto>>.Success(dto, 200, dto.Count);
             return ApiResponse<List<UserMainDto>>.Fail("User list is empty", 404);
 
         }
@@ -263,7 +263,7 @@ namespace SolaERP.Application.Services
             }
 
             if (dto.Count > 0)
-                return ApiResponse<List<UserMainDto>>.Success(dto, 200);
+                return ApiResponse<List<UserMainDto>>.Success(dto, 200, dto.Count);
             return ApiResponse<List<UserMainDto>>.Fail("User list is empty", 404);
         }
 
@@ -283,7 +283,7 @@ namespace SolaERP.Application.Services
             }
 
             if (dto.Count > 0)
-                return ApiResponse<List<UserMainDto>>.Success(dto, 200);
+                return ApiResponse<List<UserMainDto>>.Success(dto, 200, dto.Count);
             return ApiResponse<List<UserMainDto>>.Fail("User list is empty", 404);
         }
 
@@ -303,7 +303,7 @@ namespace SolaERP.Application.Services
             }
 
             if (dto.Count > 0)
-                return ApiResponse<List<UserMainDto>>.Success(dto, 200);
+                return ApiResponse<List<UserMainDto>>.Success(dto, 200, dto.Count);
             return ApiResponse<List<UserMainDto>>.Fail("User list is empty", 404);
         }
 
@@ -367,7 +367,10 @@ namespace SolaERP.Application.Services
             var result = await _userRepository.SaveUserAsync(userEntry);
             await _unitOfWork.SaveChangesAsync();
 
-            return ApiResponse<bool>.Success(result ? true : false, 200);
+            if (result)
+                return ApiResponse<bool>.Success(result, 200);
+            else
+                return ApiResponse<bool>.Fail("Data can not be saved", 400);
         }
 
         public async Task<bool> CheckTokenAsync(Guid name)
