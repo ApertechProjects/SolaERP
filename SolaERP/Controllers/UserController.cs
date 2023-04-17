@@ -21,12 +21,12 @@ namespace SolaERP.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetUserByToken([FromHeader] string authToken)
-            => CreateActionResult(await _userService.GetUserByTokenAsync(authToken));
+        public async Task<IActionResult> GetUserByToken()
+            => CreateActionResult(await _userService.GetUserByTokenAsync(User.Identity.Name));
 
         [HttpGet]
-        public async Task<string> GetUserNameByToken([FromHeader] string authToken)
-          => await _userService.GetUserNameByTokenAsync(authToken);
+        public async Task<string> GetUserNameByToken()
+          => await _userService.GetUserNameByTokenAsync(User.Identity.Name);
 
 
         /// <summary>
@@ -35,8 +35,8 @@ namespace SolaERP.Controllers
         /// <remarks>Users who are authenticated and authorized to perform the action will be able to access the</remarks>
         /// <param name="authToken">userIdentifier which returns in Login or Register.</param>
         [HttpDelete]
-        public async Task<IActionResult> RemoveUser([FromHeader] string authToken)
-            => CreateActionResult(await _userService.RemoveUserByTokenAsync(authToken));
+        public async Task<IActionResult> RemoveUser()
+            => CreateActionResult(await _userService.RemoveUserByTokenAsync(User.Identity.Name));
 
         /// <summary>
         ///Gets all active users for user list
@@ -46,30 +46,30 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _userService.GetActiveUsersAsync());
 
         [HttpGet]
-        public async Task<IActionResult> GetActiveUsersWithoutCurrentUserAsync([FromHeader] string authToken)
-          => CreateActionResult(await _userService.GetActiveUsersWithoutCurrentUserAsync(authToken));
+        public async Task<IActionResult> GetActiveUsersWithoutCurrentUserAsync()
+          => CreateActionResult(await _userService.GetActiveUsersWithoutCurrentUserAsync(User.Identity.Name));
 
         [HttpPost]
-        public async Task<IActionResult> GetUserWFAAsync([FromHeader] string authToken, UserGetModel model)
+        public async Task<IActionResult> GetUserWFAAsync(UserGetModel model)
         {
-            return CreateActionResult(await _userService.GetUserWFAAsync(authToken, model));
+            return CreateActionResult(await _userService.GetUserWFAAsync(User.Identity.Name, model));
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetUserAllAsync([FromHeader] string authToken, UserGetModel model)
-            => CreateActionResult(await _userService.GetUserAllAsync(authToken, model));
+        public async Task<IActionResult> GetUserAllAsync(UserGetModel model)
+            => CreateActionResult(await _userService.GetUserAllAsync(User.Identity.Name, model));
 
         [HttpGet]
-        public async Task<IActionResult> GetUserCompanyAsync([FromHeader] string authToken, [FromQuery] int userStatus)
-            => CreateActionResult(await _userService.GetUserCompanyAsync(authToken, userStatus));
+        public async Task<IActionResult> GetUserCompanyAsync([FromQuery] int userStatus)
+            => CreateActionResult(await _userService.GetUserCompanyAsync(User.Identity.Name, userStatus));
 
         [HttpGet]
-        public async Task<IActionResult> GetUserVendorAsync([FromHeader] string authToken, [FromQuery] int userStatus)
-            => CreateActionResult(await _userService.GetUserVendorAsync(authToken, userStatus));
+        public async Task<IActionResult> GetUserVendorAsync([FromQuery] int userStatus)
+            => CreateActionResult(await _userService.GetUserVendorAsync(User.Identity.Name, userStatus));
 
         [HttpPost]
-        public async Task<IActionResult> UserChangeStatusAsync([FromHeader] string authToken, UserChangeStatusModel model)
-            => CreateActionResult(await _userService.UserChangeStatusAsync(authToken, model));
+        public async Task<IActionResult> UserChangeStatusAsync(UserChangeStatusModel model)
+            => CreateActionResult(await _userService.UserChangeStatusAsync(User.Identity.Name, model));
 
         [HttpPost]
         public async Task<IActionResult> SaveUser(UserSaveModel user)

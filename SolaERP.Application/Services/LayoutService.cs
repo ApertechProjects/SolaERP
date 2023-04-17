@@ -24,28 +24,28 @@ namespace SolaERP.Application.Services
             _layoutRepository = layoutRepository;
         }
 
-        public async Task<ApiResponse<bool>> DeleteLayoutAsync(string finderToken, string key)
+        public async Task<ApiResponse<bool>> DeleteLayoutAsync(string name, string key)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
 
             var response = await _layoutRepository.DeleteLayoutAsync(userId, key);
             _unitOfWork.SaveChangesAsync();
             return response ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Fail("Failed to delete user layout", 400);
         }
 
-        public async Task<ApiResponse<LayoutDto>> GetUserLayoutAsync(string finderToken, string layoutKey)
+        public async Task<ApiResponse<LayoutDto>> GetUserLayoutAsync(string name, string layoutKey)
         {
             var entity = await _layoutRepository.GetUserLayoutAsync(await
-                 _userRepository.GetIdentityNameAsIntAsync(finderToken), layoutKey);
+                 _userRepository.GetIdentityNameAsIntAsync(name), layoutKey);
 
             var responseContent = _mapper.Map<LayoutDto>(entity);
             return responseContent is not null ? ApiResponse<LayoutDto>.Success(responseContent, 200) : ApiResponse<LayoutDto>.Fail("Failed to load user layout", 400);
         }
 
-        public async Task<ApiResponse<bool>> SaveLayoutAsync(string finderToken, LayoutDto layout)
+        public async Task<ApiResponse<bool>> SaveLayoutAsync(string name, LayoutDto layout)
         {
             var entity = _mapper.Map<Layout>(layout);
-            entity.UserId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
+            entity.UserId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var response = await _layoutRepository.SaveLayoutAsync(entity);
             await _unitOfWork.SaveChangesAsync();
             return response ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Fail("Failed to save user layout", 400);

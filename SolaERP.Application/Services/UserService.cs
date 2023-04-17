@@ -140,9 +140,9 @@ namespace SolaERP.Application.Services
             return ApiResponse<NoContentDto>.Success(200);
         }
 
-        public async Task<int> GetIdentityNameAsIntAsync(string finderToken)
+        public async Task<int> GetIdentityNameAsIntAsync(string name)
         {
-            return await _userRepository.GetIdentityNameAsIntAsync(finderToken);
+            return await _userRepository.GetIdentityNameAsIntAsync(name);
         }
 
         public async Task<UserDto> GetUserByEmailAsync(string email)
@@ -171,9 +171,9 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(true, 200);
         }
 
-        public async Task<ApiResponse<UserDto>> GetUserByTokenAsync(string finderToken)
+        public async Task<ApiResponse<UserDto>> GetUserByTokenAsync(string name)
         {
-            var userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
+            var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var user = await _userRepository.GetUserByIdAsync(userId);
 
             if (user is null)
@@ -183,9 +183,9 @@ namespace SolaERP.Application.Services
             return ApiResponse<UserDto>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<bool>> RemoveUserByTokenAsync(string finderToken)
+        public async Task<ApiResponse<bool>> RemoveUserByTokenAsync(string name)
         {
-            var userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
+            var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
 
             if (userId == 0)
                 return ApiResponse<bool>.Fail("User not found", 404);
@@ -204,9 +204,9 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<ActiveUserDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<List<ActiveUserDto>>> GetActiveUsersWithoutCurrentUserAsync(string finderToken)
+        public async Task<ApiResponse<List<ActiveUserDto>>> GetActiveUsersWithoutCurrentUserAsync(string name)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var users = await _userRepository.GetActiveUsersWithoutCurrentUserAsync(userId);
             var dto = _mapper.Map<List<ActiveUserDto>>(users);
 
@@ -221,15 +221,15 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<UserListDto>>.Success(dto, 200);
         }
 
-        public Task<string> GetUserNameByTokenAsync(string finderToken)
+        public Task<string> GetUserNameByTokenAsync(string name)
         {
-            return _userRepository.GetUserNameByTokenAsync(finderToken);
+            return _userRepository.GetUserNameByTokenAsync(name);
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserWFAAsync(string authToken, UserGetModel model)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserWFAAsync(string name, UserGetModel model)
         {
             //_tokenHandler.DecodeJwtToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiMTQzMCIsImVtYWlsIjoiaHVseWEuZ2FyaWJsaUBhcGVydGVjaC5uZXQiLCJuYW1laWQiOiIxNDMwIiwibmJmIjoxNjgxNTcxMDAxLCJleHAiOjE2ODE2NTc0MDEsImlhdCI6MTY4MTU3MTAwMX0.RGYxxAJi0lH78i6J8CptuE4p8-s1e5wsSG5yuh7tBJo");
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(authToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var users = await _userRepository.GetUserWFAAsync(userId, model);
             var dto = _mapper.Map<List<UserMainDto>>(users);
 
@@ -248,9 +248,9 @@ namespace SolaERP.Application.Services
 
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string authToken, UserGetModel model)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string name, UserGetModel model)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(authToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var users = await _userRepository.GetUserAllAsync(userId, model);
             var dto = _mapper.Map<List<UserMainDto>>(users);
 
@@ -268,9 +268,9 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<UserMainDto>>.Fail("User list is empty", 404);
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string authToken, int userStatus)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string name, int userStatus)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(authToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var users = await _userRepository.GetUserCompanyAsync(userId, userStatus);
             var dto = _mapper.Map<List<UserMainDto>>(users);
 
@@ -288,9 +288,9 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<UserMainDto>>.Fail("User list is empty", 404);
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string authToken, int userStatus)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string name, int userStatus)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(authToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var users = await _userRepository.GetUserVendorAsync(userId, userStatus);
             var dto = _mapper.Map<List<UserMainDto>>(users);
 
@@ -308,14 +308,14 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<UserMainDto>>.Fail("User list is empty", 404);
         }
 
-        public async Task<ApiResponse<bool>> UserChangeStatusAsync(string authToken, UserChangeStatusModel model)
+        public async Task<ApiResponse<bool>> UserChangeStatusAsync(string name, UserChangeStatusModel model)
         {
-            var userId = await _userRepository.GetIdentityNameAsIntAsync(authToken);
+            var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             if (model.Id == 0)
                 return ApiResponse<bool>.Fail("User not found", 404);
 
             List<string> failedMailList = new List<string>();
-            string userName = await _userRepository.GetUserNameByTokenAsync(authToken);
+            string userName = await _userRepository.GetUserNameByTokenAsync(name);
 
             var user = await _userRepository.UserChangeStatusAsync(userId, model);
 
@@ -372,9 +372,9 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(result ? true : false, 200);
         }
 
-        public async Task<bool> CheckTokenAsync(Guid authToken)
+        public async Task<bool> CheckTokenAsync(Guid name)
         {
-            var check = await _userRepository.CheckTokenAsync(authToken);
+            var check = await _userRepository.CheckTokenAsync(name);
             if (check) return true;
             else return false;
         }

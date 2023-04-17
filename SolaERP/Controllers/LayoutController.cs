@@ -20,15 +20,15 @@ namespace SolaERP.API.Controllers
         }
 
         [HttpGet("{key}")]
-        public async Task<IActionResult> GetUserLayout([FromHeader] string authToken, string key)
-            => CreateActionResult(await _layoutService.GetUserLayoutAsync(authToken, key));
+        public async Task<IActionResult> GetUserLayout(string key)
+            => CreateActionResult(await _layoutService.GetUserLayoutAsync(User.Identity.Name, key));
 
         [HttpPost]
-        public async Task<IActionResult> SaveLayout([FromHeader] string authToken, LayoutDto layout)
-            => CreateActionResult(await _layoutService.SaveLayoutAsync(authToken, layout));
+        public async Task<IActionResult> SaveLayout(LayoutDto layout)
+            => CreateActionResult(await _layoutService.SaveLayoutAsync(User.Identity.Name, layout));
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteLayout([FromHeader] string authToken, string key)
-            => CreateActionResult(await _layoutService.DeleteLayoutAsync(authToken, key));
+        public async Task<IActionResult> DeleteLayout(string key)
+            => CreateActionResult(await _layoutService.DeleteLayoutAsync(User.Identity.Name, key));
     }
 }

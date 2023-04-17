@@ -7,6 +7,7 @@ using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics;
 
 namespace SolaERP.DataAccess.DataAcces.SqlServer
 {

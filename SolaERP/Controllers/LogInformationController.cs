@@ -5,8 +5,8 @@ using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Controllers
 {
+    [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
     [Authorize]
     public class LogInformationController : CustomBaseController
     {

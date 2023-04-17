@@ -24,39 +24,39 @@ namespace SolaERP.Controllers
 
         [Authorize]
         [HttpGet("{BU}")]
-        public async Task<ApiResult> GetWFAandAllVendorList([FromHeader] string token, int BU)
+        public async Task<ApiResult> GetWFAandAllVendorList(int BU)
         {
-            return await new EntityLogic(ConfHelper).GetVendorList(token, BU);
+            return await new EntityLogic(ConfHelper).GetVendorList(User.Identity.Name, BU);
         }
 
         [HttpGet("{vendorId}")]
         [Authorize]
-        public async Task<ApiResult> GetVendorDetails([FromHeader] string token, int vendorId)
+        public async Task<ApiResult> GetVendorDetails(int vendorId)
         {
-            return await new EntityLogic(ConfHelper).GetVendorDetails(token, vendorId);
+            return await new EntityLogic(ConfHelper).GetVendorDetails(User.Identity.Name, vendorId);
         }
 
 
 
         [HttpPost]
         [Authorize]
-        public async Task<ApiResult> VendorApprove([FromHeader] string token, List<VendorWFAModel> vendorWFAModel)
+        public async Task<ApiResult> VendorApprove(List<VendorWFAModel> vendorWFAModel)
         {
-            return await new EntityLogic(ConfHelper).VendorApprove(token, vendorWFAModel);
+            return await new EntityLogic(ConfHelper).VendorApprove(User.Identity.Name, vendorWFAModel);
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<ApiResult> VendorSendToApprove([FromHeader] string token, VendorSendToApprove vendorSendToApprove)
+        public async Task<ApiResult> VendorSendToApprove( VendorSendToApprove vendorSendToApprove)
         {
-            return await new EntityLogic(ConfHelper).VendorSendToApprove(token, vendorSendToApprove);
+            return await new EntityLogic(ConfHelper).VendorSendToApprove(User.Identity.Name, vendorSendToApprove);
         }
 
         [Authorize]
         [HttpGet("{businessUnitId}")]
-        public async Task<ApiResult> GetActiveVendor([FromHeader] string authToken, int businessUnitId)
+        public async Task<ApiResult> GetActiveVendor(int businessUnitId)
         {
-            return await new EntityLogic(ConfHelper, _userRepository).GetActiveVendors(authToken, businessUnitId);
+            return await new EntityLogic(ConfHelper, _userRepository).GetActiveVendors(User.Identity.Name, businessUnitId);
         }
 
         [HttpGet("{taxId}")]

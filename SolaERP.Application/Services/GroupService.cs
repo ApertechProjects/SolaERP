@@ -197,9 +197,9 @@ namespace SolaERP.Application.Services
                 return ApiResponse<bool>.Fail("Data can not be saved", 400);
         }
 
-        public async Task<ApiResponse<bool>> SaveGroupAsync(string finderToken, GroupSaveModel model)
+        public async Task<ApiResponse<bool>> SaveGroupAsync(string name, GroupSaveModel model)
         {
-            var userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
+            var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             model.GroupId = await _groupRepository.AddUpdateOrDeleteGroupAsync(userId, new() { GroupId = model.GroupId, GroupName = model.GroupName, Description = model.Description });
 
             if (model.Users != null)

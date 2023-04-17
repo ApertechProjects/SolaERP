@@ -25,8 +25,8 @@ namespace SolaERP.Controllers
            => CreateActionResult(await _groupService.GetGroupsByUserIdAsync(userId));
 
         [HttpPost]
-        public async Task<IActionResult> SaveGroupAsync([FromHeader] string authToken, GroupSaveModel model)
-            => CreateActionResult(await _groupService.SaveGroupAsync(authToken, model));
+        public async Task<IActionResult> SaveGroupAsync(GroupSaveModel model)
+            => CreateActionResult(await _groupService.SaveGroupAsync(User.Identity.Name, model));
 
         [HttpGet("{groupId}")]
         public async Task<IActionResult> GetBuyersByGroupIdAsync(int groupId)

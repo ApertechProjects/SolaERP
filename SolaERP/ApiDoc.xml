@@ -105,7 +105,7 @@
              <remarks>The GetDue endpoint retrieves a list of all due diligence tasks for a given vendor, identified by the vendorId parameter.</remarks>
             <param name="token">The token used to authenticate the user who performs the operation</param>
         </member>
-        <member name="M:SolaERP.Controllers.MenuController.GetUserMenusWithChildren(System.String)">
+        <member name="M:SolaERP.Controllers.MenuController.GetUserMenusWithChildren">
             <summary>
             Gets the list of users.
             </summary>
@@ -128,7 +128,7 @@
              <remarks>The GetAllUOMList endpoint returns a list of all the available unit of measure codes in the system. This endpoint can be used to retrieve the list of available UOM codes and their descriptions for use in other parts of the system.</remarks>
             <param name="businessUnitCode">The unique identifier of the business unit for which to retrieve currency codes.</param>
         </member>
-        <member name="M:SolaERP.Controllers.UserController.RemoveUser(System.String)">
+        <member name="M:SolaERP.Controllers.UserController.RemoveUser">
              <summary>
             Removes the user which referenced with authToken
              </summary>

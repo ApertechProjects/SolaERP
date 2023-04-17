@@ -64,14 +64,14 @@ namespace SolaERP.Application.Services
                 ApiResponse<List<RequestTypesDto>>.Fail("Request types not found", 404);
         }
 
-        public async Task<ApiResponse<bool>> RequestMainChangeStatusAsync(string finderToken, RequestChangeStatusModel changeStatusParametersDtos)
+        public async Task<ApiResponse<bool>> RequestMainChangeStatusAsync(string name, RequestChangeStatusModel changeStatusParametersDtos)
         {
-            var userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
+            var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             if (changeStatusParametersDtos.RequestMainIds == null && changeStatusParametersDtos.RequestMainIds.Count == 0)
                 return ApiResponse<bool>.Fail("Request must be selected", 200);
 
             List<string> failedMailList = new List<string>();
-            string userName = await _userRepository.GetUserNameByTokenAsync(finderToken);
+            string userName = await _userRepository.GetUserNameByTokenAsync(name);
             for (int i = 0; i < changeStatusParametersDtos.RequestMainIds.Count; i++)
             {
                 await _requestMainRepository.RequestMainChangeStatusAsync(userId, changeStatusParametersDtos.RequestMainIds[i], changeStatusParametersDtos.ApproveStatus, changeStatusParametersDtos.Comment);
@@ -103,10 +103,10 @@ namespace SolaERP.Application.Services
             return text;
         }
 
-        public async Task<ApiResponse<bool>> RequestSendToApproveAsync(string finderToken, int requestMainId)
+        public async Task<ApiResponse<bool>> RequestSendToApproveAsync(string name, int requestMainId)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
-            string userName = await _userRepository.GetUserNameByTokenAsync(finderToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            string userName = await _userRepository.GetUserNameByTokenAsync(name);
             var result = await _requestMainRepository.SendRequestToApproveAsync(userId, requestMainId);
             await _unitOfWork.SaveChangesAsync();
 
@@ -117,9 +117,9 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(true, 200);
         }
 
-        public async Task<ApiResponse<RequestCardMainDto>> GetRequestByRequestMainId(string authToken, int requestMainId)
+        public async Task<ApiResponse<RequestCardMainDto>> GetRequestByRequestMainId(string name, int requestMainId)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(authToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var requestMain = await _requestMainRepository.GetRequesMainHeaderAsync(requestMainId, userId);
             requestMain.requestCardDetails = await _requestDetailRepository.GetRequestDetailsByMainIdAsync(requestMainId);
             var requestDto = _mapper.Map<RequestCardMainDto>(requestMain);
@@ -138,9 +138,9 @@ namespace SolaERP.Application.Services
             //return ApiResponse<List<RequestMainDraftDto>>.Fail("Main drafts is empty", 404);
         }
 
-        public async Task<ApiResponse<List<RequestAmendmentDto>>> GetApproveAmendmentRequests(string finderToken, RequestApproveAmendmentModel requestParametersDto)
+        public async Task<ApiResponse<List<RequestAmendmentDto>>> GetApproveAmendmentRequests(string name, RequestApproveAmendmentModel requestParametersDto)
         {
-            var userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
+            var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var mainRequest = await _requestMainRepository.GetApproveAmendmentRequestsAsync(userId, requestParametersDto);
             var mainRequestDto = _mapper.Map<List<RequestAmendmentDto>>(mainRequest);
 
@@ -151,9 +151,9 @@ namespace SolaERP.Application.Services
             //return ApiResponse<List<RequestAmendmentDto>>.Fail("Amendment is empty", 404);
         }
 
-        public async Task<ApiResponse<List<RequestApprovalInfoDto>>> GetRequestApprovalInfoAsync(string finderToken, int requestMainId)
+        public async Task<ApiResponse<List<RequestApprovalInfoDto>>> GetRequestApprovalInfoAsync(string name, int requestMainId)
         {
-            var userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
+            var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var approvalInfo = await _requestMainRepository.GetRequestApprovalInfoAsync(requestMainId, userId);
             var approvalInfoResult = _mapper.Map<List<RequestApprovalInfoDto>>(approvalInfo);
 
@@ -161,9 +161,9 @@ namespace SolaERP.Application.Services
                 ApiResponse<List<RequestApprovalInfoDto>>.Fail("Bad Request Approval info is empty", 404);
         }
 
-        public async Task<ApiResponse<RequestMainDto>> GetRequestHeaderAsync(string finderToken, int requestMainId)
+        public async Task<ApiResponse<RequestMainDto>> GetRequestHeaderAsync(string name, int requestMainId)
         {
-            var userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
+            var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var requestHeader = await _requestMainRepository.GetRequesMainHeaderAsync(userId, requestMainId);
             var requestHeaderResult = _mapper.Map<RequestMainDto>(requestHeader);
 
@@ -180,9 +180,9 @@ namespace SolaERP.Application.Services
                 ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>.Fail("Request details is empty", 404);
         }
 
-        public async Task<ApiResponse<RequestSaveResultModel>> AddOrUpdateRequestAsync(string finderToken, RequestSaveModel model)
+        public async Task<ApiResponse<RequestSaveResultModel>> AddOrUpdateRequestAsync(string name, RequestSaveModel model)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             RequestSaveResultModel resultModel = await _requestMainRepository.AddOrUpdateRequestAsync(userId, _mapper.Map<RequestMainSaveModel>(model));
 
             if (resultModel != null)
@@ -205,9 +205,9 @@ namespace SolaERP.Application.Services
             return ApiResponse<RequestSaveResultModel>.Fail("Not Found", 404);
         }
 
-        public async Task<ApiResponse<bool>> DeleteRequestAsync(string authToken, int requestMainId)
+        public async Task<ApiResponse<bool>> DeleteRequestAsync(string name, int requestMainId)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(authToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             int requestId = await _requestMainRepository.DeleteAsync(userId, requestMainId);
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(requestId);
@@ -221,9 +221,9 @@ namespace SolaERP.Application.Services
             return result != null ? ApiResponse<List<RequestDetailApprovalInfoDto>>.Success(result, 200) : ApiResponse<List<RequestDetailApprovalInfoDto>>.Success(new(), 200);
         }
 
-        public async Task<ApiResponse<NoContentDto>> RequestDetailChangeStatusAsync(string finderToken, RequestDetailApproveModel model)
+        public async Task<ApiResponse<NoContentDto>> RequestDetailChangeStatusAsync(string name, RequestDetailApproveModel model)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             if (model.RequestDetailIds == null && model.RequestDetailIds.Count == 0)
                 return ApiResponse<NoContentDto>.Fail("Request must be selected", 200);
 
@@ -242,9 +242,9 @@ namespace SolaERP.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(string finderToken, RequestWFAGetModel requestWFAGetParametersDto)
+        public async Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(string name, RequestWFAGetModel requestWFAGetParametersDto)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(finderToken);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var mainreq = await _requestMainRepository.GetWaitingForApprovalsAsync(userId, requestWFAGetParametersDto);
 
             var mainRequestDto = _mapper.Map<List<RequestWFADto>>(mainreq);
