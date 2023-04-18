@@ -26,5 +26,6 @@
         public int VendorId { get; set; }
         public int Sequence { get; set; }
         public int Session { get; set; }
+        public DateTime CreateDate { get; set; }
     }
 }
