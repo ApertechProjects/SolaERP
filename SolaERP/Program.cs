@@ -132,7 +132,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 }
 app.UseHttpLogging();
 app.UseCors("CorsPolicy");
-
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.MapHub<ChatHub>("/ChatHub");

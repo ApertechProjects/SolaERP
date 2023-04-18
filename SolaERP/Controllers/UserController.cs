@@ -19,15 +19,6 @@ namespace SolaERP.Controllers
         }
 
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetUserByToken()
-        //    => CreateActionResult(await _userService.GetUserByTokenAsync(User.Identity.Name));
-
-        //[HttpGet]
-        //public async Task<string> GetUserNameByToken()
-        //  => await _userService.GetUserNameByTokenAsync(User.Identity.Name);
-
-
         /// <summary>
         ///Removes the user which referenced with authToken
         /// </summary>
@@ -50,9 +41,7 @@ namespace SolaERP.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetUserWFAAsync(int userStatus, int userType)
-        {
-            return CreateActionResult(await _userService.GetUserWFAAsync(User.Identity.Name, userStatus, userType));
-        }
+            => CreateActionResult(await _userService.GetUserWFAAsync(User.Identity.Name, userStatus, userType));
 
         [HttpGet]
         public async Task<IActionResult> GetUserAllAsync(int userStatus, int userType)
@@ -72,11 +61,7 @@ namespace SolaERP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> SaveUser(UserSaveModel user)
-        {
-
-            return CreateActionResult(await _userService.SaveUserAsync(user));
-
-        }
+            => CreateActionResult(await _userService.SaveUserAsync(user));
 
         [HttpPost]
         public async Task<IActionResult> ChangeUserPasswordAsync(ChangeUserPasswordModel user)

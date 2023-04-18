@@ -25,4 +25,8 @@
     <ProjectReference Include="..\SolaERP.SignalR\SolaERP.SignalR.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>
