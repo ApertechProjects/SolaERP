@@ -8,6 +8,7 @@
         public string Url { get; set; }
         public string ReactIcon { get; set; }
         public int ParentMenuId { get; set; }
+        public bool ReadAccess { get; set; }
         public ParentMenuDto ParentMenu { get; set; }
     }
 }

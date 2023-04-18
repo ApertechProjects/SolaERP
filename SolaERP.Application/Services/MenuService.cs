@@ -38,7 +38,8 @@ namespace SolaERP.Application.Services
                     ParentMenuName = parent.MenuName,
                     Icon = parent.Icon,
                     ReactIcon = parent.ReactIcon,
-                    Url = parent.Url
+                    Url = parent.Url,
+                    ReadAccess = parent.ReadAccess,
                 };
 
                 var childMenus = menusWithPrivilages.Where(m => m.ParentId == parent.MenuId).ToList();
@@ -53,7 +54,8 @@ namespace SolaERP.Application.Services
                         Url = child.Url,
                         ReactIcon = child.ReactIcon,
                         ChildMenuName = child.MenuName,
-                        ParentMenu = parentMenu
+                        ParentMenu = parentMenu,
+                        ReadAccess = child.ReadAccess
                     });
                 }
                 menus.Add(parentMenu);
