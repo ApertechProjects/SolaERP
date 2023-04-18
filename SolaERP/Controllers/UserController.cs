@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Controllers
@@ -74,12 +73,9 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveUser(UserSaveModel user)
         {
-            var result = await _userService.SaveUserAsync(user);
 
-            if (Convert.ToBoolean(result.Data))
-                return Ok(ApiResponse<NoContentDto>.Success(204));
+            return CreateActionResult(await _userService.SaveUserAsync(user));
 
-            return BadRequest(result);
         }
 
         [HttpPost]
