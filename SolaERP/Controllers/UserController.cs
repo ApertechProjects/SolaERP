@@ -55,9 +55,13 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetUserVendorAsync([FromQuery] int userStatus)
             => CreateActionResult(await _userService.GetUserVendorAsync(User.Identity.Name, userStatus));
 
+        //[HttpPost]
+        //public async Task<IActionResult> UserChangeStatusAsync(UserChangeStatusModel model)
+        //    => CreateActionResult(await _userService.UserChangeStatusAsync(User.Identity.Name, model));
+
         [HttpPost]
-        public async Task<IActionResult> UserChangeStatusAsync(UserChangeStatusModel model)
-            => CreateActionResult(await _userService.UserChangeStatusAsync(User.Identity.Name, model));
+        public async Task<IActionResult> UserChangeStatusAsync(List<UserChangeStatusModel> model)
+          => CreateActionResult(await _userService.UserChangeStatusAsync(User.Identity.Name, model));
 
         [HttpPost]
         public async Task<IActionResult> SaveUserAsync(UserSaveModel user)

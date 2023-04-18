@@ -9,6 +9,7 @@ using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
+using System.Data;
 
 namespace SolaERP.Application.Services
 {
@@ -313,9 +314,31 @@ namespace SolaERP.Application.Services
             if (model.Id == 0)
                 return ApiResponse<bool>.Fail("User not found", 404);
 
-            List<string> failedMailList = new List<string>();
-
             var user = await _userRepository.UserChangeStatusAsync(userId, model);
+
+            await _unitOfWork.SaveChangesAsync();
+            if (user)
+                return ApiResponse<bool>.Success(true, 200);
+            return ApiResponse<bool>.Fail("Problem detected", 400);
+        }
+
+        public async Task<ApiResponse<bool>> UserChangeStatusAsync(string name, List<UserChangeStatusModel> model)
+        {
+            var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            if (model.Count == 0)
+                return ApiResponse<bool>.Fail("User not found", 404);
+
+            DataTable table = new DataTable("MyTable");
+            table.Columns.Add("Id", typeof(int));
+            table.Columns.Add("Sequence", typeof(int));
+            table.Columns.Add("ApproveStatus", typeof(int));
+            table.Columns.Add("Comment", typeof(string));
+            for (int i = 0; i < model.Count; i++)
+            {
+                table.Rows.Add(model[i].Id, model[i].Sequence, model[i].ApproveStatus, model[i].Comment);
+            }
+
+            var user = await _userRepository.UserChangeStatusAsync(userId, table);
 
             await _unitOfWork.SaveChangesAsync();
             if (user)

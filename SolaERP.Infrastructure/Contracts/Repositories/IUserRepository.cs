@@ -2,6 +2,7 @@
 using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Entities.User;
 using SolaERP.Infrastructure.Models;
+using System.Data;
 
 namespace SolaERP.Infrastructure.Contracts.Repositories
 {
@@ -24,6 +25,7 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<List<UserMain>> GetUserCompanyAsync(int userId, int userStatus);
         Task<List<UserMain>> GetUserVendorAsync(int userId, int userStatus);
         Task<bool> UserChangeStatusAsync(int userId, UserChangeStatusModel model);
+        Task<bool> UserChangeStatusAsync(int userId, DataTable data);
         Task<bool> SaveUserAsync(User model);
         Task<UserLoad> GetUserInfoAsync(int userId);
         Task<List<ERPUser>> GetERPUser();

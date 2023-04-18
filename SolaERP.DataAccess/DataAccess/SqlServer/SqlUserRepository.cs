@@ -7,6 +7,7 @@ using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
+using System.Data.SqlClient;
 
 namespace SolaERP.DataAccess.DataAcces.SqlServer
 {
@@ -508,6 +509,20 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@Command", sessionCom);
                 return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> UserChangeStatusAsync(int userId, DataTable data)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_UserChangeStatusBulk @dataTable,@userId";
+                command.Parameters.AddWithValue(command, "@userId", userId);
+
+                command.Parameters.Add("@dataTable", SqlDbType.Structured).Value = data;
+                command.Parameters["@dataTable"].TypeName = "UserChangeStatus";
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
             }
         }
 
