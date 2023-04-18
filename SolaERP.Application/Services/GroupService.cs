@@ -42,6 +42,7 @@ namespace SolaERP.Application.Services
         public async Task<ApiResponse<bool>> AddUserToGroupAsync(List<AddUserToGroupModel> model)
         {
             var data = false;
+
             for (int i = 0; i < model.Count; i++)
             {
                 data = await _groupRepository.AddUserToGroupAsync(model[i]);

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using SolaERP.Infrastructure.Dtos.Group;
+﻿using SolaERP.Infrastructure.Dtos.Group;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
@@ -32,7 +31,8 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<bool> CheckTokenAsync(Guid name);
         Task<ApiResponse<bool>> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel);
         Task<ApiResponse<bool>> DeleteUserAsync(List<int> userIds);
+        Task<bool> UpdateSessionAsync(int userId, int updateCommand);
         Task<ApiResponse<List<UsersByGroupDto>>> GetUsersByGroupIdAsync(int groupId);
-        Task SaveImageAsync(IFormFile formFile);
+
     }
 }

@@ -21,5 +21,6 @@ namespace SolaERP.Infrastructure.Dtos.User
         public string SignaturePhoto { get; set; }
         public string Description { get; set; }
         public string ERPUser { get; set; }
+        public int Session { get; set; }
     }
 }

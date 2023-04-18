@@ -414,9 +414,19 @@ namespace SolaERP.Application.Services
                 : ApiResponse<bool>.Fail("User can not be deleted", 400);
         }
 
-        public Task<ApiResponse<List<UsersByGroupDto>>> GetUsersByGroupIdAsync(int groupId)
+        public async Task<ApiResponse<List<UsersByGroupDto>>> GetUsersByGroupIdAsync(int groupId)
         {
-            throw new NotImplementedException();
+            var grupser = await _userRepository.GetUsersByGroupIdAsync(groupId);
+            var dto = _mapper.Map<List<UsersByGroupDto>>(grupser);
+
+            return dto.Capacity > 0 ? ApiResponse<List<UsersByGroupDto>>.Success(dto, 200)
+                              : ApiResponse<List<UsersByGroupDto>>.Fail("No users found for the specified group .", 404);
+
+        }
+
+        public async Task<bool> UpdateSessionAsync(int userId, int updateCommand)
+        {
+            return await _userRepository.UpdateSessionAsync(userId, updateCommand);
         }
     }
 }

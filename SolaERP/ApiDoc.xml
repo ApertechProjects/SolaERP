@@ -25,26 +25,6 @@
              <remarks>This endpoint returns a list of account codes that are associated with a specific business unit in the accounting system.</remarks>
              <param name="businessUnit">The unique identifier of the business unit for which to retrieve account codes.</param>
         </member>
-        <member name="M:SolaERP.Controllers.AccountController.SendResetPasswordEmail(System.String)">
-            <summary>
-            Sends Reset Password message template to given email.Then redirects to ResetPassword
-            </summary>
-        </member>
-        <member name="M:SolaERP.Controllers.AccountController.Login(SolaERP.Infrastructure.Dtos.Auth.LoginRequestModel)">
-            <summary>
-            Logs user into system and returns token
-            </summary>
-        </member>
-        <member name="M:SolaERP.Controllers.AccountController.Register(SolaERP.Infrastructure.Models.UserRegisterModel)">
-            <summary>
-            Creates a user with given input
-            </summary>
-        </member>
-        <member name="M:SolaERP.Controllers.AccountController.ResetPasswordAsync(SolaERP.Infrastructure.Models.ResetPasswordModel)">
-            <summary>
-            Allows users to reset their password if they forget it.
-            </summary>
-        </member>
         <member name="M:SolaERP.Controllers.AnalysisCodeController.GetAnalysisCodes(SolaERP.Infrastructure.Models.AnalysisCodeGetModel)">
              <summary>
             Retrieve a list of all analysis codes

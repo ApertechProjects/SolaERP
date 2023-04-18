@@ -32,16 +32,12 @@ namespace SolaERP.Controllers
         }
 
 
-        /// <summary>
-        /// Sends Reset Password message template to given email.Then redirects to ResetPassword
-        /// </summary>
+
         [HttpGet("{email}")]
         public async Task<IActionResult> SendResetPasswordEmail(string email)
             => CreateActionResult(await _userService.SendResetPasswordEmail(email));
 
-        /// <summary>
-        /// Logs user into system and returns token
-        /// </summary>
+
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequestModel dto)
         {
@@ -54,38 +50,15 @@ namespace SolaERP.Controllers
 
             if (signInResult.Succeeded)
             {
-                var newtoken = Guid.NewGuid();
-                var checkToken = CheckTokensRecursively(newtoken);
-
-                await _userService.UpdateUserIdentifierAsync(user.Id, await checkToken);
-
+                await _userService.UpdateSessionAsync(user.Id, 1);
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(
-                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(1, userdto)}, 200));
+                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(1, userdto) }, 200));
             }
 
 
             return CreateActionResult(ApiResponse<bool>.Fail("email", "Email or password is incorrect", 422));
         }
 
-        async Task<Guid> CheckTokensRecursively(Guid currentToken)
-        {
-            bool isValid = await _userService.CheckTokenAsync(currentToken);
-
-            if (isValid)
-            {
-                // If the token is valid, recursively call this method again with the new token.
-                var newToken = Guid.NewGuid();
-                return await CheckTokensRecursively(newToken);
-            }
-            else
-            {
-                // If the token is not valid, return it.
-                return currentToken;
-            }
-        }
-        /// <summary>
-        /// Creates a user with given input
-        /// </summary>
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterModel dto)
         {
@@ -93,12 +66,8 @@ namespace SolaERP.Controllers
 
             if (user is null)
             {
-                var newtoken = Guid.NewGuid();
-                var checkToken = CheckTokensRecursively(newtoken);
-                dto.UserToken = await checkToken;
                 await _userService.UserRegisterAsync(dto);
-
-                return CreateActionResult(ApiResponse<AccountResponseDto>.Success(new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto)}, 200));
+                return CreateActionResult(ApiResponse<AccountResponseDto>.Success(new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto) }, 200));
             }
             return CreateActionResult(ApiResponse<bool>.Fail("email", "This email is already exsist", 422));
         }
@@ -109,14 +78,11 @@ namespace SolaERP.Controllers
             await _signInManager.SignOutAsync();
 
             var userId = await _userService.GetIdentityNameAsIntAsync(User.Identity.Name);
-            await _userService.UpdateUserIdentifierAsync(userId, new Guid());
-
+            await _userService.UpdateSessionAsync(Convert.ToInt32(User.Identity.Name), -1);
             return CreateActionResult(ApiResponse<bool>.Success(true, 200));
         }
 
-        /// <summary>
-        /// Allows users to reset their password if they forget it.
-        /// </summary>
+
         [HttpPost]
         public async Task<IActionResult> ResetPasswordAsync(ResetPasswordModel resetPasswordrequestDto)
             => CreateActionResult(await _userService.ResetPasswordAsync(resetPasswordrequestDto));

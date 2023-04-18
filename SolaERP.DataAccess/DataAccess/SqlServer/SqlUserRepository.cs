@@ -7,7 +7,6 @@ using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
-using System.Diagnostics;
 
 namespace SolaERP.DataAccess.DataAcces.SqlServer
 {
@@ -497,6 +496,18 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     users.Add(reader.GetByEntityStructure<UsersByGroup>());
                 }
                 return users;
+            }
+        }
+
+        public async Task<bool> UpdateSessionAsync(int userId, int sessionCom)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_UserSession_U @UserId,@Command";
+
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                command.Parameters.AddWithValue(command, "@Command", sessionCom);
+                return await command.ExecuteNonQueryAsync() > 0;
             }
         }
 

@@ -30,5 +30,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<bool> CheckTokenAsync(Guid authToken);
         Task<bool> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel);
         Task<List<UsersByGroup>> GetUsersByGroupIdAsync(int groupId);
+        Task<bool> UpdateSessionAsync(int userId, int command); // -1 is Dissconnect 1 Connect
     }
 }

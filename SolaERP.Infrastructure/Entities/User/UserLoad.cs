@@ -20,5 +20,6 @@
         public string UserPhoto { get; set; }
         public string SignaturePhoto { get; set; }
         public string ERPUser { get; set; }
+        public int Session { get; set; }
     }
 }
