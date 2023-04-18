@@ -60,7 +60,7 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _userService.UserChangeStatusAsync(User.Identity.Name, model));
 
         [HttpPost]
-        public async Task<IActionResult> SaveUser(UserSaveModel user)
+        public async Task<IActionResult> SaveUserAsync(UserSaveModel user)
             => CreateActionResult(await _userService.SaveUserAsync(user));
 
         [HttpPost]
@@ -68,15 +68,19 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _userService.ChangeUserPasswordAsync(user));
 
         [HttpGet("{userId}")]
-        public async Task<IActionResult> GetUserInfo(int userId)
-            => CreateActionResult(await _userService.GetUserInfo(userId));
+        public async Task<IActionResult> GetUserInfoAsync(int userId)
+            => CreateActionResult(await _userService.GetUserInfoAsync(userId));
 
         [HttpGet]
         public async Task<IActionResult> GetERPUserAsync()
             => CreateActionResult(await _userService.GetERPUserAsync());
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteUser([FromBody] List<int> userIds)
+        public async Task<IActionResult> DeleteUserAsync([FromBody] List<int> userIds)
             => CreateActionResult(await _userService.DeleteUserAsync(userIds));
+
+        [HttpGet]
+        public async Task<IActionResult> GetUsersByGroupIdAsync(int groupId)
+            => CreateActionResult(await _userService.GetUsersByGroupIdAsync(groupId));
     }
 }

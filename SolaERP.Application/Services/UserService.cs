@@ -323,7 +323,7 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Fail("Problem detected", 400);
         }
 
-        public async Task<ApiResponse<UserLoadDto>> GetUserInfo(int userId)
+        public async Task<ApiResponse<UserLoadDto>> GetUserInfoAsync(int userId)
         {
             var user = await _userRepository.GetUserInfoAsync(userId);
             var dto = _mapper.Map<UserLoadDto>(user);
