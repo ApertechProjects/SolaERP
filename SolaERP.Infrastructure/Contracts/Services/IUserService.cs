@@ -19,7 +19,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<bool>> ResetPasswordAsync(ResetPasswordModel resetPasswordRequestDto);
         Task<ApiResponse<List<ActiveUserDto>>> GetActiveUsersAsync();
         Task<ApiResponse<List<ActiveUserDto>>> GetActiveUsersWithoutCurrentUserAsync(string name);
-        Task<ApiResponse<(int, List<UserMainDto>)>> GetUserWFAAsync(string name, int userStatus, int userType, int page, int limit);
+        Task<ApiResponse<List<UserMainDto>>> GetUserWFAAsync(string name, int userStatus, int userType, int page, int limit);
         Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string name, int userStatus, int userType, int page, int limit);
         Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string name, int userStatus, int page, int limit);
         Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string name, int userStatus, int page, int limit);
