@@ -285,25 +285,33 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         public async Task<(int, List<UserMain>)> GetUserWFAAsync(int userId, int userStatus, int userType, int page, int limit)
         {
             List<UserMain> users = new List<UserMain>();
+            int totalDataCount = 0;
+
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec SP_UsersWFA @UserType,@UserStatus,@UserId,@limit,@page,@totalDataCount";
+                command.CommandText = "exec SP_UsersWFA @UserType, @UserStatus, @UserId, @Limit, @Page, @TotalDataCount OUTPUT";
 
                 command.Parameters.AddWithValue(command, "@UserType", userType is -1 ? "%" : string.Join(',', userType));
                 command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
                 command.Parameters.AddWithValue(command, "@Limit", limit);
                 command.Parameters.AddWithValue(command, "@Page", page);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
-                command.Parameters.AddOutPutParameter(command, "@totalDataCount");
+                var totalDataCountParam = new SqlParameter("@TotalDataCount", SqlDbType.Int) { Direction = ParameterDirection.Output };
+                command.Parameters.Add(totalDataCountParam);
 
-                using var reader = await command.ExecuteReaderAsync();
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    while (reader.Read())
+                    {
+                        users.Add(reader.GetByEntityStructure<UserMain>());
+                    }
+                }
 
-                while (reader.Read())
-                    users.Add(reader.GetByEntityStructure<UserMain>());
+                totalDataCount = (int)totalDataCountParam.Value;
 
-                var returnValue = command.Parameters["@totalDataCount"].Value;
-                return (Convert.ToInt32(returnValue), users);
             }
+
+            return (totalDataCount, users);
         }
 
         public async Task<List<UserMain>> GetUserAllAsync(int userId, int userStatus, int userType, int page, int limit)
