@@ -1,4 +1,10 @@
-﻿namespace SolaERP.Infrastructure.Contracts.Repositories
+﻿using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Entities.Groups;
+using SolaERP.Infrastructure.Entities.User;
+using SolaERP.Infrastructure.Models;
+using System.Data;
+
+namespace SolaERP.Infrastructure.Contracts.Repositories
 {
     public interface IUserRepository : ICrudOperations<User>
     {
