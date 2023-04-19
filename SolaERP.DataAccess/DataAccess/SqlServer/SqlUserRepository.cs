@@ -1,4 +1,15 @@
-﻿namespace SolaERP.DataAccess.DataAcces.SqlServer
+﻿using SolaERP.DataAccess.Extensions;
+using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Entities.Groups;
+using SolaERP.Infrastructure.Entities.User;
+using SolaERP.Infrastructure.Models;
+using SolaERP.Infrastructure.UnitOfWork;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
+
+namespace SolaERP.DataAccess.DataAcces.SqlServer
 {
     public class SqlUserRepository : IUserRepository
     {
@@ -271,12 +282,12 @@
             return new() { UserId = reader.Get<int>("Id"), FullName = reader.Get<string>("FullName") };
         }
 
-        public async Task<List<UserMain>> GetUserWFAAsync(int userId, int userStatus, int userType, int page, int limit)
+        public async Task<(int, List<UserMain>)> GetUserWFAAsync(int userId, int userStatus, int userType, int page, int limit)
         {
             List<UserMain> users = new List<UserMain>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec SP_UsersWFA @UserType,@UserStatus,@UserId";
+                command.CommandText = "exec SP_UsersWFA @UserType,@UserStatus,@UserId,@limit,@page,@totalDataCount";
 
                 command.Parameters.AddWithValue(command, "@UserType", userType is -1 ? "%" : string.Join(',', userType));
                 command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));

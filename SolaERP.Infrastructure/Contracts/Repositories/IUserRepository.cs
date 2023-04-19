@@ -20,7 +20,7 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<bool> ResetUserPasswordAsync(string email, string passwordHash);
         Task<List<ActiveUser>> GetActiveUsersAsync();
         Task<List<ActiveUser>> GetActiveUsersWithoutCurrentUserAsync(int userId);
-        Task<List<UserMain>> GetUserWFAAsync(int userId, int userStatus, int userType, int page, int limit);
+        Task<(int, List<UserMain>)> GetUserWFAAsync(int userId, int userStatus, int userType, int page, int limit);
         Task<List<UserMain>> GetUserAllAsync(int userId, int userStatus, int userType, int page, int limit);
         Task<List<UserMain>> GetUserCompanyAsync(int userId, int userStatus, int page, int limit);
         Task<List<UserMain>> GetUserVendorAsync(int userId, int userStatus, int page, int limit);

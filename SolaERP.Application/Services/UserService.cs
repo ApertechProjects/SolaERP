@@ -1,4 +1,17 @@
-﻿namespace SolaERP.Application.Services
+﻿using AutoMapper;
+using SolaERP.Application.Utils;
+using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.Group;
+using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Dtos.User;
+using SolaERP.Infrastructure.Dtos.UserDto;
+using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Models;
+using SolaERP.Infrastructure.UnitOfWork;
+using System.Data;
+
+namespace SolaERP.Application.Services
 {
     public class UserService : IUserService
     {
@@ -59,9 +72,7 @@
         {
             var users = await _userRepository.GetAllAsync();
             var dto = _mapper.Map<List<UserDto>>(users);
-            if (dto.Count == 0)
-                return ApiResponse<List<UserDto>>.Fail("User list is empty", 404);
-            return ApiResponse<List<UserDto>>.Success(dto, 200);
+            return dto.Count == 0 ? ApiResponse<List<UserDto>>.Fail("User list is empty", 404) : ApiResponse<List<UserDto>>.Success(dto, 200);
         }
 
         public async Task<ApiResponse<bool>> UpdateAsync(UserDto userUpdateDto)
@@ -214,11 +225,10 @@
             return _userRepository.GetUserNameByTokenAsync(name);
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserWFAAsync(string name, int userStatus, int userType, int page, int limit)
-        public async Task<ApiResponse<(int, List<UserMainDto>)>> GetUserWFAAsync(string name, int userStatus, int userType)
+        public async Task<ApiResponse<(int, List<UserMainDto>)>> GetUserWFAAsync(string name, int userStatus, int userType, int page, int limit)
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
-            var users = await _userRepository.GetUserWFAAsync(userId, userStatus, userType);
+            var users = await _userRepository.GetUserWFAAsync(userId, userStatus, userType, page, limit);
             var dto = _mapper.Map<List<UserMainDto>>(users.Item2);
 
             for (int i = 0; i < dto.Count; i++)
