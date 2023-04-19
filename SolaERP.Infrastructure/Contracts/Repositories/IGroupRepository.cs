@@ -31,5 +31,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<bool> DeleteEmailNotificationAsync(int groupEmailNotificationId);
         Task<bool> AddUserToGroupAsync(AddUserToGroupModel model);
         Task<bool> DeleteUserFromGroupAsync(int groupUserId);
+        Task<Group> GetGroupInfoAsync(int groupId);
     }
 }

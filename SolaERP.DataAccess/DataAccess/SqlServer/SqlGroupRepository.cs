@@ -3,10 +3,14 @@ using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.AnalysisCode;
 using SolaERP.Infrastructure.Entities.Buyer;
 using SolaERP.Infrastructure.Entities.Groups;
+using SolaERP.Infrastructure.Entities.Item_Code;
+using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data.Common;
 using System.Reflection;
+using System.Text.RegularExpressions;
+using Group = SolaERP.Infrastructure.Entities.Groups.Group;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -369,6 +373,32 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 var result = await command.ExecuteNonQueryAsync();
                 return result > 0;
             }
+        }
+
+        public async Task<Group> GetGroupInfoAsync(int groupId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec [dbo].[SP_GroupHeader_Load] @groupId";
+                command.Parameters.AddWithValue(command, "@groupId", groupId);
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                Group group = new Group();
+                while (reader.Read())
+                    group = reader.GetByEntityStructure<Group>();
+                return group;
+            }
+        }
+
+        private Groups GetGroupData(DbDataReader reader)
+        {
+            return new()
+            {
+                GroupId = reader.Get<int>("GroupId"),
+                GroupName = reader.Get<string>("GroupName"),
+                Description = reader.Get<string>("Description")
+            };
         }
     }
 }
