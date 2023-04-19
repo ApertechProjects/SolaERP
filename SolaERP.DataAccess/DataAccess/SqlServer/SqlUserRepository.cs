@@ -281,23 +281,25 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             return new() { UserId = reader.Get<int>("Id"), FullName = reader.Get<string>("FullName") };
         }
 
-        public async Task<List<UserMain>> GetUserWFAAsync(int userId, int userStatus, int userType)
+        public async Task<(int,List<UserMain>)> GetUserWFAAsync(int userId, int userStatus, int userType)
         {
             List<UserMain> users = new List<UserMain>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec SP_UsersWFA @UserType,@UserStatus,@UserId";
+                command.CommandText = "exec SP_UsersWFA @UserType,@UserStatus,@UserId,@totalDataCount";
 
                 command.Parameters.AddWithValue(command, "@UserType", userType is -1 ? "%" : string.Join(',', userType));
                 command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
                 command.Parameters.AddWithValue(command, "@UserId", userId);
-
+                command.Parameters.AddOutPutParameter(command, "@totalDataCount");
+                
                 using var reader = await command.ExecuteReaderAsync();
 
                 while (reader.Read())
                     users.Add(reader.GetByEntityStructure<UserMain>());
-
-                return users;
+                
+                var returnValue = command.Parameters["@totalDataCount"].Value;
+                return (Convert.ToInt32(returnValue),users);
             }
         }
 
