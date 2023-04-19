@@ -225,7 +225,7 @@ namespace SolaERP.Application.Services
             return _userRepository.GetUserNameByTokenAsync(name);
         }
 
-        public async Task<ApiResponse<(int, List<UserMainDto>)>> GetUserWFAAsync(string name, int userStatus, int userType, int page, int limit)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserWFAAsync(string name, int userStatus, int userType, int page, int limit)
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var users = await _userRepository.GetUserWFAAsync(userId, userStatus, userType, page, limit);
@@ -241,8 +241,8 @@ namespace SolaERP.Application.Services
             }
 
             if (dto.Count > 0)
-                return ApiResponse<(int, List<UserMainDto>)>.Success((users.Item1, dto), 200, dto.Count);
-            return ApiResponse<(int, List<UserMainDto>)>.Fail("User list is empty", 404);
+                return ApiResponse<List<UserMainDto>>.Success(dto, 200, users.Item1);
+            return ApiResponse<List<UserMainDto>>.Fail("User list is empty", 404);
 
         }
 
@@ -250,19 +250,19 @@ namespace SolaERP.Application.Services
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var users = await _userRepository.GetUserAllAsync(userId, userStatus, userType, page, limit);
-            var dto = _mapper.Map<List<UserMainDto>>(users);
+            var dto = _mapper.Map<List<UserMainDto>>(users.Item2);
 
             for (int i = 0; i < dto.Count; i++)
             {
-                var user = dto.FirstOrDefault(x => x.UserName == users[i].UserName);
-                if (!string.IsNullOrEmpty(users[i].UserPhoto))
+                var user = dto.FirstOrDefault(x => x.UserName == users.Item2[i].UserName);
+                if (!string.IsNullOrEmpty(users.Item2[i].UserPhoto))
                 {
-                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users[i].UserPhoto);
+                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users.Item2[i].UserPhoto);
                 }
             }
 
             if (dto.Count > 0)
-                return ApiResponse<List<UserMainDto>>.Success(dto, 200, dto.Count);
+                return ApiResponse<List<UserMainDto>>.Success(dto, 200, users.Item1);
             return ApiResponse<List<UserMainDto>>.Fail("User list is empty", 404);
         }
 
@@ -270,19 +270,19 @@ namespace SolaERP.Application.Services
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var users = await _userRepository.GetUserCompanyAsync(userId, userStatus, page, limit);
-            var dto = _mapper.Map<List<UserMainDto>>(users);
+            var dto = _mapper.Map<List<UserMainDto>>(users.Item2);
 
             for (int i = 0; i < dto.Count; i++)
             {
-                var user = dto.FirstOrDefault(x => x.UserName == users[i].UserName);
-                if (!string.IsNullOrEmpty(users[i].UserPhoto))
+                var user = dto.FirstOrDefault(x => x.UserName == users.Item2[i].UserName);
+                if (!string.IsNullOrEmpty(users.Item2[i].UserPhoto))
                 {
-                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users[i].UserPhoto);
+                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users.Item2[i].UserPhoto);
                 }
             }
 
             if (dto.Count > 0)
-                return ApiResponse<List<UserMainDto>>.Success(dto, 200, dto.Count);
+                return ApiResponse<List<UserMainDto>>.Success(dto, 200, users.Item1);
             return ApiResponse<List<UserMainDto>>.Fail("User list is empty", 404);
         }
 
@@ -290,19 +290,19 @@ namespace SolaERP.Application.Services
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var users = await _userRepository.GetUserVendorAsync(userId, userStatus, page, limit);
-            var dto = _mapper.Map<List<UserMainDto>>(users);
+            var dto = _mapper.Map<List<UserMainDto>>(users.Item2);
 
             for (int i = 0; i < dto.Count; i++)
             {
-                var user = dto.FirstOrDefault(x => x.UserName == users[i].UserName);
-                if (!string.IsNullOrEmpty(users[i].UserPhoto))
+                var user = dto.FirstOrDefault(x => x.UserName == users.Item2[i].UserName);
+                if (!string.IsNullOrEmpty(users.Item2[i].UserPhoto))
                 {
-                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users[i].UserPhoto);
+                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users.Item2[i].UserPhoto);
                 }
             }
 
             if (dto.Count > 0)
-                return ApiResponse<List<UserMainDto>>.Success(dto, 200, dto.Count);
+                return ApiResponse<List<UserMainDto>>.Success(dto, 200, users.Item1);
             return ApiResponse<List<UserMainDto>>.Fail("User list is empty", 404);
         }
 
