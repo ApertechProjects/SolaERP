@@ -1,16 +1,4 @@
-﻿using AutoMapper;
-using SolaERP.Application.Utils;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Group;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.User;
-using SolaERP.Infrastructure.Dtos.UserDto;
-using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Models;
-using SolaERP.Infrastructure.UnitOfWork;
-
-namespace SolaERP.Application.Services
+﻿namespace SolaERP.Application.Services
 {
     public class UserService : IUserService
     {
@@ -226,7 +214,8 @@ namespace SolaERP.Application.Services
             return _userRepository.GetUserNameByTokenAsync(name);
         }
 
-        public async Task<ApiResponse<(int,List<UserMainDto>)>> GetUserWFAAsync(string name, int userStatus, int userType)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserWFAAsync(string name, int userStatus, int userType, int page, int limit)
+        public async Task<ApiResponse<(int, List<UserMainDto>)>> GetUserWFAAsync(string name, int userStatus, int userType)
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var users = await _userRepository.GetUserWFAAsync(userId, userStatus, userType);
@@ -242,15 +231,15 @@ namespace SolaERP.Application.Services
             }
 
             if (dto.Count > 0)
-                return ApiResponse<(int,List<UserMainDto>)>.Success((users.Item1,dto), 200, dto.Count);
-            return ApiResponse<(int,List<UserMainDto>)>.Fail("User list is empty", 404);
+                return ApiResponse<(int, List<UserMainDto>)>.Success((users.Item1, dto), 200, dto.Count);
+            return ApiResponse<(int, List<UserMainDto>)>.Fail("User list is empty", 404);
 
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string name, int userStatus, int userType)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string name, int userStatus, int userType, int page, int limit)
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
-            var users = await _userRepository.GetUserAllAsync(userId, userStatus, userType);
+            var users = await _userRepository.GetUserAllAsync(userId, userStatus, userType, page, limit);
             var dto = _mapper.Map<List<UserMainDto>>(users);
 
             for (int i = 0; i < dto.Count; i++)
@@ -267,10 +256,10 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<UserMainDto>>.Fail("User list is empty", 404);
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string name, int userStatus)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string name, int userStatus, int page, int limit)
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
-            var users = await _userRepository.GetUserCompanyAsync(userId, userStatus);
+            var users = await _userRepository.GetUserCompanyAsync(userId, userStatus, page, limit);
             var dto = _mapper.Map<List<UserMainDto>>(users);
 
             for (int i = 0; i < dto.Count; i++)
@@ -287,10 +276,10 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<UserMainDto>>.Fail("User list is empty", 404);
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string name, int userStatus)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string name, int userStatus, int page, int limit)
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
-            var users = await _userRepository.GetUserVendorAsync(userId, userStatus);
+            var users = await _userRepository.GetUserVendorAsync(userId, userStatus, page, limit);
             var dto = _mapper.Map<List<UserMainDto>>(users);
 
             for (int i = 0; i < dto.Count; i++)
@@ -313,8 +302,6 @@ namespace SolaERP.Application.Services
             if (model.Id == 0)
                 return ApiResponse<bool>.Fail("User not found", 404);
 
-            List<string> failedMailList = new List<string>();
-
             var user = await _userRepository.UserChangeStatusAsync(userId, model);
 
             await _unitOfWork.SaveChangesAsync();
@@ -323,7 +310,31 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Fail("Problem detected", 400);
         }
 
-        public async Task<ApiResponse<UserLoadDto>> GetUserInfo(int userId)
+        public async Task<ApiResponse<bool>> UserChangeStatusAsync(string name, List<UserChangeStatusModel> model)
+        {
+            var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            if (model.Count == 0)
+                return ApiResponse<bool>.Fail("User not found", 404);
+
+            DataTable table = new DataTable("MyTable");
+            table.Columns.Add("Id", typeof(int));
+            table.Columns.Add("Sequence", typeof(int));
+            table.Columns.Add("ApproveStatus", typeof(int));
+            table.Columns.Add("Comment", typeof(string));
+            for (int i = 0; i < model.Count; i++)
+            {
+                table.Rows.Add(model[i].Id, model[i].Sequence, model[i].ApproveStatus, model[i].Comment);
+            }
+
+            var user = await _userRepository.UserChangeStatusAsync(userId, table);
+
+            await _unitOfWork.SaveChangesAsync();
+            if (user)
+                return ApiResponse<bool>.Success(true, 200);
+            return ApiResponse<bool>.Fail("Problem detected", 400);
+        }
+
+        public async Task<ApiResponse<UserLoadDto>> GetUserInfoAsync(int userId)
         {
             var user = await _userRepository.GetUserInfoAsync(userId);
             var dto = _mapper.Map<UserLoadDto>(user);

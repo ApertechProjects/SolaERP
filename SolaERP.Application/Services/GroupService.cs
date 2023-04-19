@@ -147,6 +147,16 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<GroupEmailNotification>>.Success(result, 200);
         }
 
+        public async Task<ApiResponse<GroupDto>> GetGroupInfoAsync(int groupId)
+        {
+            var data = await _groupRepository.GetGroupInfoAsync(groupId);
+            var dto = _mapper.Map<GroupDto>(data);
+            if (dto != null)
+                return ApiResponse<GroupDto>.Success(dto, 200);
+            else
+                return ApiResponse<GroupDto>.Fail("group not found", 404);
+        }
+
         public async Task<ApiResponse<List<GroupRoleDto>>> GetGroupRolesByGroupIdAsync(int groupId)
         {
             var buyers = await _groupRepository.GetGroupRolesByGroupIdAsync(groupId);

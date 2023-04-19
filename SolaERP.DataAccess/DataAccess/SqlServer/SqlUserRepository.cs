@@ -1,14 +1,4 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Entities.Groups;
-using SolaERP.Infrastructure.Entities.User;
-using SolaERP.Infrastructure.Models;
-using SolaERP.Infrastructure.UnitOfWork;
-using System.Data;
-using System.Data.Common;
-
-namespace SolaERP.DataAccess.DataAcces.SqlServer
+﻿namespace SolaERP.DataAccess.DataAcces.SqlServer
 {
     public class SqlUserRepository : IUserRepository
     {
@@ -281,37 +271,41 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             return new() { UserId = reader.Get<int>("Id"), FullName = reader.Get<string>("FullName") };
         }
 
-        public async Task<(int,List<UserMain>)> GetUserWFAAsync(int userId, int userStatus, int userType)
+        public async Task<List<UserMain>> GetUserWFAAsync(int userId, int userStatus, int userType, int page, int limit)
         {
             List<UserMain> users = new List<UserMain>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec SP_UsersWFA @UserType,@UserStatus,@UserId,@totalDataCount";
+                command.CommandText = "exec SP_UsersWFA @UserType,@UserStatus,@UserId";
 
                 command.Parameters.AddWithValue(command, "@UserType", userType is -1 ? "%" : string.Join(',', userType));
                 command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
+                command.Parameters.AddWithValue(command, "@Limit", limit);
+                command.Parameters.AddWithValue(command, "@Page", page);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddOutPutParameter(command, "@totalDataCount");
-                
+
                 using var reader = await command.ExecuteReaderAsync();
 
                 while (reader.Read())
                     users.Add(reader.GetByEntityStructure<UserMain>());
-                
+
                 var returnValue = command.Parameters["@totalDataCount"].Value;
-                return (Convert.ToInt32(returnValue),users);
+                return (Convert.ToInt32(returnValue), users);
             }
         }
 
-        public async Task<List<UserMain>> GetUserAllAsync(int userId, int userStatus, int userType)
+        public async Task<List<UserMain>> GetUserAllAsync(int userId, int userStatus, int userType, int page, int limit)
         {
             List<UserMain> users = new List<UserMain>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec SP_UsersAll @UserType,@UserStatus,@UserId";
+                command.CommandText = "exec SP_UsersAll @UserType,@UserStatus,@UserId,@Limit,@Page";
 
                 command.Parameters.AddWithValue(command, "@UserType", userType is -1 ? "%" : string.Join(',', userType));
                 command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
+                command.Parameters.AddWithValue(command, "@Limit", limit);
+                command.Parameters.AddWithValue(command, "@Page", page);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 using var reader = await command.ExecuteReaderAsync();
@@ -323,14 +317,15 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<List<UserMain>> GetUserCompanyAsync(int userId, int userStatus)
+        public async Task<List<UserMain>> GetUserCompanyAsync(int userId, int userStatus, int page, int limit)
         {
             List<UserMain> users = new List<UserMain>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec SP_UsersCompany @UserStatus,@UserId";
+                command.CommandText = "exec SP_UsersCompany @UserStatus,@UserId,@Limit,@Page";
                 command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
-
+                command.Parameters.AddWithValue(command, "@Limit", limit);
+                command.Parameters.AddWithValue(command, "@Page", page);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 using var reader = await command.ExecuteReaderAsync();
@@ -343,14 +338,15 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<List<UserMain>> GetUserVendorAsync(int userId, int userStatus)
+        public async Task<List<UserMain>> GetUserVendorAsync(int userId, int userStatus, int page, int limit)
         {
             List<UserMain> users = new List<UserMain>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec SP_UsersVendor @UserStatus,@UserId";
+                command.CommandText = "exec SP_UsersVendor @UserStatus,@UserId,@Limit,@Page";
                 command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
-
+                command.Parameters.AddWithValue(command, "@Limit", limit);
+                command.Parameters.AddWithValue(command, "@Page", page);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 using var reader = await command.ExecuteReaderAsync();
                 while (reader.Read())
@@ -510,6 +506,20 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@Command", sessionCom);
                 return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> UserChangeStatusAsync(int userId, DataTable data)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_UserChangeStatusBulk @dataTable,@userId";
+                command.Parameters.AddWithValue(command, "@userId", userId);
+
+                command.Parameters.Add("@dataTable", SqlDbType.Structured).Value = data;
+                command.Parameters["@dataTable"].TypeName = "UserChangeStatus";
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
             }
         }
 

@@ -1,9 +1,4 @@
-﻿using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Entities.Groups;
-using SolaERP.Infrastructure.Entities.User;
-using SolaERP.Infrastructure.Models;
-
-namespace SolaERP.Infrastructure.Contracts.Repositories
+﻿namespace SolaERP.Infrastructure.Contracts.Repositories
 {
     public interface IUserRepository : ICrudOperations<User>
     {
@@ -19,11 +14,12 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<bool> ResetUserPasswordAsync(string email, string passwordHash);
         Task<List<ActiveUser>> GetActiveUsersAsync();
         Task<List<ActiveUser>> GetActiveUsersWithoutCurrentUserAsync(int userId);
-        Task<(int, List<UserMain>)> GetUserWFAAsync(int userId, int userStatus, int userType);
-        Task<List<UserMain>> GetUserAllAsync(int userId, int userStatus, int userType);
-        Task<List<UserMain>> GetUserCompanyAsync(int userId, int userStatus);
-        Task<List<UserMain>> GetUserVendorAsync(int userId, int userStatus);
+        Task<List<UserMain>> GetUserWFAAsync(int userId, int userStatus, int userType, int page, int limit);
+        Task<List<UserMain>> GetUserAllAsync(int userId, int userStatus, int userType, int page, int limit);
+        Task<List<UserMain>> GetUserCompanyAsync(int userId, int userStatus, int page, int limit);
+        Task<List<UserMain>> GetUserVendorAsync(int userId, int userStatus, int page, int limit);
         Task<bool> UserChangeStatusAsync(int userId, UserChangeStatusModel model);
+        Task<bool> UserChangeStatusAsync(int userId, DataTable data);
         Task<bool> SaveUserAsync(User model);
         Task<UserLoad> GetUserInfoAsync(int userId);
         Task<List<ERPUser>> GetERPUser();

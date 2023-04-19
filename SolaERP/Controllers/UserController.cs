@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Models;
+using System.Collections.Generic;
 
 namespace SolaERP.Controllers
 {
@@ -40,27 +42,27 @@ namespace SolaERP.Controllers
           => CreateActionResult(await _userService.GetActiveUsersWithoutCurrentUserAsync(User.Identity.Name));
 
         [HttpGet]
-        public async Task<IActionResult> GetUserWFAAsync(int userStatus, int userType)
-            => CreateActionResult(await _userService.GetUserWFAAsync(User.Identity.Name, userStatus, userType));
+        public async Task<IActionResult> GetUserWFAAsync(int userStatus, int userType, int page, int limit)
+            => CreateActionResult(await _userService.GetUserWFAAsync(User.Identity.Name, userStatus, userType, page, limit));
 
         [HttpGet]
-        public async Task<IActionResult> GetUserAllAsync(int userStatus, int userType)
-            => CreateActionResult(await _userService.GetUserAllAsync(User.Identity.Name, userStatus, userType));
+        public async Task<IActionResult> GetUserAllAsync(int userStatus, int userType, int page, int limit)
+        => CreateActionResult(await _userService.GetUserAllAsync(User.Identity.Name, userStatus, userType, page, limit));
 
         [HttpGet]
-        public async Task<IActionResult> GetUserCompanyAsync([FromQuery] int userStatus)
-            => CreateActionResult(await _userService.GetUserCompanyAsync(User.Identity.Name, userStatus));
+        public async Task<IActionResult> GetUserCompanyAsync([FromQuery] int userStatus, int page, int limit)
+            => CreateActionResult(await _userService.GetUserCompanyAsync(User.Identity.Name, userStatus, page, limit));
 
         [HttpGet]
-        public async Task<IActionResult> GetUserVendorAsync([FromQuery] int userStatus)
-            => CreateActionResult(await _userService.GetUserVendorAsync(User.Identity.Name, userStatus));
+        public async Task<IActionResult> GetUserVendorAsync([FromQuery] int userStatus, int page, int limit)
+            => CreateActionResult(await _userService.GetUserVendorAsync(User.Identity.Name, userStatus, page, limit));
 
         [HttpPost]
-        public async Task<IActionResult> UserChangeStatusAsync(UserChangeStatusModel model)
-            => CreateActionResult(await _userService.UserChangeStatusAsync(User.Identity.Name, model));
+        public async Task<IActionResult> UserChangeStatusAsync(List<UserChangeStatusModel> model)
+          => CreateActionResult(await _userService.UserChangeStatusAsync(User.Identity.Name, model));
 
         [HttpPost]
-        public async Task<IActionResult> SaveUser(UserSaveModel user)
+        public async Task<IActionResult> SaveUserAsync(UserSaveModel user)
             => CreateActionResult(await _userService.SaveUserAsync(user));
 
         [HttpPost]
@@ -68,15 +70,19 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _userService.ChangeUserPasswordAsync(user));
 
         [HttpGet("{userId}")]
-        public async Task<IActionResult> GetUserInfo(int userId)
-            => CreateActionResult(await _userService.GetUserInfo(userId));
+        public async Task<IActionResult> GetUserInfoAsync(int userId)
+            => CreateActionResult(await _userService.GetUserInfoAsync(userId));
 
         [HttpGet]
         public async Task<IActionResult> GetERPUserAsync()
             => CreateActionResult(await _userService.GetERPUserAsync());
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteUser([FromBody] List<int> userIds)
+        public async Task<IActionResult> DeleteUserAsync([FromBody] List<int> userIds)
             => CreateActionResult(await _userService.DeleteUserAsync(userIds));
+
+        [HttpGet]
+        public async Task<IActionResult> GetUsersByGroupIdAsync(int groupId)
+            => CreateActionResult(await _userService.GetUsersByGroupIdAsync(groupId));
     }
 }
