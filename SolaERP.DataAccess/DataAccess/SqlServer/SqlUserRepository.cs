@@ -282,15 +282,17 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             return new() { UserId = reader.Get<int>("Id"), FullName = reader.Get<string>("FullName") };
         }
 
-        public async Task<List<UserMain>> GetUserWFAAsync(int userId, int userStatus, int userType)
+        public async Task<List<UserMain>> GetUserWFAAsync(int userId, int userStatus, int userType, int page, int limit)
         {
             List<UserMain> users = new List<UserMain>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec SP_UsersWFA @UserType,@UserStatus,@UserId";
+                command.CommandText = "exec SP_UsersWFA @UserType,@UserStatus,@UserId,@Limit,@Page";
 
                 command.Parameters.AddWithValue(command, "@UserType", userType is -1 ? "%" : string.Join(',', userType));
                 command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
+                command.Parameters.AddWithValue(command, "@Limit", limit);
+                command.Parameters.AddWithValue(command, "@Page", page);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 using var reader = await command.ExecuteReaderAsync();
@@ -302,15 +304,17 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<List<UserMain>> GetUserAllAsync(int userId, int userStatus, int userType)
+        public async Task<List<UserMain>> GetUserAllAsync(int userId, int userStatus, int userType, int page, int limit)
         {
             List<UserMain> users = new List<UserMain>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec SP_UsersAll @UserType,@UserStatus,@UserId";
+                command.CommandText = "exec SP_UsersAll @UserType,@UserStatus,@UserId,@Limit,@Page";
 
                 command.Parameters.AddWithValue(command, "@UserType", userType is -1 ? "%" : string.Join(',', userType));
                 command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
+                command.Parameters.AddWithValue(command, "@Limit", limit);
+                command.Parameters.AddWithValue(command, "@Page", page);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 using var reader = await command.ExecuteReaderAsync();
@@ -322,14 +326,15 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<List<UserMain>> GetUserCompanyAsync(int userId, int userStatus)
+        public async Task<List<UserMain>> GetUserCompanyAsync(int userId, int userStatus, int page, int limit)
         {
             List<UserMain> users = new List<UserMain>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec SP_UsersCompany @UserStatus,@UserId";
+                command.CommandText = "exec SP_UsersCompany @UserStatus,@UserId,@Limit,@Page";
                 command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
-
+                command.Parameters.AddWithValue(command, "@Limit", limit);
+                command.Parameters.AddWithValue(command, "@Page", page);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 using var reader = await command.ExecuteReaderAsync();
@@ -342,14 +347,15 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<List<UserMain>> GetUserVendorAsync(int userId, int userStatus)
+        public async Task<List<UserMain>> GetUserVendorAsync(int userId, int userStatus, int page, int limit)
         {
             List<UserMain> users = new List<UserMain>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec SP_UsersVendor @UserStatus,@UserId";
+                command.CommandText = "exec SP_UsersVendor @UserStatus,@UserId,@Limit,@Page";
                 command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
-
+                command.Parameters.AddWithValue(command, "@Limit", limit);
+                command.Parameters.AddWithValue(command, "@Page", page);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 using var reader = await command.ExecuteReaderAsync();
                 while (reader.Read())

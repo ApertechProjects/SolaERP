@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Models;
+using System.Collections.Generic;
 
 namespace SolaERP.Controllers
 {
@@ -40,20 +42,20 @@ namespace SolaERP.Controllers
           => CreateActionResult(await _userService.GetActiveUsersWithoutCurrentUserAsync(User.Identity.Name));
 
         [HttpGet]
-        public async Task<IActionResult> GetUserWFAAsync(int userStatus, int userType)
-            => CreateActionResult(await _userService.GetUserWFAAsync(User.Identity.Name, userStatus, userType));
+        public async Task<IActionResult> GetUserWFAAsync(int userStatus, int userType, int page, int limit)
+            => CreateActionResult(await _userService.GetUserWFAAsync(User.Identity.Name, userStatus, userType, page, limit));
 
         [HttpGet]
-        public async Task<IActionResult> GetUserAllAsync(int userStatus, int userType)
-            => CreateActionResult(await _userService.GetUserAllAsync(User.Identity.Name, userStatus, userType));
+        public async Task<IActionResult> GetUserAllAsync(int userStatus, int userType, int page, int limit)
+        => CreateActionResult(await _userService.GetUserAllAsync(User.Identity.Name, userStatus, userType, page, limit));
 
         [HttpGet]
-        public async Task<IActionResult> GetUserCompanyAsync([FromQuery] int userStatus)
-            => CreateActionResult(await _userService.GetUserCompanyAsync(User.Identity.Name, userStatus));
+        public async Task<IActionResult> GetUserCompanyAsync([FromQuery] int userStatus, int page, int limit)
+            => CreateActionResult(await _userService.GetUserCompanyAsync(User.Identity.Name, userStatus, page, limit));
 
         [HttpGet]
-        public async Task<IActionResult> GetUserVendorAsync([FromQuery] int userStatus)
-            => CreateActionResult(await _userService.GetUserVendorAsync(User.Identity.Name, userStatus));
+        public async Task<IActionResult> GetUserVendorAsync([FromQuery] int userStatus, int page, int limit)
+            => CreateActionResult(await _userService.GetUserVendorAsync(User.Identity.Name, userStatus, page, limit));
 
         [HttpPost]
         public async Task<IActionResult> UserChangeStatusAsync(List<UserChangeStatusModel> model)
