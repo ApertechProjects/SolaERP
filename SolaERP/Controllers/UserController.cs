@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Controllers
@@ -76,8 +77,8 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _userService.GetERPUserAsync());
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteUserAsync([FromBody] List<int> userIds)
-            => CreateActionResult(await _userService.DeleteUserAsync(userIds));
+        public async Task<IActionResult> DeleteUserAsync(DeleteUser deleteUser)
+            => CreateActionResult(await _userService.DeleteUserAsync(deleteUser));
 
         [HttpGet]
         public async Task<IActionResult> GetUsersByGroupIdAsync(int groupId)

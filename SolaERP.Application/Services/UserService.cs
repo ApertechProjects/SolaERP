@@ -411,12 +411,12 @@ namespace SolaERP.Application.Services
             else return ApiResponse<bool>.Success(400);
         }
 
-        public async Task<ApiResponse<bool>> DeleteUserAsync(List<int> userIds)
+        public async Task<ApiResponse<bool>> DeleteUserAsync(DeleteUser deleteUser)
         {
             int succesfulCounter = 0;
             List<Task<bool>> tasks = new List<Task<bool>>();
 
-            userIds.ForEach(x =>
+            deleteUser.userIds.ForEach(x =>
             {
                 tasks.Add(_userRepository.SaveUserAsync(new() { Id = x }));
             });
@@ -430,7 +430,7 @@ namespace SolaERP.Application.Services
 
             await _unitOfWork.SaveChangesAsync();
 
-            return succesfulCounter == userIds.Count
+            return succesfulCounter == deleteUser.userIds.Count
                 ? ApiResponse<bool>.Success(204)
                 : ApiResponse<bool>.Fail("User can not be deleted", 400);
         }
