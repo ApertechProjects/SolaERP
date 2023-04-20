@@ -43,6 +43,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return new()
             {
                 LogId = reader.Get<int>("LogId"),
+                ActionId = reader.Get<int>("ActionId"),
                 ActionName = reader.Get<string>("ActionName"),
                 BusnessUnitName = reader.Get<string>("BusinessUnitName"),
                 FullName = reader.Get<string>("FullName"),
