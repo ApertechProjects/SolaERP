@@ -542,7 +542,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_UserSession_U @UserId,@Command";
-
+                 
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@Command", sessionCom);
                 return await command.ExecuteNonQueryAsync() > 0;

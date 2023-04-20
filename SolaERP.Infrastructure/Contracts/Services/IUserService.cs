@@ -31,7 +31,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<List<ERPUserDto>>> GetERPUserAsync();
         Task<bool> CheckTokenAsync(Guid name);
         Task<ApiResponse<bool>> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel);
-        Task<ApiResponse<bool>> DeleteUserAsync(List<int> userIds);
+        Task<ApiResponse<bool>> DeleteUserAsync(DeleteUser deleteUser);
         Task<bool> UpdateSessionAsync(int userId, int updateCommand);
         Task<ApiResponse<List<UsersByGroupDto>>> GetUsersByGroupIdAsync(int groupId);
     }
