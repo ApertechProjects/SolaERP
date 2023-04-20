@@ -3,6 +3,7 @@
     public class LogInfo : BaseEntity
     {
         public int LogId { get; set; }
+        public int ActionId { get; set; }
         public string ActionName { get; set; }
         public string BusnessUnitName { get; set; }
         public string FullName { get; set; }

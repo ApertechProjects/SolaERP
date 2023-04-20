@@ -108,18 +108,6 @@
              <remarks>The GetAllUOMList endpoint returns a list of all the available unit of measure codes in the system. This endpoint can be used to retrieve the list of available UOM codes and their descriptions for use in other parts of the system.</remarks>
             <param name="businessUnitCode">The unique identifier of the business unit for which to retrieve currency codes.</param>
         </member>
-        <member name="M:SolaERP.Controllers.UserController.RemoveUser">
-             <summary>
-            Removes the user which referenced with authToken
-             </summary>
-             <remarks>Users who are authenticated and authorized to perform the action will be able to access the</remarks>
-             <param name="authToken">userIdentifier which returns in Login or Register.</param>
-        </member>
-        <member name="M:SolaERP.Controllers.UserController.GetActiveUsersAsync">
-             <summary>
-            Gets all active users for user list
-             </summary>
-        </member>
         <member name="T:SolaERP.Extensions.ServiceRegistrations">
             <summary>
             This class is container for DataAcces Services 
