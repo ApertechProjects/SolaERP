@@ -7,7 +7,6 @@ namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [Authorize]
-    [Authorize]
     public class UserController : CustomBaseController
     {
         private readonly IUserService _userService;
@@ -19,18 +18,10 @@ namespace SolaERP.Controllers
         }
 
 
-        /// <summary>
-        ///Removes the user which referenced with authToken
-        /// </summary>
-        /// <remarks>Users who are authenticated and authorized to perform the action will be able to access the</remarks>
-        /// <param name="authToken">userIdentifier which returns in Login or Register.</param>
         [HttpDelete]
         public async Task<IActionResult> RemoveUser()
             => CreateActionResult(await _userService.RemoveUserByTokenAsync(User.Identity.Name));
 
-        /// <summary>
-        ///Gets all active users for user list
-        /// </summary>
         [HttpGet]
         public async Task<IActionResult> GetActiveUsersAsync()
             => CreateActionResult(await _userService.GetActiveUsersAsync());

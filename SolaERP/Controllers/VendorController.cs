@@ -22,12 +22,12 @@ namespace SolaERP.Controllers
             _vendorService = vendorService;
         }
 
-        //[Authorize]
-        //[HttpGet("{BU}")]
-        //public async Task<ApiResult> GetWFAandAllVendorList(int BU)
-        //{
-        //    return await new EntityLogic(ConfHelper).GetVendorList(User.Identity.Name, BU);
-        //}
+        [Authorize]
+        [HttpGet("{BU}")]
+        public async Task<ApiResult> GetWFAandAllVendorList(int BU)
+        {
+            return await new EntityLogic(ConfHelper).GetVendorList(User.Identity.Name, BU);
+        }
 
         [HttpGet("{vendorId}")]
         [Authorize]
