@@ -431,7 +431,7 @@ namespace SolaERP.Application.Services
             await _unitOfWork.SaveChangesAsync();
 
             return succesfulCounter == deleteUser.userIds.Count
-                ? ApiResponse<bool>.Success(204)
+                ? ApiResponse<bool>.Success(true, 200);
                 : ApiResponse<bool>.Fail("User can not be deleted", 400);
         }
 
