@@ -6,9 +6,7 @@ namespace SolaERP.Infrastructure.Dtos.Shared
 {
     public class ApiResponse<T>
     {
-
-
-        public object Data { get; set; }
+        public T Data { get; set; }
         [JsonIgnore]
         public int StatusCode { get; set; }
         public string Errors { get; set; }
@@ -26,9 +24,22 @@ namespace SolaERP.Infrastructure.Dtos.Shared
             return new ApiResponse<T> { StatusCode = statusCode };
         }
 
+        public static T GetEmptyArrayIfCollection<T>()
+        {
+            if (typeof(T).GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICollection<>)))
+            {
+                var elementType = typeof(T).GetGenericArguments()[0];
+                var collectionType = typeof(List<>).MakeGenericType(elementType);
+                return (T)Activator.CreateInstance(collectionType);
+            }
+
+            return default(T);
+        }
+
+
         public static ApiResponse<T> Fail(string error, int statusCode)
         {
-            return new ApiResponse<T> { Errors = error, StatusCode = statusCode };
+            return new ApiResponse<T> { Errors = error, StatusCode = statusCode, Data = GetEmptyArrayIfCollection<T>() };
         }
 
         public static ApiResponse<bool> Fail(string propertyName, string error, int statusCode)
@@ -52,7 +63,7 @@ namespace SolaERP.Infrastructure.Dtos.Shared
 
             var jsonResult = JsonConvert.SerializeObject(errorss);
 
-            return new ApiResponse<T> { Errors = jsonResult, StatusCode = statusCode, Data = false };
+            return new ApiResponse<T> { Errors = jsonResult, StatusCode = statusCode };
         }
 
         public static ApiResponse<T> Fail(List<string> propertyName, List<ModelErrorCollection> error, int statusCode)

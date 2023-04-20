@@ -27,9 +27,7 @@ namespace SolaERP.Application.Services
             var dto = _mapper.Map<List<LogInfoDto>>(entity);
 
             return dto.Count > 0 ? ApiResponse<List<LogInfoDto>>.Success(dto, 200) :
-                ApiResponse<List<LogInfoDto>>.Fail("Something went wrong", 400);
-
+                ApiResponse<List<LogInfoDto>>.Fail("No log information found with the specified parameters.", 404);
         }
-
     }
 }
