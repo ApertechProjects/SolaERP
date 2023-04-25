@@ -26,14 +26,14 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Create(CreateEmailNotificationCommandRequest request)
         {
             var result = await _mediator.Send(request);
-            return result ? Ok(ApiResponse<bool>.Success(204)) : BadRequest(ApiResponse<bool>.Fail("Something went wrong Notification is not created", 400));
+            return result ? Ok(ApiResponse<bool>.Success(200)) : BadRequest(ApiResponse<bool>.Fail("Something went wrong Notification is not created", 400));
         }
 
         [HttpPut]
         public async Task<IActionResult> Update(UpdateEmailNotificationRequest request)
         {
             var result = await _mediator.Send(request);
-            return result ? Ok(ApiResponse<bool>.Success(204)) : BadRequest(ApiResponse<bool>.Fail("Something went wrong Notification is not updated", 400));
+            return result ? Ok(ApiResponse<bool>.Success(200)) : BadRequest(ApiResponse<bool>.Fail("Something went wrong Notification is not updated", 400));
         }
 
 
@@ -41,7 +41,7 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Delete(DeleteEmailNotificationRequest request)
         {
             var result = await _mediator.Send(request);
-            return result ? Ok(ApiResponse<bool>.Success(204)) : BadRequest(ApiResponse<bool>.Fail("Something went wrong Notification is not deleted", 400));
+            return result ? Ok(ApiResponse<bool>.Success(200)) : BadRequest(ApiResponse<bool>.Fail("Something went wrong Notification is not deleted", 400));
         }
 
     }
