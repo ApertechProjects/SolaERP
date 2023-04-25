@@ -120,7 +120,7 @@ namespace SolaERP.Application.Services
             else return ApiResponse<bool>.Fail("user", "Data can not be deleted", 400);
         }
 
-        public async Task DeleteUserToGroupAsync(List<int> users, int groupId)
+        public async Task DeleteUserFromGroupAsync(List<int> users, int groupId)
         {
             DataTable table = new DataTable("MyTable");
             table.Columns.Add("UserId", typeof(int));
@@ -239,7 +239,7 @@ namespace SolaERP.Application.Services
             if (model.AddUsers != null)
                 await AddUserToGroupAsync(model.AddUsers, model.GroupId);
             if (model.RemoveUsers != null)
-                await DeleteUserToGroupAsync(model.RemoveUsers, model.GroupId);
+                await DeleteUserFromGroupAsync(model.RemoveUsers, model.GroupId);
 
             //if (model.BusinessUnitIds != null)
             //{
