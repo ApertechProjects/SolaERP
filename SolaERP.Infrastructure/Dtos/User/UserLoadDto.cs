@@ -21,6 +21,11 @@ namespace SolaERP.Infrastructure.Dtos.User
         public string SignaturePhoto { get; set; }
         public string Description { get; set; }
         public string ERPUser { get; set; }
-        public int Session { get; set; }
+        public string VendorCode { get; set; }
+        public string VendorName { get; set; }
+        public string TaxId { get; set; }
+        public string Status { get; set; }
+        public string ApproveStatus { get; set; }
+        public int Sequence { get; set; }
     }
 }

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Features.Queries.AnalysisCode;
 using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Controllers
@@ -11,16 +13,15 @@ namespace SolaERP.Controllers
     public class AnalysisCodeController : CustomBaseController
     {
         private readonly IAnalysisCodeService _analysisCodeService;
+        private readonly IMediator _mediator;
 
-        public AnalysisCodeController(IAnalysisCodeService analysisCodeService)
+        public AnalysisCodeController(IAnalysisCodeService analysisCodeService, IMediator mediator)
         {
             _analysisCodeService = analysisCodeService;
+            _mediator = mediator;
         }
 
-        /// <summary>
-        ///Retrieve a list of all analysis codes
-        /// </summary>
-        /// <remarks>This endpoint retrieves a list of all analysis codes in the system.</remarks>
+
         [HttpPost]
         public async Task<IActionResult> GetAnalysisCodes(AnalysisCodeGetModel getRequest)
             => CreateActionResult(await _analysisCodeService.GetAnalysisCodesAsync(getRequest));
@@ -29,6 +30,9 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetAnalysisDimensionAsync()
             => CreateActionResult(await _analysisCodeService.GetAnalysisDimensionAsync());
 
-      
+
+        [HttpGet]
+        public async Task<IActionResult> GetBusinessUnitAnalysisDimensions([FromQuery] GetAnalysisDimensionByBuRequest request)
+            => CreateActionResult(await _mediator.Send(request));
     }
 }
