@@ -70,13 +70,5 @@ namespace SolaERP.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteUserAsync(DeleteUser deleteUser)
             => CreateActionResult(await _userService.DeleteUserAsync(deleteUser));
-
-        [HttpGet]
-        public async Task<IActionResult> GetUsersByGroupIdAsync(int groupId)
-            => CreateActionResult(await _userService.GetUsersByGroupIdAsync(groupId));
-
-        //[HttpPost]
-        //public async Task<IActionResult> Upload(int groupId)
-        //    => CreateActionResult(await _userService.GetUsersByGroupIdAsync(groupId));
     }
 }

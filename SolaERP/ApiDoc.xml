@@ -25,12 +25,6 @@
              <remarks>This endpoint returns a list of account codes that are associated with a specific business unit in the accounting system.</remarks>
              <param name="businessUnit">The unique identifier of the business unit for which to retrieve account codes.</param>
         </member>
-        <member name="M:SolaERP.Controllers.AnalysisCodeController.GetAnalysisCodes(SolaERP.Infrastructure.Models.AnalysisCodeGetModel)">
-             <summary>
-            Retrieve a list of all analysis codes
-             </summary>
-             <remarks>This endpoint retrieves a list of all analysis codes in the system.</remarks>
-        </member>
         <member name="M:SolaERP.Controllers.AttachmentController.GetAttachmentsWithFilesAsync(System.Int32)">
              <summary>
             Retrieve attachment details with file data by ID

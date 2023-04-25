@@ -26,10 +26,10 @@ using SolaERP.Infrastructure.Dtos.UOM;
 using SolaERP.Infrastructure.Dtos.User;
 using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Dtos.Venndors;
-using SolaERP.Infrastructure.Entities;
 using SolaERP.Infrastructure.Entities.Account;
 using SolaERP.Infrastructure.Entities.AnalysisCode;
 using SolaERP.Infrastructure.Entities.AnalysisDimension;
+using SolaERP.Infrastructure.Entities.ApproveRole;
 using SolaERP.Infrastructure.Entities.ApproveStage;
 using SolaERP.Infrastructure.Entities.ApproveStages;
 using SolaERP.Infrastructure.Entities.Attachment;
@@ -46,13 +46,13 @@ using SolaERP.Infrastructure.Entities.LogInfo;
 using SolaERP.Infrastructure.Entities.Menu;
 using SolaERP.Infrastructure.Entities.Procedure;
 using SolaERP.Infrastructure.Entities.Request;
-using SolaERP.Infrastructure.Entities.ApproveRole;
 using SolaERP.Infrastructure.Entities.Status;
 using SolaERP.Infrastructure.Entities.Supplier;
 using SolaERP.Infrastructure.Entities.Translate;
 using SolaERP.Infrastructure.Entities.UOM;
 using SolaERP.Infrastructure.Entities.User;
 using SolaERP.Infrastructure.Entities.Vendors;
+using SolaERP.Infrastructure.Features.Queries.AnalysisCode;
 using SolaERP.Infrastructure.Models;
 
 namespace SolaERP.Application.Mappers
@@ -123,6 +123,12 @@ namespace SolaERP.Application.Mappers
             CreateMap<Layout, LayoutDto>().ForMember(dest => dest.TabIndex, opt => opt.MapFrom(src => src.TabIndex)).
                 ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.Key)).
                 ForMember(dest => dest.Layout, opt => opt.MapFrom(src => src.UserLayout)).ReverseMap();
+
+            CreateMap<GetAnalysisDimensionByBuResponse, BuAnalysisDimension>().ForMember(dest => dest.AnalysisDimensionId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.AnalysisDimensionName, opt => opt.MapFrom(src => src.AnalysisDimensionName))
+                .ForMember(dest => dest.AnalysisDimensionCode, opt => opt.MapFrom(src => src.AnalysisDimensionCode))
+                .ForMember(dest => dest.BusinessUnitId, opt => opt.MapFrom(src => src.BusinessUnitId))
+                .ForMember(dest => dest.BusinessUnitName, opt => opt.MapFrom(src => src.BusinessUnit)).ReverseMap();
 
             CreateMap<RequestMainDto, RequestMainAll>().ReverseMap();
             CreateMap<Language, LanguageDto>().ReverseMap();

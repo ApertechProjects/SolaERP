@@ -1,13 +1,9 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities;
 using SolaERP.Infrastructure.Entities.AnalysisCode;
 using SolaERP.Infrastructure.Entities.AnalysisDimension;
-using SolaERP.Infrastructure.Entities.BusinessUnits;
-using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data.Common;
-using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -54,5 +50,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<List<BuAnalysisDimension>> GetBusinessUnitDimensions(int businessUnitId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                List<BuAnalysisDimension> resultList = new();
+
+                command.CommandText = "EXEC [dbo].[SP_AnalysisDimension_Load_BY_BU] @businessUniId";
+                command.Parameters.AddWithValue(command, "@businessUniId", businessUnitId);
+
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (await reader.ReadAsync())
+                    resultList.Add(reader.GetByEntityStructure<BuAnalysisDimension>());
+
+                return resultList;
+            }
+        }
     }
 }
