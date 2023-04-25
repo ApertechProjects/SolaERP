@@ -2,6 +2,7 @@
 using SolaERP.Infrastructure.Entities.Buyer;
 using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Models;
+using System.Data;
 
 namespace SolaERP.Infrastructure.Contracts.Repositories
 {
@@ -12,6 +13,9 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<List<Groups>> GetAllAsync();
         Task<int> AddUpdateOrDeleteGroupAsync(int userID, Groups entity);
         Task<bool> AddUserToGroupOrDeleteAsync(UserToGroupModel model);
+        Task AddUserToGroupAsync(DataTable model, int groupId);
+        Task DeleteUserToGroupAsync(DataTable model, int groupId);
+        Task<bool> AddUserToGroupAsync(AddUserToGroupModel model);
         Task<bool> AddMenuToGroupOrDeleteAsync(GroupMenuIDSaveModel saveOrDeleteModel);
         Task AddBusiessUnitToGroupOrDeleteAsync(int groupId, int busiessUnitId);
         Task AddApproveRoleToGroupOrDelete(int groupId, int approveRoleId);
@@ -29,7 +33,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<bool> CreateEmailNotificationAsync(CreateGroupEmailNotificationModel model);
         Task<bool> UpdateEmailNotificationAsync(GroupEmailNotification entity);
         Task<bool> DeleteEmailNotificationAsync(int groupEmailNotificationId);
-        Task<bool> AddUserToGroupAsync(AddUserToGroupModel model);
         Task<bool> DeleteUserFromGroupAsync(int groupUserId);
         Task<Group> GetGroupInfoAsync(int groupId);
     }

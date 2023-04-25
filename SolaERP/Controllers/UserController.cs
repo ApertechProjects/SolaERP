@@ -75,8 +75,6 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetUsersByGroupIdAsync(int groupId)
             => CreateActionResult(await _userService.GetUsersByGroupIdAsync(groupId));
 
-        //[HttpPost]
-        //public async Task<IActionResult> Upload(int groupId)
-        //    => CreateActionResult(await _userService.GetUsersByGroupIdAsync(groupId));
+     
     }
 }
