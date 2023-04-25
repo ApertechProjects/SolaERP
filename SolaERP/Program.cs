@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.OpenApi.Models;
+using RabbitMQ.Client;
 using Serilog;
 using SolaERP.Application.Mappers;
 using SolaERP.Application.Validations;
@@ -29,6 +30,12 @@ builder.Services.AddControllers(options => { options.Filters.Add(new ValidationF
 builder.UseIdentityService();
 builder.ConfigureServices();
 builder.UseValidationExtension();
+builder.Services.AddTransient(sp => new ConnectionFactory()
+{
+    Uri = new(builder.Configuration["RabbitMQ:Uri"])
+});
+
+builder.Services.Configure<SolaERP.Application.Options.FileOptions>(builder.Configuration.GetSection("FileOptions"));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MapProfile));
@@ -51,7 +58,10 @@ builder.Services.Configure<HubOptions<ChatHub>>(config =>
 
 });
 
+
+
 builder.Host.UseSerilog(logger);
+
 
 builder.Services.AddAuthentication(x =>
 {
