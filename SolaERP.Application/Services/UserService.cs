@@ -322,6 +322,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<bool>> UserChangeStatusAsync(string name, List<UserChangeStatusModel> model)
         {
+            var ddd = model.ConvertListToDataTable();
             var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             if (model.Count == 0)
                 return ApiResponse<bool>.Fail("User not found", 404);
