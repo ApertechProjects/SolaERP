@@ -22,8 +22,8 @@ namespace SolaERP.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<IActionResult> GetAnalysisCodes(AnalysisCodeGetModel getRequest)
+        [HttpGet]
+        public async Task<IActionResult> GetAnalysisCodes([FromQuery] AnalysisCodeGetModel getRequest)
             => CreateActionResult(await _analysisCodeService.GetAnalysisCodesAsync(getRequest));
 
         [HttpGet]

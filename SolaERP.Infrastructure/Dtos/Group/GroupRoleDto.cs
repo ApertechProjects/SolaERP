@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Infrastructure.Dtos.Group
+﻿namespace SolaERP.Infrastructure.Dtos.Group
 {
     public class GroupRoleDto
     {
@@ -12,5 +6,6 @@ namespace SolaERP.Infrastructure.Dtos.Group
         public int GroupId { get; set; }
         public int ApproveRoleId { get; set; }
         public string ApproveRoleName { get; set; }
+        public bool IsInGroup { get; set; }
     }
 }

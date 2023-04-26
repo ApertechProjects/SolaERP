@@ -36,8 +36,6 @@ namespace SolaERP.Controllers
         /// </summary>
         /// <remarks>Returns All Business Unit List which available for given groupId</remarks>
         /// <param name="groupId">groupd id for check</param>
-        [HttpGet("{groupId}")]
-        public async Task<IActionResult> GetBusinessUnitListForGroups(int groupId)
-            => CreateActionResult(await _businessUnitService.GetBusinessUnitForGroupAsync(groupId));
+
     }
 }

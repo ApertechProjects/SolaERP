@@ -27,5 +27,6 @@ namespace SolaERP.Infrastructure.Dtos.User
         public string Status { get; set; }
         public string ApproveStatus { get; set; }
         public int Sequence { get; set; }
+        public bool InActive { get; set; }
     }
 }

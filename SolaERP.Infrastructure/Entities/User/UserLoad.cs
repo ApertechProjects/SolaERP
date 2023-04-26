@@ -21,5 +21,7 @@
         public string SignaturePhoto { get; set; }
         public string ERPUser { get; set; }
         public int Session { get; set; }
+        public bool InActive { get; set; }
+
     }
 }
