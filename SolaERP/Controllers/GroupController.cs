@@ -75,7 +75,6 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> UpdateEmailNotification(GroupEmailNotification model)
             => CreateActionResult(await _groupService.UpdateEmailNotificationAsync(model));
 
-
         [HttpPost]
         public async Task<IActionResult> SaveGroupRoleByGroupAsync(GroupRoleSaveModel model)
          => CreateActionResult(await _groupService.SaveGroupRoleByGroupAsync(model));
