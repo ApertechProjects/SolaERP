@@ -1,38 +1,54 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
+﻿using System.Data;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.Application.Utils
 {
     public static class ConvertListToTable
     {
-        public static DataTable ConvertListToDataTable<T>(this List<T> list) where T : ICollection<T>
+        public static DataTable ConvertListCollectionToDataTable<T>(this List<T> list) where T : class
         {
-            //PropertyInfo[] propertyInfos = null;
-            //propertyInfos = list.GetType().GetProperties();
+            PropertyInfo[] propertyInfos = null;
+            var properties = typeof(T).GetProperties();
+            DataTable table = new DataTable("MyTable");
+            foreach (PropertyInfo propertyInfo in properties)
+            {
+                table.Columns.Add(propertyInfo.Name, Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType);
+            }
 
-            //PropertyInfo item = propertyInfos[2];
-            //var prop = 
-            //for (int i = 0; i < list.Count; i++)
-            //{
-            //    var prop = item.GetValue(list[i]);
+            foreach (var person in list)
+            {
+                DataRow row = table.NewRow();
+                foreach (PropertyInfo property in typeof(T).GetProperties())
+                {
+                    row[property.Name] = property.GetValue(person, null) ?? DBNull.Value;
+                }
+                table.Rows.Add(row);
+            }
 
-            //}
+            return table;
+        }
 
+        public static DataTable ConvertListToDataTable<T>(this List<T> list) where T : Type
+        {
+            PropertyInfo[] propertyInfos = null;
+            var properties = typeof(T).GetProperties();
+            DataTable table = new DataTable("MyTable");
+            foreach (PropertyInfo propertyInfo in properties)
+            {
+                table.Columns.Add(propertyInfo.Name, Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType);
+            }
 
+            foreach (var person in list)
+            {
+                DataRow row = table.NewRow();
+                foreach (PropertyInfo property in typeof(T).GetProperties())
+                {
+                    row[property.Name] = property.GetValue(person, null) ?? DBNull.Value;
+                }
+                table.Rows.Add(row);
+            }
 
-            //if (prop is IEnumerable)
-            //{
-            //    foreach (var listitem in prop as IEnumerable)
-            //    {
-            //    }
-            //}
-            return new DataTable();
+            return table;
         }
     }
 }
