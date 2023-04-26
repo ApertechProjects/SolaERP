@@ -23,12 +23,12 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetGroupsAsync()
             => CreateActionResult(await _groupService.GetAllAsync());
 
-        [HttpGet("{groupid}")]
-        public async Task<IActionResult> GetEmailNotifications(int groupid)
+        [HttpGet]
+        public async Task<IActionResult> GetEmailNotifications([FromQuery] int groupid)
            => CreateActionResult(await _groupService.GetGroupEmailNotificationsAsync(groupid));
 
         [HttpGet]
-        public async Task<IActionResult> GetGroupInfoAsync(int groupId)
+        public async Task<IActionResult> GetGroupInfoAsync([FromQuery] int groupId)
           => CreateActionResult(await _groupService.GetGroupInfoAsync(groupId));
 
         [HttpPost]
@@ -36,15 +36,15 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _groupService.SaveGroupAsync(User.Identity.Name, model));
 
         [HttpGet("{groupId}")]
-        public async Task<IActionResult> GetBuyersByGroupIdAsync(int groupId)
+        public async Task<IActionResult> GetBuyers(int groupId)
            => CreateActionResult(await _groupService.GetBuyersByGroupIdAsync(groupId));
 
         [HttpGet]
-        public async Task<IActionResult> GetGroupRolesByGroupIdAsync(int groupId)
+        public async Task<IActionResult> GetGroupRoles(int groupId)
             => CreateActionResult(await _groupService.GetGroupRolesByGroupIdAsync(groupId));
 
         [HttpGet("{groupId}")]
-        public async Task<IActionResult> GetAdditionalPrivilegesByGroup(int groupId)
+        public async Task<IActionResult> GetAdditionalPrivileges(int groupId)
           => CreateActionResult(await _groupService.GetAdditionalPrivilegesForGroupAsync(groupId));
 
         [HttpGet("{userId}")]
@@ -52,7 +52,7 @@ namespace SolaERP.Controllers
           => CreateActionResult(await _groupService.GetUserGroupsWithoutCurrents(userId));
 
         [HttpGet]
-        public async Task<IActionResult> GetUsersByGroupIdAsync([FromQuery] int groupId)
+        public async Task<IActionResult> GetUsers([FromQuery] int groupId)
           => CreateActionResult(await _userService.GetUsersByGroupIdAsync(groupId));
 
         [HttpPost]
@@ -60,7 +60,7 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _groupService.SaveBuyerByGroupAsync(model));
 
         [HttpGet("{groupId}")]
-        public async Task<IActionResult> GetAnalysisCodesByGroupIdAsync(int groupId)
+        public async Task<IActionResult> GetAnalysisCodes(int groupId)
           => CreateActionResult(await _groupService.GetAnalysisCodesByGroupIdAsync(groupId));
 
         [HttpPost]
