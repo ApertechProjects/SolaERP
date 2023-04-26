@@ -13,10 +13,12 @@ namespace SolaERP.Controllers
     {
         private readonly IGroupService _groupService;
         private readonly IUserService _userService;
-        public GroupController(IGroupService groupService, IUserService userService)
+        private readonly IBusinessUnitService _businessUnitService;
+        public GroupController(IGroupService groupService, IUserService userService, IBusinessUnitService businessUnitService)
         {
             _groupService = groupService;
             _userService = userService;
+            _businessUnitService = businessUnitService;
         }
 
         [HttpGet]
@@ -26,6 +28,10 @@ namespace SolaERP.Controllers
         [HttpGet]
         public async Task<IActionResult> GetEmailNotifications([FromQuery] int groupid)
            => CreateActionResult(await _groupService.GetGroupEmailNotificationsAsync(groupid));
+
+        [HttpGet]
+        public async Task<IActionResult> GetBusinessUnits([FromQuery] int groupId)
+            => CreateActionResult(await _businessUnitService.GetBusinessUnitForGroupAsync(groupId));
 
         [HttpGet]
         public async Task<IActionResult> GetGroupInfoAsync([FromQuery] int groupId)
