@@ -12,6 +12,7 @@ namespace SolaERP.Controllers
     {
         private readonly IUserService _userService;
         private readonly IVendorService _vendorService;
+        private readonly IGroupService _groupService;
         public UserController(IUserService userService, IVendorService vendorService)
         {
             _userService = userService;
@@ -22,6 +23,11 @@ namespace SolaERP.Controllers
         [HttpDelete]
         public async Task<IActionResult> RemoveUser()
             => CreateActionResult(await _userService.RemoveUserByTokenAsync(User.Identity.Name));
+
+        [HttpGet]
+        public async Task<IActionResult> GetGroupsByUserIdAsync([FromQuery] int userId)
+         => CreateActionResult(await _groupService.GetGroupsByUserIdAsync(userId));
+
 
         [HttpGet]
         public async Task<IActionResult> GetActiveUsersAsync()
