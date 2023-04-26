@@ -9,6 +9,7 @@ using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Enums;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
+using System.Data;
 
 namespace SolaERP.Application.Services
 {
@@ -39,18 +40,15 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(isSucces, 200);
         }
 
-        public async Task<ApiResponse<bool>> AddUserToGroupAsync(List<AddUserToGroupModel> model)
+        public async Task AddUserToGroupAsync(List<int> model, int groupId)
         {
-            var data = false;
+            DataTable table = new DataTable("MyTable");
+            table.Columns.Add("UserId", typeof(int));
 
             for (int i = 0; i < model.Count; i++)
-            {
-                data = await _groupRepository.AddUserToGroupAsync(model[i]);
-            }
-            await _unitOfWork.SaveChangesAsync();
-            if (data)
-                return ApiResponse<bool>.Success(data, 200);
-            return ApiResponse<bool>.Fail("user", "Data can not be saved", 400);
+                table.Rows.Add(model[i]);
+
+            await _groupRepository.AddUserToGroupAsync(table, groupId);
         }
 
         public async Task<ApiResponse<bool>> CreateEmailNotificationAsync(CreateGroupEmailNotificationModel model)
@@ -96,16 +94,15 @@ namespace SolaERP.Application.Services
             else return ApiResponse<bool>.Fail("role", "Data can not be deleted", 400);
         }
 
-        public async Task<ApiResponse<bool>> DeleteUserFromGroupAsync(List<int> groupUserIds)
+        public async Task DeleteUserFromGroupAsync(List<int> users, int groupId)
         {
-            var result = false;
-            for (int i = 0; i < groupUserIds.Count; i++)
-            {
-                result = await _groupRepository.DeleteUserFromGroupAsync(groupUserIds[i]);
-            }
-            await _unitOfWork.SaveChangesAsync();
-            if (result) return ApiResponse<bool>.Success(true, 200);
-            else return ApiResponse<bool>.Fail("user", "Data can not be deleted", 400);
+            DataTable table = new DataTable("MyTable");
+            table.Columns.Add("UserId", typeof(int));
+
+            for (int i = 0; i < users.Count; i++)
+                table.Rows.Add(users[i]);
+
+            await _groupRepository.DeleteUserToGroupAsync(table, groupId);
         }
 
         public async Task<ApiResponse<List<GroupAdditionalPrivilage>>> GetAdditionalPrivilegesForGroupAsync(int groupId)
@@ -213,64 +210,58 @@ namespace SolaERP.Application.Services
             var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             model.GroupId = await _groupRepository.AddUpdateOrDeleteGroupAsync(userId, new() { GroupId = model.GroupId, GroupName = model.GroupName, Description = model.Description });
 
-            if (model.Users != null)
-            {
-                model.Users.Add(userId);
+            if (model.AddUsers != null)
+                await AddUserToGroupAsync(model.AddUsers, model.GroupId);
+            if (model.RemoveUsers != null)
+                await DeleteUserFromGroupAsync(model.RemoveUsers, model.GroupId);
 
-                if (model.GroupId == 0) await _groupRepository.AddUserToGroupOrDeleteAsync(new() { GroupId = model.GroupId });
-                foreach (var user in model.Users)
-                {
-                    await _groupRepository.AddUserToGroupOrDeleteAsync(new() { GroupId = model.GroupId, UserId = user });
-                }
-            }
+            //if (model.BusinessUnitIds != null)
+            //{
+            //    if (model.GroupId == 0) await _groupRepository.AddBusiessUnitToGroupOrDeleteAsync(model.GroupId, 0); // for delete operation buid is 0
+            //    foreach (var buId in model.BusinessUnitIds)
+            //    {
+            //        await _groupRepository.AddBusiessUnitToGroupOrDeleteAsync(model.GroupId, buId);
+            //    }
+            //}
 
-            if (model.BusinessUnitIds != null)
-            {
-                if (model.GroupId == 0) await _groupRepository.AddBusiessUnitToGroupOrDeleteAsync(model.GroupId, 0); // for delete operation buid is 0
-                foreach (var buId in model.BusinessUnitIds)
-                {
-                    await _groupRepository.AddBusiessUnitToGroupOrDeleteAsync(model.GroupId, buId);
-                }
-            }
+            //if (model.ApproveRoles != null)
+            //{
+            //    if (model.GroupId == 0) await _groupRepository.AddApproveRoleToGroupOrDelete(model.GroupId, 0); // for delete operation approvalId is 0
+            //    foreach (var approveRole in model.ApproveRoles)
+            //    {
+            //        await _groupRepository.AddApproveRoleToGroupOrDelete(model.GroupId, approveRole);
+            //    }
+            //}
 
-            if (model.ApproveRoles != null)
-            {
-                if (model.GroupId == 0) await _groupRepository.AddApproveRoleToGroupOrDelete(model.GroupId, 0); // for delete operation approvalId is 0
-                foreach (var approveRole in model.ApproveRoles)
-                {
-                    await _groupRepository.AddApproveRoleToGroupOrDelete(model.GroupId, approveRole);
-                }
-            }
+            //if (model.AdditionalPrivilege != null)
+            //{
+            //    await _groupRepository.AdditionalPrivilegeAddOrUpdateAsync(new() { GroupAdditionalPrivilegeId = model.AdditionalPrivilege.GroupAdditionalPrivilegeId });
+            //    await _groupRepository.AdditionalPrivilegeAddOrUpdateAsync(new()
+            //    {
+            //        GroupAdditionalPrivilegeId = model.AdditionalPrivilege.GroupAdditionalPrivilegeId,
+            //        GroupId = model.GroupId,
+            //        VendorDraft = model.AdditionalPrivilege.VendorDraft
+            //    });
+            //}
 
-            if (model.AdditionalPrivilege != null)
-            {
-                await _groupRepository.AdditionalPrivilegeAddOrUpdateAsync(new() { GroupAdditionalPrivilegeId = model.AdditionalPrivilege.GroupAdditionalPrivilegeId });
-                await _groupRepository.AdditionalPrivilegeAddOrUpdateAsync(new()
-                {
-                    GroupAdditionalPrivilegeId = model.AdditionalPrivilege.GroupAdditionalPrivilegeId,
-                    GroupId = model.GroupId,
-                    VendorDraft = model.AdditionalPrivilege.VendorDraft
-                });
-            }
+            //if (model.Menus != null)
+            //{
+            //    var menuIds = model.Menus.GetAllUnionMenuIds(); // gets all menu ids in a union list
+            //    if (model.GroupId == 0) await _groupRepository.AddMenuToGroupOrDeleteAsync(new() { GroupId = model.GroupId });
 
-            if (model.Menus != null)
-            {
-                var menuIds = model.Menus.GetAllUnionMenuIds(); // gets all menu ids in a union list
-                if (model.GroupId == 0) await _groupRepository.AddMenuToGroupOrDeleteAsync(new() { GroupId = model.GroupId });
-
-                foreach (var menuId in menuIds)
-                {
-                    await _groupRepository.AddMenuToGroupOrDeleteAsync(new()
-                    {
-                        GroupId = model.GroupId,
-                        MenuId = menuId,
-                        Create = GetMenuIdforAction(model.Menus, MenuAction.Create, menuId),
-                        Edit = GetMenuIdforAction(model.Menus, MenuAction.Edit, menuId),
-                        Delete = GetMenuIdforAction(model.Menus, MenuAction.Delete, menuId),
-                        Export = GetMenuIdforAction(model.Menus, MenuAction.Export, menuId)
-                    });
-                }
-            }
+            //    foreach (var menuId in menuIds)
+            //    {
+            //        await _groupRepository.AddMenuToGroupOrDeleteAsync(new()
+            //        {
+            //            GroupId = model.GroupId,
+            //            MenuId = menuId,
+            //            Create = GetMenuIdforAction(model.Menus, MenuAction.Create, menuId),
+            //            Edit = GetMenuIdforAction(model.Menus, MenuAction.Edit, menuId),
+            //            Delete = GetMenuIdforAction(model.Menus, MenuAction.Delete, menuId),
+            //            Export = GetMenuIdforAction(model.Menus, MenuAction.Export, menuId)
+            //        });
+            //    }
+            //}
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(true, 200);
         }

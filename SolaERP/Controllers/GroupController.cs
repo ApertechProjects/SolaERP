@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Entities.Groups;
-using SolaERP.Infrastructure.Models;
-
-namespace SolaERP.Controllers
+﻿namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [Authorize]
@@ -93,6 +87,10 @@ namespace SolaERP.Controllers
         [HttpDelete("{groupBuyerId}")]
         public async Task<IActionResult> DeleteBuyerByGroupIdAsync(int groupBuyerId)
           => CreateActionResult(await _groupService.DeleteBuyerByGroupIdAsync(groupBuyerId));
+
+        [HttpGet]
+        public async Task<IActionResult> GetUsersByGroupIdAsync(int groupId)
+           => CreateActionResult(await _userService.GetUsersByGroupIdAsync(groupId));
 
         [HttpDelete("{groupAnalysisCodeId}")]
         public async Task<IActionResult> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId)

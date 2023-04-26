@@ -1,13 +1,17 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.AnalysisCode;
+using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Entities.Buyer;
 using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Entities.Item_Code;
 using SolaERP.Infrastructure.Entities.Request;
+using SolaERP.Infrastructure.Entities.User;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
+using System.Data;
 using System.Data.Common;
+using System.Data.SqlClient;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Group = SolaERP.Infrastructure.Entities.Groups.Group;
@@ -88,6 +92,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<int> AddUpdateOrDeleteGroupAsync(int userID, Groups entity)
         {
+            int res = 0;
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "EXEC SP_Groups_IUD @GroupId,@GroupName,@Description,@UserId,@NewId OUTPUT";//User id cnat be null or 0
@@ -96,27 +101,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@GroupName", entity.GroupName);
                 command.Parameters.AddWithValue(command, "@Description", entity.Description);
                 command.Parameters.AddWithValue(command, "@UserId", userID);
-                command.Parameters.AddOutPutParameter(command, "@NewId");
 
-                int result = 0;
-                using var reader = await command.ExecuteReaderAsync();
-                if (await reader.ReadAsync()) result = reader.Get<int>("");
+                var result = new SqlParameter("@NewId", SqlDbType.Int) { Direction = ParameterDirection.Output };
+                command.Parameters.Add(result);
 
-                return result;
-            }
-        }
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    res = (int)result.Value;
+                }
 
-        public async Task<bool> AddUserToGroupOrDeleteAsync(UserToGroupModel model)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupUsers_ID @GroupId,@UserId";
 
-                command.Parameters.AddWithValue(command, "@GroupId", model.GroupId);
-                command.Parameters.AddWithValue(command, "@UserId", model.UserId);
-
-                var result = await command.ExecuteNonQueryAsync();
-                return result > 0;
+                return res;
             }
         }
 
@@ -348,33 +343,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> AddUserToGroupAsync(AddUserToGroupModel model)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupUsers_ID @GroupId,@UserId";
-
-                command.Parameters.AddWithValue(command, "@GroupId", model.GroupId);
-                command.Parameters.AddWithValue(command, "@UserId", model.UserId);
-
-                var result = await command.ExecuteNonQueryAsync();
-                return result > 0;
-            }
-        }
-
-        public async Task<bool> DeleteUserFromGroupAsync(int groupUserId)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupUsers_D @groupuserId";
-
-                command.Parameters.AddWithValue(command, "@groupuserId", groupUserId);
-
-                var result = await command.ExecuteNonQueryAsync();
-                return result > 0;
-            }
-        }
-
         public async Task<Group> GetGroupInfoAsync(int groupId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -399,6 +367,32 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 GroupName = reader.Get<string>("GroupName"),
                 Description = reader.Get<string>("Description")
             };
+        }
+
+        public async Task AddUserToGroupAsync(DataTable data, int groupId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupUsersBulk_I @GroupId,@UserId";
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+
+                command.Parameters.Add("@UserId", SqlDbType.Structured).Value = data;
+                command.Parameters["@UserId"].TypeName = "SingleIdItems";
+                var value = await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        public async Task DeleteUserToGroupAsync(DataTable model, int groupId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupUsersBulk_D @GroupId,@UserId";
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+
+                command.Parameters.Add("@UserId", SqlDbType.Structured).Value = model;
+                command.Parameters["@UserId"].TypeName = "SingleIdItems";
+                var value = await command.ExecuteNonQueryAsync();
+            }
         }
     }
 }
