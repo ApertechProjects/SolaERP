@@ -13,24 +13,25 @@ namespace SolaERP.Application.Utils
     {
         public static DataTable ConvertListToDataTable<T>(this List<T> list) where T : ICollection<T>
         {
-            PropertyInfo[] propertyInfos = null;
-            propertyInfos = list.GetType().GetProperties();
+            //PropertyInfo[] propertyInfos = null;
+            //propertyInfos = list.GetType().GetProperties();
 
-            PropertyInfo item = propertyInfos[2];
-            for (int i = 0; i < list.Count; i++)
-            {
-                var prop = item.GetValue(list);
+            //PropertyInfo item = propertyInfos[2];
+            //var prop = 
+            //for (int i = 0; i < list.Count; i++)
+            //{
+            //    var prop = item.GetValue(list[i]);
 
-            }
+            //}
 
 
 
-            if (prop is IEnumerable)
-            {
-                foreach (var listitem in prop as IEnumerable)
-                {
-                }
-            }
+            //if (prop is IEnumerable)
+            //{
+            //    foreach (var listitem in prop as IEnumerable)
+            //    {
+            //    }
+            //}
             return new DataTable();
         }
     }
