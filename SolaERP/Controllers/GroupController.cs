@@ -1,4 +1,11 @@
-﻿namespace SolaERP.Controllers
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Entities.Groups;
+using SolaERP.Infrastructure.Models;
+
+
+namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [Authorize]
@@ -68,9 +75,6 @@
         public async Task<IActionResult> UpdateEmailNotification(GroupEmailNotification model)
             => CreateActionResult(await _groupService.UpdateEmailNotificationAsync(model));
 
-        [HttpPost]
-        public async Task<IActionResult> AddUserToGroupAsync(List<AddUserToGroupModel> model)
-            => CreateActionResult(await _groupService.AddUserToGroupAsync(model));
 
         [HttpPost]
         public async Task<IActionResult> SaveGroupRoleByGroupAsync(GroupRoleSaveModel model)
@@ -88,16 +92,10 @@
         public async Task<IActionResult> DeleteBuyerByGroupIdAsync(int groupBuyerId)
           => CreateActionResult(await _groupService.DeleteBuyerByGroupIdAsync(groupBuyerId));
 
-        [HttpGet]
-        public async Task<IActionResult> GetUsersByGroupIdAsync(int groupId)
-           => CreateActionResult(await _userService.GetUsersByGroupIdAsync(groupId));
-
         [HttpDelete("{groupAnalysisCodeId}")]
         public async Task<IActionResult> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId)
             => CreateActionResult(await _groupService.DeleteAnalysisCodeByGroupIdAsync(groupAnalysisCodeId));
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteUserFromGroupAsync(List<int> groupUserIds)
-            => CreateActionResult(await _groupService.DeleteUserFromGroupAsync(groupUserIds));
+
     }
 }
