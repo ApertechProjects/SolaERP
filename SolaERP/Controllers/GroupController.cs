@@ -94,14 +94,6 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> UpdateEmailNotification(GroupEmailNotification model)
             => CreateActionResult(await _groupService.UpdateEmailNotificationAsync(model));
 
-        [HttpPost]
-        public async Task<IActionResult> AddUserToGroupAsync(List<AddUserToGroupModel> model)
-            => CreateActionResult(await _groupService.AddUserToGroupAsync(model));
-
-        [HttpDelete]
-        public async Task<IActionResult> DeleteUserFromGroupAsync(List<int> groupUserIds)
-            => CreateActionResult(await _groupService.DeleteUserFromGroupAsync(groupUserIds));
-
         [HttpGet]
         public async Task<IActionResult> GetUsersByGroupIdAsync(int groupId)
            => CreateActionResult(await _userService.GetUsersByGroupIdAsync(groupId));
