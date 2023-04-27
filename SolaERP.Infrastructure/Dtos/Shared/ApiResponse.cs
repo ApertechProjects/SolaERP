@@ -11,6 +11,7 @@ namespace SolaERP.Infrastructure.Dtos.Shared
         public int StatusCode { get; set; }
         public string Errors { get; set; }
         public int TotalData { get; set; }
+        
         public static ApiResponse<T> Success(T data, int statusCode = 200)
         {
             return new ApiResponse<T> { Data = data, StatusCode = statusCode };
@@ -53,6 +54,7 @@ namespace SolaERP.Infrastructure.Dtos.Shared
 
             return new ApiResponse<bool> { Errors = jsonResult, StatusCode = statusCode, Data = false };
         }
+
 
         public static ApiResponse<T> Fail(string propertyName, string error, int statusCode, bool isObject = true)
         {

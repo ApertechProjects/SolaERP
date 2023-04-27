@@ -2,6 +2,7 @@
 using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.Group;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.User;
@@ -52,19 +53,26 @@ namespace SolaERP.Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task UserRegisterAsync(UserRegisterModel model)
+        public async Task<ApiResponse<bool>> UserRegisterAsync(UserRegisterModel model)
         {
+            var userExsist = await _userRepository.GetUserByEmailAsync(model.Email);   
+
+            if(userExsist is not null)
+                return ApiResponse<bool>.Fail("user", "This user is already exsist in our system", 422);
+
             if (model.UserType == Infrastructure.Enums.UserRegisterType.SupplierUser && model.VendorId == 0)
-                ApiResponse<bool>.Fail("companyName", "Company name required for Supplier user", 422);
+                return ApiResponse<bool>.Fail("company","Company name required for Supplier user", 422);
 
             if (model.Password != model.ConfirmPassword)
-                ApiResponse<bool>.Fail("password", "Password doesn't match with confirm password", 422);
+                return ApiResponse<bool>.Fail("password","Password doesn't match with confirm password", 422);
 
             var user = _mapper.Map<User>(model);
             user.PasswordHash = SecurityUtil.ComputeSha256Hash(model.Password);
 
             var result = await _userRepository.AddAsync(user);
             await _unitOfWork.SaveChangesAsync();
+
+            return ApiResponse<bool>.Success(result, 200);
         }
 
         public async Task<ApiResponse<List<UserDto>>> GetAllAsync()

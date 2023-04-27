@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Auth;
 using SolaERP.Infrastructure.Dtos.Shared;
@@ -62,14 +63,16 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterModel dto)
         {
-            var user = await _userManager.FindByNameAsync(dto.Email);
+            ApiResponse<bool> response = response = await _userService.UserRegisterAsync(dto);
 
-            if (user is null)
+            AccountResponseDto account = new();
+            if (response.Data)
             {
-                await _userService.UserRegisterAsync(dto);
-                return CreateActionResult(ApiResponse<AccountResponseDto>.Success(new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto) }, 200));
+                account.Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto);
+                return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
             }
-            return CreateActionResult(ApiResponse<bool>.Fail("email", "This email is already exsist", 422));
+
+            return CreateActionResult(ApiResponse<bool>.Fail(response.Errors, 422));
         }
 
         [HttpPost]

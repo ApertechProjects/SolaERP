@@ -6,7 +6,7 @@
         public int Id { get; set; }
         public string FullName { get; set; }
         public string UserName { get; set; }
-        public bool Gender { get; set; }
+        public int Gender { get; set; }
         public bool IsInGroup { get; set; }
     }
 }
