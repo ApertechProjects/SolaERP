@@ -1,4 +1,15 @@
-﻿using Group = SolaERP.Infrastructure.Entities.Groups.Group;
+﻿using SolaERP.Application.Constants;
+using SolaERP.DataAccess.Extensions;
+using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Entities.AnalysisCode;
+using SolaERP.Infrastructure.Entities.Buyer;
+using SolaERP.Infrastructure.Entities.Groups;
+using SolaERP.Infrastructure.Models;
+using SolaERP.Infrastructure.UnitOfWork;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
+using Group = SolaERP.Infrastructure.Entities.Groups.Group;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {

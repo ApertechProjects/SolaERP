@@ -1,4 +1,16 @@
-﻿namespace SolaERP.Persistence.Services
+﻿using AutoMapper;
+using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.AnalysisCode;
+using SolaERP.Infrastructure.Dtos.Buyer;
+using SolaERP.Infrastructure.Dtos.Group;
+using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Entities.Groups;
+using SolaERP.Infrastructure.Models;
+using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Persistence.Utils;
+
+namespace SolaERP.Persistence.Services
 {
     public class GroupService : IGroupService
     {
@@ -173,43 +185,38 @@
                 return ApiResponse<bool>.Fail("Data can not be saved", 400);
         }
 
-        public async Task<ApiResponse<bool>> SaveGroupAsync(string name, GroupSaveModel model)
+        public async Task<ApiResponse<bool>> SaveGroupAsync(string identity, GroupSaveModel model)
         {
-            var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            var userId = await _userRepository.GetIdentityNameAsIntAsync(identity);
             model.GroupId = await _groupRepository.AddUpdateOrDeleteGroupAsync(userId, new() { GroupId = model.GroupId, GroupName = model.GroupName, Description = model.Description });
 
-            if (model.AddUsers != null)
-                await AddUsersAsync(model.AddUsers, model.GroupId);
-            if (model.RemoveUsers != null)
-                await DeleteUsersAsync(model.RemoveUsers, model.GroupId);
+            //if (model.AddUsers != null)
+            //    await AddUsersAsync(model.AddUsers, model.GroupId);
+            //if (model.RemoveUsers != null)
+            //    await DeleteUsersAsync(model.RemoveUsers, model.GroupId);
 
-            if (model.AddBusinessUnits != null)
-                await AddBusinessUnitsAsync(model.AddBusinessUnits, model.GroupId);
-            if (model.RemoveBusinessUnits != null)
-                await DeleteBusinessUnitsAsync(model.RemoveBusinessUnits, model.GroupId);
+            //if (model.AddBusinessUnits != null)
+            //    await AddBusinessUnitsAsync(model.AddBusinessUnits, model.GroupId);
+            //if (model.RemoveBusinessUnits != null)
+            //    await DeleteBusinessUnitsAsync(model.RemoveBusinessUnits, model.GroupId);
 
-            if (model.AddApproveRoles != null)
-                await AddApproveRolesAsync(model.AddApproveRoles, model.GroupId);
-            if (model.RemoveApproveRoles != null)
-                await DeleteApproveRolesAsync(model.RemoveApproveRoles, model.GroupId);
+            //if (model.AddApproveRoles != null)
+            //    await AddApproveRolesAsync(model.AddApproveRoles, model.GroupId);
+            //if (model.RemoveApproveRoles != null)
+            //    await DeleteApproveRolesAsync(model.RemoveApproveRoles, model.GroupId);
 
-            if (model.AddAdditionalPrivileges != null)
-                await AddAdditionalPrivilegesAsync(model.AddAdditionalPrivileges, model.GroupId);
-            if (model.RemoveAdditionalPrivileges != null)
-                await DeleteAdditionalPrivilegesAsync(model.RemoveAdditionalPrivileges, model.GroupId);
+            //if (model.AddAdditionalPrivileges != null)
+            //    await AddAdditionalPrivilegesAsync(model.AddAdditionalPrivileges, model.GroupId);
+            //if (model.RemoveAdditionalPrivileges != null)
+            //    await DeleteAdditionalPrivilegesAsync(model.RemoveAdditionalPrivileges, model.GroupId);
 
-            if (model.AddBuyers != null)
-                await AddBuyersAsync(model.AddBuyers, model.GroupId);
-            if (model.RemoveBuyers != null)
-                await DeleteBuyersAsync(model.RemoveBuyers, model.GroupId);
-            //if (model.ApproveRoles != null)
-            //{
-            //    if (model.GroupId == 0) await _groupRepository.AddApproveRoleAsync(model.GroupId, 0); // for delete operation approvalId is 0
-            //    foreach (var approveRole in model.ApproveRoles)
-            //    {
-            //        await _groupRepository.AddApproveRoleAsync(model.GroupId, approveRole);
-            //    }
-            //}
+            //if (model.AddBuyers != null)
+            //    await AddBuyersAsync(model.AddBuyers, model.GroupId);
+            //if (model.RemoveBuyers != null)
+            //    await DeleteBuyersAsync(model.RemoveBuyers, model.GroupId);
+
+            if (model.Menus != null)
+                await _groupRepository.AddMenuAsync(model.GroupId, model.Menus.ConvertToDataTable());
 
             //if (model.AdditionalPrivilege != null)
             //{
@@ -246,13 +253,13 @@
 
         private async Task DeleteBuyersAsync(List<GroupBuyerSaveModel> removeBuyers, int groupId)
         {
-            var data = removeBuyers.ConvertListCollectionToDataTable();
+            var data = removeBuyers.ConvertListToDataTable();
             await _groupRepository.DeleteBuyersAsync(data, groupId);
         }
 
         private async Task AddBuyersAsync(List<GroupBuyerSaveModel> addBuyers, int groupId)
         {
-            var data = addBuyers.ConvertListCollectionToDataTable();
+            var data = addBuyers.ConvertListToDataTable();
             await _groupRepository.AddBuyersAsync(data, groupId);
         }
 
@@ -298,21 +305,5 @@
                             ApiResponse<bool>.Success(204)
                           : ApiResponse<bool>.Fail($"Something went wrong. The email notification was not updated.", 400);
         }
-
-        private int GetMenuIdforAction(GroupMenuPrivilegeListModel menus, MenuAction action, int menuId)
-        {
-            switch (action)
-            {
-                case MenuAction.Create:
-                    return Convert.ToInt16(menus.Create.Contains(menuId));
-                case MenuAction.Edit:
-                    return Convert.ToInt16(menus.Edit.Contains(menuId));
-                case MenuAction.Delete:
-                    return Convert.ToInt16(menus.Delete.Contains(menuId));
-                default:
-                    return Convert.ToInt16(menus.Export.Contains(menuId));
-            }
-        }
-
     }
 }

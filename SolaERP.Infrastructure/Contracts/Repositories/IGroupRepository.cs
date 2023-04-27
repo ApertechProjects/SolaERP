@@ -1,4 +1,11 @@
-﻿namespace SolaERP.Infrastructure.Contracts.Repositories
+﻿using SolaERP.Infrastructure.Entities.AnalysisCode;
+using SolaERP.Infrastructure.Entities.Buyer;
+using SolaERP.Infrastructure.Entities.Groups;
+using SolaERP.Infrastructure.Models;
+using System.Data;
+
+
+namespace SolaERP.Infrastructure.Contracts.Repositories
 {
     public interface IGroupRepository
     {
@@ -9,7 +16,7 @@
         Task DeleteUsersAsync(DataTable model, int groupId);
         Task AddBusinessUnitsAsync(DataTable model, int groupId);
         Task DeleteBusinessUnitsAsync(DataTable model, int groupId);
-        Task<bool> AddMenuToGroupOrDeleteAsync(GroupMenuIDSaveModel saveOrDeleteModel);
+        Task<bool> AddMenuAsync(int groupId, DataTable table);
         Task<bool> DeleteBuyerByGroupIdAsync(int groupBuyerId);
         public Task<List<GroupBuyer>> GetBuyersByGroupIdAsync(int groupId);
         Task<List<GroupAnalysisCode>> GetAnalysisCodesByGroupIdAsync(int groupId);

@@ -1,4 +1,17 @@
-﻿namespace SolaERP.Persistence.Services
+﻿using AutoMapper;
+using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.Group;
+using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Dtos.User;
+using SolaERP.Infrastructure.Dtos.UserDto;
+using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Infrastructure.Models;
+using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Persistence.Utils;
+
+
+namespace SolaERP.Persistence.Services
 {
     public class UserService : IUserService
     {

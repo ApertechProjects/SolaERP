@@ -25,6 +25,6 @@
         public List<GroupBuyerSaveModel> AddBuyers { get; set; }
         public List<GroupBuyerSaveModel> RemoveBuyers { get; set; }
         #endregion
-        public GroupMenuPrivilegeListModel Menus { get; set; }
+        public List<GroupMenuPrivilegeListModel> Menus { get; set; }
     }
 }
