@@ -6,6 +6,7 @@
         public int GroupId { get; set; }
         public int ApproveRoleId { get; set; }
         public string ApproveRoleName { get; set; }
+        public string ApproveRole { get; set; }
         public bool IsInGroup { get; set; }
     }
 }
