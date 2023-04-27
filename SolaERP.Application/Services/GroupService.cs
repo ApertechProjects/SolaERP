@@ -1,4 +1,18 @@
-﻿namespace SolaERP.Persistence.Services
+﻿using AutoMapper;
+using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Infrastructure.Dtos.AnalysisCode;
+using SolaERP.Infrastructure.Dtos.Buyer;
+using SolaERP.Infrastructure.Dtos.Group;
+using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Infrastructure.Entities.Groups;
+using SolaERP.Infrastructure.Models;
+using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Persistence.Utils;
+using System.Data;
+
+
+namespace SolaERP.Persistence.Services
 {
     public class GroupService : IGroupService
     {
