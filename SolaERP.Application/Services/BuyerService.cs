@@ -33,9 +33,9 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<BuyerDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<List<BuyerDto>>> GetBuyerByUserTokenAsync(string authToken, string businessUnitCode)
+        public async Task<ApiResponse<List<BuyerDto>>> GetBuyersAsync(string name, string businessUnitCode)
         {
-            var buyer = await _buyerRepository.GetBuyerByUserTokenAsync(await _userRepository.GetIdentityNameAsIntAsync(authToken), businessUnitCode);
+            var buyer = await _buyerRepository.GetBuyersAsync(await _userRepository.GetIdentityNameAsIntAsync(name), businessUnitCode);
             var buyerDto = _mapper.Map<List<BuyerDto>>(buyer);
 
             if (buyerDto != null)

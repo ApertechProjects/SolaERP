@@ -31,7 +31,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public async Task<List<Buyer>> GetBuyerByUserTokenAsync(int userId, string businessUnitCode)
+        public async Task<List<Buyer>> GetBuyersAsync(int userId, string businessUnitCode)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

@@ -10,7 +10,7 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
 {
     public interface IBuyerRepository : ICrudOperations<Buyer>
     {
-        public Task<List<Buyer>> GetBuyerByUserTokenAsync(int userId, string businessUnitCode);
+        public Task<List<Buyer>> GetBuyersAsync(int userId, string businessUnitCode);
        
     }
 }

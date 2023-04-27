@@ -6,7 +6,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
 {
     public interface IBuyerService : ICrudService<BuyerDto>
     {
-        Task<ApiResponse<List<BuyerDto>>> GetBuyerByUserTokenAsync(string authToken, string businessUnitCode);
+        Task<ApiResponse<List<BuyerDto>>> GetBuyersAsync(string name, string businessUnitCode);
      
     }
 }

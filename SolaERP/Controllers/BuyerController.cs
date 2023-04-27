@@ -25,8 +25,8 @@ namespace SolaERP.Controllers
         ///<param name="authToken">The token used to authenticate the user who performs the operation</param>
         ///<param name="businessUnitCode">The unique identifier of the business unit for which to retrieve account codes.</param>
         [HttpGet("{businessUnitCode}")]
-        public async Task<IActionResult> GetBuyersByTokenAsync(string businessUnitCode)
-            => CreateActionResult(await _buyerService.GetBuyerByUserTokenAsync(User.Identity.Name, businessUnitCode));
+        public async Task<IActionResult> GetBuyersAsync(string businessUnitCode)
+            => CreateActionResult(await _buyerService.GetBuyersAsync(User.Identity.Name, businessUnitCode));
 
 
 

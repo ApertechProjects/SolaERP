@@ -12,8 +12,8 @@ namespace SolaERP.Application.Validations.GroupValidation
     {
         public AddUserToGroupValidation()
         {
-            RuleFor(x => x.GroupId).NotEmpty().WithMessage("Please, enter {PropertyName}").GreaterThanOrEqualTo(0).WithMessage("Please, enter {PropertyName}");
-            RuleFor(x => x.UserId).NotEmpty().WithMessage("Please, enter {PropertyName}").GreaterThanOrEqualTo(0).WithMessage("Please, enter {PropertyName}");
+            //RuleFor(x => x.GroupId).NotEmpty().WithMessage("Please, enter {PropertyName}").GreaterThanOrEqualTo(0).WithMessage("Please, enter {PropertyName}");
+            //RuleFor(x => x.UserId).NotEmpty().WithMessage("Please, enter {PropertyName}").GreaterThanOrEqualTo(0).WithMessage("Please, enter {PropertyName}");
         }
     }
 }

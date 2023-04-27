@@ -82,12 +82,12 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _userService.GetUsersByGroupIdAsync(groupId));
 
         [HttpPost]
-        public async Task<IActionResult> AddGroupToUserAsync(List<int> groupsIds, int userId)
-            => CreateActionResult(await _userService.AddGroupToUserAsync(groupsIds, userId));
+        public async Task<IActionResult> AddGroupToUserAsync(AddUserToGroupModel addUserToGroupModel)
+            => CreateActionResult(await _userService.AddGroupToUserAsync(addUserToGroupModel.groupIds, addUserToGroupModel.UserId));
 
         [HttpPost]
-        public async Task<IActionResult> DeleteGroupFromUserAsync(List<int> groupsIds, int userId)
-          => CreateActionResult(await _userService.DeleteGroupFromUserAsync(groupsIds, userId));
+        public async Task<IActionResult> DeleteGroupFromUserAsync(AddUserToGroupModel addUserToGroupModel)
+          => CreateActionResult(await _userService.DeleteGroupFromUserAsync(addUserToGroupModel.groupIds, addUserToGroupModel.UserId));
 
     }
 }

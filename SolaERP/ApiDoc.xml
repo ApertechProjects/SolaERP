@@ -49,7 +49,7 @@
              <remarks>Returns all business unit list which available for given User. (authToken = userIdentifier)</remarks>
              <param name="authToken">user identifier token</param>
         </member>
-        <member name="M:SolaERP.Controllers.BuyerController.GetBuyersByTokenAsync(System.String)">
+        <member name="M:SolaERP.Controllers.BuyerController.GetBuyersAsync(System.String)">
              <summary>
             Get a list of buyers for the current user and business Unit Code
              </summary>
