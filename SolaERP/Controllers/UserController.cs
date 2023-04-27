@@ -13,10 +13,11 @@ namespace SolaERP.Controllers
         private readonly IUserService _userService;
         private readonly IVendorService _vendorService;
         private readonly IGroupService _groupService;
-        public UserController(IUserService userService, IVendorService vendorService)
+        public UserController(IUserService userService, IVendorService vendorService, IGroupService groupService)
         {
             _userService = userService;
             _vendorService = vendorService;
+            _groupService = groupService;
         }
 
 
