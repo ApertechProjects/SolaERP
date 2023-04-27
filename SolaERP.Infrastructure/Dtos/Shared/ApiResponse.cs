@@ -11,7 +11,7 @@ namespace SolaERP.Infrastructure.Dtos.Shared
         public int StatusCode { get; set; }
         public string Errors { get; set; }
         public int TotalData { get; set; }
-        public static ApiResponse<T> Success(T data, int statusCode)
+        public static ApiResponse<T> Success(T data, int statusCode = 200)
         {
             return new ApiResponse<T> { Data = data, StatusCode = statusCode };
         }

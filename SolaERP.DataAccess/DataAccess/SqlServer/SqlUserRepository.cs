@@ -8,6 +8,7 @@ using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace SolaERP.DataAccess.DataAcces.SqlServer
 {
@@ -542,7 +543,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_UserSession_U @UserId,@Command";
-                 
+
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@Command", sessionCom);
                 return await command.ExecuteNonQueryAsync() > 0;
@@ -558,6 +559,34 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
                 command.Parameters.Add("@dataTable", SqlDbType.Structured).Value = data;
                 command.Parameters["@dataTable"].TypeName = "UserChangeStatus";
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
+            }
+        }
+
+        public async Task<bool> AddGroupToUserAsync(DataTable data, int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_UsersGroupsBulk_I @UserId,@GroupId";
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+
+                command.Parameters.Add("@GroupId", SqlDbType.Structured).Value = data;
+                command.Parameters["@GroupId"].TypeName = "SingleIdItems";
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
+            }
+        }
+
+        public async Task<bool> DeleteGroupFromUserAsync(DataTable data, int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_UsersGroupBulk_D @UserId,@GroupId";
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+
+                command.Parameters.Add("@GroupId", SqlDbType.Structured).Value = data;
+                command.Parameters["@GroupId"].TypeName = "SingleIdItems";
                 var value = await command.ExecuteNonQueryAsync();
                 return value > 0;
             }

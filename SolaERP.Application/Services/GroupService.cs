@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.AnalysisCode;
@@ -42,13 +43,8 @@ namespace SolaERP.Application.Services
 
         public async Task AddUserToGroupAsync(List<int> model, int groupId)
         {
-            DataTable table = new DataTable("MyTable");
-            table.Columns.Add("UserId", typeof(int));
-
-            for (int i = 0; i < model.Count; i++)
-                table.Rows.Add(model[i]);
-
-            await _groupRepository.AddUserToGroupAsync(table, groupId);
+            var data = model.ConvertListToDataTable();
+            await _groupRepository.AddUserToGroupAsync(data, groupId);
         }
 
         public async Task<ApiResponse<bool>> CreateEmailNotificationAsync(CreateGroupEmailNotificationModel model)
@@ -96,13 +92,8 @@ namespace SolaERP.Application.Services
 
         public async Task DeleteUserFromGroupAsync(List<int> users, int groupId)
         {
-            DataTable table = new DataTable("MyTable");
-            table.Columns.Add("UserId", typeof(int));
-
-            for (int i = 0; i < users.Count; i++)
-                table.Rows.Add(users[i]);
-
-            await _groupRepository.DeleteUserToGroupAsync(table, groupId);
+            var data = users.ConvertListToDataTable();
+            await _groupRepository.DeleteUserToGroupAsync(data, groupId);
         }
 
         public async Task<ApiResponse<List<GroupAdditionalPrivilage>>> GetAdditionalPrivilegesForGroupAsync(int groupId)

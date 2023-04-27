@@ -435,5 +435,27 @@ namespace SolaERP.Application.Services
         {
             return await _userRepository.UpdateSessionAsync(userId, updateCommand);
         }
+
+        public async Task<ApiResponse<bool>> AddGroupToUserAsync(List<int> groupsIds, int userId)
+        {
+            var data = groupsIds.ConvertListToDataTable();
+            var result = await _userRepository.AddGroupToUserAsync(data, userId);
+            await _unitOfWork.SaveChangesAsync();
+            if (result)
+                return ApiResponse<bool>.Success(result);
+            else
+                return ApiResponse<bool>.Fail("Data can not be saved", 400);
+        }
+
+        public async Task<ApiResponse<bool>> DeleteGroupFromUserAsync(List<int> groupsIds, int userId)
+        {
+            var data = groupsIds.ConvertListToDataTable();
+            var result = await _userRepository.DeleteGroupFromUserAsync(data, userId);
+            await _unitOfWork.SaveChangesAsync();
+            if (result)
+                return ApiResponse<bool>.Success(result);
+            else
+                return ApiResponse<bool>.Fail("Data can not be saved", 400);
+        }
     }
 }

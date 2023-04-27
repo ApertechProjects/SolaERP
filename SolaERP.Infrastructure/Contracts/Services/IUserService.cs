@@ -34,5 +34,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<bool>> DeleteUserAsync(DeleteUser deleteUser);
         Task<bool> UpdateSessionAsync(int userId, int updateCommand);
         Task<ApiResponse<List<UsersByGroupDto>>> GetUsersByGroupIdAsync(int groupId);
+        Task<ApiResponse<bool>> AddGroupToUserAsync(List<int> groupsIds, int userId);
+        Task<ApiResponse<bool>> DeleteGroupFromUserAsync(List<int> groupsIds, int userId);
     }
 }

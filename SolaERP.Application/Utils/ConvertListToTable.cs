@@ -28,25 +28,13 @@ namespace SolaERP.Application.Utils
             return table;
         }
 
-        public static DataTable ConvertListToDataTable<T>(this List<T> list) where T : Type
+        public static DataTable ConvertListToDataTable<T>(this List<T> list)
         {
-            PropertyInfo[] propertyInfos = null;
-            var properties = typeof(T).GetProperties();
             DataTable table = new DataTable("MyTable");
-            foreach (PropertyInfo propertyInfo in properties)
-            {
-                table.Columns.Add(propertyInfo.Name, Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType);
-            }
+            table.Columns.Add("Column", typeof(T));
 
-            foreach (var person in list)
-            {
-                DataRow row = table.NewRow();
-                foreach (PropertyInfo property in typeof(T).GetProperties())
-                {
-                    row[property.Name] = property.GetValue(person, null) ?? DBNull.Value;
-                }
-                table.Rows.Add(row);
-            }
+            foreach (var item in list)
+                table.Rows.Add(item);
 
             return table;
         }
