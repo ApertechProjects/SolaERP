@@ -7,7 +7,6 @@ namespace SolaERP.Application.Utils
     {
         public static DataTable ConvertListCollectionToDataTable<T>(this List<T> list) where T : class
         {
-            PropertyInfo[] propertyInfos = null;
             var properties = typeof(T).GetProperties();
             DataTable table = new DataTable("MyTable");
             foreach (PropertyInfo propertyInfo in properties)

@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Data.SqlClient;
 
 namespace SolaERP.DataAccess.Extensions
 {
@@ -27,6 +28,18 @@ namespace SolaERP.DataAccess.Extensions
             parameter.Direction = ParameterDirection.Output;
             parameter.DbType = DbType.Int32;
             command.Parameters.Add(parameter);
+        }
+
+        public static void AddTableValue(this IDataParameterCollection parameters, IDbCommand command, string parameterName, string typeName, DataTable dataTable)
+        {
+            SqlParameter parameter = command.CreateParameter() as SqlParameter;
+            parameter.ParameterName = parameterName;
+            parameter.SqlDbType = SqlDbType.Structured;
+            parameter.Value = dataTable;
+            parameter.TypeName = typeName;
+
+            parameters.Add(parameter);  
+
         }
     }
 }

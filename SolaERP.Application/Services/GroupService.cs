@@ -206,6 +206,11 @@ namespace SolaERP.Application.Services
             if (model.RemoveUsers != null)
                 await DeleteUserFromGroupAsync(model.RemoveUsers, model.GroupId);
 
+            if(model.AddBusinessUnits!=null)
+            {
+                //await 
+
+            }
             //if (model.BusinessUnitIds != null)
             //{
             //    if (model.GroupId == 0) await _groupRepository.AddBusiessUnitToGroupOrDeleteAsync(model.GroupId, 0); // for delete operation buid is 0

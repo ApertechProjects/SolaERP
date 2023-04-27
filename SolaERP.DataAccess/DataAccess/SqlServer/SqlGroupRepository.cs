@@ -115,7 +115,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task AddBusiessUnitToGroupOrDeleteAsync(int groupId, int busiessUnitId)
+        public async Task AddBusinessUnitToGroupOrDeleteAsync(int groupId, int busiessUnitId)
         {
             using (var commmand = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -375,9 +375,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupUsersBulk_I @GroupId,@UserId";
                 command.Parameters.AddWithValue(command, "@GroupId", groupId);
-
-                command.Parameters.Add("@UserId", SqlDbType.Structured).Value = data;
-                command.Parameters["@UserId"].TypeName = "SingleIdItems";
+                command.Parameters.AddTableValue(command, "@UserId", "SingleIdItems", data);
                 var value = await command.ExecuteNonQueryAsync();
             }
         }
