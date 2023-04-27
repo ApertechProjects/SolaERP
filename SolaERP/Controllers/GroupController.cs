@@ -70,24 +70,12 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _groupService.SaveAnalysisCodeByGroupAsync(model));
 
         [HttpPost]
-        public async Task<IActionResult> CreateEmailNotification(CreateGroupEmailNotificationModel model)
-            => CreateActionResult(await _groupService.CreateEmailNotificationAsync(model));
-
-        [HttpPut]
-        public async Task<IActionResult> UpdateEmailNotification(GroupEmailNotification model)
-            => CreateActionResult(await _groupService.UpdateEmailNotificationAsync(model));
-
-        [HttpPost]
         public async Task<IActionResult> SaveGroupRoleByGroupAsync(GroupRoleSaveModel model)
          => CreateActionResult(await _groupService.SaveGroupRoleByGroupAsync(model));
 
         [HttpDelete("{groupApproveRoleId}")]
         public async Task<IActionResult> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId)
             => CreateActionResult(await _groupService.DeleteGroupRoleByGroupIdAsync(groupApproveRoleId));
-
-        [HttpDelete("{groupEmailNotificationId}")]
-        public async Task<IActionResult> DeleteEmailNotification(int groupEmailNotificationId)
-            => CreateActionResult(await _groupService.DeleteEmailNotificationAsync(groupEmailNotificationId));
 
         [HttpDelete("{groupBuyerId}")]
         public async Task<IActionResult> DeleteBuyerByGroupIdAsync(int groupBuyerId)

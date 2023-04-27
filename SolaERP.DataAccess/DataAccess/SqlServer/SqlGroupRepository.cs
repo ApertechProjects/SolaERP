@@ -436,5 +436,27 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 var value = await command.ExecuteNonQueryAsync();
             }
         }
+
+        public async Task DeleteEmailNotificationAsync(DataTable data, int groupId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupEmailNotificationsBulk_D @GroupId,@Items";
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+                command.Parameters.AddTableValue(command, "@Items", "SingleIdItems", data);
+                var value = await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        public async Task AddEmailNotificationsAsync(DataTable data, int groupId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupEmailNotificationsBulk_I @GroupId,@Items";
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+                command.Parameters.AddTableValue(command, "@Items", "SingleIdItems", data);
+                var value = await command.ExecuteNonQueryAsync();
+            }
+        }
     }
 }

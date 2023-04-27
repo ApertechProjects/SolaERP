@@ -28,7 +28,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<List<GroupEmailNotification>> GetGroupEmailNotificationsAsync(int groupId);
         Task<bool> CreateEmailNotificationAsync(CreateGroupEmailNotificationModel model);
         Task<bool> UpdateEmailNotificationAsync(GroupEmailNotification entity);
-        Task<bool> DeleteEmailNotificationAsync(int groupEmailNotificationId);
         Task<Group> GetGroupInfoAsync(int groupId);
         Task DeleteApproveRolesFromGroupAsync(DataTable data, int groupId);
         Task AddApproveRolesToGroupAsync(DataTable data, int groupId);
@@ -36,5 +35,7 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task AddAdditionalPrivilegesAsync(DataTable data, int groupId);
         Task AddBuyersAsync(DataTable data, int groupId);
         Task DeleteBuyersAsync(DataTable data, int groupId);
+        Task DeleteEmailNotificationAsync(DataTable data, int groupId);
+        Task AddEmailNotificationsAsync(DataTable data, int groupId);
     }
 }
