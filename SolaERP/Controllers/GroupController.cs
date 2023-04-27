@@ -64,21 +64,21 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetUsers(int groupId)
           => CreateActionResult(await _userService.GetUsersByGroupIdAsync(groupId));
 
-        [HttpPost]
-        public async Task<IActionResult> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model)
-            => CreateActionResult(await _groupService.AddAnalysisCodeAsync(model.GroupId, model.AnalysisIds));
+        //[HttpPost]
+        //public async Task<IActionResult> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model)
+        //    => CreateActionResult(await _groupService.AddAnalysisCodeAsync(model.GroupId, model.AnalysisIds));
 
-        [HttpPost]
-        public async Task<IActionResult> SaveGroupRoleByGroupAsync(GroupRoleSaveModel model)
-         => CreateActionResult(await _groupService.SaveGroupRoleAsync(model));
+        //[HttpPost]
+        //public async Task<IActionResult> SaveGroupRoleByGroupAsync(GroupRoleSaveModel model)
+        // => CreateActionResult(await _groupService.SaveGroupRoleAsync(model));
 
-        [HttpDelete("{groupApproveRoleId}")]
-        public async Task<IActionResult> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId)
-            => CreateActionResult(await _groupService.DeleteGroupRoleAsync(groupApproveRoleId));
+        //[HttpDelete("{groupApproveRoleId}")]
+        //public async Task<IActionResult> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId)
+        //    => CreateActionResult(await _groupService.DeleteGroupRoleAsync(groupApproveRoleId));
 
-        [HttpDelete("{groupAnalysisCodeId}")]
-        public async Task<IActionResult> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId)
-            => CreateActionResult(await _groupService.DeleteAnalysisCodeAsync(groupAnalysisCodeId));
+        //[HttpDelete("{groupAnalysisCodeId}")]
+        //public async Task<IActionResult> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId)
+        //    => CreateActionResult(await _groupService.DeleteAnalysisCodeAsync(groupAnalysisCodeId));
 
 
     }
