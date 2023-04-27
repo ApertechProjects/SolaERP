@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Application.DataContext
+﻿namespace SolaERP.Persistence.DataContext
 {
     public static class DataProvider
     {

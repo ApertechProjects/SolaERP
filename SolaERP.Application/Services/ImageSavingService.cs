@@ -3,7 +3,7 @@ using Microsoft.Extensions.Hosting;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace SolaERP.Application.Services
+namespace SolaERP.Persistence.Services
 {
     public class ImageSavingService : BackgroundService
     {

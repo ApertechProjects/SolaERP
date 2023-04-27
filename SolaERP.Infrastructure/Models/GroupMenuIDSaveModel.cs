@@ -4,10 +4,10 @@
     {
         public int MenuId { get; set; }
         public int GroupId { get; set; }
-        public int Create { get; set; } = new();
-        public int Edit { get; set; } = new();
-        public int Delete { get; set; } = new();
-        public int Export { get; set; } = new();
+        public int Create { get; set; }
+        public int Edit { get; set; }
+        public int Delete { get; set; }
+        public int Export { get; set; }
 
     }
 }

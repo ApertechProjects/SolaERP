@@ -5,7 +5,7 @@ using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.Venndors;
 using SolaERP.Infrastructure.Entities.Vendors;
 
-namespace SolaERP.Application.Services
+namespace SolaERP.Persistence.Services
 {
     public class VendorService : IVendorService
     {

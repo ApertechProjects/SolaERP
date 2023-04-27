@@ -1,6 +1,6 @@
 ﻿using Extender;
 
-namespace SolaERP.Application.Utils
+namespace SolaERP.Persistence.Utils
 {
     public static class AttributeExtensions
     {

@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using SolaERP.Application.Identity_Server;
-using SolaERP.Application.Services;
 using SolaERP.Application.Validations.ApproveRoleValidation;
 using SolaERP.Application.Validations.ApproveStageValidation;
 using SolaERP.Application.Validations.AttachmentValidation;
@@ -17,6 +16,7 @@ using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.UnitOfWork;
 using SolaERP.Infrastructure.ValidationRules;
+using SolaERP.Persistence.Services;
 using UserValidation = SolaERP.Application.Validations.UserValidation.UserValidation;
 
 namespace SolaERP.Extensions

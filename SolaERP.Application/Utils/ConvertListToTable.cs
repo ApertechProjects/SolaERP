@@ -1,11 +1,11 @@
 ﻿using System.Data;
 using System.Reflection;
 
-namespace SolaERP.Application.Utils
+namespace SolaERP.Persistence.Utils
 {
     public static class ConvertListToTable
     {
-        public static DataTable ConvertListCollectionToDataTable<T>(this List<T> list) where T : class
+        public static DataTable ConvertToDataTable<T>(this List<T> list) where T : class
         {
             var properties = typeof(T).GetProperties();
             DataTable table = new DataTable("MyTable");

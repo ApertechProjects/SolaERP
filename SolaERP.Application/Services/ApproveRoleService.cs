@@ -5,9 +5,8 @@ using SolaERP.Infrastructure.Dtos.ApproveRole;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Entities.ApproveRole;
 using SolaERP.Infrastructure.UnitOfWork;
-using System.Reflection;
 
-namespace SolaERP.Application.Services
+namespace SolaERP.Persistence.Services
 {
     public class ApproveRoleService : IApproveRoleService
     {

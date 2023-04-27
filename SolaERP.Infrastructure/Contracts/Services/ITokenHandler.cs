@@ -6,7 +6,7 @@ namespace SolaERP.Infrastructure.Contracts.Services
 {
     public interface ITokenHandler
     {
-        Task<Token> GenerateJwtTokenAsync(int days, UserRegisterModel dto);
+        Task<Token> GenerateJwtTokenAsync(int minutes, UserRegisterModel dto);
         Task<List<Claim>> GetUserClaimsAsync(UserRegisterModel dto);
         void DecodeJwtToken(string jwtToken);
 

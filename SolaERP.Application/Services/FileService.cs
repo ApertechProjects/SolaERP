@@ -3,14 +3,14 @@ using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Enums;
 using SolaERP.Infrastructure.Extensions;
 
-namespace SolaERP.Application.Services
+namespace SolaERP.Persistence.Services
 {
     public class FileService : IFileService
     {
         public async Task<string> DownloadPhotoWithNetworkAsBase64Async(string filePath)
         {
             RemoteFileServer fileServer = new();
-            using NetworkConnection networkConnection = new(fileServer.FolderPath,fileServer.Credential);
+            using NetworkConnection networkConnection = new(fileServer.FolderPath, fileServer.Credential);
             using FileStream fileStream = new(filePath, FileMode.Open, FileAccess.Read);
             using MemoryStream memoryStream = new();
 

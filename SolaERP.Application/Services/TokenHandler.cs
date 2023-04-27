@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Text;
 
 
-namespace SolaERP.Application.Services
+namespace SolaERP.Persistence.Services
 {
     public class JwtTokenHandler : ITokenHandler
     {

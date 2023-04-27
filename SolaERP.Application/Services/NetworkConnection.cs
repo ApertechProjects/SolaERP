@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Runtime.InteropServices;
 
-namespace SolaERP.Application.Services
+namespace SolaERP.Persistence.Services
 {
     public class NetworkConnection : IDisposable
     {

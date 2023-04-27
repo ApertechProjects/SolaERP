@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SolaERP.Application.Models;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Models;
@@ -71,7 +72,7 @@ namespace SolaERP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model)
-            => CreateActionResult(await _groupService.SaveAnalysisCodeByGroupAsync(model));
+            => CreateActionResult(await _groupService.AddAnalysisCodeAsync(model.GroupId, model.AnalysisIds));
 
         [HttpPost]
         public async Task<IActionResult> CreateEmailNotification(CreateGroupEmailNotificationModel model)

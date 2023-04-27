@@ -7,7 +7,7 @@ using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 
-namespace SolaERP.Application.Services
+namespace SolaERP.Persistence.Services
 {
     public class AnalysisCodeService : IAnalysisCodeService
     {

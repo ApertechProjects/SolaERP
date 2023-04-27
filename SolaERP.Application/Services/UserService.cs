@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Group;
@@ -9,8 +8,9 @@ using SolaERP.Infrastructure.Dtos.UserDto;
 using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Persistence.Utils;
 
-namespace SolaERP.Application.Services
+namespace SolaERP.Persistence.Services
 {
     public class UserService : IUserService
     {
@@ -52,19 +52,21 @@ namespace SolaERP.Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task UserRegisterAsync(UserRegisterModel model)
+        public async Task<ApiResponse<bool>> UserRegisterAsync(UserRegisterModel model)
         {
             if (model.UserType == Infrastructure.Enums.UserRegisterType.SupplierUser && model.VendorId == 0)
-                ApiResponse<bool>.Fail("companyName", "Company name required for Supplier user", 422);
+                return ApiResponse<bool>.Fail("companyName", "Company name required for Supplier user", 422);
 
             if (model.Password != model.ConfirmPassword)
-                ApiResponse<bool>.Fail("password", "Password doesn't match with confirm password", 422);
+                return ApiResponse<bool>.Fail("password", "Password doesn't match with confirm password", 422);
 
             var user = _mapper.Map<User>(model);
             user.PasswordHash = SecurityUtil.ComputeSha256Hash(model.Password);
 
             var result = await _userRepository.AddAsync(user);
             await _unitOfWork.SaveChangesAsync();
+
+            return ApiResponse<bool>.Success(result, 200);
         }
 
         public async Task<ApiResponse<List<UserDto>>> GetAllAsync()
@@ -321,7 +323,7 @@ namespace SolaERP.Application.Services
 
         public async Task<ApiResponse<bool>> UserChangeStatusAsync(string name, List<UserChangeStatusModel> model)
         {
-            var table = model.ConvertListCollectionToDataTable();
+            var table = model.ConvertToDataTable();
             var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var user = await _userRepository.UserChangeStatusAsync(userId, table);
             await _unitOfWork.SaveChangesAsync();

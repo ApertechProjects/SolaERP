@@ -3,13 +3,8 @@ using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Location;
 using SolaERP.Infrastructure.Dtos.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SolaERP.Application.Services
+namespace SolaERP.Persistence.Services
 {
 
     public class LocationService : ILocationService

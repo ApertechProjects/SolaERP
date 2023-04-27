@@ -1,19 +1,14 @@
-﻿using SolaERP.DataAccess.Extensions;
+﻿using SolaERP.Application.Constants;
+using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Entities.AnalysisCode;
-using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Entities.Buyer;
 using SolaERP.Infrastructure.Entities.Groups;
-using SolaERP.Infrastructure.Entities.Item_Code;
-using SolaERP.Infrastructure.Entities.Request;
-using SolaERP.Infrastructure.Entities.User;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Reflection;
-using System.Text.RegularExpressions;
 using Group = SolaERP.Infrastructure.Entities.Groups.Group;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
@@ -26,16 +21,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> AddMenuToGroupOrDeleteAsync(GroupMenuIDSaveModel saveOrDeleteModel)
+        public async Task<bool> AddMenuAsync(int groupId, DataTable table)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_GroupMenus_ID @GroupId,@MenuId,@Edit,@Delete,@Export";
-                command.Parameters.AddWithValue(command, "@GroupId", saveOrDeleteModel.GroupId);
-                command.Parameters.AddWithValue(command, "@MenuId", saveOrDeleteModel.MenuId);
-                command.Parameters.AddWithValue(command, "@Edit", saveOrDeleteModel.Edit);
-                command.Parameters.AddWithValue(command, "@Delete", saveOrDeleteModel.Delete);
-                command.Parameters.AddWithValue(command, "@Export", saveOrDeleteModel.Export);
+                command.CommandText = "EXEC SP_GroupMenuBulk_I  @GroupId,@MenuType";
+
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+                command.Parameters.AddTableValue(command, "@MenuType", GroupRepoConstants.AddMenu, table);
 
                 var result = await command.ExecuteNonQueryAsync();
                 return result > 0;
@@ -115,7 +108,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task AddBusinessUnitToGroupOrDeleteAsync(int groupId, int busiessUnitId)
+        public async Task AddBusinessUnitAsync(int groupId, int busiessUnitId)
         {
             using (var commmand = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -127,7 +120,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task AddApproveRoleToGroupOrDelete(int groupId, int approveRoleId)
+        public async Task AddApproveRoleAsync(int groupId, int approveRoleId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -213,22 +206,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model)
+        public async Task<bool> AddAnalysisCodeAsync(int groupId, DataTable table)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"SET NOCOUNT OFF Exec SP_GroupAnalysisCodes_IUD  @GroupAnalysisCodeId,
-                                                                       @GroupId,  
-                                                                       @BusinessUnitId, 
-                                                                       @AnalysisDimensionId, 
-                                                                       @AnalysisCodesId";
+                command.CommandText = @"SET NOCOUNT OFF Exec SP_GroupAnalysisBulk_I @GroupId,@Items";
 
-                command.Parameters.AddWithValue(command, "@GroupAnalysisCodeId", model.GroupAnalysisCodeId);
-                command.Parameters.AddWithValue(command, "@GroupId", model.GroupId);
-                command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
-                command.Parameters.AddWithValue(command, "@AnalysisDimensionId", model.AnalysisDimensionId);
-                command.Parameters.AddWithValue(command, "@AnalysisCodesId", model.AnalysisCodesId);
-
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+                command.Parameters.AddTableValue(command, "@Items", GroupRepoConstants.AddAnalysisCode, table);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }

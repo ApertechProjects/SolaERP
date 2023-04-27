@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Application.Options
+﻿namespace SolaERP.Persistence.Options
 {
     public class FileOptions
     {

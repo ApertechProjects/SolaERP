@@ -5,7 +5,7 @@ using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.Supplier;
 using SolaERP.Infrastructure.UnitOfWork;
 
-namespace SolaERP.Application.Services
+namespace SolaERP.Persistence.Services
 {
     public class SupplierService : ISupplierService
     {

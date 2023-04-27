@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.OpenApi.Models;
 using RabbitMQ.Client;
 using Serilog;
-using SolaERP.Application.Mappers;
 using SolaERP.Application.Validations;
 using SolaERP.Business.Models;
 using SolaERP.Extensions;
 using SolaERP.Middlewares;
+using SolaERP.Persistence.Mappers;
 using SolaERP.SignalR.Hubs;
 using System.Security.Claims;
 using System.Text;
@@ -35,7 +35,7 @@ builder.Services.AddTransient(sp => new ConnectionFactory()
     Uri = new(builder.Configuration["RabbitMQ:Uri"])
 });
 
-builder.Services.Configure<SolaERP.Application.Options.FileOptions>(builder.Configuration.GetSection("FileOptions"));
+builder.Services.Configure<SolaERP.Persistence.Options.FileOptions>(builder.Configuration.GetSection("FileOptions"));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MapProfile));

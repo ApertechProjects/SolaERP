@@ -8,7 +8,7 @@ using SolaERP.Infrastructure.Entities.ApproveStage;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 
-namespace SolaERP.Application.Services
+namespace SolaERP.Persistence.Services
 {
     public class ApproveStageService : IApproveStageService
     {

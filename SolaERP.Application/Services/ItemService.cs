@@ -4,10 +4,9 @@ using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos;
 using SolaERP.Infrastructure.Dtos.Item_Code;
 using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
 
-namespace SolaERP.Application.Services
+namespace SolaERP.Persistence.Services
 {
     public class ItemService : IItemService
     {

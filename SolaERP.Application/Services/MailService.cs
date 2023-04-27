@@ -3,7 +3,7 @@ using SolaERP.Infrastructure.Contracts.Services;
 using System.Net;
 using System.Net.Mail;
 
-namespace SolaERP.Application.Services
+namespace SolaERP.Persistence.Services
 {
     /// <summary>
     /// 

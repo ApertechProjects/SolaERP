@@ -5,15 +5,15 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.API", "SolaERP\SolaERP.API.csproj", "{9E1D639B-9689-4F00-B5AB-3EAA8E325BF0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.Infrastructure", "SolaERP.Infrastructure\SolaERP.Infrastructure.csproj", "{2F345001-FDA9-4C29-8875-2F052C7B704F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.Application", "SolaERP.Infrastructure\SolaERP.Application.csproj", "{2F345001-FDA9-4C29-8875-2F052C7B704F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.DataAccess", "SolaERP.DataAccess\SolaERP.DataAccess.csproj", "{5658310C-0DAA-4F09-935E-7ABDD9EF0BB9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.Application", "SolaERP.Application\SolaERP.Application.csproj", "{C9CB4045-DAF3-49FD-B253-118F94C21BDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.Persistence", "SolaERP.Application\SolaERP.Persistence.csproj", "{C9CB4045-DAF3-49FD-B253-118F94C21BDA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.SignalR", "SolaERP.SignalR\SolaERP.SignalR.csproj", "{9296A16F-A3C7-482E-B0FD-3C43F2216926}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolaERP.Console", "SolaERP.Console\SolaERP.Console.csproj", "{CA97EFA2-87E1-4A63-9193-17B0C2642DF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.Console", "SolaERP.Console\SolaERP.Console.csproj", "{CA97EFA2-87E1-4A63-9193-17B0C2642DF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

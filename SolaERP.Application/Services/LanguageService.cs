@@ -1,23 +1,14 @@
 ﻿using AutoMapper;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.BusinessUnit;
 using SolaERP.Infrastructure.Dtos.Language;
-using SolaERP.Infrastructure.Dtos.Request;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.Translate;
-using SolaERP.Infrastructure.Entities.Auth;
 using SolaERP.Infrastructure.Entities.Language;
-using SolaERP.Infrastructure.Entities.Request;
 using SolaERP.Infrastructure.Entities.Translate;
 using SolaERP.Infrastructure.UnitOfWork;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SolaERP.Application.Services
+namespace SolaERP.Persistence.Services
 {
     public class LanguageService : ILanguageService
     {

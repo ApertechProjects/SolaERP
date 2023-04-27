@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace SolaERP.Application.Utils
+namespace SolaERP.Persistence.Utils
 {
     public class SecurityUtil
     {

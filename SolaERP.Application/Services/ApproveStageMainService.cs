@@ -4,7 +4,7 @@ using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.ApproveStage;
 using SolaERP.Infrastructure.Dtos.Shared;
 
-namespace SolaERP.Application.Services
+namespace SolaERP.Persistence.Services
 {
     public class ApproveStageMainService : IApproveStageMainService, ILoggableCrudService<ApproveStagesMainDto>
     {

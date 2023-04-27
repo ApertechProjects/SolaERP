@@ -4,9 +4,8 @@ using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Menu;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.Dtos.User;
-using System.Xml.Linq;
 
-namespace SolaERP.Application.Services
+namespace SolaERP.Persistence.Services
 {
     public class MenuService : IMenuService
     {

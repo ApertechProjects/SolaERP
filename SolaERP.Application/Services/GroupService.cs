@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using SolaERP.Application.Utils;
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.AnalysisCode;
@@ -10,9 +9,10 @@ using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Enums;
 using SolaERP.Infrastructure.Models;
 using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Persistence.Utils;
 using System.Data;
 
-namespace SolaERP.Application.Services
+namespace SolaERP.Persistence.Services
 {
     public class GroupService : IGroupService
     {
@@ -176,10 +176,11 @@ namespace SolaERP.Application.Services
             return ApiResponse<List<GroupsDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<bool>> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model)
+        public async Task<ApiResponse<bool>> AddAnalysisCodeAsync(int groupId, List<int> analysisIds)
         {
-            var res = await _groupRepository.SaveAnalysisCodeByGroupAsync(model);
+            var res = await _groupRepository.AddAnalysisCodeAsync(groupId, analysisIds.ConvertListToDataTable());
             await _unitOfWork.SaveChangesAsync();
+
             if (res)
                 return ApiResponse<bool>.Success(res, 200);
             else
@@ -206,7 +207,7 @@ namespace SolaERP.Application.Services
             if (model.RemoveUsers != null)
                 await DeleteUserFromGroupAsync(model.RemoveUsers, model.GroupId);
 
-            if(model.AddBusinessUnits!=null)
+            if (model.AddBusinessUnits != null)
             {
                 //await 
 
@@ -222,10 +223,10 @@ namespace SolaERP.Application.Services
 
             //if (model.ApproveRoles != null)
             //{
-            //    if (model.GroupId == 0) await _groupRepository.AddApproveRoleToGroupOrDelete(model.GroupId, 0); // for delete operation approvalId is 0
+            //    if (model.GroupId == 0) await _groupRepository.AddApproveRoleAsync(model.GroupId, 0); // for delete operation approvalId is 0
             //    foreach (var approveRole in model.ApproveRoles)
             //    {
-            //        await _groupRepository.AddApproveRoleToGroupOrDelete(model.GroupId, approveRole);
+            //        await _groupRepository.AddApproveRoleAsync(model.GroupId, approveRole);
             //    }
             //}
 
@@ -243,11 +244,11 @@ namespace SolaERP.Application.Services
             //if (model.Menus != null)
             //{
             //    var menuIds = model.Menus.GetAllUnionMenuIds(); // gets all menu ids in a union list
-            //    if (model.GroupId == 0) await _groupRepository.AddMenuToGroupOrDeleteAsync(new() { GroupId = model.GroupId });
+            //    if (model.GroupId == 0) await _groupRepository.AddMenuAsync(new() { GroupId = model.GroupId });
 
             //    foreach (var menuId in menuIds)
             //    {
-            //        await _groupRepository.AddMenuToGroupOrDeleteAsync(new()
+            //        await _groupRepository.AddMenuAsync(new()
             //        {
             //            GroupId = model.GroupId,
             //            MenuId = menuId,

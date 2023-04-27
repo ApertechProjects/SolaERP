@@ -55,7 +55,7 @@ using SolaERP.Infrastructure.Entities.Vendors;
 using SolaERP.Infrastructure.Features.Queries.AnalysisCode;
 using SolaERP.Infrastructure.Models;
 
-namespace SolaERP.Application.Mappers
+namespace SolaERP.Persistence.Mappers
 {
     public class MapProfile : Profile
     {

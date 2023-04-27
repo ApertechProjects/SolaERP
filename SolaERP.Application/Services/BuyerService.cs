@@ -5,7 +5,7 @@ using SolaERP.Infrastructure.Dtos.Buyer;
 using SolaERP.Infrastructure.Dtos.Shared;
 using SolaERP.Infrastructure.UnitOfWork;
 
-namespace SolaERP.Application.Services
+namespace SolaERP.Persistence.Services
 {
     public class BuyerService : IBuyerService
     {

@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SolaERP.Application\SolaERP.Application.csproj" />
+    <ProjectReference Include="..\SolaERP.Application\SolaERP.Persistence.csproj" />
     <ProjectReference Include="..\SolaERP.SignalR\SolaERP.SignalR.csproj" />
   </ItemGroup>
 

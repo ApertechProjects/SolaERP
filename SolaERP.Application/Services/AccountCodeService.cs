@@ -2,17 +2,9 @@
 using SolaERP.Infrastructure.Contracts.Repositories;
 using SolaERP.Infrastructure.Contracts.Services;
 using SolaERP.Infrastructure.Dtos.Account;
-using SolaERP.Infrastructure.Dtos.AnalysisCode;
-using SolaERP.Infrastructure.Dtos.BusinessUnit;
 using SolaERP.Infrastructure.Dtos.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SolaERP.Application.Services
+namespace SolaERP.Persistence.Services
 {
     public class AccountCodeService : IAccountCodeService
     {
@@ -33,7 +25,7 @@ namespace SolaERP.Application.Services
         {
             var accountCodes = await _accountCodeRepository.GetAccountCodesByBusinessUnit(businessUnit);
             var dto = _mapper.Map<List<AccountCodeDto>>(accountCodes);
-            return ApiResponse<List<AccountCodeDto>>.Success(dto, 200); 
+            return ApiResponse<List<AccountCodeDto>>.Success(dto, 200);
         }
 
         public async Task<ApiResponse<List<AccountCodeDto>>> GetAllAsync()
