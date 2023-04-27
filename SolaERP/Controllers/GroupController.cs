@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Models;
 using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Entities.Groups;
 using SolaERP.Infrastructure.Models;
 
 
@@ -26,16 +25,16 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetGroupsAsync()
             => CreateActionResult(await _groupService.GetAllAsync());
 
-        [HttpGet]
-        public async Task<IActionResult> GetEmailNotifications([FromQuery] int groupid)
+        [HttpGet("{groupid}")]
+        public async Task<IActionResult> GetEmailNotifications(int groupid)
            => CreateActionResult(await _groupService.GetGroupEmailNotificationsAsync(groupid));
 
-        [HttpGet]
-        public async Task<IActionResult> GetBusinessUnits([FromQuery] int groupId)
+        [HttpGet("{groupId}")]
+        public async Task<IActionResult> GetBusinessUnits(int groupId)
             => CreateActionResult(await _businessUnitService.GetBusinessUnitForGroupAsync(groupId));
 
-        [HttpGet]
-        public async Task<IActionResult> GetGroupInfoAsync([FromQuery] int groupId)
+        [HttpGet("{groupId}")]
+        public async Task<IActionResult> GetGroupInfoAsync(int groupId)
           => CreateActionResult(await _groupService.GetGroupInfoAsync(groupId));
 
         [HttpPost]
@@ -46,7 +45,7 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetBuyers(int groupId)
            => CreateActionResult(await _groupService.GetBuyersByGroupIdAsync(groupId));
 
-        [HttpGet]
+        [HttpGet("{groupId}")]
         public async Task<IActionResult> GetGroupRoles(int groupId)
             => CreateActionResult(await _groupService.GetGroupRolesByGroupIdAsync(groupId));
 
@@ -58,8 +57,8 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> AvailableGroupsForUser(int userId)
           => CreateActionResult(await _groupService.GetUserGroupsWithoutCurrents(userId));
 
-        [HttpGet]
-        public async Task<IActionResult> GetUsers([FromQuery] int groupId)
+        [HttpGet("{groupId}")]
+        public async Task<IActionResult> GetUsers(int groupId)
           => CreateActionResult(await _userService.GetUsersByGroupIdAsync(groupId));
 
         [HttpGet("{groupId}")]

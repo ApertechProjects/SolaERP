@@ -9,7 +9,7 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
 {
     public interface IGroupRepository
     {
-        public Task<List<GroupAdditionalPrivilage>> GetAdditionalPrivilegesForGroupAsync(int groupId);
+        public Task<List<GroupAdditionalPrivilege>> GetAdditionalPrivilegesForGroupAsync(int groupId);
         Task<int> AddUpdateOrDeleteGroupAsync(int userID, Groups entity);
         Task<List<Groups>> GetAllAsync();
         Task AddUsersAsync(DataTable model, int groupId);
