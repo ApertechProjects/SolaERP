@@ -127,18 +127,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task AddApproveRoleToGroupOrDelete(int groupId, int approveRoleId)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "EXEC SP_GroupApproveRoles_ID @GroupId,@ApproveRoleId";
-                command.Parameters.AddWithValue(command, "@GroupId", groupId);
-                command.Parameters.AddWithValue(command, "@ApproveRoleId", approveRoleId);
-
-                await command.ExecuteNonQueryAsync();
-            }
-        }
-
         public async Task<bool> DeleteBuyerByGroupIdAsync(int groupBuyerId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -359,7 +347,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task AddUserToGroupAsync(DataTable data, int groupId)
+        public async Task AddUsersAsync(DataTable data, int groupId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
@@ -370,7 +358,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task DeleteUserToGroupAsync(DataTable model, int groupId)
+        public async Task DeleteUsersAsync(DataTable model, int groupId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
@@ -381,7 +369,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task AddBusinessUnitsToGroupAsync(DataTable model, int groupId)
+        public async Task AddBusinessUnitsAsync(DataTable model, int groupId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
@@ -392,13 +380,56 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task DeleteBusinessUnitsFromGroupAsync(DataTable model, int groupId)
+        public async Task DeleteBusinessUnitsAsync(DataTable model, int groupId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupBusinessUnitsBulk_D @GroupId,@Items";
                 command.Parameters.AddWithValue(command, "@GroupId", groupId);
                 command.Parameters.AddTableValue(command, "@Items", "SingleIdItems", model);
+                var value = await command.ExecuteNonQueryAsync();
+            }
+        }
+        public async Task AddApproveRolesToGroupAsync(DataTable data, int groupId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupApproveRolesBulk_I @GroupId,@Items";
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+                command.Parameters.AddTableValue(command, "@Items", "SingleIdItems", data);
+                var value = await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        public async Task DeleteApproveRolesFromGroupAsync(DataTable data, int groupId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupApproveRolesBulk_D @GroupId,@Items";
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+                command.Parameters.AddTableValue(command, "@Items", "SingleIdItems", data);
+                var value = await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        public async Task DeleteAdditionalPrivilegesAsync(DataTable data, int groupId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupAdditionalPrivilegesBulk_D @GroupId,@Items";
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+                command.Parameters.AddTableValue(command, "@Items", "SingleIdItems", data);
+                var value = await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        public async Task AddAdditionalPrivilegesAsync(DataTable data, int groupId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupAdditionalPrivilegesBulk_I @GroupId,@Items";
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+                command.Parameters.AddTableValue(command, "@Items", "SingleIdItems", data);
                 var value = await command.ExecuteNonQueryAsync();
             }
         }

@@ -12,7 +12,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<List<GroupsDto>>> GetAllAsync();
         Task<ApiResponse<bool>> SaveGroupAsync(string name, GroupSaveModel model);
         Task<ApiResponse<List<GroupAdditionalPrivilage>>> GetAdditionalPrivilegesForGroupAsync(int groupId);
-        Task<ApiResponse<bool>> AddOrUpdateAsync(GroupAdditionalPrivelegeDto additionalPrivilage);
         Task<ApiResponse<bool>> DeleteBuyerByGroupIdAsync(int groupBuyerId);
         Task<ApiResponse<List<GroupBuyerDto>>> GetBuyersByGroupIdAsync(int groupId);
         Task<ApiResponse<bool>> SaveBuyerByGroupAsync(GroupBuyerSaveModel model);
@@ -28,10 +27,10 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<bool>> UpdateEmailNotificationAsync(GroupEmailNotification model);
         Task<ApiResponse<bool>> DeleteEmailNotificationAsync(int groupEmailNotificationId);
         Task<ApiResponse<List<GroupEmailNotification>>> GetGroupEmailNotificationsAsync(int groupId);
-        Task AddUserToGroupAsync(List<int> users, int groupId);
-        Task DeleteUserFromGroupAsync(List<int> users, int groupId);
-        Task AddBusinessUnitsToGroupAsync(List<int> users, int groupId);
-        Task DeleteBusinessUnitsFromGroupAsync(List<int> users, int groupId);
+        Task AddUsersAsync(List<int> users, int groupId);
+        Task DeleteUsersAsync(List<int> users, int groupId);
+        Task AddBusinessUnitsAsync(List<int> users, int groupId);
+        Task DeleteBusinessUnitsAsync(List<int> users, int groupId);
 
         Task<ApiResponse<GroupDto>> GetGroupInfoAsync(int groupId);
 

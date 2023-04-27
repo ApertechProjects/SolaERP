@@ -29,33 +29,21 @@ namespace SolaERP.Application.Services
             _mapper = mapper;
         }
 
-        public async Task AddBusinessUnitsToGroupAsync(List<int> users, int groupId)
+        public async Task AddBusinessUnitsAsync(List<int> users, int groupId)
         {
             var data = users.ConvertListToDataTable();
-            await _groupRepository.AddBusinessUnitsToGroupAsync(data, groupId);
+            await _groupRepository.AddBusinessUnitsAsync(data, groupId);
         }
-        public async Task DeleteBusinessUnitsFromGroupAsync(List<int> users, int groupId)
+        public async Task DeleteBusinessUnitsAsync(List<int> users, int groupId)
         {
             var data = users.ConvertListToDataTable();
-            await _groupRepository.DeleteBusinessUnitsFromGroupAsync(data, groupId);
+            await _groupRepository.DeleteBusinessUnitsAsync(data, groupId);
         }
 
-        public async Task<ApiResponse<bool>> AddOrUpdateAsync(GroupAdditionalPrivelegeDto additionalPrivilage)
-        {
-            bool isSucces = false;
-
-            if (additionalPrivilage != null)
-            {
-                var entity = _mapper.Map<GroupAdditionalPrivilage>(additionalPrivilage);
-                isSucces = await _groupRepository.AdditionalPrivilegeAddOrUpdateAsync(entity);
-            }
-            return ApiResponse<bool>.Success(isSucces, 200);
-        }
-
-        public async Task AddUserToGroupAsync(List<int> model, int groupId)
+        public async Task AddUsersAsync(List<int> model, int groupId)
         {
             var data = model.ConvertListToDataTable();
-            await _groupRepository.AddUserToGroupAsync(data, groupId);
+            await _groupRepository.AddUsersAsync(data, groupId);
         }
 
         public async Task<ApiResponse<bool>> CreateEmailNotificationAsync(CreateGroupEmailNotificationModel model)
@@ -102,10 +90,10 @@ namespace SolaERP.Application.Services
             else return ApiResponse<bool>.Fail("role", "Data can not be deleted", 400);
         }
 
-        public async Task DeleteUserFromGroupAsync(List<int> users, int groupId)
+        public async Task DeleteUsersAsync(List<int> users, int groupId)
         {
             var data = users.ConvertListToDataTable();
-            await _groupRepository.DeleteUserToGroupAsync(data, groupId);
+            await _groupRepository.DeleteUsersAsync(data, groupId);
         }
 
         public async Task<ApiResponse<List<GroupAdditionalPrivilage>>> GetAdditionalPrivilegesForGroupAsync(int groupId)
@@ -214,22 +202,24 @@ namespace SolaERP.Application.Services
             model.GroupId = await _groupRepository.AddUpdateOrDeleteGroupAsync(userId, new() { GroupId = model.GroupId, GroupName = model.GroupName, Description = model.Description });
 
             if (model.AddUsers != null)
-                await AddUserToGroupAsync(model.AddUsers, model.GroupId);
+                await AddUsersAsync(model.AddUsers, model.GroupId);
             if (model.RemoveUsers != null)
-                await DeleteUserFromGroupAsync(model.RemoveUsers, model.GroupId);
+                await DeleteUsersAsync(model.RemoveUsers, model.GroupId);
 
             if (model.AddBusinessUnits != null)
-                await AddBusinessUnitsToGroupAsync(model.AddBusinessUnits, model.GroupId);
+                await AddBusinessUnitsAsync(model.AddBusinessUnits, model.GroupId);
             if (model.RemoveBusinessUnits != null)
-                await DeleteBusinessUnitsFromGroupAsync(model?.RemoveBusinessUnits, model.GroupId);
-            //if (model.BusinessUnitIds != null)
-            //{
-            //    if (model.GroupId == 0) await _groupRepository.AddBusiessUnitToGroupOrDeleteAsync(model.GroupId, 0); // for delete operation buid is 0
-            //    foreach (var buId in model.BusinessUnitIds)
-            //    {
-            //        await _groupRepository.AddBusiessUnitToGroupOrDeleteAsync(model.GroupId, buId);
-            //    }
-            //}
+                await DeleteBusinessUnitsAsync(model.RemoveBusinessUnits, model.GroupId);
+
+            if (model.AddApproveRoles != null)
+                await AddApproveRolesAsync(model.AddApproveRoles, model.GroupId);
+            if (model.RemoveApproveRoles != null)
+                await DeleteApproveRolesAsync(model.RemoveApproveRoles, model.GroupId);
+
+            if (model.AddAdditionalPrivileges != null)
+                await AddAdditionalPrivilegesAsync(model.AddAdditionalPrivileges, model.GroupId);
+            if (model.RemoveAdditionalPrivileges != null)
+                await DeleteAdditionalPrivilegesAsync(model.RemoveAdditionalPrivileges, model.GroupId);
 
             //if (model.ApproveRoles != null)
             //{
@@ -273,6 +263,30 @@ namespace SolaERP.Application.Services
             return ApiResponse<bool>.Success(true, 200);
         }
 
+        private async Task DeleteAdditionalPrivilegesAsync(List<int> removeAdditionalPrivileges, int groupId)
+        {
+            var data = removeAdditionalPrivileges.ConvertListToDataTable();
+            await _groupRepository.DeleteAdditionalPrivilegesAsync(data, groupId);
+        }
+
+        private async Task AddAdditionalPrivilegesAsync(List<int> addAdditionalPrivileges, int groupId)
+        {
+            var data = addAdditionalPrivileges.ConvertListToDataTable();
+            await _groupRepository.AddAdditionalPrivilegesAsync(data, groupId);
+        }
+
+        private async Task DeleteApproveRolesAsync(List<int> removeApproveRoles, int groupId)
+        {
+            var data = removeApproveRoles.ConvertListToDataTable();
+            await _groupRepository.DeleteApproveRolesFromGroupAsync(data, groupId);
+        }
+
+        private async Task AddApproveRolesAsync(List<int> addApproveRoles, int groupId)
+        {
+            var data = addApproveRoles.ConvertListToDataTable();
+            await _groupRepository.AddApproveRolesToGroupAsync(data, groupId);
+        }
+
         public async Task<ApiResponse<bool>> SaveGroupRoleByGroupAsync(GroupRoleSaveModel model)
         {
             var res = await _groupRepository.SaveGroupRoleByGroupAsync(model);
@@ -292,13 +306,6 @@ namespace SolaERP.Application.Services
                           : ApiResponse<bool>.Fail($"Something went wrong. The email notification was not updated.", 400);
         }
 
-        /// <summary>
-        /// Checks if a menuid contains in a list. if is, returns menu id for this action
-        /// </summary>
-        /// <param name="action">Menu actions</param>
-        /// <param name="menus">Menu model which contains List of menu id for Menuactions</param>
-        /// <param name="menuId">menuid for checking </param>
-        /// <returns></returns>
         private int GetMenuIdforAction(GroupMenuPrivilegeListModel menus, MenuAction action, int menuId)
         {
             switch (action)
