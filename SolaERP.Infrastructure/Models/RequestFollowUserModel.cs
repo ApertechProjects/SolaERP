@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Models
+﻿namespace SolaERP.Application.Models
 {
     public class RequestFollowUserModel
     {

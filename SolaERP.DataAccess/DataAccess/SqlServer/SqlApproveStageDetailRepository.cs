@@ -1,7 +1,7 @@
 ﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.ApproveStage;
-using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.ApproveStage;
+using SolaERP.Application.UnitOfWork;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;

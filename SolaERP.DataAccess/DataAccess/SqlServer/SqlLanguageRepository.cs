@@ -1,23 +1,10 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Dtos.Language;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.Translate;
-using SolaERP.Infrastructure.Entities.Account;
-using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Entities.Language;
-using SolaERP.Infrastructure.Entities.Translate;
-using SolaERP.Infrastructure.Models;
-using SolaERP.Infrastructure.UnitOfWork;
-using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.Language;
+using SolaERP.Application.Entities.Translate;
+using SolaERP.Application.UnitOfWork;
+using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {

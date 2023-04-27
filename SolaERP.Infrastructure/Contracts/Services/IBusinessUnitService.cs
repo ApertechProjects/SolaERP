@@ -1,7 +1,7 @@
-﻿using SolaERP.Infrastructure.Dtos.BusinessUnit;
-using SolaERP.Infrastructure.Dtos.Shared;
+﻿using SolaERP.Application.Dtos.BusinessUnit;
+using SolaERP.Application.Dtos.Shared;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public interface IBusinessUnitService : ICrudService<BusinessUnitsAllDto>
     {

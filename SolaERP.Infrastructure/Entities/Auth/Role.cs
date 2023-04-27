@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Entities.Auth
+﻿namespace SolaERP.Application.Entities.Auth
 {
     public class Role
     {

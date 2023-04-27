@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Language;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.Translate;
-using SolaERP.Infrastructure.Entities.Language;
-using SolaERP.Infrastructure.Entities.Translate;
-using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Language;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.Translate;
+using SolaERP.Application.Entities.Language;
+using SolaERP.Application.Entities.Translate;
+using SolaERP.Application.UnitOfWork;
 
 namespace SolaERP.Persistence.Services
 {

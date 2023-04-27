@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Entities.ApproveStages
+﻿namespace SolaERP.Application.Entities.ApproveStages
 {
     public class ApprovalStatus : BaseEntity
     {

@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Attributes;
+﻿using SolaERP.Application.Attributes;
 
-namespace SolaERP.Infrastructure.Dtos.AnalysisCode
+namespace SolaERP.Application.Dtos.AnalysisCode
 {
     public class AnalysisCodeDto
     {

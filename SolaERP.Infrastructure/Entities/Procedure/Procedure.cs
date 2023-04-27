@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Attributes;
+﻿using SolaERP.Application.Attributes;
 
-namespace SolaERP.Infrastructure.Entities.Procedure
+namespace SolaERP.Application.Entities.Procedure
 {
     public class Procedure : BaseEntity
     {

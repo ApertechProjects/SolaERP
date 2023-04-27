@@ -15,7 +15,7 @@ using SolaERP.Business.Dtos.EntityDtos.Vendor;
 using SolaERP.Business.Dtos.GeneralDtos;
 using SolaERP.Business.Dtos.Wrappers;
 using SolaERP.Business.Models;
-using SolaERP.Infrastructure.Contracts.Repositories;
+using SolaERP.Application.Contracts.Repositories;
 using System.Data;
 
 namespace SolaERP.Business.CommonLogic

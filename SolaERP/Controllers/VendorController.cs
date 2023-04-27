@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using SolaERP.Business.CommonLogic;
 using SolaERP.Business.Dtos.EntityDtos.Vendor;
 using SolaERP.Business.Models;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Contracts.Services;
 
 namespace SolaERP.Controllers
 {

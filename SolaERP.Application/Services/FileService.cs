@@ -1,7 +1,7 @@
 ﻿using SixLabors.ImageSharp.Formats.Jpeg;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Enums;
-using SolaERP.Infrastructure.Extensions;
+using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Enums;
+using SolaERP.Application.Extensions;
 
 namespace SolaERP.Persistence.Services
 {

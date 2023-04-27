@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SolaERP.Infrastructure.Features.Commands.EmailNotifications
+namespace SolaERP.Application.Features.Commands.EmailNotifications
 {
     public class DeleteEmailNotificationRequest : IRequest<bool>
     {

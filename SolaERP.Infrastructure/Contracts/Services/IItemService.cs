@@ -1,9 +1,9 @@
-﻿using SolaERP.Infrastructure.Contracts.Common;
-using SolaERP.Infrastructure.Dtos;
-using SolaERP.Infrastructure.Dtos.Item_Code;
-using SolaERP.Infrastructure.Dtos.Shared;
+﻿using SolaERP.Application.Contracts.Common;
+using SolaERP.Application.Dtos;
+using SolaERP.Application.Dtos.Item_Code;
+using SolaERP.Application.Dtos.Shared;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public interface IItemService
     {

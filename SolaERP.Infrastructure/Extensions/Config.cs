@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Net;
 
-namespace SolaERP.Infrastructure.Extensions
+namespace SolaERP.Application.Extensions
 {
 
     public class RemoteFileServer

@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Dtos.Shared
+﻿namespace SolaERP.Application.Dtos.Shared
 {
     public class NoContentDto
     {

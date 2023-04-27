@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Entities.PrequalificationCategory
+﻿namespace SolaERP.Application.Entities.PrequalificationCategory
 {
     public class PrequalificationCategory : BaseEntity
     {

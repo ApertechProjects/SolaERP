@@ -1,7 +1,7 @@
-﻿using SolaERP.Infrastructure.Entities.ApproveStage;
-using SolaERP.Infrastructure.Entities.ApproveStages;
+﻿using SolaERP.Application.Entities.ApproveStage;
+using SolaERP.Application.Entities.ApproveStages;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IApproveStageMainRepository : ILoggableCrudOperations<ApproveStagesMain>
     {

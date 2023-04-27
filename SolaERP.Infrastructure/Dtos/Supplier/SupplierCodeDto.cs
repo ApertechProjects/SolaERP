@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Dtos.Supplier
+﻿namespace SolaERP.Application.Dtos.Supplier
 {
     public class SupplierCodeDto
     {

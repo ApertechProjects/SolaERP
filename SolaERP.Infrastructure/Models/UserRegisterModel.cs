@@ -1,4 +1,4 @@
-﻿using SolaERP.Infrastructure.Enums;
+﻿using SolaERP.Application.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Models
+namespace SolaERP.Application.Models
 {
     public class UserRegisterModel
     {

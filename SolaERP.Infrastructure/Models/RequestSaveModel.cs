@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Dtos.Request;
+﻿using SolaERP.Application.Dtos.Request;
 
-namespace SolaERP.Infrastructure.Models
+namespace SolaERP.Application.Models
 {
     public class RequestSaveModel
     {

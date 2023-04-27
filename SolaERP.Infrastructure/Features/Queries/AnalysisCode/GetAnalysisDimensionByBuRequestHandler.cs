@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using MediatR;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Entities.AnalysisDimension;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.AnalysisDimension;
 
-namespace SolaERP.Infrastructure.Features.Queries.AnalysisCode
+namespace SolaERP.Application.Features.Queries.AnalysisCode
 {
     public class GetAnalysisDimensionByBuRequestHandler : IRequestHandler<GetAnalysisDimensionByBuRequest, ApiResponse<List<GetAnalysisDimensionByBuResponse>>>
     {

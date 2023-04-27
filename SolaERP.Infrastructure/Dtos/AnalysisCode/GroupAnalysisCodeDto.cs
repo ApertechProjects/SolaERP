@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Dtos.AnalysisCode
+namespace SolaERP.Application.Dtos.AnalysisCode
 {
     public class GroupAnalysisCodeDto
     {

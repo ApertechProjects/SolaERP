@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Entities.Groups
+﻿namespace SolaERP.Application.Entities.Groups
 {
     public class UsersByGroup : BaseEntity
     {

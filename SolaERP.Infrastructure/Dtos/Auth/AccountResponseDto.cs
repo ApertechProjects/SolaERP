@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Dtos.Auth
+﻿namespace SolaERP.Application.Dtos.Auth
 {
     public class AccountResponseDto
     {

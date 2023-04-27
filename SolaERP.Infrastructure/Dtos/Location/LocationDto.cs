@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Dtos.Location
+namespace SolaERP.Application.Dtos.Location
 {
     public class LocationDto
     {

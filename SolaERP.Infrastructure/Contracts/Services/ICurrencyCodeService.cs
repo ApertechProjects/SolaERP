@@ -1,7 +1,7 @@
-﻿using SolaERP.Infrastructure.Dtos.Currency;
-using SolaERP.Infrastructure.Dtos.Shared;
+﻿using SolaERP.Application.Dtos.Currency;
+using SolaERP.Application.Dtos.Shared;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public interface ICurrencyCodeService : ICrudService<CurrencyDto>
     {

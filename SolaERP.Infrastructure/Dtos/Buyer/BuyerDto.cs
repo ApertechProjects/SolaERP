@@ -1,6 +1,6 @@
 ﻿
 
-namespace SolaERP.Infrastructure.Dtos.Buyer
+namespace SolaERP.Application.Dtos.Buyer
 {
     public class BuyerDto
     {

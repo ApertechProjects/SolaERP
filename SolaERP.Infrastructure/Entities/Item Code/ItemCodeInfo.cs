@@ -1,7 +1,6 @@
-﻿using SolaERP.Infrastructure.Attributes;
-using SolaERP.Infrastructure.Entities;
+﻿using SolaERP.Application.Entities;
 
-namespace SolaERP.Infrastructure.Dtos.Item_Code
+namespace SolaERP.Application.Dtos.Item_Code
 {
     public class ItemCodeInfo : BaseEntity
     {

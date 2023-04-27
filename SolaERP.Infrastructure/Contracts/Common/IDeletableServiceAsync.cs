@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Contracts.Common
+namespace SolaERP.Application.Contracts.Common
 {
     internal interface IDeletableServiceAsync
     {

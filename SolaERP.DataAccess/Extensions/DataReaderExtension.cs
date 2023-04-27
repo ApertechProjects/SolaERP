@@ -1,5 +1,5 @@
-﻿using SolaERP.Infrastructure.Attributes;
-using SolaERP.Infrastructure.Entities;
+﻿using SolaERP.Application.Attributes;
+using SolaERP.Application.Entities;
 using System.Data;
 using System.Reflection;
 

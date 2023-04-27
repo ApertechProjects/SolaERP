@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Dtos.Item_Code
+namespace SolaERP.Application.Dtos.Item_Code
 {
     public class ItemCodeInfoDto
     {

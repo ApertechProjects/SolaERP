@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Entities.Attachment
+﻿namespace SolaERP.Application.Entities.Attachment
 {
     public class Attachment : BaseEntity
     {

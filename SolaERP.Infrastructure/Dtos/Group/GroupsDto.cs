@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Dtos.Group
+﻿namespace SolaERP.Application.Dtos.Group
 {
     public class GroupsDto
     {

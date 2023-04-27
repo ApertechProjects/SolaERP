@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Attributes;
+﻿using SolaERP.Application.Attributes;
 
-namespace SolaERP.Infrastructure.Entities.Layout
+namespace SolaERP.Application.Entities.Layout
 {
     public class Layout : BaseEntity
     {

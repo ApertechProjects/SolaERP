@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Contracts.Services
+﻿namespace SolaERP.Application.Contracts.Services
 {
     public interface IMailService
     {

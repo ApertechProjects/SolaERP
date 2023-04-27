@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Dtos.Status
+namespace SolaERP.Application.Dtos.Status
 {
     public class StatusDto
     {

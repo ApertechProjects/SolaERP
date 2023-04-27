@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using SolaERP.Infrastructure.Dtos.ApproveStage;
+using SolaERP.Application.Dtos.ApproveStage;
 
 namespace SolaERP.Application.Validations.ApproveStageValidation
 {

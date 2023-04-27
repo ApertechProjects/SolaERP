@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Entities.LogInfo
+﻿namespace SolaERP.Application.Entities.LogInfo
 {
     public class LogInfo : BaseEntity
     {

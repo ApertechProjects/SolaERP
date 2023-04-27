@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Entities.Menu
+﻿namespace SolaERP.Application.Entities.Menu
 {
     public class MenuWithPrivilages : BaseEntity
     {

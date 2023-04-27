@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using SolaERP.Infrastructure.Models;
+using SolaERP.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

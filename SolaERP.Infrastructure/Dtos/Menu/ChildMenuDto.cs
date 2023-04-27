@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Dtos.Menu
+﻿namespace SolaERP.Application.Dtos.Menu
 {
     public class ChildMenuDto
     {

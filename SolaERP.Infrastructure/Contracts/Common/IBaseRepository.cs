@@ -1,8 +1,8 @@
-﻿using SolaERP.Infrastructure.Entities;
-using SolaERP.Infrastructure.Models;
+﻿using SolaERP.Application.Entities;
+using SolaERP.Application.Models;
 using System.Data;
 
-namespace SolaERP.Infrastructure.Contracts.Common
+namespace SolaERP.Application.Contracts.Common
 {
     public interface IBaseRepository<TEntity> where TEntity : BaseEntity
     {

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SolaERP.Infrastructure.Models
+namespace SolaERP.Application.Models
 {
     public class RequestDetailApproveModel
     {

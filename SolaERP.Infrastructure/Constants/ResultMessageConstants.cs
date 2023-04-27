@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Constants
+﻿namespace SolaERP.Application.Constants
 {
     public class ResultMessageConstants
     {

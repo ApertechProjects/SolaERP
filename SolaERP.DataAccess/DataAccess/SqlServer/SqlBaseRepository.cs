@@ -1,9 +1,9 @@
 ﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Common;
-using SolaERP.Infrastructure.Entities;
-using SolaERP.Infrastructure.Entities.Request;
-using SolaERP.Infrastructure.Models;
-using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Application.Contracts.Common;
+using SolaERP.Application.Entities;
+using SolaERP.Application.Entities.Request;
+using SolaERP.Application.Models;
+using SolaERP.Application.UnitOfWork;
 using System.Data;
 using System.Data.Common;
 using System.Text;

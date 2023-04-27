@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Entities.VendorDueDiligence
+﻿namespace SolaERP.Application.Entities.VendorDueDiligence
 {
     public class VendorDueDiligence : BaseEntity
     {

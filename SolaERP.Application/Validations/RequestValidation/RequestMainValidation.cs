@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using SolaERP.Application.Validations.ApproveStageValidation;
-using SolaERP.Infrastructure.Models;
+using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Validations.RequestValidation
 {

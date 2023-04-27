@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Models
+namespace SolaERP.Application.Models
 {
     public class LayoutDeleteModel
     {

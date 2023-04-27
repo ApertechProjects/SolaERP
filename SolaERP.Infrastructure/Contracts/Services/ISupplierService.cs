@@ -1,7 +1,7 @@
-﻿using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.Supplier;
+﻿using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.Supplier;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public interface ISupplierService
     {

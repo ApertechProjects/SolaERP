@@ -1,7 +1,7 @@
-﻿using SolaERP.Infrastructure.Dtos.ApproveRole;
-using SolaERP.Infrastructure.Entities.ApproveRole;
+﻿using SolaERP.Application.Dtos.ApproveRole;
+using SolaERP.Application.Entities.ApproveRole;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IApproveRoleRepository : ICrudOperations<ApproveRole>
     {

@@ -1,9 +1,9 @@
-﻿using SolaERP.Infrastructure.Contracts.Common;
-using SolaERP.Infrastructure.Dtos.Request;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Models;
+﻿using SolaERP.Application.Contracts.Common;
+using SolaERP.Application.Dtos.Request;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Models;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public interface IRequestService : IDeleteableAsync
     {

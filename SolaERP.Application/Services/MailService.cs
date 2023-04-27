@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using SolaERP.Infrastructure.Contracts.Services;
+using SolaERP.Application.Contracts.Services;
 using System.Net;
 using System.Net.Mail;
 

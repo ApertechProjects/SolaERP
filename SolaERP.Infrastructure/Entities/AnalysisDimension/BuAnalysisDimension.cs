@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Entities.AnalysisDimension
+﻿namespace SolaERP.Application.Entities.AnalysisDimension
 {
     public class BuAnalysisDimension : AnalysisDimension
     {

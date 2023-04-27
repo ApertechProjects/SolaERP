@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.AnalysisCode;
-using SolaERP.Infrastructure.Dtos.Buyer;
-using SolaERP.Infrastructure.Dtos.Group;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Entities.Groups;
-using SolaERP.Infrastructure.Models;
-using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.AnalysisCode;
+using SolaERP.Application.Dtos.Buyer;
+using SolaERP.Application.Dtos.Group;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.Groups;
+using SolaERP.Application.Models;
+using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
 using System.Data;
 
@@ -57,7 +57,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId)
         {
-            var result = await _groupRepository.DeleteGroupRoleByGroupIdAsync(groupApproveRoleId);
+            var result = await _groupRepository.DeleteGroupRoleAsync(groupApproveRoleId);
             await _unitOfWork.SaveChangesAsync();
             if (result) return ApiResponse<bool>.Success(true, 200);
             else return ApiResponse<bool>.Fail("role", "Data can not be deleted", 400);
@@ -71,7 +71,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<GroupAdditionalPrivilegeDto>>> GetAdditionalPrivilegesForGroupAsync(int groupId)
         {
-            var data = await _groupRepository.GetAdditionalPrivilegesForGroupAsync(groupId);
+            var data = await _groupRepository.GetAdditionalPrivilegesAsync(groupId);
             var dto = _mapper.Map<List<GroupAdditionalPrivilegeDto>>(data);
             return ApiResponse<List<GroupAdditionalPrivilegeDto>>.Success(dto, 200);
         }
@@ -86,7 +86,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<GroupAnalysisCodeDto>>> GetAnalysisCodesByGroupIdAsync(int groupId)
         {
-            var buyers = await _groupRepository.GetBuyersByGroupIdAsync(groupId);
+            var buyers = await _groupRepository.GetBuyersAsync(groupId);
             var dto = _mapper.Map<List<GroupAnalysisCodeDto>>(buyers);
             if (dto != null)
                 return ApiResponse<List<GroupAnalysisCodeDto>>.Success(dto, 200);
@@ -96,7 +96,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<GroupBuyerDto>>> GetBuyersByGroupIdAsync(int groupId)
         {
-            var buyers = await _groupRepository.GetBuyersByGroupIdAsync(groupId);
+            var buyers = await _groupRepository.GetBuyersAsync(groupId);
             var dto = _mapper.Map<List<GroupBuyerDto>>(buyers);
             if (dto != null)
                 return ApiResponse<List<GroupBuyerDto>>.Success(dto, 200);
@@ -122,7 +122,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<GroupRoleDto>>> GetGroupRolesByGroupIdAsync(int groupId)
         {
-            var buyers = await _groupRepository.GetGroupRolesByGroupIdAsync(groupId);
+            var buyers = await _groupRepository.GetGroupRolesAsync(groupId);
             var dto = _mapper.Map<List<GroupRoleDto>>(buyers);
             if (dto != null)
                 return ApiResponse<List<GroupRoleDto>>.Success(dto, 200);
@@ -132,7 +132,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<GroupUserDto>>> GetGroupsByUserIdAsync(int userId)
         {
-            var groups = await _groupRepository.GetGroupsByUserIdAsync(userId);
+            var groups = await _groupRepository.GetUserGroupsAsync(userId);
             var dto = _mapper.Map<List<GroupUserDto>>(groups);
             if (dto != null)
                 return ApiResponse<List<GroupUserDto>>.Success(dto, 200);
@@ -142,7 +142,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<GroupsDto>>> GetUserGroupsWithoutCurrents(int id)
         {
-            var groups = await _groupRepository.GetGroupsByUserIdAsync(id);
+            var groups = await _groupRepository.GetUserGroupsAsync(id);
             var allGroups = await _groupRepository.GetAllAsync();
             var allGroupCanUserA = allGroups.Where(x => !allGroups.Any(y => y.GroupId == x.GroupId)).ToList();
 
@@ -261,7 +261,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> SaveGroupRoleByGroupAsync(GroupRoleSaveModel model)
         {
-            var res = await _groupRepository.SaveGroupRoleByGroupAsync(model);
+            var res = await _groupRepository.SaveGroupRoleAsync(model);
             await _unitOfWork.SaveChangesAsync();
             if (res)
                 return ApiResponse<bool>.Success(res, 200);

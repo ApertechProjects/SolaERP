@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Dtos.VendorDueDiligence
+﻿namespace SolaERP.Application.Dtos.VendorDueDiligence
 {
     public class VendorDueDiligenceDto
     {

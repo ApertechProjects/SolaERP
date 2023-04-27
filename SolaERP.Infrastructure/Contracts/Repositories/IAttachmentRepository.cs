@@ -1,7 +1,7 @@
-﻿using SolaERP.Infrastructure.Entities.Attachment;
-using SolaERP.Infrastructure.Models;
+﻿using SolaERP.Application.Entities.Attachment;
+using SolaERP.Application.Models;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IAttachmentRepository
     {

@@ -1,7 +1,7 @@
-﻿using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Entities.DueDiligenceDesign;
+﻿using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.DueDiligenceDesign;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public class IDueDiligenceDesignService : ICrudService<DueDiligenceDesign>
     {

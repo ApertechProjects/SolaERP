@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Entities.Supplier;
+﻿using SolaERP.Application.Entities.Supplier;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface ISupplierRepository
     {

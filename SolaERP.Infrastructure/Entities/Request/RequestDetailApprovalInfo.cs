@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Entities.Request
+﻿namespace SolaERP.Application.Entities.Request
 {
     public class RequestDetailApprovalInfo : BaseEntity
     {

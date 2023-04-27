@@ -1,7 +1,7 @@
-﻿using SolaERP.Infrastructure.Dtos.ApproveStage;
-using SolaERP.Infrastructure.Dtos.Shared;
+﻿using SolaERP.Application.Dtos.ApproveStage;
+using SolaERP.Application.Dtos.Shared;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public interface IApproveStageMainService : ICrudService<ApproveStagesMainDto>, ILoggableCrudService<ApproveStagesMainDto>
     {

@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Features.Queries.AnalysisCode
+﻿namespace SolaERP.Application.Features.Queries.AnalysisCode
 {
     public class GetAnalysisDimensionByBuResponse
     {

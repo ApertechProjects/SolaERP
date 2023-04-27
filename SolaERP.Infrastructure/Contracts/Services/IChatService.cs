@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Dtos.Chat;
+﻿using SolaERP.Application.Dtos.Chat;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public interface IChatService
     {

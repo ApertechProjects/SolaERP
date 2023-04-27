@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.Menu;
-using SolaERP.Infrastructure.Entities.User;
-using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.Menu;
+using SolaERP.Application.Entities.User;
+using SolaERP.Application.UnitOfWork;
 using System.Data;
 using System.Data.Common;
 

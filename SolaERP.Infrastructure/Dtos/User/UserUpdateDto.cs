@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Dtos.User
+namespace SolaERP.Application.Dtos.User
 {
     public class UserUpdateDto
     {

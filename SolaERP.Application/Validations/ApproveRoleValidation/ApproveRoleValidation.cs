@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using SolaERP.Infrastructure.Dtos.ApproveRole;
+using SolaERP.Application.Dtos.ApproveRole;
 using System;
 using System.Collections.Generic;
 using System.Linq;

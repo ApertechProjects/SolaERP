@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using SolaERP.Application.Exceptions;
-using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Application.Dtos.Shared;
 using System.Text.Json;
 
 namespace SolaERP.Middlewares

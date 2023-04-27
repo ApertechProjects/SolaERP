@@ -1,7 +1,7 @@
-﻿using SolaERP.Infrastructure.Entities.Menu;
-using SolaERP.Infrastructure.Entities.User;
+﻿using SolaERP.Application.Entities.Menu;
+using SolaERP.Application.Entities.User;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IMenuRepository : ICrudOperations<Menu>
     {

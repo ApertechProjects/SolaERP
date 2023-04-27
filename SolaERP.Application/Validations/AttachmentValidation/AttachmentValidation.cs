@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using SolaERP.Infrastructure.Models;
+using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Validations.AttachmentValidation
 {

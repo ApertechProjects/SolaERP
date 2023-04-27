@@ -1,17 +1,17 @@
-﻿using SolaERP.Infrastructure.Contracts.Common;
-using SolaERP.Infrastructure.Dtos.Language;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.Translate;
-using SolaERP.Infrastructure.Entities.Language;
-using SolaERP.Infrastructure.Entities.Translate;
-using SolaERP.Infrastructure.Models;
+﻿using SolaERP.Application.Contracts.Common;
+using SolaERP.Application.Dtos.Language;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.Translate;
+using SolaERP.Application.Entities.Language;
+using SolaERP.Application.Entities.Translate;
+using SolaERP.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface ILanguageRepository
     {

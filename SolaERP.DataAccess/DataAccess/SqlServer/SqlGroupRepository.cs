@@ -1,15 +1,15 @@
 ﻿using SolaERP.Application.Constants;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.AnalysisCode;
+using SolaERP.Application.Entities.Buyer;
+using SolaERP.Application.Entities.Groups;
+using SolaERP.Application.Models;
+using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.AnalysisCode;
-using SolaERP.Infrastructure.Entities.Buyer;
-using SolaERP.Infrastructure.Entities.Groups;
-using SolaERP.Infrastructure.Models;
-using SolaERP.Infrastructure.UnitOfWork;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using Group = SolaERP.Infrastructure.Entities.Groups.Group;
+using Group = SolaERP.Application.Entities.Groups.Group;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -35,7 +35,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<GroupAdditionalPrivilege>> GetAdditionalPrivilegesForGroupAsync(int groupId)
+        public async Task<List<GroupAdditionalPrivilege>> GetAdditionalPrivilegesAsync(int groupId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -126,7 +126,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<GroupBuyer>> GetBuyersByGroupIdAsync(int groupId)
+        public async Task<List<GroupBuyer>> GetBuyersAsync(int groupId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -184,7 +184,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<GroupRole>> GetGroupRolesByGroupIdAsync(int groupId)
+        public async Task<List<GroupRole>> GetGroupRolesAsync(int groupId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -201,7 +201,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> SaveGroupRoleByGroupAsync(GroupRoleSaveModel model)
+        public async Task<bool> SaveGroupRoleAsync(GroupRoleSaveModel model)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -215,7 +215,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId)
+        public async Task<bool> DeleteGroupRoleAsync(int groupApproveRoleId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -225,7 +225,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<GroupUser>> GetGroupsByUserIdAsync(int userId)
+        public async Task<List<GroupUser>> GetUserGroupsAsync(int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Dtos.Request
+namespace SolaERP.Application.Dtos.Request
 {
     public class RequestCardDetailDto
     {

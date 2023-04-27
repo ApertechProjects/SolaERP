@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Application.Dtos.Shared;
 
 namespace SolaERP.Controllers
 {

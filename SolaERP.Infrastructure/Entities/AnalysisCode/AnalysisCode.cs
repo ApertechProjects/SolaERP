@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Attributes;
+﻿using SolaERP.Application.Attributes;
 
-namespace SolaERP.Infrastructure.Entities.AnalysisCode
+namespace SolaERP.Application.Entities.AnalysisCode
 {
     public class AnalysisCode : BaseEntity
     {

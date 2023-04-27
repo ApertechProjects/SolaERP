@@ -1,8 +1,8 @@
 ﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.LogInfo;
-using SolaERP.Infrastructure.Enums;
-using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.LogInfo;
+using SolaERP.Application.Enums;
+using SolaERP.Application.UnitOfWork;
 using System.Data;
 using System.Data.Common;
 

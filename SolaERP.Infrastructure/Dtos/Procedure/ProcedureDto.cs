@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Dtos.Procedure
+﻿namespace SolaERP.Application.Dtos.Procedure
 {
     public class ProcedureDto
     {

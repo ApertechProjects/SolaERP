@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Dtos
+﻿namespace SolaERP.Application.Dtos
 {
     public class EmailModel
     {

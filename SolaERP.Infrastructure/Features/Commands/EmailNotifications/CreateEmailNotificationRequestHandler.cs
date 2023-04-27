@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.UnitOfWork;
 
-namespace SolaERP.Infrastructure.Features.Commands.EmailNotifications
+namespace SolaERP.Application.Features.Commands.EmailNotifications
 {
     public class CreateEmailNotificationRequestHandler : IRequestHandler<CreateEmailNotificationCommandRequest, bool>
     {

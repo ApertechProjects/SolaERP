@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.Venndors;
-using SolaERP.Infrastructure.Entities.Vendors;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.Venndors;
+using SolaERP.Application.Entities.Vendors;
 
 namespace SolaERP.Persistence.Services
 {

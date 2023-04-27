@@ -1,15 +1,14 @@
-﻿using SolaERP.Infrastructure.Dtos.Group;
-using SolaERP.Infrastructure.Entities.AnalysisCode;
-using SolaERP.Infrastructure.Entities.Buyer;
-using SolaERP.Infrastructure.Entities.Groups;
-using SolaERP.Infrastructure.Models;
+﻿using SolaERP.Application.Entities.AnalysisCode;
+using SolaERP.Application.Entities.Buyer;
+using SolaERP.Application.Entities.Groups;
+using SolaERP.Application.Models;
 using System.Data;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IGroupRepository
     {
-        Task<List<GroupAdditionalPrivilegeDto>> GetAdditionalPrivilegesAsync(int groupId);
+        Task<List<GroupAdditionalPrivilege>> GetAdditionalPrivilegesAsync(int groupId);
         Task<int> AddUpdateOrDeleteGroupAsync(int userID, Groups entity);
         Task<List<Groups>> GetAllAsync();
         Task AddUsersAsync(DataTable model, int groupId);
@@ -20,14 +19,14 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<bool> AddMenuAsync(int groupId, DataTable table);
         Task<bool> DeleteMenuAsync(int groupId, DataTable table);
         Task<bool> DeleteBuyerByGroupIdAsync(int groupBuyerId);
-        Task<List<GroupBuyer>> GetBuyersByGroupIdAsync(int groupId);
+        Task<List<GroupBuyer>> GetBuyersAsync(int groupId);
         Task<List<GroupAnalysisCode>> GetAnalysisCodesByGroupIdAsync(int groupId);
         Task<bool> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId);
         Task<bool> AddAnalysisCodeAsync(int groupId, DataTable table);
-        Task<List<GroupRole>> GetGroupRolesByGroupIdAsync(int groupId);
-        Task<bool> SaveGroupRoleByGroupAsync(GroupRoleSaveModel model);
-        Task<bool> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId);
-        Task<List<GroupUser>> GetGroupsByUserIdAsync(int userId);
+        Task<List<GroupRole>> GetGroupRolesAsync(int groupId);
+        Task<bool> SaveGroupRoleAsync(GroupRoleSaveModel model);
+        Task<bool> DeleteGroupRoleAsync(int groupApproveRoleId);
+        Task<List<GroupUser>> GetUserGroupsAsync(int userId);
         Task<List<GroupEmailNotification>> GetGroupEmailNotificationsAsync(int groupId);
         Task<bool> CreateEmailNotificationAsync(CreateGroupEmailNotificationModel model);
         Task<bool> UpdateEmailNotificationAsync(GroupEmailNotification entity);

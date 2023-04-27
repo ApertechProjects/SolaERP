@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Entities.DueDiligenceDesign
+﻿namespace SolaERP.Application.Entities.DueDiligenceDesign
 {
     public class DueDiligenceDesign : BaseEntity
     {

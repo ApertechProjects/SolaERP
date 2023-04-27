@@ -1,11 +1,11 @@
-﻿using SolaERP.Infrastructure.Dtos.Auth;
-using SolaERP.Infrastructure.Dtos.Group;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.User;
-using SolaERP.Infrastructure.Dtos.UserDto;
-using SolaERP.Infrastructure.Models;
+﻿using SolaERP.Application.Dtos.Auth;
+using SolaERP.Application.Dtos.Group;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.User;
+using SolaERP.Application.Dtos.UserDto;
+using SolaERP.Application.Models;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public interface IUserService : ICrudService<UserDto>
     {

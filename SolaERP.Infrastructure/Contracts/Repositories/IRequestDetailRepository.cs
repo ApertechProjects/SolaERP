@@ -1,7 +1,7 @@
-﻿using SolaERP.Infrastructure.Entities.Request;
-using SolaERP.Infrastructure.Models;
+﻿using SolaERP.Application.Entities.Request;
+using SolaERP.Application.Models;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IRequestDetailRepository : ICrudOperations<RequestDetail>
     {

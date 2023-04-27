@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace SolaERP.Infrastructure.Extensions
+namespace SolaERP.Application.Extensions
 {
     public static class ClassBuilderExtension
     {

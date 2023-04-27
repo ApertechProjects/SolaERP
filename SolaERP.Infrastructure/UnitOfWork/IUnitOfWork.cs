@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace SolaERP.Infrastructure.UnitOfWork
+namespace SolaERP.Application.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {

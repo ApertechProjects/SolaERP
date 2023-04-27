@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Dtos.LogInfo
+﻿namespace SolaERP.Application.Dtos.LogInfo
 {
     public class LogInfoDto
     {

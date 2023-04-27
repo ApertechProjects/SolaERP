@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using SolaERP.Infrastructure.Dtos.Auth;
+using SolaERP.Application.Dtos.Auth;
 
 namespace SolaERP.Application.Validations.UserValidation
 {

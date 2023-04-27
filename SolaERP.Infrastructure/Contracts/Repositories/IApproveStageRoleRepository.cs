@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Entities.ApproveStage;
+﻿using SolaERP.Application.Entities.ApproveStage;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IApproveStageRoleRepository : IReturnableAddAsync<ApproveStageRole>
     {

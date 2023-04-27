@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Entities.Email
+﻿namespace SolaERP.Application.Entities.Email
 {
     public class EmailNotification : BaseEntity
     {

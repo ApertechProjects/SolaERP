@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Dtos.ApproveRole
+namespace SolaERP.Application.Dtos.ApproveRole
 {
     public class ApproveRoleDto
     {

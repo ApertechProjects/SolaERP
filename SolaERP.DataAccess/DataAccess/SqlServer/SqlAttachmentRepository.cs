@@ -1,8 +1,8 @@
 ﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.Attachment;
-using SolaERP.Infrastructure.Models;
-using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.Attachment;
+using SolaERP.Application.Models;
+using SolaERP.Application.UnitOfWork;
 using System.Data.Common;
 using System.Text;
 

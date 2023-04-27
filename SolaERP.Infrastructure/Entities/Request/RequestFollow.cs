@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Attributes;
+﻿using SolaERP.Application.Attributes;
 
-namespace SolaERP.Infrastructure.Entities.Request
+namespace SolaERP.Application.Entities.Request
 {
     public class RequestFollow : BaseEntity
     {

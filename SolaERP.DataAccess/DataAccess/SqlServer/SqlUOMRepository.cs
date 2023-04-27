@@ -1,9 +1,9 @@
 ﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.BusinessUnits;
-using SolaERP.Infrastructure.Entities.UOM;
-using SolaERP.Infrastructure.Models;
-using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.BusinessUnits;
+using SolaERP.Application.Entities.UOM;
+using SolaERP.Application.Models;
+using SolaERP.Application.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;

@@ -1,7 +1,7 @@
-﻿using SolaERP.Infrastructure.Entities.AnalysisCode;
-using SolaERP.Infrastructure.Entities.AnalysisDimension;
+﻿using SolaERP.Application.Entities.AnalysisCode;
+using SolaERP.Application.Entities.AnalysisDimension;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IAnalysisCodeRepository
     {

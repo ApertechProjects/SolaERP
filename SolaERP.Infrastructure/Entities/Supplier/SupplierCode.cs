@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Entities.Supplier
+﻿namespace SolaERP.Application.Entities.Supplier
 {
     public class SupplierCode : BaseEntity
     {

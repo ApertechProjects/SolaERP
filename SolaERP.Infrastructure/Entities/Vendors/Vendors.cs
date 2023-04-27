@@ -1,6 +1,4 @@
-﻿using SolaERP.Infrastructure.Entities.Auth;
-
-namespace SolaERP.Infrastructure.Entities.Vendors
+﻿namespace SolaERP.Application.Entities.Vendors
 {
     public class Vendors : BaseEntity
     {
@@ -28,6 +26,6 @@ namespace SolaERP.Infrastructure.Entities.Vendors
         public int UserId { get; set; }
         public string UserStatusName { get; set; }
         public VendorApprovals VendorApprovals { get; set; }
-        public SolaERP.Infrastructure.Entities.Auth.User AppUser { get; set; }
+        public SolaERP.Application.Entities.Auth.User AppUser { get; set; }
     }
 }

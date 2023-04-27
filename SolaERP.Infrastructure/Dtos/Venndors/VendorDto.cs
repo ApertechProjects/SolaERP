@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Dtos.Venndors
+﻿namespace SolaERP.Application.Dtos.Venndors
 {
     public class VendorDto
     {

@@ -1,9 +1,9 @@
-﻿using SolaERP.Infrastructure.Dtos.ApproveStage;
-using SolaERP.Infrastructure.Dtos.ApproveStages;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Models;
+﻿using SolaERP.Application.Dtos.ApproveStage;
+using SolaERP.Application.Dtos.ApproveStages;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Models;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public interface IApproveStageService
     {

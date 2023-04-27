@@ -1,13 +1,13 @@
-﻿using SolaERP.Infrastructure.Dtos.BusinessUnit;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.UOM;
+﻿using SolaERP.Application.Dtos.BusinessUnit;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.UOM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public interface IUOMService : ICrudService<UOMDto>
     {

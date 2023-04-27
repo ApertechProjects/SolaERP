@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Contracts.Common
+﻿namespace SolaERP.Application.Contracts.Common
 {
     public interface IDeleteableAsync
     {

@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Dtos.Attachment
+﻿namespace SolaERP.Application.Dtos.Attachment
 {
     public class AttachmentDto
     {

@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace SolaERP.Infrastructure.Dtos.Layout
+namespace SolaERP.Application.Dtos.Layout
 {
     public class LayoutDto
     {

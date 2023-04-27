@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Auth;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Models;
+using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Auth;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Models;
 
 namespace SolaERP.Controllers
 {

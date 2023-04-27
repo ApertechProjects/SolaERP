@@ -1,7 +1,7 @@
 ﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.Email;
-using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.Email;
+using SolaERP.Application.UnitOfWork;
 using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer

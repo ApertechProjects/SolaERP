@@ -1,10 +1,10 @@
-﻿using SolaERP.Infrastructure.Dtos.AnalysisCode;
-using SolaERP.Infrastructure.Dtos.AnaysisDimension;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Entities;
-using SolaERP.Infrastructure.Models;
+﻿using SolaERP.Application.Dtos.AnalysisCode;
+using SolaERP.Application.Dtos.AnaysisDimension;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities;
+using SolaERP.Application.Models;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public interface IAnalysisCodeService
     {

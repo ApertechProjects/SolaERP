@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Enums;
+﻿using SolaERP.Application.Enums;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public interface IFileService
     {

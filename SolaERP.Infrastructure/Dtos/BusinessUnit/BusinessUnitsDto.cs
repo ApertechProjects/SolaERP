@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Dtos.BusinessUnit
+namespace SolaERP.Application.Dtos.BusinessUnit
 {
     public class BusinessUnitsDto : BaseBusinessUnitDto
     {

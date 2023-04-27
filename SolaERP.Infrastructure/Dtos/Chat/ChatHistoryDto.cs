@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Dtos.Chat
+﻿namespace SolaERP.Application.Dtos.Chat
 {
     public class ChatHistoryDto
     {

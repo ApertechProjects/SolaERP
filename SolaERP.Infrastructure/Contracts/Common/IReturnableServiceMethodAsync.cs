@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Dtos.Shared;
+﻿using SolaERP.Application.Dtos.Shared;
 
-namespace SolaERP.Infrastructure.Contracts.Common
+namespace SolaERP.Application.Contracts.Common
 {
     public interface IReturnableServiceMethodAsync<T>
     {

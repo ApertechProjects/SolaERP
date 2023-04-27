@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Entities.BusinessUnits
+﻿namespace SolaERP.Application.Entities.BusinessUnits
 {
     public class GroupBusinessUnits : BaseEntity
     {

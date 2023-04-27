@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Entities.Auth;
+﻿using SolaERP.Application.Entities.Auth;
 
-namespace SolaERP.Infrastructure.Entities.Groups
+namespace SolaERP.Application.Entities.Groups
 {
     public class GroupUserDto
     {

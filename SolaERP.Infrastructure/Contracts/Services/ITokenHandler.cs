@@ -1,8 +1,8 @@
-﻿using SolaERP.Infrastructure.Dtos.Auth;
-using SolaERP.Infrastructure.Models;
+﻿using SolaERP.Application.Dtos.Auth;
+using SolaERP.Application.Models;
 using System.Security.Claims;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public interface ITokenHandler
     {

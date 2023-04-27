@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Group;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.User;
-using SolaERP.Infrastructure.Dtos.UserDto;
-using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Models;
-using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Group;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.User;
+using SolaERP.Application.Dtos.UserDto;
+using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Models;
+using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
 
 
@@ -39,7 +39,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task AddAsync(UserDto model)
         {
-            if (model.UserType == Infrastructure.Enums.UserRegisterType.SupplierUser && model.VendorId == 0)
+            if (model.UserType == Application.Enums.UserRegisterType.SupplierUser && model.VendorId == 0)
                 ApiResponse<bool>.Fail("companyName", "Company name required for Supplier user", 422);
 
             if (model.Password != model.ConfirmPassword)
@@ -60,7 +60,7 @@ namespace SolaERP.Persistence.Services
             if (userExsist is not null)
                 return ApiResponse<bool>.Fail("user", "This user is already exsist in our system", 422);
 
-            if (model.UserType == Infrastructure.Enums.UserRegisterType.SupplierUser && model.VendorId == 0)
+            if (model.UserType == Application.Enums.UserRegisterType.SupplierUser && model.VendorId == 0)
                 return ApiResponse<bool>.Fail("company", "Company name required for Supplier user", 422);
 
             if (model.Password != model.ConfirmPassword)

@@ -1,8 +1,8 @@
-﻿using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.Venndors;
-using SolaERP.Infrastructure.Entities.Vendors;
+﻿using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.Venndors;
+using SolaERP.Application.Entities.Vendors;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public interface IVendorService : ICrudService<Vendors>
     {

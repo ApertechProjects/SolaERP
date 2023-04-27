@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Entities.User
+﻿namespace SolaERP.Application.Entities.User
 {
     public class UserLoad : BaseEntity
     {

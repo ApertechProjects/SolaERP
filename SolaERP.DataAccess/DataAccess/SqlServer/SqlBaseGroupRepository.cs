@@ -1,4 +1,4 @@
-﻿using SolaERP.Infrastructure.Entities.Groups;
+﻿using SolaERP.Application.Entities.Groups;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {

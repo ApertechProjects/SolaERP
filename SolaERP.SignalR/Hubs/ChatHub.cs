@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using SignalRChatExample.Models;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.SignalR.InMemorySource;
 using SolaERP.SignalR.Models;
 

@@ -1,7 +1,7 @@
-﻿using SolaERP.Infrastructure.Attributes;
+﻿using SolaERP.Application.Attributes;
 using System.Text.Json.Serialization;
 
-namespace SolaERP.Infrastructure.Entities.Auth
+namespace SolaERP.Application.Entities.Auth
 {
     public class User : BaseEntity
     {

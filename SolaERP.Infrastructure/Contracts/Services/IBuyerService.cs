@@ -1,8 +1,8 @@
-﻿using SolaERP.Infrastructure.Dtos.Buyer;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Models;
+﻿using SolaERP.Application.Dtos.Buyer;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Models;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public interface IBuyerService : ICrudService<BuyerDto>
     {

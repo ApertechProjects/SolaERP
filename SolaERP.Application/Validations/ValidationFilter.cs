@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Application.Dtos.Shared;
 
 namespace SolaERP.Application.Validations
 {

@@ -1,8 +1,8 @@
-﻿using SolaERP.Infrastructure.Dtos.ApproveRole;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Models;
+﻿using SolaERP.Application.Dtos.ApproveRole;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Models;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public interface IApproveRoleService : ICrudService<ApproveRoleDto>
     {

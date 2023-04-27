@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Dtos.Translate
+namespace SolaERP.Application.Dtos.Translate
 {
     public class TranslateDto
     {

@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Dtos.ApproveStages
+﻿namespace SolaERP.Application.Dtos.ApproveStages
 {
     public class ApproveStagesDetailDto
     {

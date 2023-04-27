@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Dtos.AnaysisDimension
+namespace SolaERP.Application.Dtos.AnaysisDimension
 {
     public class AnalysisDimensionDto
     {

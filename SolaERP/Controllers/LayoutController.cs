@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Controllers;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Layout;
-using SolaERP.Infrastructure.Models;
+using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Layout;
+using SolaERP.Application.Models;
 
 namespace SolaERP.API.Controllers
 {

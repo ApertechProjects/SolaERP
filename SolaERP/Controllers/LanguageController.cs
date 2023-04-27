@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SolaERP.Controllers;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Language;
-using SolaERP.Infrastructure.Dtos.Translate;
+using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Language;
+using SolaERP.Application.Dtos.Translate;
 
 namespace SolaERP.API.Controllers
 {

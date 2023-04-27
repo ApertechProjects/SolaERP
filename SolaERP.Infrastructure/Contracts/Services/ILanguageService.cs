@@ -1,15 +1,15 @@
-﻿using SolaERP.Infrastructure.Dtos.Language;
-using SolaERP.Infrastructure.Dtos.Layout;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.Translate;
-using SolaERP.Infrastructure.Models;
+﻿using SolaERP.Application.Dtos.Language;
+using SolaERP.Application.Dtos.Layout;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.Translate;
+using SolaERP.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public interface ILanguageService
     {

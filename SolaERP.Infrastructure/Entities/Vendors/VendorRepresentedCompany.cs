@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Entities.Vendors
+﻿namespace SolaERP.Application.Entities.Vendors
 {
     public class VendorRepresentedCompany : BaseEntity
     {

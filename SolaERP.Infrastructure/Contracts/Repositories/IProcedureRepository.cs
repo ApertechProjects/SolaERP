@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Entities.Procedure;
+﻿using SolaERP.Application.Entities.Procedure;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IProcedureRepository : ICrudOperations<Procedure>
     {

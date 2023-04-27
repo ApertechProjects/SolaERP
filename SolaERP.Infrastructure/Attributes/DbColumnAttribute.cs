@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Attributes
+﻿namespace SolaERP.Application.Attributes
 {
     public class DbColumnAttribute : Attribute
     {

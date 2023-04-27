@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Dtos.Currency
+namespace SolaERP.Application.Dtos.Currency
 {
     public class CurrencyDto
     {

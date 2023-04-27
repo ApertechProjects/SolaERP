@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Entities.Layout;
+﻿using SolaERP.Application.Entities.Layout;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface ILayoutRepository
     {

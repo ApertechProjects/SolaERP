@@ -31,7 +31,7 @@
              </summary>
              <param name="attachmentId">ID of the attachment to retrieve.</param>
         </member>
-        <member name="M:SolaERP.Controllers.AttachmentController.GetAttachmentsAsync(SolaERP.Infrastructure.Models.AttachmentListGetModel)">
+        <member name="M:SolaERP.Controllers.AttachmentController.GetAttachmentsAsync(SolaERP.Application.Models.AttachmentListGetModel)">
              <summary>
             Get a list of attachments based on the specified criteria.
              </summary>

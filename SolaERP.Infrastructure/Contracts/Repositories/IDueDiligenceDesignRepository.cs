@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Entities.DueDiligenceDesign;
+﻿using SolaERP.Application.Entities.DueDiligenceDesign;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IDueDiligenceDesignRepository : ICrudOperations<DueDiligenceDesign>
     {

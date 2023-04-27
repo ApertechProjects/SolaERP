@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Dtos.UOM
+namespace SolaERP.Application.Dtos.UOM
 {
     public class UOMDto
     {

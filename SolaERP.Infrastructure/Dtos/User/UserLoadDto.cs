@@ -1,5 +1,5 @@
 ﻿
-namespace SolaERP.Infrastructure.Dtos.User
+namespace SolaERP.Application.Dtos.User
 {
     public class UserLoadDto
     {

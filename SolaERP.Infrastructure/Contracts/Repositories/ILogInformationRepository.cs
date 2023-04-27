@@ -1,7 +1,7 @@
-﻿using SolaERP.Infrastructure.Entities.LogInfo;
-using SolaERP.Infrastructure.Enums;
+﻿using SolaERP.Application.Entities.LogInfo;
+using SolaERP.Application.Enums;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface ILogInformationRepository
     {

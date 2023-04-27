@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Dtos.Account
+﻿namespace SolaERP.Application.Dtos.Account
 {
     public class AccountCodeDto
     {

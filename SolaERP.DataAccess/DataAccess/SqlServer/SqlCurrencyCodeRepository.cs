@@ -1,8 +1,8 @@
 ﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.Currency;
-using SolaERP.Infrastructure.Models;
-using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.Currency;
+using SolaERP.Application.Models;
+using SolaERP.Application.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;

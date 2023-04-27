@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Dtos.Language
+namespace SolaERP.Application.Dtos.Language
 {
     public class LanguageDto
     {

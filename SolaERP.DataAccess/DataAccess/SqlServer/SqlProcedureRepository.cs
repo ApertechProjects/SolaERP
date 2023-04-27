@@ -1,7 +1,7 @@
 ﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.Procedure;
-using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.Procedure;
+using SolaERP.Application.UnitOfWork;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {

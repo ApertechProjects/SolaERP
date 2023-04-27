@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.Auth;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.Auth;
 
 namespace SolaERP.Application.Identity_Server
 {

@@ -1,11 +1,12 @@
-﻿using SolaERP.Infrastructure.Dtos.AnalysisCode;
-using SolaERP.Infrastructure.Dtos.Buyer;
-using SolaERP.Infrastructure.Dtos.Group;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Entities.Groups;
-using SolaERP.Infrastructure.Models;
+﻿using SolaERP.Application.Entities.Groups;
+using SolaERP.Application.Dtos.AnalysisCode;
+using SolaERP.Application.Dtos.Buyer;
+using SolaERP.Application.Dtos.Group;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.Groups;
+using SolaERP.Application.Models;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public interface IGroupService
     {

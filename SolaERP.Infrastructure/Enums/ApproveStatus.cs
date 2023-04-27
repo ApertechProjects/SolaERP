@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Infrastructure.Enums
+﻿namespace SolaERP.Application.Enums
 {
     public enum ApproveStatus
     {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SolaERP.Infrastructure.Extensions;
+using SolaERP.Application.Extensions;
 using System.Data;
 using System.Data.SqlClient;
 

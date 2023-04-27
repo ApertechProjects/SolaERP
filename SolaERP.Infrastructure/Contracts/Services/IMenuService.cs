@@ -1,8 +1,8 @@
-﻿using SolaERP.Infrastructure.Dtos.Menu;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.User;
+﻿using SolaERP.Application.Dtos.Menu;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.User;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public interface IMenuService
     {

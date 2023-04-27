@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Enums;
+﻿using SolaERP.Application.Enums;
 
-namespace SolaERP.Infrastructure.Models
+namespace SolaERP.Application.Models
 {
     public class LogInfoGetModel
     {

@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using JsonIgnoreAttribute = Newtonsoft.Json.JsonIgnoreAttribute;
 
-namespace SolaERP.Infrastructure.Dtos.Shared
+namespace SolaERP.Application.Dtos.Shared
 {
     public class ApiResponse<T>
     {

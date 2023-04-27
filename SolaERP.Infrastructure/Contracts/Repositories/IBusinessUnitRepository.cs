@@ -1,6 +1,7 @@
-﻿using SolaERP.Infrastructure.Entities.BusinessUnits;
+﻿using SolaERP.Application.Entities.BusinessUnits;
+using SolaERP.Application.Entities.BusinessUnits;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IBusinessUnitRepository : ICrudOperations<BusinessUnits>
     {

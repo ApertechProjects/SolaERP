@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Entities.Vendors;
+﻿using SolaERP.Application.Entities.Vendors;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IVendorRepository : ICrudOperations<Vendors>
     {

@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Entities.Email;
+﻿using SolaERP.Application.Entities.Email;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IEmailNotificationRepository
     {

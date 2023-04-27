@@ -1,6 +1,4 @@
-﻿using SolaERP.Infrastructure.Entities.Auth;
-
-namespace SolaERP.Infrastructure.Entities.Groups
+﻿namespace SolaERP.Application.Entities.Groups
 {
     public class GroupUser : BaseEntity
     {

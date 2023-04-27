@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.ApproveStage;
-using SolaERP.Infrastructure.Dtos.ApproveStages;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Entities.ApproveStage;
-using SolaERP.Infrastructure.Models;
-using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.ApproveStage;
+using SolaERP.Application.Dtos.ApproveStages;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.ApproveStage;
+using SolaERP.Application.Models;
+using SolaERP.Application.UnitOfWork;
 
 namespace SolaERP.Persistence.Services
 {

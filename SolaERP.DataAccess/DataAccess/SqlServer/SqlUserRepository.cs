@@ -1,10 +1,10 @@
 ﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Entities.Groups;
-using SolaERP.Infrastructure.Entities.User;
-using SolaERP.Infrastructure.Models;
-using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Entities.Groups;
+using SolaERP.Application.Entities.User;
+using SolaERP.Application.Models;
+using SolaERP.Application.UnitOfWork;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;

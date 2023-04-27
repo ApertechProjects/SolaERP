@@ -1,7 +1,7 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.Chat;
-using SolaERP.Infrastructure.UnitOfWork;
+﻿using SolaERP.Application.Entities.Chat;
+using SolaERP.DataAccess.Extensions;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.UnitOfWork;
 using System.Data;
 using System.Data.Common;
 

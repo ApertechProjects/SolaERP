@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Controllers;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Features.Commands.EmailNotifications;
-using SolaERP.Infrastructure.Features.Queries.EmailNotifications;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Features.Commands.EmailNotifications;
+using SolaERP.Application.Features.Queries.EmailNotifications;
 
 namespace SolaERP.API.Controllers
 {

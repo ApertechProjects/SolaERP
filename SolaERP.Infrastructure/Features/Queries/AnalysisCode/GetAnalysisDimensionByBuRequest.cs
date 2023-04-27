@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using SolaERP.Infrastructure.Dtos.Shared;
+using SolaERP.Application.Dtos.Shared;
 
-namespace SolaERP.Infrastructure.Features.Queries.AnalysisCode
+namespace SolaERP.Application.Features.Queries.AnalysisCode
 {
     public class GetAnalysisDimensionByBuRequest : IRequest<ApiResponse<List<GetAnalysisDimensionByBuResponse>>>
     {

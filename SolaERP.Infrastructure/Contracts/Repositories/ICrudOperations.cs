@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Entities;
+﻿using SolaERP.Application.Entities;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface ICrudOperations<Tentity> where Tentity : BaseEntity
     {

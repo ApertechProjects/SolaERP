@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace SolaERP.Infrastructure
+namespace SolaERP.Application
 {
     public static class UseMediatR
     {

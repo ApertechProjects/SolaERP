@@ -1,8 +1,8 @@
-﻿using SolaERP.Infrastructure.Contracts.Common;
-using SolaERP.Infrastructure.Dtos.Item_Code;
-using SolaERP.Infrastructure.Entities.Item_Code;
+﻿using SolaERP.Application.Contracts.Common;
+using SolaERP.Application.Dtos.Item_Code;
+using SolaERP.Application.Entities.Item_Code;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IItemCodeRepository : IReadableAsync<ItemCode>
     {

@@ -1,10 +1,10 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.Account;
-using SolaERP.Infrastructure.Entities.Location;
-using SolaERP.Infrastructure.Entities.Request;
-using SolaERP.Infrastructure.Models;
-using SolaERP.Infrastructure.UnitOfWork;
+﻿using SolaERP.Application.Entities.AccountCode;
+using SolaERP.DataAccess.Extensions;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.Location;
+using SolaERP.Application.Entities.Request;
+using SolaERP.Application.Models;
+using SolaERP.Application.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;

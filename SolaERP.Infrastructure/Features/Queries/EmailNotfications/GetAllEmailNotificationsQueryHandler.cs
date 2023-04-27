@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.UnitOfWork;
 
-namespace SolaERP.Infrastructure.Features.Queries.EmailNotifications
+namespace SolaERP.Application.Features.Queries.EmailNotifications
 {
     public class GetAllEmailNotificationsQueryHandler : IRequestHandler<GetAllEmailNotificationsQueryRequest, GetAllEmailNotificationsQueryResponse>
     {

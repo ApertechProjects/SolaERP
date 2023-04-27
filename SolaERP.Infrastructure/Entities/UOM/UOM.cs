@@ -1,11 +1,6 @@
-﻿using SolaERP.Infrastructure.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SolaERP.Application.Attributes;
 
-namespace SolaERP.Infrastructure.Entities.UOM
+namespace SolaERP.Application.Entities.UOM
 {
     public class UOM : BaseEntity
     {

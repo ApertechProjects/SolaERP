@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Entities.Chat;
+﻿using SolaERP.Application.Entities.Chat;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IChatRepository
     {

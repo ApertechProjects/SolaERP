@@ -1,9 +1,9 @@
 ﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Entities.Attachment;
-using SolaERP.Infrastructure.Entities.DueDiligenceDesign;
-using SolaERP.Infrastructure.Entities.VendorDueDiligence;
-using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.Attachment;
+using SolaERP.Application.Entities.DueDiligenceDesign;
+using SolaERP.Application.Entities.VendorDueDiligence;
+using SolaERP.Application.UnitOfWork;
 using System.Data;
 using System.Data.Common;
 

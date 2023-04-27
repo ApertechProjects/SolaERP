@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Entities;
+﻿using SolaERP.Application.Entities;
 
-namespace SolaERP.Infrastructure.Models
+namespace SolaERP.Application.Models
 {
     public class BaseModel : BaseEntity
     {

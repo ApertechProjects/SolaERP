@@ -1,8 +1,8 @@
-﻿using SolaERP.Infrastructure.Contracts.Common;
-using SolaERP.Infrastructure.Entities.Request;
-using SolaERP.Infrastructure.Models;
+﻿using SolaERP.Application.Contracts.Common;
+using SolaERP.Application.Entities.Request;
+using SolaERP.Application.Models;
 
-namespace SolaERP.Infrastructure.Contracts.Repositories
+namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IRequestMainRepository : IDeleteableAsync, IReturnableRepoMethodAsync<RequestMainSaveModel>
     {

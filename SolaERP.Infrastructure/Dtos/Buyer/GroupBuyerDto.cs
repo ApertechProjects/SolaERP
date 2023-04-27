@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Infrastructure.Dtos.Buyer
+namespace SolaERP.Application.Dtos.Buyer
 {
     public class GroupBuyerDto
     {

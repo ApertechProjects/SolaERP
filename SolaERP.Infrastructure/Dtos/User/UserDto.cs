@@ -1,8 +1,8 @@
-﻿using SolaERP.Infrastructure.Attributes;
-using SolaERP.Infrastructure.Enums;
+﻿using SolaERP.Application.Attributes;
+using SolaERP.Application.Enums;
 using System.Text.Json.Serialization;
 
-namespace SolaERP.Infrastructure.Dtos.UserDto
+namespace SolaERP.Application.Dtos.UserDto
 {
     public class UserDto
     {

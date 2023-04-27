@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Attributes;
+﻿using SolaERP.Application.Attributes;
 
-namespace SolaERP.Infrastructure.Entities.ApproveStage
+namespace SolaERP.Application.Entities.ApproveStage
 {
     public class ApproveStagesDetail : BaseEntity
     {

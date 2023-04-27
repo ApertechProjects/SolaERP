@@ -1,6 +1,6 @@
-﻿using SolaERP.Infrastructure.Dtos.Procedure;
+﻿using SolaERP.Application.Dtos.Procedure;
 
-namespace SolaERP.Infrastructure.Contracts.Services
+namespace SolaERP.Application.Contracts.Services
 {
     public interface IProcedureService : ICrudService<ProcedureDto>
     {

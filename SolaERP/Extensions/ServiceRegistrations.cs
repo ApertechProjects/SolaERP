@@ -10,12 +10,12 @@ using SolaERP.Application.Validations.UserValidation;
 using SolaERP.DataAccess.DataAcces.SqlServer;
 using SolaERP.DataAccess.DataAccess.SqlServer;
 using SolaERP.DataAccess.Factories;
-using SolaERP.Infrastructure;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.UnitOfWork;
-using SolaERP.Infrastructure.ValidationRules;
+using SolaERP.Application;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.UnitOfWork;
+using SolaERP.Application.ValidationRules;
 using SolaERP.Persistence.Services;
 using UserValidation = SolaERP.Application.Validations.UserValidation.UserValidation;
 

@@ -1,8 +1,8 @@
 ﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Dtos.ApproveRole;
-using SolaERP.Infrastructure.Entities.ApproveRole;
-using SolaERP.Infrastructure.UnitOfWork;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Dtos.ApproveRole;
+using SolaERP.Application.Entities.ApproveRole;
+using SolaERP.Application.UnitOfWork;
 using System.Data.Common;
 using System.Reflection;
 
