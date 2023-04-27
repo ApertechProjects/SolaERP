@@ -14,7 +14,6 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<List<GroupAdditionalPrivilage>>> GetAdditionalPrivilegesForGroupAsync(int groupId);
         Task<ApiResponse<bool>> DeleteBuyerByGroupIdAsync(int groupBuyerId);
         Task<ApiResponse<List<GroupBuyerDto>>> GetBuyersByGroupIdAsync(int groupId);
-        Task<ApiResponse<bool>> SaveBuyerByGroupAsync(GroupBuyerSaveModel model);
         Task<ApiResponse<bool>> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId);
         Task<ApiResponse<List<GroupAnalysisCodeDto>>> GetAnalysisCodesByGroupIdAsync(int groupId);
         Task<ApiResponse<bool>> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model);

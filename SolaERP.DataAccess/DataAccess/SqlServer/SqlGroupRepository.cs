@@ -155,25 +155,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> SaveBuyerByGroupAsync(GroupBuyerSaveModel model)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = @"SET NOCOUNT OFF Exec SP_GroupBuyers_IUD  @GroupBuyerId,
-                                                                       @GroupId,  
-                                                                       @BusinessUnitId, 
-                                                                       @BuyerCode";
-
-                command.Parameters.AddWithValue(command, "@GroupBuyerId", model.GroupBuyerId);
-                command.Parameters.AddWithValue(command, "@GroupId", model.GroupId);
-                command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
-                command.Parameters.AddWithValue(command, "@BuyerCode", model.BuyerCode);
-
-
-                return await command.ExecuteNonQueryAsync() > 0;
-            }
-        }
-
         public async Task<List<GroupAnalysisCode>> GetAnalysisCodesByGroupIdAsync(int groupId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -430,6 +411,28 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupAdditionalPrivilegesBulk_I @GroupId,@Items";
                 command.Parameters.AddWithValue(command, "@GroupId", groupId);
                 command.Parameters.AddTableValue(command, "@Items", "SingleIdItems", data);
+                var value = await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        public async Task AddBuyersAsync(DataTable data, int groupId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupBuyersBulk_I @GroupId,@Items";
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+                command.Parameters.AddTableValue(command, "@Items", "GroupBuyersType", data);
+                var value = await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        public async Task DeleteBuyersAsync(DataTable data, int groupId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupBuyersBulk_D @GroupId,@Items";
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+                command.Parameters.AddTableValue(command, "@Items", "GroupBuyersType", data);
                 var value = await command.ExecuteNonQueryAsync();
             }
         }

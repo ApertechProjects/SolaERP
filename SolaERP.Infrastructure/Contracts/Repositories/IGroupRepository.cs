@@ -18,7 +18,6 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<bool> AddMenuToGroupOrDeleteAsync(GroupMenuIDSaveModel saveOrDeleteModel);
         Task<bool> DeleteBuyerByGroupIdAsync(int groupBuyerId);
         public Task<List<GroupBuyer>> GetBuyersByGroupIdAsync(int groupId);
-        Task<bool> SaveBuyerByGroupAsync(GroupBuyerSaveModel model);
         Task<List<GroupAnalysisCode>> GetAnalysisCodesByGroupIdAsync(int groupId);
         Task<bool> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId);
         Task<bool> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model);
@@ -35,5 +34,7 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task AddApproveRolesToGroupAsync(DataTable data, int groupId);
         Task DeleteAdditionalPrivilegesAsync(DataTable data, int groupId);
         Task AddAdditionalPrivilegesAsync(DataTable data, int groupId);
+        Task AddBuyersAsync(DataTable data, int groupId);
+        Task DeleteBuyersAsync(DataTable data, int groupId);
     }
 }

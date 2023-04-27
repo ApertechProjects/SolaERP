@@ -186,16 +186,6 @@ namespace SolaERP.Application.Services
                 return ApiResponse<bool>.Fail("Data can not be saved", 400);
         }
 
-        public async Task<ApiResponse<bool>> SaveBuyerByGroupAsync(GroupBuyerSaveModel model)
-        {
-            var res = await _groupRepository.SaveBuyerByGroupAsync(model);
-            await _unitOfWork.SaveChangesAsync();
-            if (res)
-                return ApiResponse<bool>.Success(res, 200);
-            else
-                return ApiResponse<bool>.Fail("Data can not be saved", 400);
-        }
-
         public async Task<ApiResponse<bool>> SaveGroupAsync(string name, GroupSaveModel model)
         {
             var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
@@ -221,6 +211,10 @@ namespace SolaERP.Application.Services
             if (model.RemoveAdditionalPrivileges != null)
                 await DeleteAdditionalPrivilegesAsync(model.RemoveAdditionalPrivileges, model.GroupId);
 
+            if (model.AddBuyers != null)
+                await AddBuyersAsync(model.AddBuyers, model.GroupId);
+            if (model.RemoveBuyers != null)
+                await DeleteBuyersAsync(model.RemoveBuyers, model.GroupId);
             //if (model.ApproveRoles != null)
             //{
             //    if (model.GroupId == 0) await _groupRepository.AddApproveRoleToGroupOrDelete(model.GroupId, 0); // for delete operation approvalId is 0
@@ -261,6 +255,18 @@ namespace SolaERP.Application.Services
             //}
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(true, 200);
+        }
+
+        private async Task DeleteBuyersAsync(List<GroupBuyerSaveModel> removeBuyers, int groupId)
+        {
+            var data = removeBuyers.ConvertListCollectionToDataTable();
+            await _groupRepository.DeleteBuyersAsync(data, groupId);
+        }
+
+        private async Task AddBuyersAsync(List<GroupBuyerSaveModel> addBuyers, int groupId)
+        {
+            var data = addBuyers.ConvertListCollectionToDataTable();
+            await _groupRepository.AddBuyersAsync(data, groupId);
         }
 
         private async Task DeleteAdditionalPrivilegesAsync(List<int> removeAdditionalPrivileges, int groupId)
