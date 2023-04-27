@@ -190,30 +190,30 @@ namespace SolaERP.Persistence.Services
             var userId = await _userRepository.GetIdentityNameAsIntAsync(identity);
             model.GroupId = await _groupRepository.AddUpdateOrDeleteGroupAsync(userId, new() { GroupId = model.GroupId, GroupName = model.GroupName, Description = model.Description });
 
-            //if (model.AddUsers != null)
-            //    await AddUsersAsync(model.AddUsers, model.GroupId);
-            //if (model.RemoveUsers != null)
-            //    await DeleteUsersAsync(model.RemoveUsers, model.GroupId);
+            if (model.AddUsers != null)
+                await AddUsersAsync(model.AddUsers, model.GroupId);
+            if (model.RemoveUsers != null)
+                await DeleteUsersAsync(model.RemoveUsers, model.GroupId);
 
-            //if (model.AddBusinessUnits != null)
-            //    await AddBusinessUnitsAsync(model.AddBusinessUnits, model.GroupId);
-            //if (model.RemoveBusinessUnits != null)
-            //    await DeleteBusinessUnitsAsync(model.RemoveBusinessUnits, model.GroupId);
+            if (model.AddBusinessUnits != null)
+                await AddBusinessUnitsAsync(model.AddBusinessUnits, model.GroupId);
+            if (model.RemoveBusinessUnits != null)
+                await DeleteBusinessUnitsAsync(model.RemoveBusinessUnits, model.GroupId);
 
-            //if (model.AddApproveRoles != null)
-            //    await AddApproveRolesAsync(model.AddApproveRoles, model.GroupId);
-            //if (model.RemoveApproveRoles != null)
-            //    await DeleteApproveRolesAsync(model.RemoveApproveRoles, model.GroupId);
+            if (model.AddApproveRoles != null)
+                await AddApproveRolesAsync(model.AddApproveRoles, model.GroupId);
+            if (model.RemoveApproveRoles != null)
+                await DeleteApproveRolesAsync(model.RemoveApproveRoles, model.GroupId);
 
-            //if (model.AddAdditionalPrivileges != null)
-            //    await AddAdditionalPrivilegesAsync(model.AddAdditionalPrivileges, model.GroupId);
-            //if (model.RemoveAdditionalPrivileges != null)
-            //    await DeleteAdditionalPrivilegesAsync(model.RemoveAdditionalPrivileges, model.GroupId);
+            if (model.AddAdditionalPrivileges != null)
+                await AddAdditionalPrivilegesAsync(model.AddAdditionalPrivileges, model.GroupId);
+            if (model.RemoveAdditionalPrivileges != null)
+                await DeleteAdditionalPrivilegesAsync(model.RemoveAdditionalPrivileges, model.GroupId);
 
-            //if (model.AddBuyers != null)
-            //    await AddBuyersAsync(model.AddBuyers, model.GroupId);
-            //if (model.RemoveBuyers != null)
-            //    await DeleteBuyersAsync(model.RemoveBuyers, model.GroupId);
+            if (model.AddBuyers != null)
+                await AddBuyersAsync(model.AddBuyers, model.GroupId);
+            if (model.RemoveBuyers != null)
+                await DeleteBuyersAsync(model.RemoveBuyers, model.GroupId);
 
             if (model.Menus != null)
                 await _groupRepository.AddMenuAsync(model.GroupId, model.Menus.ConvertToDataTable());
