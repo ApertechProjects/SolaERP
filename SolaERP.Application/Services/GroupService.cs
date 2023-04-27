@@ -46,7 +46,7 @@ namespace SolaERP.Persistence.Services
             await _groupRepository.AddUsersAsync(data, groupId);
         }
 
-        public async Task<ApiResponse<bool>> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId)
+        public async Task<ApiResponse<bool>> DeleteAnalysisCodeAsync(int groupAnalysisCodeId)
         {
             var result = await _groupRepository.DeleteAnalysisCodeByGroupIdAsync(groupAnalysisCodeId);
             await _unitOfWork.SaveChangesAsync();
@@ -55,7 +55,7 @@ namespace SolaERP.Persistence.Services
         }
 
 
-        public async Task<ApiResponse<bool>> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId)
+        public async Task<ApiResponse<bool>> DeleteGroupRoleAsync(int groupApproveRoleId)
         {
             var result = await _groupRepository.DeleteGroupRoleAsync(groupApproveRoleId);
             await _unitOfWork.SaveChangesAsync();
@@ -69,7 +69,7 @@ namespace SolaERP.Persistence.Services
             await _groupRepository.DeleteUsersAsync(data, groupId);
         }
 
-        public async Task<ApiResponse<List<GroupAdditionalPrivilegeDto>>> GetAdditionalPrivilegesForGroupAsync(int groupId)
+        public async Task<ApiResponse<List<GroupAdditionalPrivilegeDto>>> GetAdditionalPrivilegesAsync(int groupId)
         {
             var data = await _groupRepository.GetAdditionalPrivilegesAsync(groupId);
             var dto = _mapper.Map<List<GroupAdditionalPrivilegeDto>>(data);
@@ -84,17 +84,17 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<GroupsDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<List<GroupAnalysisCodeDto>>> GetAnalysisCodesByGroupIdAsync(int groupId)
+        public async Task<ApiResponse<List<GroupAnalysisCodeDto>>> GetAnalysisCodesAsync(int groupId)
         {
-            var buyers = await _groupRepository.GetBuyersAsync(groupId);
-            var dto = _mapper.Map<List<GroupAnalysisCodeDto>>(buyers);
+            var analysisCodes = await _groupRepository.GetAnalysisCodesAsync(groupId);
+            var dto = _mapper.Map<List<GroupAnalysisCodeDto>>(analysisCodes);
             if (dto != null)
                 return ApiResponse<List<GroupAnalysisCodeDto>>.Success(dto, 200);
             else
                 return ApiResponse<List<GroupAnalysisCodeDto>>.Fail("Analysis list is empty", 404);
         }
 
-        public async Task<ApiResponse<List<GroupBuyerDto>>> GetBuyersByGroupIdAsync(int groupId)
+        public async Task<ApiResponse<List<GroupBuyerDto>>> GetBuyersAsync(int groupId)
         {
             var buyers = await _groupRepository.GetBuyersAsync(groupId);
             var dto = _mapper.Map<List<GroupBuyerDto>>(buyers);
@@ -120,7 +120,7 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<GroupDto>.Fail("group not found", 404);
         }
 
-        public async Task<ApiResponse<List<GroupRoleDto>>> GetGroupRolesByGroupIdAsync(int groupId)
+        public async Task<ApiResponse<List<GroupRoleDto>>> GetGroupRolesAsync(int groupId)
         {
             var buyers = await _groupRepository.GetGroupRolesAsync(groupId);
             var dto = _mapper.Map<List<GroupRoleDto>>(buyers);
@@ -130,7 +130,7 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<List<GroupRoleDto>>.Fail("Group Role list is empty", 404);
         }
 
-        public async Task<ApiResponse<List<GroupUserDto>>> GetGroupsByUserIdAsync(int userId)
+        public async Task<ApiResponse<List<GroupUserDto>>> GetUserGroupsAsync(int userId)
         {
             var groups = await _groupRepository.GetUserGroupsAsync(userId);
             var dto = _mapper.Map<List<GroupUserDto>>(groups);
@@ -259,7 +259,7 @@ namespace SolaERP.Persistence.Services
             await _groupRepository.AddApproveRolesToGroupAsync(data, groupId);
         }
 
-        public async Task<ApiResponse<bool>> SaveGroupRoleByGroupAsync(GroupRoleSaveModel model)
+        public async Task<ApiResponse<bool>> SaveGroupRoleAsync(GroupRoleSaveModel model)
         {
             var res = await _groupRepository.SaveGroupRoleAsync(model);
             await _unitOfWork.SaveChangesAsync();

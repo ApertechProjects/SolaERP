@@ -144,7 +144,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<GroupAnalysisCode>> GetAnalysisCodesByGroupIdAsync(int groupId)
+        public async Task<List<GroupAnalysisCode>> GetAnalysisCodesAsync(int groupId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

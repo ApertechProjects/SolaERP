@@ -20,7 +20,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> DeleteMenuAsync(int groupId, DataTable table);
         Task<bool> DeleteBuyerByGroupIdAsync(int groupBuyerId);
         Task<List<GroupBuyer>> GetBuyersAsync(int groupId);
-        Task<List<GroupAnalysisCode>> GetAnalysisCodesByGroupIdAsync(int groupId);
+        Task<List<GroupAnalysisCode>> GetAnalysisCodesAsync(int groupId);
         Task<bool> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId);
         Task<bool> AddAnalysisCodeAsync(int groupId, DataTable table);
         Task<List<GroupRole>> GetGroupRolesAsync(int groupId);

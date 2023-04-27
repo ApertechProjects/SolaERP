@@ -3,7 +3,6 @@ using System.Net;
 
 namespace SolaERP.Application.Extensions
 {
-
     public class RemoteFileServer
     {
         private static ConfigurationManager _configuration;

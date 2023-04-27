@@ -27,7 +27,7 @@ namespace SolaERP.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetGroupsByUserIdAsync([FromQuery] int userId)
-         => CreateActionResult(await _groupService.GetGroupsByUserIdAsync(userId));
+         => CreateActionResult(await _groupService.GetUserGroupsAsync(userId));
 
         [HttpGet]
         public async Task<IActionResult> GetActiveUsersAsync()
