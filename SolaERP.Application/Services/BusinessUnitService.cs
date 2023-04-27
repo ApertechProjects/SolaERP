@@ -31,13 +31,6 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<BusinessUnitsAllDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<List<BusinessUnitForGroupDto>>> GetBusinessUnitForGroupAsync(int groupId)
-        {
-            var buisnessUnitForGroup = await _businessUnitRepository.GetBusinessUnitForGroups(groupId);
-            var dto = _mapper.Map<List<BusinessUnitForGroupDto>>(buisnessUnitForGroup);
-
-            return ApiResponse<List<BusinessUnitForGroupDto>>.Success(dto, 200);
-        }
 
         public async Task<ApiResponse<List<BaseBusinessUnitDto>>> GetBusinessUnitListByUserToken(string finderToken)
         {

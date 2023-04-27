@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Entities.AnalysisCode;
+using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Buyer;
 using SolaERP.Application.Entities.Groups;
 using SolaERP.Application.Models;
@@ -39,5 +40,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task DeleteBuyersAsync(DataTable data, int groupId);
         Task DeleteEmailNotificationAsync(DataTable data, int groupId);
         Task AddEmailNotificationsAsync(DataTable data, int groupId);
+        Task<List<BusinessUnitForGroup>> GetGroupBusinessUnitsAsync(int groupId);
     }
 }

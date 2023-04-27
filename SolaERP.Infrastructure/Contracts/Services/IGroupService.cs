@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Dtos.AnalysisCode;
+using SolaERP.Application.Dtos.BusinessUnit;
 using SolaERP.Application.Dtos.Buyer;
 using SolaERP.Application.Dtos.Group;
 using SolaERP.Application.Dtos.Shared;
@@ -12,7 +13,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<GroupsDto>>> GetAllAsync();
         Task<ApiResponse<bool>> SaveGroupAsync(string name, GroupSaveModel model);
         Task<ApiResponse<List<GroupAdditionalPrivilegeDto>>> GetAdditionalPrivilegesAsync(int groupId);
-        Task<ApiResponse<List<GroupBuyerDto>>> GetBuyersAsync(int groupId);
+        Task<ApiResponse<List<GroupBuyerDto>>> GetGroupBuyersAsync(int groupId);
         Task<ApiResponse<bool>> DeleteAnalysisCodeAsync(int groupAnalysisCodeId);
         Task<ApiResponse<List<GroupAnalysisCodeDto>>> GetAnalysisCodesAsync(int groupId);
         Task<ApiResponse<bool>> AddAnalysisCodeAsync(int groupId, List<int> analysisIds);
@@ -27,7 +28,7 @@ namespace SolaERP.Application.Contracts.Services
         Task AddBusinessUnitsAsync(List<int> users, int groupId);
         Task DeleteBusinessUnitsAsync(List<int> users, int groupId);
         Task<ApiResponse<GroupDto>> GetGroupInfoAsync(int groupId);
-
+        Task<ApiResponse<List<BusinessUnitForGroupDto>>> GetGroupBusinessUnitsAsync(int groupId);
 
     }
 }

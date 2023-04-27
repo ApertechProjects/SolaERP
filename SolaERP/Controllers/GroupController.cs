@@ -12,12 +12,10 @@ namespace SolaERP.Controllers
     {
         private readonly IGroupService _groupService;
         private readonly IUserService _userService;
-        private readonly IBusinessUnitService _businessUnitService;
         public GroupController(IGroupService groupService, IUserService userService, IBusinessUnitService businessUnitService)
         {
             _groupService = groupService;
             _userService = userService;
-            _businessUnitService = businessUnitService;
         }
 
         [HttpGet]
@@ -30,7 +28,7 @@ namespace SolaERP.Controllers
 
         [HttpGet("{groupId}")]
         public async Task<IActionResult> GetBusinessUnits(int groupId)
-            => CreateActionResult(await _businessUnitService.GetBusinessUnitForGroupAsync(groupId));
+            => CreateActionResult(await _groupService.GetGroupBusinessUnitsAsync(groupId));
 
         [HttpGet("{groupId}")]
         public async Task<IActionResult> GetGroupInfoAsync(int groupId)
@@ -46,7 +44,7 @@ namespace SolaERP.Controllers
 
         [HttpGet("{groupId}")]
         public async Task<IActionResult> GetBuyers(int groupId)
-           => CreateActionResult(await _groupService.GetBuyersAsync(groupId));
+           => CreateActionResult(await _groupService.GetGroupBuyersAsync(groupId));
 
         [HttpGet("{groupId}")]
         public async Task<IActionResult> GetGroupRoles(int groupId)
