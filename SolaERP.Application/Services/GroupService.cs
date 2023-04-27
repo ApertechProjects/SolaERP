@@ -1,16 +1,4 @@
-﻿using AutoMapper;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.AnalysisCode;
-using SolaERP.Infrastructure.Dtos.Buyer;
-using SolaERP.Infrastructure.Dtos.Group;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Entities.Groups;
-using SolaERP.Infrastructure.Models;
-using SolaERP.Infrastructure.UnitOfWork;
-using SolaERP.Persistence.Utils;
-
-namespace SolaERP.Persistence.Services
+﻿namespace SolaERP.Persistence.Services
 {
     public class GroupService : IGroupService
     {
@@ -44,15 +32,6 @@ namespace SolaERP.Persistence.Services
             await _groupRepository.AddUsersAsync(data, groupId);
         }
 
-        public async Task<ApiResponse<bool>> CreateEmailNotificationAsync(CreateGroupEmailNotificationModel model)
-        {
-            var result = await _groupRepository.CreateEmailNotificationAsync(model);
-            await _unitOfWork.SaveChangesAsync();
-
-            return result ? ApiResponse<bool>.Success(204)
-                          : ApiResponse<bool>.Fail($"Something went wrong. The email notification was not created for the group ID: {model.GroupId}", 500);
-        }
-
         public async Task<ApiResponse<bool>> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId)
         {
             var result = await _groupRepository.DeleteAnalysisCodeByGroupIdAsync(groupAnalysisCodeId);
@@ -61,24 +40,6 @@ namespace SolaERP.Persistence.Services
             else return ApiResponse<bool>.Fail("Data can not be deleted", 400);
         }
 
-
-        public async Task<ApiResponse<bool>> DeleteBuyerByGroupIdAsync(int groupBuyerId)
-        {
-            var result = await _groupRepository.DeleteBuyerByGroupIdAsync(groupBuyerId);
-            await _unitOfWork.SaveChangesAsync();
-            if (result) return ApiResponse<bool>.Success(true, 200);
-            else return ApiResponse<bool>.Fail("Data can not be deleted", 400);
-        }
-
-        public async Task<ApiResponse<bool>> DeleteEmailNotificationAsync(int groupEmailNotificationId)
-        {
-            var result = await _groupRepository.DeleteEmailNotificationAsync(groupEmailNotificationId);
-            await _unitOfWork.SaveChangesAsync();
-
-            return result ?
-                            ApiResponse<bool>.Success(204)
-                          : ApiResponse<bool>.Fail($"The email notification with Id: {groupEmailNotificationId}  was not deleted.", 400);
-        }
 
         public async Task<ApiResponse<bool>> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId)
         {
@@ -218,37 +179,25 @@ namespace SolaERP.Persistence.Services
             if (model.Menus != null)
                 await _groupRepository.AddMenuAsync(model.GroupId, model.Menus.ConvertToDataTable());
 
-            //if (model.AdditionalPrivilege != null)
-            //{
-            //    await _groupRepository.AdditionalPrivilegeAddOrUpdateAsync(new() { GroupAdditionalPrivilegeId = model.AdditionalPrivilege.GroupAdditionalPrivilegeId });
-            //    await _groupRepository.AdditionalPrivilegeAddOrUpdateAsync(new()
-            //    {
-            //        GroupAdditionalPrivilegeId = model.AdditionalPrivilege.GroupAdditionalPrivilegeId,
-            //        GroupId = model.GroupId,
-            //        VendorDraft = model.AdditionalPrivilege.VendorDraft
-            //    });
-            //}
+            if (model.AddEmailNotification != null)
+                await AddEmailNotificationsAsync(model.GroupId, model.AddEmailNotification);
+            if (model.RemoveEmailNotification != null)
+                await DeleteEmailNotificationAsync(model.GroupId, model.RemoveEmailNotification);
 
-            //if (model.Menus != null)
-            //{
-            //    var menuIds = model.Menus.GetAllUnionMenuIds(); // gets all menu ids in a union list
-            //    if (model.GroupId == 0) await _groupRepository.AddMenuAsync(new() { GroupId = model.GroupId });
-
-            //    foreach (var menuId in menuIds)
-            //    {
-            //        await _groupRepository.AddMenuAsync(new()
-            //        {
-            //            GroupId = model.GroupId,
-            //            MenuId = menuId,
-            //            Create = GetMenuIdforAction(model.Menus, MenuAction.Create, menuId),
-            //            Edit = GetMenuIdforAction(model.Menus, MenuAction.Edit, menuId),
-            //            Delete = GetMenuIdforAction(model.Menus, MenuAction.Delete, menuId),
-            //            Export = GetMenuIdforAction(model.Menus, MenuAction.Export, menuId)
-            //        });
-            //    }
-            //}
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(true, 200);
+        }
+
+        private async Task DeleteEmailNotificationAsync(int groupId, List<int> removeEmailNotification)
+        {
+            var data = removeEmailNotification.ConvertListToDataTable();
+            await _groupRepository.DeleteEmailNotificationAsync(data, groupId);
+        }
+
+        private async Task AddEmailNotificationsAsync(int groupId, List<int> addEmailNotification)
+        {
+            var data = addEmailNotification.ConvertListToDataTable();
+            await _groupRepository.AddEmailNotificationsAsync(data, groupId);
         }
 
         private async Task DeleteBuyersAsync(List<GroupBuyerSaveModel> removeBuyers, int groupId)

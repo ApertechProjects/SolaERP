@@ -25,6 +25,10 @@
         public List<GroupBuyerSaveModel> AddBuyers { get; set; }
         public List<GroupBuyerSaveModel> RemoveBuyers { get; set; }
         #endregion
+        #region EmailNotification
+        public List<int> AddEmailNotification { get; set; }
+        public List<int> RemoveEmailNotification { get; set; }
+        #endregion
         public List<GroupMenuPrivilegeListModel> Menus { get; set; }
     }
 }
