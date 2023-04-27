@@ -190,13 +190,20 @@ namespace SolaERP.Persistence.Services
             if (model.RemoveBuyers != null)
                 await DeleteBuyersAsync(model.RemoveBuyers, model.GroupId);
 
-            if (model.Menus != null)
-                await _groupRepository.AddMenuAsync(model.GroupId, model.Menus.ConvertToDataTable());
+            if (model.AddMenus != null)
+                await _groupRepository.AddMenuAsync(model.GroupId, model.AddMenus.ConvertToDataTable());
+            if (model.RemoveMenus != null)
+                await _groupRepository.DeleteMenuAsync(model.GroupId, model.RemoveMenus.ConvertListToDataTable());
 
             if (model.AddEmailNotification != null)
                 await AddEmailNotificationsAsync(model.GroupId, model.AddEmailNotification);
             if (model.RemoveEmailNotification != null)
                 await DeleteEmailNotificationAsync(model.GroupId, model.RemoveEmailNotification);
+
+            if (model.AddAnalysisCodeIds != null)
+                await _groupRepository.AddAnalysisCodeAsync(model.GroupId, model.AddAnalysisCodeIds.ConvertListToDataTable());
+            if (model.RemoveAnalysisCodeIds != null)
+                await _groupRepository.DeleteAnalysisCodeAsync(model.GroupId, model.RemoveAnalysisCodeIds.ConvertListToDataTable());
 
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(true, 200);

@@ -221,9 +221,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"SET NOCOUNT OFF Exec SP_GroupApproveRoles_IUD  @GroupApproveRoleId,
-                                                                       @GroupId,  
-                                                                       @ApproveRoleId";
+                command.CommandText = @"SET NOCOUNT OFF Exec SP_GroupApproveRoles_IUD  @GroupApproveRoleId,@GroupId,@ApproveRoleId";
 
                 command.Parameters.AddWithValue(command, "@GroupApproveRoleId", model.GroupApproveRoleId);
                 command.Parameters.AddWithValue(command, "@GroupId", model.GroupId);
@@ -317,10 +315,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@groupId", groupId);
 
                 using var reader = await command.ExecuteReaderAsync();
-
                 Group group = new Group();
+
                 while (reader.Read())
                     group = reader.GetByEntityStructure<Group>();
+
                 return group;
             }
         }
@@ -452,7 +451,31 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupEmailNotificationsBulk_I @GroupId,@Items";
                 command.Parameters.AddWithValue(command, "@GroupId", groupId);
                 command.Parameters.AddTableValue(command, "@Items", "SingleIdItems", data);
-                var value = await command.ExecuteNonQueryAsync();
+                await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        public async Task<bool> DeleteMenuAsync(int groupId, DataTable table)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupMenuBulk_D @GroupId,@Items";
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+                command.Parameters.AddTableValue(command, "@Items", "SingleIdItems", table);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> DeleteAnalysisCodeAsync(int groupId, DataTable table)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupAnalysisBulk_D @GroupId,@Items";
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+                command.Parameters.AddTableValue(command, "@Items", "SingleIdItems", table);
+
+                return await command.ExecuteNonQueryAsync() > 0;
             }
         }
     }

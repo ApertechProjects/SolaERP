@@ -29,6 +29,9 @@
         public List<int> AddEmailNotification { get; set; }
         public List<int> RemoveEmailNotification { get; set; }
         #endregion
-        public List<GroupMenuPrivilegeListModel> Menus { get; set; }
+        public List<GroupMenuPrivilegeListModel> AddMenus { get; set; }
+        public List<int> RemoveMenus { get; set; }
+        public List<int> AddAnalysisCodeIds { get; set; }
+        public List<int> RemoveAnalysisCodeIds { get; set; }
     }
 }

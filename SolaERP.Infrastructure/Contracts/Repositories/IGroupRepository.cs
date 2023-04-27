@@ -9,16 +9,18 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
 {
     public interface IGroupRepository
     {
-        public Task<List<GroupAdditionalPrivilage>> GetAdditionalPrivilegesForGroupAsync(int groupId);
+        Task<List<GroupAdditionalPrivilage>> GetAdditionalPrivilegesForGroupAsync(int groupId);
         Task<int> AddUpdateOrDeleteGroupAsync(int userID, Groups entity);
         Task<List<Groups>> GetAllAsync();
         Task AddUsersAsync(DataTable model, int groupId);
+        Task<bool> DeleteAnalysisCodeAsync(int groupId, DataTable table);
         Task DeleteUsersAsync(DataTable model, int groupId);
         Task AddBusinessUnitsAsync(DataTable model, int groupId);
         Task DeleteBusinessUnitsAsync(DataTable model, int groupId);
         Task<bool> AddMenuAsync(int groupId, DataTable table);
+        Task<bool> DeleteMenuAsync(int groupId, DataTable table);
         Task<bool> DeleteBuyerByGroupIdAsync(int groupBuyerId);
-        public Task<List<GroupBuyer>> GetBuyersByGroupIdAsync(int groupId);
+        Task<List<GroupBuyer>> GetBuyersByGroupIdAsync(int groupId);
         Task<List<GroupAnalysisCode>> GetAnalysisCodesByGroupIdAsync(int groupId);
         Task<bool> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId);
         Task<bool> AddAnalysisCodeAsync(int groupId, DataTable table);
