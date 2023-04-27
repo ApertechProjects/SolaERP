@@ -30,7 +30,11 @@ namespace SolaERP.Infrastructure.Contracts.Services
         Task<ApiResponse<List<GroupEmailNotification>>> GetGroupEmailNotificationsAsync(int groupId);
         Task AddUserToGroupAsync(List<int> users, int groupId);
         Task DeleteUserFromGroupAsync(List<int> users, int groupId);
+        Task AddBusinessUnitsToGroupAsync(List<int> users, int groupId);
+        Task DeleteBusinessUnitsFromGroupAsync(List<int> users, int groupId);
+
         Task<ApiResponse<GroupDto>> GetGroupInfoAsync(int groupId);
+
 
     }
 }

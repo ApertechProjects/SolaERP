@@ -14,6 +14,8 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<int> AddUpdateOrDeleteGroupAsync(int userID, Groups entity);
         Task AddUserToGroupAsync(DataTable model, int groupId);
         Task DeleteUserToGroupAsync(DataTable model, int groupId);
+        Task AddBusinessUnitsToGroupAsync(DataTable model, int groupId);
+        Task DeleteBusinessUnitsFromGroupAsync(DataTable model, int groupId);
         Task<bool> AddMenuToGroupOrDeleteAsync(GroupMenuIDSaveModel saveOrDeleteModel);
         Task AddBusinessUnitToGroupOrDeleteAsync(int groupId, int busiessUnitId);
         Task AddApproveRoleToGroupOrDelete(int groupId, int approveRoleId);

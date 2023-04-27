@@ -359,16 +359,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        private Groups GetGroupData(DbDataReader reader)
-        {
-            return new()
-            {
-                GroupId = reader.Get<int>("GroupId"),
-                GroupName = reader.Get<string>("GroupName"),
-                Description = reader.Get<string>("Description")
-            };
-        }
-
         public async Task AddUserToGroupAsync(DataTable data, int groupId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
@@ -386,9 +376,29 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupUsersBulk_D @GroupId,@UserId";
                 command.Parameters.AddWithValue(command, "@GroupId", groupId);
+                command.Parameters.AddTableValue(command, "@UserId", "SingleIdItems", model);
+                var value = await command.ExecuteNonQueryAsync();
+            }
+        }
 
-                command.Parameters.Add("@UserId", SqlDbType.Structured).Value = model;
-                command.Parameters["@UserId"].TypeName = "SingleIdItems";
+        public async Task AddBusinessUnitsToGroupAsync(DataTable model, int groupId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupBusinessUnitBulk_I @GroupId,@UserId";
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+                command.Parameters.AddTableValue(command, "@UserId", "SingleIdItems", model);
+                var value = await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        public async Task DeleteBusinessUnitsFromGroupAsync(DataTable model, int groupId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupBusinessUnitsBulk_D @GroupId,@Items";
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+                command.Parameters.AddTableValue(command, "@Items", "SingleIdItems", model);
                 var value = await command.ExecuteNonQueryAsync();
             }
         }

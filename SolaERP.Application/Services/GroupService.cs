@@ -29,6 +29,17 @@ namespace SolaERP.Application.Services
             _mapper = mapper;
         }
 
+        public async Task AddBusinessUnitsToGroupAsync(List<int> users, int groupId)
+        {
+            var data = users.ConvertListToDataTable();
+            await _groupRepository.AddBusinessUnitsToGroupAsync(data, groupId);
+        }
+        public async Task DeleteBusinessUnitsFromGroupAsync(List<int> users, int groupId)
+        {
+            var data = users.ConvertListToDataTable();
+            await _groupRepository.DeleteBusinessUnitsFromGroupAsync(data, groupId);
+        }
+
         public async Task<ApiResponse<bool>> AddOrUpdateAsync(GroupAdditionalPrivelegeDto additionalPrivilage)
         {
             bool isSucces = false;
@@ -63,6 +74,7 @@ namespace SolaERP.Application.Services
             if (result) return ApiResponse<bool>.Success(true, 200);
             else return ApiResponse<bool>.Fail("Data can not be deleted", 400);
         }
+
 
         public async Task<ApiResponse<bool>> DeleteBuyerByGroupIdAsync(int groupBuyerId)
         {
@@ -206,11 +218,10 @@ namespace SolaERP.Application.Services
             if (model.RemoveUsers != null)
                 await DeleteUserFromGroupAsync(model.RemoveUsers, model.GroupId);
 
-            if(model.AddBusinessUnits!=null)
-            {
-                //await 
-
-            }
+            if (model.AddBusinessUnits != null)
+                await AddBusinessUnitsToGroupAsync(model.AddBusinessUnits, model.GroupId);
+            if (model.RemoveBusinessUnits != null)
+                await DeleteBusinessUnitsFromGroupAsync(model?.RemoveBusinessUnits, model.GroupId);
             //if (model.BusinessUnitIds != null)
             //{
             //    if (model.GroupId == 0) await _groupRepository.AddBusiessUnitToGroupOrDeleteAsync(model.GroupId, 0); // for delete operation buid is 0
