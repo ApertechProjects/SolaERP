@@ -1,6 +1,7 @@
 ﻿using SolaERP.Application.Constants;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.AnalysisCode;
+using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Buyer;
 using SolaERP.Application.Entities.Groups;
 using SolaERP.Application.Models;
@@ -34,6 +35,24 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return result > 0;
             }
         }
+        public async Task<List<BusinessUnitForGroup>> GetGroupBusinessUnitsAsync(int groupId)
+        {
+            List<BusinessUnitForGroup> businessUnitForGroups = new();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SP_GroupBusinessUnit_Load";
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(command, "@GroupId", groupId);
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    businessUnitForGroups.Add(reader.GetByEntityStructure<BusinessUnitForGroup>());
+
+                return businessUnitForGroups;
+            }
+        }
+
 
         public async Task<List<GroupAdditionalPrivilege>> GetAdditionalPrivilegesAsync(int groupId)
         {

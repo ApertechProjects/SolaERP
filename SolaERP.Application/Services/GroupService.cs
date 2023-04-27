@@ -2,6 +2,7 @@
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.AnalysisCode;
+using SolaERP.Application.Dtos.BusinessUnit;
 using SolaERP.Application.Dtos.Buyer;
 using SolaERP.Application.Dtos.Group;
 using SolaERP.Application.Dtos.Shared;
@@ -38,6 +39,14 @@ namespace SolaERP.Persistence.Services
         {
             var data = users.ConvertListToDataTable();
             await _groupRepository.DeleteBusinessUnitsAsync(data, groupId);
+        }
+
+        public async Task<ApiResponse<List<BusinessUnitForGroupDto>>> GetGroupBusinessUnitsAsync(int groupId)
+        {
+            var buisnessUnitForGroup = await _groupRepository.GetGroupBusinessUnitsAsync(groupId);
+            var dto = _mapper.Map<List<BusinessUnitForGroupDto>>(buisnessUnitForGroup);
+
+            return ApiResponse<List<BusinessUnitForGroupDto>>.Success(dto, 200);
         }
 
         public async Task AddUsersAsync(List<int> model, int groupId)
@@ -94,7 +103,7 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<List<GroupAnalysisCodeDto>>.Fail("Analysis list is empty", 404);
         }
 
-        public async Task<ApiResponse<List<GroupBuyerDto>>> GetBuyersAsync(int groupId)
+        public async Task<ApiResponse<List<GroupBuyerDto>>> GetGroupBuyersAsync(int groupId)
         {
             var buyers = await _groupRepository.GetBuyersAsync(groupId);
             var dto = _mapper.Map<List<GroupBuyerDto>>(buyers);
