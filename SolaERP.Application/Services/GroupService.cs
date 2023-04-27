@@ -46,15 +46,6 @@ namespace SolaERP.Application.Services
             await _groupRepository.AddUsersAsync(data, groupId);
         }
 
-        public async Task<ApiResponse<bool>> CreateEmailNotificationAsync(CreateGroupEmailNotificationModel model)
-        {
-            var result = await _groupRepository.CreateEmailNotificationAsync(model);
-            await _unitOfWork.SaveChangesAsync();
-
-            return result ? ApiResponse<bool>.Success(204)
-                          : ApiResponse<bool>.Fail($"Something went wrong. The email notification was not created for the group ID: {model.GroupId}", 500);
-        }
-
         public async Task<ApiResponse<bool>> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId)
         {
             var result = await _groupRepository.DeleteAnalysisCodeByGroupIdAsync(groupAnalysisCodeId);
@@ -63,14 +54,6 @@ namespace SolaERP.Application.Services
             else return ApiResponse<bool>.Fail("Data can not be deleted", 400);
         }
 
-
-        public async Task<ApiResponse<bool>> DeleteBuyerByGroupIdAsync(int groupBuyerId)
-        {
-            var result = await _groupRepository.DeleteBuyerByGroupIdAsync(groupBuyerId);
-            await _unitOfWork.SaveChangesAsync();
-            if (result) return ApiResponse<bool>.Success(true, 200);
-            else return ApiResponse<bool>.Fail("Data can not be deleted", 400);
-        }
 
         public async Task<ApiResponse<bool>> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId)
         {
