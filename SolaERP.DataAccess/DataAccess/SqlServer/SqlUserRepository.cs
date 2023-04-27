@@ -65,7 +65,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 if (reader.Read())
-                    user = reader.GetByEntityStructure<User>();
+                    user = reader.GetByEntityStructure<User>("InActive");
 
                 return user;
             }

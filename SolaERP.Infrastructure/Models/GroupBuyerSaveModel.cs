@@ -8,8 +8,6 @@ namespace SolaERP.Infrastructure.Models
 {
     public class GroupBuyerSaveModel
     {
-        public int GroupBuyerId { get; set; }
-        public int GroupId { get; set; }
         public int BusinessUnitId { get; set; }
         public string BuyerCode { get; set; }
     }

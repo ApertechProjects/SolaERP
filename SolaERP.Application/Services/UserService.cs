@@ -1,16 +1,4 @@
-﻿using AutoMapper;
-using SolaERP.Infrastructure.Contracts.Repositories;
-using SolaERP.Infrastructure.Contracts.Services;
-using SolaERP.Infrastructure.Dtos.Group;
-using SolaERP.Infrastructure.Dtos.Shared;
-using SolaERP.Infrastructure.Dtos.User;
-using SolaERP.Infrastructure.Dtos.UserDto;
-using SolaERP.Infrastructure.Entities.Auth;
-using SolaERP.Infrastructure.Models;
-using SolaERP.Infrastructure.UnitOfWork;
-using SolaERP.Persistence.Utils;
-
-namespace SolaERP.Persistence.Services
+﻿namespace SolaERP.Persistence.Services
 {
     public class UserService : IUserService
     {
@@ -54,8 +42,13 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> UserRegisterAsync(UserRegisterModel model)
         {
+            var userExsist = await _userRepository.GetUserByEmailAsync(model.Email);
+
+            if (userExsist is not null)
+                return ApiResponse<bool>.Fail("user", "This user is already exsist in our system", 422);
+
             if (model.UserType == Infrastructure.Enums.UserRegisterType.SupplierUser && model.VendorId == 0)
-                return ApiResponse<bool>.Fail("companyName", "Company name required for Supplier user", 422);
+                return ApiResponse<bool>.Fail("company", "Company name required for Supplier user", 422);
 
             if (model.Password != model.ConfirmPassword)
                 return ApiResponse<bool>.Fail("password", "Password doesn't match with confirm password", 422);

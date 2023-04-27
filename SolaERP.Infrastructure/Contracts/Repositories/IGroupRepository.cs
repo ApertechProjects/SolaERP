@@ -1,25 +1,17 @@
-﻿using SolaERP.Infrastructure.Entities.AnalysisCode;
-using SolaERP.Infrastructure.Entities.Buyer;
-using SolaERP.Infrastructure.Entities.Groups;
-using SolaERP.Infrastructure.Models;
-using System.Data;
-
-namespace SolaERP.Infrastructure.Contracts.Repositories
+﻿namespace SolaERP.Infrastructure.Contracts.Repositories
 {
     public interface IGroupRepository
     {
         public Task<List<GroupAdditionalPrivilage>> GetAdditionalPrivilegesForGroupAsync(int groupId);
-        public Task<bool> AdditionalPrivilegeAddOrUpdateAsync(GroupAdditionalPrivilage additionalPrivilage);
-        Task<List<Groups>> GetAllAsync();
         Task<int> AddUpdateOrDeleteGroupAsync(int userID, Groups entity);
-        Task AddUserToGroupAsync(DataTable model, int groupId);
-        Task DeleteUserToGroupAsync(DataTable model, int groupId);
-        Task<bool> AddMenuAsync(int groupId, DataTable table);
-        Task AddBusinessUnitAsync(int groupId, int busiessUnitId);
-        Task AddApproveRoleAsync(int groupId, int approveRoleId);
+        Task<List<Groups>> GetAllAsync();
+        Task AddUsersAsync(DataTable model, int groupId);
+        Task DeleteUsersAsync(DataTable model, int groupId);
+        Task AddBusinessUnitsAsync(DataTable model, int groupId);
+        Task DeleteBusinessUnitsAsync(DataTable model, int groupId);
+        Task<bool> AddMenuToGroupOrDeleteAsync(GroupMenuIDSaveModel saveOrDeleteModel);
         Task<bool> DeleteBuyerByGroupIdAsync(int groupBuyerId);
         public Task<List<GroupBuyer>> GetBuyersByGroupIdAsync(int groupId);
-        Task<bool> SaveBuyerByGroupAsync(GroupBuyerSaveModel model);
         Task<List<GroupAnalysisCode>> GetAnalysisCodesByGroupIdAsync(int groupId);
         Task<bool> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId);
         Task<bool> AddAnalysisCodeAsync(int groupId, DataTable table);
@@ -32,5 +24,11 @@ namespace SolaERP.Infrastructure.Contracts.Repositories
         Task<bool> UpdateEmailNotificationAsync(GroupEmailNotification entity);
         Task<bool> DeleteEmailNotificationAsync(int groupEmailNotificationId);
         Task<Group> GetGroupInfoAsync(int groupId);
+        Task DeleteApproveRolesFromGroupAsync(DataTable data, int groupId);
+        Task AddApproveRolesToGroupAsync(DataTable data, int groupId);
+        Task DeleteAdditionalPrivilegesAsync(DataTable data, int groupId);
+        Task AddAdditionalPrivilegesAsync(DataTable data, int groupId);
+        Task AddBuyersAsync(DataTable data, int groupId);
+        Task DeleteBuyersAsync(DataTable data, int groupId);
     }
 }
