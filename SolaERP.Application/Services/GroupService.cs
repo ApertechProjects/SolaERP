@@ -69,9 +69,11 @@ namespace SolaERP.Persistence.Services
             await _groupRepository.DeleteUsersAsync(data, groupId);
         }
 
-        public async Task<ApiResponse<List<GroupAdditionalPrivilage>>> GetAdditionalPrivilegesForGroupAsync(int groupId)
+        public async Task<ApiResponse<List<GroupAdditionalPrivilegeDto>>> GetAdditionalPrivilegesForGroupAsync(int groupId)
         {
-            return ApiResponse<List<GroupAdditionalPrivilage>>.Success(await _groupRepository.GetAdditionalPrivilegesForGroupAsync(groupId), 200);
+            var data = await _groupRepository.GetAdditionalPrivilegesForGroupAsync(groupId);
+            var dto = _mapper.Map<List<GroupAdditionalPrivilegeDto>>(data);
+            return ApiResponse<List<GroupAdditionalPrivilegeDto>>.Success(dto, 200);
         }
 
         public async Task<ApiResponse<List<GroupsDto>>> GetAllAsync()

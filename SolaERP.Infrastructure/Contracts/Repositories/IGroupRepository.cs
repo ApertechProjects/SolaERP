@@ -1,11 +1,4 @@
-﻿using SolaERP.Infrastructure.Entities.AnalysisCode;
-using SolaERP.Infrastructure.Entities.Buyer;
-using SolaERP.Infrastructure.Entities.Groups;
-using SolaERP.Infrastructure.Models;
-using System.Data;
-
-
-namespace SolaERP.Infrastructure.Contracts.Repositories
+﻿namespace SolaERP.Infrastructure.Contracts.Repositories
 {
     public interface IGroupRepository
     {

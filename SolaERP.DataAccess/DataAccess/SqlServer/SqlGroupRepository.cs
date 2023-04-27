@@ -35,23 +35,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> AdditionalPrivilegeAddOrUpdateAsync(GroupAdditionalPrivilage additionalPrivilage)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "EXEC SP_GroupAdditionalPrivileges_IUD @GroupAddtionalPrivilegeId,@GroupId,@VendorDraft,@RequestAttachment,@RequstSendToApprove";
-                command.Parameters.AddWithValue(command, "@GroupAddtionalPrivilegeId", additionalPrivilage.GroupAdditionalPrivilegeId);
-                command.Parameters.AddWithValue(command, "@GroupId", additionalPrivilage.GroupId);
-                command.Parameters.AddWithValue(command, "@VendorDraft", additionalPrivilage.VendorDraft);
-                command.Parameters.AddWithValue(command, "@RequestAttachment", additionalPrivilage.RequestAttachment);
-                command.Parameters.AddWithValue(command, "@RequstSendToApprove", additionalPrivilage.RequestSendToApprove);
-
-                var result = await command.ExecuteNonQueryAsync();
-                return result > 0;
-            }
-        }
-
-        public async Task<List<GroupAdditionalPrivilage>> GetAdditionalPrivilegesForGroupAsync(int groupId)
+        public async Task<List<GroupAdditionalPrivilege>> GetAdditionalPrivilegesForGroupAsync(int groupId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -60,8 +44,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 using var reader = await command.ExecuteReaderAsync();
 
-                List<GroupAdditionalPrivilage> resultList = new();
-                while (reader.Read()) resultList.Add(reader.GetByEntityStructure<GroupAdditionalPrivilage>("RequestAttachment", "RequestSendToApprove"));
+                List<GroupAdditionalPrivilege> resultList = new();
+                while (reader.Read()) resultList.Add(reader.GetByEntityStructure<GroupAdditionalPrivilege>());
 
                 return resultList;
             }

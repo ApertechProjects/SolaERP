@@ -115,7 +115,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             List<BusinessUnitForGroup> businessUnitForGroups = new();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SP_BusinessUnitsList";
+                command.CommandText = "SP_GroupBusinessUnit_Load";
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(command, "@GroupId", groupId);
 
