@@ -32,7 +32,7 @@ namespace SolaERP.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetBusinessUnitAnalysisDimensions([FromQuery] GetAnalysisDimensionByBuRequest request)
+        public async Task<IActionResult> GetAnalysisDimensionsByBusinessUnitId([FromQuery] GetAnalysisDimensionByBuRequest request)
             => CreateActionResult(await _mediator.Send(request));
     }
 }

@@ -1,6 +1,6 @@
-﻿namespace SolaERP.Application.Dtos.AnalysisCode
+﻿namespace SolaERP.Application.Entities.AnalysisCode
 {
-    public class GroupAnalysisCodeDto
+    public class GroupAnalysisCode : BaseEntity
     {
         public int GroupAnalysisCodeId { get; set; }
         public int BusinessUnitId { get; set; }
@@ -9,5 +9,6 @@
         public int AnalysisCodesId { get; set; }
         public string AnalysisCode { get; set; }
         public string AnalysisName { get; set; }
+        public bool IsInGroup { get; set; }
     }
 }

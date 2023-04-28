@@ -6,6 +6,7 @@ using SolaERP.Application.Dtos.BusinessUnit;
 using SolaERP.Application.Dtos.Buyer;
 using SolaERP.Application.Dtos.Group;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Groups;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -285,6 +286,17 @@ namespace SolaERP.Persistence.Services
             return result ?
                             ApiResponse<bool>.Success(204)
                           : ApiResponse<bool>.Fail($"Something went wrong. The email notification was not updated.", 400);
+        }
+
+        public async Task<ApiResponse<bool>> DeleteGroupAsync(string identity, int groupId)
+        {
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(identity);
+            var data = await _groupRepository.AddUpdateOrDeleteGroupAsync(userId, new() { GroupId = groupId });
+
+            if (data == 0)
+                return ApiResponse<bool>.Success(200);
+            else
+                return ApiResponse<bool>.Fail($"Something went wrong. The email notification was not updated.", 400);
         }
     }
 }
