@@ -35,7 +35,7 @@ builder.Services.AddTransient(sp => new ConnectionFactory()
     Uri = new(builder.Configuration["RabbitMQ:Uri"])
 });
 
-builder.Services.Configure<SolaERP.Persistence.Options.FileOptions>(builder.Configuration.GetSection("FileOptions"));
+builder.Services.Configure<SolaERP.Infrastructure.Configurations.FileOptions>(builder.Configuration.GetSection("FileOptions"));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MapProfile));
@@ -58,7 +58,11 @@ builder.Services.Configure<HubOptions<ChatHub>>(config =>
 
 });
 
-
+builder.Services.Configure<ConnectionFactory>(option =>
+{
+    option.Uri = new Uri(builder.Configuration["FileOptions:URI"]);
+    option.DispatchConsumersAsync = true;
+});
 
 builder.Host.UseSerilog(logger);
 

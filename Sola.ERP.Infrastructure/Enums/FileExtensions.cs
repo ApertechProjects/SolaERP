@@ -1,6 +1,6 @@
-﻿namespace SolaERP.Application.Enums
+﻿namespace SolaERP.Infrastructure.Enums
 {
-    public enum FileExtension
+    public enum FileExtensions
     {
         PNG = 1,
         JPEG = 2,

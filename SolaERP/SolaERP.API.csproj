@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\UserImages\**" />
+    <Content Remove="wwwroot\UserImages\**" />
+    <EmbeddedResource Remove="wwwroot\UserImages\**" />
+    <None Remove="wwwroot\UserImages\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
     <PackageReference Include="MediatR" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11" />
@@ -22,12 +29,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Sola.ERP.Infrastructure\SolaERP.Infrastructure.csproj" />
     <ProjectReference Include="..\SolaERP.Application\SolaERP.Persistence.csproj" />
     <ProjectReference Include="..\SolaERP.SignalR\SolaERP.SignalR.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\UserImages\" />
+    <Folder Include="wwwroot\sources\images\" />
   </ItemGroup>
 
 </Project>
