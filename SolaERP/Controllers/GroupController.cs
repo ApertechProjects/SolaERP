@@ -22,9 +22,9 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetGroupsAsync()
             => CreateActionResult(await _groupService.GetAllAsync());
 
-        [HttpGet("{groupid}")]
-        public async Task<IActionResult> GetEmailNotifications(int groupid)
-           => CreateActionResult(await _groupService.GetGroupEmailNotificationsAsync(groupid));
+        [HttpGet("{groupId}")]
+        public async Task<IActionResult> GetEmailNotifications(int groupId)
+           => CreateActionResult(await _groupService.GetGroupEmailNotificationsAsync(groupId));
 
         [HttpGet("{groupId}")]
         public async Task<IActionResult> GetBusinessUnits(int groupId)
@@ -42,12 +42,16 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> SaveGroupAsync(GroupSaveModel model)
             => CreateActionResult(await _groupService.SaveGroupAsync(User.Identity.Name, model));
 
+        [HttpDelete("{groupId}")]
+        public async Task<IActionResult> DeleteGroupAsync(int groupId)
+            => CreateActionResult(await _groupService.DeleteGroupAsync(User.Identity.Name, groupId));
+
         [HttpGet("{groupId}")]
         public async Task<IActionResult> GetBuyers(int groupId)
            => CreateActionResult(await _groupService.GetGroupBuyersAsync(groupId));
 
         [HttpGet("{groupId}")]
-        public async Task<IActionResult> GetGroupRoles(int groupId)
+        public async Task<IActionResult> GetRoles(int groupId)
             => CreateActionResult(await _groupService.GetGroupRolesAsync(groupId));
 
         [HttpGet("{groupId}")]
@@ -61,23 +65,6 @@ namespace SolaERP.Controllers
         [HttpGet("{groupId}")]
         public async Task<IActionResult> GetUsers(int groupId)
           => CreateActionResult(await _userService.GetUsersByGroupIdAsync(groupId));
-
-        //[HttpPost]
-        //public async Task<IActionResult> SaveAnalysisCodeByGroupAsync(AnalysisCodeSaveModel model)
-        //    => CreateActionResult(await _groupService.AddAnalysisCodeAsync(model.GroupId, model.AnalysisIds));
-
-        //[HttpPost]
-        //public async Task<IActionResult> SaveGroupRoleByGroupAsync(GroupRoleSaveModel model)
-        // => CreateActionResult(await _groupService.SaveGroupRoleAsync(model));
-
-        //[HttpDelete("{groupApproveRoleId}")]
-        //public async Task<IActionResult> DeleteGroupRoleByGroupIdAsync(int groupApproveRoleId)
-        //    => CreateActionResult(await _groupService.DeleteGroupRoleAsync(groupApproveRoleId));
-
-        //[HttpDelete("{groupAnalysisCodeId}")]
-        //public async Task<IActionResult> DeleteAnalysisCodeByGroupIdAsync(int groupAnalysisCodeId)
-        //    => CreateActionResult(await _groupService.DeleteAnalysisCodeAsync(groupAnalysisCodeId));
-
 
     }
 }
