@@ -1,4 +1,6 @@
-﻿namespace SolaERP.Application.Models
+﻿using System.Text.Json.Serialization;
+
+namespace SolaERP.Application.Models
 {
     public class UserSaveModel
     {
@@ -7,7 +9,9 @@
         public bool ChangePassword { get; set; }
         public int StatusId { get; set; }
         public string Theme { get; set; }
-        public DateTime LastActivity { get; set; }
+
+        [JsonIgnore]
+        public DateTime LastActivity { get; set; } = DateTime.UtcNow;
         public string UserName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
