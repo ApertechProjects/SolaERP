@@ -14,12 +14,12 @@ namespace SolaERP.Persistence.Validations.UserValidation
             RuleFor(x => x.Gender).NotEmpty().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.VendorId).NotEmpty().When(x => x.UserTypeId == 0).WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.Buyer).NotEmpty().When(x => x.UserTypeId == 1).WithMessage("Please, enter {PropertyName}");
-            When(x => x.UserTypeId == 0, () =>
-            {
-                RuleFor(b => b.Buyer)
-                .Empty()
-                .WithMessage("A user cannot be both a Vendor and a Buyer simultaneously.");
-            });
+            //When(x => x.UserTypeId == 0, () =>
+            //{
+            //    RuleFor(b => b.Buyer)
+            //    .Empty()
+            //    .WithMessage("A user cannot be both a Vendor and a Buyer simultaneously.");
+            //});
         }
     }
 }
