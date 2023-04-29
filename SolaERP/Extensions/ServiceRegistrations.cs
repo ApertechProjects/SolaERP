@@ -1,6 +1,12 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Identity;
+using SolaERP.Application;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Identity_Server;
+using SolaERP.Application.UnitOfWork;
+using SolaERP.Application.ValidationRules;
 using SolaERP.Application.Validations.ApproveRoleValidation;
 using SolaERP.Application.Validations.ApproveStageValidation;
 using SolaERP.Application.Validations.AttachmentValidation;
@@ -10,13 +16,8 @@ using SolaERP.Application.Validations.UserValidation;
 using SolaERP.DataAccess.DataAcces.SqlServer;
 using SolaERP.DataAccess.DataAccess.SqlServer;
 using SolaERP.DataAccess.Factories;
-using SolaERP.Application;
-using SolaERP.Application.Contracts.Repositories;
-using SolaERP.Application.Contracts.Services;
-using SolaERP.Application.Entities.Auth;
-using SolaERP.Application.UnitOfWork;
-using SolaERP.Application.ValidationRules;
 using SolaERP.Persistence.Services;
+using SolaERP.Persistence.Validations.UserValidation;
 using UserValidation = SolaERP.Application.Validations.UserValidation.UserValidation;
 
 namespace SolaERP.Extensions
@@ -106,6 +107,7 @@ namespace SolaERP.Extensions
             builder.Services.AddValidatorsFromAssemblyContaining<ApprovalStatusValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<UserRegisterValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<GroupBuyerSaveValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<UserSaveModelValidation>();
             builder.Services.AddScoped<ValidationFilter>();
         }
         public static void UseIdentityService(this WebApplicationBuilder builder)
