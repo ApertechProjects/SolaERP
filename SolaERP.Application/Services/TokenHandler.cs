@@ -5,6 +5,7 @@ using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 
@@ -19,24 +20,13 @@ namespace SolaERP.Persistence.Services
             _configuration = configuration;
         }
 
-        public void DecodeJwtToken(string jwtToken)
+        public string CreateRefreshToken()
         {
-            // decode JWT token
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var jwt = tokenHandler.ReadJwtToken(jwtToken);
+            byte[] number = new byte[32];
+            using RandomNumberGenerator random = RandomNumberGenerator.Create();
+            random.GetBytes(number);
+            return Convert.ToBase64String(number);
 
-            // access claims
-            var nameIdClaim = jwt.Claims.FirstOrDefault(c => c.Type == "nameid");
-
-            if (nameIdClaim != null)
-            {
-                string nameIdValue = nameIdClaim.Value;
-                // use nameIdValue as needed
-            }
-            else
-            {
-                // nameid claim not found in token
-            }
         }
 
         public async Task<Token> GenerateJwtTokenAsync(int minutes, UserRegisterModel user)
@@ -63,7 +53,7 @@ namespace SolaERP.Persistence.Services
                 JwtSecurityToken securityToken = tokenHandler.CreateJwtSecurityToken(tokenDescriptor);
 
                 token.AccessToken = tokenHandler.WriteToken(securityToken);
-
+                token.RefreshToken = CreateRefreshToken();
                 return token;
             });
             return result;

@@ -1,5 +1,4 @@
-﻿using SolaERP.Application.Dtos.Auth;
-using SolaERP.Application.Dtos.Group;
+﻿using SolaERP.Application.Dtos.Group;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Dtos.UserDto;
@@ -13,7 +12,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<UserDto> GetUserByIdAsync(int userId);
         Task<UserDto> GetUserByEmailAsync(string email);
         Task<ApiResponse<bool>> UpdateUserAsync(UserUpdateDto userUpdateDto);
-        Task<ApiResponse<NoContentDto>> UpdateUserIdentifierAsync(int userId, Guid newToken);
+        Task<ApiResponse<NoContentDto>> UpdateUserIdentifierAsync(int userId, string refreshToken, DateTime expirationDate, int refreshTokenLifeTime);
         Task<ApiResponse<bool>> SendResetPasswordEmail(string email);
         Task<int> GetIdentityNameAsIntAsync(string name);
         Task<ApiResponse<bool>> RemoveUserByTokenAsync(string name);

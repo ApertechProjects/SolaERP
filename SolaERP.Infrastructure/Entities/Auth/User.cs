@@ -44,5 +44,7 @@ namespace SolaERP.Application.Entities.Auth
         public string UserPhoto { get; set; }
         public string SignaturePhoto { get; set; }
         public bool InActive { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTime RefreshTokenEndDate { get; set; }
     }
 }

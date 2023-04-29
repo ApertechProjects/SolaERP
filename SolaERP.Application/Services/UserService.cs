@@ -138,9 +138,9 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Fail("password", "Password does not match with ConfirmPassword", 422);
         }
 
-        public async Task<ApiResponse<NoContentDto>> UpdateUserIdentifierAsync(int userId, Guid newToken)
+        public async Task<ApiResponse<NoContentDto>> UpdateUserIdentifierAsync(int userId, string refreshToken, DateTime expirationDate, int refreshTokenLifeTime)
         {
-            var isSuccessfull = await _userRepository.UpdateUserTokenAsync(userId, newToken);
+            var isSuccessfull = await _userRepository.UpdateUserTokenAsync(userId, refreshToken, expirationDate, refreshTokenLifeTime);
             await _unitOfWork.SaveChangesAsync();
 
             return ApiResponse<NoContentDto>.Success(200);

@@ -16,7 +16,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> SetUserEmailCode(string token, int id);
         Task<int> GetIdentityNameAsIntAsync(string name);
         Task<string> GetUserNameByTokenAsync(string finderToken);
-        Task<bool> UpdateUserTokenAsync(int userId, Guid token);
+        Task<bool> UpdateUserTokenAsync(int userId, string refreshtoken, DateTime expirationDate, int refreshTokenLifeTime);
         Task<bool> ResetUserPasswordAsync(string email, string passwordHash);
         Task<List<ActiveUser>> GetActiveUsersAsync();
         Task<List<ActiveUser>> GetActiveUsersWithoutCurrentUserAsync(int userId);

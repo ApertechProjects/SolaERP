@@ -1,14 +1,13 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Application.Contracts.Repositories;
+﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Groups;
 using SolaERP.Application.Entities.User;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Text.RegularExpressions;
 
 namespace SolaERP.DataAccess.DataAcces.SqlServer
 {
@@ -212,14 +211,15 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 await command.ExecuteNonQueryAsync();
             }
         }
-        public async Task<bool> UpdateUserTokenAsync(int userId, Guid token)
+        public async Task<bool> UpdateUserTokenAsync(int userId, string token, DateTime expirationDate, int refreshTokenLifeTime)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SP_UPDATE_USER_TOKEN";//@USERID,@USERTOKEN";
+                command.CommandText = "SP_UPDATE_USER_REFRESH_TOKEN";//@USERID,@USERTOKEN";
 
                 command.Parameters.AddWithValue(command, "@USERID", userId);
                 command.Parameters.AddWithValue(command, "@USERTOKEN", token);
+                command.Parameters.AddWithValue(command, "@EXPIRATION_DATE", expirationDate.AddSeconds(refreshTokenLifeTime));
                 command.CommandType = CommandType.StoredProcedure;
 
                 var result = await command.ExecuteNonQueryAsync();

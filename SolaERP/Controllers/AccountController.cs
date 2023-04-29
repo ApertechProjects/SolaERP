@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Shared;
@@ -52,8 +51,11 @@ namespace SolaERP.Controllers
             if (signInResult.Succeeded)
             {
                 await _userService.UpdateSessionAsync(user.Id, 1);
+                var token = await _tokenHandler.GenerateJwtTokenAsync(1, userdto);
+                await _userService.UpdateUserIdentifierAsync(user.Id, token.RefreshToken, token.Expiration, 60);
+
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(
-                    new AccountResponseDto { Token = await _tokenHandler.GenerateJwtTokenAsync(1, userdto) }, 200));
+                    new AccountResponseDto { Token = token }, 200));
             }
 
 
