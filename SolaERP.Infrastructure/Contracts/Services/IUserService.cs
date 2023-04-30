@@ -12,7 +12,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<UserDto> GetUserByIdAsync(int userId);
         Task<UserDto> GetUserByEmailAsync(string email);
         Task<ApiResponse<bool>> UpdateUserAsync(UserUpdateDto userUpdateDto);
-        Task<ApiResponse<NoContentDto>> UpdateUserIdentifierAsync(int userId, string refreshToken, DateTime expirationDate, int refreshTokenLifeTime);
+        Task<ApiResponse<NoContentDto>> UpdateUserIdentifierAsync(int userId, string refreshToken, DateTime expirationDate, int addOnAccessTokenDate);
         Task<ApiResponse<bool>> SendResetPasswordEmail(string email);
         Task<int> GetIdentityNameAsIntAsync(string name);
         Task<ApiResponse<bool>> RemoveUserByTokenAsync(string name);
