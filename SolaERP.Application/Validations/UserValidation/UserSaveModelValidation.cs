@@ -19,15 +19,17 @@ namespace SolaERP.Persistence.Validations.UserValidation
                 .WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.Email)
                 .NotEmpty()
+                .WithMessage("Please, enter {PropertyName}")
                 .EmailAddress()
-                .WithMessage("Please, enter {PropertyName}");
+                .WithMessage("Please enter valid email format");
             RuleFor(x => x.Gender)
                 .NotEmpty()
                 .WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.Password)
                 .NotEmpty()
                 .WithMessage("Please, enter {PropertyName}")
-                .MinimumLength(7);
+                .MinimumLength(7)
+                .WithMessage("The length of '{PropertyName}' must be at least {MinLength} characters. You entered {TotalLength} characters.");
             RuleFor(x => x.ConfirmPassword)
                 .NotEmpty()
                 .WithMessage("Please, enter {PropertyName}")
