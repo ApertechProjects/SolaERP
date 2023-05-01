@@ -331,9 +331,6 @@ namespace SolaERP.Persistence.Services
             cancellationToken.ThrowIfCancellationRequested();
             var userEntry = _mapper.Map<User>(user);
 
-            if (user.Password != user.ConfirmPassword)
-                return ApiResponse<bool>.Fail("confirm Password", " Confirm Password doesn't match the Password!", 422);
-
             if (!string.IsNullOrEmpty(user.Password))
                 userEntry.PasswordHash = SecurityUtil.ComputeSha256Hash(user?.Password);
 
