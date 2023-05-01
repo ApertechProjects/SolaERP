@@ -19,8 +19,9 @@ namespace SolaERP.Persistence.Validations.UserValidation
                 .WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.Email)
                 .NotEmpty()
+                .WithMessage("Please, enter {PropertyName}")
                 .EmailAddress()
-                .WithMessage("Please, enter {PropertyName}");
+                .WithMessage("Please enter valid email format");
             RuleFor(x => x.Gender)
                 .NotEmpty()
                 .WithMessage("Please, enter {PropertyName}");
