@@ -36,6 +36,7 @@ builder.Services.AddTransient(sp => new ConnectionFactory()
 });
 
 builder.Services.Configure<SolaERP.Infrastructure.Configurations.FileOptions>(builder.Configuration.GetSection("FileOptions"));
+builder.Services.Configure<SolaERP.Persistence.Options.FileConfig>(builder.Configuration.GetSection("FileConfig"));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MapProfile));
@@ -50,14 +51,20 @@ builder.Services.AddCors(options =>
         .Build());
 });
 
-var logger = new LoggerConfiguration().WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"), "logs").Enrich.FromLogContext().MinimumLevel.Error().CreateLogger();
+var logger = new LoggerConfiguration()
+    .WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"), "logs")
+    .WriteTo.File("logs.txt")
+    .Enrich.FromLogContext()
+    .MinimumLevel.Error()
+    .CreateLogger();
+
+
 builder.Services.Configure<HubOptions<ChatHub>>(config =>
 {
     config.ClientTimeoutInterval = TimeSpan.FromMinutes(30);
     config.KeepAliveInterval = TimeSpan.FromMinutes(30);
 
 });
-
 builder.Services.Configure<ConnectionFactory>(option =>
 {
     option.Uri = new Uri(builder.Configuration["FileOptions:URI"]);
@@ -65,7 +72,6 @@ builder.Services.Configure<ConnectionFactory>(option =>
 });
 
 builder.Host.UseSerilog(logger);
-
 
 builder.Services.AddAuthentication(x =>
 {
@@ -104,9 +110,6 @@ builder.Services.AddSwaggerGen(c =>
         Description = "Our test swagger client",
     });
 
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, "ApiDoc.xml");
-    c.IncludeXmlComments(xmlPath);
-
     var jwtSecurityScheme = new OpenApiSecurityScheme
     {
         Scheme = "bearer",
@@ -134,6 +137,9 @@ builder.Services.AddSignalR();
 
 var app = builder.Build();
 
+IConfiguration configuration = app.Configuration;
+IWebHostEnvironment _webEnviroment = app.Environment;
+
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
@@ -151,6 +157,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.MapHub<ChatHub>("/ChatHub");
 app.UseAuthorization();
-app.UseGlobalExceptionHandlerMiddleware<Program>(app.Services.GetRequiredService<ILogger<Program>>());
+app.UseGlobalExceptionHandlerMiddleware(app.Services.GetRequiredService<ILogger<Program>>());
 app.MapControllers();
 app.Run();

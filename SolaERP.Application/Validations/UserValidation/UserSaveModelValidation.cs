@@ -7,7 +7,7 @@ namespace SolaERP.Persistence.Validations.UserValidation
     {
         public UserSaveModelValidation()
         {
-            RuleFor(x=>x.UserTypeId).NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.UserTypeId).NotEmpty().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.UserName).NotEmpty().WithMessage("Please, enter {PropertyName}").MinimumLength(3);
             RuleFor(x => x.FullName).NotEmpty().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.Email).NotEmpty().WithMessage("Please, enter {PropertyName}");

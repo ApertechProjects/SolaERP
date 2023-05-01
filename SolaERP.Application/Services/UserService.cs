@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Options;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Group;
@@ -8,6 +9,7 @@ using SolaERP.Application.Dtos.UserDto;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.Persistence.Options;
 using SolaERP.Persistence.Utils;
 
 
@@ -18,23 +20,27 @@ namespace SolaERP.Persistence.Services
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMailService _mailService;
-        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
         private readonly ITokenHandler _tokenHandler;
+        private readonly IFileService _fileService;
+        private readonly IOptions<FileConfig> _config;
 
         public UserService(IUserRepository userRepository,
                            IUnitOfWork unitOfWork,
                            IMapper mapper,
                            IMailService mailService,
+                           ITokenHandler tokenHandler,
                            IFileService fileService,
-                           ITokenHandler tokenHandler)
+                           IOptions<FileConfig> config)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _mailService = mailService;
             _mapper = mapper;
-            _fileService = fileService;
             _tokenHandler = tokenHandler;
+            _fileService = fileService;
+            _config = config;
+            _config = config;
         }
 
         public async Task AddAsync(UserDto model)
@@ -238,15 +244,6 @@ namespace SolaERP.Persistence.Services
             var users = await _userRepository.GetUserWFAAsync(userId, userStatus, userType, page, limit);
             var dto = _mapper.Map<List<UserMainDto>>(users.Item2);
 
-            for (int i = 0; i < dto.Count; i++)
-            {
-                var user = dto.FirstOrDefault(x => x.UserName == users.Item2[i].UserName);
-                if (!string.IsNullOrEmpty(users.Item2[i].UserPhoto))
-                {
-                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users.Item2[i].UserPhoto);
-                }
-            }
-
             if (dto.Count > 0)
                 return ApiResponse<List<UserMainDto>>.Success(dto, 200, users.Item1);
             return ApiResponse<List<UserMainDto>>.Fail("User list is empty", 404);
@@ -259,14 +256,7 @@ namespace SolaERP.Persistence.Services
             var users = await _userRepository.GetUserAllAsync(userId, userStatus, userType, page, limit);
             var dto = _mapper.Map<List<UserMainDto>>(users.Item2);
 
-            for (int i = 0; i < dto.Count; i++)
-            {
-                var user = dto.FirstOrDefault(x => x.UserName == users.Item2[i].UserName);
-                if (!string.IsNullOrEmpty(users.Item2[i].UserPhoto))
-                {
-                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users.Item2[i].UserPhoto);
-                }
-            }
+
 
             if (dto.Count > 0)
                 return ApiResponse<List<UserMainDto>>.Success(dto, 200, users.Item1);
@@ -279,14 +269,6 @@ namespace SolaERP.Persistence.Services
             var users = await _userRepository.GetUserCompanyAsync(userId, userStatus, page, limit);
             var dto = _mapper.Map<List<UserMainDto>>(users.Item2);
 
-            for (int i = 0; i < dto.Count; i++)
-            {
-                var user = dto.FirstOrDefault(x => x.UserName == users.Item2[i].UserName);
-                if (!string.IsNullOrEmpty(users.Item2[i].UserPhoto))
-                {
-                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users.Item2[i].UserPhoto);
-                }
-            }
 
             if (dto.Count > 0)
                 return ApiResponse<List<UserMainDto>>.Success(dto, 200, users.Item1);
@@ -298,15 +280,6 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var users = await _userRepository.GetUserVendorAsync(userId, userStatus, page, limit);
             var dto = _mapper.Map<List<UserMainDto>>(users.Item2);
-
-            for (int i = 0; i < dto.Count; i++)
-            {
-                var user = dto.FirstOrDefault(x => x.UserName == users.Item2[i].UserName);
-                if (!string.IsNullOrEmpty(users.Item2[i].UserPhoto))
-                {
-                    user.Photo = await _fileService.DownloadPhotoWithNetworkAsBase64Async(users.Item2[i].UserPhoto);
-                }
-            }
 
             if (dto.Count > 0)
                 return ApiResponse<List<UserMainDto>>.Success(dto, 200, users.Item1);
@@ -342,11 +315,6 @@ namespace SolaERP.Persistence.Services
         {
             var user = await _userRepository.GetUserInfoAsync(userId);
             var dto = _mapper.Map<UserLoadDto>(user);
-            if (!string.IsNullOrEmpty(user.UserPhoto))
-                user.UserPhoto = await _fileService.DownloadPhotoWithNetworkAsBase64Async(user.UserPhoto);
-
-            if (!string.IsNullOrEmpty(user.SignaturePhoto))
-                user.SignaturePhoto = await _fileService.DownloadPhotoWithNetworkAsBase64Async(user.SignaturePhoto);
 
             return ApiResponse<UserLoadDto>.Success(dto, 200);
         }
@@ -358,11 +326,10 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<ERPUserDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<bool>> SaveUserAsync(UserSaveModel user)
+        public async Task<ApiResponse<bool>> SaveUserAsync(UserSaveModel user, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var userEntry = _mapper.Map<User>(user);
-            string serverFilePath = string.Empty;
-            string serverSignaturePath = string.Empty;
 
             if (user.Password != user.ConfirmPassword)
                 return ApiResponse<bool>.Fail("confirm Password", " Confirm Password doesn't match the Password!", 422);
@@ -370,30 +337,17 @@ namespace SolaERP.Persistence.Services
             if (!string.IsNullOrEmpty(user.Password))
                 userEntry.PasswordHash = SecurityUtil.ComputeSha256Hash(user?.Password);
 
-            if (!string.IsNullOrEmpty(user.Files?.Base64Photo))
-                serverFilePath = await _fileService.UploadBase64PhotoWithNetworkAsync(user.Files.Base64Photo, user.Files.Extension, user.Files.PhotoFileName);
-
-            if (!string.IsNullOrEmpty(user.Files?.Base64Signature))
-                serverSignaturePath = await _fileService.UploadBase64PhotoWithNetworkAsync(user.Files.Base64Signature, user.Files.Extension, user.Email + "signature");
-
-            userEntry.SignaturePhoto = serverSignaturePath;
-            userEntry.UserPhoto = serverFilePath;
+            userEntry.UserPhoto = await _fileService.UploadAsync(user.Photo, _config.Value.Images, cancellationToken);
+            userEntry.SignaturePhoto = await _fileService.UploadAsync(user.Signature, _config.Value.Signatures, cancellationToken);
 
             var result = await _userRepository.SaveUserAsync(userEntry);
             await _unitOfWork.SaveChangesAsync();
 
-            if (result)
-                return ApiResponse<bool>.Success(result, 200);
-            else
-                return ApiResponse<bool>.Fail("Data can not be saved", 400);
+            return result ? ApiResponse<bool>.Success(result, 200)
+                          : ApiResponse<bool>.Fail("Data can not be saved", 400);
         }
 
-        public async Task<bool> CheckTokenAsync(Guid name)
-        {
-            var check = await _userRepository.CheckTokenAsync(name);
-            if (check) return true;
-            else return false;
-        }
+
 
         public async Task<ApiResponse<bool>> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel)
         {
@@ -465,5 +419,13 @@ namespace SolaERP.Persistence.Services
             else
                 return ApiResponse<bool>.Fail("Data can not be saved", 400);
         }
+
+        //public Task<ApiResponse<bool>> UploadFilesAsync(string email, List<IFormFile> files, CancellationToken cancellationToken)
+        //{
+        //    for(int i =0;i<files.Count;i++) 
+        //    {
+        //        _fileService
+        //    }
+        //}
     }
 }

@@ -18,6 +18,8 @@ using SolaERP.DataAccess.DataAccess.SqlServer;
 using SolaERP.DataAccess.Factories;
 using SolaERP.Persistence.Services;
 using SolaERP.Persistence.Validations.UserValidation;
+using FileService = SolaERP.Infrastructure.Services.FileService;
+using IFileService = SolaERP.Application.Contracts.Services.IFileService;
 using UserValidation = SolaERP.Application.Validations.UserValidation.UserValidation;
 
 namespace SolaERP.Extensions
@@ -123,7 +125,13 @@ namespace SolaERP.Extensions
             builder.UseRepositories();
             builder.UseServices();
             builder.UseSqlConnection();
+            builder.UseInfrastructureServices();
             builder.Services.AddMediatR();
+        }
+
+        private static void UseInfrastructureServices(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddScoped<IFileService, FileService>();
         }
     }
 }

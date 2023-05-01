@@ -1,11 +1,10 @@
-﻿using SolaERP.Application.Enums;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace SolaERP.Application.Contracts.Services
 {
     public interface IFileService
     {
-        Task<string> UploadBase64PhotoWithNetworkAsync(string base64File, FileExtension extension, string fileName);
-        Task<string> DownloadPhotoWithNetworkAsBase64Async(string fileName);
-        byte[] ResizeImage(byte[] imageData, int width, int height);
+        Task<string> UploadAsync(IFormFile file, string filePath, CancellationToken cancellationToken = default);
+        Task<string> UploadAsync(List<IFormFile> files, string filePath, CancellationToken cancellationToken = default);
     }
 }

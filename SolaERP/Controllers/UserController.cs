@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Models;
+using IFileService = SolaERP.Application.Contracts.Services.IFileService;
 
 namespace SolaERP.Controllers
 {
@@ -13,11 +14,13 @@ namespace SolaERP.Controllers
         private readonly IUserService _userService;
         private readonly IVendorService _vendorService;
         private readonly IGroupService _groupService;
-        public UserController(IUserService userService, IVendorService vendorService, IGroupService groupService)
+        private readonly IFileService _fileService;
+        public UserController(IUserService userService, IVendorService vendorService, IGroupService groupService, IFileService fileService)
         {
             _userService = userService;
             _vendorService = vendorService;
             _groupService = groupService;
+            _fileService = fileService;
         }
 
 
@@ -58,8 +61,8 @@ namespace SolaERP.Controllers
           => CreateActionResult(await _userService.UserChangeStatusAsync(User.Identity.Name, model));
 
         [HttpPost]
-        public async Task<IActionResult> SaveUserAsync(UserSaveModel user)
-            => CreateActionResult(await _userService.SaveUserAsync(user));
+        public async Task<IActionResult> SaveUserAsync([FromForm] UserSaveModel user, CancellationToken cancellationToken)
+            => CreateActionResult(await _userService.SaveUserAsync(user, cancellationToken));
 
         [HttpPost]
         public async Task<IActionResult> ChangeUserPasswordAsync(ChangeUserPasswordModel user)
@@ -88,6 +91,16 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteGroupFromUserAsync(AddUserToGroupModel addUserToGroupModel)
           => CreateActionResult(await _userService.DeleteGroupFromUserAsync(addUserToGroupModel.groupIds, addUserToGroupModel.UserId));
+
+
+        [HttpPost]
+        public async Task<IActionResult> UploadFile(IFormFile file, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            string path = await _fileService.UploadAsync(file, @"\sources\images", cancellationToken);
+            return Ok(path);
+
+        }
 
     }
 }

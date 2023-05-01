@@ -29,7 +29,7 @@ namespace SolaERP.Application.Validations
             //var modelState = context.ModelState; 
             //if (!modelState.IsValid)
             //{
-            //    var errorText = modelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList()[0][0].ErrorMessage;
+            //    var errorText = modelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
             //    var property = modelState
             //    .Where(x => x.Value.Errors.Count > 0)
             //    .Select(x => x.Key.Split(".").Last())

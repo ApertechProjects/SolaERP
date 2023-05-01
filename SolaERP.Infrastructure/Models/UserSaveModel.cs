@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace SolaERP.Application.Models
 {
@@ -9,9 +9,6 @@ namespace SolaERP.Application.Models
         public bool ChangePassword { get; set; }
         public int StatusId { get; set; }
         public string Theme { get; set; }
-
-        [JsonIgnore]
-        public DateTime LastActivity { get; set; } = DateTime.UtcNow;
         public string UserName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
@@ -24,6 +21,7 @@ namespace SolaERP.Application.Models
         public string Description { get; set; }
         public string ERPUser { get; set; }
         public bool IsDeleted { get; set; }
-        public PhotoUploadModel? Files { get; set; }
+        public IFormFile Photo { get; set; }
+        public IFormFile Signature { get; set; }
     }
 }
