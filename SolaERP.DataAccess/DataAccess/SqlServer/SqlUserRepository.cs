@@ -592,6 +592,11 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
+        public Task CheckRefreshTokenIsValid(string refreshToken)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }
