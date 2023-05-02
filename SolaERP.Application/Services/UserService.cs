@@ -417,6 +417,21 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<bool>.Fail("Data can not be saved", 400);
         }
 
+        public Task<ApiResponse<bool>> EmailVerify(string verifyToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> CheckTokenAsync(Guid name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UpdateToken(string token)
+        {
+            throw new NotImplementedException();
+        }
+
         //public Task<ApiResponse<bool>> UploadFilesAsync(string email, List<IFormFile> files, CancellationToken cancellationToken)
         //{
         //    for(int i =0;i<files.Count;i++) 

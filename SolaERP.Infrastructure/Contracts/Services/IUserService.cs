@@ -26,7 +26,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> UserChangeStatusAsync(string name, UserChangeStatusModel model);
         Task<ApiResponse<bool>> UserChangeStatusAsync(string name, List<UserChangeStatusModel> model);
         Task<ApiResponse<bool>> SaveUserAsync(UserSaveModel user, CancellationToken cancellationToken);
-        //Task<ApiResponse<bool>> UploadFilesAsync(string email, List<IFormFile> files, CancellationToken cancellationToken);
         Task<ApiResponse<bool>> UserRegisterAsync(UserRegisterModel model);
         Task<ApiResponse<UserLoadDto>> GetUserInfoAsync(int userId);
         Task<ApiResponse<List<ERPUserDto>>> GetERPUserAsync();
@@ -36,5 +35,8 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<UsersByGroupDto>>> GetUsersByGroupIdAsync(int groupId);
         Task<ApiResponse<bool>> AddGroupToUserAsync(List<int> groupsIds, int userId);
         Task<ApiResponse<bool>> DeleteGroupFromUserAsync(List<int> groupsIds, int userId);
+        Task<ApiResponse<bool>> EmailVerify(string verifyToken);
+        Task<bool> CheckTokenAsync(Guid name);
+        Task<bool> UpdateToken(string token);
     }
 }
