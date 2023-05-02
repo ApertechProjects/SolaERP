@@ -103,7 +103,7 @@ namespace SolaERP.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUserByNameAsync()
+        public async Task<IActionResult> GetCurrentUserInfoAsync()
           => CreateActionResult(await _userService.GetUserByNameAsync(User.Identity.Name));
 
     }

@@ -38,6 +38,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> EmailVerify(string verifyToken);
         Task<bool> CheckTokenAsync(Guid name);
         Task<bool> UpdateToken(string token);
-        Task<ApiResponse<object>> RefreshTokenLoginAsync(string refreshToken);
+        Task<ApiResponse<UserDto>> GetUserByNameAsync(string name);
     }
 }

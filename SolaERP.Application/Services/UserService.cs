@@ -2,11 +2,13 @@
 using Microsoft.Extensions.Options;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Group;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Dtos.UserDto;
 using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Exceptions;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Options;
@@ -39,7 +41,6 @@ namespace SolaERP.Persistence.Services
             _mapper = mapper;
             _tokenHandler = tokenHandler;
             _fileService = fileService;
-            _config = config;
             _config = config;
         }
 
@@ -183,7 +184,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(true, 200);
         }
 
-        public async Task<ApiResponse<UserDto>> GetUserByTokenAsync(string name)
+        public async Task<ApiResponse<UserDto>> GetUserByNameAsync(string name)
         {
             var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var user = await _userRepository.GetUserByIdAsync(userId);
@@ -422,22 +423,37 @@ namespace SolaERP.Persistence.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> CheckTokenAsync(Guid name)
+        public async Task<bool> CheckTokenAsync(Guid name)
         {
-            throw new NotImplementedException();
+            var check = await _userRepository.CheckTokenAsync(name);
+            if (check) return true;
+            else return false;
         }
+
+        public async Task<bool> UpdateTokenAsync(Guid guid)
+        {
+            //var isSuccessfull = await _userRepository.UpdateToken(userId, newToken);
+            //await _unitOfWork.SaveChangesAsync();
+            return true;
+        }
+
+        //public async Task<ApiResponse<Token>> RefreshTokenLoginAsync(string refreshToken)
+        //{
+        //    var data = await _userRepository.CheckRefreshTokenIsValid(refreshToken);
+        //    if (data != null)
+        //    {
+        //        var mapp = _mapper.Map<UserRegisterModel>(data);
+        //        Token token = await _tokenHandler.GenerateJwtTokenAsync(1, mapp);
+        //        await UpdateUserIdentifierAsync(mapp.UserId, token.RefreshToken, token.Expiration, 20);
+        //        return ApiResponse<Token>.Success(token, 200);
+        //    }
+        //    else
+        //        throw new UserException("User not found");
+        //}
 
         public Task<bool> UpdateToken(string token)
         {
             throw new NotImplementedException();
         }
-
-        //public Task<ApiResponse<bool>> UploadFilesAsync(string email, List<IFormFile> files, CancellationToken cancellationToken)
-        //{
-        //    for(int i =0;i<files.Count;i++) 
-        //    {
-        //        _fileService
-        //    }
-        //}
     }
 }
