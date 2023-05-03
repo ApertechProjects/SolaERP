@@ -9,6 +9,8 @@ namespace SolaERP.Persistence.Validations.UserValidation
         {
             RuleFor(x => x.UserTypeId)
                 .NotEmpty()
+                .When(x => x.UserTypeId == 0)
+                .Empty()
                 .WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.UserName)
                 .NotEmpty()
