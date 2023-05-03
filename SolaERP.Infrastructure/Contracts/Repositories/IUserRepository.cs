@@ -26,7 +26,8 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<(int, List<UserMain>)> GetUserVendorAsync(int userId, int userStatus, int page, int limit);
         Task<bool> UserChangeStatusAsync(int userId, UserChangeStatusModel model);
         Task<bool> UserChangeStatusAsync(int userId, DataTable data);
-        Task<bool> SaveUserAsync(User model);
+        Task<int> SaveUserAsync(User model);
+        Task<int> RegisterUserAsync(User model);
         Task<UserLoad> GetUserInfoAsync(int userId);
         Task<List<ERPUser>> GetERPUser();
         Task<bool> CheckTokenAsync(Guid authToken);

@@ -72,12 +72,13 @@ namespace SolaERP.Controllers
         {
             var newtoken = Guid.NewGuid();
             //dto.UserToken = newtoken + _tokenHandler.CreateRefreshToken();
-            ApiResponse<bool> response = response = await _userService.UserRegisterAsync(dto);
+            ApiResponse<int> response = response = await _userService.UserRegisterAsync(dto);
 
             AccountResponseDto account = new();
-            if (response.Data)
+            if (response.Data > 0)
             {
                 account.Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto);
+                account.UserId = response.Data;
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
             }
 

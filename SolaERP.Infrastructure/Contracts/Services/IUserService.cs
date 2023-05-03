@@ -25,12 +25,12 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string name, int userStatus, int page, int limit);
         Task<ApiResponse<bool>> UserChangeStatusAsync(string name, UserChangeStatusModel model);
         Task<ApiResponse<bool>> UserChangeStatusAsync(string name, List<UserChangeStatusModel> model);
-        Task<ApiResponse<bool>> SaveUserAsync(UserSaveModel user, CancellationToken cancellationToken);
-        Task<ApiResponse<bool>> UserRegisterAsync(UserRegisterModel model);
+        Task<ApiResponse<int>> SaveUserAsync(UserSaveModel user, CancellationToken cancellationToken);
+        Task<ApiResponse<int>> UserRegisterAsync(UserRegisterModel model);
         Task<ApiResponse<UserLoadDto>> GetUserInfoAsync(int userId);
         Task<ApiResponse<List<ERPUserDto>>> GetERPUserAsync();
         Task<ApiResponse<bool>> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel);
-        Task<ApiResponse<bool>> DeleteUserAsync(DeleteUser deleteUser);
+        Task<ApiResponse<int>> DeleteUserAsync(DeleteUser deleteUser);
         Task<bool> UpdateSessionAsync(int userId, int updateCommand);
         Task<ApiResponse<List<UsersByGroupDto>>> GetUsersByGroupIdAsync(int groupId);
         Task<ApiResponse<bool>> AddGroupToUserAsync(List<int> groupsIds, int userId);

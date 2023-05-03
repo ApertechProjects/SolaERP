@@ -7,11 +7,12 @@ namespace SolaERP.Persistence.Validations.UserValidation
     {
         public UserSaveModelValidation()
         {
-            RuleFor(x => x.UserTypeId)
+            When(x => x.UserTypeId == 1, () =>
+            {
+                RuleFor(x => x.VendorId)
                 .NotEmpty()
-                .When(x => x.UserTypeId == 0)
-                .Empty()
                 .WithMessage("Please, enter {PropertyName}");
+            });
             RuleFor(x => x.UserName)
                 .NotEmpty()
                 .WithMessage("Please, enter {PropertyName}")
@@ -37,10 +38,6 @@ namespace SolaERP.Persistence.Validations.UserValidation
                 .WithMessage("Please, enter {PropertyName}")
                 .Equal(m => m.Password)
                 .WithMessage("confirm Password:  Confirm Password doesn't match the Password!");
-            RuleFor(x => x.VendorId)
-                .NotEmpty()
-                .When(x => x.UserTypeId == 1)
-                .WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.Gender)
                 .GreaterThan(0)
                 .LessThan(3)
