@@ -99,7 +99,6 @@ namespace SolaERP.Controllers
             cancellationToken.ThrowIfCancellationRequested();
             string path = await _fileService.UploadAsync(file, @"\sources\images", cancellationToken);
             return Ok(path);
-
         }
 
         [HttpGet]

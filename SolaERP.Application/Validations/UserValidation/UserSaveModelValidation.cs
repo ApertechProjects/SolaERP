@@ -7,7 +7,7 @@ namespace SolaERP.Persistence.Validations.UserValidation
     {
         public UserSaveModelValidation()
         {
-            When(x => x.UserTypeId == 1, () =>
+            When(x => x.UserTypeId == 0, () =>
             {
                 RuleFor(x => x.VendorId)
                 .NotEmpty()
