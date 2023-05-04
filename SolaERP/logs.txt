@@ -40,3 +40,24 @@ System.IndexOutOfRangeException: RefreshToken
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
 2023-05-03 12:39:14.787 +04:00 [ERR] RefreshToken
+2023-05-04 16:40:06.870 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.IndexOutOfRangeException: BusinesUnitCode
+   at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)
+   at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
+   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 68
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlBuyerRepository.GetBuyersAsync(Int32 userId, String businessUnitCode) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlBuyerRepository.cs:line 45
+   at SolaERP.Persistence.Services.BuyerService.GetBuyersAsync(String name, String businessUnitCode) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\BuyerService.cs:line 38
+   at SolaERP.Controllers.BuyerController.GetBuyersAsync(String businessUnitCode) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\BuyerController.cs:line 21
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-04 16:40:06.983 +04:00 [ERR] BusinesUnitCode
