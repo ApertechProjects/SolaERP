@@ -43,7 +43,7 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _groupService.SaveGroupAsync(User.Identity.Name, model));
 
         [HttpDelete("{groupId}")]
-        public async Task<IActionResult> DeleteGroupAsync(int groupId)
+        public async Task<IActionResult> DeleteGroupAsync(List<GroupDeleteModel> deleteIds)
             => CreateActionResult(await _groupService.DeleteGroupAsync(User.Identity.Name, groupId));
 
         [HttpGet("{groupId}")]

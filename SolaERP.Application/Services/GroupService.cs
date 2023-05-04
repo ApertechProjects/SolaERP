@@ -288,12 +288,15 @@ namespace SolaERP.Persistence.Services
                           : ApiResponse<bool>.Fail($"Something went wrong. The email notification was not updated.", 400);
         }
 
-        public async Task<ApiResponse<bool>> DeleteGroupAsync(string identity, int groupId)
+        public async Task<ApiResponse<bool>> DeleteGroupAsync(string identity, List<GroupDeleteModel> deleteIds)
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(identity);
+            int counter = 0;
             var data = await _groupRepository.AddUpdateOrDeleteGroupAsync(userId, new() { GroupId = groupId });
+            if (data)
+                counter++;
 
-            if (data == 0)
+            if (counter == deleteIds.Count)
                 return ApiResponse<bool>.Success(200);
             else
                 return ApiResponse<bool>.Fail($"Something went wrong. The email notification was not updated.", 400);
