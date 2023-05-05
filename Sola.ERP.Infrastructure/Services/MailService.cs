@@ -20,7 +20,6 @@ namespace SolaERP.Infrastructure.Services
         {
             await SendMailAsync(new[] { to }, subject, body, isBodyHtml);
         }
-
         public async Task SendMailAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
         {
             if (tos.Length != 0)
@@ -44,14 +43,6 @@ namespace SolaERP.Infrastructure.Services
                 await smtp.SendMailAsync(mail);
             }
         }
-
-
-        /// <summary>
-        /// Sends Password Reset email 
-        /// </summary>
-        /// <param name="to">Email receiver</param>
-        /// <param name="templatePath">Template path for sendin email </param>
-        /// <returns></returns>
         public async Task SendPasswordResetMailAsync(string to, string code)
         {
 
@@ -159,9 +150,6 @@ namespace SolaERP.Infrastructure.Services
                 }
             }
         }
-
-
-
         public async Task<List<string>> SendSafeMailAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
         {
             List<string> failedList = new List<string>();
@@ -209,7 +197,6 @@ namespace SolaERP.Infrastructure.Services
 
             return failedList;
         }
-
         public async Task SendSafeMailsAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
         {
             if (tos.Length != 0)

@@ -32,14 +32,7 @@ namespace SolaERP.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        protected string AttempLoadEmailTemplate(string name)
-        {
-            if (File.Exists(name))
-            {
-                var templateText = File.ReadAllText(name);
-                return templateText;
-            }
-        }
+
 
     }
 }
