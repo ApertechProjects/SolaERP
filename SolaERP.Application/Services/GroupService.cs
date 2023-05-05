@@ -12,6 +12,7 @@ using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
 using System.Data;
+using System.Text.RegularExpressions;
 
 
 namespace SolaERP.Persistence.Services
@@ -288,12 +289,18 @@ namespace SolaERP.Persistence.Services
                           : ApiResponse<bool>.Fail($"Something went wrong. The email notification was not updated.", 400);
         }
 
-        public async Task<ApiResponse<bool>> DeleteGroupAsync(string identity, int groupId)
+        public async Task<ApiResponse<bool>> DeleteGroupAsync(string identity, GroupDeleteModel model)
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(identity);
-            var data = await _groupRepository.AddUpdateOrDeleteGroupAsync(userId, new() { GroupId = groupId });
-
-            if (data == 0)
+            int counter = 0;
+            for (int i = 0; i < model.groupIds.Count; i++)
+            {
+                var data = await _groupRepository.AddUpdateOrDeleteGroupAsync(userId, new() { GroupId = model.groupIds[i] });
+                if (data == 0)
+                    counter++;
+            }
+            await _unitOfWork.SaveChangesAsync();
+            if (counter == model.groupIds.Count)
                 return ApiResponse<bool>.Success(200);
             else
                 return ApiResponse<bool>.Fail($"Something went wrong. The email notification was not updated.", 400);

@@ -6,20 +6,21 @@ using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Models;
+using SolaERP.Business.Dtos.EntityDtos.User;
 
 namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     public class AccountController : CustomBaseController
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<Application.Entities.Auth.User> _userManager;
+        private readonly SignInManager<Application.Entities.Auth.User> _signInManager;
         private readonly IUserService _userService;
         private readonly ITokenHandler _tokenHandler;
         private readonly IMapper _mapper;
 
-        public AccountController(UserManager<User> userManager,
-                                 SignInManager<User> signInManager,
+        public AccountController(UserManager<Application.Entities.Auth.User> userManager,
+                                 SignInManager<Application.Entities.Auth.User> signInManager,
                                  IUserService userService,
                                  ITokenHandler handler,
                                  IMapper mapper)
@@ -51,7 +52,7 @@ namespace SolaERP.Controllers
             if (signInResult.Succeeded)
             {
                 await _userService.UpdateSessionAsync(user.Id, 1);
-                var token = await _tokenHandler.GenerateJwtTokenAsync(1, userdto);
+                var token = await _tokenHandler.GenerateJwtTokenAsync(30, userdto);
                 await _userService.UpdateUserIdentifierAsync(user.Id, token.RefreshToken, token.Expiration, 5);
 
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(
@@ -65,17 +66,21 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterModel dto)
         {
-            ApiResponse<bool> response = response = await _userService.UserRegisterAsync(dto);
+            var newtoken = Guid.NewGuid();
+            //dto.UserToken = newtoken + _tokenHandler.CreateRefreshToken();
+            ApiResponse<int> response = response = await _userService.UserRegisterAsync(dto);
 
             AccountResponseDto account = new();
-            if (response.Data)
+            if (response.Data > 0)
             {
                 account.Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto);
+                account.UserId = response.Data;
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
             }
 
             return CreateActionResult(ApiResponse<bool>.Fail(response.Errors, 422));
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Logout()

@@ -1,15 +1,4 @@
-﻿using SolaERP.Application.Contracts.Repositories;
-using SolaERP.Application.Entities.Auth;
-using SolaERP.Application.Entities.Groups;
-using SolaERP.Application.Entities.User;
-using SolaERP.Application.Models;
-using SolaERP.Application.UnitOfWork;
-using SolaERP.DataAccess.Extensions;
-using System.Data;
-using System.Data.Common;
-using System.Data.SqlClient;
-
-namespace SolaERP.DataAccess.DataAcces.SqlServer
+﻿namespace SolaERP.DataAccess.DataAcces.SqlServer
 {
     public class SqlUserRepository : IUserRepository
     {
@@ -64,7 +53,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 if (reader.Read())
-                    user = reader.GetByEntityStructure<User>("InActive");
+                    user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate");
 
                 return user;
             }
@@ -158,10 +147,10 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         #endregion
         //
         #region DML Operations 
-
-        public async Task<bool> AddAsync(User entity)
+        public async Task<int> SaveUserAsync(User entity)
         {
-            string query = "SET NOCOUNT OFF Exec SP_AppUser_IUD @Id,@FullName,@ChangePassword,@Theme,@UserName,@Email,@PasswordHash,@PhoneNumber ,@UserTypeId,@VendorId,@UserToken,@Gender,@Buyer,@Description,@ERPUser,NULL,NULL,0";
+            string query = @"SET NOCOUNT OFF Exec SP_AppUser_IUD @Id,@FullName,@ChangePassword,@Theme,@UserName,@Email,
+                           @PasswordHash,@PhoneNumber ,@UserTypeId,@VendorId,@UserToken,@Gender,@Buyer,@Description,@ERPUser,@UserPhoto,@SignaturePhoto,@Inactive,@ChangeUserId,@NewId output";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = query;
@@ -180,9 +169,42 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@Description", entity.Description);
                 command.Parameters.AddWithValue(command, "@ERPUser", entity.ERPUser);
                 command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken.ToString());
+                command.Parameters.AddWithValue(command, "@UserPhoto", entity.UserPhoto);
+                command.Parameters.AddWithValue(command, "@SignaturePhoto", entity.SignaturePhoto);
+                command.Parameters.AddWithValue(command, "@Inactive", entity.InActive);
+                command.Parameters.AddWithValue(command, "@ChangeUserId", entity.UserId);
+                command.Parameters.AddOutPutParameter(command, "@NewId");
+                await command.ExecuteNonQueryAsync();
+                var result = Convert.ToInt32(command.Parameters["@NewId"].Value);
+                return result;
+            }
+        }
 
-                var value = await command.ExecuteNonQueryAsync();
-                return value > 0;
+        public async Task<int> RegisterUserAsync(User entity)
+        {
+            string query = "SET NOCOUNT OFF Exec SP_AppUser_IUD @Id,@FullName,@ChangePassword,@Theme,@UserName,@Email,@PasswordHash,@PhoneNumber ,@UserTypeId,@VendorId,@UserToken,@Gender,@Buyer,@Description,@ERPUser,NULL,NULL,0,0,@NewId output";
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = query;
+                command.Parameters.AddWithValue(command, "@Id", entity.Id);
+                command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
+                command.Parameters.AddWithValue(command, "@ChangePassword", entity.ChangePassword);
+                command.Parameters.AddWithValue(command, "@Theme", entity.Theme);
+                command.Parameters.AddWithValue(command, "@UserName", entity.UserName);
+                command.Parameters.AddWithValue(command, "@Email", entity.Email);
+                command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
+                command.Parameters.AddWithValue(command, "@PhoneNumber", entity.PhoneNumber);
+                command.Parameters.AddWithValue(command, "@UserTypeId", entity.UserTypeId);
+                command.Parameters.AddWithValue(command, "@VendorId", entity.VendorId);
+                command.Parameters.AddWithValue(command, "@Gender", entity.Gender);
+                command.Parameters.AddWithValue(command, "@Buyer", entity.Buyer);
+                command.Parameters.AddWithValue(command, "@Description", entity.Description);
+                command.Parameters.AddWithValue(command, "@ERPUser", entity.ERPUser);
+                command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken.ToString());
+                command.Parameters.AddOutPutParameter(command, "@NewId");
+                await command.ExecuteNonQueryAsync();
+                var result = Convert.ToInt32(command.Parameters["@NewId"].Value);
+                return result;
             }
         }
 
@@ -414,37 +436,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<bool> SaveUserAsync(User entity)
-        {
-            string query = @"SET NOCOUNT OFF Exec SP_AppUser_IUD @Id,@FullName,@ChangePassword,@Theme,@UserName,@Email,
-                           @PasswordHash,@PhoneNumber ,@UserTypeId,@VendorId,@UserToken,@Gender,@Buyer,@Description,@ERPUser,@UserPhoto,@SignaturePhoto,@Inactive,@ChangeUserId";
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = query;
-                command.Parameters.AddWithValue(command, "@Id", entity.Id);
-                command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
-                command.Parameters.AddWithValue(command, "@ChangePassword", entity.ChangePassword);
-                command.Parameters.AddWithValue(command, "@Theme", entity.Theme);
-                command.Parameters.AddWithValue(command, "@UserName", entity.UserName);
-                command.Parameters.AddWithValue(command, "@Email", entity.Email);
-                command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
-                command.Parameters.AddWithValue(command, "@PhoneNumber", entity.PhoneNumber);
-                command.Parameters.AddWithValue(command, "@UserTypeId", entity.UserTypeId);
-                command.Parameters.AddWithValue(command, "@VendorId", entity.VendorId);
-                command.Parameters.AddWithValue(command, "@Gender", entity.Gender);
-                command.Parameters.AddWithValue(command, "@Buyer", entity.Buyer);
-                command.Parameters.AddWithValue(command, "@Description", entity.Description);
-                command.Parameters.AddWithValue(command, "@ERPUser", entity.ERPUser);
-                command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken.ToString());
-                command.Parameters.AddWithValue(command, "@UserPhoto", entity.UserPhoto);
-                command.Parameters.AddWithValue(command, "@SignaturePhoto", entity.SignaturePhoto);
-                command.Parameters.AddWithValue(command, "@Inactive", entity.InActive);
-                command.Parameters.AddWithValue(command, "@ChangeUserId", entity.UserId);
-
-                var value = await command.ExecuteNonQueryAsync();
-                return value > 0;
-            }
-        }
 
         public async Task<UserLoad> GetUserInfoAsync(int userId)
         {

@@ -25,16 +25,19 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string name, int userStatus, int page, int limit);
         Task<ApiResponse<bool>> UserChangeStatusAsync(string name, UserChangeStatusModel model);
         Task<ApiResponse<bool>> UserChangeStatusAsync(string name, List<UserChangeStatusModel> model);
-        Task<ApiResponse<bool>> SaveUserAsync(UserSaveModel user, CancellationToken cancellationToken);
-        //Task<ApiResponse<bool>> UploadFilesAsync(string email, List<IFormFile> files, CancellationToken cancellationToken);
-        Task<ApiResponse<bool>> UserRegisterAsync(UserRegisterModel model);
+        Task<ApiResponse<int>> SaveUserAsync(UserSaveModel user, CancellationToken cancellationToken);
+        Task<ApiResponse<int>> UserRegisterAsync(UserRegisterModel model);
         Task<ApiResponse<UserLoadDto>> GetUserInfoAsync(int userId);
         Task<ApiResponse<List<ERPUserDto>>> GetERPUserAsync();
         Task<ApiResponse<bool>> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel);
-        Task<ApiResponse<bool>> DeleteUserAsync(DeleteUser deleteUser);
+        Task<ApiResponse<int>> DeleteUserAsync(DeleteUser deleteUser);
         Task<bool> UpdateSessionAsync(int userId, int updateCommand);
         Task<ApiResponse<List<UsersByGroupDto>>> GetUsersByGroupIdAsync(int groupId);
         Task<ApiResponse<bool>> AddGroupToUserAsync(List<int> groupsIds, int userId);
         Task<ApiResponse<bool>> DeleteGroupFromUserAsync(List<int> groupsIds, int userId);
+        Task<ApiResponse<bool>> EmailVerify(string verifyToken);
+        Task<bool> CheckTokenAsync(Guid name);
+        Task<bool> UpdateToken(string token);
+        Task<ApiResponse<UserDto>> GetUserByNameAsync(string name);
     }
 }

@@ -3,6 +3,6 @@
     public class AccountResponseDto
     {
         public Token Token { get; set; }
-        //public string RefreshToken { get; set; }
+        public int UserId { get; set; }
     }
 }

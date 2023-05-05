@@ -1,17 +1,4 @@
-﻿using AutoMapper;
-using SolaERP.Application.Contracts.Repositories;
-using SolaERP.Application.Contracts.Services;
-using SolaERP.Application.Dtos.Group;
-using SolaERP.Application.Dtos.Shared;
-using SolaERP.Application.Dtos.User;
-using SolaERP.Application.Dtos.UserDto;
-using SolaERP.Application.Entities.Auth;
-using SolaERP.Application.Models;
-using SolaERP.Application.UnitOfWork;
-using SolaERP.Persistence.Utils;
-
-
-namespace SolaERP.Persistence.Services
+﻿namespace SolaERP.Persistence.Services
 {
     public class UserService : IUserService
     {
@@ -34,6 +21,8 @@ namespace SolaERP.Persistence.Services
             _mailService = mailService;
             _mapper = mapper;
             _tokenHandler = tokenHandler;
+            _fileService = fileService;
+            _config = config;
             _producer = producer;
         }
 
@@ -53,26 +42,26 @@ namespace SolaERP.Persistence.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<ApiResponse<bool>> UserRegisterAsync(UserRegisterModel model)
+        public async Task<ApiResponse<int>> UserRegisterAsync(UserRegisterModel model)
         {
             var userExsist = await _userRepository.GetUserByEmailAsync(model.Email);
 
             if (userExsist is not null)
-                return ApiResponse<bool>.Fail("user", "This user is already exsist in our system", 422);
+                return ApiResponse<int>.Fail("user", "This user is already exsist in our system", 422, false);
 
             if (model.UserType == Application.Enums.UserRegisterType.SupplierUser && model.VendorId == 0)
-                return ApiResponse<bool>.Fail("company", "Company name required for Supplier user", 422);
+                return ApiResponse<int>.Fail("company", "Company name required for Supplier user", 422, false);
 
             if (model.Password != model.ConfirmPassword)
-                return ApiResponse<bool>.Fail("password", "Password doesn't match with confirm password", 422);
+                return ApiResponse<int>.Fail("password", "Password doesn't match with confirm password", 422, false);
 
             var user = _mapper.Map<User>(model);
             user.PasswordHash = SecurityUtil.ComputeSha256Hash(model.Password);
 
-            var result = await _userRepository.AddAsync(user);
+            var result = await _userRepository.RegisterUserAsync(user);
             await _unitOfWork.SaveChangesAsync();
 
-            return ApiResponse<bool>.Success(result, 200);
+            return ApiResponse<int>.Success(result, 200);
         }
 
         public async Task<ApiResponse<List<UserDto>>> GetAllAsync()
@@ -177,7 +166,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(true, 200);
         }
 
-        public async Task<ApiResponse<UserDto>> GetUserByTokenAsync(string name)
+        public async Task<ApiResponse<UserDto>> GetUserByNameAsync(string name)
         {
             var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var user = await _userRepository.GetUserByIdAsync(userId);
@@ -320,7 +309,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<ERPUserDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<bool>> SaveUserAsync(UserSaveModel user, CancellationToken cancellationToken)
+        public async Task<ApiResponse<int>> SaveUserAsync(UserSaveModel user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var userEntry = _mapper.Map<User>(user);
@@ -355,28 +344,28 @@ namespace SolaERP.Persistence.Services
             else return ApiResponse<bool>.Success(400);
         }
 
-        public async Task<ApiResponse<bool>> DeleteUserAsync(DeleteUser deleteUser)
+        public async Task<ApiResponse<int>> DeleteUserAsync(DeleteUser deleteUser)
         {
             int succesfulCounter = 0;
-            List<Task<bool>> tasks = new List<Task<bool>>();
+            List<Task<int>> tasks = new List<Task<int>>();
 
             deleteUser.userIds.ForEach(x =>
             {
                 tasks.Add(_userRepository.SaveUserAsync(new() { Id = x }));
             });
 
-            bool[] results = await Task.WhenAll(tasks);
+            int[] results = await Task.WhenAll(tasks);
 
             foreach (var result in results)
             {
-                if (result) succesfulCounter++;
+                if (result > 0) succesfulCounter++;
             }
 
             await _unitOfWork.SaveChangesAsync();
 
             return succesfulCounter == deleteUser.userIds.Count
-                ? ApiResponse<bool>.Success(true, 200)
-                : ApiResponse<bool>.Fail("User can not be deleted", 400);
+                ? ApiResponse<int>.Success(0, 200)
+                : ApiResponse<int>.Fail("User can not be deleted", 400);
         }
 
         public async Task<ApiResponse<List<UsersByGroupDto>>> GetUsersByGroupIdAsync(int groupId)
