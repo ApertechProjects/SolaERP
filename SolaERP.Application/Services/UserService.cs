@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.Options;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Group;
@@ -9,7 +8,6 @@ using SolaERP.Application.Dtos.UserDto;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
-using SolaERP.Persistence.Options;
 using SolaERP.Persistence.Utils;
 
 
@@ -22,25 +20,21 @@ namespace SolaERP.Persistence.Services
         private readonly IMailService _mailService;
         private readonly IMapper _mapper;
         private readonly ITokenHandler _tokenHandler;
-        private readonly IFileService _fileService;
-        private readonly IOptions<FileConfig> _config;
+        private readonly IFileProducer _producer;
 
         public UserService(IUserRepository userRepository,
                            IUnitOfWork unitOfWork,
                            IMapper mapper,
                            IMailService mailService,
                            ITokenHandler tokenHandler,
-                           IFileService fileService,
-                           IOptions<FileConfig> config)
+                           IFileProducer producer)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _mailService = mailService;
             _mapper = mapper;
             _tokenHandler = tokenHandler;
-            _fileService = fileService;
-            _config = config;
-            _config = config;
+            _producer = producer;
         }
 
         public async Task AddAsync(UserDto model)
@@ -334,11 +328,16 @@ namespace SolaERP.Persistence.Services
             if (!string.IsNullOrEmpty(user.Password))
                 userEntry.PasswordHash = SecurityUtil.ComputeSha256Hash(user?.Password);
 
-            userEntry.UserPhoto = await _fileService.UploadAsync(user.Photo, _config.Value.Images, cancellationToken);
-            userEntry.SignaturePhoto = await _fileService.UploadAsync(user.Signature, _config.Value.Signatures, cancellationToken);
 
             var result = await _userRepository.SaveUserAsync(userEntry);
             await _unitOfWork.SaveChangesAsync();
+
+            if (user?.Photo?.Length > 0)
+                await _producer.ProduceAsync(user?.Photo, Filetype.Profile, user.Email);
+
+            if (user?.Signature?.Length > 0)
+                await _producer.ProduceAsync(user?.Signature, Filetype.Signature, user.Email);
+
 
             return result ? ApiResponse<bool>.Success(result, 200)
                           : ApiResponse<bool>.Fail("Data can not be saved", 400);

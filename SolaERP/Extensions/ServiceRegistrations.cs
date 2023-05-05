@@ -16,6 +16,8 @@ using SolaERP.Application.Validations.UserValidation;
 using SolaERP.DataAccess.DataAcces.SqlServer;
 using SolaERP.DataAccess.DataAccess.SqlServer;
 using SolaERP.DataAccess.Factories;
+using SolaERP.Infrastructure.Services;
+using SolaERP.Infrastructure.Services.Storage;
 using SolaERP.Persistence.Services;
 using SolaERP.Persistence.Validations.UserValidation;
 using FileService = SolaERP.Infrastructure.Services.FileService;
@@ -66,6 +68,9 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<ILanguageService, LanguageService>();
             builder.Services.AddScoped<IVendorService, VendorService>();
             builder.Services.AddScoped<IFileService, FileService>();
+            builder.Services.AddScoped<IFileProducer, FileProducer>();
+            builder.Services.AddScoped<IStorage, LocalStorage>();
+
         }
         private static void UseRepositories(this WebApplicationBuilder builder)
         {

@@ -1,11 +1,11 @@
 ﻿using System.Net;
 using System.Runtime.InteropServices;
 
-namespace SolaERP.Persistence.Services
+namespace SolaERP.Infrastructure.Extensions
 {
     public class NetworkConnection : IDisposable
     {
-        string _networkName;
+        private string _networkName;
 
         public NetworkConnection(string networkName,
             NetworkCredential credentials)

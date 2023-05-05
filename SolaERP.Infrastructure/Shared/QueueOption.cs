@@ -1,11 +1,12 @@
-﻿namespace SolaERP.Persistence.Options
+﻿namespace SolaERP.Application.Shared
 {
-    public class FileOptions
+    public class QueueOption
     {
-        public string URI { get; set; }
+        public string Uri { get; set; }
         public string Exchange { get; set; }
         public string ExchangeType { get; set; }
         public string Queue { get; set; }
         public string Route { get; set; }
+
     }
 }

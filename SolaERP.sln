@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.Persistence", "Sola
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.SignalR", "SolaERP.SignalR\SolaERP.SignalR.csproj", "{9296A16F-A3C7-482E-B0FD-3C43F2216926}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolaERP.Infrastructure", "Sola.ERP.Infrastructure\SolaERP.Infrastructure.csproj", "{6FFF2401-5F6E-40A5-9452-7A0DFF25AB82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.Infrastructure", "Sola.ERP.Infrastructure\SolaERP.Infrastructure.csproj", "{6FFF2401-5F6E-40A5-9452-7A0DFF25AB82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolaERP.FileWorker", "SolaERP.FileWorker\SolaERP.FileWorker.csproj", "{864D4973-C732-4010-851B-37D19DB91100}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{6FFF2401-5F6E-40A5-9452-7A0DFF25AB82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FFF2401-5F6E-40A5-9452-7A0DFF25AB82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FFF2401-5F6E-40A5-9452-7A0DFF25AB82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{864D4973-C732-4010-851B-37D19DB91100}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{864D4973-C732-4010-851B-37D19DB91100}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{864D4973-C732-4010-851B-37D19DB91100}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{864D4973-C732-4010-851B-37D19DB91100}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

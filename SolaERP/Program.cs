@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.OpenApi.Models;
 using RabbitMQ.Client;
 using Serilog;
+using SolaERP.Application.Shared;
 using SolaERP.Application.Validations;
 using SolaERP.Business.Models;
 using SolaERP.Extensions;
@@ -22,7 +23,6 @@ builder.Services.AddControllers(options => { options.Filters.Add(new ValidationF
 .AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-    //This code ignores circular referanced object when they serialized to jsonfile 
 }).Services
 .AddFluentValidationAutoValidation()
 .AddFluentValidationClientsideAdapters();
@@ -32,11 +32,11 @@ builder.ConfigureServices();
 builder.UseValidationExtension();
 builder.Services.AddTransient(sp => new ConnectionFactory()
 {
-    Uri = new(builder.Configuration["RabbitMQ:Uri"])
+    Uri = new(builder.Configuration["FileOptions:URI"])
 });
 
-builder.Services.Configure<SolaERP.Infrastructure.Configurations.FileOptions>(builder.Configuration.GetSection("FileOptions"));
-builder.Services.Configure<SolaERP.Persistence.Options.FileConfig>(builder.Configuration.GetSection("FileConfig"));
+builder.Services.Configure<QueueOption>(builder.Configuration.GetSection("FileOptions"));
+builder.Services.Configure<StorageOption>(builder.Configuration.GetSection("StorageServer"));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MapProfile));

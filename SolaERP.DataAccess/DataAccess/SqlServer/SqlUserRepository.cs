@@ -592,6 +592,20 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
+        public async Task<bool> UpdateImgesAsync(string email, Filetype type, string filePath)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_UpdateImages @email,@type,@filePath";
+
+                command.Parameters.AddWithValue(command, "@email", email);
+                command.Parameters.AddWithValue(command, "@type", type);
+                command.Parameters.AddWithValue(command, "@filePath", filePath);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
         #endregion
     }
 }
