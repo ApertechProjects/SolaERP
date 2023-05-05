@@ -23,7 +23,7 @@ namespace SolaERP.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAnalysisCodes([FromQuery] AnalysisCodeGetModel getRequest)
+        public async Task<IActionResult> GetAnalysisCodesAsync([FromQuery] AnalysisCodeGetModel getRequest)
             => CreateActionResult(await _analysisCodeService.GetAnalysisCodesAsync(getRequest));
 
         [HttpGet]
@@ -32,7 +32,11 @@ namespace SolaERP.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAnalysisDimensionsByBusinessUnitId([FromQuery] GetAnalysisDimensionByBuRequest request)
+        public async Task<IActionResult> GetAnalysisDimensionsByBusinessUnitIdAsync([FromQuery] GetAnalysisDimensionByBuRequest request)
             => CreateActionResult(await _mediator.Send(request));
+
+        [HttpGet("{dimensionId}")]
+        public async Task<IActionResult> GetAnalysisCodesByDimensionIdAsync(int dimensionId)
+            => CreateActionResult(await _analysisCodeService.GetAnalysisCodesByDimensionIdAsync(dimensionId));
     }
 }
