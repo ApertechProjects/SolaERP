@@ -91,7 +91,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             int res = 0;
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_Groups_IUD @GroupId,@GroupName,@Description,@UserId,@NewId OUTPUT";//User id cnat be null or 0
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_Groups_IUD @GroupId,@GroupName,@Description,@UserId,@NewId OUTPUT";//User id cnat be null or 0
 
                 command.Parameters.AddWithValue(command, "@GroupId", entity.GroupId);
                 command.Parameters.AddWithValue(command, "@GroupName", entity.GroupName);
@@ -103,7 +103,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 using (var reader = await command.ExecuteReaderAsync())
                 {
-                    res = (int)result.Value;
+                    res = result.Value == DBNull.Value ? 0 : (int)result.Value;
                 }
 
 

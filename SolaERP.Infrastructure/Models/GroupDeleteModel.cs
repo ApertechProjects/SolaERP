@@ -8,6 +8,6 @@ namespace SolaERP.Application.Models
 {
     public class GroupDeleteModel
     {
-        public int GroupId { get; set; }
+        public List<int> groupIds { get; set; }
     }
 }

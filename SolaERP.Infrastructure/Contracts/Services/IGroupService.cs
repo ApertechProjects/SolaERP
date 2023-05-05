@@ -29,6 +29,6 @@ namespace SolaERP.Application.Contracts.Services
         Task DeleteBusinessUnitsAsync(List<int> users, int groupId);
         Task<ApiResponse<GroupDto>> GetGroupInfoAsync(int groupId);
         Task<ApiResponse<List<BusinessUnitForGroupDto>>> GetGroupBusinessUnitsAsync(int groupId);
-        Task<ApiResponse<bool>> DeleteGroupAsync(string identity, List<GroupDeleteModel> deleteIds);
+        Task<ApiResponse<bool>> DeleteGroupAsync(string identity, GroupDeleteModel model);
     }
 }
