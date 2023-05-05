@@ -94,6 +94,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<Buyer, BuyerDto>().ReverseMap();
             CreateMap<ActiveUser, ActiveUserDto>().ReverseMap();
             CreateMap<AnalysisCode, AnalysisCodeDto>().ReverseMap();
+            CreateMap<AnalysisCodes, AnalysisCodesDto>().ReverseMap();
             CreateMap<RequestApprovalInfo, RequestApprovalInfoDto>().ReverseMap();
             CreateMap<RequestDetail, RequestDetailsWithAnalysisCodeDto>().ReverseMap();
             CreateMap<ItemCodeWithImages, ItemCodeWithImagesDto>().ReverseMap();

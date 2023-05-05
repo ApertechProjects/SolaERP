@@ -7,6 +7,6 @@
         public int EmailNotificationId { get; set; }
         public string Notification { get; set; }
         public string Description { get; set; }
-        public bool IsIngroup { get; set; }
+        public bool IsInGroup { get; set; }
     }
 }

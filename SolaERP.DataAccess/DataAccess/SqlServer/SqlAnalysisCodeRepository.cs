@@ -4,6 +4,7 @@ using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.AnalysisDimension;
 using SolaERP.Application.UnitOfWork;
 using System.Data.Common;
+using SolaERP.Application.Entities.BusinessUnits;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -29,6 +30,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 while (reader.Read())
                     resultList.Add(reader.GetByEntityStructure<AnalysisCode>());
+
+                return resultList;
+            }
+        }
+
+        public async Task<List<AnalysisCodes>> GetAnalysisCodesByDimensionIdAsync(int dimensionId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_AnalysisCodes_Load_BY_DIM @DimensionId";
+                command.Parameters.AddWithValue(command, "@DimensionId", dimensionId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                List<AnalysisCodes> resultList = new();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<AnalysisCodes>());
 
                 return resultList;
             }

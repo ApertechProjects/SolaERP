@@ -36,6 +36,15 @@ namespace SolaERP.Persistence.Services
                   ApiResponse<List<IGrouping<int, AnalysisCodeDto>>>.Fail("analysisCodes", "Analysis codes is empty", 404, true);
         }
 
+        public async Task<ApiResponse<List<AnalysisCodesDto>>> GetAnalysisCodesByDimensionIdAsync(int dimensionId)
+        {
+            var data = await _analysisCodeRepository.GetAnalysisCodesByDimensionIdAsync(dimensionId);
+            var map = _mapper.Map<List<AnalysisCodesDto>>(data);
+            if (map.Count > 0)
+                return ApiResponse<List<AnalysisCodesDto>>.Success(map, 200);
+            return ApiResponse<List<AnalysisCodesDto>>.Fail("Analysis Codes is empty", 400);
+
+        }
 
         public async Task<ApiResponse<List<AnalysisDimensionDto>>> GetAnalysisDimensionAsync()
         {
