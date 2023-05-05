@@ -38,6 +38,10 @@ builder.Services.AddTransient(sp => new ConnectionFactory()
 builder.Services.Configure<QueueOption>(builder.Configuration.GetSection("FileOptions"));
 builder.Services.Configure<StorageOption>(builder.Configuration.GetSection("StorageServer"));
 
+
+
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.Configure<ApiBehaviorOptions>(config => { config.SuppressModelStateInvalidFilter = true; });
@@ -58,6 +62,11 @@ var logger = new LoggerConfiguration()
     .MinimumLevel.Error()
     .CreateLogger();
 
+
+builder.Services
+    .AddFluentEmail(builder.Configuration["Mail:Mail"])
+    .AddRazorRenderer()
+    .AddSmtpSender(builder.Configuration["Mail:Host"], Convert.ToInt32(builder.Configuration["Mail:Port"]));
 
 builder.Services.Configure<HubOptions<ChatHub>>(config =>
 {

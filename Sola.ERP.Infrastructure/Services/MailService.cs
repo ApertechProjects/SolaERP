@@ -3,11 +3,9 @@ using SolaERP.Application.Contracts.Services;
 using System.Net;
 using System.Net.Mail;
 
-namespace SolaERP.Persistence.Services
+namespace SolaERP.Infrastructure.Services
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class MailService : IMailService
     {
         private readonly IConfiguration _configuration;
