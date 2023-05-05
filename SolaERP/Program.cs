@@ -63,6 +63,7 @@ var logger = new LoggerConfiguration()
     .CreateLogger();
 
 
+
 builder.Services
     .AddFluentEmail(builder.Configuration["Mail:Mail"])
     .AddRazorRenderer()
