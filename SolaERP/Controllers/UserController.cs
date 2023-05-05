@@ -24,9 +24,6 @@ namespace SolaERP.Controllers
         }
 
 
-        [HttpDelete]
-        public async Task<IActionResult> RemoveUser()
-            => CreateActionResult(await _userService.RemoveUserByTokenAsync(User.Identity.Name));
 
         [HttpGet]
         public async Task<IActionResult> GetGroupsByUserIdAsync([FromQuery] int userId)

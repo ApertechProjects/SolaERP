@@ -1,4 +1,16 @@
-﻿namespace SolaERP.Persistence.Services
+﻿using AutoMapper;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Group;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.User;
+using SolaERP.Application.Dtos.UserDto;
+using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Models;
+using SolaERP.Application.UnitOfWork;
+using SolaERP.Persistence.Utils;
+
+namespace SolaERP.Persistence.Services
 {
     public class UserService : IUserService
     {
@@ -21,26 +33,9 @@
             _mailService = mailService;
             _mapper = mapper;
             _tokenHandler = tokenHandler;
-            _fileService = fileService;
-            _config = config;
             _producer = producer;
         }
 
-        public async Task AddAsync(UserDto model)
-        {
-            if (model.UserType == Application.Enums.UserRegisterType.SupplierUser && model.VendorId == 0)
-                ApiResponse<bool>.Fail("companyName", "Company name required for Supplier user", 422);
-
-            if (model.Password != model.ConfirmPassword)
-                ApiResponse<bool>.Fail("password", "Password doesn't match with confirm password", 422);
-
-
-            var user = _mapper.Map<User>(model);
-            user.PasswordHash = SecurityUtil.ComputeSha256Hash(model.Password);
-
-            var result = await _userRepository.AddAsync(user);
-            await _unitOfWork.SaveChangesAsync();
-        }
 
         public async Task<ApiResponse<int>> UserRegisterAsync(UserRegisterModel model)
         {
@@ -71,25 +66,6 @@
             return dto.Count == 0 ? ApiResponse<List<UserDto>>.Fail("User list is empty", 404) : ApiResponse<List<UserDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<bool>> UpdateAsync(UserDto userUpdateDto)
-        {
-            if (userUpdateDto.Password != userUpdateDto.ConfirmPassword)
-                ApiResponse<bool>.Fail("password", "Password doesn't match with confirm password", 422);
-            var user = _mapper.Map<User>(userUpdateDto);
-            user.PasswordHash = SecurityUtil.ComputeSha256Hash(userUpdateDto.Password);
-            await _userRepository.UpdateAsync(user);
-
-            await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<bool>.Success(200);
-        }
-
-        public async Task<ApiResponse<bool>> RemoveAsync(int Id)
-        {
-            await _userRepository.RemoveAsync(Id);
-
-            await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<bool>.Success(200);
-        }
 
         public async Task<UserDto> GetUserByIdAsync(int userId)
         {
@@ -98,13 +74,7 @@
             return userDto;
         }
 
-        public async Task<ApiResponse<bool>> UpdateUserAsync(UserUpdateDto userUpdateDto)
-        {
-            var result = _mapper.Map<User>(userUpdateDto);
-            await _userRepository.UpdateAsync(result);
-            await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<bool>.Success(200);
-        }
+
 
         public async Task<ApiResponse<bool>> ResetPasswordAsync(ResetPasswordModel resetPasswordRequestDto)
         {
@@ -178,18 +148,6 @@
             return ApiResponse<UserDto>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<bool>> RemoveUserByTokenAsync(string name)
-        {
-            var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
-
-            if (userId == 0)
-                return ApiResponse<bool>.Fail("User not found", 404);
-
-            var result = _userRepository.RemoveAsync(userId);
-            await _unitOfWork.SaveChangesAsync();
-
-            return ApiResponse<bool>.Success(200);
-        }
 
         public async Task<ApiResponse<List<ActiveUserDto>>> GetActiveUsersAsync()
         {
@@ -328,8 +286,8 @@
                 await _producer.ProduceAsync(user?.Signature, Filetype.Signature, user.Email);
 
 
-            return result ? ApiResponse<bool>.Success(result, 200)
-                          : ApiResponse<bool>.Fail("Data can not be saved", 400);
+            return result > 0 ? ApiResponse<int>.Success(result, 200)
+                          : ApiResponse<int>.Fail("Data can not be saved", 400);
         }
 
 

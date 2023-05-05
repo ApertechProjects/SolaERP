@@ -1,4 +1,15 @@
-﻿namespace SolaERP.DataAccess.DataAcces.SqlServer
+﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Entities.Groups;
+using SolaERP.Application.Entities.User;
+using SolaERP.Application.Models;
+using SolaERP.Application.UnitOfWork;
+using SolaERP.DataAccess.Extensions;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
+
+namespace SolaERP.DataAccess.DataAcces.SqlServer
 {
     public class SqlUserRepository : IUserRepository
     {
@@ -77,22 +88,6 @@
         }
 
 
-        public async Task<User> GetByIdAsync(int id)
-        {
-            User user = null;
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "EXEC SP_GETUSER_BY_NAME_OR_ID @Id";
-                command.Parameters.AddWithValue(command, "@Id", id);
-
-                using var reader = await command.ExecuteReaderAsync();
-
-                if (reader.Read())
-                    user = reader.GetByEntityStructure<User>();
-
-                return user;
-            }
-        }
         public async Task<User> GetUserByUsernameAsync(string userName)
         {
             User user = null;
@@ -108,26 +103,14 @@
                 return user;
             }
         }
-        public async Task<User> GetLastInsertedUserAsync()
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "SELECT * FROM GET_LAST_INSERTED_USER";
-                using var reader = await command.ExecuteReaderAsync();
 
-                User user = new User();
-                if (reader.Read())
-                {
-                    user = reader.GetByEntityStructure<User>();
-                }
-                return user;
-            }
-        }
+
         public async Task<int> GetIdentityNameAsIntAsync(string name)
         {
             int userId = Convert.ToInt32(name);
             return userId;
         }
+
 
         public async Task<string> GetUserNameByTokenAsync(string finderToken)
         {
@@ -208,31 +191,7 @@
             }
         }
 
-        public async Task<bool> RemoveAsync(int Id)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "SP_DELETE_USER @Id";
-                command.Parameters.AddWithValue(command, "@Id", Id);
-                var value = await command.ExecuteNonQueryAsync();
 
-                return value > 0;
-            }
-        }
-        public async Task UpdateAsync(User entity)
-        {
-            string query = "Exec [dbo].[SP_UserData_U] @UserId,@FullName,@Position,@PhoneNumber,@Photo,@PasswordHash";
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.Parameters.AddWithValue(command, "@UserId", entity.UserId);
-                command.Parameters.AddWithValue(command, "@FullName", entity.FullName);
-                command.Parameters.AddWithValue(command, "@PhoneNumber", entity.PhoneNumber);
-                command.Parameters.AddWithValue(command, "@PasswordHash", entity.PasswordHash);
-                command.CommandText = query;
-                //TODO: Handle Procedure Convert Error When Updateing User
-                await command.ExecuteNonQueryAsync();
-            }
-        }
         public async Task<bool> UpdateUserTokenAsync(int userId, string token, DateTime expirationDate, int refreshTokenLifeTime)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -249,6 +208,8 @@
                 return result > 0;
             }
         }
+
+
         public async Task<bool> ResetUserPasswordAsync(string email, string passwordHash)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)

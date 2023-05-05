@@ -6,16 +6,14 @@ using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Contracts.Services
 {
-    public interface IUserService : ICrudService<UserDto>
+    public interface IUserService
     {
         Task<ApiResponse<List<UserListDto>>> GetUserListAsync();
         Task<UserDto> GetUserByIdAsync(int userId);
         Task<UserDto> GetUserByEmailAsync(string email);
-        Task<ApiResponse<bool>> UpdateUserAsync(UserUpdateDto userUpdateDto);
         Task<ApiResponse<NoContentDto>> UpdateUserIdentifierAsync(int userId, string refreshToken, DateTime expirationDate, int addOnAccessTokenDate);
         Task<ApiResponse<bool>> SendResetPasswordEmail(string email);
         Task<int> GetIdentityNameAsIntAsync(string name);
-        Task<ApiResponse<bool>> RemoveUserByTokenAsync(string name);
         Task<ApiResponse<bool>> ResetPasswordAsync(ResetPasswordModel resetPasswordRequestDto);
         Task<ApiResponse<List<ActiveUserDto>>> GetActiveUsersAsync();
         Task<ApiResponse<List<ActiveUserDto>>> GetActiveUsersWithoutCurrentUserAsync(string name);
@@ -35,9 +33,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<UsersByGroupDto>>> GetUsersByGroupIdAsync(int groupId);
         Task<ApiResponse<bool>> AddGroupToUserAsync(List<int> groupsIds, int userId);
         Task<ApiResponse<bool>> DeleteGroupFromUserAsync(List<int> groupsIds, int userId);
-        Task<ApiResponse<bool>> EmailVerify(string verifyToken);
-        Task<bool> CheckTokenAsync(Guid name);
-        Task<bool> UpdateToken(string token);
         Task<ApiResponse<UserDto>> GetUserByNameAsync(string name);
     }
 }

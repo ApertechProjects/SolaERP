@@ -31,8 +31,7 @@ namespace SolaERP.Application.Identity_Server
 
         public async Task<User> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByIdAsync(int.Parse(userId));
-            return user;
+            throw new NotImplementedException();
         }
 
         public async Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)

@@ -1,10 +1,16 @@
-﻿namespace SolaERP.Application.Contracts.Repositories
+﻿using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Entities.Groups;
+using SolaERP.Application.Entities.User;
+using SolaERP.Application.Models;
+using System.Data;
+
+namespace SolaERP.Application.Contracts.Repositories
 {
-    public interface IUserRepository : ICrudOperations<User>
+    public interface IUserRepository
     {
+        Task<List<User>> GetAllAsync();
         Task<User> GetUserByUsernameAsync(string userName);
         Task<User> GetUserByEmailAsync(string email);
-        Task<User> GetLastInsertedUserAsync();
         Task<User> GetUserByIdAsync(int userId);
         Task<User> GetUserByEmailCode(string token);
         Task<bool> SetUserEmailCode(string token, int id);
