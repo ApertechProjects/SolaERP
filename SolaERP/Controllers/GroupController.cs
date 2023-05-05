@@ -44,7 +44,7 @@ namespace SolaERP.Controllers
 
         [HttpDelete("{groupId}")]
         public async Task<IActionResult> DeleteGroupAsync(List<GroupDeleteModel> deleteIds)
-            => CreateActionResult(await _groupService.DeleteGroupAsync(User.Identity.Name, groupId));
+            => CreateActionResult(await _groupService.DeleteGroupAsync(User.Identity.Name, deleteIds));
 
         [HttpGet("{groupId}")]
         public async Task<IActionResult> GetBuyers(int groupId)

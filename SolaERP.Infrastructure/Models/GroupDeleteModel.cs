@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Models
 {
-    internal class DeleteGroupModel
+    public class GroupDeleteModel
     {
+        public int GroupId { get; set; }
     }
 }
