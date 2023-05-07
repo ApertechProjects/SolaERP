@@ -132,8 +132,11 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         #region DML Operations 
         public async Task<int> SaveUserAsync(User entity)
         {
-            string query = @"SET NOCOUNT OFF Exec SP_AppUser_IUD @Id,@FullName,@ChangePassword,@Theme,@UserName,@Email,
-                           @PasswordHash,@PhoneNumber ,@UserTypeId,@VendorId,@UserToken,@Gender,@Buyer,@Description,@ERPUser,@UserPhoto,@SignaturePhoto,@Inactive,@ChangeUserId,@NewId output";
+            string query = @"SET NOCOUNT OFF Exec SP_AppUser_IUD @Id,@FullName,@ChangePassword,@Theme,@UserName
+                                                                ,@Email,@PasswordHash,@PhoneNumber ,@UserTypeId
+                                                                ,@VendorId,@UserToken,@Gender,@Buyer,@Description
+                                                                ,@ERPUser,@UserPhoto,@SignaturePhoto,@Inactive
+                                                                ,@ChangeUserId,@VerifyToken,@NewId output";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = query;
@@ -156,6 +159,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@SignaturePhoto", entity.SignaturePhoto);
                 command.Parameters.AddWithValue(command, "@Inactive", entity.InActive);
                 command.Parameters.AddWithValue(command, "@ChangeUserId", entity.UserId);
+                command.Parameters.AddWithValue(command, "@VerifyToken", entity.VerifyToken);
                 command.Parameters.AddOutPutParameter(command, "@NewId");
                 await command.ExecuteNonQueryAsync();
                 var result = Convert.ToInt32(command.Parameters["@NewId"].Value);
@@ -165,7 +169,9 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public async Task<int> RegisterUserAsync(User entity)
         {
-            string query = "SET NOCOUNT OFF Exec SP_AppUser_IUD @Id,@FullName,@ChangePassword,@Theme,@UserName,@Email,@PasswordHash,@PhoneNumber ,@UserTypeId,@VendorId,@UserToken,@Gender,@Buyer,@Description,@ERPUser,NULL,NULL,0,0,@NewId output";
+            string query = @"SET NOCOUNT OFF Exec SP_AppUser_IUD @Id,@FullName,@ChangePassword,@Theme,@UserName,@Email
+                                                                ,@PasswordHash,@PhoneNumber,@UserTypeId,@VendorId,@UserToken
+                                                                ,@Gender,@Buyer,@Description,@ERPUser,NULL,NULL,0,0,@VerifyToken,@NewId output";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = query;
@@ -184,6 +190,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@Description", entity.Description);
                 command.Parameters.AddWithValue(command, "@ERPUser", entity.ERPUser);
                 command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken.ToString());
+                command.Parameters.AddWithValue(command, "@VerifyToken", entity.VerifyToken);
                 command.Parameters.AddOutPutParameter(command, "@NewId");
                 await command.ExecuteNonQueryAsync();
                 var result = Convert.ToInt32(command.Parameters["@NewId"].Value);
@@ -443,21 +450,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<bool> CheckTokenAsync(Guid authToken)
-        {
-            string query = "SET NOCOUNT OFF select [dbo].[SF_CheckToken1] (@UserToken) as 'ReturnInfo'";
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = query;
-                command.Parameters.AddWithValue(command, "@UserToken", authToken);
-                using var reader = await command.ExecuteReaderAsync();
-                if (reader.Read())
-                {
-                    return reader.Get<bool>("ReturnInfo");
-                }
-                return false;
-            }
-        }
 
         public async Task<bool> SetUserEmailCode(string token, int id)
         {
@@ -555,6 +547,31 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@filePath", filePath);
 
                 return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> ConfirmEmail(string verifyToken)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF exec SP_ConfirmUserToken @verifyToken";
+                command.Parameters.AddWithValue(command, "@verifyToken", verifyToken);
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> CheckEmailIsVerified(string email)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "Select SF_CheckUserVerify(@email) IsVerified";
+                command.Parameters.AddWithValue(command, "@email", email);
+                using var reader = await command.ExecuteReaderAsync();
+                bool res = false;
+                if (reader.Read())
+                    res = reader.Get<bool>("IsVerified");
+
+                return res;
             }
         }
 

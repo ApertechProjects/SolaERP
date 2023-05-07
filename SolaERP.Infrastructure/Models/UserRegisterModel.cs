@@ -1,10 +1,5 @@
 ﻿using SolaERP.Application.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace SolaERP.Application.Models
 {
@@ -23,5 +18,7 @@ namespace SolaERP.Application.Models
         [JsonIgnore]
         public Guid UserToken { get; set; }
         public UserRegisterType UserType { get; set; }
+        [JsonIgnore]
+        public string VerifyToken { get; set; }
     }
 }

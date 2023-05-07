@@ -363,12 +363,22 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<bool>.Fail("Data can not be saved", 400);
         }
 
-        //public Task<ApiResponse<bool>> UploadFilesAsync(string email, List<IFormFile> files, CancellationToken cancellationToken)
-        //{
-        //    for(int i =0;i<files.Count;i++) 
-        //    {
-        //        _fileService
-        //    }
-        //}
+        public async Task<ApiResponse<bool>> ConfirmEmail(string verifyToken)
+        {
+            if (string.IsNullOrEmpty(verifyToken))
+                return ApiResponse<bool>.Fail("Verify Token is empty", 400);
+
+            var user = await _userRepository.ConfirmEmail(verifyToken);
+            await _unitOfWork.SaveChangesAsync();
+
+            if (user)
+                return ApiResponse<bool>.Success(200);
+            return ApiResponse<bool>.Fail("Email can not be confirmed", 400);
+        }
+
+        public async Task<bool> CheckEmailIsVerified(string email)
+        {
+            var result = await _userRepository.CheckEmailIsVerified(email);
+        }
     }
 }

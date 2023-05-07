@@ -14,7 +14,10 @@ namespace SolaERP.Infrastructure.Services
             _configuration = configuration;
         }
 
-
+        public Task<bool> SendEmailMessage<T>(string template, T viewModel, string to, string subject)
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task SendMailAsync(string to, string subject, string body, bool isBodyHtml = true)
         {

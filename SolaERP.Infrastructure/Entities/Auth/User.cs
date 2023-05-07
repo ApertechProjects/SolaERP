@@ -46,5 +46,6 @@ namespace SolaERP.Application.Entities.Auth
         public bool InActive { get; set; }
         public string RefreshToken { get; set; }
         public DateTime RefreshTokenEndDate { get; set; }
+        public string VerifyToken { get; set; }
     }
 }

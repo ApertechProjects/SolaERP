@@ -4,8 +4,10 @@ namespace SolaERP.Infrastructure.Services
 {
     public abstract class MailServiceBase : IMailService
     {
-
-
+        public Task<bool> SendEmailMessage<T>(string template, T viewModel, string to, string subject)
+        {
+            throw new NotImplementedException();
+        }
 
         public Task SendMailAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
         {

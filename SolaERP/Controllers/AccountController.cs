@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Shared;
-using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Models;
-using SolaERP.Business.Dtos.EntityDtos.User;
 
 namespace SolaERP.Controllers
 {
@@ -48,8 +46,8 @@ namespace SolaERP.Controllers
 
             var userdto = _mapper.Map<UserRegisterModel>(user);
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
-
-            if (signInResult.Succeeded)
+            var emailVerified = await _userService.CheckEmailIsVerified(dto.Email);
+            if (signInResult.Succeeded && emailVerified)
             {
                 await _userService.UpdateSessionAsync(user.Id, 1);
                 var token = await _tokenHandler.GenerateJwtTokenAsync(30, userdto);
@@ -64,16 +62,20 @@ namespace SolaERP.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> ConfirmEmail(string verifyToken)
+            => CreateActionResult(await _userService.ConfirmEmail(verifyToken));
+
+        [HttpPost]
         public async Task<IActionResult> Register(UserRegisterModel dto)
         {
             var newtoken = Guid.NewGuid();
-            //dto.UserToken = newtoken + _tokenHandler.CreateRefreshToken();
+            dto.VerifyToken = newtoken + _tokenHandler.CreateRefreshToken();
             ApiResponse<int> response = response = await _userService.UserRegisterAsync(dto);
 
             AccountResponseDto account = new();
             if (response.Data > 0)
             {
-                account.Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto);
+                //account.Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto);
                 account.UserId = response.Data;
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
             }

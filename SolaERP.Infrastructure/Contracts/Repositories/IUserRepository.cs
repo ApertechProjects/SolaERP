@@ -30,13 +30,14 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<int> RegisterUserAsync(User model);
         Task<UserLoad> GetUserInfoAsync(int userId);
         Task<List<ERPUser>> GetERPUser();
-        Task<bool> CheckTokenAsync(Guid authToken);
         Task<bool> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel);
         Task<List<UsersByGroup>> GetUsersByGroupIdAsync(int groupId);
         Task<bool> UpdateSessionAsync(int userId, int command); // -1 is Dissconnect 1 Connect
         Task<bool> AddGroupToUserAsync(DataTable data, int userId);
         Task<bool> DeleteGroupFromUserAsync(DataTable data, int userId);
         Task<bool> UpdateImgesAsync(string email, Filetype type, string filePath);
+        Task<bool> ConfirmEmail(string verifyToken);
+        Task<bool> CheckEmailIsVerified(string email);
     }
 
     public enum Filetype { Profile = 1, Signature = 2 }
