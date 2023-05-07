@@ -379,6 +379,7 @@ namespace SolaERP.Persistence.Services
         public async Task<bool> CheckEmailIsVerified(string email)
         {
             var result = await _userRepository.CheckEmailIsVerified(email);
+            return result;
         }
     }
 }
