@@ -1,7 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using FluentEmail.Core;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using SolaERP.Application.Contracts.Services;
+using System.Dynamic;
 using System.Net;
 using System.Net.Mail;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace SolaERP.Infrastructure.Services
 {
@@ -9,9 +14,14 @@ namespace SolaERP.Infrastructure.Services
     public class MailService : IMailService
     {
         private readonly IConfiguration _configuration;
-        public MailService(IConfiguration configuration)
+        private const string TemplatePath = "Web.Api.Infrastructure.Services.Emails.Templates.{0}.cshtml";
+        private readonly IFluentEmail _email;
+        private readonly ILogger<MailService> _logger;
+        public MailService(IConfiguration configuration, IFluentEmail email, ILogger<MailService> logger)
         {
             _configuration = configuration;
+            _email = email;
+            _logger = logger;
         }
 
         public Task<bool> SendEmailMessage<T>(string template, T viewModel, string to, string subject)
@@ -240,6 +250,47 @@ namespace SolaERP.Infrastructure.Services
                     }
                 }
             }
+        }
+
+        public async Task<bool> SendUsingTemplate<T>(string subject, string to, T viewModel)
+        {
+            var result = await _email.To(to)
+                .Subject(subject)
+                .UsingTemplateFromEmbedded(TemplatePath, ToExpando(viewModel), GetType().Assembly)
+                .SendAsync();
+
+            if (!result.Successful)
+                _logger.LogError("Failed to send an email.\n{Errors}", string.Join(Environment.NewLine, result.ErrorMessages));
+
+            return result.Successful;
+        }
+
+        private static ExpandoObject ToExpando(object model)
+        {
+            if (model is ExpandoObject exp)
+                return exp;
+
+            IDictionary<string, object> expando = new ExpandoObject();
+            foreach (var propertyDescriptor in model.GetType().GetTypeInfo().GetProperties())
+            {
+                var obj = propertyDescriptor.GetValue(model);
+                if (obj != null && IsAnonymousType(obj.GetType()))
+                    obj = ToExpando(obj);
+                expando.Add(propertyDescriptor.Name, obj);
+            }
+            return (ExpandoObject)expando;
+        }
+
+        private static bool IsAnonymousType(Type type)
+        {
+            bool hasCompilerGeneratedAttribute = type.GetTypeInfo()
+                .GetCustomAttributes(typeof(CompilerGeneratedAttribute), false)
+                .Any();
+
+            bool nameContainsAnonymousType = type.FullName.Contains("AnonymousType");
+            bool isAnonymousType = hasCompilerGeneratedAttribute && nameContainsAnonymousType;
+
+            return isAnonymousType;
         }
     }
 }
