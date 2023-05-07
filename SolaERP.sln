@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.SignalR", "SolaERP.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.Infrastructure", "Sola.ERP.Infrastructure\SolaERP.Infrastructure.csproj", "{6FFF2401-5F6E-40A5-9452-7A0DFF25AB82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolaERP.FileWorker", "SolaERP.FileWorker\SolaERP.FileWorker.csproj", "{864D4973-C732-4010-851B-37D19DB91100}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolaERP.FileWorker", "SolaERP.FileWorker\SolaERP.FileWorker.csproj", "{864D4973-C732-4010-851B-37D19DB91100}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
