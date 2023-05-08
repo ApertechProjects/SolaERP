@@ -47,7 +47,7 @@
                                     <h4>
                                         @string.Format(Model.Body,@Model.Username);
                                     </h4>
-                                    <p style="text-align: center;"><a href="#" class="btn btn-primary" onClick="sendRequest()">Verify Email Now</a></p>
+                                    <p style="text-align: center;"><a href="#" class="btn btn-primary" onClick="sendRequest()">@Model.GenerateButtonText();</a></p>
                                     <p style="color:black;">@Model.GenerateCompanyNameTeamText();</p>
                                     <p style="font-weight: bold;">Developed by Apertech Team.</p>
                                 </div>
@@ -64,8 +64,8 @@
                 </td>
             </tr>
         </table>
-
     </div>
+
 
     <script>
         function sendRequest() {

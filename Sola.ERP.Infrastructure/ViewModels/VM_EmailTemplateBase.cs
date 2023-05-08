@@ -1,5 +1,7 @@
-﻿using SolaERP.Application.Enums;
-
+﻿using SolaERP.Application.Entities.Language;
+using SolaERP.Application.Enums;
+using System.Security.Cryptography.X509Certificates;
+using Language = SolaERP.Application.Enums.Language;
 
 namespace SolaERP.Infrastructure.ViewModels
 {
@@ -38,6 +40,15 @@ namespace SolaERP.Infrastructure.ViewModels
             {
                 Language.Aze => $@"{CompanyName} Şirkəti.",
                 Language.Eng => $@"{CompanyName} Team",
+            };
+        }
+
+        public string GenerateDevelopedInformationText()
+        {
+            return this.Language switch
+            {
+                Language.Aze => "Apertech Şirkəti tərəfindən hazırlanıb.",
+                Language.Eng => "Developed by Apertech Team",
             };
         }
     }
