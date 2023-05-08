@@ -5,6 +5,7 @@ using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Models;
+using SolaERP.Infrastructure.ViewModels;
 
 namespace SolaERP.Controllers
 {
@@ -16,18 +17,21 @@ namespace SolaERP.Controllers
         private readonly IUserService _userService;
         private readonly ITokenHandler _tokenHandler;
         private readonly IMapper _mapper;
+        private readonly IMailService _mailService;
 
         public AccountController(UserManager<Application.Entities.Auth.User> userManager,
                                  SignInManager<Application.Entities.Auth.User> signInManager,
                                  IUserService userService,
                                  ITokenHandler handler,
-                                 IMapper mapper)
+                                 IMapper mapper,
+                                 IMailService mailService)
         {
             _userService = userService;
             _signInManager = signInManager;
             _userManager = userManager;
             _tokenHandler = handler;
             _mapper = mapper;
+            _mailService = mailService;
         }
 
 
@@ -70,17 +74,24 @@ namespace SolaERP.Controllers
         {
             var newtoken = Guid.NewGuid();
             dto.VerifyToken = newtoken + _tokenHandler.CreateRefreshToken();
-            ApiResponse<int> response = response = await _userService.UserRegisterAsync(dto);
+            //ApiResponse<int> response = response = await _userService.UserRegisterAsync(dto);
 
             AccountResponseDto account = new();
-            if (response.Data > 0)
-            {
-                //account.Token = await _tokenHandler.GenerateJwtTokenAsync(60, dto);
-                account.UserId = response.Data;
-                return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
-            }
+            //if (response.Data > 0)
+            //{
+            VM_RegistrationPending model = new VM_RegistrationPending();
+            model.FullName = "Hulya Garibli";
+            model.UserName = "hulya.garibli@apertech.net";
+            model.CompanyName = "Apertech";
+            model.Header = "Registration pending for approvals";
+            model.Body = "Thank you for signing up, @UserName.<br>  Please Dear @FullName, Your registration is pending for Approvals. Please wait for the company decision or contact responsible person.";
 
-            return CreateActionResult(ApiResponse<bool>.Fail(response.Errors, 422));
+            await _mailService.SendUsingTemplate("Test", "hulya.garibli@apertech.net", model);
+            //account.UserId = response.Data;
+            return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
+            //}
+
+            //return CreateActionResult(ApiResponse<bool>.Fail(response.Errors, 422));
         }
 
 

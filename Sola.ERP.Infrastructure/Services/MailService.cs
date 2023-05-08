@@ -14,7 +14,7 @@ namespace SolaERP.Infrastructure.Services
     public class MailService : IMailService
     {
         private readonly IConfiguration _configuration;
-        private const string TemplatePath = "Web.Api.Infrastructure.Services.Emails.Templates.{0}.cshtml";
+        private const string TemplatePath = @"SolaERP.API/wwwroot/sources/templates/RegistrationPending.cshtml";
         private readonly IFluentEmail _email;
         private readonly ILogger<MailService> _logger;
         public MailService(IConfiguration configuration, IFluentEmail email, ILogger<MailService> logger)
@@ -256,7 +256,7 @@ namespace SolaERP.Infrastructure.Services
         {
             var result = await _email.To(to)
                 .Subject(subject)
-                .UsingTemplateFromEmbedded(TemplatePath, ToExpando(viewModel), GetType().Assembly)
+                .UsingTemplateFromEmbedded(@"wwwroot.sources.templates.RegistrationPending.cshtml", ToExpando(viewModel), GetType().Assembly)
                 .SendAsync();
 
             if (!result.Successful)
