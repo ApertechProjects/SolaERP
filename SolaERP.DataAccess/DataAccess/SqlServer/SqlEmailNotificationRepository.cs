@@ -1,7 +1,8 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Application.Contracts.Repositories;
+﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.Email;
+using SolaERP.Application.Enums;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
@@ -62,6 +63,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@Description", null);
 
             return await command.ExecuteNonQueryAsync() > 0;
+        }
+
+        public async Task<string> GetCompanyName(string email)
+        {
+            string result = string.Empty;
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = "select * from VW_CompanyName";
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+                result = reader.Get<string>("CompanyName");
+            return result;
+        }
+
+        public Task<EmailTemplateData> GetEmailTemplateDatas(Language language, EmailTemplateKey templateKey)
+        {
+            throw new NotImplementedException();
         }
     }
 }
