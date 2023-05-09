@@ -78,26 +78,42 @@ namespace SolaERP.Controllers
         {
             var newtoken = Guid.NewGuid();
             dto.VerifyToken = newtoken + _tokenHandler.CreateRefreshToken();
-            //ApiResponse<int> response = response = await _userService.UserRegisterAsync(dto);
+            ApiResponse<int> response = response = await _userService.UserRegisterAsync(dto);
 
             AccountResponseDto account = new();
-            //if (response.Data > 0)
-            //{
-            var templateData = await _emailNotificationService.GetEmailTemplateData(dto.language, EmailTemplateKey.VER);
-            VM_RegistrationPending model = new VM_RegistrationPending()
+            if (response.Data > 0)
             {
-                FullName = dto.FullName,
-                UserName = dto.UserName,
-                Header = templateData.Header,
-                Body = templateData.Body
-            };
+                var templateDataForRegistrationPending = await _emailNotificationService.GetEmailTemplateData(dto.language, EmailTemplateKey.RP);
+                var templateDataForVerification = await _emailNotificationService.GetEmailTemplateData(dto.language, EmailTemplateKey.VER);
+                var companyName = await _emailNotificationService.GetCompanyName(dto.Email);
+                VM_RegistrationPending registrationPending = new VM_RegistrationPending()
+                {
+                    FullName = dto.FullName,
+                    UserName = dto.UserName,
+                    Header = templateDataForRegistrationPending.Header,
+                    Body = templateDataForRegistrationPending.Body,
+                    Language = dto.language,
+                    CompanyName = companyName,
+                };
+                VM_EmailVerification emailVerification = new VM_EmailVerification()
+                {
+                    Username = dto.UserName,
+                    Body = templateDataForVerification.Body,
+                    CompanyName = companyName,
+                    Header = templateDataForVerification.Header,
+                    Language = dto.language,
+                    Subject = templateDataForVerification.Subject,
+                    Token = dto.VerifyToken,
+                };
 
-            await _mailService.SendUsingTemplate(templateData.Subject, "hulya.garibli@apertech.net", model, model.TemplateName());
-            //account.UserId = response.Data;
-            return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
-            //}
+                await _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject, registrationPending, registrationPending.TemplateName(), new List<string> { "hulya.garibli@apertech.net" });
+                await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification, emailVerification.TemplateName(), new List<string> { "hulya.garibli@apertech.net" });
 
-            //return CreateActionResult(ApiResponse<bool>.Fail(response.Errors, 422));  
+                account.UserId = response.Data;
+                return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
+            }
+
+            return CreateActionResult(ApiResponse<bool>.Fail(response.Errors, 422));
         }
 
 

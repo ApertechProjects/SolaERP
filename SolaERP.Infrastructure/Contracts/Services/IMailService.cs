@@ -7,7 +7,7 @@
         Task SendMailAsync(string[] tos, string subject, string body, bool isBodyHtml = true);
         Task SendPasswordResetMailAsync(string to, string code);
         Task<bool> SendEmailMessage<T>(string template, T viewModel, string to, string subject);
-        Task<bool> SendUsingTemplate<T>(string subject, string to, T viewModel, string templateName);
+        Task<bool> SendUsingTemplate<T>(string subject, T viewModel, string templateName, List<string> tos);
     }
 
 }

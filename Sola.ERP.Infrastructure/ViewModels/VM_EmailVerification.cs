@@ -17,5 +17,10 @@ namespace SolaERP.Infrastructure.ViewModels
                 Language.en => "Verify Email Now",
             };
         }
+
+        public string TemplateName()
+        {
+            return @"EmailVerification.cshtml";
+        }
     }
 }

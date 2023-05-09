@@ -3,11 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RazorLight;
 using SolaERP.Application.Contracts.Services;
-using System.Dynamic;
 using System.Net;
 using System.Net.Mail;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace SolaERP.Infrastructure.Services
 {
@@ -18,12 +15,18 @@ namespace SolaERP.Infrastructure.Services
         private const string TemplatePath = @"SolaERP.API/wwwroot/sources/templates/RegistrationPending.cshtml";
         private IFluentEmail _email;
         private readonly ILogger<MailService> _logger;
+        private readonly RazorLightEngine _razorEngine;
 
         public MailService(IConfiguration configuration, IFluentEmail email, ILogger<MailService> logger)
         {
+            //var rootPath = Path.GetFullPath(@"wwwroot/sources/templates");
             _configuration = configuration;
             _email = email;
             _logger = logger;
+            //_razorEngine = new RazorLightEngineBuilder()
+            //.UseFileSystemProject(rootPath)
+            //.UseMemoryCachingProvider()
+            //.Build();
         }
 
         public Task<bool> SendEmailMessage<T>(string template, T viewModel, string to, string subject)
@@ -251,9 +254,7 @@ namespace SolaERP.Infrastructure.Services
         }
 
 
-
-
-        public async Task<bool> SendUsingTemplate<T>(string subject, string to, T viewModel, string templateName)
+        public async Task<bool> SendUsingTemplate<T>(string subject, T viewModel, string templateName, List<string> tos)
         {
             var rootPath = Path.GetFullPath(@"wwwroot/sources/templates");
 
@@ -263,47 +264,21 @@ namespace SolaERP.Infrastructure.Services
             .Build();
 
             string renderedHtml = await engine.CompileRenderAsync(templateName, viewModel);
-            #region
+
             Email.DefaultSender = _email.Sender;
             _email = Email
             .From("hulya.garibli@apertech.net")
-            .To(to)
             .Subject(subject)
             .UsingTemplate(renderedHtml, viewModel);
-            var response = _email.Send();
-            #endregion
+
+            foreach (var item in tos)
+            {
+                _email.To(item);
+            }
+            var response = await _email.SendAsync();
             return response.Successful;
         }
 
 
-
-
-        private static ExpandoObject ToExpando(object model)
-        {
-            if (model is ExpandoObject exp)
-                return exp;
-
-            IDictionary<string, object> expando = new ExpandoObject();
-            foreach (var propertyDescriptor in model.GetType().GetTypeInfo().GetProperties())
-            {
-                var obj = propertyDescriptor.GetValue(model);
-                if (obj != null && IsAnonymousType(obj.GetType()))
-                    obj = ToExpando(obj);
-                expando.Add(propertyDescriptor.Name, obj);
-            }
-            return (ExpandoObject)expando;
-        }
-
-        private static bool IsAnonymousType(Type type)
-        {
-            bool hasCompilerGeneratedAttribute = type.GetTypeInfo()
-                .GetCustomAttributes(typeof(CompilerGeneratedAttribute), false)
-                .Any();
-
-            bool nameContainsAnonymousType = type.FullName.Contains("AnonymousType");
-            bool isAnonymousType = hasCompilerGeneratedAttribute && nameContainsAnonymousType;
-
-            return isAnonymousType;
-        }
     }
 }

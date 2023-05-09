@@ -11,7 +11,7 @@
     <meta name="x-apple-disable-message-reformatting">
     <title></title>
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
-    <link href="@Url.Content("~/Content/css/emailverification.css")" rel="stylesheet" type="text/css" />
+    <link href="~/Content/css/emailverification.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body width="100%">
@@ -70,7 +70,7 @@
     <script>
         function sendRequest() {
             const token = 'your_api_key';
-            const url = `https://example.com/api?token=${token}`;
+            const url = `https://example.com/api?token=${@Model.Token}`;
         }
     </script>
 </body>

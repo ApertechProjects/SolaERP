@@ -1408,3 +1408,185 @@ See CompilationErrors for detailed information
 
 See CompilationErrors for detailed information
 
+2023-05-09 19:42:41.295 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: 'SolaERP.Infrastructure.ViewModels.VM_RegistrationPending' does not contain a definition for 'GetFooterText'
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at RazorLight.CompiledTemplates.GeneratedTemplate.ExecuteAsync() in /RegistrationPending.cshtml:line 42
+   at RazorLight.TemplateRenderer.RenderPageCoreAsync(ITemplatePage page, PageContext context)
+   at RazorLight.TemplateRenderer.RenderPageAsync(ITemplatePage page, PageContext context, Boolean invokeViewStarts)
+   at RazorLight.TemplateRenderer.RenderAsync(ITemplatePage page)
+   at RazorLight.EngineHandler.RenderTemplateAsync[T](ITemplatePage templatePage, T model, TextWriter textWriter, ExpandoObject viewBag)
+   at RazorLight.EngineHandler.RenderTemplateAsync[T](ITemplatePage templatePage, T model, ExpandoObject viewBag)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at SolaERP.Infrastructure.Services.MailService.SendUsingTemplate[T](String subject, String to, T viewModel, String templateName) in C:\Users\DELL\Desktop\solaerp\Sola.ERP.Infrastructure\Services\MailService.cs:line 265
+   at SolaERP.Controllers.AccountController.Register(UserRegisterModel dto) in C:\Users\DELL\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 95
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-09 19:42:44.761 +04:00 [ERR] 'SolaERP.Infrastructure.ViewModels.VM_RegistrationPending' does not contain a definition for 'GetFooterText'
+2023-05-09 19:45:29.062 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Runtime.CompilerServices.SwitchExpressionException: Non-exhaustive switch expression failed to match its input.
+Unmatched value was 0.
+   at <PrivateImplementationDetails>.ThrowSwitchExpressionException(Object unmatchedValue)
+   at SolaERP.Infrastructure.ViewModels.VM_EmailTemplateBase.GenerateAutomatedEmailText() in C:\Users\DELL\Desktop\solaerp\Sola.ERP.Infrastructure\ViewModels\VM_EmailTemplateBase.cs:line 26
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at RazorLight.CompiledTemplates.GeneratedTemplate.ExecuteAsync() in /RegistrationPending.cshtml:line 42
+   at RazorLight.TemplateRenderer.RenderPageCoreAsync(ITemplatePage page, PageContext context)
+   at RazorLight.TemplateRenderer.RenderPageAsync(ITemplatePage page, PageContext context, Boolean invokeViewStarts)
+   at RazorLight.TemplateRenderer.RenderAsync(ITemplatePage page)
+   at RazorLight.EngineHandler.RenderTemplateAsync[T](ITemplatePage templatePage, T model, TextWriter textWriter, ExpandoObject viewBag)
+   at RazorLight.EngineHandler.RenderTemplateAsync[T](ITemplatePage templatePage, T model, ExpandoObject viewBag)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at SolaERP.Infrastructure.Services.MailService.SendUsingTemplate[T](String subject, String to, T viewModel, String templateName) in C:\Users\DELL\Desktop\solaerp\Sola.ERP.Infrastructure\Services\MailService.cs:line 265
+   at SolaERP.Controllers.AccountController.Register(UserRegisterModel dto) in C:\Users\DELL\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 95
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-09 19:45:32.779 +04:00 [ERR] Non-exhaustive switch expression failed to match its input.
+Unmatched value was 0.
+2023-05-09 19:50:35.708 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Runtime.CompilerServices.SwitchExpressionException: Non-exhaustive switch expression failed to match its input.
+Unmatched value was 0.
+   at <PrivateImplementationDetails>.ThrowSwitchExpressionException(Object unmatchedValue)
+   at SolaERP.Infrastructure.ViewModels.VM_EmailTemplateBase.GenerateAutomatedEmailText() in C:\Users\DELL\Desktop\solaerp\Sola.ERP.Infrastructure\ViewModels\VM_EmailTemplateBase.cs:line 26
+   at RazorLight.CompiledTemplates.GeneratedTemplate.ExecuteAsync() in /RegistrationPending.cshtml:line 45
+   at RazorLight.TemplateRenderer.RenderPageCoreAsync(ITemplatePage page, PageContext context)
+   at RazorLight.TemplateRenderer.RenderPageAsync(ITemplatePage page, PageContext context, Boolean invokeViewStarts)
+   at RazorLight.TemplateRenderer.RenderAsync(ITemplatePage page)
+   at RazorLight.EngineHandler.RenderTemplateAsync[T](ITemplatePage templatePage, T model, TextWriter textWriter, ExpandoObject viewBag)
+   at RazorLight.EngineHandler.RenderTemplateAsync[T](ITemplatePage templatePage, T model, ExpandoObject viewBag)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at SolaERP.Infrastructure.Services.MailService.SendUsingTemplate[T](String subject, String to, T viewModel, String templateName) in C:\Users\DELL\Desktop\solaerp\Sola.ERP.Infrastructure\Services\MailService.cs:line 265
+   at SolaERP.Controllers.AccountController.Register(UserRegisterModel dto) in C:\Users\DELL\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 95
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-09 19:50:39.422 +04:00 [ERR] Non-exhaustive switch expression failed to match its input.
+Unmatched value was 0.
+2023-05-09 19:51:28.300 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Runtime.CompilerServices.SwitchExpressionException: Non-exhaustive switch expression failed to match its input.
+Unmatched value was 0.
+   at <PrivateImplementationDetails>.ThrowSwitchExpressionException(Object unmatchedValue)
+   at SolaERP.Infrastructure.ViewModels.VM_EmailTemplateBase.GenerateAutomatedEmailText() in C:\Users\DELL\Desktop\solaerp\Sola.ERP.Infrastructure\ViewModels\VM_EmailTemplateBase.cs:line 26
+   at RazorLight.CompiledTemplates.GeneratedTemplate.ExecuteAsync() in /RegistrationPending.cshtml:line 45
+   at RazorLight.TemplateRenderer.RenderPageCoreAsync(ITemplatePage page, PageContext context)
+   at RazorLight.TemplateRenderer.RenderPageAsync(ITemplatePage page, PageContext context, Boolean invokeViewStarts)
+   at RazorLight.TemplateRenderer.RenderAsync(ITemplatePage page)
+   at RazorLight.EngineHandler.RenderTemplateAsync[T](ITemplatePage templatePage, T model, TextWriter textWriter, ExpandoObject viewBag)
+   at RazorLight.EngineHandler.RenderTemplateAsync[T](ITemplatePage templatePage, T model, ExpandoObject viewBag)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at SolaERP.Infrastructure.Services.MailService.SendUsingTemplate[T](String subject, String to, T viewModel, String templateName) in C:\Users\DELL\Desktop\solaerp\Sola.ERP.Infrastructure\Services\MailService.cs:line 265
+   at SolaERP.Controllers.AccountController.Register(UserRegisterModel dto) in C:\Users\DELL\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 95
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-09 19:51:29.640 +04:00 [ERR] Non-exhaustive switch expression failed to match its input.
+Unmatched value was 0.
+2023-05-09 19:54:48.142 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Runtime.CompilerServices.SwitchExpressionException: Non-exhaustive switch expression failed to match its input.
+Unmatched value was 0.
+   at <PrivateImplementationDetails>.ThrowSwitchExpressionException(Object unmatchedValue)
+   at SolaERP.Infrastructure.ViewModels.VM_EmailTemplateBase.GenerateAutomatedEmailText() in C:\Users\DELL\Desktop\solaerp\Sola.ERP.Infrastructure\ViewModels\VM_EmailTemplateBase.cs:line 26
+   at RazorLight.CompiledTemplates.GeneratedTemplate.ExecuteAsync() in /RegistrationPending.cshtml:line 45
+   at RazorLight.TemplateRenderer.RenderPageCoreAsync(ITemplatePage page, PageContext context)
+   at RazorLight.TemplateRenderer.RenderPageAsync(ITemplatePage page, PageContext context, Boolean invokeViewStarts)
+   at RazorLight.TemplateRenderer.RenderAsync(ITemplatePage page)
+   at RazorLight.EngineHandler.RenderTemplateAsync[T](ITemplatePage templatePage, T model, TextWriter textWriter, ExpandoObject viewBag)
+   at RazorLight.EngineHandler.RenderTemplateAsync[T](ITemplatePage templatePage, T model, ExpandoObject viewBag)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at SolaERP.Infrastructure.Services.MailService.SendUsingTemplate[T](String subject, String to, T viewModel, String templateName) in C:\Users\DELL\Desktop\solaerp\Sola.ERP.Infrastructure\Services\MailService.cs:line 265
+   at SolaERP.Controllers.AccountController.Register(UserRegisterModel dto) in C:\Users\DELL\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 95
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-09 19:54:50.204 +04:00 [ERR] Non-exhaustive switch expression failed to match its input.
+Unmatched value was 0.
+2023-05-09 19:57:28.302 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Runtime.CompilerServices.SwitchExpressionException: Non-exhaustive switch expression failed to match its input.
+Unmatched value was 0.
+   at <PrivateImplementationDetails>.ThrowSwitchExpressionException(Object unmatchedValue)
+   at SolaERP.Infrastructure.ViewModels.VM_EmailTemplateBase.GenerateAutomatedEmailText() in C:\Users\DELL\Desktop\solaerp\Sola.ERP.Infrastructure\ViewModels\VM_EmailTemplateBase.cs:line 26
+   at RazorLight.CompiledTemplates.GeneratedTemplate.ExecuteAsync() in /RegistrationPending.cshtml:line 45
+   at RazorLight.TemplateRenderer.RenderPageCoreAsync(ITemplatePage page, PageContext context)
+   at RazorLight.TemplateRenderer.RenderPageAsync(ITemplatePage page, PageContext context, Boolean invokeViewStarts)
+   at RazorLight.TemplateRenderer.RenderAsync(ITemplatePage page)
+   at RazorLight.EngineHandler.RenderTemplateAsync[T](ITemplatePage templatePage, T model, TextWriter textWriter, ExpandoObject viewBag)
+   at RazorLight.EngineHandler.RenderTemplateAsync[T](ITemplatePage templatePage, T model, ExpandoObject viewBag)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at SolaERP.Infrastructure.Services.MailService.SendUsingTemplate[T](String subject, String to, T viewModel, String templateName) in C:\Users\DELL\Desktop\solaerp\Sola.ERP.Infrastructure\Services\MailService.cs:line 265
+   at SolaERP.Controllers.AccountController.Register(UserRegisterModel dto) in C:\Users\DELL\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 95
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-09 19:57:29.717 +04:00 [ERR] Non-exhaustive switch expression failed to match its input.
+Unmatched value was 0.
+2023-05-09 22:30:38.537 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidCastException: Unable to cast object of type 'SolaERP.Infrastructure.ViewModels.VM_EmailVerification' to type 'SolaERP.Infrastructure.ViewModels.VM_RegistrationPending'.
+   at RazorLight.TemplatePage`1.SetModel(Object model)
+   at RazorLight.EngineHandler.SetModelContext[T](ITemplatePage templatePage, TextWriter textWriter, T model, ExpandoObject viewBag)
+   at RazorLight.EngineHandler.RenderTemplateAsync[T](ITemplatePage templatePage, T model, TextWriter textWriter, ExpandoObject viewBag)
+   at RazorLight.EngineHandler.RenderTemplateAsync[T](ITemplatePage templatePage, T model, ExpandoObject viewBag)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at SolaERP.Infrastructure.Services.MailService.SendUsingTemplate[T](String subject, T viewModel, String templateName, String[] tos) in C:\Users\DELL\Desktop\solaerp\Sola.ERP.Infrastructure\Services\MailService.cs:line 266
+   at SolaERP.Controllers.AccountController.Register(UserRegisterModel dto) in C:\Users\DELL\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 110
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-09 22:30:42.605 +04:00 [ERR] Unable to cast object of type 'SolaERP.Infrastructure.ViewModels.VM_EmailVerification' to type 'SolaERP.Infrastructure.ViewModels.VM_RegistrationPending'.
