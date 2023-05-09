@@ -273,7 +273,14 @@ namespace SolaERP.Infrastructure.Services
 
             foreach (var item in tos)
             {
-                _email.To(item);
+                try
+                {
+                    _email.To(item);
+                }
+                catch (Exception)
+                {
+
+                }
             }
             var response = await _email.SendAsync();
             return response.Successful;
