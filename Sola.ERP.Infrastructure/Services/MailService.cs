@@ -1,9 +1,7 @@
 ﻿using FluentEmail.Core;
-using FluentEmail.Core.Models;
-using FluentEmail.Razor;
-using FluentEmail.Smtp;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using RazorLight;
 using SolaERP.Application.Contracts.Services;
 using System.Dynamic;
 using System.Net;
@@ -243,10 +241,6 @@ namespace SolaERP.Infrastructure.Services
                         try
                         {
                             await smtpClient.SendMailAsync(message);
-                            // Task.Run(async () =>
-                            //{
-                            //    await smtpClient.SendMailAsync(message);
-                            //});
                         }
                         catch (Exception ex)
                         {
@@ -256,33 +250,38 @@ namespace SolaERP.Infrastructure.Services
             }
         }
 
+
+
+
         public async Task<bool> SendUsingTemplate<T>(string subject, string to, T viewModel)
         {
-            //using SmtpClient smtpClient = new SmtpClient("mail.apertech.net", 587);
-            ////Email.DefaultRenderer = new RazorRenderer();
-            ////Email.DefaultSender = new SmtpSender(smtpClient);
-            //IFluentEmail firstEmail = Email
-            //.From("test@apertech.net")
-            //.To("hulya.garibli@apertech.net")
-            //.Subject("Test Email")
-            //.UsingTemplateFromFile(
-            //@"wwwroot\sources\templates\RegistrationPending.cshtml", viewModel);
+
+            string templateFilePath = @"wwwroot\sources\templates\RegistrationPending.cshtml";
+            string template = System.IO.File.ReadAllText(templateFilePath);
 
 
-            //SendResponse firstEmailResponse = await firstEmail.SendAsync();
+            var rootPath = Path.GetFullPath(@"wwwroot/sources/templates");
+            var engine = new RazorLightEngineBuilder()
+            .UseFileSystemProject(rootPath)
+            .UseMemoryCachingProvider()
+            .Build();
 
-
-            // Create a new email message using FluentEmail
-            Email.DefaultRenderer = new RazorRenderer();
+            string templateKey = "RegistrationPending.cshtml";
+            string renderedHtml = await engine.CompileRenderAsync(templateKey, viewModel);
+            #region
             Email.DefaultSender = _email.Sender;
             _email = Email
             .From("hulya.garibli@apertech.net")
             .To("hulya.garibli@apertech.net") // Send the email message using FluentEmail
             .Subject("Test Email")
-            .UsingTemplate(@"wwwroot\sources\templates\RegistrationPendi.html", viewModel);
+            .UsingTemplate(renderedHtml, viewModel);
             var response = _email.Send();
+            #endregion
             return true;
         }
+
+
+
 
         private static ExpandoObject ToExpando(object model)
         {

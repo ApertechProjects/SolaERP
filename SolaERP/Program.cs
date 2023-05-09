@@ -69,6 +69,8 @@ builder.Services
     .AddRazorRenderer()
     .AddSmtpSender(builder.Configuration["Mail:Host"], Convert.ToInt32(builder.Configuration["Mail:Port"]));
 
+
+
 builder.Services.Configure<HubOptions<ChatHub>>(config =>
 {
     config.ClientTimeoutInterval = TimeSpan.FromMinutes(30);

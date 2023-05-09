@@ -91,7 +91,7 @@ namespace SolaERP.Controllers
             return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
             //}
 
-            //return CreateActionResult(ApiResponse<bool>.Fail(response.Errors, 422));
+            //return CreateActionResult(ApiResponse<bool>.Fail(response.Errors, 422));  
         }
 
 
