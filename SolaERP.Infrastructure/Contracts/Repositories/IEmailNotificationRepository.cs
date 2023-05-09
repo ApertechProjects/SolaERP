@@ -10,7 +10,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> UpdateAsync(EmailNotification model);
         Task<bool> DeleteAsync(int id);
         Task<string> GetCompanyName(string email);
-        Task<EmailTemplateData> GetEmailTemplateDatas(Language language, EmailTemplateKey templateKey);
+        Task<EmailTemplateData> GetEmailTemplateData(Language language, EmailTemplateKey templateKey);
 
     }
 }

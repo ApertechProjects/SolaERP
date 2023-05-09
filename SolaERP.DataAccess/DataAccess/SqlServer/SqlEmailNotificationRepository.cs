@@ -76,9 +76,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return result;
         }
 
-        public Task<EmailTemplateData> GetEmailTemplateDatas(Language language, EmailTemplateKey templateKey)
+        public async Task<EmailTemplateData> GetEmailTemplateData(Language language, EmailTemplateKey templateKey)
         {
-            throw new NotImplementedException();
+            EmailTemplateData emailTemplate = new();
+
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = "select * from FN_GetMailTemplateData(@TemplateKey,@Language)";
+            command.Parameters.AddWithValue(command, "@TemplateKey", templateKey.ToString());
+            command.Parameters.AddWithValue(command, "@Language", language.ToString());
+
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync()) emailTemplate = reader.GetByEntityStructure<EmailTemplateData>();
+
+            return emailTemplate;
         }
     }
 }

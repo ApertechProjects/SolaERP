@@ -253,31 +253,26 @@ namespace SolaERP.Infrastructure.Services
 
 
 
-        public async Task<bool> SendUsingTemplate<T>(string subject, string to, T viewModel)
+        public async Task<bool> SendUsingTemplate<T>(string subject, string to, T viewModel, string templateName)
         {
-
-            string templateFilePath = @"wwwroot\sources\templates\RegistrationPending.cshtml";
-            string template = System.IO.File.ReadAllText(templateFilePath);
-
-
             var rootPath = Path.GetFullPath(@"wwwroot/sources/templates");
+
             var engine = new RazorLightEngineBuilder()
             .UseFileSystemProject(rootPath)
             .UseMemoryCachingProvider()
             .Build();
 
-            string templateKey = "RegistrationPending.cshtml";
-            string renderedHtml = await engine.CompileRenderAsync(templateKey, viewModel);
+            string renderedHtml = await engine.CompileRenderAsync(templateName, viewModel);
             #region
             Email.DefaultSender = _email.Sender;
             _email = Email
             .From("hulya.garibli@apertech.net")
-            .To("hulya.garibli@apertech.net") // Send the email message using FluentEmail
-            .Subject("Test Email")
+            .To(to)
+            .Subject(subject)
             .UsingTemplate(renderedHtml, viewModel);
             var response = _email.Send();
             #endregion
-            return true;
+            return response.Successful;
         }
 
 

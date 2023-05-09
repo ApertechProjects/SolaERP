@@ -1,5 +1,4 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
-using SolaERP.Application.Enums;
+﻿using SolaERP.Application.Enums;
 
 namespace SolaERP.Infrastructure.ViewModels
 {
@@ -14,8 +13,8 @@ namespace SolaERP.Infrastructure.ViewModels
         {
             return base.Language switch
             {
-                Language.Aze => "E-poçtu indi təsdiq et",
-                Language.Eng => "Verify Email Now",
+                Language.az => "E-poçtu indi təsdiq et",
+                Language.en => "Verify Email Now",
             };
         }
     }

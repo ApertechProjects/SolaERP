@@ -70,6 +70,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IFileService, FileService>();
             builder.Services.AddScoped<IFileProducer, FileProducer>();
             builder.Services.AddScoped<IStorage, LocalStorage>();
+            builder.Services.AddScoped<IEmailNotificationService, EmailNotificationService>();
 
         }
         private static void UseRepositories(this WebApplicationBuilder builder)

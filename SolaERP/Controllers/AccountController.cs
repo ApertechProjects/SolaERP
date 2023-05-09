@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Infrastructure.ViewModels;
 
@@ -18,13 +19,15 @@ namespace SolaERP.Controllers
         private readonly ITokenHandler _tokenHandler;
         private readonly IMapper _mapper;
         private readonly IMailService _mailService;
+        private readonly IEmailNotificationService _emailNotificationService;
 
         public AccountController(UserManager<Application.Entities.Auth.User> userManager,
                                  SignInManager<Application.Entities.Auth.User> signInManager,
                                  IUserService userService,
                                  ITokenHandler handler,
                                  IMapper mapper,
-                                 IMailService mailService)
+                                 IMailService mailService,
+                                 IEmailNotificationService emailNotificationService)
         {
             _userService = userService;
             _signInManager = signInManager;
@@ -32,6 +35,7 @@ namespace SolaERP.Controllers
             _tokenHandler = handler;
             _mapper = mapper;
             _mailService = mailService;
+            _emailNotificationService = emailNotificationService;
         }
 
 
@@ -79,14 +83,16 @@ namespace SolaERP.Controllers
             AccountResponseDto account = new();
             //if (response.Data > 0)
             //{
-            VM_RegistrationPending model = new VM_RegistrationPending();
-            model.FullName = "Hulya Garibli";
-            model.UserName = "hulya.garibli@apertech.net";
-            model.CompanyName = "Apertech";
-            model.Header = "Registration pending for approvals";
-            model.Body = "Thank you for signing up, @UserName.<br>  Please Dear @FullName, Your registration is pending for Approvals. Please wait for the company decision or contact responsible person.";
+            var templateData = await _emailNotificationService.GetEmailTemplateData(dto.language, EmailTemplateKey.VER);
+            VM_RegistrationPending model = new VM_RegistrationPending()
+            {
+                FullName = dto.FullName,
+                UserName = dto.UserName,
+                Header = templateData.Header,
+                Body = templateData.Body
+            };
 
-            await _mailService.SendUsingTemplate("Test", "hulya.garibli@apertech.net", model);
+            await _mailService.SendUsingTemplate(templateData.Subject, "hulya.garibli@apertech.net", model, model.TemplateName());
             //account.UserId = response.Data;
             return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
             //}

@@ -1,7 +1,11 @@
-﻿namespace SolaERP.Application.Contracts.Services
+﻿using SolaERP.Application.Dtos.Email;
+using SolaERP.Application.Enums;
+
+namespace SolaERP.Application.Contracts.Services
 {
     public interface IEmailNotificationService
     {
         Task<string> GetCompanyName(string email);
+        Task<EmailTemplateDataDto> GetEmailTemplateData(Language language, EmailTemplateKey templateKey);
     }
 }
