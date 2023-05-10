@@ -15,9 +15,7 @@
     <EmbeddedResource Remove="wwwroot\UserImages\**" />
     <None Remove="wwwroot\UserImages\**" />
     <Content Remove="wwwroot\Content\css\emailverification.css" />
-    <Content Remove="wwwroot\sources\templates\EmailVerification.cshtml" />
     <Content Remove="wwwroot\sources\templates\vypt5elo.e2o~" />
-    <Resource Include="wwwroot\sources\templates\EmailVerification.cshtml" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
