@@ -233,7 +233,7 @@ namespace SolaERP.Infrastructure.Services
                     {
                         foreach (string item in tos)
                         {
-                            message.From = new MailAddress("test@apertech.com", "Apertech");
+                            message.From = new MailAddress(_configuration["Mail:UserName"], "Apertech");
                             message.Subject = subject;
                             message.IsBodyHtml = isBodyHtml;
                             message.Body = body;
@@ -256,6 +256,11 @@ namespace SolaERP.Infrastructure.Services
 
         public async Task<bool> SendUsingTemplate<T>(string subject, T viewModel, string templateName, List<string> tos)
         {
+            //string imagePath = Path.GetFullPath(@"wwwroot/Content/css/emailverification.css");
+            //byte[] imageBytes = System.IO.File.ReadAllBytes(imagePath);
+
+            //string base64Image = Convert.ToBase64String(imageBytes);
+            //// Convert the image bytes to a base64 string
             var rootPath = Path.GetFullPath(@"wwwroot/sources/templates");
 
             var engine = new RazorLightEngineBuilder()
@@ -264,13 +269,16 @@ namespace SolaERP.Infrastructure.Services
             .UseMemoryCachingProvider()
             .Build();
 
+
             string renderedHtml = await engine.CompileRenderAsync(templateName, viewModel);
 
+            var processedBody = PreMailer.Net.PreMailer.MoveCssInline(renderedHtml, true).Html;
             Email.DefaultSender = _email.Sender;
             _email = Email
             .From("hulya.garibli@apertech.net")
             .Subject(subject)
-            .UsingTemplate(renderedHtml, viewModel);
+            .UsingTemplate(processedBody, viewModel);
+
 
             foreach (var item in tos)
             {

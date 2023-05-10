@@ -2,8 +2,7 @@
 @{
     Layout = null;
 }
-
-
+<html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
@@ -11,9 +10,168 @@
     <meta name="x-apple-disable-message-reformatting">
     <title></title>
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
-    <link href="~/Content/css/emailverification.css" rel="stylesheet" type="text/css" />
-    <style>
+    <style type="text/css">
+        html,
+        body {
+            margin: 2rem auto !important;
+            padding: 0 !important;
+            width: 100% !important;
+            background: #f1f1f1;
+        }
 
+
+        table {
+            border-spacing: 0 !important;
+            border-collapse: collapse !important;
+            table-layout: fixed !important;
+            margin: 0 auto !important;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        @@ media only screen and (min-device-width: 320px) and (max-device-width: 374px) {
+            u ~ div .email-container {
+                min-width: 320px !important;
+            }
+        }
+
+        /* iPhone 6, 6S, 7, 8, and X */
+        @@ media only screen and (min-device-width: 375px) and (max-device-width: 413px) {
+            u ~ div .email-container {
+                min-width: 375px !important;
+            }
+        }
+
+        /* iPhone 6+, 7+, and 8+ */
+        @@ media only screen and (min-device-width: 414px) {
+            u ~ div .email-container {
+                min-width: 414px !important;
+            }
+        }
+
+
+        .bg_white {
+            background: #ffffff;
+        }
+
+        .bg_light {
+            background: #fafafa;
+        }
+
+        .bg_black {
+            background: #000000;
+        }
+
+        .bg_dark {
+            background: rgba(0, 0, 0, .8);
+        }
+
+        .email-section {
+            padding: 2.5em;
+        }
+
+        /*BUTTON*/
+        .btn {
+            padding: 10px 15px;
+            display: inline-block;
+        }
+
+            .btn.btn-primary {
+                border-radius: 5px;
+                background: #5b16b6;
+                color: #ffffff;
+            }
+
+            .btn.btn-white {
+                border-radius: 5px;
+                background: #ffffff;
+                color: #000000;
+            }
+
+            .btn.btn-white-outline {
+                border-radius: 5px;
+                background: transparent;
+                border: 1px solid #fff;
+                color: #fff;
+            }
+
+            .btn.btn-black-outline {
+                border-radius: 0px;
+                background: transparent;
+                border: 2px solid #000;
+                color: #000;
+                font-weight: 700;
+            }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Lato', sans-serif;
+            color: #000000;
+            margin-top: 0;
+            font-weight: 400;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            font-weight: 400;
+            font-size: 15px;
+            line-height: 1.8;
+            color: rgba(0, 0, 0, .4);
+        }
+
+        a {
+            color: #30e3ca;
+        }
+
+        /*LOGO*/
+
+        .logo h1 {
+            margin: 0;
+        }
+
+        .logo h1 {
+            color: #32abdb;
+            font-size: 24px;
+            font-weight: 700;
+            font-family: 'Lato', sans-serif;
+        }
+
+        /*HERO*/
+        .hero {
+            position: relative;
+            z-index: 0;
+        }
+
+            .hero .text {
+                color: rgba(0, 0, 0, .3);
+            }
+
+                .hero .text h2 {
+                    color: #000;
+                    font-size: 40px;
+                    margin-bottom: 0;
+                    font-weight: 400;
+                    line-height: 1.4;
+                }
+
+                .hero .text h3 {
+                    font-size: 24px;
+                    font-weight: 300;
+                }
+
+                .hero .text h2 span {
+                    font-weight: 600;
+                    color: #30e3ca;
+                }
+
+        @@ media screen and (max-width: 500px) {
+        }
     </style>
 </head>
 
@@ -34,8 +192,7 @@
             </tr>
             <tr>
                 <td valign="middle" class="hero bg_white">
-                    <img src="https://newoldstamp.com/system/posts/og_images/000/000/298/original/Images_in_Email_Everything_You_Need_to_Know_and_Even_More_-_Facebook.png?1592831717"
-                         alt="" style="width: 200px; max-width: 400px; height: auto; margin: auto; display: block;">
+                    <img src=@Model.ImageBase64() alt="" style="width: 200px; max-width: 400px; height: auto; margin: auto; display: block;" />
                 </td>
             </tr>
             <tr>
@@ -45,13 +202,13 @@
                             <td>
                                 <div class="text" style="padding: 0 2.5em; text-align: start;">
                                     <h4 style="color: gray; text-align: center; font-weight: bold;">
-                                        @Model.GenerateAutomatedEmailText();
+                                        @Model.GenerateAutomatedEmailText()
                                     </h4>
                                     <h4>
-                                        @string.Format(Model.Body,@Model.Username);
+                                        @string.Format(Model.Body,@Model.Username)
                                     </h4>
-                                    <p style="text-align: center;"><a href="#" class="btn btn-primary" onClick="sendRequest()">@Model.GenerateButtonText();</a></p>
-                                    <p style="color:black;">@Model.GenerateCompanyNameTeamText();</p>
+                                    <p style="text-align: center;"><a href="#" class="btn btn-primary" onClick="sendRequest()">@Model.GenerateButtonText()</a></p>
+                                    <p style="color:black;">@Model.GenerateCompanyNameTeamText()</p>
                                     <p style="font-weight: bold;">@Model.GenerateDevelopedInformationText()</p>
                                 </div>
                             </td>
@@ -63,7 +220,7 @@
         <table width="100%">
             <tr>
                 <td class="bg_light" style="text-align: center; color: #000; font-size:14px;">
-                    <p>@Model.GenerateCopyRightText();</p>
+                    <p>@Model.GenerateCopyRightText()</p>
                 </td>
             </tr>
         </table>
@@ -73,9 +230,9 @@
     <script>
         function sendRequest() {
             const token = 'your_api_key';
-            const url = `https://example.com/api?token=${@Model.Token}`;
+            const url = `http:116.203.90.202:3294/api/Account/ConfirmEmail?token=${@Model.Token}`;
         }
     </script>
 </body>
-
+</html>
 
