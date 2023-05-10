@@ -14,6 +14,10 @@
     <Content Remove="wwwroot\UserImages\**" />
     <EmbeddedResource Remove="wwwroot\UserImages\**" />
     <None Remove="wwwroot\UserImages\**" />
+    <Content Remove="wwwroot\Content\css\emailverification.css" />
+    <Content Remove="wwwroot\sources\templates\EmailVerification.cshtml" />
+    <Content Remove="wwwroot\sources\templates\vypt5elo.e2o~" />
+    <Resource Include="wwwroot\sources\templates\EmailVerification.cshtml" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
@@ -46,8 +50,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\Content\image\" />
     <Folder Include="wwwroot\sources\images\" />
     <Folder Include="wwwroot\sources\signatures\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="wwwroot\Content\css\emailverification.css" />
   </ItemGroup>
 
   <ItemGroup>

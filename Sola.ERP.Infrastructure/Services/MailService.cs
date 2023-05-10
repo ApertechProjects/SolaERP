@@ -260,6 +260,7 @@ namespace SolaERP.Infrastructure.Services
 
             var engine = new RazorLightEngineBuilder()
             .UseFileSystemProject(rootPath)
+            .EnableEncoding()
             .UseMemoryCachingProvider()
             .Build();
 
@@ -277,7 +278,7 @@ namespace SolaERP.Infrastructure.Services
                 {
                     _email.To(item);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
 
                 }

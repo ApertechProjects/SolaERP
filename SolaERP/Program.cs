@@ -40,8 +40,6 @@ builder.Services.Configure<StorageOption>(builder.Configuration.GetSection("Stor
 
 
 
-
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.Configure<ApiBehaviorOptions>(config => { config.SuppressModelStateInvalidFilter = true; });

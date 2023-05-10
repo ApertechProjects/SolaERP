@@ -67,8 +67,8 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<ILayoutService, LayoutService>();
             builder.Services.AddScoped<ILanguageService, LanguageService>();
             builder.Services.AddScoped<IVendorService, VendorService>();
-            builder.Services.AddScoped<IFileService, FileService>();
-            builder.Services.AddScoped<IFileProducer, FileProducer>();
+            //builder.Services.AddScoped<IFileService, FileService>();
+            //builder.Services.AddScoped<IFileProducer, FileProducer>();
             builder.Services.AddScoped<IStorage, LocalStorage>();
             builder.Services.AddScoped<IEmailNotificationService, EmailNotificationService>();
 
@@ -137,7 +137,7 @@ namespace SolaERP.Extensions
 
         private static void UseInfrastructureServices(this WebApplicationBuilder builder)
         {
-            builder.Services.AddScoped<IFileService, FileService>();
+            //builder.Services.AddScoped<IFileService, FileService>();
         }
     }
 }
