@@ -192,7 +192,9 @@
             </tr>
             <tr>
                 <td valign="middle" class="hero bg_white">
-                    <img src=@Model.ImageBase64() alt="" style="width: 200px; max-width: 400px; height: auto; margin: auto; display: block;" />
+                    <div style="text-align: center;">
+                        <img src="https://newoldstamp.com/system/posts/og_images/000/000/298/original/Images_in_Email_Everything_You_Need_to_Know_and_Even_More_-_Facebook.png?1592831717" alt="" width="200" height="200" style="max-width: 200px; margin: auto; display: block;" />
+                    </div>
                 </td>
             </tr>
             <tr>
@@ -208,6 +210,7 @@
                                         @string.Format(Model.Body,@Model.Username)
                                     </h4>
                                     <p style="text-align: center;"><a href="#" class="btn btn-primary" onClick="sendRequest()">@Model.GenerateButtonText()</a></p>
+
                                     <p style="color:black;">@Model.GenerateCompanyNameTeamText()</p>
                                     <p style="font-weight: bold;">@Model.GenerateDevelopedInformationText()</p>
                                 </div>
