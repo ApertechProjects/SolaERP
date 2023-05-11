@@ -105,8 +105,7 @@ namespace SolaERP.Controllers
                 Subject = templateDataForVerification.Subject,
                 Token = dto.VerifyToken,
             };
-            string[] c = { "" };
-            await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification, emailVerification.TemplateName(), new List<string> { "hulya.garibli@apertech.net" });
+            await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification, emailVerification.TemplateName(), emailVerification.ImageName(), new List<string> { "hulya.garibli@apertech.net" });
             //await _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject, registrationPending, registrationPending.TemplateName(), new List<string> { "hulya.garibli@apertech.net" });
 
             //account.UserId = response.Data;

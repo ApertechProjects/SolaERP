@@ -1,24 +1,11 @@
 ﻿using FluentEmail.Core;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using RazorEngine.Compilation;
 using RazorLight;
 using SolaERP.Application.Contracts.Services;
-using System.Composition;
-using System.Diagnostics.Contracts;
-using System.Drawing.Imaging;
-using System.Drawing.Printing;
-using System;
 using System.Net;
 using System.Net.Mail;
-using DinkToPdf;
-using ColorMode = DinkToPdf.ColorMode;
-using PaperKind = DinkToPdf.PaperKind;
-using DinkToPdf.Contracts;
-using iTextSharp.text.pdf.qrcode;
+using System.Net.Mime;
 
 namespace SolaERP.Infrastructure.Services
 {
@@ -268,40 +255,97 @@ namespace SolaERP.Infrastructure.Services
         }
 
 
-        public async Task<bool> SendUsingTemplate<T>(string subject, T viewModel, string templateName, List<string> tos)
+        public async Task<bool> SendUsingTemplate<T>(string subject, T viewModel, string templateName, string imageName, List<string> tos)
         {
-            var rootPath = Path.GetFullPath(@"wwwroot/sources/templates");
+            #region
+            //var rootPath = Path.GetFullPath(@"wwwroot/sources/templates");
+
+            //var engine = new RazorLightEngineBuilder()
+            //.UseFileSystemProject(rootPath)
+            //.EnableEncoding()
+            //.UseMemoryCachingProvider()
+            //.Build();
+
+
+            //string renderedHtml = await engine.CompileRenderAsync(templateName, viewModel);
+
+            //var processedBody = PreMailer.Net.PreMailer.MoveCssInline(renderedHtml, true).Html;
+            //Email.DefaultSender = _email.Sender;
+            //_email = Email
+            //.From("hulya.garibli@apertech.net")
+            //.Subject(subject)
+            //.UsingTemplate(processedBody, viewModel);
+
+
+            //foreach (var item in tos)
+            //{
+            //    try
+            //    {
+            //        _email.To(item);
+            //    }
+            //    catch (Exception ex)
+            //    {
+
+            //    }
+            //}
+            //var response = await _email.SendAsync();
+            //return response.Successful;
+            #endregion
+            var fileRootPath = Path.GetFullPath(@"wwwroot/sources/templates");
+            var imageRootPath = Path.GetFullPath(@"wwwroot/Content/image");
+
+            LinkedResource imageResource = new LinkedResource(imageRootPath + "\\" + imageName);
+            imageResource.ContentId = "image1";
 
             var engine = new RazorLightEngineBuilder()
-            .UseFileSystemProject(rootPath)
+            .UseFileSystemProject(fileRootPath)
             .EnableEncoding()
             .UseMemoryCachingProvider()
             .Build();
 
-
             string renderedHtml = await engine.CompileRenderAsync(templateName, viewModel);
-
             var processedBody = PreMailer.Net.PreMailer.MoveCssInline(renderedHtml, true).Html;
-            Email.DefaultSender = _email.Sender;
-            _email = Email
-            .From("hulya.garibli@apertech.net")
-            .Subject(subject)
-            .UsingTemplate(processedBody, viewModel);
+            processedBody = processedBody.Replace("<br>", "\n");
+            AlternateView alternateView = AlternateView.CreateAlternateViewFromString(processedBody, null, MediaTypeNames.Text.Html);
+            alternateView.LinkedResources.Add(imageResource);
 
 
-            foreach (var item in tos)
+
+            using (SmtpClient smtpClient = new SmtpClient())
             {
-                try
-                {
-                    _email.To(item);
-                }
-                catch (Exception ex)
-                {
+                var basicCredential = new NetworkCredential(_configuration["Mail:UserName"], _configuration["Mail:Password"]);
 
+                smtpClient.Host = "mail.apertech.net";
+                smtpClient.Port = 587;
+                smtpClient.EnableSsl = true;
+                smtpClient.UseDefaultCredentials = false;
+                smtpClient.Credentials = basicCredential;
+
+                using (MailMessage message = new MailMessage())
+                {
+                    foreach (string item in tos)
+                    {
+                        message.From = new MailAddress(_configuration["Mail:UserName"], "Apertech");
+                        message.Subject = subject;
+                        message.IsBodyHtml = true;
+                        message.Body = processedBody;
+
+                        message.AlternateViews.Add(alternateView);
+                        message.To.Add(item);
+                    }
+
+                    try
+                    {
+                        await smtpClient.SendMailAsync(message);
+                    }
+                    catch (Exception ex)
+                    {
+                    }
                 }
             }
-            var response = await _email.SendAsync();
-            return response.Successful;
+            return true;
+
+
         }
 
     }
