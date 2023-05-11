@@ -4,10 +4,17 @@ using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using RazorEngine.Compilation;
 using RazorLight;
 using SolaERP.Application.Contracts.Services;
+using System.Composition;
+using System.Diagnostics.Contracts;
+using System.Drawing.Imaging;
+using System.Drawing.Printing;
+using System;
 using System.Net;
 using System.Net.Mail;
+using DinkToPdf;
 
 namespace SolaERP.Infrastructure.Services
 {
@@ -259,131 +266,60 @@ namespace SolaERP.Infrastructure.Services
 
         public async Task<bool> SendUsingTemplate<T>(string subject, T viewModel, string templateName, List<string> tos)
         {
-            var document = new Document();
-
-            // Create a new MemoryStream to store the PDF bytes
-            var stream = new MemoryStream();
-
-            // Create a new PdfWriter to write the document to the stream
-            var writer = PdfWriter.GetInstance(document, stream);
-
-            // Open the document
-            document.Open();
-
-            var rootPath = Path.GetFullPath(@"wwwroot/sources/templates");
-            var engine = new RazorLightEngineBuilder()
-            .UseFileSystemProject(rootPath)
-            .EnableEncoding()
-            .UseMemoryCachingProvider()
-            .Build();
+            string file = File.ReadAllText("ProjectFiles/expertiseAct.html");
 
 
-            string renderedHtml = await engine.CompileRenderAsync(templateName, viewModel);
-            // Add some content to the document
-            document.Add(new Paragraph(renderedHtml));
+            GlobalSettings globalSettings = new GlobalSettings();
+            globalSettings.ColorMode = ColorMode.Color;
+            globalSettings.Orientation = Orientation.Portrait;
+            globalSettings.PaperSize = PaperKind.A4;
+            globalSettings.Margins = new MarginSettings { Top = 25, Bottom = 25, Left = 30 };
 
-            // Close the document
-            document.Close();
-
-            // Return the PDF bytes as a byte array
-            byte[] aa = stream.ToArray();
-
-
-            // Convert the PDF bytes to a Base64 string
-            var base64String = Convert.ToBase64String(aa);
-
-            var htmlBody = $@"<html>
-                        <body>
-                            <embed src='data:application/pdf;base64,{base64String}' type='application/pdf' width='100%' height='100%'>
-                        </body>
-                    </html>";
-            // Create a new AlternateView for the PDF content
-
-            using (SmtpClient smtpClient = new SmtpClient())
+            HtmlToPdfDocument htmlToPdfDocument = new HtmlToPdfDocument()
             {
-                var basicCredential = new NetworkCredential(_configuration["Mail:UserName"], _configuration["Mail:Password"]);
-
-                smtpClient.Host = "mail.apertech.net";
-                smtpClient.Port = 587;
-                smtpClient.EnableSsl = true;
-                smtpClient.UseDefaultCredentials = false;
-                smtpClient.Credentials = basicCredential;
-
-                using (MailMessage message = new MailMessage())
-                {
-                    foreach (string item in tos)
+                GlobalSettings = globalSettings,
+                Objects = {
+                    new ObjectSettings
                     {
-                        message.From = new MailAddress(_configuration["Mail:UserName"], "Apertech");
-                        message.Subject = subject;
-                        message.IsBodyHtml = true;
-                        message.Body = htmlBody;
-                        message.To.Add(item);
-                    }
-                    try
-                    {
-                        await smtpClient.SendMailAsync(message);
-                    }
-                    catch (Exception ex)
-                    {
-                    }
-                }
-            }
+                         HtmlContent = file
+                    },
+                },
+            };
 
-            // Create a new PDF document
-         
-            return true;
-            // Add the PDF view to the message body
-            //message.AlternateViews.Add(pdfView);
+            var pdfFile = _converter.Convert(htmlToPdfDocument);
+            //var rootPath = Path.GetFullPath(@"wwwroot/sources/templates");
+
+            //var engine = new RazorLightEngineBuilder()
+            //.UseFileSystemProject(rootPath)
+            //.EnableEncoding()
+            //.UseMemoryCachingProvider()
+            //.Build();
 
 
-            //    var processedBody = PreMailer.Net.PreMailer.MoveCssInline(renderedHtml, true).Html;
-            //    Email.DefaultSender = _email.Sender;
-            //    _email = Email
-            //    .From("hulya.garibli@apertech.net")
-            //    .Subject(subject)
-            //    .UsingTemplate(processedBody, viewModel);
+            //string renderedHtml = await engine.CompileRenderAsync(templateName, viewModel);
+
+            //var processedBody = PreMailer.Net.PreMailer.MoveCssInline(renderedHtml, true).Html;
+            //Email.DefaultSender = _email.Sender;
+            //_email = Email
+            //.From("hulya.garibli@apertech.net")
+            //.Subject(subject)
+            //.UsingTemplate(processedBody, viewModel);
 
 
-            //    foreach (var item in tos)
+            //foreach (var item in tos)
+            //{
+            //    try
             //    {
-            //        try
-            //        {
-            //            _email.To(item);
-            //        }
-            //        catch (Exception ex)
-            //        {
-
-            //        }
+            //        _email.To(item);
             //    }
-            //    var response = await _email.SendAsync();
-            //    return response.Successful;
+            //    catch (Exception ex)
+            //    {
+
+            //    }
             //}
-
-
+            //var response = await _email.SendAsync();
+            //return response.Successful;
         }
 
-        public async Task<byte[]> GeneratePdfAsync()
-        {
-            // Create a new PDF document
-            var document = new Document();
-
-            // Create a new MemoryStream to store the PDF bytes
-            var stream = new MemoryStream();
-
-            // Create a new PdfWriter to write the document to the stream
-            var writer = PdfWriter.GetInstance(document, stream);
-
-            // Open the document
-            document.Open();
-
-            // Add some content to the document
-            document.Add(new Paragraph("Hello, world!"));
-
-            // Close the document
-            document.Close();
-
-            // Return the PDF bytes as a byte array
-            return stream.ToArray();
-        }
     }
 }
