@@ -17,6 +17,8 @@ using System.Net.Mail;
 using DinkToPdf;
 using ColorMode = DinkToPdf.ColorMode;
 using PaperKind = DinkToPdf.PaperKind;
+using DinkToPdf.Contracts;
+using iTextSharp.text.pdf.qrcode;
 
 namespace SolaERP.Infrastructure.Services
 {
@@ -268,60 +270,38 @@ namespace SolaERP.Infrastructure.Services
 
         public async Task<bool> SendUsingTemplate<T>(string subject, T viewModel, string templateName, List<string> tos)
         {
-            //string file = File.ReadAllText("ProjectFiles/expertiseAct.html");
+            var rootPath = Path.GetFullPath(@"wwwroot/sources/templates");
+
+            var engine = new RazorLightEngineBuilder()
+            .UseFileSystemProject(rootPath)
+            .EnableEncoding()
+            .UseMemoryCachingProvider()
+            .Build();
 
 
-            //GlobalSettings globalSettings = new GlobalSettings();
-            //globalSettings.ColorMode = ColorMode.Color;
-            //globalSettings.Orientation = Orientation.Portrait;
-            //globalSettings.PaperSize = PaperKind.A4;
-            //globalSettings.Margins = new MarginSettings { Top = 25, Bottom = 25, Left = 30 };
+            string renderedHtml = await engine.CompileRenderAsync(templateName, viewModel);
 
-            //HtmlToPdfDocument htmlToPdfDocument = new HtmlToPdfDocument()
-            //{
-            //    GlobalSettings = globalSettings,
-            //    Objects = {
-            //        new ObjectSettings
-            //        {
-            //             HtmlContent = file
-            //        },
-            //    },
-            //};
-
-            //var pdfFile = _converter.Convert(htmlToPdfDocument);
-            //var rootPath = Path.GetFullPath(@"wwwroot/sources/templates");
-
-            //var engine = new RazorLightEngineBuilder()
-            //.UseFileSystemProject(rootPath)
-            //.EnableEncoding()
-            //.UseMemoryCachingProvider()
-            //.Build();
+            var processedBody = PreMailer.Net.PreMailer.MoveCssInline(renderedHtml, true).Html;
+            Email.DefaultSender = _email.Sender;
+            _email = Email
+            .From("hulya.garibli@apertech.net")
+            .Subject(subject)
+            .UsingTemplate(processedBody, viewModel);
 
 
-            //string renderedHtml = await engine.CompileRenderAsync(templateName, viewModel);
+            foreach (var item in tos)
+            {
+                try
+                {
+                    _email.To(item);
+                }
+                catch (Exception ex)
+                {
 
-            //var processedBody = PreMailer.Net.PreMailer.MoveCssInline(renderedHtml, true).Html;
-            //Email.DefaultSender = _email.Sender;
-            //_email = Email
-            //.From("hulya.garibli@apertech.net")
-            //.Subject(subject)
-            //.UsingTemplate(processedBody, viewModel);
-
-
-            //foreach (var item in tos)
-            //{
-            //    try
-            //    {
-            //        _email.To(item);
-            //    }
-            //    catch (Exception ex)
-            //    {
-
-            //    }
-            //}
-            //var response = await _email.SendAsync();
-            //return response.Successful;
-            return true;
+                }
+            }
+            var response = await _email.SendAsync();
+            return response.Successful;
         }
 
     }
