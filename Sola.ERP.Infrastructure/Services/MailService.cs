@@ -15,6 +15,8 @@ using System;
 using System.Net;
 using System.Net.Mail;
 using DinkToPdf;
+using ColorMode = DinkToPdf.ColorMode;
+using PaperKind = DinkToPdf.PaperKind;
 
 namespace SolaERP.Infrastructure.Services
 {
@@ -266,27 +268,27 @@ namespace SolaERP.Infrastructure.Services
 
         public async Task<bool> SendUsingTemplate<T>(string subject, T viewModel, string templateName, List<string> tos)
         {
-            string file = File.ReadAllText("ProjectFiles/expertiseAct.html");
+            //string file = File.ReadAllText("ProjectFiles/expertiseAct.html");
 
 
-            GlobalSettings globalSettings = new GlobalSettings();
-            globalSettings.ColorMode = ColorMode.Color;
-            globalSettings.Orientation = Orientation.Portrait;
-            globalSettings.PaperSize = PaperKind.A4;
-            globalSettings.Margins = new MarginSettings { Top = 25, Bottom = 25, Left = 30 };
+            //GlobalSettings globalSettings = new GlobalSettings();
+            //globalSettings.ColorMode = ColorMode.Color;
+            //globalSettings.Orientation = Orientation.Portrait;
+            //globalSettings.PaperSize = PaperKind.A4;
+            //globalSettings.Margins = new MarginSettings { Top = 25, Bottom = 25, Left = 30 };
 
-            HtmlToPdfDocument htmlToPdfDocument = new HtmlToPdfDocument()
-            {
-                GlobalSettings = globalSettings,
-                Objects = {
-                    new ObjectSettings
-                    {
-                         HtmlContent = file
-                    },
-                },
-            };
+            //HtmlToPdfDocument htmlToPdfDocument = new HtmlToPdfDocument()
+            //{
+            //    GlobalSettings = globalSettings,
+            //    Objects = {
+            //        new ObjectSettings
+            //        {
+            //             HtmlContent = file
+            //        },
+            //    },
+            //};
 
-            var pdfFile = _converter.Convert(htmlToPdfDocument);
+            //var pdfFile = _converter.Convert(htmlToPdfDocument);
             //var rootPath = Path.GetFullPath(@"wwwroot/sources/templates");
 
             //var engine = new RazorLightEngineBuilder()
@@ -319,6 +321,7 @@ namespace SolaERP.Infrastructure.Services
             //}
             //var response = await _email.SendAsync();
             //return response.Successful;
+            return true;
         }
 
     }
