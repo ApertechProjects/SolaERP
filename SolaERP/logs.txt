@@ -1857,3 +1857,26 @@ System.Data.SqlClient.SqlException (0x80131904): 'SF_CheckUserVerify' is not a r
 ClientConnectionId:3eaf89da-fd7e-46e6-ab10-0c5bc7836410
 Error Number:195,State:10,Class:15
 2023-05-11 10:29:29.519 +04:00 [ERR] 'SF_CheckUserVerify' is not a recognized built-in function name.
+2023-05-11 12:05:59.619 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Net.Mail.SmtpException: Failure sending mail.
+ ---> System.InvalidOperationException: The SMTP host was not specified.
+   at System.Net.Mail.SmtpClient.CheckHostAndPort()
+   at System.Net.Mail.SmtpClient.SendAsync(MailMessage message, Object userToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Mail.SmtpClient.SendAsync(MailMessage message, Object userToken)
+   at System.Net.Mail.SmtpClient.SendMailAsync(MailMessage message, CancellationToken cancellationToken)
+   at System.Net.Mail.SmtpClient.SendMailAsync(MailMessage message)
+   at SolaERP.Infrastructure.Services.MailService.SendUsingTemplate[T](String subject, T viewModel, String templateName, List`1 tos) in C:\Users\User\Desktop\solaerp\Sola.ERP.Infrastructure\Services\MailService.cs:line 282
+   at SolaERP.Controllers.AccountController.Register(UserRegisterModel dto) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 109
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-11 12:05:59.670 +04:00 [ERR] Failure sending mail.

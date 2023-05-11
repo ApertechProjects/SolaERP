@@ -1,4 +1,7 @@
 ﻿using FluentEmail.Core;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RazorLight;
@@ -256,13 +259,18 @@ namespace SolaERP.Infrastructure.Services
 
         public async Task<bool> SendUsingTemplate<T>(string subject, T viewModel, string templateName, List<string> tos)
         {
-            //string imagePath = Path.GetFullPath(@"wwwroot/Content/css/emailverification.css");
-            //byte[] imageBytes = System.IO.File.ReadAllBytes(imagePath);
+            var document = new Document();
 
-            //string base64Image = Convert.ToBase64String(imageBytes);
-            //// Convert the image bytes to a base64 string
+            // Create a new MemoryStream to store the PDF bytes
+            var stream = new MemoryStream();
+
+            // Create a new PdfWriter to write the document to the stream
+            var writer = PdfWriter.GetInstance(document, stream);
+
+            // Open the document
+            document.Open();
+
             var rootPath = Path.GetFullPath(@"wwwroot/sources/templates");
-
             var engine = new RazorLightEngineBuilder()
             .UseFileSystemProject(rootPath)
             .EnableEncoding()
@@ -271,30 +279,111 @@ namespace SolaERP.Infrastructure.Services
 
 
             string renderedHtml = await engine.CompileRenderAsync(templateName, viewModel);
+            // Add some content to the document
+            document.Add(new Paragraph(renderedHtml));
 
-            var processedBody = PreMailer.Net.PreMailer.MoveCssInline(renderedHtml, true).Html;
-            Email.DefaultSender = _email.Sender;
-            _email = Email
-            .From("hulya.garibli@apertech.net")
-            .Subject(subject)
-            .UsingTemplate(processedBody, viewModel);
+            // Close the document
+            document.Close();
+
+            // Return the PDF bytes as a byte array
+            byte[] aa = stream.ToArray();
 
 
-            foreach (var item in tos)
+            // Convert the PDF bytes to a Base64 string
+            var base64String = Convert.ToBase64String(aa);
+
+            var htmlBody = $@"<html>
+                        <body>
+                            <embed src='data:application/pdf;base64,{base64String}' type='application/pdf' width='100%' height='100%'>
+                        </body>
+                    </html>";
+            // Create a new AlternateView for the PDF content
+
+            using (SmtpClient smtpClient = new SmtpClient())
             {
-                try
-                {
-                    _email.To(item);
-                }
-                catch (Exception ex)
-                {
+                var basicCredential = new NetworkCredential(_configuration["Mail:UserName"], _configuration["Mail:Password"]);
 
+                smtpClient.Host = "mail.apertech.net";
+                smtpClient.Port = 587;
+                smtpClient.EnableSsl = true;
+                smtpClient.UseDefaultCredentials = false;
+                smtpClient.Credentials = basicCredential;
+
+                using (MailMessage message = new MailMessage())
+                {
+                    foreach (string item in tos)
+                    {
+                        message.From = new MailAddress(_configuration["Mail:UserName"], "Apertech");
+                        message.Subject = subject;
+                        message.IsBodyHtml = true;
+                        message.Body = htmlBody;
+                        message.To.Add(item);
+                    }
+                    try
+                    {
+                        await smtpClient.SendMailAsync(message);
+                    }
+                    catch (Exception ex)
+                    {
+                    }
                 }
             }
-            var response = await _email.SendAsync();
-            return response.Successful;
+
+            // Create a new PDF document
+         
+            return true;
+            // Add the PDF view to the message body
+            //message.AlternateViews.Add(pdfView);
+
+
+            //    var processedBody = PreMailer.Net.PreMailer.MoveCssInline(renderedHtml, true).Html;
+            //    Email.DefaultSender = _email.Sender;
+            //    _email = Email
+            //    .From("hulya.garibli@apertech.net")
+            //    .Subject(subject)
+            //    .UsingTemplate(processedBody, viewModel);
+
+
+            //    foreach (var item in tos)
+            //    {
+            //        try
+            //        {
+            //            _email.To(item);
+            //        }
+            //        catch (Exception ex)
+            //        {
+
+            //        }
+            //    }
+            //    var response = await _email.SendAsync();
+            //    return response.Successful;
+            //}
+
+
         }
 
+        public async Task<byte[]> GeneratePdfAsync()
+        {
+            // Create a new PDF document
+            var document = new Document();
 
+            // Create a new MemoryStream to store the PDF bytes
+            var stream = new MemoryStream();
+
+            // Create a new PdfWriter to write the document to the stream
+            var writer = PdfWriter.GetInstance(document, stream);
+
+            // Open the document
+            document.Open();
+
+            // Add some content to the document
+            document.Add(new Paragraph("Hello, world!"));
+
+            // Close the document
+            document.Close();
+
+            // Return the PDF bytes as a byte array
+            return stream.ToArray();
+        }
     }
 }
