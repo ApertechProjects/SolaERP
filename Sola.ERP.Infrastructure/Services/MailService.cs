@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Infrastructure.ViewModels;
 using System.Net;
 using System.Net.Mail;
 
@@ -14,10 +15,14 @@ namespace SolaERP.Infrastructure.Services
             _configuration = configuration;
         }
 
-        public Task<bool> SendEmailMessage<T>(string template, T viewModel, string to, string subject)
+        public async Task<bool> SendEmailMessage(string tamplatePath, string to, string subject)
         {
-            throw new NotImplementedException();
+            string templateContent = await GetTemplateAsync(tamplatePath);
+            await SendMailAsync("yaqub.nasibov@apertech.net", "Test Email For Registration is Pending", templateContent, true);
+            return true;
         }
+
+        private async Task<string> GetTemplateAsync(string templatePath) => await File.ReadAllTextAsync(templatePath);
 
         public async Task SendMailAsync(string to, string subject, string body, bool isBodyHtml = true)
         {
@@ -153,53 +158,6 @@ namespace SolaERP.Infrastructure.Services
                 }
             }
         }
-        public async Task<List<string>> SendSafeMailAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
-        {
-            List<string> failedList = new List<string>();
-
-            if (tos.Length == 0)
-            {
-                return failedList;
-            }
-
-            using (SmtpClient smtpClient = new SmtpClient())
-            {
-                var basicCredential = new NetworkCredential(_configuration["Mail:UserName"], _configuration["Mail:Password"]);
-
-                smtpClient.Host = "mail.apertech.net";
-                smtpClient.Port = 587;
-                smtpClient.EnableSsl = true;
-                smtpClient.UseDefaultCredentials = false;
-                smtpClient.Credentials = basicCredential;
-
-                using (MailMessage message = new MailMessage())
-                {
-                    message.From = new MailAddress("test@apertech.com");
-                    message.Subject = subject;
-                    message.IsBodyHtml = isBodyHtml;
-                    message.Body = body;
-
-                    foreach (string item in tos)
-                    {
-                        message.CC.Add(item);
-                    }
-
-                    try
-                    {
-                        await Task.Run(async () =>
-                        {
-                            await smtpClient.SendMailAsync(message);
-                        });
-                    }
-                    catch (SmtpException ex)
-                    {
-                        failedList.Add(ex.Message);
-                    }
-                }
-            }
-
-            return failedList;
-        }
         public async Task SendSafeMailsAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
         {
             if (tos.Length != 0)
@@ -229,10 +187,6 @@ namespace SolaERP.Infrastructure.Services
                         try
                         {
                             await smtpClient.SendMailAsync(message);
-                            // Task.Run(async () =>
-                            //{
-                            //    await smtpClient.SendMailAsync(message);
-                            //});
                         }
                         catch (Exception ex)
                         {
