@@ -14,13 +14,13 @@ namespace SolaERP.Controllers
         private readonly IUserService _userService;
         private readonly IVendorService _vendorService;
         private readonly IGroupService _groupService;
-        private readonly IFileService _fileService;
-        public UserController(IUserService userService, IVendorService vendorService, IGroupService groupService, IFileService fileService)
+        //private readonly IFileService _fileService;
+        public UserController(IUserService userService, IVendorService vendorService, IGroupService groupService)
         {
             _userService = userService;
             _vendorService = vendorService;
             _groupService = groupService;
-            _fileService = fileService;
+            //_fileService = fileService;
         }
 
 
@@ -93,9 +93,9 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadFile(IFormFile file, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            string path = await _fileService.UploadAsync(file, @"\sources\images", cancellationToken);
-            return Ok(path);
+            //cancellationToken.ThrowIfCancellationRequested();
+            //string path = await _fileService.UploadAsync(file, @"\sources\images", cancellationToken);
+            return Ok("");
         }
 
         [HttpGet]
