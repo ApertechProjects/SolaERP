@@ -79,8 +79,8 @@
         }
 
             .btn.btn-primary {
-                border-radius: 5px;
                 background: #5b16b6;
+                border-radius: 5px;
                 color: #ffffff;
             }
 
@@ -176,7 +176,7 @@
 </head>
 
 <body width="100%">
-    <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+    <div style="margin: 0 auto;" class="email-container">
 
         <table width="100%" style="margin: auto;">
             <tr>
@@ -198,7 +198,7 @@
                 </td>
             </tr>
             <tr>
-                <td valign="middle" class="hero bg_white" style="padding: 2em 0 2em 0;">
+                <td valign="middle" class="hero bg_white" style="padding: 2em 0 2em 0; margin: 0 auto; text-align: center">
                     <table>
                         <tr>
                             <td>
@@ -209,7 +209,15 @@
                                     <h4>
                                         @string.Format(Model.Body,@Model.Username)
                                     </h4>
-                                    <p style="text-align: center;"><a href="#" class="btn btn-primary" onClick="sendRequest()">@Model.GenerateButtonText()</a></p>
+                                    <div width="300px" style="text-align: center; padding: 10px 20px; border-radius: 4px;">
+                                        <table width="300px" style="text-align: center">
+                                            <tr>
+                                                <td align="center" bgcolor="#008CBA" style="padding: 10px 20px; border-radius: 4px;">
+                                                    <a href="https://example.com" style="color: #ffffff; text-decoration: none; display: inline-block; text-align: center; margin: 0 auto;">@Model.GenerateButtonText()</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
 
                                     <p style="color:black;">@Model.GenerateCompanyNameTeamText()</p>
                                     <p style="font-weight: bold;">@Model.GenerateDevelopedInformationText()</p>
@@ -220,7 +228,7 @@
                 </td>
             </tr>
         </table>
-        <table width="100%">
+        <table width="100%" style="margin: auto;">
             <tr>
                 <td class="bg_light" style="text-align: center; color: #000; font-size:14px;">
                     <p>@Model.GenerateCopyRightText()</p>

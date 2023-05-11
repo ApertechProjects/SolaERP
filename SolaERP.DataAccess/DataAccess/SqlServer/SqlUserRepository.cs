@@ -564,7 +564,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "Select SF_CheckUserVerify(@email) IsVerified";
+                command.CommandText = "Select dbo.SF_CheckUserVerify(@email) IsVerified";
                 command.Parameters.AddWithValue(command, "@email", email);
                 using var reader = await command.ExecuteReaderAsync();
                 bool res = false;
