@@ -19,21 +19,20 @@ namespace SolaERP.Persistence.Services
         private readonly IMailService _mailService;
         private readonly IMapper _mapper;
         private readonly ITokenHandler _tokenHandler;
-        private readonly IFileProducer _producer;
+        //private readonly IFileProducer _producer;
 
         public UserService(IUserRepository userRepository,
                            IUnitOfWork unitOfWork,
                            IMapper mapper,
                            IMailService mailService,
-                           ITokenHandler tokenHandler,
-                           IFileProducer producer)
+                           ITokenHandler tokenHandler)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _mailService = mailService;
             _mapper = mapper;
             _tokenHandler = tokenHandler;
-            _producer = producer;
+            //_producer = producer;
         }
 
 
@@ -279,11 +278,11 @@ namespace SolaERP.Persistence.Services
             var result = await _userRepository.SaveUserAsync(userEntry);
             await _unitOfWork.SaveChangesAsync();
 
-            if (user?.Photo?.Length > 0)
-                await _producer.ProduceAsync(user?.Photo, Filetype.Profile, user.Email);
+            //if (user?.Photo?.Length > 0)
+            //    await _producer.ProduceAsync(user?.Photo, Filetype.Profile, user.Email);
 
-            if (user?.Signature?.Length > 0)
-                await _producer.ProduceAsync(user?.Signature, Filetype.Signature, user.Email);
+            //if (user?.Signature?.Length > 0)
+            //    await _producer.ProduceAsync(user?.Signature, Filetype.Signature, user.Email);
 
 
             return result > 0 ? ApiResponse<int>.Success(result, 200)
