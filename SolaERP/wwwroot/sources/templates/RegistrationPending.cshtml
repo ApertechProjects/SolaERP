@@ -1,4 +1,7 @@
-﻿@*@model SolaERP.Infrastructure.ViewModels.VM_RegistrationPending
+﻿@model SolaERP.Infrastructure.ViewModels.VM_RegistrationIsPending
+@{
+    Layout = null;
+}
 
 <head>
     <meta charset="utf-8">
@@ -7,8 +10,7 @@
     <meta name="x-apple-disable-message-reformatting">
     <title></title>
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
-    <link href="@Url.Content("~/~/Content/css/emailverification.css")" rel="stylesheet" type="text/css" />
-
+    <link href="@Url.Content("~/Content/css/emailverification.css")" rel="stylesheet" type="text/css" />
 </head>
 
 <body width="100%">
@@ -28,7 +30,7 @@
             </tr>
             <tr>
                 <td valign="middle" class="hero bg_white">
-                    <img src="https://newoldstamp.com/system/posts/og_images/000/000/298/original/Images_in_Email_Everything_You_Need_to_Know_and_Even_More_-_Facebook.png?1592831717"
+                    <img src="~/sources/images/email.png"
                          alt="" style="width: 200px; max-width: 400px; height: auto; margin: auto; display: block;">
                 </td>
             </tr>
@@ -39,14 +41,13 @@
                             <td>
                                 <div class="text" style="padding: 0 2.5em; text-align: start;">
                                     <h4 style="color: gray; text-align: center; font-weight: bold;">
-                                        @Model.GetFooterText();
+                                        @Model.GenerateAutomatedEmailText();
                                     </h4>
                                     <h4>
-                                        @string.Format(Model.Body,@Model.UserName);
+                                        Thank you for signing up, @Model.UserName. <br>  Please Dear @Model.Fullname, Your registration is pending for Approvals. Please wait for the company decision or contact responsible person.
                                     </h4>
-                                    <p style="text-align: center;"><a href="#" class="btn btn-primary" onClick="sendRequest()">Verify Email Now</a></p>
-                                    <p style="color:black;">@Model.CompanyName Team.</p>
-                                    <p style="font-weight: bold;">Developed by Apertech Team.</p>
+                                    <p style="color:black;">@Model.GenerateCompanyNameTeamText();</p>
+                                    <p style="font-weight: bold;">@Model.GenerateDevelopedInformationText();</p>
                                 </div>
                             </td>
                         </tr>
@@ -57,14 +58,9 @@
         <table width="100%">
             <tr>
                 <td class="bg_light" style="text-align: center; color: #000; font-size:14px;">
-                    <p>© @Model.GetFooterText();</p>
+                    <p>@Model.GenerateCopyRightText();</p>
                 </td>
             </tr>
         </table>
-
     </div>
-
 </body>
-
-
-*@
