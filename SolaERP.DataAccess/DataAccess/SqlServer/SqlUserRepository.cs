@@ -64,7 +64,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 if (reader.Read())
-                    user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate");
+                    user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate","VerifyToken");
 
                 return user;
             }

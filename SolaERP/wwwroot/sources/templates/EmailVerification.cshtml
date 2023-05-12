@@ -213,7 +213,7 @@
                                         <table width="300px" style="text-align: center">
                                             <tr>
                                                 <td align="center" bgcolor="#008CBA" style="padding: 10px 20px; border-radius: 4px;">
-                                                    <a href="http://116.203.90.202:3030/api/Account/Login" onclick="sendRequest" style="color: #ffffff; text-decoration: none; display: inline-block; text-align: center; margin: 0 auto;">@Model.GenerateButtonText()</a>
+                                                    <a href="http://116.203.90.202:88/login" onclick="sendRequest()" style="color: #ffffff; text-decoration: none; display: inline-block; text-align: center; margin: 0 auto;">@Model.GenerateButtonText()</a>
                                                 </td>
                                             </tr>
                                         </table>
@@ -239,10 +239,20 @@
 
 
     <script>
-        function sendRequest() {
-            const token = 'your_api_key';
-            const url = `http:116.203.90.202:3294/api/Account/ConfirmEmail?token=${@Model.Token}`;
+        async function sendRequest() {
+          try {
+            const response = await fetch(`http://localhost:7252/api/Account/ConfirmEmail?verifyToken=${@Model.Token}`, {
+              method: "POST",
+              body: { verifyToken: `${@Model.Token}` },
+              headers: { "Content-Type": "application/json" },
+            });
+            const result = await response.json();
+            console.log("Success:", result);
+          } catch (error) {
+            console.error("Error:", error);
+          }
         }
+      
     </script>
 </body>
 </html>

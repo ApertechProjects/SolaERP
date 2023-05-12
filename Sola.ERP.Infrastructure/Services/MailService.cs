@@ -305,5 +305,9 @@ namespace SolaERP.Infrastructure.Services
 
         }
 
+        public Task<bool> SendEmailMessage<T>(string template, T viewModel, string to, string subject)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
