@@ -71,8 +71,8 @@ namespace SolaERP.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ConfirmEmail(string verifyToken)
-            => CreateActionResult(await _userService.ConfirmEmail(verifyToken));
+        public async Task<IActionResult> ConfirmEmail(ConfirmEmailModel model)
+            => CreateActionResult(await _userService.ConfirmEmail(model.VerifyToken));
 
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterModel dto)
