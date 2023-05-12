@@ -70,9 +70,9 @@ namespace SolaERP.Controllers
             return CreateActionResult(ApiResponse<bool>.Fail("email", "Email or password is incorrect", 422));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ConfirmEmail(ConfirmEmailModel model)
-            => CreateActionResult(await _userService.ConfirmEmail(model.VerifyToken));
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string model)
+            => CreateActionResult(await _userService.ConfirmEmail(model));
 
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterModel dto)
@@ -106,7 +106,7 @@ namespace SolaERP.Controllers
                     Subject = templateDataForVerification.Subject,
                     Token = dto.VerifyToken,
                 };
-                await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification, emailVerification.TemplateName(), emailVerification.ImageName(), new List<string> { "hulya.garibli@apertech.net" });
+                await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification, emailVerification.TemplateName(), emailVerification.ImageName(), new List<string> { "yaqub.nasibov@apertech.net" });
                 //await _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject, registrationPending, registrationPending.TemplateName(), new List<string> { "hulya.garibli@apertech.net" });
 
                 account.UserId = response.Data;
