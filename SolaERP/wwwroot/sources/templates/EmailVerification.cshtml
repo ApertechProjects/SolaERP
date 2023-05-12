@@ -206,14 +206,14 @@
                                     <h4 style="color: gray; text-align: center; font-weight: bold;">
                                         @Model.GenerateAutomatedEmailText()
                                     </h4>
-                                    <h4>
-                                        @string.Format(Model.Body,@Model.Username)
+                                    <h4 style="text-align: center">
+                                        @Model.Body
                                     </h4>
                                     <div width="300px" style="text-align: center; padding: 10px 20px; border-radius: 4px;">
                                         <table width="300px" style="text-align: center">
                                             <tr>
                                                 <td align="center" bgcolor="#008CBA" style="padding: 10px 20px; border-radius: 4px;">
-                                                    <a href="https://example.com" style="color: #ffffff; text-decoration: none; display: inline-block; text-align: center; margin: 0 auto;">@Model.GenerateButtonText()</a>
+                                                    <a href="http://116.203.90.202:3030/api/Account/Login" onclick="sendRequest" style="color: #ffffff; text-decoration: none; display: inline-block; text-align: center; margin: 0 auto;">@Model.GenerateButtonText()</a>
                                                 </td>
                                             </tr>
                                         </table>

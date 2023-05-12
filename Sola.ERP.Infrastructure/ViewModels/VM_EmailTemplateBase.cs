@@ -1,10 +1,11 @@
-﻿using Language = SolaERP.Application.Enums.Language;
+﻿using Microsoft.AspNetCore.Html;
+using Language = SolaERP.Application.Enums.Language;
 
 namespace SolaERP.Infrastructure.ViewModels
 {
     public class VM_EmailTemplateBase
     {
-        public string? Body { get; set; }
+        public HtmlString? Body { get; set; }
         public string? Header { get; set; }
         public string? CompanyName { get; set; }
         public Language Language { get; set; }

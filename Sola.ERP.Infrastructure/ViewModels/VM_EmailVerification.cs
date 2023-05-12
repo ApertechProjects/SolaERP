@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Enums;
+﻿using Microsoft.AspNetCore.Html;
+using SolaERP.Application.Enums;
 
 namespace SolaERP.Infrastructure.ViewModels
 {
@@ -7,7 +8,6 @@ namespace SolaERP.Infrastructure.ViewModels
         public string? Token { get; set; }
         public string? Subject { get; set; }
         public string? Username { get; set; }
-
         public string GenerateButtonText()
         {
             return base.Language switch

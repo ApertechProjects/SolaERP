@@ -305,7 +305,6 @@ namespace SolaERP.Infrastructure.Services
 
             string renderedHtml = await engine.CompileRenderAsync(templateName, viewModel);
             var processedBody = PreMailer.Net.PreMailer.MoveCssInline(renderedHtml, true).Html;
-            processedBody = processedBody.Replace("<br>", "\n");
             AlternateView alternateView = AlternateView.CreateAlternateViewFromString(processedBody, null, MediaTypeNames.Text.Html);
             alternateView.LinkedResources.Add(imageResource);
 
