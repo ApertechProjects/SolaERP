@@ -20,6 +20,7 @@ namespace SolaERP.Controllers
             _userService = userService;
             _vendorService = vendorService;
             _groupService = groupService;
+            //_fileService = fileService;
         }
 
 
