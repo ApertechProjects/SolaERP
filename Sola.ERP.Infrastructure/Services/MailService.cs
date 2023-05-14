@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RazorLight;
 using SolaERP.Application.Contracts.Services;
-using SolaERP.Infrastructure.ViewModels;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
@@ -215,40 +214,6 @@ namespace SolaERP.Infrastructure.Services
 
         public async Task<bool> SendUsingTemplate<T>(string subject, T viewModel, string templateName, string imageName, List<string> tos)
         {
-            #region
-            //var rootPath = Path.GetFullPath(@"wwwroot/sources/templates");
-
-            //var engine = new RazorLightEngineBuilder()
-            //.UseFileSystemProject(rootPath)
-            //.EnableEncoding()
-            //.UseMemoryCachingProvider()
-            //.Build();
-
-
-            //string renderedHtml = await engine.CompileRenderAsync(templateName, viewModel);
-
-            //var processedBody = PreMailer.Net.PreMailer.MoveCssInline(renderedHtml, true).Html;
-            //Email.DefaultSender = _email.Sender;
-            //_email = Email
-            //.From("hulya.garibli@apertech.net")
-            //.Subject(subject)
-            //.UsingTemplate(processedBody, viewModel);
-
-
-            //foreach (var item in tos)
-            //{
-            //    try
-            //    {
-            //        _email.To(item);
-            //    }
-            //    catch (Exception ex)
-            //    {
-
-            //    }
-            //}
-            //var response = await _email.SendAsync();
-            //return response.Successful;
-            #endregion
             var fileRootPath = Path.GetFullPath(@"wwwroot/sources/templates");
             var imageRootPath = Path.GetFullPath(@"wwwroot/Content/image");
 
