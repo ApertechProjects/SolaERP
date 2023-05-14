@@ -207,20 +207,12 @@
                                 <tr>
                                     <td>
                                         <div class="text" style="padding: 0 2.5em; text-align: start;">
-                                            <h4 style="color: gray; text-align: center; font-weight: bold;">
-                                                @Model.GenerateAutomatedEmailText()
-                                            </h4>
+                                            <h4 style="color: gray; text-align: center; font-weight: bold;">@Model.GenerateAutomatedEmailText()</h4>
                                             <h4>
                                                 @Model.Body
                                             </h4>
-
-                                            <p style="font-size: 15px;font-weight: bold;margin-top: 2rem; color: gray;" "=" ">
-                                                User Full Name: @Model.ApproveUser <br>
-                                                Company: {@Model.CompanyOrVendorName}
-                                            </p>
-
-                                            <p style="color:black;">@Model.CompanyName</p>
-                                            <p style="font-weight: bold;">@Model.GenerateDevelopedInformationText()</p>
+                                            <p style="color:black;">@Model.GenerateDevelopedInformationText</p>
+                                            <p style="font-weight: bold;">@Model.GenerateCompanyNameTeamText</p>
                                         </div>
                                     </td>
                                 </tr>

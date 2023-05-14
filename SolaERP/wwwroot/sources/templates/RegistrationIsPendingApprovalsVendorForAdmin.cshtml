@@ -1,4 +1,4 @@
-﻿@model SolaERP.Infrastructure.ViewModels.VM_RegistrationIsPendingApprovalsVendorForAdmin
+﻿@*@model SolaERP.Infrastructure.ViewModels.VM_RegistrationIsPendingApprovalsVendorForAdmin
 @{
     Layout = null;
 }
@@ -174,8 +174,7 @@
         }
     </style>
 </head>
-
-<body width="100%">
+<body>
     <div style="max-width: 600px; margin: 0 auto;" class="email-container">
 
         <table width="100%" style="margin: auto;">
@@ -234,12 +233,11 @@
             <tbody>
                 <tr>
                     <td class="bg_light" style="text-align: center; color: #000; font-size:14px;">
-                        <p>© @actualYear Sola ERP @CompanyName All rights reserved</p>
+                        <p>@Model.GenerateCopyRightText()</p>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
-
 </body>
-</html>
+</html>>*@
