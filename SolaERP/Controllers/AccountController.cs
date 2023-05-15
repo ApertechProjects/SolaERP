@@ -1,15 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using SolaERP.Application.Contracts.Services;
-using SolaERP.Application.Dtos.Auth;
-using SolaERP.Application.Dtos.Shared;
-using SolaERP.Application.Enums;
-using SolaERP.Application.Models;
-using SolaERP.Infrastructure.ViewModels;
-
-namespace SolaERP.Controllers
+﻿namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     public class AccountController : CustomBaseController
@@ -109,7 +98,9 @@ namespace SolaERP.Controllers
                 Subject = templateDataForVerification.Subject,
                 Token = "3af64321-cb9e-4a59-813d-b42a06973a14Jp3bOfpRVNPSkb6GlSOWay/UQ3XXz43O+m8ltTyA5es=",
             };
+
             await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification, emailVerification.TemplateName(), emailVerification.ImageName(), new List<string> { "hulya.garibli@apertech.net" });
+
             //await _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject, registrationPending, registrationPending.TemplateName(), new List<string> { "hulya.garibli@apertech.net" });
 
             //account.UserId = response.Data;

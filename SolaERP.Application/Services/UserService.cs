@@ -371,7 +371,7 @@ namespace SolaERP.Persistence.Services
             await _unitOfWork.SaveChangesAsync();
 
             if (user)
-                return ApiResponse<bool>.Success(200);
+                return ApiResponse<bool>.Success(true, 200);
             return ApiResponse<bool>.Fail("Email can not be confirmed", 400);
         }
 
