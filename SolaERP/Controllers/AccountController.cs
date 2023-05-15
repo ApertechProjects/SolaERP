@@ -73,6 +73,7 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfirmEmail([FromQuery] string verifyToken)
         {
+            //string url = HttpUtility.UrlEncode(verifyToken);
             return CreateActionResult(await _userService.ConfirmEmail(verifyToken));
         }
 
