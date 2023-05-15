@@ -1,4 +1,14 @@
-﻿namespace SolaERP.Controllers
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Auth;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Enums;
+using SolaERP.Application.Models;
+using SolaERP.Infrastructure.ViewModels;
+namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     public class AccountController : CustomBaseController
