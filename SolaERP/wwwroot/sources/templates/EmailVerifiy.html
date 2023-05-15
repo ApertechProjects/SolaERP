@@ -1,9 +1,4 @@
-﻿@using System.Web
-@model SolaERP.Infrastructure.ViewModels.VM_EmailVerification
-@{
-    Layout = null;
-}
-<html>
+﻿<html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
@@ -214,9 +209,10 @@
                                         <table width="300px" style="text-align: center">
                                             <tr>
                                                 <td align="center" bgcolor="#008CBA" style="padding: 10px 20px; border-radius: 4px;">
-                                                    
-                                                    <a href="http://116.203.90.202/EmailRedirectingPage/EmailVerified.html?verifyToken=@encodedToken">Click here to submit the form</a>
-
+                                                    <form action="@Url.Action("ConfirmEmail","Account" )" method="post">
+                                                        <input type="hidden" name="verifyToken" value="xksndskmdkskd" />
+                                                        <input type="submit" value="Click me" />
+                                                    </form>
                                                 </td>
                                             </tr>
                                         </table>
@@ -239,6 +235,19 @@
             </tr>
         </table>
     </div>
+
+
+    <script>
+        function sendRequest(verifyToken) {
+            fetch(`http://localhost:7252/api/Account/ConfirmEmail?verifyToken=${verifyToken}`, {
+                method: "GET",
+                headers: { "Content-type": "application/json; charset=UTF-8" }
+            })
+                .then(response => response.json())
+                .then(json => console.log(json))
+                .catch(err => console.log(err));
+        }
+    </script>
 </body>
 </html>
 

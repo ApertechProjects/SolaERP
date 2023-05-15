@@ -70,9 +70,11 @@ namespace SolaERP.Controllers
             return CreateActionResult(ApiResponse<bool>.Fail("email", "Email or password is incorrect", 422));
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> ConfirmEmail([FromQuery] string verifyToken)
-            => CreateActionResult(await _userService.ConfirmEmail(verifyToken));
+        {
+            return CreateActionResult(await _userService.ConfirmEmail(verifyToken));
+        }
 
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterModel dto)
