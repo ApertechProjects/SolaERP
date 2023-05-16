@@ -8,6 +8,11 @@ using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Infrastructure.ViewModels;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.RegularExpressions;
+using System.Web;
+
 namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
@@ -69,55 +74,58 @@ namespace SolaERP.Controllers
             return CreateActionResult(ApiResponse<bool>.Fail("email", "Email or password is incorrect", 422));
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> ConfirmEmail([FromQuery] string verifyToken)
         {
-            //string url = HttpUtility.UrlEncode(verifyToken);
-            return CreateActionResult(await _userService.ConfirmEmail(verifyToken));
+            var result = await _userService.ConfirmEmail(verifyToken);
+            if (result)
+
         }
 
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterModel dto)
         {
-            //var newtoken = Guid.NewGuid();
-            //dto.VerifyToken = newtoken + _tokenHandler.CreateRefreshToken();
-            //ApiResponse<int> response = response = await _userService.UserRegisterAsync(dto);
+            var newtoken = Guid.NewGuid();
+
+            dto.VerifyToken = newtoken + _tokenHandler.CreateRefreshToken();
+            dto.VerifyToken = Regex.Replace(dto.VerifyToken, @"[^a-zA-Z0-9_.~\-]", "");
+            ApiResponse<int> response = response = await _userService.UserRegisterAsync(dto);
 
             AccountResponseDto account = new();
-            //if (response.Data > 0)
-            //{
-            var templateDataForRegistrationPending = await _emailNotificationService.GetEmailTemplateData(dto.language, EmailTemplateKey.RP);
-            var templateDataForVerification = await _emailNotificationService.GetEmailTemplateData(dto.language, EmailTemplateKey.VER);
-            var companyName = await _emailNotificationService.GetCompanyName(dto.Email);
-            VM_RegistrationPending registrationPending = new VM_RegistrationPending()
+            if (response.Data > 0)
             {
-                FullName = dto.FullName,
-                UserName = dto.UserName,
-                Header = templateDataForRegistrationPending.Header,
-                Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, dto.UserName)),
-                Language = dto.language,
-                CompanyName = companyName,
-            };
-            VM_EmailVerification emailVerification = new VM_EmailVerification()
-            {
-                Username = dto.UserName,
-                Body = new HtmlString(string.Format(templateDataForVerification.Body, dto.UserName)),
-                CompanyName = companyName,
-                Header = templateDataForVerification.Header,
-                Language = dto.language,
-                Subject = templateDataForVerification.Subject,
-                Token = "3af64321-cb9e-4a59-813d-b42a06973a14Jp3bOfpRVNPSkb6GlSOWay/UQ3XXz43O+m8ltTyA5es=",
-            };
+                var templateDataForRegistrationPending = await _emailNotificationService.GetEmailTemplateData(dto.language, EmailTemplateKey.RP);
+                var templateDataForVerification = await _emailNotificationService.GetEmailTemplateData(dto.language, EmailTemplateKey.VER);
+                var companyName = await _emailNotificationService.GetCompanyName(dto.Email);
+                VM_RegistrationPending registrationPending = new VM_RegistrationPending()
+                {
+                    FullName = dto.FullName,
+                    UserName = dto.UserName,
+                    Header = templateDataForRegistrationPending.Header,
+                    Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, dto.UserName)),
+                    Language = dto.language,
+                    CompanyName = companyName,
+                };
+                VM_EmailVerification emailVerification = new VM_EmailVerification()
+                {
+                    Username = dto.UserName,
+                    Body = new HtmlString(string.Format(templateDataForVerification.Body, dto.UserName)),
+                    CompanyName = companyName,
+                    Header = templateDataForVerification.Header,
+                    Language = dto.language,
+                    Subject = templateDataForVerification.Subject,
+                    Token = HttpUtility.HtmlDecode(dto.VerifyToken),
+                };
 
-            await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification, emailVerification.TemplateName(), emailVerification.ImageName(), new List<string> { "hulya.garibli@apertech.net" });
+                await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification, emailVerification.TemplateName(), emailVerification.ImageName(), new List<string> { dto.Email });
 
-            //await _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject, registrationPending, registrationPending.TemplateName(), new List<string> { "hulya.garibli@apertech.net" });
+                //await _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject, registrationPending, registrationPending.TemplateName(), new List<string> { "hulya.garibli@apertech.net" });
 
-            //account.UserId = response.Data;
-            return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
-            //}
+                account.UserId = response.Data;
+                return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
+            }
 
-            //return CreateActionResult(ApiResponse<bool>.Fail(response.Errors, 422));
+            return CreateActionResult(ApiResponse<bool>.Fail(response.Errors, 422));
         }
 
 
