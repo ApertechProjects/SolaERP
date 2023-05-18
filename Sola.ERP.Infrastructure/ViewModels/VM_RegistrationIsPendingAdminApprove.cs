@@ -17,13 +17,14 @@ namespace SolaERP.Infrastructure.ViewModels
             return @"registrationPending.png";
         }
 
-        public string? GenerateBody()
+        public HtmlString? GenerateBody()
         {
             return Language switch
             {
-                Language.az => Body?.ToString().Replace("{0}", "<a href=\"http://116.203.90.202:88/login\">Müştəri Portalına</a>"),
-                Language.en =>Body?.ToString().Replace("{0}", "<a href=\"http://116.203.90.202:88/login\">Client Portal</a>")
-            }; 
+                Language.az => new HtmlString(string.Format(Body?.ToString(), @"<a href=""http://116.203.90.202:88/login"">Müştəri Portalına</a>")),
+                Language.en => new HtmlString(string.Format(Body?.ToString(), @"<a href=""http://116.203.90.202:88/login"">Client Portal</a>")),
+            };
         }
+
     }
 }

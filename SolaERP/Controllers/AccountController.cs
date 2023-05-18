@@ -111,13 +111,13 @@ namespace SolaERP.Controllers
                 var templateData = templates[i];
                 VM_RegistrationIsPendingAdminApprove adminApprove = new VM_RegistrationIsPendingAdminApprove()
                 {
+                    Body = new HtmlString(templateData.Body),
                     CompanyName = companyName,
                     Header = templateData.Header,
                     UserName = userData.UserName,
                     CompanyOrVendorName = companyName,
                     Language = templateData.Language.GetLanguageEnumValue(),
                 };
-
                 await _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), new List<string> { "hulya.garibli@apertech.net" });
             }
 
