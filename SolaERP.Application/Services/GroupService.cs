@@ -236,13 +236,13 @@ namespace SolaERP.Persistence.Services
 
         private async Task DeleteBuyersAsync(List<GroupBuyerSaveModel> removeBuyers, int groupId)
         {
-            var data = removeBuyers.ConvertListToDataTable();
+            var data = removeBuyers.ConvertToDataTable();
             await _groupRepository.DeleteBuyersAsync(data, groupId);
         }
 
         private async Task AddBuyersAsync(List<GroupBuyerSaveModel> addBuyers, int groupId)
         {
-            var data = addBuyers.ConvertListToDataTable();
+            var data = addBuyers.ConvertToDataTable();
             await _groupRepository.AddBuyersAsync(data, groupId);
         }
 
