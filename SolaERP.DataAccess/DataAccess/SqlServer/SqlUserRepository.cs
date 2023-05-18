@@ -1,7 +1,9 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Groups;
 using SolaERP.Application.Entities.User;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
@@ -64,7 +66,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 if (reader.Read())
-                    user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate","VerifyToken");
+                    user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate", "VerifyToken");
 
                 return user;
             }
@@ -572,6 +574,38 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     res = reader.Get<bool>("IsVerified");
 
                 return res;
+            }
+        }
+
+        public async Task<UserData> GetUserDataByVerifyTokenAsync(string verifyToken)
+        {
+            UserData userData = new UserData();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "select * from FN_GetUserDataByVerifyToken(@verifyToken)";
+                command.Parameters.AddWithValue(command, "@verifyToken", verifyToken);
+                using var reader = await command.ExecuteReaderAsync();
+                bool res = false;
+                if (reader.Read())
+                    userData = reader.GetByEntityStructure<UserData>();
+
+                return userData;
+            }
+        }
+
+        public async Task<List<string>> GetAdminUsersAsync(int sequence, Language language)
+        {
+            List<string> userData = new List<string>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec dbo.SP_UserApproveNotificationBody_Load @sequence,@language";
+                command.Parameters.AddWithValue(command, "@sequence", sequence);
+                command.Parameters.AddWithValue(command, "@language", language.ToString());
+                using var reader = await command.ExecuteReaderAsync();
+                if (reader.Read())
+                    userData.Add(reader.Get<string>("Email"));
+
+                return userData;
             }
         }
 

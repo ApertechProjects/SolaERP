@@ -5,7 +5,10 @@ using SolaERP.Application.Dtos.Group;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Dtos.UserDto;
+using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Entities.User;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
@@ -372,6 +375,7 @@ namespace SolaERP.Persistence.Services
 
             if (user)
                 return ApiResponse<bool>.Success(true, 200);
+
             return ApiResponse<bool>.Fail("Email can not be confirmed", 400);
         }
 
@@ -379,6 +383,18 @@ namespace SolaERP.Persistence.Services
         {
             var result = await _userRepository.CheckEmailIsVerified(email);
             return result;
+        }
+
+        public async Task<UserData> GetUserDataByVerifyTokenAsync(string verifyToken)
+        {
+            var result = await _userRepository.GetUserDataByVerifyTokenAsync(verifyToken);
+            return result;
+        }
+
+        public async Task<List<string>> GetAdminUsersAsync(int sequence, Language language)
+        {
+            var users = await _userRepository.GetAdminUsersAsync(sequence, language);
+            return users;
         }
     }
 }

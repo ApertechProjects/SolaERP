@@ -1,9 +1,11 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.Email;
+using SolaERP.Application.Entities.Language;
 using SolaERP.Application.Enums;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
+using Language = SolaERP.Application.Enums.Language;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -89,6 +91,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             while (await reader.ReadAsync()) emailTemplate = reader.GetByEntityStructure<EmailTemplateData>();
 
             return emailTemplate;
+        }
+
+        public async Task<List<EmailTemplateData>> GetEmailTemplateData(EmailTemplateKey templateKey)
+        {
+            List<EmailTemplateData> templates = new List<EmailTemplateData>();
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = "select * from FN_GetEmailTemplateByEmailType(@TemplateKey)";
+            command.Parameters.AddWithValue(command, "@TemplateKey", templateKey.ToString());
+
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync()) templates.Add(reader.GetByEntityStructure<EmailTemplateData>());
+
+            return templates;
         }
     }
 }

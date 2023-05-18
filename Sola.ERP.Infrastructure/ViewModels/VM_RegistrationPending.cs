@@ -8,5 +8,10 @@
         {
             return @"RegistrationPending.cshtml";
         }
+
+        public string ImageName()
+        {
+            return @"registrationPending.png";
+        }
     }
 }

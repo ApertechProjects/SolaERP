@@ -49,7 +49,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Content\image\" />
-    <Folder Include="wwwroot\sources\images\" />
     <Folder Include="wwwroot\sources\signatures\" />
   </ItemGroup>
 

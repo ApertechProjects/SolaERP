@@ -1,4 +1,4 @@
-﻿@*@model SolaERP.Infrastructure.ViewModels.VM_RegistrationIsPendingApprovalsVendorForAdmin
+﻿@model SolaERP.Infrastructure.ViewModels.VM_RegistrationIsPendingAdminApprove
 @{
     Layout = null;
 }
@@ -174,8 +174,8 @@
         }
     </style>
 </head>
-<body>
-    <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+<body width = "100%">
+    <div style="margin: 0 auto;" class="email-container">
 
         <table width="100%" style="margin: auto;">
             <tbody>
@@ -205,17 +205,15 @@
                                     <td>
                                         <div class="text" style="padding: 0 2.5em; text-align: start;">
                                             <h4 style="color: gray; text-align: center; font-weight: bold;">
-                                                This is an automatically generated
-                                                email - please do not reply
+                                                @Model.GenerateAutomatedEmailText()
                                             </h4>
-                                            <h4>
-                                                Dear Administrator, User Registration is pending for your Approvals. Please login to <a href="116.203.90.202:99">Client Portal</a>
-                                                using your email address and password and make your decision.
+                                            <h4 style="text-align: center">
+                                                @Model.GenerateBody()
                                             </h4>
 
-                                            <p style="font-size: 15px;font-weight: bold;margin-top: 2rem; color: gray;" "=" ">
+                                            <p style="font-size: 15px;font-weight: bold;margin-top: 2rem; color: gray;">
                                                 Submitted User Name: @Model.UserName<br>
-                                                Company: {@Model.CompanyOrVendorName}
+                                                Company: @Model.CompanyOrVendorName
                                             </p>
 
                                             <p style="color:black;">@Model.GenerateCompanyNameTeamText</p>
@@ -229,7 +227,7 @@
                 </tr>
             </tbody>
         </table>
-        <table width="100%">
+        <table width="100%" style="margin: auto;">
             <tbody>
                 <tr>
                     <td class="bg_light" style="text-align: center; color: #000; font-size:14px;">
@@ -240,4 +238,4 @@
         </table>
     </div>
 </body>
-</html>>*@
+</html>

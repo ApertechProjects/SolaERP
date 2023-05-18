@@ -214,8 +214,11 @@ namespace SolaERP.Infrastructure.Services
 
         public async Task<bool> SendUsingTemplate<T>(string subject, T viewModel, string templateName, string imageName, List<string> tos)
         {
+            if (tos.Count == 0)
+                return false;
+
             var fileRootPath = Path.GetFullPath(@"wwwroot/sources/templates");
-            var imageRootPath = Path.GetFullPath(@"wwwroot/Content/image");
+            var imageRootPath = Path.GetFullPath(@"wwwroot/sources/images");
 
             LinkedResource imageResource = new LinkedResource(imageRootPath + "\\" + imageName);
             imageResource.ContentId = "image1";
@@ -230,8 +233,6 @@ namespace SolaERP.Infrastructure.Services
             var processedBody = PreMailer.Net.PreMailer.MoveCssInline(renderedHtml, true).Html;
             AlternateView alternateView = AlternateView.CreateAlternateViewFromString(processedBody, null, MediaTypeNames.Text.Html);
             alternateView.LinkedResources.Add(imageResource);
-
-
 
             using (SmtpClient smtpClient = new SmtpClient())
             {

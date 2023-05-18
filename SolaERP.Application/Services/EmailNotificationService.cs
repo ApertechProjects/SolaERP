@@ -2,6 +2,7 @@
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Email;
+using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Enums;
 
 namespace SolaERP.Persistence.Services
@@ -26,6 +27,12 @@ namespace SolaERP.Persistence.Services
             var data = await _emailNotificationRepository.GetEmailTemplateData(language, templateKey);
             var result = _mapper.Map<EmailTemplateDataDto>(data);
             return result;
+        }
+
+        public async Task<List<EmailTemplateData>> GetEmailTemplateData(EmailTemplateKey templateKey)
+        {
+            var templates = await _emailNotificationRepository.GetEmailTemplateData(templateKey);
+            return templates;
         }
     }
 }

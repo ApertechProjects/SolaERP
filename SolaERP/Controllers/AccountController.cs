@@ -2,16 +2,20 @@
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using RazorEngine;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities;
 using SolaERP.Application.Enums;
+using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
 using SolaERP.Infrastructure.ViewModels;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using System.Web;
+using Language = SolaERP.Application.Enums.Language;
 
 namespace SolaERP.Controllers
 {
@@ -77,9 +81,49 @@ namespace SolaERP.Controllers
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail([FromQuery] string verifyToken)
         {
-            var result = await _userService.ConfirmEmail(verifyToken);
-            if (result)
+            //var result = await _userService.ConfirmEmail(verifyToken);
+            //if (result.StatusCode == 200)
+            //{
+            UserData userData = await _userService.GetUserDataByVerifyTokenAsync(verifyToken);
+            //    Language language = userData.Language.GetLanguageEnumValue();
+            var companyName = await _emailNotificationService.GetCompanyName(userData.Email);
+            //    #region RegistratedUser
+            //    var templateDataForRegistrationPending = await _emailNotificationService.GetEmailTemplateData(language, EmailTemplateKey.RP);
+            //    VM_RegistrationPending registrationPending = new VM_RegistrationPending()
+            //    {
+            //        FullName = userData.FullName,
+            //        UserName = userData.UserName,
+            //        Header = templateDataForRegistrationPending.Header,
+            //        Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, userData.UserName)),
+            //        Language = language,
+            //        CompanyName = companyName,
+            //    };
 
+            //    await _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject, registrationPending, registrationPending.TemplateName(), registrationPending.ImageName(), new List<string> { userData.Email });
+            //    #endregion
+            #region AdminUsers
+            var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
+
+            for (int i = 0; i < Enum.GetNames(typeof(Language)).Length; i++)
+            {
+                string enumElement = Enum.GetNames(typeof(Language))[i];
+                var sendUsers = await _userService.GetAdminUsersAsync(1, enumElement.GetLanguageEnumValue());
+                var templateData = templates[i];
+                VM_RegistrationIsPendingAdminApprove adminApprove = new VM_RegistrationIsPendingAdminApprove()
+                {
+                    CompanyName = companyName,
+                    Header = templateData.Header,
+                    UserName = userData.UserName,
+                    CompanyOrVendorName = companyName,
+                    Language = templateData.Language.GetLanguageEnumValue(),
+                };
+
+                await _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), new List<string> { "hulya.garibli@apertech.net" });
+            }
+
+            #endregion
+            //}
+            return CreateActionResult(ApiResponse<bool>.Fail("Any problem detected", 400));
         }
 
         [HttpPost]
@@ -94,18 +138,9 @@ namespace SolaERP.Controllers
             AccountResponseDto account = new();
             if (response.Data > 0)
             {
-                var templateDataForRegistrationPending = await _emailNotificationService.GetEmailTemplateData(dto.language, EmailTemplateKey.RP);
                 var templateDataForVerification = await _emailNotificationService.GetEmailTemplateData(dto.language, EmailTemplateKey.VER);
                 var companyName = await _emailNotificationService.GetCompanyName(dto.Email);
-                VM_RegistrationPending registrationPending = new VM_RegistrationPending()
-                {
-                    FullName = dto.FullName,
-                    UserName = dto.UserName,
-                    Header = templateDataForRegistrationPending.Header,
-                    Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, dto.UserName)),
-                    Language = dto.language,
-                    CompanyName = companyName,
-                };
+
                 VM_EmailVerification emailVerification = new VM_EmailVerification()
                 {
                     Username = dto.UserName,

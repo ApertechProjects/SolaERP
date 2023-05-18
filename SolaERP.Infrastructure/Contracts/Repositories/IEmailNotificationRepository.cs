@@ -11,6 +11,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> DeleteAsync(int id);
         Task<string> GetCompanyName(string email);
         Task<EmailTemplateData> GetEmailTemplateData(Language language, EmailTemplateKey templateKey);
+        Task<List<EmailTemplateData>> GetEmailTemplateData(EmailTemplateKey templateKey);
 
     }
 }
