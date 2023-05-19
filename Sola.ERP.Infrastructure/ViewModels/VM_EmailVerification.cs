@@ -1,10 +1,20 @@
 ﻿using Microsoft.AspNetCore.Html;
+using Microsoft.Extensions.Configuration;
 using SolaERP.Application.Enums;
 
 namespace SolaERP.Infrastructure.ViewModels
 {
     public class VM_EmailVerification : VM_EmailTemplateBase
     {
+        private readonly IConfiguration _configuration;
+        public VM_EmailVerification()
+        {
+            IConfigurationBuilder builder = new ConfigurationBuilder()
+           .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            _configuration = builder.Build();
+        }
+
         public string? Token { get; set; }
         public string? Subject { get; set; }
         public string? Username { get; set; }
@@ -25,6 +35,11 @@ namespace SolaERP.Infrastructure.ViewModels
         public string ImageName()
         {
             return @"verification.png";
+        }
+
+        public string GetEmailVerifiedLink()
+        {
+            return _configuration["Mail:ServerUrl"] + $"/EmailRedirectingPage/EmailVerified.html?verifyToken={Token}";
         }
 
     }

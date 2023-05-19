@@ -66,7 +66,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 if (reader.Read())
-                    user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate", "VerifyToken");
+                    user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate", "VerifyToken","Language");
 
                 return user;
             }
@@ -173,7 +173,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         {
             string query = @"SET NOCOUNT OFF Exec SP_AppUser_IUD @Id,@FullName,@ChangePassword,@Theme,@UserName,@Email
                                                                 ,@PasswordHash,@PhoneNumber,@UserTypeId,@VendorId,@UserToken
-                                                                ,@Gender,@Buyer,@Description,@ERPUser,NULL,NULL,0,0,@VerifyToken,@NewId output";
+                                                                ,@Gender,@Buyer,@Description,@ERPUser,NULL,NULL,0,0,@VerifyToken,@Language,@NewId output";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = query;
@@ -193,6 +193,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@ERPUser", entity.ERPUser);
                 command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken.ToString());
                 command.Parameters.AddWithValue(command, "@VerifyToken", entity.VerifyToken);
+                command.Parameters.AddWithValue(command, "@Language", entity.Language.ToString());
                 command.Parameters.AddOutPutParameter(command, "@NewId");
                 await command.ExecuteNonQueryAsync();
                 var result = Convert.ToInt32(command.Parameters["@NewId"].Value);

@@ -81,49 +81,50 @@ namespace SolaERP.Controllers
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail([FromQuery] string verifyToken)
         {
-            //var result = await _userService.ConfirmEmail(verifyToken);
-            //if (result.StatusCode == 200)
-            //{
-            UserData userData = await _userService.GetUserDataByVerifyTokenAsync(verifyToken);
-            //    Language language = userData.Language.GetLanguageEnumValue();
-            var companyName = await _emailNotificationService.GetCompanyName(userData.Email);
-            //    #region RegistratedUser
-            //    var templateDataForRegistrationPending = await _emailNotificationService.GetEmailTemplateData(language, EmailTemplateKey.RP);
-            //    VM_RegistrationPending registrationPending = new VM_RegistrationPending()
-            //    {
-            //        FullName = userData.FullName,
-            //        UserName = userData.UserName,
-            //        Header = templateDataForRegistrationPending.Header,
-            //        Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, userData.UserName)),
-            //        Language = language,
-            //        CompanyName = companyName,
-            //    };
-
-            //    await _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject, registrationPending, registrationPending.TemplateName(), registrationPending.ImageName(), new List<string> { userData.Email });
-            //    #endregion
-            #region AdminUsers
-            var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
-
-            for (int i = 0; i < Enum.GetNames(typeof(Language)).Length; i++)
+            var result = await _userService.ConfirmEmail(verifyToken);
+            if (result.StatusCode == 200)
             {
-                string enumElement = Enum.GetNames(typeof(Language))[i];
-                var sendUsers = await _userService.GetAdminUsersAsync(1, enumElement.GetLanguageEnumValue());
-                var templateData = templates[i];
-                VM_RegistrationIsPendingAdminApprove adminApprove = new VM_RegistrationIsPendingAdminApprove()
+                UserData userData = await _userService.GetUserDataByVerifyTokenAsync(verifyToken);
+                Language language = userData.Language.GetLanguageEnumValue();
+                var companyName = await _emailNotificationService.GetCompanyName(userData.Email);
+                #region RegistratedUser
+                var templateDataForRegistrationPending = await _emailNotificationService.GetEmailTemplateData(language, EmailTemplateKey.RGA);
+                VM_RegistrationPending registrationPending = new VM_RegistrationPending()
                 {
-                    Body = new HtmlString(templateData.Body),
-                    CompanyName = companyName,
-                    Header = templateData.Header,
+                    FullName = userData.FullName,
                     UserName = userData.UserName,
-                    CompanyOrVendorName = companyName,
-                    Language = templateData.Language.GetLanguageEnumValue(),
+                    Header = templateDataForRegistrationPending.Header,
+                    Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, userData.UserName)),
+                    Language = language,
+                    CompanyName = companyName,
                 };
-                await _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), new List<string> { "hulya.garibli@apertech.net" });
-            }
 
-            #endregion
-            //}
-            return CreateActionResult(ApiResponse<bool>.Fail("Any problem detected", 400));
+                await _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject, registrationPending, registrationPending.TemplateName(), registrationPending.ImageName(), new List<string> { userData.Email });
+                #endregion
+                #region AdminUsers
+                var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
+
+                for (int i = 0; i < Enum.GetNames(typeof(Language)).Length; i++)
+                {
+                    string enumElement = Enum.GetNames(typeof(Language))[i];
+                    var sendUsers = await _userService.GetAdminUsersAsync(1, enumElement.GetLanguageEnumValue());
+                    var templateData = templates[i];
+                    VM_RegistrationIsPendingAdminApprove adminApprove = new VM_RegistrationIsPendingAdminApprove()
+                    {
+                        Body = new HtmlString(templateData.Body),
+                        CompanyName = companyName,
+                        Header = templateData.Header,
+                        UserName = userData.UserName,
+                        CompanyOrVendorName = companyName,
+                        Language = templateData.Language.GetLanguageEnumValue(),
+                    };
+                    await _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), sendUsers);
+                }
+
+                #endregion
+                //}
+            }
+            return CreateActionResult(result);
         }
 
         [HttpPost]
@@ -138,7 +139,7 @@ namespace SolaERP.Controllers
             AccountResponseDto account = new();
             if (response.Data > 0)
             {
-                var templateDataForVerification = await _emailNotificationService.GetEmailTemplateData(dto.language, EmailTemplateKey.VER);
+                var templateDataForVerification = await _emailNotificationService.GetEmailTemplateData(dto.Language, EmailTemplateKey.VER);
                 var companyName = await _emailNotificationService.GetCompanyName(dto.Email);
 
                 VM_EmailVerification emailVerification = new VM_EmailVerification()
@@ -147,14 +148,12 @@ namespace SolaERP.Controllers
                     Body = new HtmlString(string.Format(templateDataForVerification.Body, dto.UserName)),
                     CompanyName = companyName,
                     Header = templateDataForVerification.Header,
-                    Language = dto.language,
+                    Language = dto.Language,
                     Subject = templateDataForVerification.Subject,
                     Token = HttpUtility.HtmlDecode(dto.VerifyToken),
                 };
 
                 await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification, emailVerification.TemplateName(), emailVerification.ImageName(), new List<string> { dto.Email });
-
-                //await _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject, registrationPending, registrationPending.TemplateName(), new List<string> { "hulya.garibli@apertech.net" });
 
                 account.UserId = response.Data;
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
