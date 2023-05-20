@@ -66,7 +66,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 if (reader.Read())
-                    user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate", "VerifyToken","Language");
+                    user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate", "VerifyToken", "Language");
 
                 return user;
             }
@@ -603,7 +603,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@sequence", sequence);
                 command.Parameters.AddWithValue(command, "@language", language.ToString());
                 using var reader = await command.ExecuteReaderAsync();
-                if (reader.Read())
+                while (reader.Read())
                     userData.Add(reader.Get<string>("Email"));
 
                 return userData;

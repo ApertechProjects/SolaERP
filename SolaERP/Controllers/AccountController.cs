@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using RazorEngine;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Shared;
@@ -11,8 +10,6 @@ using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
 using SolaERP.Infrastructure.ViewModels;
-using System.Text;
-using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using System.Web;
 using Language = SolaERP.Application.Enums.Language;
@@ -99,7 +96,7 @@ namespace SolaERP.Controllers
                     CompanyName = companyName,
                 };
 
-                await _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject, registrationPending, registrationPending.TemplateName(), registrationPending.ImageName(), new List<string> { userData.Email });
+                //await _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject, registrationPending, registrationPending.TemplateName(), registrationPending.ImageName(), new List<string> { userData.Email });
                 #endregion
                 #region AdminUsers
                 var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
@@ -122,10 +119,10 @@ namespace SolaERP.Controllers
                 }
 
                 #endregion
-                //}
             }
             return CreateActionResult(result);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterModel dto)

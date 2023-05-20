@@ -246,15 +246,16 @@ namespace SolaERP.Infrastructure.Services
 
                 using (MailMessage message = new MailMessage())
                 {
+                    message.From = new MailAddress(_configuration["Mail:UserName"], "Apertech");
+                    message.Subject = subject;
+                    message.IsBodyHtml = true;
+                    message.Body = processedBody;
+
+                    message.AlternateViews.Add(alternateView);
                     foreach (string item in tos)
                     {
-                        message.From = new MailAddress(_configuration["Mail:UserName"], "Apertech");
-                        message.Subject = subject;
-                        message.IsBodyHtml = true;
-                        message.Body = processedBody;
-
-                        message.AlternateViews.Add(alternateView);
-                        message.To.Add(item);
+                        if (IsValidEmail(item))
+                            message.To.Add(item);
                     }
 
                     try
@@ -263,12 +264,26 @@ namespace SolaERP.Infrastructure.Services
                     }
                     catch (Exception ex)
                     {
+                        // Handle other exceptions or logging if necessary
+                        // ...
                     }
+
                 }
             }
             return true;
+        }
 
-
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var mailAddress = new System.Net.Mail.MailAddress(email);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public Task<bool> SendEmailMessage<T>(string template, T viewModel, string to, string subject)

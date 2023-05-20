@@ -7,7 +7,6 @@ using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Dtos.UserDto;
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
-using SolaERP.Application.Entities.User;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -43,8 +42,8 @@ namespace SolaERP.Persistence.Services
         {
             var userExsist = await _userRepository.GetUserByEmailAsync(model.Email);
 
-            if (userExsist is not null)
-                return ApiResponse<int>.Fail("user", "This user is already exsist in our system", 422, false);
+            //if (userExsist is not null)
+            //    return ApiResponse<int>.Fail("user", "This user is already exsist in our system", 422, false);
 
             if (model.UserType == Application.Enums.UserRegisterType.SupplierUser && model.VendorId == 0)
                 return ApiResponse<int>.Fail("company", "Company name required for Supplier user", 422, false);
