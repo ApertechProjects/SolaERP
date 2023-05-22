@@ -226,3 +226,32 @@ System.Data.SqlClient.SqlException (0x80131904): 'SF_CheckUserVerify' is not a r
 ClientConnectionId:08e0ee32-8972-454f-9db3-b97e004df73d
 Error Number:195,State:10,Class:15
 2023-05-11 14:18:32.921 +04:00 [ERR] 'SF_CheckUserVerify' is not a recognized built-in function name.
+2023-05-18 13:09:30.531 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.ArgumentException: The type of column 'Column' is not supported.  The type is 'GroupBuyerSaveModel'
+   at Microsoft.SqlServer.Server.MetaDataUtilsSmi.SmiMetaDataFromDataColumn(DataColumn column, DataTable parent)
+   at System.Data.SqlClient.SqlParameter.GetActualFieldsAndProperties(List`1& fields, SmiMetaDataPropertyCollection& props, ParameterPeekAheadValue& peekAhead)
+   at System.Data.SqlClient.SqlParameter.MetaDataForSmi(ParameterPeekAheadValue& peekAhead)
+   at System.Data.SqlClient.TdsParser.WriteSmiParameter(SqlParameter param, Int32 paramIndex, Boolean sendDefault, TdsParserStateObject stateObj)
+   at System.Data.SqlClient.TdsParser.TdsExecuteRPC(_SqlRPC[] rpcArray, Int32 timeout, Boolean inSchema, SqlNotificationRequest notificationRequest, TdsParserStateObject stateObj, Boolean isCommandProc, Boolean sync, TaskCompletionSource`1 completion, Int32 startRpc, Int32 startParam)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite, String methodName)
+   at System.Data.SqlClient.SqlCommand.BeginExecuteNonQuery(AsyncCallback callback, Object stateObject)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl(Func`3 beginMethod, Func`2 endFunction, Action`1 endAction, Object state, TaskCreationOptions creationOptions)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQueryAsync(CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlGroupRepository.AddBuyersAsync(DataTable data, Int32 groupId) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlGroupRepository.cs:line 424
+   at SolaERP.Persistence.Services.GroupService.AddBuyersAsync(List`1 addBuyers, Int32 groupId) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\GroupService.cs:line 246
+   at SolaERP.Persistence.Services.GroupService.SaveGroupAsync(String identity, GroupSaveModel model) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\GroupService.cs:line 202
+   at SolaERP.Controllers.GroupController.SaveGroupAsync(GroupSaveModel model) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\GroupController.cs:line 43
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-18 13:09:30.608 +04:00 [ERR] The type of column 'Column' is not supported.  The type is 'GroupBuyerSaveModel'
