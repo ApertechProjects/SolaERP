@@ -160,8 +160,8 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@SignaturePhoto", entity.SignaturePhoto);
                 command.Parameters.AddWithValue(command, "@Inactive", entity.InActive);
                 command.Parameters.AddWithValue(command, "@ChangeUserId", entity.UserId);
-                command.Parameters.AddWithValue(command, "@Language", "eng");
                 command.Parameters.AddWithValue(command, "@VerifyToken", entity.VerifyToken);
+                command.Parameters.AddWithValue(command, "@Language", "eng");
                 command.Parameters.AddOutPutParameter(command, "@NewId");
                 await command.ExecuteNonQueryAsync();
                 var result = Convert.ToInt32(command.Parameters["@NewId"].Value);
