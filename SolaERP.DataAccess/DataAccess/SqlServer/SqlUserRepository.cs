@@ -135,8 +135,9 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             string query = @"SET NOCOUNT OFF Exec SP_AppUser_IUD @Id,@FullName,@ChangePassword,@Theme,@UserName
                                                                 ,@Email,@PasswordHash,@PhoneNumber ,@UserTypeId
                                                                 ,@VendorId,@UserToken,@Gender,@Buyer,@Description
-                                                                ,@ERPUser,@UserPhoto,@SignaturePhoto,@Inactive
-                                                                ,@ChangeUserId,@VerifyToken,@NewId output";
+                                                                ,@ERPUser,@UserPhoto,@SignaturePhoto,@Inactive  
+                                                                ,@ChangeUserId,@VerifyToken,@Language,@NewId output";
+
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = query;
@@ -159,6 +160,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@SignaturePhoto", entity.SignaturePhoto);
                 command.Parameters.AddWithValue(command, "@Inactive", entity.InActive);
                 command.Parameters.AddWithValue(command, "@ChangeUserId", entity.UserId);
+                command.Parameters.AddWithValue(command, "@Language", "eng");
                 command.Parameters.AddWithValue(command, "@VerifyToken", entity.VerifyToken);
                 command.Parameters.AddOutPutParameter(command, "@NewId");
                 await command.ExecuteNonQueryAsync();
