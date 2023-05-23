@@ -75,7 +75,6 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> UpdateBuyer(List<RequestSetBuyer> requestSetBuyer)
             => CreateActionResult(await _requestService.UpdateBuyerAsync(requestSetBuyer));
 
-
         [HttpPost("api/[controller]/[action]")]
         public async Task<IActionResult> SaveFollowUser(RequestFollowSaveModel saveModel)
             => CreateActionResult(await _requestService.RequestFollowSaveAsync(saveModel));
@@ -83,7 +82,6 @@ namespace SolaERP.Controllers
         [HttpDelete("{requestMainId}")]
         public async Task<IActionResult> Delete(int requestMainId)
             => CreateActionResult(await _requestService.DeleteRequestAsync(User.Identity.Name, requestMainId));
-
 
         [HttpDelete("api/[controller]/[action]/{requestFollowId}")]
         public async Task<IActionResult> DeleteRequestFollow(int requestFollowId)
