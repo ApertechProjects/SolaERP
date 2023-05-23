@@ -31,7 +31,7 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _requestService.GetRequestDetailApprvalInfoAsync(requestDetailId));
 
         [HttpGet("{requestMainId}")]
-        public async Task<IActionResult> FollowUsers(int requestMainId)
+        public async Task<IActionResult> FollowUser(int requestMainId)
             => CreateActionResult(await _requestService.RequestFollowUserLoadAsync(requestMainId));
 
         [HttpGet]
@@ -51,7 +51,7 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _requestService.GetChangeApprovalAsync(User.Identity.Name, requestParametersDto));
 
         [HttpPost]
-        public async Task<IActionResult> Drafts(RequestMainDraftModel model)
+        public async Task<IActionResult> Draft(RequestMainDraftModel model)
             => CreateActionResult(await _requestService.GetDraftsAsync(model));
 
         [HttpPost]
