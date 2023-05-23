@@ -55,7 +55,7 @@ namespace SolaERP.Persistence.Services
             return requestDetails;
         }
 
-        public async Task<ApiResponse<List<RequestTypesDto>>> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId)
+        public async Task<ApiResponse<List<RequestTypesDto>>> GetRequestTypesAsync(int businessUnitId)
         {
             var entity = await _requestMainRepository.GetRequestTypesByBusinessUnitIdAsync(businessUnitId);
             var dto = _mapper.Map<List<RequestTypesDto>>(entity);
@@ -64,7 +64,7 @@ namespace SolaERP.Persistence.Services
                 ApiResponse<List<RequestTypesDto>>.Fail("Request types not found", 404);
         }
 
-        public async Task<ApiResponse<bool>> RequestMainChangeStatusAsync(string name, RequestChangeStatusModel changeStatusParametersDtos)
+        public async Task<ApiResponse<bool>> ChangeMainStatusAsync(string name, RequestChangeStatusModel changeStatusParametersDtos)
         {
             var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             if (changeStatusParametersDtos.RequestMainIds == null && changeStatusParametersDtos.RequestMainIds.Count == 0)
@@ -103,7 +103,7 @@ namespace SolaERP.Persistence.Services
             return text;
         }
 
-        public async Task<ApiResponse<bool>> RequestSendToApproveAsync(string name, int requestMainId)
+        public async Task<ApiResponse<bool>> SendToApproveAsync(string name, int requestMainId)
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             string userName = await _userRepository.GetUserNameByTokenAsync(name);
@@ -117,7 +117,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(true, 200);
         }
 
-        public async Task<ApiResponse<RequestCardMainDto>> GetRequestByRequestMainId(string name, int requestMainId)
+        public async Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId)
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var requestMain = await _requestMainRepository.GetRequesMainHeaderAsync(requestMainId, userId);
@@ -126,7 +126,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<RequestCardMainDto>.Success(requestDto, 200);
         }
 
-        public async Task<ApiResponse<List<RequestMainDraftDto>>> GetRequestMainDraftsAsync(RequestMainDraftModel getMainDraftParameters)
+        public async Task<ApiResponse<List<RequestMainDraftDto>>> GetDraftsAsync(RequestMainDraftModel getMainDraftParameters)
         {
             var mainDraftEntites = await _requestMainRepository.GetMainRequestDraftsAsync(getMainDraftParameters);
             var mainDraftDto = _mapper.Map<List<RequestMainDraftDto>>(mainDraftEntites);
@@ -138,7 +138,7 @@ namespace SolaERP.Persistence.Services
             //return ApiResponse<List<RequestMainDraftDto>>.Fail("Main drafts is empty", 404);
         }
 
-        public async Task<ApiResponse<List<RequestAmendmentDto>>> GetApproveAmendmentRequests(string name, RequestApproveAmendmentModel requestParametersDto)
+        public async Task<ApiResponse<List<RequestAmendmentDto>>> GetChangeApprovalAsync(string name, RequestApproveAmendmentModel requestParametersDto)
         {
             var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var mainRequest = await _requestMainRepository.GetApproveAmendmentRequestsAsync(userId, requestParametersDto);
@@ -151,7 +151,7 @@ namespace SolaERP.Persistence.Services
             //return ApiResponse<List<RequestAmendmentDto>>.Fail("Amendment is empty", 404);
         }
 
-        public async Task<ApiResponse<List<RequestApprovalInfoDto>>> GetRequestApprovalInfoAsync(string name, int requestMainId)
+        public async Task<ApiResponse<List<RequestApprovalInfoDto>>> GetApprovalInfoAsync(string name, int requestMainId)
         {
             var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var approvalInfo = await _requestMainRepository.GetRequestApprovalInfoAsync(requestMainId, userId);
