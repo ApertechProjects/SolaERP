@@ -12,12 +12,10 @@ namespace SolaERP.Controllers
     public class RequestController : CustomBaseController
     {
         private readonly IRequestService _requestService;
-        private IUserRepository _userRepository;
 
-        public RequestController(IRequestService requestService, IUserRepository userRepository)
+        public RequestController(IRequestService requestService)
         {
             _requestService = requestService;
-            _userRepository = userRepository;
         }
 
         [HttpGet("{businessUnitId}")]
@@ -36,6 +34,10 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> FollowUsers(int requestMainId)
             => CreateActionResult(await _requestService.RequestFollowUserLoadAsync(requestMainId));
 
+        [HttpGet]
+        public async Task<IActionResult> Info(int requestMainId)
+           => CreateActionResult(await _requestService.GetByMainId(User.Identity.Name, requestMainId));
+
         [HttpPost]
         public async Task<IActionResult> WaitingForApproval(RequestWFAGetModel requestWFAGetParametersDto)
             => CreateActionResult(await _requestService.GetWaitingForApprovalsAsync(User.Identity.Name, requestWFAGetParametersDto));
@@ -51,10 +53,6 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> Drafts(RequestMainDraftModel model)
             => CreateActionResult(await _requestService.GetDraftsAsync(model));
-
-        [HttpGet]
-        public async Task<IActionResult> Info(int requestMainId)
-             => CreateActionResult(await _requestService.GetByMainId(User.Identity.Name, requestMainId));
 
         [HttpPost]
         public async Task<IActionResult> Save(RequestSaveModel model)
