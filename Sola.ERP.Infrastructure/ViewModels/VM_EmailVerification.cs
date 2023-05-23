@@ -34,7 +34,7 @@ namespace SolaERP.Infrastructure.ViewModels
 
         public string ImageName()
         {
-            return @"verification.png";
+            return @"email.png";
         }
 
         public string GetEmailVerifiedLink()

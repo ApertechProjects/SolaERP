@@ -177,7 +177,7 @@
 </head>
 
 <body width="100%">
-    <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+    <div style="margin: 0 auto;" class="email-container">
 
         <table width="100%" style="margin: auto;">
             <tr>
@@ -193,11 +193,13 @@
             </tr>
             <tr>
                 <td valign="middle" class="hero bg_white">
-                    <img src='cid:image1' alt="" width="200" height="200" style="max-width: 200px; margin: auto; display: block;" />
+                    <div style="text-align: center;">
+                        <img src='cid:image1' alt="" width="200" height="200" style="max-width: 200px; margin: auto; display: block;" />
+                    </div>
                 </td>
             </tr>
             <tr>
-                <td valign="middle" class="hero bg_white" style="padding: 2em 0 2em 0;">
+                <td valign="middle" class="hero bg_white" style="padding: 2em 0 2em 0; margin: 0 auto; text-align: center">
                     <table>
                         <tr>
                             <td>
@@ -205,9 +207,10 @@
                                     <h4 style="color: gray; text-align: center; font-weight: bold;">
                                         @Model.GenerateAutomatedEmailText()
                                     </h4>
-                                    <h4>
+                                    <h4 style="text-align: center">
                                         @Model.Body
                                     </h4>
+                                   
                                     <p style="color:black;">@Model.GenerateCompanyNameTeamText()</p>
                                     <p style="font-weight: bold;">@Model.GenerateDevelopedInformationText()</p>
                                 </div>
@@ -217,7 +220,7 @@
                 </td>
             </tr>
         </table>
-        <table width="100%">
+        <table width="100%" style="margin: auto;">
             <tr>
                 <td class="bg_light" style="text-align: center; color: #000; font-size:14px;">
                     <p>@Model.GenerateCopyRightText()</p>

@@ -180,7 +180,7 @@
 </head>
 
 <body width="100%">
-    <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+    <div style="margin: 0 auto;" class="email-container">
 
         <table width="100%" style="margin: auto;">
             <tbody>
@@ -199,11 +199,13 @@
                 </tr>
                 <tr>
                     <td valign="middle" class="hero bg_white">
-                        <img src='cid:image1' alt="" width="200" height="200" style="max-width: 200px; margin: auto; display: block;" />
+                        <div style="text-align: center;">
+                            <img src='cid:image1' alt="" width="200" height="200" style="max-width: 200px; margin: auto; display: block;" />
+                        </div>
                     </td>
                 </tr>
                 <tr>
-                    <td valign="middle" class="hero bg_white" style="padding: 2em 0 2em 0;">
+                    <td valign="middle" class="hero bg_white" style="padding: 2em 0 2em 0; margin: 0 auto; text-align: center">
                         <table>
                             <tbody>
                                 <tr>
@@ -214,7 +216,7 @@
                                                 @Model.Body
                                             </h4>
 
-                                            <p style="color:black;">@Model.GenerateCompanyNameTeamText</p>
+                                            <p style="color:black;">@Model.GenerateCompanyNameTeamText()</p>
                                             <p style="font-weight: bold;">@Model.GenerateDevelopedInformationText()</p>
                                         </div>
                                     </td>
@@ -225,7 +227,7 @@
                 </tr>
             </tbody>
         </table>
-        <table width="100%">
+        <table width="100%" style="margin: auto;">
             <tbody>
                 <tr>
                     <td class="bg_light" style="text-align: center; color: #000; font-size:14px;">
