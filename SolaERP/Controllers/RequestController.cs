@@ -36,12 +36,12 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> RequestFollowUsersLoadAsync(int requestMainId)
             => CreateActionResult(await _requestService.RequestFollowUserLoadAsync(requestMainId));
 
-        [HttpPost]
-        public async Task<IActionResult> GetWaitingForApprovalsRequest(RequestWFAGetModel requestWFAGetParametersDto)
+        [HttpGet]
+        public async Task<IActionResult> GetWaitingForApprovalsRequest([FromQuery] RequestWFAGetModel requestWFAGetParametersDto)
             => CreateActionResult(await _requestService.GetWaitingForApprovalsAsync(User.Identity.Name, requestWFAGetParametersDto));
 
-        [HttpPost]
-        public async Task<IActionResult> GetAllMainRequestAsync(RequestMainGetModel requestMainParameters)
+        [HttpGet]
+        public async Task<IActionResult> GetAllMainRequestAsync([FromQuery] RequestMainGetModel requestMainParameters)
             => CreateActionResult(await _requestService.GetAllAsync(requestMainParameters));
 
         [HttpPost]
