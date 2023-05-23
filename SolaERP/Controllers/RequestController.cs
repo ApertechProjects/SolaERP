@@ -36,25 +36,27 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> RequestFollowUsersLoadAsync(int requestMainId)
             => CreateActionResult(await _requestService.RequestFollowUserLoadAsync(requestMainId));
 
-        [HttpGet]
-        public async Task<IActionResult> GetWaitingForApprovalsRequest([FromQuery] RequestWFAGetModel requestWFAGetParametersDto)
+        [HttpPost]
+        public async Task<IActionResult> GetWaitingForApprovalsRequest(RequestWFAGetModel requestWFAGetParametersDto)
             => CreateActionResult(await _requestService.GetWaitingForApprovalsAsync(User.Identity.Name, requestWFAGetParametersDto));
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllMainRequestAsync([FromQuery] RequestMainGetModel requestMainParameters)
+        [HttpPost]
+        public async Task<IActionResult> GetAllMainRequestAsync(RequestMainGetModel requestMainParameters)
             => CreateActionResult(await _requestService.GetAllAsync(requestMainParameters));
 
-        [HttpGet]
-        public async Task<IActionResult> GetApproveAmendmentRequestsAsync([FromQuery] RequestApproveAmendmentModel requestParametersDto)
+        [HttpPost]
+        public async Task<IActionResult> GetApproveAmendmentRequestsAsync(RequestApproveAmendmentModel requestParametersDto)
             => CreateActionResult(await _requestService.GetApproveAmendmentRequests(User.Identity.Name, requestParametersDto));
 
-        [HttpGet]
-        public async Task<IActionResult> GetRequestDraftsAsync([FromQuery] RequestMainDraftModel model)
+
+        [HttpPost]
+        public async Task<IActionResult> GetRequestDraftsAsync(RequestMainDraftModel model)
             => CreateActionResult(await _requestService.GetRequestMainDraftsAsync(model));
 
         [HttpGet("{requestMainId}")]
         public async Task<IActionResult> GetRequestCardByMainId(int requestMainId)
              => CreateActionResult(await _requestService.GetRequestByRequestMainId(User.Identity.Name, requestMainId));
+
 
         [HttpPost]
         public async Task<IActionResult> SaveRequestAsync(RequestSaveModel model)
