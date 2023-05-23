@@ -35,6 +35,24 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<List<Analysis>> GetAnalysisCodesAsync(int analysisCodeId, int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_AnalysisCodes_Load @analysisCodeId,@userId";
+                command.Parameters.AddWithValue(command, "@analysisCodeId", analysisCodeId);
+                command.Parameters.AddWithValue(command, "@userId", userId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                List<Analysis> resultList = new();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<Analysis>());
+
+                return resultList;
+            }
+        }
+
         public async Task<List<AnalysisCodes>> GetAnalysisCodesByDimensionIdAsync(int dimensionId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)

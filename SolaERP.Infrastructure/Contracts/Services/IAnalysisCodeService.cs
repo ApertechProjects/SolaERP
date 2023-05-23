@@ -10,6 +10,7 @@ namespace SolaERP.Application.Contracts.Services
     public interface IAnalysisCodeService
     {
         public Task<ApiResponse<List<IGrouping<int, AnalysisCodeDto>>>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest);
+        public Task<ApiResponse<List<AnalysisDto>>> GetAnalysisCodesAsync(int analysisCodeId, string userName);
         Task<ApiResponse<List<AnalysisCodesDto>>> GetAnalysisCodesByDimensionIdAsync(int dimensionId);
         Task<ApiResponse<List<AnalysisDimensionDto>>> GetAnalysisDimensionAsync();
     }

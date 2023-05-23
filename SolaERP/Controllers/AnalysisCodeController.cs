@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Features.Queries.AnalysisCode;
 using SolaERP.Application.Models;
+using System.Security.Claims;
 
 namespace SolaERP.Controllers
 {
@@ -23,8 +24,12 @@ namespace SolaERP.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAnalysisCodesAsync([FromQuery] AnalysisCodeGetModel getRequest)
+        public async Task<IActionResult> AnalysisCodes([FromQuery] AnalysisCodeGetModel getRequest)
             => CreateActionResult(await _analysisCodeService.GetAnalysisCodesAsync(getRequest));
+
+        [HttpGet("{analysisCodeId}")]
+        public async Task<IActionResult> AnalysisCodes(int analysisCodeId)
+            => CreateActionResult(await _analysisCodeService.GetAnalysisCodesAsync(analysisCodeId, User.Identity.Name));
 
         [HttpGet]
         public async Task<IActionResult> GetAnalysisDimensionAsync()
