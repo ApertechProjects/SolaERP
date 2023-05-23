@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.AnalysisCode;
 using SolaERP.Application.Features.Queries.AnalysisCode;
 using SolaERP.Application.Models;
-using System.Security.Claims;
 
 namespace SolaERP.Controllers
 {
@@ -30,6 +30,14 @@ namespace SolaERP.Controllers
         [HttpGet("{analysisCodeId}")]
         public async Task<IActionResult> AnalysisCodes(int analysisCodeId)
             => CreateActionResult(await _analysisCodeService.GetAnalysisCodesAsync(analysisCodeId, User.Identity.Name));
+
+        [HttpPost]
+        public async Task<IActionResult> Save(AnalysisDto analysisDto)
+            => CreateActionResult(await _analysisCodeService.SaveAnalysisCodeAsync(analysisDto, User.Identity.Name));
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int analysisCodeId)
+           => CreateActionResult(await _analysisCodeService.DeleteAnalysisCodeAsync(analysisCodeId));
 
         [HttpGet]
         public async Task<IActionResult> GetAnalysisDimensionAsync()

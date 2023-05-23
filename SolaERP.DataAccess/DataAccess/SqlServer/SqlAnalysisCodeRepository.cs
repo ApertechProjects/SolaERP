@@ -1,10 +1,11 @@
-﻿using SolaERP.Application.Entities.AnalysisCode;
-using SolaERP.DataAccess.Extensions;
-using SolaERP.Application.Contracts.Repositories;
+﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Dtos.AnalysisCode;
+using SolaERP.Application.Entities.AnalysisCode;
 using SolaERP.Application.Entities.AnalysisDimension;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
-using SolaERP.Application.Entities.BusinessUnits;
+using System.Data.SqlClient;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -15,6 +16,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public SqlAnalysisCodeRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+        }
+
+        public async Task<bool> DeleteAnalysisCodeAsync(int analysisCodeId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_AnalysisCodes_IUD    
+                                                                @AnalysisCodesId"
+                ;
+                command.Parameters.AddWithValue(command, "@AnalysisCodesId", analysisCodeId);
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
         }
 
         public async Task<List<AnalysisCode>> GetAnalysisCodesAsync(int businessUnitId, string procedureName)
@@ -102,6 +115,30 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     resultList.Add(reader.GetByEntityStructure<BuAnalysisDimension>());
 
                 return resultList;
+            }
+        }
+
+        public async Task<bool> SaveAnalysisCode(AnalysisDto analysisDto, int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_AnalysisCodes_IUD    
+                                                                @AnalysisCodesId,
+                                                                @AnalysisDimensionId,
+                                                                @AnalysisCode,
+                                                                @AnalysisName,
+                                                                @Description,
+                                                                @UserId"
+                ;
+
+                command.Parameters.AddWithValue(command, "@AnalysisCodesId", analysisDto.AnalysisCodesId);
+                command.Parameters.AddWithValue(command, "@AnalysisDimensionId", analysisDto.AnalysisDimensionId);
+                command.Parameters.AddWithValue(command, "@AnalysisCode", analysisDto.AnalysisCode);
+                command.Parameters.AddWithValue(command, "@AnalysisName", analysisDto.AnalysisName);
+                command.Parameters.AddWithValue(command, "@Description", analysisDto.Description);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+
+                return await command.ExecuteNonQueryAsync() > 0;
             }
         }
     }

@@ -146,6 +146,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<Group, GroupDto>().ReverseMap();
             CreateMap<UserSaveModel, User>().ReverseMap();
             CreateMap<UsersByGroup, UsersByGroupDto>().ReverseMap();
+            CreateMap<Analysis, AnalysisDto>().ReverseMap();
 
         }
     }

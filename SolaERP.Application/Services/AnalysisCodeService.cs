@@ -6,7 +6,6 @@ using SolaERP.Application.Dtos.AnaysisDimension;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
-using System.Xml.Linq;
 
 namespace SolaERP.Persistence.Services
 {
@@ -23,6 +22,15 @@ namespace SolaERP.Persistence.Services
             _unitOfWork = unitOfWork;
             _analysisCodeRepository = analysisCodeRepository;
             _userRepository = userRepository;
+        }
+
+        public async Task<ApiResponse<bool>> DeleteAnalysisCodeAsync(int analysisCodeId)
+        {
+            var code = await _analysisCodeRepository.DeleteAnalysisCodeAsync(analysisCodeId);
+            await _unitOfWork.SaveChangesAsync();
+            if (code)
+                return ApiResponse<bool>.Success(code, 200);
+            return ApiResponse<bool>.Fail("Analysis code can not be deleted", 400);
         }
 
         public async Task<ApiResponse<List<IGrouping<int, AnalysisCodeDto>>>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest)
@@ -66,5 +74,14 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<AnalysisDimensionDto>>.Success(dto, 200);
         }
 
+        public async Task<ApiResponse<bool>> SaveAnalysisCodeAsync(AnalysisDto analysisDto, string name)
+        {
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            var code = await _analysisCodeRepository.SaveAnalysisCode(analysisDto, userId);
+            await _unitOfWork.SaveChangesAsync();
+            if (code)
+                return ApiResponse<bool>.Success(code, 200);
+            return ApiResponse<bool>.Fail("Analysis code can not be saved", 400);
+        }
     }
 }
