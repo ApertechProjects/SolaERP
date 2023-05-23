@@ -27,7 +27,7 @@ namespace SolaERP.Persistence.Services
             _mailService = mailService;
         }
 
-        public async Task<bool> RemoveRequestDetailAsync(int requestDetailId)
+        public async Task<bool> RemoveDetailAsync(int requestDetailId)
         {
             var result = await _requestDetailRepository.RemoveAsync(requestDetailId);
             await _unitOfWork.SaveChangesAsync();
@@ -55,7 +55,7 @@ namespace SolaERP.Persistence.Services
             return requestDetails;
         }
 
-        public async Task<ApiResponse<List<RequestTypesDto>>> GetRequestTypesAsync(int businessUnitId)
+        public async Task<ApiResponse<List<RequestTypesDto>>> GetTypesAsync(int businessUnitId)
         {
             var entity = await _requestMainRepository.GetRequestTypesByBusinessUnitIdAsync(businessUnitId);
             var dto = _mapper.Map<List<RequestTypesDto>>(entity);
@@ -161,7 +161,7 @@ namespace SolaERP.Persistence.Services
                 ApiResponse<List<RequestApprovalInfoDto>>.Fail("Bad Request Approval info is empty", 404);
         }
 
-        public async Task<ApiResponse<RequestMainDto>> GetRequestHeaderAsync(string name, int requestMainId)
+        public async Task<ApiResponse<RequestMainDto>> GetHeaderAsync(string name, int requestMainId)
         {
             var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var requestHeader = await _requestMainRepository.GetRequesMainHeaderAsync(userId, requestMainId);
@@ -171,7 +171,7 @@ namespace SolaERP.Persistence.Services
                 ApiResponse<RequestMainDto>.Fail("Bad request header is null", 404);
         }
 
-        public async Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetRequestDetails(int requestmainId)
+        public async Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetDetails(int requestmainId)
         {
             var requestDetails = await _requestDetailRepository.GetRequestDetailsByMainIdAsync(requestmainId);
             var requestDetailsResult = _mapper.Map<List<RequestDetailsWithAnalysisCodeDto>>(requestDetails);
@@ -180,7 +180,7 @@ namespace SolaERP.Persistence.Services
                 ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>.Fail("Request details is empty", 404);
         }
 
-        public async Task<ApiResponse<RequestSaveResultModel>> AddOrUpdateRequestAsync(string name, RequestSaveModel model)
+        public async Task<ApiResponse<RequestSaveResultModel>> AddOrUpdateAsync(string name, RequestSaveModel model)
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             RequestSaveResultModel resultModel = await _requestMainRepository.AddOrUpdateRequestAsync(userId, _mapper.Map<RequestMainSaveModel>(model));
@@ -193,7 +193,7 @@ namespace SolaERP.Persistence.Services
                     requestDetailDto.RequestMainId = resultModel.RequestMainId;
                     if (requestDetailDto.Type == "remove" && requestDetailDto.RequestDetailId > 0)
                     {
-                        await RemoveRequestDetailAsync(requestDetailDto.RequestDetailId);
+                        await RemoveDetailAsync(requestDetailDto.RequestDetailId);
                     }
                     else
                     {
@@ -205,7 +205,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<RequestSaveResultModel>.Fail("Not Found", 404);
         }
 
-        public async Task<ApiResponse<bool>> DeleteRequestAsync(string name, int requestMainId)
+        public async Task<ApiResponse<bool>> DeleteAsync(string name, int requestMainId)
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             int requestId = await _requestMainRepository.DeleteAsync(userId, requestMainId);
@@ -213,7 +213,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(requestId);
         }
 
-        public async Task<ApiResponse<List<RequestDetailApprovalInfoDto>>> GetRequestDetailApprvalInfoAsync(int requestDetaildId)
+        public async Task<ApiResponse<List<RequestDetailApprovalInfoDto>>> GetDetailApprvalInfoAsync(int requestDetaildId)
         {
             var entity = await _requestDetailRepository.GetDetailApprovalInfoAsync(requestDetaildId);
             var result = _mapper.Map<List<RequestDetailApprovalInfoDto>>(entity);
@@ -221,7 +221,7 @@ namespace SolaERP.Persistence.Services
             return result != null ? ApiResponse<List<RequestDetailApprovalInfoDto>>.Success(result, 200) : ApiResponse<List<RequestDetailApprovalInfoDto>>.Success(new(), 200);
         }
 
-        public async Task<ApiResponse<NoContentDto>> RequestDetailChangeStatusAsync(string name, RequestDetailApproveModel model)
+        public async Task<ApiResponse<NoContentDto>> ChangeDetailStatusAsync(string name, RequestDetailApproveModel model)
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             if (model.RequestDetailIds == null && model.RequestDetailIds.Count == 0)
@@ -242,7 +242,7 @@ namespace SolaERP.Persistence.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ApiResponse<List<RequestWFADto>>> GetWaitingForApprovalsAsync(string name, RequestWFAGetModel requestWFAGetParametersDto)
+        public async Task<ApiResponse<List<RequestWFADto>>> GetWFAAsync(string name, RequestWFAGetModel requestWFAGetParametersDto)
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
             var mainreq = await _requestMainRepository.GetWaitingForApprovalsAsync(userId, requestWFAGetParametersDto);
@@ -267,7 +267,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(data, 200);
         }
 
-        public async Task<ApiResponse<List<RequestFollowDto>>> RequestFollowUserLoadAsync(int requestMainId)
+        public async Task<ApiResponse<List<RequestFollowDto>>> GetFollowUsersAsync(int requestMainId)
         {
             var data = await _requestMainRepository.RequestFollowUserLoadAsync(requestMainId);
             var dto = _mapper.Map<List<RequestFollowDto>>(data);
@@ -276,7 +276,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<RequestFollowDto>>.Fail("Request Follow User List is empty", 400);
         }
 
-        public async Task<ApiResponse<bool>> RequestFollowSaveAsync(RequestFollowSaveModel saveModel)
+        public async Task<ApiResponse<bool>> SaveFollowUserAsync(RequestFollowSaveModel saveModel)
         {
             bool result = await _requestMainRepository.RequestFollowCheckUserExistAsync(saveModel);
             if (!result)
@@ -288,7 +288,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Fail("This user already exist for this request", 200);
         }
 
-        public async Task<ApiResponse<bool>> RequestFollowDeleteAsync(int requestFollowId)
+        public async Task<ApiResponse<bool>> DeleteFollowUserAsync(int requestFollowId)
         {
             bool result = false;
             result = await _requestMainRepository.RequestFollowDeleteAsync(requestFollowId);
@@ -296,7 +296,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(result, 200);
         }
 
-        public Task SendFollowMailForRequest(string[] tos, string messageBody, string subject)
+        public Task PushNotfication(string[] tos, string messageBody, string subject)
         {
             throw new NotImplementedException();
         }

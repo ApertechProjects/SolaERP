@@ -20,7 +20,7 @@ namespace SolaERP.Controllers
 
         [HttpGet("{businessUnitId}")]
         public async Task<IActionResult> Type(int businessUnitId)
-            => CreateActionResult(await _requestService.GetRequestTypesAsync(businessUnitId));
+            => CreateActionResult(await _requestService.GetTypesAsync(businessUnitId));
 
         [HttpGet("{requestMainId}")]
         public async Task<IActionResult> MainApprovalInfo(int requestMainId)
@@ -28,11 +28,11 @@ namespace SolaERP.Controllers
 
         [HttpGet("{requestDetailId}")]
         public async Task<IActionResult> DetailApprovalInfo(int requestDetailId)
-            => CreateActionResult(await _requestService.GetRequestDetailApprvalInfoAsync(requestDetailId));
+            => CreateActionResult(await _requestService.GetDetailApprvalInfoAsync(requestDetailId));
 
         [HttpGet("{requestMainId}")]
         public async Task<IActionResult> FollowUser(int requestMainId)
-            => CreateActionResult(await _requestService.RequestFollowUserLoadAsync(requestMainId));
+            => CreateActionResult(await _requestService.GetFollowUsersAsync(requestMainId));
 
         [HttpGet]
         public async Task<IActionResult> Info(int requestMainId)
@@ -40,7 +40,7 @@ namespace SolaERP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> WaitingForApproval(RequestWFAGetModel requestWFAGetParametersDto)
-            => CreateActionResult(await _requestService.GetWaitingForApprovalsAsync(User.Identity.Name, requestWFAGetParametersDto));
+            => CreateActionResult(await _requestService.GetWFAAsync(User.Identity.Name, requestWFAGetParametersDto));
 
         [HttpPost]
         public async Task<IActionResult> All(RequestMainGetModel requestMainParameters)
@@ -56,7 +56,7 @@ namespace SolaERP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Save(RequestSaveModel model)
-        => CreateActionResult(await _requestService.AddOrUpdateRequestAsync(User.Identity.Name, model));
+        => CreateActionResult(await _requestService.AddOrUpdateAsync(User.Identity.Name, model));
 
         [HttpPost]
         public async Task<IActionResult> SendToApprove(int requestMainId)
@@ -68,7 +68,7 @@ namespace SolaERP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> ChangeDetailStatus(RequestDetailApproveModel model)
-            => CreateActionResult(await _requestService.RequestDetailChangeStatusAsync(User.Identity.Name, model));
+            => CreateActionResult(await _requestService.ChangeDetailStatusAsync(User.Identity.Name, model));
 
         [HttpPost]
         public async Task<IActionResult> UpdateBuyer(List<RequestSetBuyer> requestSetBuyer)
@@ -76,15 +76,15 @@ namespace SolaERP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateFollowUser(RequestFollowSaveModel saveModel)
-            => CreateActionResult(await _requestService.RequestFollowSaveAsync(saveModel));
+            => CreateActionResult(await _requestService.SaveFollowUserAsync(saveModel));
 
         [HttpDelete("{requestMainId}")]
         public async Task<IActionResult> Delete(int requestMainId)
-            => CreateActionResult(await _requestService.DeleteRequestAsync(User.Identity.Name, requestMainId));
+            => CreateActionResult(await _requestService.DeleteAsync(User.Identity.Name, requestMainId));
 
         [HttpDelete("{requestFollowId}")]
         public async Task<IActionResult> DeleteFollowUser(int requestFollowId)
-            => CreateActionResult(await _requestService.RequestFollowDeleteAsync(requestFollowId));
+            => CreateActionResult(await _requestService.DeleteFollowUserAsync(requestFollowId));
     }
 }
 
