@@ -23,7 +23,7 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _requestService.GetRequestTypesAsync(businessUnitId));
 
         [HttpGet("{requestMainId}")]
-        public async Task<IActionResult> ApprovalInfo(int requestMainId)
+        public async Task<IActionResult> MainApprovalInfo(int requestMainId)
             => CreateActionResult(await _requestService.GetApprovalInfoAsync(User.Identity.Name, requestMainId));
 
         [HttpGet("{requestDetailId}")]
