@@ -44,19 +44,17 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetAllMainRequestAsync([FromQuery] RequestMainGetModel requestMainParameters)
             => CreateActionResult(await _requestService.GetAllAsync(requestMainParameters));
 
-        [HttpPost]
-        public async Task<IActionResult> GetApproveAmendmentRequestsAsync(RequestApproveAmendmentModel requestParametersDto)
+        [HttpGet]
+        public async Task<IActionResult> GetApproveAmendmentRequestsAsync([FromQuery] RequestApproveAmendmentModel requestParametersDto)
             => CreateActionResult(await _requestService.GetApproveAmendmentRequests(User.Identity.Name, requestParametersDto));
 
-
-        [HttpPost]
-        public async Task<IActionResult> GetRequestDraftsAsync(RequestMainDraftModel model)
+        [HttpGet]
+        public async Task<IActionResult> GetRequestDraftsAsync([FromQuery] RequestMainDraftModel model)
             => CreateActionResult(await _requestService.GetRequestMainDraftsAsync(model));
 
         [HttpGet("{requestMainId}")]
         public async Task<IActionResult> GetRequestCardByMainId(int requestMainId)
              => CreateActionResult(await _requestService.GetRequestByRequestMainId(User.Identity.Name, requestMainId));
-
 
         [HttpPost]
         public async Task<IActionResult> SaveRequestAsync(RequestSaveModel model)
