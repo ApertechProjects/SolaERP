@@ -10,6 +10,9 @@ namespace SolaERP.Application.Contracts.Services
 {
     public interface IAnalysisDimensionService
     {
-        Task<ApiResponse<List<AnalysisDimensionDto>>> ByAnalysisDimensionId(int analysisDimensionId,string name);
+        Task<ApiResponse<List<AnalysisDimensionDto>>> ByAnalysisDimensionId(int analysisDimensionId, string name);
+        Task<ApiResponse<List<BuAnalysisDimensionDto>>> ByBusinessUnitId(int businessUnitId, string name);
+        Task<ApiResponse<bool>> Save(AnalysisDimensionDto analysisDimension, string name);
+        Task<ApiResponse<bool>> Delete(int analysisDimensionId, string name);
     }
 }
