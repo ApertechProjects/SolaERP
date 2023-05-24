@@ -513,3 +513,24 @@ System.Data.SqlClient.SqlException (0x80131904): The DELETE statement conflicted
 ClientConnectionId:ddff4f2c-fecb-4fa6-811b-54bb845894a7
 Error Number:547,State:0,Class:16
 2023-05-24 15:01:54.064 +04:00 [ERR] The DELETE statement conflicted with the REFERENCE constraint "FK__AnalysisC__Analy__08F5448B". The conflict occurred in database "SolaERPR", table "Config.AnalysisCodes", column 'AnalysisDimensionid'.
+2023-05-24 16:31:20.552 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.IndexOutOfRangeException: LinkedAnalysisDimensionId
+   at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)
+   at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
+   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 68
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlAnalysisCodeRepository.GetAnalysisCodesAsync(Int32 analysisCodeId, Int32 userId) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlAnalysisCodeRepository.cs:line 76
+   at SolaERP.Persistence.Services.AnalysisCodeService.GetAnalysisCodesAsync(Int32 analysisCodeId, String userName) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\AnalysisCodeService.cs:line 54
+   at SolaERP.Controllers.AnalysisCodeController.ByDimension(Int32 dimensionId) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AnalysisCodeController.cs:line 33
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-24 16:31:20.687 +04:00 [ERR] LinkedAnalysisDimensionId
