@@ -10,10 +10,8 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> DeleteAnalysisCodeAsync(int analysisCodeId, int userId);
         public Task<List<AnalysisCode>> GetAnalysisCodesAsync(int businessUnitId, string procedureName);
         Task<List<Analysis>> GetAnalysisCodesAsync(int analysisCodeId, int userId);
-        Task<List<AnalysisWithBu>> GetAnalysisCodesByBusinessUnitIdAsync(int businessUnitId, int userId);
+        Task<List<AnalysisWithBu>> GetByBUIdAsync(int businessUnitId, int userId);
         Task<List<AnalysisCodes>> GetAnalysisCodesByDimensionIdAsync(int dimensionId);
-        Task<List<AnalysisDimension>> GetAnalysisDimensionAsync();
-        Task<List<BuAnalysisDimension>> GetBusinessUnitDimensions(int businessUnitId);
         Task<bool> SaveAnalysisCode(AnalysisCodeSaveModel analysisCodeSave, int userId);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SolaERP.Application.Features.Queries.AnalysisCode;
+using SolaERP.Application.Contracts.Services;
 using SolaERP.Controllers;
 
 namespace SolaERP.API.Controllers
@@ -9,18 +9,16 @@ namespace SolaERP.API.Controllers
     [ApiController]
     public class AnalysisDimensionController : CustomBaseController
     {
-        //private readonly IAnalysisDimensionService _analysisDimensionService;
-        public AnalysisDimensionController(
-            //IAnalysisDimensionService analysisDimensionService
-            )
+        private readonly IAnalysisDimensionService _analysisDimensionService;
+        public AnalysisDimensionController(IAnalysisDimensionService analysisDimensionService)
         {
-
+            _analysisDimensionService = analysisDimensionService;
 
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetAnalysisDimensionAsync()
-        //   => CreateActionResult(await _analysisDimensionService.GetAnalysisDimensionAsync());
+        [HttpGet]
+        public async Task<IActionResult> ByAnalysisDimensionId(int analysisDimensionId)
+           => CreateActionResult(await _analysisDimensionService.ByAnalysisDimensionId(analysisDimensionId, User.Identity.Name));
 
 
         //[HttpGet]

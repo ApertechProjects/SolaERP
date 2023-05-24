@@ -79,7 +79,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<AnalysisWithBu>> GetAnalysisCodesByBusinessUnitIdAsync(int businessUnitId, int userId)
+        public async Task<List<AnalysisWithBu>> GetByBUIdAsync(int businessUnitId, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -110,41 +110,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 while (reader.Read())
                     resultList.Add(reader.GetByEntityStructure<AnalysisCodes>());
-
-                return resultList;
-            }
-        }
-
-        public async Task<List<AnalysisDimension>> GetAnalysisDimensionAsync()
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "select * from VW_AnalysisDimension_List";
-
-                using var reader = await command.ExecuteReaderAsync();
-                List<AnalysisDimension> resultList = new();
-
-                while (reader.Read())
-                    resultList.Add(reader.GetByEntityStructure<AnalysisDimension>());
-
-                return resultList;
-            }
-        }
-
-        public async Task<List<BuAnalysisDimension>> GetBusinessUnitDimensions(int businessUnitId)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                List<BuAnalysisDimension> resultList = new();
-
-                command.CommandText = "EXEC [dbo].[SP_AnalysisDimension_Load_BY_BU] @businessUniId";
-                command.Parameters.AddWithValue(command, "@businessUniId", businessUnitId);
-
-
-                using var reader = await command.ExecuteReaderAsync();
-
-                while (await reader.ReadAsync())
-                    resultList.Add(reader.GetByEntityStructure<BuAnalysisDimension>());
 
                 return resultList;
             }

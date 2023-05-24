@@ -52,7 +52,6 @@ using SolaERP.Application.Entities.Translate;
 using SolaERP.Application.Entities.UOM;
 using SolaERP.Application.Entities.User;
 using SolaERP.Application.Entities.Vendors;
-using SolaERP.Application.Features.Queries.AnalysisCode;
 using SolaERP.Application.Models;
 
 namespace SolaERP.Persistence.Mappers
@@ -124,12 +123,6 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<Layout, LayoutDto>().ForMember(dest => dest.TabIndex, opt => opt.MapFrom(src => src.TabIndex)).
                 ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.Key)).
                 ForMember(dest => dest.Layout, opt => opt.MapFrom(src => src.UserLayout)).ReverseMap();
-
-            CreateMap<GetAnalysisDimensionByBuResponse, BuAnalysisDimension>().ForMember(dest => dest.AnalysisDimensionId, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.AnalysisDimensionName, opt => opt.MapFrom(src => src.AnalysisDimensionName))
-                .ForMember(dest => dest.AnalysisDimensionCode, opt => opt.MapFrom(src => src.AnalysisDimensionCode))
-                .ForMember(dest => dest.BusinessUnitId, opt => opt.MapFrom(src => src.BusinessUnitId))
-                .ForMember(dest => dest.BusinessUnitName, opt => opt.MapFrom(src => src.BusinessUnit)).ReverseMap();
 
             CreateMap<RequestMainDto, RequestMainAll>().ReverseMap();
             CreateMap<Language, LanguageDto>().ReverseMap();

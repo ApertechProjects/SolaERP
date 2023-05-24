@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.AnalysisCode;
-using SolaERP.Application.Features.Queries.AnalysisCode;
 using SolaERP.Application.Models;
 
 namespace SolaERP.Controllers
@@ -25,16 +24,16 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _analysisCodeService.GetAnalysisCodesAsync(getRequest));
 
         [HttpGet("{analysisCodeId}")]
-        public async Task<IActionResult> AnalysisCodes(int analysisCodeId)
+        public async Task<IActionResult> ByAnalysisCode(int analysisCodeId)
             => CreateActionResult(await _analysisCodeService.GetAnalysisCodesAsync(analysisCodeId, User.Identity.Name));
 
         [HttpGet("{dimensionId}")]
-        public async Task<IActionResult> AnalysisCodesByDimension(int dimensionId)
-            => CreateActionResult(await _analysisCodeService.GetAnalysisCodesByDimensionIdAsync(dimensionId));
+        public async Task<IActionResult> ByDimension(int dimensionId)
+            => CreateActionResult(await _analysisCodeService.GetByDimensionIdAsync(dimensionId));
 
         [HttpGet("{businessUnitId}")]
-        public async Task<IActionResult> AnalysisCodesByBusinessUnit(int businessUnitId)
-           => CreateActionResult(await _analysisCodeService.GetAnalysisCodesByBusinessUnitIdAsync(businessUnitId, User.Identity.Name));
+        public async Task<IActionResult> ByBusinessUnit(int businessUnitId)
+           => CreateActionResult(await _analysisCodeService.GetByBUIdAsync(businessUnitId, User.Identity.Name));
 
         [HttpPost]
         public async Task<IActionResult> Save(AnalysisCodeSaveModel analysisCodeSave)

@@ -70,6 +70,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IFileService, FileService>();
             builder.Services.AddScoped<IFileProducer, FileProducer>();
             builder.Services.AddScoped<IStorage, LocalStorage>();
+            builder.Services.AddScoped<IAnalysisDimensionService, AnalysisDimensionService>();
 
         }
         private static void UseRepositories(this WebApplicationBuilder builder)
@@ -100,6 +101,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<ILanguageRepository, SqlLanguageRepository>();
             builder.Services.AddScoped<IVendorRepository, SqlVendorRepository>();
             builder.Services.AddScoped<IEmailNotificationRepository, SqlEmailNotificationRepository>();
+            builder.Services.AddScoped<IAnalysisDimensionRepository, SqlAnalysisDimensionRepository>();
         }
         public static void UseValidationExtension(this WebApplicationBuilder builder)
         {

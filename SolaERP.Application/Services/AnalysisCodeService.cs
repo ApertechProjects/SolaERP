@@ -58,17 +58,17 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<AnalysisDto>>.Fail("Analysis Codes is empty", 400);
         }
 
-        public async Task<ApiResponse<List<AnalysisWithBuDto>>> GetAnalysisCodesByBusinessUnitIdAsync(int businessUnitId, string userName)
+        public async Task<ApiResponse<List<AnalysisWithBuDto>>> GetByBUIdAsync(int businessUnitId, string userName)
         {
             var userId = await _userRepository.GetIdentityNameAsIntAsync(userName);
-            var data = await _analysisCodeRepository.GetAnalysisCodesByBusinessUnitIdAsync(businessUnitId, userId);
+            var data = await _analysisCodeRepository.GetByBUIdAsync(businessUnitId, userId);
             var map = _mapper.Map<List<AnalysisWithBuDto>>(data);
             if (map.Count > 0)
                 return ApiResponse<List<AnalysisWithBuDto>>.Success(map, 200);
             return ApiResponse<List<AnalysisWithBuDto>>.Fail("Analysis Codes is empty", 400);
         }
 
-        public async Task<ApiResponse<List<AnalysisCodesDto>>> GetAnalysisCodesByDimensionIdAsync(int dimensionId)
+        public async Task<ApiResponse<List<AnalysisCodesDto>>> GetByDimensionIdAsync(int dimensionId)
         {
             var data = await _analysisCodeRepository.GetAnalysisCodesByDimensionIdAsync(dimensionId);
             var map = _mapper.Map<List<AnalysisCodesDto>>(data);
@@ -76,13 +76,6 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<List<AnalysisCodesDto>>.Success(map, 200);
             return ApiResponse<List<AnalysisCodesDto>>.Fail("Analysis Codes is empty", 400);
 
-        }
-
-        public async Task<ApiResponse<List<AnalysisDimensionDto>>> GetAnalysisDimensionAsync()
-        {
-            var codes = await _analysisCodeRepository.GetAnalysisDimensionAsync();
-            var dto = _mapper.Map<List<AnalysisDimensionDto>>(codes);
-            return ApiResponse<List<AnalysisDimensionDto>>.Success(dto, 200);
         }
 
         public async Task<ApiResponse<bool>> SaveAnalysisCodeAsync(AnalysisCodeSaveModel analysisCodeSave, string name)

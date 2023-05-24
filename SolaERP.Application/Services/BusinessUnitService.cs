@@ -19,11 +19,7 @@ namespace SolaERP.Persistence.Services
             _mapper = mapper;
         }
 
-        public Task AddAsync(BusinessUnitsAllDto model)
-        {
-            throw new NotImplementedException();
-        }
-
+      
         public async Task<ApiResponse<List<BusinessUnitsAllDto>>> GetAllAsync()
         {
             var businessUnits = await _businessUnitRepository.GetAllAsync();

@@ -10,6 +10,6 @@ namespace SolaERP.Application.Contracts.Services
 {
     public interface IAnalysisDimensionService
     {
-        Task<ApiResponse<List<AnalysisDimensionDto>>> GetAnalysisDimensionAsync();
+        Task<ApiResponse<List<AnalysisDimensionDto>>> ByAnalysisDimensionId(int analysisDimensionId,string name);
     }
 }
