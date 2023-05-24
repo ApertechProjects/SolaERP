@@ -24,9 +24,10 @@ namespace SolaERP.Persistence.Services
             _userRepository = userRepository;
         }
 
-        public async Task<ApiResponse<bool>> DeleteAnalysisCodeAsync(int analysisCodeId)
+        public async Task<ApiResponse<bool>> DeleteAnalysisCodeAsync(int analysisCodeId, string userName)
         {
-            var code = await _analysisCodeRepository.DeleteAnalysisCodeAsync(analysisCodeId);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(userName);
+            var code = await _analysisCodeRepository.DeleteAnalysisCodeAsync(analysisCodeId, userId);
             await _unitOfWork.SaveChangesAsync();
             if (code)
                 return ApiResponse<bool>.Success(code, 200);
@@ -57,6 +58,16 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<AnalysisDto>>.Fail("Analysis Codes is empty", 400);
         }
 
+        public async Task<ApiResponse<List<AnalysisWithBuDto>>> GetAnalysisCodesByBusinessUnitIdAsync(int businessUnitId, string userName)
+        {
+            var userId = await _userRepository.GetIdentityNameAsIntAsync(userName);
+            var data = await _analysisCodeRepository.GetAnalysisCodesByBusinessUnitIdAsync(businessUnitId, userId);
+            var map = _mapper.Map<List<AnalysisWithBuDto>>(data);
+            if (map.Count > 0)
+                return ApiResponse<List<AnalysisWithBuDto>>.Success(map, 200);
+            return ApiResponse<List<AnalysisWithBuDto>>.Fail("Analysis Codes is empty", 400);
+        }
+
         public async Task<ApiResponse<List<AnalysisCodesDto>>> GetAnalysisCodesByDimensionIdAsync(int dimensionId)
         {
             var data = await _analysisCodeRepository.GetAnalysisCodesByDimensionIdAsync(dimensionId);
@@ -74,10 +85,10 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<AnalysisDimensionDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<bool>> SaveAnalysisCodeAsync(AnalysisDto analysisDto, string name)
+        public async Task<ApiResponse<bool>> SaveAnalysisCodeAsync(AnalysisCodeSaveModel analysisCodeSave, string name)
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
-            var code = await _analysisCodeRepository.SaveAnalysisCode(analysisDto, userId);
+            var code = await _analysisCodeRepository.SaveAnalysisCode(analysisCodeSave, userId);
             await _unitOfWork.SaveChangesAsync();
             if (code)
                 return ApiResponse<bool>.Success(code, 200);

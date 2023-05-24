@@ -3,7 +3,7 @@ using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Validations.GroupValidation
 {
-    public class GroupAnalysisCodeSaveValidation : AbstractValidator<AnalysisCodeSaveModel>
+    public class GroupAnalysisCodeSaveValidation : AbstractValidator<GroupAnalysisCodeSaveModel>
     {
         public GroupAnalysisCodeSaveValidation()
         {

@@ -14,14 +14,11 @@ namespace SolaERP.Controllers
     public class AnalysisCodeController : CustomBaseController
     {
         private readonly IAnalysisCodeService _analysisCodeService;
-        private readonly IMediator _mediator;
 
-        public AnalysisCodeController(IAnalysisCodeService analysisCodeService, IMediator mediator)
+        public AnalysisCodeController(IAnalysisCodeService analysisCodeService)
         {
             _analysisCodeService = analysisCodeService;
-            _mediator = mediator;
         }
-
 
         [HttpGet]
         public async Task<IActionResult> AnalysisCodes([FromQuery] AnalysisCodeGetModel getRequest)
@@ -31,25 +28,21 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> AnalysisCodes(int analysisCodeId)
             => CreateActionResult(await _analysisCodeService.GetAnalysisCodesAsync(analysisCodeId, User.Identity.Name));
 
+        [HttpGet("{dimensionId}")]
+        public async Task<IActionResult> AnalysisCodesByDimension(int dimensionId)
+            => CreateActionResult(await _analysisCodeService.GetAnalysisCodesByDimensionIdAsync(dimensionId));
+
+        [HttpGet("{businessUnitId}")]
+        public async Task<IActionResult> AnalysisCodesByBusinessUnit(int businessUnitId)
+           => CreateActionResult(await _analysisCodeService.GetAnalysisCodesByBusinessUnitIdAsync(businessUnitId, User.Identity.Name));
+
         [HttpPost]
-        public async Task<IActionResult> Save(AnalysisDto analysisDto)
-            => CreateActionResult(await _analysisCodeService.SaveAnalysisCodeAsync(analysisDto, User.Identity.Name));
+        public async Task<IActionResult> Save(AnalysisCodeSaveModel analysisCodeSave)
+            => CreateActionResult(await _analysisCodeService.SaveAnalysisCodeAsync(analysisCodeSave, User.Identity.Name));
 
         [HttpDelete]
         public async Task<IActionResult> Delete(int analysisCodeId)
-           => CreateActionResult(await _analysisCodeService.DeleteAnalysisCodeAsync(analysisCodeId));
+           => CreateActionResult(await _analysisCodeService.DeleteAnalysisCodeAsync(analysisCodeId, User.Identity.Name));
 
-        [HttpGet]
-        public async Task<IActionResult> GetAnalysisDimensionAsync()
-            => CreateActionResult(await _analysisCodeService.GetAnalysisDimensionAsync());
-
-
-        [HttpGet]
-        public async Task<IActionResult> GetAnalysisDimensionsByBusinessUnitIdAsync([FromQuery] GetAnalysisDimensionByBuRequest request)
-            => CreateActionResult(await _mediator.Send(request));
-
-        [HttpGet("{dimensionId}")]
-        public async Task<IActionResult> GetAnalysisCodesByDimensionIdAsync(int dimensionId)
-            => CreateActionResult(await _analysisCodeService.GetAnalysisCodesByDimensionIdAsync(dimensionId));
     }
 }

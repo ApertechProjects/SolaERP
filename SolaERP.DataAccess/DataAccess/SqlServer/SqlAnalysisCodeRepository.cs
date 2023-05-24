@@ -2,6 +2,7 @@
 using SolaERP.Application.Dtos.AnalysisCode;
 using SolaERP.Application.Entities.AnalysisCode;
 using SolaERP.Application.Entities.AnalysisDimension;
+using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
@@ -18,14 +19,26 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> DeleteAnalysisCodeAsync(int analysisCodeId)
+        public async Task<bool> DeleteAnalysisCodeAsync(int analysisCodeId,int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText = @"SET NOCOUNT OFF EXEC SP_AnalysisCodes_IUD    
-                                                                @AnalysisCodesId"
+                                                                @AnalysisCodesId,
+                                                                NULL,
+                                                                NULL,
+                                                                NULL,
+                                                                NULL,
+                                                                NULL,
+                                                                NULL,
+                                                                NULL,
+                                                                NULL,
+                                                                NULL,
+                                                                @UserId"
                 ;
+
                 command.Parameters.AddWithValue(command, "@AnalysisCodesId", analysisCodeId);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
@@ -61,6 +74,25 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 while (reader.Read())
                     resultList.Add(reader.GetByEntityStructure<Analysis>());
+
+                return resultList;
+            }
+        }
+
+        public async Task<List<AnalysisWithBu>> GetAnalysisCodesByBusinessUnitIdAsync(int businessUnitId, int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                List<AnalysisWithBu> resultList = new();
+
+                command.CommandText = "EXEC [dbo].[SP_AnalysisCodes_Load_BY_BU] @businessUnitId,@userId";
+                command.Parameters.AddWithValue(command, "@businessUnitId", businessUnitId);
+                command.Parameters.AddWithValue(command, "@userId", userId);
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (await reader.ReadAsync())
+                    resultList.Add(reader.GetByEntityStructure<AnalysisWithBu>());
 
                 return resultList;
             }
@@ -118,7 +150,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> SaveAnalysisCode(AnalysisDto analysisDto, int userId)
+        public async Task<bool> SaveAnalysisCode(AnalysisCodeSaveModel analysisCodeSave, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
@@ -128,14 +160,24 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                 @AnalysisCode,
                                                                 @AnalysisName,
                                                                 @Description,
+                                                                @AdditionalDescription,
+                                                                @AdditionalDescription2,
+                                                                @Status,
+                                                                @Date1,
+                                                                @Date2,
                                                                 @UserId"
                 ;
 
-                command.Parameters.AddWithValue(command, "@AnalysisCodesId", analysisDto.AnalysisCodesId);
-                command.Parameters.AddWithValue(command, "@AnalysisDimensionId", analysisDto.AnalysisDimensionId);
-                command.Parameters.AddWithValue(command, "@AnalysisCode", analysisDto.AnalysisCode);
-                command.Parameters.AddWithValue(command, "@AnalysisName", analysisDto.AnalysisName);
-                command.Parameters.AddWithValue(command, "@Description", analysisDto.Description);
+                command.Parameters.AddWithValue(command, "@AnalysisCodesId", analysisCodeSave.AnalysisCodesId);
+                command.Parameters.AddWithValue(command, "@AnalysisDimensionId", analysisCodeSave.AnalysisDimensionId);
+                command.Parameters.AddWithValue(command, "@AnalysisCode", analysisCodeSave.AnalysisCode);
+                command.Parameters.AddWithValue(command, "@AnalysisName", analysisCodeSave.AnalysisName);
+                command.Parameters.AddWithValue(command, "@Description", analysisCodeSave.Description);
+                command.Parameters.AddWithValue(command, "@AdditionalDescription", analysisCodeSave.AdditionalDescription);
+                command.Parameters.AddWithValue(command, "@AdditionalDescription2", analysisCodeSave.AdditionalDescription2);
+                command.Parameters.AddWithValue(command, "@Status", analysisCodeSave.Status);
+                command.Parameters.AddWithValue(command, "@Date1", analysisCodeSave.Date1);
+                command.Parameters.AddWithValue(command, "@Date2", analysisCodeSave.Date2);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
