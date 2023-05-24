@@ -18,12 +18,12 @@ namespace SolaERP.API.Controllers
         }
 
         [HttpGet("{analysisDimensionId}")]
-        public async Task<IActionResult> ByAnalysisDimensionId(int analysisDimensionId)
+        public async Task<IActionResult> ByAnalysisDimension(int analysisDimensionId)
            => CreateActionResult(await _analysisDimensionService.ByAnalysisDimensionId(analysisDimensionId, User.Identity.Name));
 
 
         [HttpGet("{businessUnitId}")]
-        public async Task<IActionResult> ByBusinessUnitId(int businessUnitId)
+        public async Task<IActionResult> ByBusinessUnit(int businessUnitId)
             => CreateActionResult(await _analysisDimensionService.ByBusinessUnitId(businessUnitId, User.Identity.Name));
 
 
@@ -32,8 +32,8 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _analysisDimensionService.Save(analysisDimension, User.Identity.Name));
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(int businessUnitId)
-            => CreateActionResult(await _analysisDimensionService.Delete(businessUnitId, User.Identity.Name));
+        public async Task<IActionResult> Delete(int analysisDimensionId)
+            => CreateActionResult(await _analysisDimensionService.Delete(analysisDimensionId, User.Identity.Name));
 
     }
 }
