@@ -141,6 +141,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<UsersByGroup, UsersByGroupDto>().ReverseMap();
             CreateMap<Analysis, AnalysisDto>().ReverseMap();
             CreateMap<AnalysisWithBu, AnalysisWithBuDto>().ReverseMap();
+            CreateMap<BuAnalysisDimension, BuAnalysisDimensionDto>().ReverseMap();
 
         }
     }
