@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using SolaERP.Application;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Entities.AnalysisStructure;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Identity_Server;
 using SolaERP.Application.UnitOfWork;
@@ -71,6 +72,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IFileProducer, FileProducer>();
             builder.Services.AddScoped<IStorage, LocalStorage>();
             builder.Services.AddScoped<IAnalysisDimensionService, AnalysisDimensionService>();
+            builder.Services.AddScoped<IAnalysisService, AnalysisService>();
 
         }
         private static void UseRepositories(this WebApplicationBuilder builder)
@@ -88,7 +90,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IRequestDetailRepository, SqlRequestDetailRepository>();
             builder.Services.AddScoped<ILogInformationRepository, SqlLogInformationRepository>();
             builder.Services.AddScoped<IItemCodeRepository, SqlItemCodeRepository>();
-            builder.Services.AddScoped<IAnalysisCodeRepository, SqlAnalysisCodeRepository>();
+            builder.Services.AddScoped<IAnalysisStructureRepository, SqlAnalysisCodeRepository>();
             builder.Services.AddScoped<IStatusRepository, SqlStatusRepository>();
             builder.Services.AddScoped<IBuyerRepository, SqlBuyerRepository>();
             builder.Services.AddScoped<ILocationRepository, SqlLocationRepository>();
@@ -102,6 +104,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IVendorRepository, SqlVendorRepository>();
             builder.Services.AddScoped<IEmailNotificationRepository, SqlEmailNotificationRepository>();
             builder.Services.AddScoped<IAnalysisDimensionRepository, SqlAnalysisDimensionRepository>();
+            builder.Services.AddScoped<INewAnalysisStructureRepository, SqlAnalysisStructureRepository>();
         }
         public static void UseValidationExtension(this WebApplicationBuilder builder)
         {

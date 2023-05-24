@@ -13,10 +13,10 @@ namespace SolaERP.Persistence.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IAnalysisCodeRepository _analysisCodeRepository;
+        private readonly IAnalysisStructureRepository _analysisCodeRepository;
         private readonly IUserRepository _userRepository;
 
-        public AnalysisCodeService(IMapper mapper, IUnitOfWork unitOfWork, IAnalysisCodeRepository analysisCodeRepository, IUserRepository userRepository)
+        public AnalysisCodeService(IMapper mapper, IUnitOfWork unitOfWork, IAnalysisStructureRepository analysisCodeRepository, IUserRepository userRepository)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;

@@ -5,7 +5,7 @@ using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Contracts.Repositories
 {
-    public interface IAnalysisCodeRepository
+    public interface IAnalysisStructureRepository
     {
         Task<bool> DeleteAnalysisCodeAsync(int analysisCodeId, int userId);
         public Task<List<AnalysisCode>> GetAnalysisCodesAsync(int businessUnitId, string procedureName);

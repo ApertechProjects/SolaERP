@@ -10,7 +10,7 @@ using System.Data.SqlClient;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlAnalysisCodeRepository : IAnalysisCodeRepository
+    public class SqlAnalysisCodeRepository : IAnalysisStructureRepository
     {
         private readonly IUnitOfWork _unitOfWork;
 
