@@ -2,8 +2,8 @@
 {
     public enum Language
     {
-        Eng = 1,
-        Aze = 2,
-        Ru = 3,
+        en = 1,
+        az = 2,
+        ru = 3,
     }
 }

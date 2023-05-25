@@ -20,5 +20,6 @@ namespace SolaERP.Application.Models
         public UserRegisterType UserType { get; set; }
         [JsonIgnore]
         public string VerifyToken { get; set; }
+        public Language Language { get; set; }
     }
 }

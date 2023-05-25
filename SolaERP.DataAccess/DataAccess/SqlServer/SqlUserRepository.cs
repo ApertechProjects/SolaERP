@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Groups;
 using SolaERP.Application.Entities.User;
@@ -65,7 +66,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 if (reader.Read())
-                    user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate");
+                    user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate", "VerifyToken", "Language");
 
                 return user;
             }
@@ -99,7 +100,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
                 using var reader = await command.ExecuteReaderAsync();
                 if (reader.Read())
-                    user = reader.GetByEntityStructure<User>();
+                    user = reader.GetByEntityStructure<User>("Language");
 
                 return user;
             }
@@ -162,7 +163,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@Inactive", entity.InActive);
                 command.Parameters.AddWithValue(command, "@ChangeUserId", entity.UserId);
                 command.Parameters.AddWithValue(command, "@VerifyToken", entity.VerifyToken);
-                command.Parameters.AddWithValue(command, "@Language", Language.Eng.ToString());
+                command.Parameters.AddWithValue(command, "@Language", Language.en.ToString());
                 command.Parameters.AddOutPutParameter(command, "@NewId");
                 await command.ExecuteNonQueryAsync();
                 var result = Convert.ToInt32(command.Parameters["@NewId"].Value);
@@ -174,7 +175,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         {
             string query = @"SET NOCOUNT OFF Exec SP_AppUser_IUD @Id,@FullName,@ChangePassword,@Theme,@UserName,@Email
                                                                 ,@PasswordHash,@PhoneNumber,@UserTypeId,@VendorId,@UserToken
-                                                                ,@Gender,@Buyer,@Description,@ERPUser,NULL,NULL,0,0,@VerifyToken,@NewId output";
+                                                                ,@Gender,@Buyer,@Description,@ERPUser,NULL,NULL,0,0,@VerifyToken,@Language,@NewId output";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = query;
@@ -194,6 +195,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@ERPUser", entity.ERPUser);
                 command.Parameters.AddWithValue(command, "@UserToken", entity.UserToken.ToString());
                 command.Parameters.AddWithValue(command, "@VerifyToken", entity.VerifyToken);
+                command.Parameters.AddWithValue(command, "@Language", entity.Language.ToString());
                 command.Parameters.AddOutPutParameter(command, "@NewId");
                 await command.ExecuteNonQueryAsync();
                 var result = Convert.ToInt32(command.Parameters["@NewId"].Value);
@@ -575,6 +577,38 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     res = reader.Get<bool>("IsVerified");
 
                 return res;
+            }
+        }
+
+        public async Task<UserData> GetUserDataByVerifyTokenAsync(string verifyToken)
+        {
+            UserData userData = new UserData();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "select * from FN_GetUserDataByVerifyToken(@verifyToken)";
+                command.Parameters.AddWithValue(command, "@verifyToken", verifyToken);
+                using var reader = await command.ExecuteReaderAsync();
+                bool res = false;
+                if (reader.Read())
+                    userData = reader.GetByEntityStructure<UserData>();
+
+                return userData;
+            }
+        }
+
+        public async Task<List<string>> GetAdminUsersAsync(int sequence, Language language)
+        {
+            List<string> userData = new List<string>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec dbo.SP_UserApproveNotificationBody_Load @sequence,@language";
+                command.Parameters.AddWithValue(command, "@sequence", sequence);
+                command.Parameters.AddWithValue(command, "@language", language.ToString());
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                    userData.Add(reader.Get<string>("Email"));
+
+                return userData;
             }
         }
 
