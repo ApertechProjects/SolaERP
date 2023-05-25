@@ -100,7 +100,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
                 using var reader = await command.ExecuteReaderAsync();
                 if (reader.Read())
-                    user = reader.GetByEntityStructure<User>();
+                    user = reader.GetByEntityStructure<User>("Language");
 
                 return user;
             }
@@ -163,7 +163,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@Inactive", entity.InActive);
                 command.Parameters.AddWithValue(command, "@ChangeUserId", entity.UserId);
                 command.Parameters.AddWithValue(command, "@VerifyToken", entity.VerifyToken);
-                command.Parameters.AddWithValue(command, "@Language", Language.Eng.ToString());
+                command.Parameters.AddWithValue(command, "@Language", Language.en.ToString());
                 command.Parameters.AddOutPutParameter(command, "@NewId");
                 await command.ExecuteNonQueryAsync();
                 var result = Convert.ToInt32(command.Parameters["@NewId"].Value);
