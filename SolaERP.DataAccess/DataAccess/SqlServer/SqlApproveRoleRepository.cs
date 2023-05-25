@@ -67,7 +67,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 command.CommandText = @"SET NOCOUNT OFF Exec SP_ApproveRoles_IUD  @approveRoleId,NULL,NULL,@userId";
                 command.Parameters.AddWithValue(command, "@approveRoleId", approveRoleId);
-                command.Parameters.AddWithValue(command, "@userId", userId);
+                command.Parameters.AddWithValue(command, "@userId", user);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
