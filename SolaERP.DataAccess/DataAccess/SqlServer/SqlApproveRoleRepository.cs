@@ -1,12 +1,9 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Application.Contracts.Repositories;
-using SolaERP.Application.Dtos.ApproveRole;
+﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.ApproveRole;
-using SolaERP.Application.UnitOfWork;
-using System.Data.Common;
-using System.Reflection;
-using SolaERP.Application.Entities.Translate;
 using SolaERP.Application.Models;
+using SolaERP.Application.UnitOfWork;
+using SolaERP.DataAccess.Extensions;
+using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -61,13 +58,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> ApproveRoleDeleteAsync(int approveRoleId,int userId)
+        public async Task<bool> ApproveRoleDeleteAsync(int approveRoleId, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = @"SET NOCOUNT OFF Exec SP_ApproveRoles_IUD  @approveRoleId,NULL,NULL,@userId";
                 command.Parameters.AddWithValue(command, "@approveRoleId", approveRoleId);
-                command.Parameters.AddWithValue(command, "@userId", user);
+                command.Parameters.AddWithValue(command, "@userId", userId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }

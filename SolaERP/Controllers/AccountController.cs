@@ -10,7 +10,6 @@ using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
 using SolaERP.Infrastructure.ViewModels;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Web;
 using Language = SolaERP.Application.Enums.Language;
@@ -62,7 +61,7 @@ namespace SolaERP.Controllers
             var userdto = _mapper.Map<UserRegisterModel>(user);
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
             var emailVerified = await _userService.CheckEmailIsVerified(dto.Email);
-            if(!emailVerified)
+            if (!emailVerified)
                 return CreateActionResult(ApiResponse<bool>.Fail("email", "Please,verify your account", 422));
 
             if (signInResult.Succeeded && emailVerified)
@@ -111,18 +110,21 @@ namespace SolaERP.Controllers
                 {
                     string enumElement = Enum.GetNames(typeof(Language))[i];
                     var sendUsers = await _userService.GetAdminUsersAsync(1, enumElement.GetLanguageEnumValue());
-                    var templateData = templates[i];
-                    VM_RegistrationIsPendingAdminApprove adminApprove = new VM_RegistrationIsPendingAdminApprove()
+                    if (sendUsers.Count > 0)
                     {
-                        Body = new HtmlString(templateData.Body),
-                        CompanyName = companyName,
-                        Header = templateData.Header,
-                        UserName = userData.UserName,
-                        CompanyOrVendorName = companyName,
-                        Language = templateData.Language.GetLanguageEnumValue(),
-                    };
-                    Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), sendUsers);
-                    emails.Add(RegEmail);
+                        var templateData = templates[i];
+                        VM_RegistrationIsPendingAdminApprove adminApprove = new VM_RegistrationIsPendingAdminApprove()
+                        {
+                            Body = new HtmlString(templateData.Body),
+                            CompanyName = companyName,
+                            Header = templateData.Header,
+                            UserName = userData.UserName,
+                            CompanyOrVendorName = companyName,
+                            Language = templateData.Language.GetLanguageEnumValue(),
+                        };
+                        Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), sendUsers);
+                        emails.Add(RegEmail);
+                    }
                 }
 
                 await Task.WhenAll(emails);

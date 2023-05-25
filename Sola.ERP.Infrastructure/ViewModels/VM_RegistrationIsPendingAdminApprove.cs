@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.Extensions.Configuration;
-using RazorEngine;
 using Language = SolaERP.Application.Enums.Language;
 namespace SolaERP.Infrastructure.ViewModels
 {
@@ -40,7 +39,7 @@ namespace SolaERP.Infrastructure.ViewModels
             return Language switch
             {
                 Language.en => new HtmlString($"Submitted User Name : {UserName}"),
-                Language.az => new HtmlString($"Qeydiyyatdan keçən istifadəçi : {UserName}"),
+                Language.az => new HtmlString($"Qeydiyyatdan keçən istifadəçi : {CompanyName}"),
             };
         }
 

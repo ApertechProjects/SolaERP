@@ -5,7 +5,6 @@ using RazorLight;
 using SolaERP.Application.Contracts.Services;
 using System.Net;
 using System.Net.Mail;
-using System.Net.Mime;
 
 namespace SolaERP.Infrastructure.Services
 {
@@ -220,20 +219,21 @@ namespace SolaERP.Infrastructure.Services
             var fileRootPath = Path.GetFullPath(@"wwwroot/sources/templates");
             var imageRootPath = Path.GetFullPath(@"wwwroot/sources/images");
 
-            LinkedResource imageResource = new LinkedResource(imageRootPath + "\\" + imageName);
-            imageResource.ContentId = "image1";
-
             var engine = new RazorLightEngineBuilder()
-            .UseFileSystemProject(fileRootPath)
-            .EnableEncoding()
-            .UseMemoryCachingProvider()
-            .Build();
+                .UseFileSystemProject(fileRootPath)
+                .EnableEncoding()
+                .UseMemoryCachingProvider()
+                .Build();
 
             string renderedHtml = await engine.CompileRenderAsync(templateName, viewModel);
             var processedBody = PreMailer.Net.PreMailer.MoveCssInline(renderedHtml, true).Html;
-            AlternateView alternateView = AlternateView.CreateAlternateViewFromString(processedBody, null, MediaTypeNames.Text.Html);
-            alternateView.LinkedResources.Add(imageResource);
 
+            // Attach the image file
+            var imageAttachment = new Attachment(Path.Combine(imageRootPath, imageName));
+            imageAttachment.ContentId = "image1";
+
+            // Include the image reference in the HTML body
+            processedBody = processedBody.Replace("cid:image1", $"cid:{imageAttachment.ContentId}");
             using (SmtpClient smtpClient = new SmtpClient())
             {
                 var basicCredential = new NetworkCredential(_configuration["Mail:UserName"], _configuration["Mail:Password"]);
@@ -253,9 +253,15 @@ namespace SolaERP.Infrastructure.Services
                             message.From = new MailAddress(_configuration["Mail:UserName"], "Apertech");
                             message.Subject = subject;
                             message.IsBodyHtml = true;
+
+                            // Add the image attachment to the message
+                            if (message.Attachments.Count == 0)
+                                message.Attachments.Add(imageAttachment);
+
+                            // Set the processed HTML body as the email body
                             message.Body = processedBody;
 
-                            message.AlternateViews.Add(alternateView);
+                            // Add recipients
                             message.To.Add(item);
                         }
                     }
@@ -269,10 +275,11 @@ namespace SolaERP.Infrastructure.Services
                         // Handle other exceptions or logging if necessary
                         // ...
                     }
-
                 }
             }
+
             return true;
+
         }
 
         private bool IsValidEmail(string email)
