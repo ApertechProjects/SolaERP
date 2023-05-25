@@ -215,8 +215,8 @@
                                             </h4>
 
                                             <p style="font-size: 15px;font-weight: bold;margin-top: 2rem; color: gray;">
-                                                Submitted User Name: @Model.UserName<br>
-                                                Company: @Model.CompanyOrVendorName
+                                                @Model.GenerateUserInfo()<br>
+                                                @Model.GenerateCompanyInfo()
                                             </p>
 
                                             <p style="color:black;">@Model.GenerateCompanyNameTeamText()</p>

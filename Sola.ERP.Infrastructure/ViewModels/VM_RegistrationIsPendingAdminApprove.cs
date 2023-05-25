@@ -35,5 +35,22 @@ namespace SolaERP.Infrastructure.ViewModels
             };
         }
 
+        public HtmlString GenerateUserInfo()
+        {
+            return Language switch
+            {
+                Language.en => new HtmlString($"Submitted User Name : {UserName}"),
+                Language.az => new HtmlString($"Qeydiyyatdan keçən istifadəçi : {UserName}"),
+            };
+        }
+
+        public HtmlString GenerateCompanyInfo()
+        {
+            return Language switch
+            {
+                Language.en => new HtmlString($"Company : {UserName}"),
+                Language.az => new HtmlString($"Şirkət : {CompanyName}"),
+            };
+        }
     }
 }

@@ -79,8 +79,6 @@ namespace SolaERP.Controllers
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail([FromQuery] string verifyToken)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
             List<Task> emails = new List<Task>();
             var result = await _userService.ConfirmEmail(verifyToken);
             if (result.StatusCode == 200)
@@ -125,8 +123,6 @@ namespace SolaERP.Controllers
                 }
 
                 await Task.WhenAll(emails);
-                stopwatch.Stop();
-                TimeSpan timeSpan = stopwatch.Elapsed;
                 #endregion
             }
             return CreateActionResult(result);
