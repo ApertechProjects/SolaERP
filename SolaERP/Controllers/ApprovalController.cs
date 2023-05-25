@@ -48,9 +48,9 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetApproveStageRolesByApproveStageDetailIdAsync(int approveStageDetailId)
             => CreateActionResult(await _approveStageRoleService.GetApproveStageRolesByApproveStageDetailId(approveStageDetailId));
 
-        [HttpGet]
-        public async Task<IActionResult> GetApproveRolesAsync()
-            => CreateActionResult(await _approveRoleService.GetAllAsync());
+        [HttpGet("{businessUnitId}")]
+        public async Task<IActionResult> GetApproveRolesAsync(int businessUnitId)
+            => CreateActionResult(await _approveRoleService.ApproveRoleAsync(businessUnitId));
 
         [HttpGet]
         public async Task<IActionResult> GetProceduresAsync()
@@ -65,8 +65,12 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _approveStageMainService.GetApproveStatus());
 
         [HttpPost]
-        public async Task<IActionResult> ApproveRoleSaveAsync(ApproveRoleDto model)
-            => CreateActionResult(await _approveRoleService.ApproveRoleSaveAsync(model));
+        public async Task<IActionResult> ApproveRoleSaveAsync(List<ApproveRoleSaveModel> model)
+            => CreateActionResult(await _approveRoleService.ApproveRoleSaveAsync(model, User.Identity.Name));
+
+        [HttpDelete]
+        public async Task<IActionResult> ApproveRoleDeleteAsync(int roleId)
+        => CreateActionResult(await _approveRoleService.ApproveRoleDeleteAsync(roleId, User.Identity.Name));
 
         [HttpDelete("{approveStageMainId}")]
         public async Task<IActionResult> DeleteApproveStageAsync(int approveStageMainId)

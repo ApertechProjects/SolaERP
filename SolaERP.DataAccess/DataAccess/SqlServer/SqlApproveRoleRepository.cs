@@ -5,6 +5,8 @@ using SolaERP.Application.Entities.ApproveRole;
 using SolaERP.Application.UnitOfWork;
 using System.Data.Common;
 using System.Reflection;
+using SolaERP.Application.Entities.Translate;
+using SolaERP.Application.Models;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -21,27 +23,51 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public async Task<bool> ApproveRoleSaveAsync(ApproveRole model)
+        public async Task<List<ApproveRole>> ApproveRoleAsync(int businessUnitId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec [dbo].[SP_ApproveRoles_Load] @businessUnitId";
+                command.Parameters.AddWithValue(command, "@businessUnitId", businessUnitId);
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                List<ApproveRole> roles = new List<ApproveRole>();
+
+                while (reader.Read())
+                {
+                    roles.Add(reader.GetByEntityStructure<ApproveRole>());
+                }
+                return roles;
+            }
+        }
+
+        public async Task<bool> ApproveRoleSaveAsync(ApproveRoleSaveModel model, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = @"SET NOCOUNT OFF Exec SP_ApproveRoles_IUD  @ApproveRoleId,
-                                                                        @ApproveRoleName";
+                                                                                  @ApproveRoleName,
+                                                                                  @BusinessUnitId,
+                                                                                  @UserId";
 
                 command.Parameters.AddWithValue(command, "@ApproveRoleId", model.ApproveRoleId);
                 command.Parameters.AddWithValue(command, "@ApproveRoleName", model.ApproveRoleName);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
 
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
 
-        public async Task<bool> DeleteApproveRoleAsync(int approveRoleId)
+        public async Task<bool> ApproveRoleDeleteAsync(int approveRoleId,int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"SET NOCOUNT OFF Exec SP_ApproveRoles_IUD  @ApproveRoleId";
-                command.Parameters.AddWithValue(command, "@ApproveRoleId", approveRoleId);
+                command.CommandText = @"SET NOCOUNT OFF Exec SP_ApproveRoles_IUD  @approveRoleId,NULL,NULL,@userId";
+                command.Parameters.AddWithValue(command, "@approveRoleId", approveRoleId);
+                command.Parameters.AddWithValue(command, "@userId", userId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
@@ -49,18 +75,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<ApproveRole>> GetAllAsync()
         {
-            List<ApproveRole> approveRoles = new List<ApproveRole>();
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "SELECT * FROM dbo.VW_ApproveRoles_List";
-                using var reader = await command.ExecuteReaderAsync();
-                while (reader.Read())
-                {
-                    approveRoles.Add(reader.GetByEntityStructure<ApproveRole>());
-                }
-
-                return approveRoles;
-            }
+            throw new NotImplementedException();
         }
 
         public Task<ApproveRole> GetByIdAsync(int id)
