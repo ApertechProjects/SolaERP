@@ -39,7 +39,7 @@ namespace SolaERP.Persistence.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ApiResponse<List<ApproveStagesDetailDto>>> GetApproveStageDetailsByApproveStageMainId(int approveStageMainId)
+        public async Task<ApiResponse<List<ApproveStagesDetailDto>>> GetDetailByIdAsync(int approveStageMainId)
         {
             var approveDetailById = await _approveStageDetailsRepository.GetApproveStageDetailsByApproveStageMainId(approveStageMainId);
             var dto = _mapper.Map<List<ApproveStagesDetailDto>>(approveDetailById);
