@@ -62,6 +62,9 @@ namespace SolaERP.Controllers
             var userdto = _mapper.Map<UserRegisterModel>(user);
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
             var emailVerified = await _userService.CheckEmailIsVerified(dto.Email);
+            if(!emailVerified)
+                return CreateActionResult(ApiResponse<bool>.Fail("email", "Please,verify your account", 422));
+
             if (signInResult.Succeeded && emailVerified)
             {
                 await _userService.UpdateSessionAsync(user.Id, 1);
