@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Attributes;
+using SolaERP.Application.Enums;
 using System.Text.Json.Serialization;
 
 namespace SolaERP.Application.Entities.Auth
@@ -47,5 +48,6 @@ namespace SolaERP.Application.Entities.Auth
         public string RefreshToken { get; set; }
         public DateTime RefreshTokenEndDate { get; set; }
         public string VerifyToken { get; set; }
+        public Enums.Language Language { get; set; }
     }
 }

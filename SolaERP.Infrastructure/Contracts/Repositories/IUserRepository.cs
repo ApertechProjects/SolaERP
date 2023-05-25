@@ -1,6 +1,8 @@
-﻿using SolaERP.Application.Entities.Auth;
+﻿using SolaERP.Application.Entities;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Groups;
 using SolaERP.Application.Entities.User;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using System.Data;
 
@@ -38,6 +40,8 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> UpdateImgesAsync(string email, Filetype type, string filePath);
         Task<bool> ConfirmEmail(string verifyToken);
         Task<bool> CheckEmailIsVerified(string email);
+        Task<UserData> GetUserDataByVerifyTokenAsync(string verifyToken);
+        Task<List<string>> GetAdminUsersAsync(int sequence, Language language);
     }
 
     public enum Filetype { Profile = 1, Signature = 2 }

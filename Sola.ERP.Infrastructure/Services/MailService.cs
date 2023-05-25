@@ -1,8 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using FluentEmail.Core;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using RazorLight;
 using SolaERP.Application.Contracts.Services;
-using SolaERP.Infrastructure.ViewModels;
 using System.Net;
 using System.Net.Mail;
+using System.Net.Mime;
 
 namespace SolaERP.Infrastructure.Services
 {
@@ -10,9 +13,21 @@ namespace SolaERP.Infrastructure.Services
     public class MailService : IMailService
     {
         private readonly IConfiguration _configuration;
-        public MailService(IConfiguration configuration)
+        private const string TemplatePath = @"SolaERP.API/wwwroot/sources/templates/RegistrationPending.cshtml";
+        private IFluentEmail _email;
+        private readonly ILogger<MailService> _logger;
+        private readonly RazorLightEngine _razorEngine;
+
+        public MailService(IConfiguration configuration, IFluentEmail email, ILogger<MailService> logger)
         {
+            //var rootPath = Path.GetFullPath(@"wwwroot/sources/templates");
             _configuration = configuration;
+            _email = email;
+            _logger = logger;
+            //_razorEngine = new RazorLightEngineBuilder()
+            //.UseFileSystemProject(rootPath)
+            //.UseMemoryCachingProvider()
+            //.Build();
         }
 
         public async Task<bool> SendEmailMessage(string tamplatePath, string to, string subject)
@@ -176,7 +191,7 @@ namespace SolaERP.Infrastructure.Services
                     {
                         foreach (string item in tos)
                         {
-                            message.From = new MailAddress("test@apertech.com", "Apertech");
+                            message.From = new MailAddress(_configuration["Mail:UserName"], "Apertech");
                             message.Subject = subject;
                             message.IsBodyHtml = isBodyHtml;
                             message.Body = body;
@@ -194,6 +209,88 @@ namespace SolaERP.Infrastructure.Services
                     }
                 }
             }
+        }
+
+
+        public async Task<bool> SendUsingTemplate<T>(string subject, T viewModel, string templateName, string imageName, List<string> tos)
+        {
+            if (tos.Count == 0)
+                return false;
+
+            var fileRootPath = Path.GetFullPath(@"wwwroot/sources/templates");
+            var imageRootPath = Path.GetFullPath(@"wwwroot/sources/images");
+
+            LinkedResource imageResource = new LinkedResource(imageRootPath + "\\" + imageName);
+            imageResource.ContentId = "image1";
+
+            var engine = new RazorLightEngineBuilder()
+            .UseFileSystemProject(fileRootPath)
+            .EnableEncoding()
+            .UseMemoryCachingProvider()
+            .Build();
+
+            string renderedHtml = await engine.CompileRenderAsync(templateName, viewModel);
+            var processedBody = PreMailer.Net.PreMailer.MoveCssInline(renderedHtml, true).Html;
+            AlternateView alternateView = AlternateView.CreateAlternateViewFromString(processedBody, null, MediaTypeNames.Text.Html);
+            alternateView.LinkedResources.Add(imageResource);
+
+            using (SmtpClient smtpClient = new SmtpClient())
+            {
+                var basicCredential = new NetworkCredential(_configuration["Mail:UserName"], _configuration["Mail:Password"]);
+
+                smtpClient.Host = "mail.apertech.net";
+                smtpClient.Port = 587;
+                smtpClient.EnableSsl = true;
+                smtpClient.UseDefaultCredentials = false;
+                smtpClient.Credentials = basicCredential;
+
+                using (MailMessage message = new MailMessage())
+                {
+                    foreach (string item in tos)
+                    {
+                        if (IsValidEmail(item))
+                        {
+                            message.From = new MailAddress(_configuration["Mail:UserName"], "Apertech");
+                            message.Subject = subject;
+                            message.IsBodyHtml = true;
+                            message.Body = processedBody;
+
+                            message.AlternateViews.Add(alternateView);
+                            message.To.Add(item);
+                        }
+                    }
+
+                    try
+                    {
+                        await smtpClient.SendMailAsync(message);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Handle other exceptions or logging if necessary
+                        // ...
+                    }
+
+                }
+            }
+            return true;
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var mailAddress = new System.Net.Mail.MailAddress(email);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public Task<bool> SendEmailMessage<T>(string template, T viewModel, string to, string subject)
+        {
+            throw new NotImplementedException();
         }
     }
 }

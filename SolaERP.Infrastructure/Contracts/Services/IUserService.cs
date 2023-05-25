@@ -2,6 +2,9 @@
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Dtos.UserDto;
+using SolaERP.Application.Entities;
+using SolaERP.Application.Entities.User;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Contracts.Services
@@ -36,5 +39,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<UserDto>> GetUserByNameAsync(string name);
         Task<ApiResponse<bool>> ConfirmEmail(string verifyToken);
         Task<bool> CheckEmailIsVerified(string email);
+        Task<UserData> GetUserDataByVerifyTokenAsync(string verifyToken);
+        Task<List<string>> GetAdminUsersAsync(int sequence, Language language);
     }
 }

@@ -1,18 +1,17 @@
-﻿<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
-      xmlns:o="urn:schemas-microsoft-com:office:office">
-
+﻿@using System.Web
+@model SolaERP.Infrastructure.ViewModels.VM_EmailVerification
+@{
+    Layout = null;
+}
+<html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="x-apple-disable-message-reformatting">
     <title></title>
-
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
-
-    <!-- CSS Reset : BEGIN -->
-    <style>
+    <style type="text/css">
         html,
         body {
             margin: 2rem auto !important;
@@ -33,29 +32,27 @@
             text-decoration: none;
         }
 
-        @media only screen and (min-device-width: 320px) and (max-device-width: 374px) {
+        @@ media only screen and (min-device-width: 320px) and (max-device-width: 374px) {
             u ~ div .email-container {
                 min-width: 320px !important;
             }
         }
 
         /* iPhone 6, 6S, 7, 8, and X */
-        @media only screen and (min-device-width: 375px) and (max-device-width: 413px) {
+        @@ media only screen and (min-device-width: 375px) and (max-device-width: 413px) {
             u ~ div .email-container {
                 min-width: 375px !important;
             }
         }
 
         /* iPhone 6+, 7+, and 8+ */
-        @media only screen and (min-device-width: 414px) {
+        @@ media only screen and (min-device-width: 414px) {
             u ~ div .email-container {
                 min-width: 414px !important;
             }
         }
-    </style>
 
 
-    <style>
         .bg_white {
             background: #ffffff;
         }
@@ -83,8 +80,8 @@
         }
 
             .btn.btn-primary {
-                border-radius: 5px;
                 background: #5b16b6;
+                border-radius: 5px;
                 color: #ffffff;
             }
 
@@ -174,16 +171,13 @@
                     color: #30e3ca;
                 }
 
-
-        @media screen and (max-width: 500px) {
+        @@ media screen and (max-width: 500px) {
         }
     </style>
-
-
 </head>
 
 <body width="100%">
-    <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+    <div style="margin: 0 auto;" class="email-container">
 
         <table width="100%" style="margin: auto;">
             <tr>
@@ -191,7 +185,7 @@
                     <table cellpadding="0" cellspacing="0" width="100%">
                         <tr>
                             <td class="logo" style="text-align: center;">
-                                <h1>Vendor Registration is Pending for Approvals</h1>
+                                <h1>@Model.Header</h1>
                             </td>
                         </tr>
                     </table>
@@ -199,32 +193,37 @@
             </tr>
             <tr>
                 <td valign="middle" class="hero bg_white">
-                    <img src="~/sources/images/expired.png"
-                         alt="" style="width: 200px; max-width: 400px; height: auto; margin: auto; display: block;">
+                    <div style="text-align: center;">
+                        <img src='cid:image1' alt="" width="200" height="200" style="max-width: 200px; margin: auto; display: block;" />
+                    </div>
                 </td>
             </tr>
             <tr>
-                <td valign="middle" class="hero bg_white" style="padding: 2em 0 2em 0;">
+                <td valign="middle" class="hero bg_white" style="padding: 2em 0 2em 0; margin: 0 auto; text-align: center">
                     <table>
                         <tr>
                             <td>
                                 <div class="text" style="padding: 0 2.5em; text-align: start;">
                                     <h4 style="color: gray; text-align: center; font-weight: bold;">
-                                        This is an automatically generated
-                                        email - please do not reply
+                                        @Model.GenerateAutomatedEmailText()
                                     </h4>
-                                    <h4>
-                                        Dear Administrator, User Registration is pending for your Approvals. Please login to <a href="116.203.90.202:99">Client Portal</a>
-                                        using your email address and password and make your decision.
+                                    <h4 style="text-align: center">
+                                        @Model.Body
                                     </h4>
+                                    <div width="300px" style="text-align: center; padding: 10px 20px; border-radius: 4px;">
+                                        <table width="300px" style="text-align: center">
+                                            <tr>
+                                                <td align="center" bgcolor="#008CBA" style="padding: 10px 20px; border-radius: 4px;">
 
-                                    <p style="font-size: 15px;font-weight: bold;margin-top: 2rem; color: gray;" ">
-                                        Submitted User Name: @UserFullName<br />
-                                        Company: {@vendorName or @companyName}
-                                    </p>
+                                                    <a href=@Model.GetEmailVerifiedLink()>Click here to submit the form</a>
 
-                                    <p style="color:black;">@CompanyName Team.</p>
-                                    <p style="font-weight: bold;">Developed by Apertech Team.</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                    <p style="color:black;">@Model.GenerateCompanyNameTeamText()</p>
+                                    <p style="font-weight: bold;">@Model.GenerateDevelopedInformationText()</p>
                                 </div>
                             </td>
                         </tr>
@@ -232,13 +231,17 @@
                 </td>
             </tr>
         </table>
-        <table width="100%">
+        <table width="100%" style="margin: auto;">
             <tr>
                 <td class="bg_light" style="text-align: center; color: #000; font-size:14px;">
-                    <p>© @actualYear Sola ERP @CompanyName All rights reserved</p>
+                    <p>@Model.GenerateCopyRightText()</p>
                 </td>
             </tr>
         </table>
     </div>
+
+
+
 </body>
 </html>
+
