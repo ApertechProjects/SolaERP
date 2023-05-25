@@ -655,20 +655,21 @@ System.IndexOutOfRangeException: LinkedAnalysisDimensionId
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
 2023-05-24 16:31:20.687 +04:00 [ERR] LinkedAnalysisDimensionId
-2023-05-25 14:04:22.201 +04:00 [ERR] An unhandled exception has occurred while executing the request.
-System.ArgumentException: Object of type 'System.String' cannot be converted to type 'SolaERP.Application.Enums.Language'.
-   at System.RuntimeType.TryChangeType(Object value, Binder binder, CultureInfo culture, Boolean needsSpecialCast)
-   at System.RuntimeType.CheckValue(Object value, Binder binder, CultureInfo culture, BindingFlags invokeAttr)
-   at System.Reflection.MethodBase.CheckArguments(StackAllocedArguments& stackArgs, ReadOnlySpan`1 parameters, Binder binder, BindingFlags invokeAttr, CultureInfo culture, Signature sig)
-   at System.Reflection.RuntimeMethodInfo.InvokeOneParameter(Object obj, BindingFlags invokeAttr, Binder binder, Object parameter, CultureInfo culture)
-   at System.Reflection.RuntimePropertyInfo.SetValue(Object obj, Object value, BindingFlags invokeAttr, Binder binder, Object[] index, CultureInfo culture)
-   at System.Reflection.PropertyInfo.SetValue(Object obj, Object value)
-   at SolaERP.DataAccess.Extensions.DataReaderExtension.CheckObjectResultAndSetToEntity(PropertyInfo property, Object entity, Object objectResult) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 78
-   at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 69
-   at SolaERP.DataAccess.DataAcces.SqlServer.SqlUserRepository.GetUserByUsernameAsync(String userName) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlUserRepository.cs:line 103
-   at SolaERP.Application.Identity_Server.UserStore.FindByNameAsync(String normalizedUserName, CancellationToken cancellationToken) in C:\Users\User\Desktop\solaerp\SolaERP\Identity Server\UserStore.cs:line 39
-   at Microsoft.AspNetCore.Identity.UserManager`1.FindByNameAsync(String userName)
-   at SolaERP.Controllers.AccountController.Login(LoginRequestModel dto) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 58
+2023-05-25 14:07:24.728 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Data.SqlClient.SqlException (0x80131904): The formal parameter "@Language" was not declared as an OUTPUT parameter, but the actual parameter passed in requested output.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.CompleteAsyncExecuteReader()
+   at System.Data.SqlClient.SqlCommand.EndExecuteNonQueryInternal(IAsyncResult asyncResult)
+   at System.Data.SqlClient.SqlCommand.EndExecuteNonQuery(IAsyncResult asyncResult)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
+--- End of stack trace from previous location ---
+   at SolaERP.DataAccess.DataAcces.SqlServer.SqlUserRepository.RegisterUserAsync(User entity) in C:\Users\selim\OneDrive\Masaüstü\Project\Back\SolaERP.DataAccess\DataAccess\SqlServer\SqlUserRepository.cs:line 198
+   at SolaERP.Persistence.Services.UserService.UserRegisterAsync(UserRegisterModel model) in C:\Users\selim\OneDrive\Masaüstü\Project\Back\SolaERP.Application\Services\UserService.cs:line 55
+   at SolaERP.Controllers.AccountController.Register(UserRegisterModel dto) in C:\Users\selim\OneDrive\Masaüstü\Project\Back\SolaERP\Controllers\AccountController.cs:line 73
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
@@ -680,17 +681,24 @@ System.ArgumentException: Object of type 'System.String' cannot be converted to 
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2023-05-25 14:04:22.288 +04:00 [ERR] Object of type 'System.String' cannot be converted to type 'SolaERP.Application.Enums.Language'.
-2023-05-25 14:09:05.756 +04:00 [ERR] An unhandled exception has occurred while executing the request.
-System.IndexOutOfRangeException: Id
-   at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)
-   at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
-   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
-   at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 68
-   at SolaERP.DataAccess.DataAcces.SqlServer.SqlUserRepository.GetUserByUsernameAsync(String userName) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlUserRepository.cs:line 103
-   at SolaERP.Application.Identity_Server.UserStore.FindByNameAsync(String normalizedUserName, CancellationToken cancellationToken) in C:\Users\User\Desktop\solaerp\SolaERP\Identity Server\UserStore.cs:line 39
-   at Microsoft.AspNetCore.Identity.UserManager`1.FindByNameAsync(String userName)
-   at SolaERP.Controllers.AccountController.Login(LoginRequestModel dto) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 58
+ClientConnectionId:30ded2fe-ddcf-4224-9fbc-2d6425497908
+Error Number:8162,State:2,Class:16
+2023-05-25 14:07:24.865 +04:00 [ERR] The formal parameter "@Language" was not declared as an OUTPUT parameter, but the actual parameter passed in requested output.
+2023-05-25 14:35:51.851 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Data.SqlClient.SqlException (0x80131904): The formal parameter "@Language" was not declared as an OUTPUT parameter, but the actual parameter passed in requested output.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.CompleteAsyncExecuteReader()
+   at System.Data.SqlClient.SqlCommand.EndExecuteNonQueryInternal(IAsyncResult asyncResult)
+   at System.Data.SqlClient.SqlCommand.EndExecuteNonQuery(IAsyncResult asyncResult)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
+--- End of stack trace from previous location ---
+   at SolaERP.DataAccess.DataAcces.SqlServer.SqlUserRepository.RegisterUserAsync(User entity) in C:\Users\selim\OneDrive\Masaüstü\Project\Back\SolaERP.DataAccess\DataAccess\SqlServer\SqlUserRepository.cs:line 198
+   at SolaERP.Persistence.Services.UserService.UserRegisterAsync(UserRegisterModel model) in C:\Users\selim\OneDrive\Masaüstü\Project\Back\SolaERP.Application\Services\UserService.cs:line 55
+   at SolaERP.Controllers.AccountController.Register(UserRegisterModel dto) in C:\Users\selim\OneDrive\Masaüstü\Project\Back\SolaERP\Controllers\AccountController.cs:line 73
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
@@ -702,4 +710,6 @@ System.IndexOutOfRangeException: Id
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2023-05-25 14:09:05.805 +04:00 [ERR] Id
+ClientConnectionId:46b73b9d-295e-42f1-ae12-505e619bb256
+Error Number:8162,State:2,Class:16
+2023-05-25 14:35:51.852 +04:00 [ERR] The formal parameter "@Language" was not declared as an OUTPUT parameter, but the actual parameter passed in requested output.
