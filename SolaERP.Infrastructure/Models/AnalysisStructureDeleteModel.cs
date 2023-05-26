@@ -1,6 +1,6 @@
 ﻿namespace SolaERP.Application.Models
 {
-    public class AnalysisStructureUpdateModel : AnalysisStructureInputModel
+    public class AnalysisStructureDeleteModel : AnalysisStructureSaveModel
     {
         public int AnalysisStructureId { get; set; }
     }

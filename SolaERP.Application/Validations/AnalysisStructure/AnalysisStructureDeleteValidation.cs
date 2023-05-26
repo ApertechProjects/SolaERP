@@ -12,10 +12,7 @@ namespace SolaERP.Persistence.Validations.AnalysisStructure
     {
         public AnalysisStructureDeleteValidation()
         {
-           // RuleFor(x => x.)
-           //.Cascade(CascadeMode.StopOnFirstFailure)
-           //.NotNull().WithMessage("Please, select Analysis Dimension")
-           //.Must(CheckNotEqualZero.NotEqualZero).WithMessage("Please, select Analysis Structure");
+          
         }
     }
 }

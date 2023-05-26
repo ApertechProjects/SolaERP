@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Persistence.Validations.AnalysisStructure
 {
-    public class AnalysisStructureListSaveModel:AbstractValidator<List<AnalysisStructureDto>>
+    public class AnalysisStructureListSaveValidation:AbstractValidator<List<AnalysisStructureDto>>
     {
-        public AnalysisStructureListSaveModel()
+        public AnalysisStructureListSaveValidation()
         {
             RuleForEach(list => list).SetValidator(new AnalysisStructureSaveValidation());
         }

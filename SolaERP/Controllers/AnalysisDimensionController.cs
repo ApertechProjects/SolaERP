@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.AnaysisDimension;
+using SolaERP.Application.Models;
 using SolaERP.Controllers;
 
 namespace SolaERP.API.Controllers
@@ -32,8 +33,8 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _analysisDimensionService.Save(analysisDimension, User.Identity.Name));
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(List<int> analysisDimensionId)
-            => CreateActionResult(await _analysisDimensionService.Delete(analysisDimensionId, User.Identity.Name));
+        public async Task<IActionResult> Delete(AnalysisDimensionDeleteModel model)
+            => CreateActionResult(await _analysisDimensionService.Delete(model, User.Identity.Name));
 
     }
 }

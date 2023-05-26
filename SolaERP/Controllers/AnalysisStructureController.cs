@@ -42,9 +42,15 @@ namespace SolaERP.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<bool>> AddAsync(List<AnalysisStructureSaveModel> model)
+        public async Task<ActionResult<bool>> AddAsync(AnalysisStructureSaveModel model)
         {
-            var result = await _analysisService.AddAsync(model, User.Identity.Name);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            model.UserId = Convert.ToInt32(User.Identity.Name);
+            var result = await _analysisService.AddAsync(model);
             if (!result)
             {
                 return StatusCode(500); // or any appropriate status code for failure
