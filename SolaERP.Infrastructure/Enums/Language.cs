@@ -3,7 +3,7 @@
     public enum Language
     {
         en = 1,
-        Aze = 2,
-        Ru = 3,
+        az = 2,
+        ru = 3,
     }
 }

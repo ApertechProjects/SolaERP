@@ -42,7 +42,7 @@ namespace SolaERP.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<bool>> AddAsync(AnalysisStructureInputModel model)
+        public async Task<ActionResult<bool>> AddAsync(AnalysisStructureSaveModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -60,7 +60,7 @@ namespace SolaERP.API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<bool>> UpdateAsync(AnalysisStructureUpdateModel model)
+        public async Task<ActionResult<bool>> UpdateAsync(AnalysisStructureDeleteModel model)
         {
             if (!ModelState.IsValid)
             {

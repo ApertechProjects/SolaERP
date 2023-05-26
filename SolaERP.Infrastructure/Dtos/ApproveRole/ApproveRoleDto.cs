@@ -10,5 +10,7 @@ namespace SolaERP.Application.Dtos.ApproveRole
     {
         public int ApproveRoleId { get; set; }
         public string ApproveRoleName { get; set; }
+        public string CreatedUser { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

@@ -15,10 +15,6 @@ namespace SolaERP.Controllers
             _statusService = statusService;
         }
 
-        /// <summary>
-        ///Retrieve the available statuses for entities in the system.
-        /// </summary>
-        /// <remarks>The All endpoint in the Status controller retrieves a list of the available statuses for entities in the system. This can be useful for determining which statuses are valid for a given entity type, and for providing users with a list of options to choose from when updating the status of an entity.<remarks>
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
             => CreateActionResult(await _statusService.GetAllAsync());

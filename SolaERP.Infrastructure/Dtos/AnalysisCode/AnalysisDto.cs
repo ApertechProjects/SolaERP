@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Dtos.AnalysisCode
 {
-    public class AnalysisDto
+    public class AnalysisDto : ModifyEntity
     {
         public int AnalysisCodesId { get; set; }
         public int AnalysisDimensionId { get; set; }
@@ -18,6 +18,6 @@ namespace SolaERP.Application.Dtos.AnalysisCode
         public int Status { get; set; }
         public DateTime Date1 { get; set; }
         public DateTime Date2 { get; set; }
-        public int LinkedAnalysisDimensionId { get; set; }
+        public bool IsLinked { get; set; }
     }
 }

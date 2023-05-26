@@ -6,6 +6,7 @@ using SolaERP.Application.Dtos.Currency;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Entities.AnalysisDimension;
 using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -45,24 +46,46 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<BuAnalysisDimensionDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<bool>> Delete(int analysisDimensionId, string name)
+        public async Task<ApiResponse<bool>> Delete(AnalysisDimensionDeleteModel model, string name)
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
-            var code = await _analysisDimensionRepository.Delete(analysisDimensionId, userId);
-            await _unitOfWork.SaveChangesAsync();
-            if (code)
+            var code = false;
+            int counter = 0;
+            for (int i = 0; i < model.DimensionIds.Count; i++)
+            {
+                code = await _analysisDimensionRepository.Delete(model.DimensionIds[i], userId);
+                if (code)
+                    counter++;
+            }
+
+            if (counter == model.DimensionIds.Count)
+            {
+                await _unitOfWork.SaveChangesAsync();
                 return ApiResponse<bool>.Success(code, 200);
+            }
             return ApiResponse<bool>.Fail("Analysis code can not be deleted", 400);
         }
 
-        public async Task<ApiResponse<bool>> Save(AnalysisDimensionDto analysisDimension, string name)
+        public async Task<ApiResponse<bool>> Save(List<AnalysisDimensionDto> analysisDimension, string name)
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
-            var dimension = await _analysisDimensionRepository.Save(analysisDimension, userId);
-            await _unitOfWork.SaveChangesAsync();
-            if (dimension)
+            var dimension = false;
+            int counter = 0;
+            for (int i = 0; i < analysisDimension.Count; i++)
+            {
+                if (analysisDimension[i].AnalysisDimensionId < 0)
+                    analysisDimension[i].AnalysisDimensionId = 0;
+                dimension = await _analysisDimensionRepository.Save(analysisDimension[i], userId);
+                if (dimension)
+                    counter++;
+            }
+
+            if (counter == analysisDimension.Count)
+            {
+                await _unitOfWork.SaveChangesAsync();
                 return ApiResponse<bool>.Success(dimension, 200);
-            return ApiResponse<bool>.Fail("Analysis code can not be saved", 400);
+            }
+            return ApiResponse<bool>.Fail("Analysis dimension can not be saved", 400);
         }
     }
 }

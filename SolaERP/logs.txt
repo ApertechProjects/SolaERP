@@ -1,12 +1,123 @@
-2023-05-03 12:37:33.323 +04:00 [ERR] An unhandled exception has occurred while executing the request.
-System.IndexOutOfRangeException: RefreshToken
+2023-05-18 16:12:33.715 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Runtime.CompilerServices.SwitchExpressionException: Non-exhaustive switch expression failed to match its input.
+Unmatched value was ru.
+   at <PrivateImplementationDetails>.ThrowSwitchExpressionException(Object unmatchedValue)
+   at SolaERP.Infrastructure.ViewModels.VM_RegistrationIsPendingAdminApprove.GenerateBody() in C:\Users\User\Desktop\solaerp\Sola.ERP.Infrastructure\ViewModels\VM_RegistrationIsPendingAdminApprove.cs:line 22
+   at SolaERP.Controllers.AccountController.ConfirmEmail(String verifyToken) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 121
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-18 16:12:33.756 +04:00 [ERR] Non-exhaustive switch expression failed to match its input.
+Unmatched value was ru.
+2023-05-18 16:15:28.866 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Runtime.CompilerServices.SwitchExpressionException: Non-exhaustive switch expression failed to match its input.
+Unmatched value was ru.
+   at <PrivateImplementationDetails>.ThrowSwitchExpressionException(Object unmatchedValue)
+   at SolaERP.Infrastructure.ViewModels.VM_RegistrationIsPendingAdminApprove.GenerateBody() in C:\Users\User\Desktop\solaerp\Sola.ERP.Infrastructure\ViewModels\VM_RegistrationIsPendingAdminApprove.cs:line 22
+   at SolaERP.Controllers.AccountController.ConfirmEmail(String verifyToken) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 121
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-18 16:15:28.866 +04:00 [ERR] Non-exhaustive switch expression failed to match its input.
+Unmatched value was ru.
+2023-05-18 16:18:09.756 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Runtime.CompilerServices.SwitchExpressionException: Non-exhaustive switch expression failed to match its input.
+Unmatched value was ru.
+   at <PrivateImplementationDetails>.ThrowSwitchExpressionException(Object unmatchedValue)
+   at SolaERP.Infrastructure.ViewModels.VM_RegistrationIsPendingAdminApprove.GenerateBody() in C:\Users\User\Desktop\solaerp\Sola.ERP.Infrastructure\ViewModels\VM_RegistrationIsPendingAdminApprove.cs:line 22
+   at SolaERP.Controllers.AccountController.ConfirmEmail(String verifyToken) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 121
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-18 16:18:09.756 +04:00 [ERR] Non-exhaustive switch expression failed to match its input.
+Unmatched value was ru.
+2023-05-18 17:02:54.301 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Runtime.CompilerServices.SwitchExpressionException: Non-exhaustive switch expression failed to match its input.
+Unmatched value was ru.
+   at <PrivateImplementationDetails>.ThrowSwitchExpressionException(Object unmatchedValue)
+   at SolaERP.Infrastructure.ViewModels.VM_RegistrationIsPendingAdminApprove.GenerateBody() in C:\Users\User\Desktop\solaerp\Sola.ERP.Infrastructure\ViewModels\VM_RegistrationIsPendingAdminApprove.cs:line 22
+   at RazorLight.CompiledTemplates.GeneratedTemplate.ExecuteAsync() in /RegistrationIsPendingAdminApprove.cshtml:line 214
+   at RazorLight.TemplateRenderer.RenderPageCoreAsync(ITemplatePage page, PageContext context)
+   at RazorLight.TemplateRenderer.RenderPageAsync(ITemplatePage page, PageContext context, Boolean invokeViewStarts)
+   at RazorLight.TemplateRenderer.RenderAsync(ITemplatePage page)
+   at RazorLight.EngineHandler.RenderTemplateAsync[T](ITemplatePage templatePage, T model, TextWriter textWriter, ExpandoObject viewBag)
+   at RazorLight.EngineHandler.RenderTemplateAsync[T](ITemplatePage templatePage, T model, ExpandoObject viewBag)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at SolaERP.Infrastructure.Services.MailService.SendUsingTemplate[T](String subject, T viewModel, String templateName, String imageName, List`1 tos) in C:\Users\User\Desktop\solaerp\Sola.ERP.Infrastructure\Services\MailService.cs:line 232
+   at SolaERP.Controllers.AccountController.ConfirmEmail(String verifyToken) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 121
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-18 17:02:54.349 +04:00 [ERR] Non-exhaustive switch expression failed to match its input.
+Unmatched value was ru.
+2023-05-18 17:09:27.611 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Runtime.CompilerServices.SwitchExpressionException: Non-exhaustive switch expression failed to match its input.
+Unmatched value was ru.
+   at <PrivateImplementationDetails>.ThrowSwitchExpressionException(Object unmatchedValue)
+   at SolaERP.Infrastructure.ViewModels.VM_RegistrationIsPendingAdminApprove.GenerateBody() in C:\Users\User\Desktop\solaerp\Sola.ERP.Infrastructure\ViewModels\VM_RegistrationIsPendingAdminApprove.cs:line 22
+   at RazorLight.CompiledTemplates.GeneratedTemplate.ExecuteAsync() in /RegistrationIsPendingAdminApprove.cshtml:line 214
+   at RazorLight.TemplateRenderer.RenderPageCoreAsync(ITemplatePage page, PageContext context)
+   at RazorLight.TemplateRenderer.RenderPageAsync(ITemplatePage page, PageContext context, Boolean invokeViewStarts)
+   at RazorLight.TemplateRenderer.RenderAsync(ITemplatePage page)
+   at RazorLight.EngineHandler.RenderTemplateAsync[T](ITemplatePage templatePage, T model, TextWriter textWriter, ExpandoObject viewBag)
+   at RazorLight.EngineHandler.RenderTemplateAsync[T](ITemplatePage templatePage, T model, ExpandoObject viewBag)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at SolaERP.Infrastructure.Services.MailService.SendUsingTemplate[T](String subject, T viewModel, String templateName, String imageName, List`1 tos) in C:\Users\User\Desktop\solaerp\Sola.ERP.Infrastructure\Services\MailService.cs:line 232
+   at SolaERP.Controllers.AccountController.ConfirmEmail(String verifyToken) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 121
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-18 17:09:27.647 +04:00 [ERR] Non-exhaustive switch expression failed to match its input.
+Unmatched value was ru.
+2023-05-19 08:52:11.077 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.IndexOutOfRangeException: Language
    at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)
    at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
    at System.Data.SqlClient.SqlDataReader.get_Item(String name)
    at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 68
-   at SolaERP.DataAccess.DataAcces.SqlServer.SqlUserRepository.GetUserByEmailAsync(String email) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlUserRepository.cs:line 67
-   at SolaERP.Persistence.Services.UserService.UserRegisterAsync(UserRegisterModel model) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\UserService.cs:line 65
-   at SolaERP.Controllers.AccountController.Register(UserRegisterModel dto) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 75
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlEmailNotificationRepository.GetEmailTemplateData(Language language, EmailTemplateKey templateKey) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlEmailNotificationRepository.cs:line 91
+   at SolaERP.Persistence.Services.EmailNotificationService.GetEmailTemplateData(Language language, EmailTemplateKey templateKey) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\EmailNotificationService.cs:line 27
+   at SolaERP.Controllers.AccountController.Register(UserRegisterModel dto) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 142
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
@@ -18,16 +129,16 @@ System.IndexOutOfRangeException: RefreshToken
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2023-05-03 12:37:33.442 +04:00 [ERR] RefreshToken
-2023-05-03 12:39:14.786 +04:00 [ERR] An unhandled exception has occurred while executing the request.
-System.IndexOutOfRangeException: RefreshToken
+2023-05-19 08:52:11.145 +04:00 [ERR] Language
+2023-05-19 08:53:10.768 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.IndexOutOfRangeException: Language
    at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)
    at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
    at System.Data.SqlClient.SqlDataReader.get_Item(String name)
    at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 68
-   at SolaERP.DataAccess.DataAcces.SqlServer.SqlUserRepository.GetUserByEmailAsync(String email) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlUserRepository.cs:line 67
-   at SolaERP.Persistence.Services.UserService.UserRegisterAsync(UserRegisterModel model) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\UserService.cs:line 65
-   at SolaERP.Controllers.AccountController.Register(UserRegisterModel dto) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 75
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlEmailNotificationRepository.GetEmailTemplateData(Language language, EmailTemplateKey templateKey) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlEmailNotificationRepository.cs:line 91
+   at SolaERP.Persistence.Services.EmailNotificationService.GetEmailTemplateData(Language language, EmailTemplateKey templateKey) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\EmailNotificationService.cs:line 27
+   at SolaERP.Controllers.AccountController.Register(UserRegisterModel dto) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 142
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
@@ -39,16 +150,50 @@ System.IndexOutOfRangeException: RefreshToken
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2023-05-03 12:39:14.787 +04:00 [ERR] RefreshToken
-2023-05-04 16:40:06.870 +04:00 [ERR] An unhandled exception has occurred while executing the request.
-System.IndexOutOfRangeException: BusinesUnitCode
+2023-05-19 08:53:10.769 +04:00 [ERR] Language
+2023-05-19 10:29:36.768 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Runtime.CompilerServices.SwitchExpressionException: Non-exhaustive switch expression failed to match its input.
+   at <PrivateImplementationDetails>.ThrowSwitchExpressionException(Object unmatchedValue)
+   at SolaERP.Application.Extensions.GetLanguageExtension.GetLanguageEnumValue(String language) in C:\Users\User\Desktop\solaerp\SolaERP.Infrastructure\Extensions\GetLanguage.cs:line 15
+   at SolaERP.Controllers.AccountController.ConfirmEmail(String verifyToken) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 88
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-19 10:29:36.833 +04:00 [ERR] Non-exhaustive switch expression failed to match its input.
+2023-05-19 10:30:55.664 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Runtime.CompilerServices.SwitchExpressionException: Non-exhaustive switch expression failed to match its input.
+   at <PrivateImplementationDetails>.ThrowSwitchExpressionException(Object unmatchedValue)
+   at SolaERP.Application.Extensions.GetLanguageExtension.GetLanguageEnumValue(String language) in C:\Users\User\Desktop\solaerp\SolaERP.Infrastructure\Extensions\GetLanguage.cs:line 15
+   at SolaERP.Controllers.AccountController.ConfirmEmail(String verifyToken) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 88
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-19 10:30:55.665 +04:00 [ERR] Non-exhaustive switch expression failed to match its input.
+2023-05-19 16:17:08.913 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.IndexOutOfRangeException: Language
    at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)
    at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
    at System.Data.SqlClient.SqlDataReader.get_Item(String name)
    at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 68
-   at SolaERP.DataAccess.DataAccess.SqlServer.SqlBuyerRepository.GetBuyersAsync(Int32 userId, String businessUnitCode) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlBuyerRepository.cs:line 45
-   at SolaERP.Persistence.Services.BuyerService.GetBuyersAsync(String name, String businessUnitCode) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\BuyerService.cs:line 38
-   at SolaERP.Controllers.BuyerController.GetBuyersAsync(String businessUnitCode) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\BuyerController.cs:line 21
+   at SolaERP.DataAccess.DataAcces.SqlServer.SqlUserRepository.GetUserByEmailAsync(String email) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlUserRepository.cs:line 69
+   at SolaERP.Persistence.Services.UserService.UserRegisterAsync(UserRegisterModel model) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\UserService.cs:line 44
+   at SolaERP.Controllers.AccountController.Register(UserRegisterModel dto) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 137
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
@@ -60,12 +205,16 @@ System.IndexOutOfRangeException: BusinesUnitCode
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2023-05-04 16:40:06.983 +04:00 [ERR] BusinesUnitCode
-2023-05-05 09:28:01.091 +04:00 [ERR] An unhandled exception has occurred while executing the request.
-System.InvalidCastException: Unable to cast object of type 'System.DBNull' to type 'System.Int32'.
-   at SolaERP.DataAccess.DataAccess.SqlServer.SqlGroupRepository.AddUpdateOrDeleteGroupAsync(Int32 userID, Groups entity) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlGroupRepository.cs:line 106
-   at SolaERP.Persistence.Services.GroupService.DeleteGroupAsync(String identity, GroupDeleteModel model) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\GroupService.cs:line 299
-   at SolaERP.Controllers.GroupController.DeleteGroupAsync(GroupDeleteModel models) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\GroupController.cs:line 47
+2023-05-19 16:17:08.980 +04:00 [ERR] Language
+2023-05-19 16:17:31.557 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.IndexOutOfRangeException: Language
+   at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)
+   at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
+   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 68
+   at SolaERP.DataAccess.DataAcces.SqlServer.SqlUserRepository.GetUserByEmailAsync(String email) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlUserRepository.cs:line 69
+   at SolaERP.Persistence.Services.UserService.UserRegisterAsync(UserRegisterModel model) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\UserService.cs:line 44
+   at SolaERP.Controllers.AccountController.Register(UserRegisterModel dto) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 137
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
@@ -77,12 +226,13 @@ System.InvalidCastException: Unable to cast object of type 'System.DBNull' to ty
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2023-05-05 09:28:01.199 +04:00 [ERR] Unable to cast object of type 'System.DBNull' to type 'System.Int32'.
-2023-05-05 09:29:13.353 +04:00 [ERR] An unhandled exception has occurred while executing the request.
-System.InvalidCastException: Unable to cast object of type 'System.DBNull' to type 'System.Int32'.
-   at SolaERP.DataAccess.DataAccess.SqlServer.SqlGroupRepository.AddUpdateOrDeleteGroupAsync(Int32 userID, Groups entity) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlGroupRepository.cs:line 106
-   at SolaERP.Persistence.Services.GroupService.DeleteGroupAsync(String identity, GroupDeleteModel model) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\GroupService.cs:line 298
-   at SolaERP.Controllers.GroupController.DeleteGroupAsync(GroupDeleteModel models) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\GroupController.cs:line 47
+2023-05-19 16:17:31.558 +04:00 [ERR] Language
+2023-05-20 23:09:48.601 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.FormatException: Index (zero based) must be greater than or equal to zero and less than the size of the argument list.
+   at System.Text.ValueStringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at SolaERP.Controllers.AccountController.ConfirmEmail(String verifyToken) in C:\Users\DELL\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 92
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
@@ -94,12 +244,15 @@ System.InvalidCastException: Unable to cast object of type 'System.DBNull' to ty
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2023-05-05 09:29:13.410 +04:00 [ERR] Unable to cast object of type 'System.DBNull' to type 'System.Int32'.
-2023-05-05 09:32:05.212 +04:00 [ERR] An unhandled exception has occurred while executing the request.
-System.InvalidCastException: Unable to cast object of type 'System.DBNull' to type 'System.Int32'.
-   at SolaERP.DataAccess.DataAccess.SqlServer.SqlGroupRepository.AddUpdateOrDeleteGroupAsync(Int32 userID, Groups entity) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlGroupRepository.cs:line 106
-   at SolaERP.Persistence.Services.GroupService.DeleteGroupAsync(String identity, GroupDeleteModel model) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\GroupService.cs:line 298
-   at SolaERP.Controllers.GroupController.DeleteGroupAsync(GroupDeleteModel models) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\GroupController.cs:line 47
+2023-05-20 23:09:55.655 +04:00 [ERR] Index (zero based) must be greater than or equal to zero and less than the size of the argument list.
+2023-05-20 23:19:03.769 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.FormatException: The specified string is not in the form required for an e-mail address.
+   at System.Net.Mail.MailAddressParser.TryParseAddress(String data, Boolean expectMultipleAddresses, Int32& index, ParseAddressInfo& parseAddressInfo, Boolean throwExceptionIfFail)
+   at System.Net.Mail.MailAddressParser.ParseMultipleAddresses(String data)
+   at System.Net.Mail.MailAddressCollection.ParseValue(String addresses)
+   at System.Net.Mail.MailAddressCollection.Add(String addresses)
+   at SolaERP.Infrastructure.Services.MailService.SendUsingTemplate[T](String subject, T viewModel, String templateName, String imageName, List`1 tos) in C:\Users\DELL\Desktop\solaerp\Sola.ERP.Infrastructure\Services\MailService.cs:line 257
+   at SolaERP.Controllers.AccountController.ConfirmEmail(String verifyToken) in C:\Users\DELL\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 121
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
@@ -111,14 +264,15 @@ System.InvalidCastException: Unable to cast object of type 'System.DBNull' to ty
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2023-05-05 09:32:05.213 +04:00 [ERR] Unable to cast object of type 'System.DBNull' to type 'System.Int32'.
-2023-05-05 09:34:19.661 +04:00 [ERR] An unhandled exception has occurred while executing the request.
-System.InvalidCastException: Object cannot be cast from DBNull to other types.
-   at System.DBNull.System.IConvertible.ToInt32(IFormatProvider provider)
-   at System.Convert.ToInt32(Object value)
-   at SolaERP.DataAccess.DataAccess.SqlServer.SqlGroupRepository.AddUpdateOrDeleteGroupAsync(Int32 userID, Groups entity) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlGroupRepository.cs:line 106
-   at SolaERP.Persistence.Services.GroupService.DeleteGroupAsync(String identity, GroupDeleteModel model) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\GroupService.cs:line 298
-   at SolaERP.Controllers.GroupController.DeleteGroupAsync(GroupDeleteModel models) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\GroupController.cs:line 47
+2023-05-20 23:19:06.206 +04:00 [ERR] The specified string is not in the form required for an e-mail address.
+2023-05-20 23:30:21.114 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.FormatException: The specified string is not in the form required for an e-mail address.
+   at System.Net.Mail.MailAddressParser.TryParseAddress(String data, Boolean expectMultipleAddresses, Int32& index, ParseAddressInfo& parseAddressInfo, Boolean throwExceptionIfFail)
+   at System.Net.Mail.MailAddressParser.ParseMultipleAddresses(String data)
+   at System.Net.Mail.MailAddressCollection.ParseValue(String addresses)
+   at System.Net.Mail.MailAddressCollection.Add(String addresses)
+   at SolaERP.Infrastructure.Services.MailService.SendUsingTemplate[T](String subject, T viewModel, String templateName, String imageName, List`1 tos) in C:\Users\DELL\Desktop\solaerp\Sola.ERP.Infrastructure\Services\MailService.cs:line 257
+   at SolaERP.Controllers.AccountController.ConfirmEmail(String verifyToken) in C:\Users\DELL\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 118
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
@@ -130,12 +284,15 @@ System.InvalidCastException: Object cannot be cast from DBNull to other types.
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2023-05-05 09:34:19.718 +04:00 [ERR] Object cannot be cast from DBNull to other types.
-2023-05-05 09:37:19.059 +04:00 [ERR] An unhandled exception has occurred while executing the request.
-System.InvalidCastException: Unable to cast object of type 'System.DBNull' to type 'System.Int32'.
-   at SolaERP.DataAccess.DataAccess.SqlServer.SqlGroupRepository.AddUpdateOrDeleteGroupAsync(Int32 userID, Groups entity) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlGroupRepository.cs:line 106
-   at SolaERP.Persistence.Services.GroupService.DeleteGroupAsync(String identity, GroupDeleteModel model) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\GroupService.cs:line 298
-   at SolaERP.Controllers.GroupController.DeleteGroupAsync(GroupDeleteModel models) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\GroupController.cs:line 47
+2023-05-20 23:30:23.869 +04:00 [ERR] The specified string is not in the form required for an e-mail address.
+2023-05-20 23:49:05.615 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.FormatException: The specified string is not in the form required for an e-mail address.
+   at System.Net.Mail.MailAddressParser.TryParseAddress(String data, Boolean expectMultipleAddresses, Int32& index, ParseAddressInfo& parseAddressInfo, Boolean throwExceptionIfFail)
+   at System.Net.Mail.MailAddressParser.ParseMultipleAddresses(String data)
+   at System.Net.Mail.MailAddressCollection.ParseValue(String addresses)
+   at System.Net.Mail.MailAddressCollection.Add(String addresses)
+   at SolaERP.Infrastructure.Services.MailService.SendUsingTemplate[T](String subject, T viewModel, String templateName, String imageName, List`1 tos) in C:\Users\DELL\Desktop\solaerp\Sola.ERP.Infrastructure\Services\MailService.cs:line 257
+   at SolaERP.Controllers.AccountController.ConfirmEmail(String verifyToken) in C:\Users\DELL\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 118
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
@@ -147,29 +304,15 @@ System.InvalidCastException: Unable to cast object of type 'System.DBNull' to ty
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2023-05-05 09:37:19.117 +04:00 [ERR] Unable to cast object of type 'System.DBNull' to type 'System.Int32'.
-2023-05-05 09:41:20.715 +04:00 [ERR] Connection id "0HMQD5D2UH624", Request id "0HMQD5D2UH624:00000004": An unhandled exception was thrown by the application.
-System.Data.SqlClient.SqlException (0x80131904): The ROLLBACK TRANSACTION request has no corresponding BEGIN TRANSACTION.
-   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
-   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
-   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
-   at System.Data.SqlClient.TdsParser.Run(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj)
-   at System.Data.SqlClient.TdsParser.TdsExecuteTransactionManagerRequest(Byte[] buffer, TransactionManagerRequestType request, String transactionName, TransactionManagerIsolationLevel isoLevel, Int32 timeout, SqlInternalTransaction transaction, TdsParserStateObject stateObj, Boolean isDelegateControlRequest)
-   at System.Data.SqlClient.SqlInternalConnectionTds.ExecuteTransactionYukon(TransactionRequest transactionRequest, String transactionName, IsolationLevel iso, SqlInternalTransaction internalTransaction, Boolean isDelegateControlRequest)
-   at System.Data.SqlClient.SqlInternalTransaction.Rollback()
-   at System.Data.SqlClient.SqlTransaction.Rollback()
-   at SolaERP.DataAccess.DataAcces.SqlServer.SqlUnitOfWork.Dispose() in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlUnitOfWork.cs:line 31
-   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.DisposeAsync()
---- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Http.Features.RequestServicesFeature.<DisposeAsync>g__Awaited|9_0(RequestServicesFeature servicesFeature, ValueTask vt)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.<FireOnCompleted>g__ProcessEvents|230_0(HttpProtocol protocol, Stack`1 events)
-ClientConnectionId:cc9333e5-44c1-4722-9807-60aa2538b011
-Error Number:3903,State:2,Class:16
-2023-05-05 14:52:25.446 +04:00 [ERR] An unhandled exception has occurred while executing the request.
-System.NullReferenceException: Object reference not set to an instance of an object.
-   at SolaERP.DataAccess.DataAccess.SqlServer.SqlGroupRepository.AddUpdateOrDeleteGroupAsync(Int32 userID, Groups entity) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlGroupRepository.cs:line 106
-   at SolaERP.Persistence.Services.GroupService.SaveGroupAsync(String identity, GroupSaveModel model) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\GroupService.cs:line 179
-   at SolaERP.Controllers.GroupController.SaveGroupAsync(GroupSaveModel model) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\GroupController.cs:line 43
+2023-05-20 23:49:08.803 +04:00 [ERR] The specified string is not in the form required for an e-mail address.
+2023-05-20 23:49:52.200 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.FormatException: The specified string is not in the form required for an e-mail address.
+   at System.Net.Mail.MailAddressParser.TryParseAddress(String data, Boolean expectMultipleAddresses, Int32& index, ParseAddressInfo& parseAddressInfo, Boolean throwExceptionIfFail)
+   at System.Net.Mail.MailAddressParser.ParseMultipleAddresses(String data)
+   at System.Net.Mail.MailAddressCollection.ParseValue(String addresses)
+   at System.Net.Mail.MailAddressCollection.Add(String addresses)
+   at SolaERP.Infrastructure.Services.MailService.SendUsingTemplate[T](String subject, T viewModel, String templateName, String imageName, List`1 tos) in C:\Users\DELL\Desktop\solaerp\Sola.ERP.Infrastructure\Services\MailService.cs:line 257
+   at SolaERP.Controllers.AccountController.ConfirmEmail(String verifyToken) in C:\Users\DELL\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 118
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
@@ -181,37 +324,15 @@ System.NullReferenceException: Object reference not set to an instance of an obj
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2023-05-05 14:52:25.487 +04:00 [ERR] Object reference not set to an instance of an object.
-2023-05-05 14:52:33.190 +04:00 [ERR] An unhandled exception has occurred while executing the request.
-System.NullReferenceException: Object reference not set to an instance of an object.
-   at SolaERP.DataAccess.DataAccess.SqlServer.SqlGroupRepository.AddUpdateOrDeleteGroupAsync(Int32 userID, Groups entity) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlGroupRepository.cs:line 106
-   at SolaERP.Persistence.Services.GroupService.SaveGroupAsync(String identity, GroupSaveModel model) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\GroupService.cs:line 179
-   at SolaERP.Controllers.GroupController.SaveGroupAsync(GroupSaveModel model) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\GroupController.cs:line 43
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2023-05-05 14:52:33.191 +04:00 [ERR] Object reference not set to an instance of an object.
-2023-05-11 14:18:32.827 +04:00 [ERR] An unhandled exception has occurred while executing the request.
-System.Data.SqlClient.SqlException (0x80131904): 'SF_CheckUserVerify' is not a recognized built-in function name.
-   at System.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__126_0(Task`1 result)
-   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
-   at System.Threading.Tasks.Task.<>c.<.cctor>b__272_0(Object obj)
-   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
---- End of stack trace from previous location ---
-   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
-   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
---- End of stack trace from previous location ---
-   at SolaERP.DataAccess.DataAcces.SqlServer.SqlUserRepository.CheckEmailIsVerified(String email) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlUserRepository.cs:line 569
-   at SolaERP.Persistence.Services.UserService.CheckEmailIsVerified(String email) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\UserService.cs:line 380
-   at SolaERP.Controllers.AccountController.Login(LoginRequestModel dto) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 49
+2023-05-20 23:50:28.071 +04:00 [ERR] The specified string is not in the form required for an e-mail address.
+2023-05-20 23:52:20.496 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.FormatException: The specified string is not in the form required for an e-mail address.
+   at System.Net.Mail.MailAddressParser.TryParseAddress(String data, Boolean expectMultipleAddresses, Int32& index, ParseAddressInfo& parseAddressInfo, Boolean throwExceptionIfFail)
+   at System.Net.Mail.MailAddressParser.ParseMultipleAddresses(String data)
+   at System.Net.Mail.MailAddressCollection.ParseValue(String addresses)
+   at System.Net.Mail.MailAddressCollection.Add(String addresses)
+   at SolaERP.Infrastructure.Services.MailService.SendUsingTemplate[T](String subject, T viewModel, String templateName, String imageName, List`1 tos) in C:\Users\DELL\Desktop\solaerp\Sola.ERP.Infrastructure\Services\MailService.cs:line 257
+   at SolaERP.Controllers.AccountController.ConfirmEmail(String verifyToken) in C:\Users\DELL\Desktop\solaerp\SolaERP\Controllers\AccountController.cs:line 118
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
@@ -513,38 +634,16 @@ System.Data.SqlClient.SqlException (0x80131904): The DELETE statement conflicted
 ClientConnectionId:ddff4f2c-fecb-4fa6-811b-54bb845894a7
 Error Number:547,State:0,Class:16
 2023-05-24 15:01:54.064 +04:00 [ERR] The DELETE statement conflicted with the REFERENCE constraint "FK__AnalysisC__Analy__08F5448B". The conflict occurred in database "SolaERPR", table "Config.AnalysisCodes", column 'AnalysisDimensionid'.
-2023-05-24 15:44:13.075 +04:00 [ERR] An unhandled exception has occurred while executing the request.
-System.InvalidOperationException: Unable to resolve service for type 'SolaERP.Application.Contracts.Services.IAnalysisService' while attempting to activate 'SolaERP.API.Controllers.AnalysisStructureController'.
-   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetService(IServiceProvider sp, Type type, Type requiredBy, Boolean isDefaultParameterRequired)
-   at lambda_method59(Closure , IServiceProvider , Object[] )
-   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.<>c__DisplayClass7_0.<CreateActivator>b__0(ControllerContext controllerContext)
-   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
---- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2023-05-24 15:44:13.160 +04:00 [ERR] Unable to resolve service for type 'SolaERP.Application.Contracts.Services.IAnalysisService' while attempting to activate 'SolaERP.API.Controllers.AnalysisStructureController'.
-2023-05-24 15:50:20.873 +04:00 [ERR] An unhandled exception has occurred while executing the request.
-System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '@AnalysisDimensionid4'.
-   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
-   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
-   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
-   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
-   at System.Data.SqlClient.SqlCommand.CompleteAsyncExecuteReader()
-   at System.Data.SqlClient.SqlCommand.EndExecuteNonQueryInternal(IAsyncResult asyncResult)
-   at System.Data.SqlClient.SqlCommand.EndExecuteNonQuery(IAsyncResult asyncResult)
-   at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
---- End of stack trace from previous location ---
-   at SolaERP.DataAccess.DataAccess.SqlServer.SqlAnalysisStructureRepository.SaveAsync(Int32 mainId, AnalysisStructureInputModel model) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlAnalysisStructureRepository.cs:line 96
-   at SolaERP.DataAccess.DataAccess.SqlServer.SqlAnalysisStructureRepository.AddAsync(AnalysisStructureInputModel model) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlAnalysisStructureRepository.cs:line 19
-   at SolaERP.Persistence.Services.AnalysisService.AddAsync(AnalysisStructureInputModel model) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\AnalysisService.cs:line 22
-   at SolaERP.API.Controllers.AnalysisStructureController.AddAsync(AnalysisStructureInputModel model) in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\AnalysisStructureController.cs:line 50
-   at lambda_method71(Closure , Object )
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+2023-05-24 16:31:20.552 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.IndexOutOfRangeException: LinkedAnalysisDimensionId
+   at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)
+   at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
+   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 68
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlAnalysisCodeRepository.GetAnalysisCodesAsync(Int32 analysisCodeId, Int32 userId) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlAnalysisCodeRepository.cs:line 76
+   at SolaERP.Persistence.Services.AnalysisCodeService.GetAnalysisCodesAsync(Int32 analysisCodeId, String userName) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\AnalysisCodeService.cs:line 54
+   at SolaERP.Controllers.AnalysisCodeController.ByDimension(Int32 dimensionId) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AnalysisCodeController.cs:line 33
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
@@ -555,12 +654,11 @@ System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '@Analysi
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-ClientConnectionId:e6f619df-0783-4167-be42-9e591460450e
-Error Number:102,State:1,Class:15
-2023-05-24 15:50:21.050 +04:00 [ERR] Incorrect syntax near '@AnalysisDimensionid4'.
-2023-05-24 15:52:22.279 +04:00 [ERR] An unhandled exception has occurred while executing the request.
-System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '@AnalysisDimensionid8'.
+2023-05-24 16:31:20.687 +04:00 [ERR] LinkedAnalysisDimensionId
+2023-05-25 14:07:24.728 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Data.SqlClient.SqlException (0x80131904): The formal parameter "@Language" was not declared as an OUTPUT parameter, but the actual parameter passed in requested output.
    at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
    at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
    at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
@@ -569,12 +667,10 @@ System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '@Analysi
    at System.Data.SqlClient.SqlCommand.EndExecuteNonQuery(IAsyncResult asyncResult)
    at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
 --- End of stack trace from previous location ---
-   at SolaERP.DataAccess.DataAccess.SqlServer.SqlAnalysisStructureRepository.SaveAsync(Int32 mainId, AnalysisStructureInputModel model) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlAnalysisStructureRepository.cs:line 96
-   at SolaERP.DataAccess.DataAccess.SqlServer.SqlAnalysisStructureRepository.AddAsync(AnalysisStructureInputModel model) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlAnalysisStructureRepository.cs:line 19
-   at SolaERP.Persistence.Services.AnalysisService.AddAsync(AnalysisStructureInputModel model) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\AnalysisService.cs:line 22
-   at SolaERP.API.Controllers.AnalysisStructureController.AddAsync(AnalysisStructureInputModel model) in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\AnalysisStructureController.cs:line 50
-   at lambda_method55(Closure , Object )
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at SolaERP.DataAccess.DataAcces.SqlServer.SqlUserRepository.RegisterUserAsync(User entity) in C:\Users\selim\OneDrive\Masaüstü\Project\Back\SolaERP.DataAccess\DataAccess\SqlServer\SqlUserRepository.cs:line 198
+   at SolaERP.Persistence.Services.UserService.UserRegisterAsync(UserRegisterModel model) in C:\Users\selim\OneDrive\Masaüstü\Project\Back\SolaERP.Application\Services\UserService.cs:line 55
+   at SolaERP.Controllers.AccountController.Register(UserRegisterModel dto) in C:\Users\selim\OneDrive\Masaüstü\Project\Back\SolaERP\Controllers\AccountController.cs:line 73
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
@@ -585,12 +681,13 @@ System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '@Analysi
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-ClientConnectionId:36917b2f-c016-4425-a3f7-8c8de553b10f
-Error Number:102,State:1,Class:15
-2023-05-24 15:52:22.367 +04:00 [ERR] Incorrect syntax near '@AnalysisDimensionid8'.
-2023-05-24 15:52:59.357 +04:00 [ERR] An unhandled exception has occurred while executing the request.
-System.Data.SqlClient.SqlException (0x80131904): Must declare the scalar variable "@UserId".
+ClientConnectionId:30ded2fe-ddcf-4224-9fbc-2d6425497908
+Error Number:8162,State:2,Class:16
+2023-05-25 14:07:24.865 +04:00 [ERR] The formal parameter "@Language" was not declared as an OUTPUT parameter, but the actual parameter passed in requested output.
+2023-05-25 14:35:51.851 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Data.SqlClient.SqlException (0x80131904): The formal parameter "@Language" was not declared as an OUTPUT parameter, but the actual parameter passed in requested output.
    at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
    at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
    at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
@@ -599,12 +696,10 @@ System.Data.SqlClient.SqlException (0x80131904): Must declare the scalar variabl
    at System.Data.SqlClient.SqlCommand.EndExecuteNonQuery(IAsyncResult asyncResult)
    at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
 --- End of stack trace from previous location ---
-   at SolaERP.DataAccess.DataAccess.SqlServer.SqlAnalysisStructureRepository.SaveAsync(Int32 mainId, AnalysisStructureInputModel model) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlAnalysisStructureRepository.cs:line 96
-   at SolaERP.DataAccess.DataAccess.SqlServer.SqlAnalysisStructureRepository.AddAsync(AnalysisStructureInputModel model) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlAnalysisStructureRepository.cs:line 19
-   at SolaERP.Persistence.Services.AnalysisService.AddAsync(AnalysisStructureInputModel model) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\AnalysisService.cs:line 22
-   at SolaERP.API.Controllers.AnalysisStructureController.AddAsync(AnalysisStructureInputModel model) in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\AnalysisStructureController.cs:line 50
-   at lambda_method55(Closure , Object )
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at SolaERP.DataAccess.DataAcces.SqlServer.SqlUserRepository.RegisterUserAsync(User entity) in C:\Users\selim\OneDrive\Masaüstü\Project\Back\SolaERP.DataAccess\DataAccess\SqlServer\SqlUserRepository.cs:line 198
+   at SolaERP.Persistence.Services.UserService.UserRegisterAsync(UserRegisterModel model) in C:\Users\selim\OneDrive\Masaüstü\Project\Back\SolaERP.Application\Services\UserService.cs:line 55
+   at SolaERP.Controllers.AccountController.Register(UserRegisterModel dto) in C:\Users\selim\OneDrive\Masaüstü\Project\Back\SolaERP\Controllers\AccountController.cs:line 73
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
@@ -615,10 +710,10 @@ System.Data.SqlClient.SqlException (0x80131904): Must declare the scalar variabl
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-ClientConnectionId:4bd6b3d4-1c0d-4d43-afd7-faadb773bf43
-Error Number:137,State:2,Class:15
-2023-05-24 15:52:59.459 +04:00 [ERR] Must declare the scalar variable "@UserId".
-2023-05-24 15:53:42.023 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+ClientConnectionId:46b73b9d-295e-42f1-ae12-505e619bb256
+Error Number:8162,State:2,Class:16
+2023-05-25 14:35:51.852 +04:00 [ERR] The formal parameter "@Language" was not declared as an OUTPUT parameter, but the actual parameter passed in requested output.
+2023-05-26 08:51:25.267 +04:00 [ERR] An unhandled exception has occurred while executing the request.
 System.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_Logs_UserId". The conflict occurred in database "SolaERPR", table "Config.AppUser", column 'Id'.
    at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
@@ -629,12 +724,10 @@ System.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted
    at System.Data.SqlClient.SqlCommand.EndExecuteNonQuery(IAsyncResult asyncResult)
    at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
 --- End of stack trace from previous location ---
-   at SolaERP.DataAccess.DataAccess.SqlServer.SqlAnalysisStructureRepository.SaveAsync(Int32 mainId, AnalysisStructureInputModel model) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlAnalysisStructureRepository.cs:line 97
-   at SolaERP.DataAccess.DataAccess.SqlServer.SqlAnalysisStructureRepository.AddAsync(AnalysisStructureInputModel model) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlAnalysisStructureRepository.cs:line 19
-   at SolaERP.Persistence.Services.AnalysisService.AddAsync(AnalysisStructureInputModel model) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\AnalysisService.cs:line 22
-   at SolaERP.API.Controllers.AnalysisStructureController.AddAsync(AnalysisStructureInputModel model) in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\AnalysisStructureController.cs:line 50
-   at lambda_method55(Closure , Object )
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlApproveRoleRepository.ApproveRoleSaveAsync(ApproveRoleSaveModel model, Int32 userId) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlApproveRoleRepository.cs:line 57
+   at SolaERP.Persistence.Services.ApproveRoleService.ApproveRoleSaveAsync(List`1 model, String userName) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\ApproveRoleService.cs:line 61
+   at SolaERP.Controllers.ApprovalController.SaveRole(List`1 model) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\ApprovalController.cs:line 69
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
@@ -645,11 +738,11 @@ System.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-ClientConnectionId:b02da29a-df59-4bfb-9d46-29a7630b80d0
+ClientConnectionId:fa238dd9-221a-4593-99ee-4e88029ef32c
 Error Number:547,State:0,Class:16
-2023-05-24 15:53:42.110 +04:00 [ERR] The INSERT statement conflicted with the FOREIGN KEY constraint "FK_Logs_UserId". The conflict occurred in database "SolaERPR", table "Config.AppUser", column 'Id'.
-2023-05-24 16:00:47.041 +04:00 [ERR] An unhandled exception has occurred while executing the request.
-System.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'UserId', table 'SolaERPR.Register.Logs'; column does not allow nulls. INSERT fails.
+2023-05-26 08:51:25.376 +04:00 [ERR] The INSERT statement conflicted with the FOREIGN KEY constraint "FK_Logs_UserId". The conflict occurred in database "SolaERPR", table "Config.AppUser", column 'Id'.
+2023-05-26 08:53:04.914 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_Logs_UserId". The conflict occurred in database "SolaERPR", table "Config.AppUser", column 'Id'.
    at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
    at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
@@ -659,12 +752,10 @@ System.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL in
    at System.Data.SqlClient.SqlCommand.EndExecuteNonQuery(IAsyncResult asyncResult)
    at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
 --- End of stack trace from previous location ---
-   at SolaERP.DataAccess.DataAccess.SqlServer.SqlAnalysisStructureRepository.SaveAsync(Int32 mainId, AnalysisStructureInputModel model) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlAnalysisStructureRepository.cs:line 97
-   at SolaERP.DataAccess.DataAccess.SqlServer.SqlAnalysisStructureRepository.RemoveAsync(Int32 id) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlAnalysisStructureRepository.cs:line 60
-   at SolaERP.Persistence.Services.AnalysisService.RemoveAsync(Int32 id) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\AnalysisService.cs:line 40
-   at SolaERP.API.Controllers.AnalysisStructureController.RemoveAsync(Int32 id) in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\AnalysisStructureController.cs:line 83
-   at lambda_method70(Closure , Object )
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlApproveRoleRepository.ApproveRoleSaveAsync(ApproveRoleSaveModel model, Int32 userId) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlApproveRoleRepository.cs:line 57
+   at SolaERP.Persistence.Services.ApproveRoleService.ApproveRoleSaveAsync(List`1 model, String userName) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\ApproveRoleService.cs:line 61
+   at SolaERP.Controllers.ApprovalController.SaveRole(List`1 model) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\ApprovalController.cs:line 69
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
@@ -675,7 +766,147 @@ System.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL in
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-ClientConnectionId:046a5189-9eab-4539-b504-7ec51b4dc055
+ClientConnectionId:4744c77d-4584-451f-93c6-da232015e89a
+Error Number:547,State:0,Class:16
+2023-05-26 08:53:04.916 +04:00 [ERR] The INSERT statement conflicted with the FOREIGN KEY constraint "FK_Logs_UserId". The conflict occurred in database "SolaERPR", table "Config.AppUser", column 'Id'.
+2023-05-26 10:10:06.862 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'ApproveRoleName', table 'SolaERPR.Register.ApproveRoles'; column does not allow nulls. INSERT fails.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.CompleteAsyncExecuteReader()
+   at System.Data.SqlClient.SqlCommand.EndExecuteNonQueryInternal(IAsyncResult asyncResult)
+   at System.Data.SqlClient.SqlCommand.EndExecuteNonQuery(IAsyncResult asyncResult)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
+--- End of stack trace from previous location ---
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlApproveRoleRepository.ApproveRoleDeleteAsync(Int32 approveRoleId, Int32 userId) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlApproveRoleRepository.cs:line 69
+   at SolaERP.Persistence.Services.ApproveRoleService.ApproveRoleDeleteAsync(ApproveRoleDeleteModel model, String userName) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\ApproveRoleService.cs:line 45
+   at SolaERP.Controllers.ApprovalController.DeleteRole(ApproveRoleDeleteModel model) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\ApprovalController.cs:line 73
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+ClientConnectionId:1fe5b9a9-4d3d-4bd2-85c0-8840899d87ea
+Error Number:515,State:2,Class:16
+2023-05-26 10:10:07.109 +04:00 [ERR] Cannot insert the value NULL into column 'ApproveRoleName', table 'SolaERPR.Register.ApproveRoles'; column does not allow nulls. INSERT fails.
+2023-05-26 10:10:29.696 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'ApproveRoleName', table 'SolaERPR.Register.ApproveRoles'; column does not allow nulls. INSERT fails.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.CompleteAsyncExecuteReader()
+   at System.Data.SqlClient.SqlCommand.EndExecuteNonQueryInternal(IAsyncResult asyncResult)
+   at System.Data.SqlClient.SqlCommand.EndExecuteNonQuery(IAsyncResult asyncResult)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
+--- End of stack trace from previous location ---
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlApproveRoleRepository.ApproveRoleDeleteAsync(Int32 approveRoleId, Int32 userId) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlApproveRoleRepository.cs:line 69
+   at SolaERP.Persistence.Services.ApproveRoleService.ApproveRoleDeleteAsync(ApproveRoleDeleteModel model, String userName) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\ApproveRoleService.cs:line 45
+   at SolaERP.Controllers.ApprovalController.DeleteRole(ApproveRoleDeleteModel model) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\ApprovalController.cs:line 73
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+ClientConnectionId:1ae68522-f79d-4dd1-bb2e-9f5399ac290e
+Error Number:515,State:2,Class:16
+2023-05-26 10:10:29.697 +04:00 [ERR] Cannot insert the value NULL into column 'ApproveRoleName', table 'SolaERPR.Register.ApproveRoles'; column does not allow nulls. INSERT fails.
+2023-05-26 10:11:33.202 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'ApproveRoleName', table 'SolaERPR.Register.ApproveRoles'; column does not allow nulls. INSERT fails.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.CompleteAsyncExecuteReader()
+   at System.Data.SqlClient.SqlCommand.EndExecuteNonQueryInternal(IAsyncResult asyncResult)
+   at System.Data.SqlClient.SqlCommand.EndExecuteNonQuery(IAsyncResult asyncResult)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
+--- End of stack trace from previous location ---
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlApproveRoleRepository.ApproveRoleDeleteAsync(Int32 approveRoleId, Int32 userId) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlApproveRoleRepository.cs:line 69
+   at SolaERP.Persistence.Services.ApproveRoleService.ApproveRoleDeleteAsync(ApproveRoleDeleteModel model, String userName) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\ApproveRoleService.cs:line 45
+   at SolaERP.Controllers.ApprovalController.DeleteRole(ApproveRoleDeleteModel model) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\ApprovalController.cs:line 73
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+ClientConnectionId:1ae68522-f79d-4dd1-bb2e-9f5399ac290e
+Error Number:515,State:2,Class:16
+2023-05-26 10:11:33.204 +04:00 [ERR] Cannot insert the value NULL into column 'ApproveRoleName', table 'SolaERPR.Register.ApproveRoles'; column does not allow nulls. INSERT fails.
+2023-05-26 10:11:50.211 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'AnalysisDimensionid', table 'SolaERPR.Config.AnalysisCodes'; column does not allow nulls. INSERT fails.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.CompleteAsyncExecuteReader()
+   at System.Data.SqlClient.SqlCommand.EndExecuteNonQueryInternal(IAsyncResult asyncResult)
+   at System.Data.SqlClient.SqlCommand.EndExecuteNonQuery(IAsyncResult asyncResult)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
+--- End of stack trace from previous location ---
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlAnalysisCodeRepository.DeleteAnalysisCodeAsync(Int32 analysisCodeId, Int32 userId) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlAnalysisCodeRepository.cs:line 42
+   at SolaERP.Persistence.Services.AnalysisCodeService.DeleteAnalysisCodeAsync(AnalysisCodeDeleteModel model, String userName) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\AnalysisCodeService.cs:line 34
+   at SolaERP.Controllers.AnalysisCodeController.Delete(AnalysisCodeDeleteModel model) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AnalysisCodeController.cs:line 41
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+ClientConnectionId:1ae68522-f79d-4dd1-bb2e-9f5399ac290e
+Error Number:515,State:2,Class:16
+2023-05-26 10:11:50.212 +04:00 [ERR] Cannot insert the value NULL into column 'AnalysisDimensionid', table 'SolaERPR.Config.AnalysisCodes'; column does not allow nulls. INSERT fails.
+2023-05-26 10:13:23.247 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'AnalysisDimensionid', table 'SolaERPR.Config.AnalysisCodes'; column does not allow nulls. INSERT fails.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.CompleteAsyncExecuteReader()
+   at System.Data.SqlClient.SqlCommand.EndExecuteNonQueryInternal(IAsyncResult asyncResult)
+   at System.Data.SqlClient.SqlCommand.EndExecuteNonQuery(IAsyncResult asyncResult)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
+--- End of stack trace from previous location ---
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlAnalysisCodeRepository.DeleteAnalysisCodeAsync(Int32 analysisCodeId, Int32 userId) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlAnalysisCodeRepository.cs:line 42
+   at SolaERP.Persistence.Services.AnalysisCodeService.DeleteAnalysisCodeAsync(AnalysisCodeDeleteModel model, String userName) in C:\Users\User\Desktop\solaerp\SolaERP.Application\Services\AnalysisCodeService.cs:line 34
+   at SolaERP.Controllers.AnalysisCodeController.Delete(AnalysisCodeDeleteModel model) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\AnalysisCodeController.cs:line 41
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+ClientConnectionId:146a6484-580d-46fa-80d6-08d11f8aa43c
 Error Number:515,State:2,Class:16
 2023-05-24 16:00:47.127 +04:00 [ERR] Cannot insert the value NULL into column 'UserId', table 'SolaERPR.Register.Logs'; column does not allow nulls. INSERT fails.
 2023-05-25 20:21:58.459 +04:00 [ERR] An unhandled exception has occurred while executing the request.

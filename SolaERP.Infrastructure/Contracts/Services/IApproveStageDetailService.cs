@@ -5,6 +5,6 @@ namespace SolaERP.Application.Contracts.Services
 {
     public interface IApproveStageDetailService : ICrudService<ApproveStagesDetailDto>, ILoggableCrudService<ApproveStagesDetailDto>
     {
-        Task<ApiResponse<List<ApproveStagesDetailDto>>> GetApproveStageDetailsByApproveStageMainId(int approveStageMainId);
+        Task<ApiResponse<List<ApproveStagesDetailDto>>> GetDetailByIdAsync(int approveStageMainId);
     }
 }

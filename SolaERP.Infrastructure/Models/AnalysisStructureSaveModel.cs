@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace SolaERP.Application.Models
 {
-    public class AnalysisStructureInputModel
+    public class AnalysisStructureSaveModel
     {
         public int? BusinessUnitId { get; set; }
         public int? ProcedureId { get; set; }

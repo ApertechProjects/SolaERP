@@ -2,6 +2,7 @@
 using SolaERP.Application.Dtos;
 using SolaERP.Application.Dtos.Account;
 using SolaERP.Application.Dtos.AnalysisCode;
+using SolaERP.Application.Dtos.AnalysisStructure;
 using SolaERP.Application.Dtos.AnaysisDimension;
 using SolaERP.Application.Dtos.ApproveRole;
 using SolaERP.Application.Dtos.ApproveStage;
@@ -10,6 +11,7 @@ using SolaERP.Application.Dtos.Attachment;
 using SolaERP.Application.Dtos.BusinessUnit;
 using SolaERP.Application.Dtos.Buyer;
 using SolaERP.Application.Dtos.Currency;
+using SolaERP.Application.Dtos.Email;
 using SolaERP.Application.Dtos.Group;
 using SolaERP.Application.Dtos.Item_Code;
 using SolaERP.Application.Dtos.Language;
@@ -30,6 +32,7 @@ using SolaERP.Application.Dtos.Venndors;
 using SolaERP.Application.Entities.AccountCode;
 using SolaERP.Application.Entities.AnalysisCode;
 using SolaERP.Application.Entities.AnalysisDimension;
+using SolaERP.Application.Entities.AnalysisStructure;
 using SolaERP.Application.Entities.ApproveRole;
 using SolaERP.Application.Entities.ApproveStage;
 using SolaERP.Application.Entities.ApproveStages;
@@ -38,6 +41,7 @@ using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Buyer;
 using SolaERP.Application.Entities.Currency;
+using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Entities.Groups;
 using SolaERP.Application.Entities.Item_Code;
 using SolaERP.Application.Entities.Language;
@@ -141,9 +145,11 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<Group, GroupDto>().ReverseMap();
             CreateMap<UserSaveModel, User>().ReverseMap();
             CreateMap<UsersByGroup, UsersByGroupDto>().ReverseMap();
+            CreateMap<EmailTemplateData, EmailTemplateDataDto>();
             CreateMap<Analysis, AnalysisDto>().ReverseMap();
             CreateMap<AnalysisWithBu, AnalysisWithBuDto>().ReverseMap();
             CreateMap<BuAnalysisDimension, BuAnalysisDimensionDto>().ReverseMap();
+            CreateMap<AnalysisStructure, AnalysisStructureDto>().ReverseMap();
 
             CreateMap<DueDiligenceDesign, DueDiligenceChildDto>()
                 .ForMember(dest => dest.TextBoxPoint, opt => opt.MapFrom(src => src.HasTextBox))

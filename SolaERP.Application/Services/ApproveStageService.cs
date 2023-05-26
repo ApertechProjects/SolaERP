@@ -35,7 +35,7 @@ namespace SolaERP.Persistence.Services
 
 
 
-        public async Task<ApiResponse<ApproveStagesMainDto>> GetApproveStageMainByApprovalStageMainId(int approvalStageMainId)
+        public async Task<ApiResponse<ApproveStagesMainDto>> GetMainByIdAsync(int approvalStageMainId)
         {
             var approveStageHeader = await _approveStageMainRepository.GetApprovalStageHeaderLoad(approvalStageMainId);
             var dto = _mapper.Map<ApproveStagesMainDto>(approveStageHeader);

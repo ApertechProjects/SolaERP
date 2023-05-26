@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Dtos.Translate;
 using SolaERP.Application.Entities.Language;
 using SolaERP.Application.Entities.Translate;
 using SolaERP.Application.UnitOfWork;
@@ -14,6 +15,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public SqlLanguageRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+        }
+
+        public async Task<bool> CheckDuplicateTranslate(string languageCode, string key)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "Select dbo.SF_CheckDuplicateTranslate(@languageCode,@key) IsVerified";
+                command.Parameters.AddWithValue(command, "@languageCode", languageCode);
+                command.Parameters.AddWithValue(command, "@key", key);
+                using var reader = await command.ExecuteReaderAsync();
+                bool res = false;
+                if (reader.Read())
+                    res = reader.Get<bool>("IsVerified");
+
+                return res;
+            }
         }
 
         public async Task<bool> DeleteLanguageAsync(int id)
@@ -112,7 +129,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> SaveTranslateAsync(Translate translate)
+        public async Task<bool> SaveTranslateAsync(TranslateDto translate)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {

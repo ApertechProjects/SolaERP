@@ -40,8 +40,6 @@ builder.Services.Configure<StorageOption>(builder.Configuration.GetSection("Stor
 
 
 
-
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.Configure<ApiBehaviorOptions>(config => { config.SuppressModelStateInvalidFilter = true; });
@@ -68,6 +66,8 @@ builder.Services
     .AddFluentEmail(builder.Configuration["Mail:Mail"])
     .AddRazorRenderer()
     .AddSmtpSender(builder.Configuration["Mail:Host"], Convert.ToInt32(builder.Configuration["Mail:Port"]));
+
+
 
 builder.Services.Configure<HubOptions<ChatHub>>(config =>
 {

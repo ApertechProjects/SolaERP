@@ -8,6 +8,6 @@ namespace SolaERP.Application.Contracts.Services
         ILoggableCrudService<ApproveStageRoleDto>
     //IReturnableAddAsync<ApproveStageRoleDto>
     {
-        Task<ApiResponse<List<ApproveStageRoleDto>>> GetApproveStageRolesByApproveStageDetailId(int approveStageDetailsId);
+        Task<ApiResponse<List<ApproveStageRoleDto>>> GetRoleAsync(int approveStageDetailsId);
     }
 }
