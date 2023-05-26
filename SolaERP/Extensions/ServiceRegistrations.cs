@@ -6,9 +6,9 @@ using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Entities.AnalysisStructure;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Identity_Server;
+using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Application.ValidationRules;
-using SolaERP.Application.Validations.ApproveRoleValidation;
 using SolaERP.Application.Validations.ApproveStageValidation;
 using SolaERP.Application.Validations.AttachmentValidation;
 using SolaERP.Application.Validations.GroupValidation;
@@ -20,6 +20,7 @@ using SolaERP.DataAccess.Factories;
 using SolaERP.Infrastructure.Services;
 using SolaERP.Infrastructure.Services.Storage;
 using SolaERP.Persistence.Services;
+using SolaERP.Persistence.Validations.ApproveRoleValidation;
 using SolaERP.Persistence.Validations.UserValidation;
 using FileService = SolaERP.Infrastructure.Services.FileService;
 using IFileService = SolaERP.Application.Contracts.Services.IFileService;
@@ -112,7 +113,6 @@ namespace SolaERP.Extensions
             builder.Services.AddValidatorsFromAssemblyContaining<UserValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<AttachmentValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<RequestMainValidation>();
-            builder.Services.AddValidatorsFromAssemblyContaining<ApproveRoleValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<ApprovalStageSaveValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<ApproveStageMainValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<ApproveStageDetailValidation>();
@@ -121,6 +121,7 @@ namespace SolaERP.Extensions
             builder.Services.AddValidatorsFromAssemblyContaining<UserRegisterValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<GroupBuyerSaveValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<UserSaveModelValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<ApproveRoleListSaveValidation>();
             builder.Services.AddScoped<ValidationFilter>();
         }
         public static void UseIdentityService(this WebApplicationBuilder builder)
