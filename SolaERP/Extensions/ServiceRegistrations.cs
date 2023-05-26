@@ -20,6 +20,7 @@ using SolaERP.DataAccess.Factories;
 using SolaERP.Infrastructure.Services;
 using SolaERP.Infrastructure.Services.Storage;
 using SolaERP.Persistence.Services;
+using SolaERP.Persistence.Validations.AnalysisCodeValidation;
 using SolaERP.Persistence.Validations.ApproveRoleValidation;
 using SolaERP.Persistence.Validations.UserValidation;
 using FileService = SolaERP.Infrastructure.Services.FileService;
@@ -122,6 +123,9 @@ namespace SolaERP.Extensions
             builder.Services.AddValidatorsFromAssemblyContaining<GroupBuyerSaveValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<UserSaveModelValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<ApproveRoleListSaveValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<ApproveRoleDeleteModel>();
+            builder.Services.AddValidatorsFromAssemblyContaining<AnalysisCodeListSaveValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<AnalysisCodeDeleteValidation>();
             builder.Services.AddScoped<ValidationFilter>();
         }
         public static void UseIdentityService(this WebApplicationBuilder builder)

@@ -24,13 +24,23 @@ namespace SolaERP.Persistence.Services
             _userRepository = userRepository;
         }
 
-        public async Task<ApiResponse<bool>> DeleteAnalysisCodeAsync(int analysisCodeId, string userName)
+        public async Task<ApiResponse<bool>> DeleteAnalysisCodeAsync(AnalysisCodeDeleteModel model, string userName)
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(userName);
-            var code = await _analysisCodeRepository.DeleteAnalysisCodeAsync(analysisCodeId, userId);
-            await _unitOfWork.SaveChangesAsync();
-            if (code)
+            var code = false;
+            int counter = 0;
+            for (int i = 0; i < model.AnalysisCodeIds.Count; i++)
+            {
+                code = await _analysisCodeRepository.DeleteAnalysisCodeAsync(model.AnalysisCodeIds[i], userId);
+                if (code)
+                    counter++;
+            }
+
+            if (counter == model.AnalysisCodeIds.Count)
+            {
+                await _unitOfWork.SaveChangesAsync();
                 return ApiResponse<bool>.Success(code, 200);
+            }
             return ApiResponse<bool>.Fail("Analysis code can not be deleted", 400);
         }
 
@@ -78,13 +88,24 @@ namespace SolaERP.Persistence.Services
 
         }
 
-        public async Task<ApiResponse<bool>> SaveAnalysisCodeAsync(AnalysisCodeSaveModel analysisCodeSave, string name)
+        public async Task<ApiResponse<bool>> SaveAnalysisCodeAsync(List<AnalysisCodeSaveModel> analysisCodeSave, string name)
         {
             int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
-            var code = await _analysisCodeRepository.SaveAnalysisCode(analysisCodeSave, userId);
-            await _unitOfWork.SaveChangesAsync();
-            if (code)
+            var code = false;
+            int counter = 0;
+            for (int i = 0; i < analysisCodeSave.Count; i++)
+            {
+                code = await _analysisCodeRepository.SaveAnalysisCode(analysisCodeSave[i], userId);
+                if (code)
+                    counter++;
+            }
+
+            if (counter == analysisCodeSave.Count)
+            {
+                await _unitOfWork.SaveChangesAsync();
                 return ApiResponse<bool>.Success(code, 200);
+            }
+
             return ApiResponse<bool>.Fail("Analysis code can not be saved", 400);
         }
     }

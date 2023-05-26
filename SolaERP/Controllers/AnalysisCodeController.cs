@@ -23,11 +23,6 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> AnalysisCodes([FromQuery] AnalysisCodeGetModel getRequest)
             => CreateActionResult(await _analysisCodeService.GetAnalysisCodesAsync(getRequest));
 
-        //[HttpGet("{analysisCodeId}")]
-        //public async Task<IActionResult> ByAnalysisCode(int analysisCodeId)
-        //    => CreateActionResult(await _analysisCodeService.GetByDimensionIdAsync(dimensionId));
-
-
         [HttpGet("{dimensionId}")]
         public async Task<IActionResult> ByDimension(int dimensionId)
             => CreateActionResult(await _analysisCodeService.GetAnalysisCodesAsync(dimensionId, User.Identity.Name));
@@ -38,12 +33,12 @@ namespace SolaERP.Controllers
            => CreateActionResult(await _analysisCodeService.GetByBUIdAsync(businessUnitId, User.Identity.Name));
 
         [HttpPost]
-        public async Task<IActionResult> Save(AnalysisCodeSaveModel analysisCodeSave)
+        public async Task<IActionResult> Save(List<AnalysisCodeSaveModel> analysisCodeSave)
             => CreateActionResult(await _analysisCodeService.SaveAnalysisCodeAsync(analysisCodeSave, User.Identity.Name));
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(int analysisCodeId)
-           => CreateActionResult(await _analysisCodeService.DeleteAnalysisCodeAsync(analysisCodeId, User.Identity.Name));
+        public async Task<IActionResult> Delete(AnalysisCodeDeleteModel model)
+           => CreateActionResult(await _analysisCodeService.DeleteAnalysisCodeAsync(model, User.Identity.Name));
 
     }
 }

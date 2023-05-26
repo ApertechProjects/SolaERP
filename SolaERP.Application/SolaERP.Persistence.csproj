@@ -27,4 +27,8 @@
     <PackageReference Include="TypeExtender" Version="1.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Validations\AnalysisStructure\" />
+  </ItemGroup>
+
 </Project>
