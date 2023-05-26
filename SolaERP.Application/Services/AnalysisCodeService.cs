@@ -29,14 +29,14 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.GetIdentityNameAsIntAsync(userName);
             var code = false;
             int counter = 0;
-            for (int i = 0; i < model.AnalysisCodeIds.Count; i++)
+            for (int i = 0; i < model.CodeIds.Count; i++)
             {
-                code = await _analysisCodeRepository.DeleteAnalysisCodeAsync(model.AnalysisCodeIds[i], userId);
+                code = await _analysisCodeRepository.DeleteAnalysisCodeAsync(model.CodeIds[i], userId);
                 if (code)
                     counter++;
             }
 
-            if (counter == model.AnalysisCodeIds.Count)
+            if (counter == model.CodeIds.Count)
             {
                 await _unitOfWork.SaveChangesAsync();
                 return ApiResponse<bool>.Success(code, 200);

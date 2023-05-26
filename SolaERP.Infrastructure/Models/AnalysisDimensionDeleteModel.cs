@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Models
 {
-    public class AnalysisCodeDeleteModel
+    internal class AnalysisDimensionDeleteModel
     {
-        public List<int> CodeIds { get; set; }
     }
 }

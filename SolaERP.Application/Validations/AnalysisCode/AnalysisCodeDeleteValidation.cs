@@ -12,7 +12,7 @@ namespace SolaERP.Persistence.Validations.AnalysisCodeValidation
     {
         public AnalysisCodeDeleteValidation()
         {
-            RuleFor(x => x.AnalysisCodeIds)
+            RuleFor(x => x.CodeIds)
             .Cascade(CascadeMode.StopOnFirstFailure)
             .NotNull().WithMessage("Please, select Analysis Code")
             .Must(CheckNotEqualZero.NotEqualZero).WithMessage("Please, select Analysis Code");

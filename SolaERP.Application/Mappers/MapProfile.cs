@@ -2,6 +2,7 @@
 using SolaERP.Application.Dtos;
 using SolaERP.Application.Dtos.Account;
 using SolaERP.Application.Dtos.AnalysisCode;
+using SolaERP.Application.Dtos.AnalysisStructure;
 using SolaERP.Application.Dtos.AnaysisDimension;
 using SolaERP.Application.Dtos.ApproveRole;
 using SolaERP.Application.Dtos.ApproveStage;
@@ -30,6 +31,7 @@ using SolaERP.Application.Dtos.Venndors;
 using SolaERP.Application.Entities.AccountCode;
 using SolaERP.Application.Entities.AnalysisCode;
 using SolaERP.Application.Entities.AnalysisDimension;
+using SolaERP.Application.Entities.AnalysisStructure;
 using SolaERP.Application.Entities.ApproveRole;
 using SolaERP.Application.Entities.ApproveStage;
 using SolaERP.Application.Entities.ApproveStages;
@@ -145,6 +147,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<Analysis, AnalysisDto>().ReverseMap();
             CreateMap<AnalysisWithBu, AnalysisWithBuDto>().ReverseMap();
             CreateMap<BuAnalysisDimension, BuAnalysisDimensionDto>().ReverseMap();
+            CreateMap<AnalysisStructure, AnalysisStructureDto>().ReverseMap();
 
         }
     }

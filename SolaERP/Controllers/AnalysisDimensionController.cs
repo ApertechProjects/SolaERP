@@ -28,11 +28,11 @@ namespace SolaERP.API.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Save(AnalysisDimensionDto analysisDimension)
+        public async Task<IActionResult> Save(List<AnalysisDimensionDto> analysisDimension)
             => CreateActionResult(await _analysisDimensionService.Save(analysisDimension, User.Identity.Name));
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(int analysisDimensionId)
+        public async Task<IActionResult> Delete(List<int> analysisDimensionId)
             => CreateActionResult(await _analysisDimensionService.Delete(analysisDimensionId, User.Identity.Name));
 
     }

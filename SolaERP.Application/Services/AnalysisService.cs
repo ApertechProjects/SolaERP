@@ -17,7 +17,7 @@ namespace SolaERP.Persistence.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> AddAsync(AnalysisStructureInputModel model)
+        public async Task<bool> AddAsync(AnalysisStructureSaveModel model)
         {
             bool result = await _repository.AddAsync(model);
             await _unitOfWork.SaveChangesAsync();
@@ -43,7 +43,7 @@ namespace SolaERP.Persistence.Services
             return result;
         }
 
-        public async Task<bool> UpdateAsync(AnalysisStructureUpdateModel model)
+        public async Task<bool> UpdateAsync(AnalysisStructureDeleteModel model)
         {
             var result = await _repository.UpdateAsync(model);
             await _unitOfWork.SaveChangesAsync();

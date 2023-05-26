@@ -14,7 +14,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public SqlAnalysisStructureRepository(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
 
-        public async Task<bool> AddAsync(AnalysisStructureInputModel model)
+        public async Task<bool> AddAsync(AnalysisStructureSaveModel model)
         {
             return await SaveAsync(0, model);
         }
@@ -60,12 +60,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return await SaveAsync(id, new() { UserId = userId });
         }
 
-        public async Task<bool> UpdateAsync(AnalysisStructureUpdateModel model)
+        public async Task<bool> UpdateAsync(AnalysisStructureDeleteModel model)
         {
             return await SaveAsync(model.AnalysisStructureId, model);
         }
 
-        private async Task<bool> SaveAsync(int mainId, AnalysisStructureInputModel model)
+        private async Task<bool> SaveAsync(int mainId, AnalysisStructureSaveModel model)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
