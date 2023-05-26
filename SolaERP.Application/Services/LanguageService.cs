@@ -73,9 +73,13 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> SaveTranslateAsync(TranslateDto translate)
         {
-            var entity = _mapper.Map<Translate>(translate);
-            bool result = await _languageRepository.SaveTranslateAsync(entity);
+            bool CheckDuplicate = await _languageRepository.CheckDuplicateTranslate(translate.LanguageCode, translate.Key);
+            if (CheckDuplicate)
+                return ApiResponse<bool>.Fail("This data already exist", 400);
+
+            bool result = await _languageRepository.SaveTranslateAsync(translate);
             await _unitOfWork.SaveChangesAsync();
+
             if (result)
                 return ApiResponse<bool>.Success(result, 200);
             return ApiResponse<bool>.Fail("Problem detected", 400);
