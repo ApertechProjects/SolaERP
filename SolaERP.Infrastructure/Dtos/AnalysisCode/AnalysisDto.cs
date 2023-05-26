@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Dtos.AnalysisCode
 {
-    public class AnalysisDto
+    public class AnalysisDto : ModifyEntity
     {
         public int AnalysisCodesId { get; set; }
         public int AnalysisDimensionId { get; set; }

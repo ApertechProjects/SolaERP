@@ -58,10 +58,10 @@ namespace SolaERP.Persistence.Services
                   ApiResponse<List<IGrouping<int, AnalysisCodeDto>>>.Fail("analysisCodes", "Analysis codes is empty", 404, true);
         }
 
-        public async Task<ApiResponse<List<AnalysisDto>>> GetAnalysisCodesAsync(int analysisCodeId, string userName)
+        public async Task<ApiResponse<List<AnalysisDto>>> GetAnalysisCodesAsync(int dimensionId, string userName)
         {
             var userId = await _userRepository.GetIdentityNameAsIntAsync(userName);
-            var data = await _analysisCodeRepository.GetAnalysisCodesAsync(analysisCodeId, userId);
+            var data = await _analysisCodeRepository.GetAnalysisCodesAsync(dimensionId, userId);
             var map = _mapper.Map<List<AnalysisDto>>(data);
             if (map.Count > 0)
                 return ApiResponse<List<AnalysisDto>>.Success(map, 200);
@@ -95,6 +95,8 @@ namespace SolaERP.Persistence.Services
             int counter = 0;
             for (int i = 0; i < analysisCodeSave.Count; i++)
             {
+                if (analysisCodeSave[i].AnalysisCodesId < 0)
+                    analysisCodeSave[i].AnalysisCodesId = 0;
                 code = await _analysisCodeRepository.SaveAnalysisCode(analysisCodeSave[i], userId);
                 if (code)
                     counter++;
