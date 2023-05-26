@@ -77,6 +77,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IAnalysisDimensionService, AnalysisDimensionService>();
             builder.Services.AddScoped<IAnalysisService, AnalysisService>();
             builder.Services.AddScoped<IEmailNotificationService, EmailNotificationService>();
+            builder.Services.AddScoped<ISupplierEvaluationService, SupplierEvaluationService>();
 
         }
         private static void UseRepositories(this WebApplicationBuilder builder)
