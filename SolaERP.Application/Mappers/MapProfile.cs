@@ -21,6 +21,7 @@ using SolaERP.Application.Dtos.Procedure;
 using SolaERP.Application.Dtos.Request;
 using SolaERP.Application.Dtos.Status;
 using SolaERP.Application.Dtos.Supplier;
+using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Dtos.Translate;
 using SolaERP.Application.Dtos.UOM;
 using SolaERP.Application.Dtos.User;
@@ -48,6 +49,7 @@ using SolaERP.Application.Entities.Procedure;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Entities.Status;
 using SolaERP.Application.Entities.Supplier;
+using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Translate;
 using SolaERP.Application.Entities.UOM;
 using SolaERP.Application.Entities.User;
@@ -103,7 +105,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<Location, LocationDto>().ReverseMap();
             CreateMap<AccountCode, AccountCodeDto>().ReverseMap();
             CreateMap<RequestSaveModel, RequestMainSaveModel>().ReverseMap();
-            CreateMap<Currency, CurrencyDto>().ReverseMap();
+            CreateMap<SolaERP.Application.Entities.SupplierEvaluation.Currency, CurrencyDto>().ReverseMap();
             CreateMap<Attachment, AttachmentWithFileDto>().ReverseMap();
             CreateMap<Attachment, AttachmentDto>().ReverseMap();
             CreateMap<UOM, UOMDto>().ReverseMap();
@@ -143,6 +145,16 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<AnalysisWithBu, AnalysisWithBuDto>().ReverseMap();
             CreateMap<BuAnalysisDimension, BuAnalysisDimensionDto>().ReverseMap();
 
+            CreateMap<DueDiligenceDesign, DueDiligenceChildDto>()
+                .ForMember(dest => dest.TextBoxPoint, opt => opt.MapFrom(src => src.HasTextBox))
+                .ForMember(dest => dest.CheckBoxPoint, opt => opt.MapFrom(src => src.HasCheckBox))
+                .ForMember(dest => dest.RadioBoxPoint, opt => opt.MapFrom(src => src.HasRadioBox))
+                .ForMember(dest => dest.IntPoint, opt => opt.MapFrom(src => src.HasInt))
+                .ForMember(dest => dest.DateTimePoint, opt => opt.MapFrom(src => src.HasDateTime))
+                .ForMember(dest => dest.AttachmentPoint, opt => opt.MapFrom(src => src.HasAttachment))
+                .ForMember(dest => dest.TextAreaPoint, opt => opt.MapFrom(src => src.HasTexArea))
+                .ForMember(dest => dest.BankListPoint, opt => opt.MapFrom(src => src.HasBankList))
+                .ForMember(dest => dest.DataGridPoint, opt => opt.MapFrom(src => src.HasGrid)).ReverseMap();
         }
     }
 }

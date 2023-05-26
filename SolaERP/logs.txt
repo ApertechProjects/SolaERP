@@ -678,3 +678,494 @@ System.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL in
 ClientConnectionId:046a5189-9eab-4539-b504-7ec51b4dc055
 Error Number:515,State:2,Class:16
 2023-05-24 16:00:47.127 +04:00 [ERR] Cannot insert the value NULL into column 'UserId', table 'SolaERPR.Register.Logs'; column does not allow nulls. INSERT fails.
+2023-05-25 20:21:58.459 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "GET api/TestEnv" for actions - SolaERP.API.Controllers.TestEnvController.SenTestTemplateEmail (SolaERP.API),SolaERP.API.Controllers.TestEnvController.TestDueDiligence (SolaERP.API). Actions require a unique method/path combination for Swagger/OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerDocumentWithoutFilters(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2023-05-25 20:22:59.660 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.IndexOutOfRangeException: PrequalificationCategoryId
+   at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)
+   at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
+   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 68
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetPrequalificationCategoriesAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 125
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDiligenceAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 23
+   at SolaERP.API.Controllers.TestEnvController.TestDueDiligence() in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\TestEnvController.cs:line 48
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-25 20:22:59.790 +04:00 [ERR] PrequalificationCategoryId
+2023-05-25 20:27:43.577 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidCastException: Unable to cast object of type 'System.Decimal' to type 'System.Int32'.
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.Get[T](IDataReader reader, String columnName) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 16
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDesignFromReader(IDataReader reader) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 166
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDiligencesDesignAsync(Language language) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 93
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDiligenceAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 24
+   at SolaERP.API.Controllers.TestEnvController.TestDueDiligence() in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\TestEnvController.cs:line 48
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-25 20:27:43.665 +04:00 [ERR] Unable to cast object of type 'System.Decimal' to type 'System.Int32'.
+2023-05-25 20:28:56.841 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidCastException: Unable to cast object of type 'System.Decimal' to type 'System.Int32'.
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.Get[T](IDataReader reader, String columnName) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 16
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDesignFromReader(IDataReader reader) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 166
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDiligencesDesignAsync(Language language) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 93
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDiligenceAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 24
+   at SolaERP.API.Controllers.TestEnvController.TestDueDiligence() in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\TestEnvController.cs:line 48
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-25 20:28:56.842 +04:00 [ERR] Unable to cast object of type 'System.Decimal' to type 'System.Int32'.
+2023-05-25 20:32:48.285 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidCastException: Unable to cast object of type 'System.Decimal' to type 'System.Int32'.
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.Get[T](IDataReader reader, String columnName) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 16
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDesignFromReader(IDataReader reader) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 166
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDiligencesDesignAsync(Language language) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 93
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDiligenceAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 24
+   at SolaERP.API.Controllers.TestEnvController.TestDueDiligence() in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\TestEnvController.cs:line 48
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-25 20:32:48.419 +04:00 [ERR] Unable to cast object of type 'System.Decimal' to type 'System.Int32'.
+2023-05-25 20:34:42.972 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidCastException: Unable to cast object of type 'System.Decimal' to type 'System.Int32'.
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.Get[T](IDataReader reader, String columnName) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 16
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDesignFromReader(IDataReader reader) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 166
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDiligencesDesignAsync(Language language) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 93
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDiligenceAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 24
+   at SolaERP.API.Controllers.TestEnvController.TestDueDiligence() in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\TestEnvController.cs:line 48
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-25 20:34:43.067 +04:00 [ERR] Unable to cast object of type 'System.Decimal' to type 'System.Int32'.
+2023-05-25 20:38:54.370 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidCastException: Unable to cast object of type 'System.Decimal' to type 'System.Int32'.
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.Get[T](IDataReader reader, String columnName) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 16
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDesignFromReader(IDataReader reader) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 166
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDiligencesDesignAsync(Language language) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 93
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDiligenceAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 24
+   at SolaERP.API.Controllers.TestEnvController.TestDueDiligence() in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\TestEnvController.cs:line 48
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-25 20:38:54.417 +04:00 [ERR] Unable to cast object of type 'System.Decimal' to type 'System.Int32'.
+2023-05-25 20:41:04.948 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidCastException: Unable to cast object of type 'System.Decimal' to type 'System.Int32'.
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.Get[T](IDataReader reader, String columnName) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 16
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDesignFromReader(IDataReader reader) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 166
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDiligencesDesignAsync(Language language) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 93
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDiligenceAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 24
+   at SolaERP.API.Controllers.TestEnvController.TestDueDiligence() in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\TestEnvController.cs:line 48
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-25 20:41:05.031 +04:00 [ERR] Unable to cast object of type 'System.Decimal' to type 'System.Int32'.
+2023-05-25 20:43:33.630 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidCastException: Unable to cast object of type 'System.Decimal' to type 'System.Int32'.
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.Get[T](IDataReader reader, String columnName) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 16
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDesignFromReader(IDataReader reader) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 166
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDiligencesDesignAsync(Language language) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 93
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDiligenceAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 24
+   at SolaERP.API.Controllers.TestEnvController.TestDueDiligence() in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\TestEnvController.cs:line 48
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-25 20:43:38.282 +04:00 [ERR] Unable to cast object of type 'System.Decimal' to type 'System.Int32'.
+2023-05-25 20:49:53.703 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidCastException: Unable to cast object of type 'System.Decimal' to type 'System.Int32'.
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.Get[T](IDataReader reader, String columnName) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 16
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDesignFromReader(IDataReader reader) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 166
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDiligencesDesignAsync(Language language) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 93
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDiligenceAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 24
+   at SolaERP.API.Controllers.TestEnvController.TestDueDiligence() in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\TestEnvController.cs:line 48
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-25 20:49:53.826 +04:00 [ERR] Unable to cast object of type 'System.Decimal' to type 'System.Int32'.
+2023-05-25 20:51:46.545 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.IndexOutOfRangeException: HasAttachemnt
+   at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)
+   at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
+   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.Get[T](IDataReader reader, String columnName) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 13
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDesignFromReader(IDataReader reader) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 166
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDiligencesDesignAsync(Language language) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 93
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDiligenceAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 24
+   at SolaERP.API.Controllers.TestEnvController.TestDueDiligence() in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\TestEnvController.cs:line 48
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-25 20:51:46.623 +04:00 [ERR] HasAttachemnt
+2023-05-25 20:53:29.549 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.ArgumentException: Object of type 'System.Int32' cannot be converted to type 'System.Boolean'.
+   at System.RuntimeType.TryChangeType(Object value, Binder binder, CultureInfo culture, Boolean needsSpecialCast)
+   at System.RuntimeType.CheckValue(Object value, Binder binder, CultureInfo culture, BindingFlags invokeAttr)
+   at System.Reflection.MethodBase.CheckArguments(StackAllocedArguments& stackArgs, ReadOnlySpan`1 parameters, Binder binder, BindingFlags invokeAttr, CultureInfo culture, Signature sig)
+   at System.Reflection.RuntimeMethodInfo.InvokeOneParameter(Object obj, BindingFlags invokeAttr, Binder binder, Object parameter, CultureInfo culture)
+   at System.Reflection.RuntimePropertyInfo.SetValue(Object obj, Object value, BindingFlags invokeAttr, Binder binder, Object[] index, CultureInfo culture)
+   at System.Reflection.PropertyInfo.SetValue(Object obj, Object value)
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.CheckObjectResultAndSetToEntity(PropertyInfo property, Object entity, Object objectResult) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 78
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 69
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetProductServicesAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 141
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDiligenceAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 33
+   at SolaERP.API.Controllers.TestEnvController.TestDueDiligence() in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\TestEnvController.cs:line 48
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-25 20:53:29.632 +04:00 [ERR] Object of type 'System.Int32' cannot be converted to type 'System.Boolean'.
+2023-05-25 20:54:32.490 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.ArgumentException: Object of type 'System.Int32' cannot be converted to type 'System.Boolean'.
+   at System.RuntimeType.TryChangeType(Object value, Binder binder, CultureInfo culture, Boolean needsSpecialCast)
+   at System.RuntimeType.CheckValue(Object value, Binder binder, CultureInfo culture, BindingFlags invokeAttr)
+   at System.Reflection.MethodBase.CheckArguments(StackAllocedArguments& stackArgs, ReadOnlySpan`1 parameters, Binder binder, BindingFlags invokeAttr, CultureInfo culture, Signature sig)
+   at System.Reflection.RuntimeMethodInfo.InvokeOneParameter(Object obj, BindingFlags invokeAttr, Binder binder, Object parameter, CultureInfo culture)
+   at System.Reflection.RuntimePropertyInfo.SetValue(Object obj, Object value, BindingFlags invokeAttr, Binder binder, Object[] index, CultureInfo culture)
+   at System.Reflection.PropertyInfo.SetValue(Object obj, Object value)
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.CheckObjectResultAndSetToEntity(PropertyInfo property, Object entity, Object objectResult) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 78
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 69
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetProductServicesAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 141
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDiligenceAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 33
+   at SolaERP.API.Controllers.TestEnvController.TestDueDiligence() in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\TestEnvController.cs:line 48
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-25 20:54:32.490 +04:00 [ERR] Object of type 'System.Int32' cannot be converted to type 'System.Boolean'.
+2023-05-26 13:58:14.240 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+List`1 -> List`1
+System.Collections.Generic.List`1[[SolaERP.Application.Entities.SupplierEvaluation.DueDiligenceDesign, SolaERP.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] -> System.Collections.Generic.List`1[[SolaERP.Application.Dtos.SupplierEvaluation.DueDiligenceDesignDto, SolaERP.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+ ---> AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+DueDiligenceDesign -> DueDiligenceDesignDto
+SolaERP.Application.Entities.SupplierEvaluation.DueDiligenceDesign -> SolaERP.Application.Dtos.SupplierEvaluation.DueDiligenceDesignDto
+   at lambda_method61(Closure , DueDiligenceDesign , DueDiligenceDesignDto , ResolutionContext )
+   at lambda_method60(Closure , Object , List`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method60(Closure , Object , List`1 , ResolutionContext )
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDiligenceAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 28
+   at SolaERP.API.Controllers.TestEnvController.TestDueDiligence() in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\TestEnvController.cs:line 48
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-26 13:58:14.376 +04:00 [ERR] Error mapping types.
+
+Mapping types:
+List`1 -> List`1
+System.Collections.Generic.List`1[[SolaERP.Application.Entities.SupplierEvaluation.DueDiligenceDesign, SolaERP.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] -> System.Collections.Generic.List`1[[SolaERP.Application.Dtos.SupplierEvaluation.DueDiligenceDesignDto, SolaERP.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+2023-05-26 15:33:29.395 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.AggregateException: One or more errors occurred. (Id)
+ ---> System.IndexOutOfRangeException: Id
+   at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)
+   at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
+   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 68
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDiligenceGridsAsync(Int32 dueDesignId) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 76
+   at SolaERP.Persistence.Services.SupplierEvaluationService.<GetDueDiligenceAsync>b__5_2(DueDiligenceDesign d) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 124
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at SolaERP.Persistence.Services.SupplierEvaluationService.<>c.<GetDueDiligenceAsync>b__5_3(Task`1 task) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 127
+   at System.Linq.Utilities.<>c__DisplayClass2_0`3.<CombineSelectors>b__0(TSource x)
+   at System.Linq.Enumerable.SelectIListIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SolaERP.Persistence.Services.SupplierEvaluationService.<GetDueDiligenceAsync>b__5_1(IGrouping`2 x) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 80
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDiligenceAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 78
+   at SolaERP.API.Controllers.TestEnvController.TestDueDiligence() in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\TestEnvController.cs:line 48
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-26 15:33:29.533 +04:00 [ERR] One or more errors occurred. (Id)
+2023-05-26 15:34:30.306 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.AggregateException: One or more errors occurred. (Id)
+ ---> System.IndexOutOfRangeException: Id
+   at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)
+   at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
+   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 68
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDiligenceGridsAsync(Int32 dueDesignId) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 76
+   at SolaERP.Persistence.Services.SupplierEvaluationService.<GetDueDiligenceAsync>b__5_2(DueDiligenceDesign d) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 124
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at SolaERP.Persistence.Services.SupplierEvaluationService.<>c.<GetDueDiligenceAsync>b__5_3(Task`1 task) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 127
+   at System.Linq.Utilities.<>c__DisplayClass2_0`3.<CombineSelectors>b__0(TSource x)
+   at System.Linq.Enumerable.SelectIListIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SolaERP.Persistence.Services.SupplierEvaluationService.<GetDueDiligenceAsync>b__5_1(IGrouping`2 x) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 80
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDiligenceAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 78
+   at SolaERP.API.Controllers.TestEnvController.TestDueDiligence() in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\TestEnvController.cs:line 48
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-26 15:34:30.307 +04:00 [ERR] One or more errors occurred. (Id)
+2023-05-26 15:39:42.473 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.AggregateException: One or more errors occurred. (Id)
+ ---> System.IndexOutOfRangeException: Id
+   at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)
+   at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
+   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 68
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDiligenceGridsAsync(Int32 dueDesignId) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 76
+   at SolaERP.Persistence.Services.SupplierEvaluationService.<GetDueDiligenceAsync>b__5_2(DueDiligenceDesign d) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 131
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at SolaERP.Persistence.Services.SupplierEvaluationService.<>c.<GetDueDiligenceAsync>b__5_3(Task`1 task) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 134
+   at System.Linq.Utilities.<>c__DisplayClass2_0`3.<CombineSelectors>b__0(TSource x)
+   at System.Linq.Enumerable.SelectIListIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SolaERP.Persistence.Services.SupplierEvaluationService.<GetDueDiligenceAsync>b__5_1(IGrouping`2 x) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 85
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDiligenceAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 83
+   at SolaERP.API.Controllers.TestEnvController.TestDueDiligence() in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\TestEnvController.cs:line 48
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-26 15:39:42.562 +04:00 [ERR] One or more errors occurred. (Id)
+2023-05-26 15:41:41.260 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.AggregateException: One or more errors occurred. (Id)
+ ---> System.IndexOutOfRangeException: Id
+   at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)
+   at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
+   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 68
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDiligenceGridsAsync(Int32 dueDesignId) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 76
+   at SolaERP.Persistence.Services.SupplierEvaluationService.<GetDueDiligenceAsync>b__5_2(DueDiligenceDesign d) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 132
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at SolaERP.Persistence.Services.SupplierEvaluationService.<>c.<GetDueDiligenceAsync>b__5_3(Task`1 task) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 145
+   at System.Linq.Utilities.<>c__DisplayClass2_0`3.<CombineSelectors>b__0(TSource x)
+   at System.Linq.Enumerable.SelectIListIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SolaERP.Persistence.Services.SupplierEvaluationService.<GetDueDiligenceAsync>b__5_1(IGrouping`2 x) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 86
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDiligenceAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 84
+   at SolaERP.API.Controllers.TestEnvController.TestDueDiligence() in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\TestEnvController.cs:line 48
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-26 15:41:41.360 +04:00 [ERR] One or more errors occurred. (Id)
+2023-05-26 16:56:30.029 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.IndexOutOfRangeException: Id
+   at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)
+   at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
+   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 68
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDiligenceGridsAsync(Int32 dueDesignId) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 76
+   at SolaERP.Persistence.Services.SupplierEvaluationService.SetGridDatasAsync(List`1 dueDesign) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 144
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDesignsAsync(Language language) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 133
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDiligenceAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 77
+   at SolaERP.API.Controllers.TestEnvController.TestDueDiligence() in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\TestEnvController.cs:line 48
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-26 16:56:30.154 +04:00 [ERR] Id
+2023-05-26 16:57:31.647 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.IndexOutOfRangeException: Id
+   at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)
+   at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
+   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 68
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDiligenceGridsAsync(Int32 dueDesignId) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 76
+   at SolaERP.Persistence.Services.SupplierEvaluationService.SetGridDatasAsync(List`1 dueDesign) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 144
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDesignsAsync(Language language) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 133
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDiligenceAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 77
+   at SolaERP.API.Controllers.TestEnvController.TestDueDiligence() in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\TestEnvController.cs:line 48
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-26 16:57:31.649 +04:00 [ERR] Id
+2023-05-26 17:00:16.615 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.IndexOutOfRangeException: Id
+   at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)
+   at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
+   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 68
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetDueDiligenceGridsAsync(Int32 dueDesignId) in C:\Users\HP\source\repos\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 76
+   at SolaERP.Persistence.Services.SupplierEvaluationService.SetGridDatasAsync(List`1 dueDesign) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 144
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDesignsAsync(Language language) in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 133
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetDueDiligenceAsync() in C:\Users\HP\source\repos\solaerp\SolaERP.Application\Services\SupplierEvaluationService.cs:line 77
+   at SolaERP.API.Controllers.TestEnvController.TestDueDiligence() in C:\Users\HP\source\repos\solaerp\SolaERP\Controllers\TestEnvController.cs:line 48
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-05-26 17:00:16.616 +04:00 [ERR] Id

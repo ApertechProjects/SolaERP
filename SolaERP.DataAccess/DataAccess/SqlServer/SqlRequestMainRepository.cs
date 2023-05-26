@@ -255,7 +255,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RequestComment = reader.Get<string>("RequestComment"),
                 OperatorComment = reader.Get<string>("OperatorComment"),
                 QualityRequired = reader.Get<string>("QualityRequired"),
-                CurrencyCode = reader.Get<string>("CurrencyCode"),
+                CurrencyCode = reader.Get<string>("Currency"),
                 LogisticsTotal = reader.Get<decimal>("LogisticsTotal"),
             };
         }
@@ -279,7 +279,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RequestComment = reader.Get<string>("RequestComment"),
                 OperatorComment = reader.Get<string>("OperatorComment"),
                 QualityRequired = reader.Get<string>("QualityRequired"),
-                CurrencyCode = reader.Get<string>("CurrencyCode"),
+                CurrencyCode = reader.Get<string>("Currency"),
                 LogisticsTotal = reader.Get<decimal>("LogisticsTotal"),
                 Destination = reader.Get<int>("Destination"),
                 ApproveStatus = reader.Get<string>("ApproveStatus"),
@@ -309,7 +309,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RequestComment = reader.Get<string>("RequestComment"),
                 OperatorComment = reader.Get<string>("OperatorComment"),
                 QualityRequired = reader.Get<string>("QualityRequired"),
-                CurrencyCode = reader.Get<string>("CurrencyCode"),
+                CurrencyCode = reader.Get<string>("Currency"),
                 LogisticTotal = reader.Get<int>("LogisticTotal"),
 
             };
@@ -352,7 +352,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                 @Requester,@Status,
                                                                 @SupplierCode,@RequestComment,
                                                                 @OperatorComment,
-                                                                @QualityRequired,@CurrencyCode,
+                                                                @QualityRequired,@Currency,
                                                                 @LogisticTotal,@Buyer,@Destination,
                                                                 @NewRequestmainId = @NewRequestmainId OUTPUT,
                                                                 @NewRequestNo = @NewRequestNo OUTPUT 
@@ -375,7 +375,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@OperatorComment", model.OperatorComment);
                 command.Parameters.AddWithValue(command, "@QualityRequired", model.QualityRequired);
                 command.Parameters.AddWithValue(command, "@Destination", model.Destination);
-                command.Parameters.AddWithValue(command, "@CurrencyCode", model.CurrencyCode);
+                command.Parameters.AddWithValue(command, "@Currency", model.CurrencyCode);
                 command.Parameters.AddWithValue(command, "@Buyer", model.Buyer);
                 command.Parameters.AddWithValue(command, "@LogisticTotal", model.LogisticTotal);
 

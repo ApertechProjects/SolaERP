@@ -11,7 +11,7 @@ namespace SolaERP.DataAccess.Extensions
         {
             T returnType = default(T);
             var value = reader[columnName];
-
+            Console.WriteLine(columnName + " " + returnType);
             if (value != DBNull.Value && value != null)
                 returnType = (T)value;
 
