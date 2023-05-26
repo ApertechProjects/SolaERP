@@ -27,9 +27,9 @@ namespace SolaERP.Infrastructure.ViewModels
         {
             return this.Language switch
             {
-                Language.Aze => "Bu avtomatik yaradılan e-poçtdur - lütfən cavab verməyin.",
-                Language.Eng => "This is an automatically generated email - please do not reply",
-                Language.Ru => "Это автоматически сгенерированное письмо - пожалуйста, не отвечайте"
+                Language.az => "Bu avtomatik yaradılan e-poçtdur - lütfən cavab verməyin.",
+                Language.en => "This is an automatically generated email - please do not reply",
+                Language.ru => "Это автоматически сгенерированное письмо - пожалуйста, не отвечайте"
             };
         }
 
@@ -37,8 +37,8 @@ namespace SolaERP.Infrastructure.ViewModels
         {
             return this.Language switch
             {
-                Language.Aze => $@"{CompanyName} Şirkəti.",
-                Language.Eng => $@"{CompanyName} Team",
+                Language.az => $@"{CompanyName} Şirkəti.",
+                Language.en => $@"{CompanyName} Team",
             };
         }
 
@@ -46,8 +46,8 @@ namespace SolaERP.Infrastructure.ViewModels
         {
             return this.Language switch
             {
-                Language.Aze => "Apertech Şirkəti tərəfindən hazırlanıb.",
-                Language.Eng => "Developed by Apertech Team",
+                Language.az => "Apertech Şirkəti tərəfindən hazırlanıb.",
+                Language.en => "Developed by Apertech Team",
             };
         }
     }
