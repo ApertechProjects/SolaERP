@@ -73,6 +73,8 @@ namespace SolaERP.Persistence.Services
             int counter = 0;
             for (int i = 0; i < analysisDimension.Count; i++)
             {
+                if (analysisDimension[i].AnalysisDimensionId < 0)
+                    analysisDimension[i].AnalysisDimensionId = 0;
                 dimension = await _analysisDimensionRepository.Save(analysisDimension[i], userId);
                 if (dimension)
                     counter++;
