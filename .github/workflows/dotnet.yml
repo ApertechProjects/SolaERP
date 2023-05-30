@@ -12,7 +12,7 @@ on:
 jobs:
   build:
 
-    runs-on: sola
+    runs-on: stp
 
     steps:
     - uses: actions/checkout@v3
