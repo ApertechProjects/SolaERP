@@ -4,6 +4,7 @@ using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
+using System;
 using System.Data;
 using System.Data.Common;
 
@@ -74,15 +75,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> UpdateDueDesignGrid(DueDiligenceGridUpdateModel gridModel)
-        {
-            return await SaveDueDesignGridAsync(gridModel);
-        }
 
-        public async Task<bool> DeleteDueDesignGrid(int id)
-        {
-            return await SaveDueDesignGridAsync(new() { Id = id });
-        }
 
         public async Task<List<BusinessCategory>> GetBusinessCategoriesAsync()
         {
@@ -262,6 +255,133 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Column5Alias = reader.Get<string>("Column5Alias"),
             };
         }
+
+        public Task<bool> AddPrequalificationAsync(VendorPreInputModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UpdatePrequalificationAsync(int id, VendorPreInputModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeletePrequalificationAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> AddDueDiligenceAsync(VendorDueDiligenceModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UpdateDueDiligenceAsync(int id, VendorDueDiligenceModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeleteDueDiligenceAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> AddVendorAsync(VendorModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UpdateVendorAsync(int id, VendorModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeleteVendorAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> UpdateDueDesignGrid(DueDiligenceGridUpdateModel gridModel)
+        {
+            return await SaveDueDesignGridAsync(gridModel);
+        }
+
+        public async Task<bool> DeleteDueDesignGrid(int id)
+        {
+            return await SaveDueDesignGridAsync(new() { Id = id });
+        }
+
+
+
+        private async Task<bool> SaveVendorPreAsync(int id, VendorPreInputModel model)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_VendorPrequalification_IUD @VendorPrequalificationId,@PrequalificationDesignId
+                                                                           @VendorId,@TextboxValue,@TextareaValue,@CheckboxValue,
+                                                                           @RadioboxValue,@IntValue,@DecimalValue,@DateTimeValue,@Scoring";
+
+                command.Parameters.AddWithValue(command, "@VendorPrequalificationId", id);
+                command.Parameters.AddWithValue(command, "@PrequalificationDesignId", model?.DesignId);
+                command.Parameters.AddWithValue(command, "@TextboxValue", model?.TextBoxValue);
+                command.Parameters.AddWithValue(command, "@TextareaValue", model?.TextareaValue);
+                command.Parameters.AddWithValue(command, "@CheckboxValue", model?.CheckboxValue);
+                command.Parameters.AddWithValue(command, "@RadioboxValue", model?.RadioboxValue);
+                command.Parameters.AddWithValue(command, "@IntValue", model?.IntValue);
+                command.Parameters.AddWithValue(command, "@DecimalValue", model?.DecimalValue);
+                command.Parameters.AddWithValue(command, "@DateTimeValue", model?.DateTimeValue);
+                command.Parameters.AddWithValue(command, "@Scoring", model?.Scoring);
+                command.Parameters.AddWithValue(command, "@VendorId", model?.VendorId);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+
+        private async Task<bool> SaveVendorAsync(int id, VendorModel model)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_Vendors_IUD @VendorId,@BusinessUnitId,@VendorName,
+                                                            @TaxId,@TaxOffice,@Location,
+                                                            @Website,@PaymentTerms,@CreditDays,
+                                                            @_0DaysPayment,@Country,@UserId,
+                                                            @OtherProducts,@ApproveStageMainId,@CompanyAddress,
+                                                            @CompanyRegistrationDate";
+
+                command.Parameters.AddWithValue(command, "@VendorId", id);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", model?.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@VendorName", model?.VendorName);
+                command.Parameters.AddWithValue(command, "@TaxId", model?.TaxId);
+                command.Parameters.AddWithValue(command, "@TaxOffice", model?.TaxOffice);
+                command.Parameters.AddWithValue(command, "@Location", model?.Location);
+                command.Parameters.AddWithValue(command, "@Website", model?.Website);
+                command.Parameters.AddWithValue(command, "@PaymentTerms", model?.PaymentTerms);
+                command.Parameters.AddWithValue(command, "@CreditDays", model?.CreditDays);
+                command.Parameters.AddWithValue(command, "@_0DaysPayment", model?._0DaysPayment);
+                command.Parameters.AddWithValue(command, "@Country", model?.Country);
+                command.Parameters.AddWithValue(command, "@UserId", model?.UserId);
+                command.Parameters.AddWithValue(command, "@OtherProducts", model?.OtherProducts);
+                command.Parameters.AddWithValue(command, "@ApproveStageMainId", model?.ApproveStageMainId);
+                command.Parameters.AddWithValue(command, "@CompanyAddress", model?.CompanyAddress);
+                command.Parameters.AddWithValue(command, "@CompanyRegistrationDate", model?.CompanyRegistrationDate);
+
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+
+        //private Task<bool> SaveDueDiligenceAsync(int id, VendorDueDiligenceModel model)
+        //{
+        //    using(var command = _unitOfWork.CreateCommand() as DbCommand) 
+        //    {
+        //        command.CommandText = "EXEC "
+        //    }
+        //}
+
+
+
 
     }
 }

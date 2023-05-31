@@ -9,5 +9,6 @@ namespace SolaERP.Application.Contracts.Services
     {
         public Task<List<DueDiligenceDesignDto>> GetDueDiligenceAsync(Enums.Language language);
         public Task<ApiResponse<VM_GET_SupplierEvaluation>> GetAllAsync(SupplierEvaluationGETModel model);
+        //public Task<ApiResponse<>>
     }
 }

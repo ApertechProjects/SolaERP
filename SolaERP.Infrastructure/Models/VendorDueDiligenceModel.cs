@@ -2,7 +2,6 @@
 {
     public class VendorDueDiligenceModel
     {
-        public int VendorDueDiligenceId { get; set; }
         public int DueDiligenceDesignId { get; set; }
         public int VendorId { get; set; }
         public string TextboxValue { get; set; }

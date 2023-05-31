@@ -1,16 +1,16 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Application.Contracts.Common;
+﻿using SolaERP.Application.Contracts.Common;
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Text;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlBaseRepository
+    public class SqlBaseRepository : IBaseRepository
     {
         private readonly IUnitOfWork _unitOfWork;
         public SqlBaseRepository(IUnitOfWork unitOfWork)
@@ -35,7 +35,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public static string GetSqlElementScript(string scriptText, string sqlElementName)
+        private string GetSqlElementScript(string scriptText, string sqlElementName)
         {
             if (sqlElementName.StartsWith("[dbo].[FN_") || sqlElementName.StartsWith("[dbo].[GET_"))
                 scriptText = scriptText.Substring(scriptText.IndexOf("SELECT"), scriptText.LastIndexOf(")") - scriptText.IndexOf("SELECT"));
@@ -49,5 +49,44 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return scriptText;
         }
 
+
+        public async Task<List<Parameter>> GetSqlElementParamatersAsync(string elementName)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = $@"select  
+                                       'Parameter_name' = name,  
+                                       'Type' = type_name(user_type_id)  
+	                                    from sys.parameters where object_id = object_id('{elementName}')";
+
+                List<Parameter> parameters = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    parameters.Add(reader.GetByEntityStructure<Parameter>());
+
+                return parameters;
+            }
+        }
+
+        private async Task<string> GetElementTypeAsync(string elementName)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = $@"SELECT 
+                                       ROUTINE_TYPE
+                                       FROM 
+                                        information_schema.routines 
+                                        WHERE routine_name = '{elementName}';";
+
+                string elemenType = string.Empty;
+                using var reader = await command.ExecuteReaderAsync();
+
+                if (reader.Read())
+                    elemenType = reader.Get<string>("ROUTINE_TYPE");
+
+                return elemenType;
+            }
+        }
     }
 }

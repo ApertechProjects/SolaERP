@@ -18,5 +18,14 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> AddDueDesignGrid(DueDiligenceGridModel gridModel);
         Task<bool> UpdateDueDesignGrid(DueDiligenceGridUpdateModel gridModel);
         Task<bool> DeleteDueDesignGrid(int id);
+        Task<bool> AddPrequalificationAsync(VendorPreInputModel model);
+        Task<bool> UpdatePrequalificationAsync(int id, VendorPreInputModel model);
+        Task<bool> DeletePrequalificationAsync(int id);
+        Task<bool> AddDueDiligenceAsync(VendorDueDiligenceModel model);
+        Task<bool> UpdateDueDiligenceAsync(int id, VendorDueDiligenceModel model);
+        Task<bool> DeleteDueDiligenceAsync(int id);
+        Task<bool> AddVendorAsync(VendorModel model);
+        Task<bool> UpdateVendorAsync(int id, VendorModel model);
+        Task<bool> DeleteVendorAsync(int id);
     }
 }
