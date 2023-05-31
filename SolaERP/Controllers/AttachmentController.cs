@@ -5,7 +5,7 @@ using SolaERP.Application.Models;
 
 namespace SolaERP.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]/")]
     [ApiController]
     [Authorize]
     public class AttachmentController : CustomBaseController
@@ -17,30 +17,22 @@ namespace SolaERP.Controllers
             _attachmentService = attachmentService;
         }
 
-        /// <summary>
-        ///Retrieve attachment details with file data by ID
-        /// </summary>
-        /// <param name="attachmentId">ID of the attachment to retrieve.</param>
-
         [HttpGet("{attachmentId}")]
-        public async Task<IActionResult> GetAttachmentsWithFilesAsync(int attachmentId)
+        public async Task<IActionResult> ById(int attachmentId)
           => CreateActionResult(await _attachmentService.GetAttachmentWithFilesAsync(attachmentId));
 
-        /// <summary>
-        ///Get a list of attachments based on the specified criteria.
-        /// </summary>
-        /// <remarks>This endpoint allows you to retrieve a list of attachments based on the specified parameters.The attachments can be filtered by source ID, source type ID, attachment type and attachment sub-type ID.</remarks>
+        [HttpGet]
+        public async Task<IActionResult> ByType(int sourceId, string reference, string sourceType)
+            => CreateActionResult(await _attachmentService.GetAttachmentsAsync(sourceId, reference, sourceType));
+
         [HttpPost]
-        public async Task<IActionResult> GetAttachmentsAsync(AttachmentListGetModel model)
-            => CreateActionResult(await _attachmentService.GetAttachmentsAsync(model));
+        public async Task<IActionResult> Save(AttachmentSaveModel model)
+            => CreateActionResult(await _attachmentService.SaveAttachmentAsync(model));
 
         [HttpDelete("{attachmentId}")]
-        public async Task<IActionResult> DeleteAttachmentAsync(int attachmentId)
+        public async Task<IActionResult> Delete(int attachmentId)
             => CreateActionResult(await _attachmentService.DeleteAttachmentAsync(attachmentId));
 
-        [HttpPost]
-        public async Task<IActionResult> SaveAttachmentAsync(AttachmentSaveModel model)
-            => CreateActionResult(await _attachmentService.SaveAttachmentAsync(model));
 
 
     }

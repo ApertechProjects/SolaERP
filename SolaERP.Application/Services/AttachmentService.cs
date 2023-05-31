@@ -29,9 +29,9 @@ namespace SolaERP.Persistence.Services
             return result ? ApiResponse<string>.Success("Operation is succesfull", 200) : ApiResponse<string>.Fail("Operation failed", 400);
         }
 
-        public async Task<ApiResponse<List<AttachmentDto>>> GetAttachmentsAsync(AttachmentListGetModel model)
+        public async Task<ApiResponse<List<AttachmentDto>>> GetAttachmentsAsync(int sourceId, string reference, string sourceType)
         {
-            var entity = await _attachmentRepository.GetAttachmentListAsync(model);
+            var entity = await _attachmentRepository.GetAttachmentListAsync(sourceId, reference, sourceType);
             var result = _mapper.Map<List<AttachmentDto>>(entity);
 
             return ApiResponse<List<AttachmentDto>>.Success(result, 200);
