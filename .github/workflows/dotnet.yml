@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: stp
+    runs-on: sola
 
     steps:
     - uses: actions/checkout@v3
