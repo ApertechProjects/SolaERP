@@ -34,6 +34,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                 NULL,
                                                                 NULL,
                                                                 NULL,
+                                                                NULL,
                                                                 @UserId"
                 ;
 
@@ -130,6 +131,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                 @Status,
                                                                 @Date1,
                                                                 @Date2,
+                                                                @LinkedAnalysisDimensionid,
                                                                 @UserId"
                 ;
 
@@ -143,6 +145,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Status", analysisCodeSave.Status);
                 command.Parameters.AddWithValue(command, "@Date1", analysisCodeSave.Date1);
                 command.Parameters.AddWithValue(command, "@Date2", analysisCodeSave.Date2);
+                command.Parameters.AddWithValue(command, "@LinkedAnalysisDimensionId", analysisCodeSave.LinkedAnalysisDimensionId);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 return await command.ExecuteNonQueryAsync() > 0;

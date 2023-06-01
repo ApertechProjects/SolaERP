@@ -8,8 +8,9 @@ namespace SolaERP.Application.Dtos.User
 {
     public class AdditionalPrivilegeAccessDto
     {
-        public bool VendorDraft { get; set; }
-        public bool RequestAttachment { get; set; }
-        public bool RequestSendToApprove { get; set; }
+        public int GroupAdditionalPrivilegeId { get; set; }
+        public int GroupId { get; set; }
+        public int AdditionalPrivelegeId { get; set; }
+        public string AdditionalPrivelegeName { get; set; }
     }
 }
