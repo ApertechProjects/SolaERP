@@ -21,5 +21,9 @@ namespace SolaERP.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] SupplierEvaluationGETModel model)
             => CreateActionResult(await _service.GetAllAsync(model));
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> InitReg()
+            => CreateActionResult(await _service.GetInitRegistrationAsync());
     }
 }

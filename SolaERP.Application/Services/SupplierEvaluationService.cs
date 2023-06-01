@@ -54,11 +54,39 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<VM_GET_SupplierEvaluation>.Success(viewModel, 200);
         }
-
         public async Task<List<DueDiligenceDesignDto>> GetDueDiligenceAsync(Language language)
         {
             return await GetDueDesignsAsync(Language.en);
         }
+
+        public async Task<ApiResponse<VM_GET_InitalRegistration>> GetInitRegistrationAsync()
+        {
+            CompanyInformation companyInformation = new()
+            {
+                BusinessCategories = await _repository.GetBusinessCategoriesAsync(),
+                PaymentTerms = await _repository.GetPaymentTermsAsync(),
+                Countries = await _repository.GetCountriesAsync(),
+                PrequalificationTypes = await _repository.GetPrequalificationCategoriesAsync(),
+                Services = await _repository.GetProductServicesAsync(),
+            };
+
+            VM_GET_InitalRegistration viewModel = new()
+            {
+                CompanyInformation = new()
+                {
+                    BusinessCategories = await _repository.GetBusinessCategoriesAsync(),
+                    PaymentTerms = await _repository.GetPaymentTermsAsync(),
+                    Countries = await _repository.GetCountriesAsync(),
+                    PrequalificationTypes = await _repository.GetPrequalificationCategoriesAsync(),
+                    Services = await _repository.GetProductServicesAsync(),
+                },
+
+                ContactPerson = new()
+            };
+
+            return ApiResponse<VM_GET_InitalRegistration>.Success(viewModel, 200);
+        }
+
         private async Task<List<DueDiligenceDesignDto>> GetDueDesignsAsync(Language language)
         {
             List<DueDiligenceDesign> dueDiligence = await _repository.GetDueDiligencesDesignAsync(language);
@@ -127,7 +155,5 @@ namespace SolaERP.Persistence.Services
             }
             return dueDesign;
         }
-
-
     }
 }

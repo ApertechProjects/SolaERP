@@ -14,6 +14,8 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<DueDiligenceDesign>> GetDueDiligencesDesignAsync(Enums.Language language);
         Task<List<DueDiligenceGrid>> GetDueDiligenceGridsAsync(int deuDesignId);
         Task<List<VendorBankDetails>> GetVondorBankDetailsAsync(int vendorid);
+        Task<bool> DeleteCOBCAsync(int id);
+        Task<bool> AddCOBCAsync();
         Task<bool> AddDueDesign(VendorDueDiligenceModel vendorDueDiligence);
         Task<bool> AddDueDesignGrid(DueDiligenceGridModel gridModel);
         Task<bool> UpdateDueDesignGrid(DueDiligenceGridUpdateModel gridModel);

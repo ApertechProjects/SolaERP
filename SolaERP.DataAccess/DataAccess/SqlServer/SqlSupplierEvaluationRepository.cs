@@ -371,6 +371,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public Task<bool> UpdateCOBCAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeleteCOBCAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> AddCOBCAsync()
+        {
+            throw new NotImplementedException();
+        }
+
 
         //private Task<bool> SaveDueDiligenceAsync(int id, VendorDueDiligenceModel model)
         //{
