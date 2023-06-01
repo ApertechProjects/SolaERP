@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Common;
+using SolaERP.Application.Enums;
 using System.Data;
 
 namespace SolaERP.API.Controllers
@@ -27,5 +28,12 @@ namespace SolaERP.API.Controllers
         {
             return Ok(_queryBuilder.GenerateClassFieldsFromSqlElement(className, elementName, type));
         }
+
+        [HttpGet]
+        public IActionResult GetSqlElementResult(string className, string elementName, SqlElementTypes elementTypes)
+        {
+            return Ok(_queryBuilder.GetSqlElementResult(className, elementName, elementTypes));
+        }
+
     }
 }

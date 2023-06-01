@@ -37,7 +37,7 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _approveStageMainService.GetByBusinessUnitId(buId));
 
         [HttpGet("{approveStageMainId}")]
-        public async Task<IActionResult> StageMain(int approveStageMainId)
+        public async Task<IActionResult> StageHeader(int approveStageMainId)
             => CreateActionResult(await _approveStageMainService.GetMainByIdAsync(approveStageMainId));
 
         [HttpGet("{approveStageMainId}")]
