@@ -13,5 +13,6 @@ namespace SolaERP.Application.Contracts.Common
         Task<SqlElementTypes> GetElementTypeAsync(string elementName);
         List<Parameter> GetSqlElementParameters(string sqlElementName, CommandType type);
         string GenerateClassFieldsFromSqlElement(string className, string sqlElementName, CommandType type);
+        Task<string> GetModel(string elementName);
     }
 }

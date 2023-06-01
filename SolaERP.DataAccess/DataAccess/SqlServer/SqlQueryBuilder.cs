@@ -223,8 +223,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return fieldName;
         }
 
-
-
         public async Task<List<Parameter>> GetSqlElementParamatersAsync(string elementName)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -269,6 +267,26 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<string> GetModel(string elementName)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = $@"SELECT 
+                                       ROUTINE_TYPE
+                                       FROM 
+                                        information_schema.routines 
+                                        WHERE routine_name = @elementName;";
 
+                command.Parameters.AddWithValue(command, "@elementName", elementName);
+
+                string elemenType = string.Empty;
+                using var reader = await command.ExecuteReaderAsync();
+
+                if (reader.Read())
+                    elemenType = reader.Get<string>("ROUTINE_TYPE");
+
+                return "";
+            }
+        }
     }
 }
