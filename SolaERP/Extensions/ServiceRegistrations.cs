@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using SolaERP.Application;
+using SolaERP.Application.Contracts.Common;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Entities.AnalysisStructure;
@@ -78,6 +79,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IAnalysisService, AnalysisService>();
             builder.Services.AddScoped<IEmailNotificationService, EmailNotificationService>();
             builder.Services.AddScoped<ISupplierEvaluationService, SupplierEvaluationService>();
+            builder.Services.AddScoped<IQueryBuilder, SqlQueryBuilder>();
 
         }
         private static void UseRepositories(this WebApplicationBuilder builder)

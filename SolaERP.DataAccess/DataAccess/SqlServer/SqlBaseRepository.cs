@@ -6,6 +6,7 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
+using System.Data.SqlClient;
 using System.Text;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
@@ -50,43 +51,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
-        public async Task<List<Parameter>> GetSqlElementParamatersAsync(string elementName)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = $@"select  
-                                       'Parameter_name' = name,  
-                                       'Type' = type_name(user_type_id)  
-	                                    from sys.parameters where object_id = object_id('{elementName}')";
 
-                List<Parameter> parameters = new();
-                using var reader = await command.ExecuteReaderAsync();
-
-                while (reader.Read())
-                    parameters.Add(reader.GetByEntityStructure<Parameter>());
-
-                return parameters;
-            }
-        }
-
-        private async Task<string> GetElementTypeAsync(string elementName)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = $@"SELECT 
-                                       ROUTINE_TYPE
-                                       FROM 
-                                        information_schema.routines 
-                                        WHERE routine_name = '{elementName}';";
-
-                string elemenType = string.Empty;
-                using var reader = await command.ExecuteReaderAsync();
-
-                if (reader.Read())
-                    elemenType = reader.Get<string>("ROUTINE_TYPE");
-
-                return elemenType;
-            }
-        }
     }
 }

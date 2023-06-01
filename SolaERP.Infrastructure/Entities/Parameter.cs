@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SolaERP.Application.Attributes;
 
 namespace SolaERP.Application.Entities
 {
-    public class Parameter
+    public class Parameter : BaseEntity
     {
+        [DbColumn("Parameter_name")]
         public string ParameterName { get; set; }
         public string Type { get; set; }
     }

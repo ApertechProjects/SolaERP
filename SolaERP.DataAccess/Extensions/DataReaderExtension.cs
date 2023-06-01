@@ -1,7 +1,9 @@
 ﻿using SolaERP.Application.Attributes;
 using SolaERP.Application.Entities;
 using System.Data;
+using System.Data.SqlClient;
 using System.Reflection;
+using System.Text;
 
 namespace SolaERP.DataAccess.Extensions
 {
@@ -76,6 +78,55 @@ namespace SolaERP.DataAccess.Extensions
         {
             if (objectResult != DBNull.Value && objectResult != null)
                 property.SetValue(entity, objectResult);
+        }
+
+        private static string GenerateEntityMappingScript<T>(IDataReader reader)
+        {
+            StringBuilder scriptBuilder = new StringBuilder();
+
+            scriptBuilder.AppendLine($"private {typeof(T).Name} Get{typeof(T).Name}FromReader(IDataReader reader)")
+                        .AppendLine("{")
+                        .AppendLine($"\t{typeof(T).Name} entity = new {typeof(T).Name}();")
+                        .AppendLine();
+
+            PropertyInfo[] properties = typeof(T).GetProperties();
+
+            foreach (PropertyInfo property in properties)
+            {
+                string columnName = property.Name;
+                string propertyType = property.PropertyType.Name;
+                string getValueMethod = GetReaderGetMethod(propertyType);
+
+                scriptBuilder.AppendLine($"\tentity.{property.Name} = reader.{getValueMethod}(\"{columnName}\");");
+            }
+
+            scriptBuilder.AppendLine()
+                        .AppendLine("\treturn entity;")
+                        .AppendLine("}");
+
+            return scriptBuilder.ToString();
+        }
+
+
+
+        private static string GetReaderGetMethod(string propertyType)
+        {
+            switch (propertyType)
+            {
+                case "String":
+                    return "GetString";
+                case "Int32":
+                    return "GetInt32";
+                case "Decimal":
+                    return "GetDecimal";
+                case "DateTime":
+                    return "GetDateTime";
+                case "Boolean":
+                    return "GetBoolean";
+                // Add more cases for other property types if needed
+                default:
+                    throw new ArgumentException($"Unsupported property type: {propertyType}");
+            }
         }
 
     }
