@@ -33,7 +33,7 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<List<ApproveStageRoleDto>>> GetRoleAsync(int approveStageDetailsId)
         {
             var approveRoles = await _approveStageRoleRepository.GetApproveStageRolesByApproveStageDetailId(approveStageDetailsId);
-            var dto = _mapper.Map<List<ApproveStageRoleDto>>(approveStageDetailsId);
+            var dto = _mapper.Map<List<ApproveStageRoleDto>>(approveRoles);
             return ApiResponse<List<ApproveStageRoleDto>>.Success(dto, 200);
         }
 

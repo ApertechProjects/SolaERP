@@ -1,5 +1,7 @@
 ﻿using SolaERP.Application.Contracts.Common;
 using SolaERP.Application.Entities;
+using SolaERP.Application.Entities.AccountCode;
+using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Enums;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
@@ -212,6 +214,73 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return classBuilder.ToString();
         }
 
+        public string GetSqlElementResult(string className, string elementName, SqlElementTypes sqlElementTypes)
+        {
+            List<Parameter> elementParameters = GetSqlElementParameters(elementName, sqlElementTypes);
+
+            StringBuilder classBuilder = new StringBuilder();
+
+            classBuilder.AppendLine($"public class {className}")
+                        .AppendLine("{");
+
+            foreach (Parameter parameter in elementParameters)
+            {
+                string fieldName = GenerateFieldName(parameter.ParameterName);
+                string fieldType = ConvertToCSharpTypeAsString(parameter.Type);
+
+                classBuilder.AppendLine($"\tpublic {fieldType} {fieldName} {{ get; set; }}");
+            }
+
+            classBuilder.AppendLine("}");
+            return classBuilder.ToString();
+        }
+
+        public List<Parameter> GetSqlElementParameters(string elementName, SqlElementTypes sqlElementTypes)
+        {
+            List<Parameter> parameters = new List<Parameter>();
+
+            using (SqlCommand command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = GenerateCommandText(sqlElementTypes);
+                command.Parameters.AddWithValue(command, "@elementName", elementName);
+
+                using var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    parameters.Add(reader.GetByEntityStructure<Parameter>());
+                }
+
+                return parameters;
+            }
+        }
+
+        public string GenerateCommandText(SqlElementTypes sqlElementTypes)
+        {
+            string text = string.Empty;
+            switch (sqlElementTypes)
+            {
+                case SqlElementTypes.PROCEDURE:
+                    text = @"SELECT 
+                             name AS Parameter_name,
+                             system_type_name AS Type
+                             FROM sys.dm_exec_describe_first_result_set
+                             (N'EXEC ' + @elementName, NULL, 0);";
+                    break;
+                case SqlElementTypes.FUNCTION:
+                    text = @"SELECT 
+                             c.name AS Parameter_name,
+                             t.name AS Type
+                             FROM sys.columns c
+                             JOIN sys.objects o ON c.object_id = o.object_id
+                             JOIN sys.types t ON c.user_type_id = t.user_type_id
+                             WHERE o.name = @elementName";
+                    break;
+                default:
+                    break;
+            }
+            return text;
+        }
+
         private string GenerateFieldName(string parameterName)
         {
             string fieldName = parameterName.TrimStart('@');
@@ -222,8 +291,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return fieldName;
         }
-
-
 
         public async Task<List<Parameter>> GetSqlElementParamatersAsync(string elementName)
         {
@@ -268,6 +335,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return elemenType.Equals("PROCEDURE") ? SqlElementTypes.PROCEDURE : SqlElementTypes.FUNCTION;
             }
         }
+
 
 
     }

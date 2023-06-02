@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Models;
+using System.IdentityModel.Tokens.Jwt;
 using IFileService = SolaERP.Application.Contracts.Services.IFileService;
 
 namespace SolaERP.Controllers
@@ -23,7 +25,17 @@ namespace SolaERP.Controllers
             //_fileService = fileService;
         }
 
+        [HttpGet]
+        public async Task<string> GetUserName([FromHeader]string jwtToken)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.ReadJwtToken(jwtToken);
 
+            // Access the 'username' claim from the payload
+            var username = token.Claims.FirstOrDefault(c => c.Type == "name")?.Value;
+
+            return username;
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetGroupsByUserIdAsync([FromQuery] int userId)
