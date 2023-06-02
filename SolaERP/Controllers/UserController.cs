@@ -26,18 +26,6 @@ namespace SolaERP.Controllers
         }
 
         [HttpGet]
-        public async Task<string> GetUserName([FromHeader]string jwtToken)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.ReadJwtToken(jwtToken);
-
-            // Access the 'username' claim from the payload
-            var username = token.Claims.FirstOrDefault(c => c.Type == "name")?.Value;
-
-            return username;
-        }
-
-        [HttpGet]
         public async Task<IActionResult> GetGroupsByUserIdAsync([FromQuery] int userId)
          => CreateActionResult(await _groupService.GetUserGroupsAsync(userId));
 

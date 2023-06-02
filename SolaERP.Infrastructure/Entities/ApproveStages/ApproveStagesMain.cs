@@ -6,6 +6,8 @@
         public int ProcedureId { get; set; }
         public Procedure.Procedure Procedure { get; set; }
         public int BusinessUnitId { get; set; }
+        public string ApproveStageCode { get; set; }
         public string ApproveStageName { get; set; }
+        public bool ReApproveOnChange { get; set; }
     }
 }

@@ -63,15 +63,15 @@ namespace SolaERP.Persistence.Services
                     approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageMainId = mainId;
                     var detailId = await _approveStageDetailRepository.SaveDetailsAsync(_mapper.Map<ApproveStagesDetail>(approvalStageSaveVM.ApproveStagesDetailDtos[i]));
 
-                    for (int j = 0; j < approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto.Count; j++)
+                    for (int j = 0; j < approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRoles.Count; j++)
                     {
-                        if (approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].Type == "remove")
-                            await _approveStageRoleRepository.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].ApproveStageRoleId);
+                        if (approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRoles[j].Type == "remove")
+                            await _approveStageRoleRepository.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRoles[j].ApproveStageRoleId);
                         else
                         {
 
-                            approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].ApproveStageDetailId = detailId;
-                            await _approveStageRoleRepository.AddAsync(_mapper.Map<ApproveStageRole>(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j]));
+                            approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRoles[j].ApproveStageDetailId = detailId;
+                            await _approveStageRoleRepository.AddAsync(_mapper.Map<ApproveStageRole>(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRoles[j]));
                         }
                     }
                 }
@@ -92,12 +92,21 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<ApprovalStatusDto>>.Fail("get", "Approval status is empty", 404, true);
         }
 
-        public async Task<ApiResponse<bool>> DeleteApproveStageAsync(int approveStageMainId)
+        public async Task<ApiResponse<bool>> DeleteApproveStageAsync(ApproveStageDeleteModel model)
         {
-            var data = await _approveStageMainRepository.DeleteApproveStageAsync(approveStageMainId);
-            await _unitOfWork.SaveChangesAsync();
-            if (data)
+            var data = false;
+            int counter = 0;
+            for (int i = 0; i < model.stageIds.Count; i++)
+            {
+                data = await _approveStageMainRepository.DeleteApproveStageAsync(model.stageIds[i]);
+                if (data)
+                    counter++;
+            }
+            if (counter == model.stageIds.Count)
+            {
+                await _unitOfWork.SaveChangesAsync();
                 return ApiResponse<bool>.Success(data, 200);
+            }
             return ApiResponse<bool>.Fail("delete", "data can not be deleted", 400);
         }
     }

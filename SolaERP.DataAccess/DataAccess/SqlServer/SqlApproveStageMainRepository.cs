@@ -22,7 +22,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<int> AddAsync(ApproveStagesMain entity, int userId = 0)
         {
-            string query = "exec SP_ApproveStagesMain_IUD @approveStageMainId,@procedureId,@businessUnitId,@approveStageName,@userId," +
+            string query = "exec SP_ApproveStagesMain_IUD @approveStageMainId,@procedureId,@businessUnitId,@approveStageName,@approveStageCode,@reApproveOnChange,@userId," +
                 "                                         @NewApproveStageMainId = @NewApproveStageMainId OUTPUT select @NewApproveStageMainId as NewApproveStageMainId";
 
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
@@ -32,6 +32,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@procedureId", entity.ProcedureId);
                 command.Parameters.AddWithValue(command, "@businessUnitId", entity.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@approveStageName", entity.ApproveStageName);
+                command.Parameters.AddWithValue(command, "@approveStageCode", entity.ApproveStageCode);
+                command.Parameters.AddWithValue(command, "@reApproveOnChange", entity.ReApproveOnChange);
                 command.Parameters.AddWithValue(command, "@userId", userId);
 
                 command.Parameters.Add("@NewApproveStageMainId", SqlDbType.Int);
