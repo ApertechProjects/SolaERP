@@ -63,15 +63,15 @@ namespace SolaERP.Persistence.Services
                     approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageMainId = mainId;
                     var detailId = await _approveStageDetailRepository.SaveDetailsAsync(_mapper.Map<ApproveStagesDetail>(approvalStageSaveVM.ApproveStagesDetailDtos[i]));
 
-                    for (int j = 0; j < approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto.Count; j++)
+                    for (int j = 0; j < approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRoles.Count; j++)
                     {
-                        if (approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].Type == "remove")
-                            await _approveStageRoleRepository.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].ApproveStageRoleId);
+                        if (approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRoles[j].Type == "remove")
+                            await _approveStageRoleRepository.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRoles[j].ApproveStageRoleId);
                         else
                         {
 
-                            approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j].ApproveStageDetailId = detailId;
-                            await _approveStageRoleRepository.AddAsync(_mapper.Map<ApproveStageRole>(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRolesDto[j]));
+                            approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRoles[j].ApproveStageDetailId = detailId;
+                            await _approveStageRoleRepository.AddAsync(_mapper.Map<ApproveStageRole>(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRoles[j]));
                         }
                     }
                 }

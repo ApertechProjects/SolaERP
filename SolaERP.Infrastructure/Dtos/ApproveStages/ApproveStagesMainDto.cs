@@ -13,6 +13,8 @@ namespace SolaERP.Application.Dtos.ApproveStage
         public int ProcedureId { get; set; }
         public Procedure.ProcedureDto Procedure { get; set; }
         public int BusinessUnitId { get; set; }
+        public string ApproveStageCode { get; set; }
         public string ApproveStageName { get; set; }
+        public bool ReApproveOnChange { get; set; }
     }
 }

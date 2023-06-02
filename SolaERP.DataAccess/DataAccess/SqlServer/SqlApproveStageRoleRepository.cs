@@ -81,11 +81,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 ApproveStageRoleId = reader.Get<int>("ApproveStageRoleId"),
                 ApproveStageDetailId = reader.Get<int>("ApproveStageDetailId"),
                 ApproveRoleId = reader.Get<int>("ApproveRoleId"),
-                ApproveRoles = new ApproveRole
-                {
-                    ApproveRoleId = reader.Get<int>("ApproveRoleId"),
-                    ApproveRoleName = reader.Get<string>("ApproveRoleName")
-                },
+                ApproveRoleName = reader.Get<string>("ApproveRoleName"),
                 AmountFrom = reader.Get<decimal>("AmountFrom"),
                 AmountTo = reader.Get<decimal>("AmountTo")
             };
