@@ -12,7 +12,7 @@ namespace SolaERP.Application.Validations.ApproveStageValidation
     {
         public ApprovalStageSaveValidation()
         {
-            RuleFor(x => x.ApproveStagesMainDto).SetValidator(new ApproveStageMainValidation());
+            RuleFor(x => x.ApproveStagesMain).SetValidator(new ApproveStageMainValidation());
             RuleForEach(x => x.ApproveStagesDetailDtos).SetValidator(new ApproveStageDetailValidation());
         }
     }

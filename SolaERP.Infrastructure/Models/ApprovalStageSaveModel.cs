@@ -5,7 +5,7 @@ namespace SolaERP.Application.Models
 {
     public class ApprovalStageSaveModel
     {
-        public ApproveStagesMainDto ApproveStagesMainDto { get; set; }
+        public ApproveStageMainInputModel ApproveStagesMain { get; set; }
         public List<ApproveStageDetailInputModel> ApproveStagesDetailDtos { get; set; }
         public string Type { get; set; }
     }

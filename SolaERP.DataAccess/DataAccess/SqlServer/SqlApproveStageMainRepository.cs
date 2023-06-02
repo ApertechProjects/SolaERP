@@ -7,6 +7,7 @@ using SolaERP.Application.UnitOfWork;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using SolaERP.Application.Models;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -22,31 +23,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<int> AddAsync(ApproveStagesMain entity, int userId = 0)
         {
-            string query = "exec SP_ApproveStagesMain_IUD @approveStageMainId,@procedureId,@businessUnitId,@approveStageName,@approveStageCode,@reApproveOnChange,@userId," +
-                "                                         @NewApproveStageMainId = @NewApproveStageMainId OUTPUT select @NewApproveStageMainId as NewApproveStageMainId";
-
-            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
-            {
-                command.CommandText = query;
-                command.Parameters.AddWithValue(command, "@approveStageMainId", entity.ApproveStageMainId);
-                command.Parameters.AddWithValue(command, "@procedureId", entity.ProcedureId);
-                command.Parameters.AddWithValue(command, "@businessUnitId", entity.BusinessUnitId);
-                command.Parameters.AddWithValue(command, "@approveStageName", entity.ApproveStageName);
-                command.Parameters.AddWithValue(command, "@approveStageCode", entity.ApproveStageCode);
-                command.Parameters.AddWithValue(command, "@reApproveOnChange", entity.ReApproveOnChange);
-                command.Parameters.AddWithValue(command, "@userId", userId);
-
-                command.Parameters.Add("@NewApproveStageMainId", SqlDbType.Int);
-                command.Parameters["@NewApproveStageMainId"].Direction = ParameterDirection.Output;
-
-                using var reader = await command.ExecuteReaderAsync();
-                int id = 0;
-                if (reader.Read())
-                {
-                    id = reader.Get<int>("NewApproveStageMainId");
-                }
-                return id;
-            }
+            throw new NotImplementedException();
         }
 
         public async Task<bool> DeleteApproveStageAsync(int approveStageMainId)
@@ -125,6 +102,34 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<int> SaveApproveStageMainAsync(ApproveStageMainInputModel entity, int userId)
+        {
+            string query = "exec SP_ApproveStagesMain_IUD @approveStageMainId,@procedureId,@businessUnitId,@approveStageName,@approveStageCode,@reApproveOnChange,@userId," +
+               "                                         @NewApproveStageMainId = @NewApproveStageMainId OUTPUT select @NewApproveStageMainId as NewApproveStageMainId";
+
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = query;
+                command.Parameters.AddWithValue(command, "@approveStageMainId", entity.ApproveStageMainId);
+                command.Parameters.AddWithValue(command, "@procedureId", entity.ProcedureId);
+                command.Parameters.AddWithValue(command, "@businessUnitId", entity.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@approveStageName", entity.ApproveStageName);
+                command.Parameters.AddWithValue(command, "@approveStageCode", entity.ApproveStageCode);
+                command.Parameters.AddWithValue(command, "@reApproveOnChange", entity.ReApproveOnChange);
+                command.Parameters.AddWithValue(command, "@userId", userId);
+
+                command.Parameters.Add("@NewApproveStageMainId", SqlDbType.Int);
+                command.Parameters["@NewApproveStageMainId"].Direction = ParameterDirection.Output;
+
+                using var reader = await command.ExecuteReaderAsync();
+                int id = 0;
+                if (reader.Read())
+                {
+                    id = reader.Get<int>("NewApproveStageMainId");
+                }
+                return id;
+            }
+        }
 
         public Task<int> UpdateAsync(ApproveStagesMain entity, int userId)
         {
@@ -137,13 +142,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 ApproveStageMainId = reader.Get<int>("ApproveStageMainId"),
                 ApproveStageName = reader.Get<string>("ApproveStageName"),
-                BusinessUnitId = reader.Get<int>("BusinessUnitId"),
                 ProcedureId = reader.Get<int>("ProcedureId"),
-                Procedure = new Procedure
-                {
-                    ProcedureId = reader.Get<int>("ProcedureId"),
-                    ProcedureName = reader.Get<string>("ProcedureName"),
-                }
+                ProcedureName = reader.Get<string>("ProcedureName"),
             };
         }
 
