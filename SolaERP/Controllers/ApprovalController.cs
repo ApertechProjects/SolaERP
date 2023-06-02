@@ -72,9 +72,9 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> DeleteRole(ApproveRoleDeleteModel model)
         => CreateActionResult(await _approveRoleService.ApproveRoleDeleteAsync(model, User.Identity.Name));
 
-        [HttpDelete("{approveStageMainId}")]
-        public async Task<IActionResult> DeleteStage(int approveStageMainId)
-            => CreateActionResult(await _approveStageMainService.DeleteApproveStageAsync(approveStageMainId));
+        [HttpDelete]
+        public async Task<IActionResult> DeleteStage(ApproveStageDeleteModel model)
+            => CreateActionResult(await _approveStageMainService.DeleteApproveStageAsync(model));
 
     }
 }

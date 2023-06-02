@@ -92,12 +92,21 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<ApprovalStatusDto>>.Fail("get", "Approval status is empty", 404, true);
         }
 
-        public async Task<ApiResponse<bool>> DeleteApproveStageAsync(int approveStageMainId)
+        public async Task<ApiResponse<bool>> DeleteApproveStageAsync(ApproveStageDeleteModel model)
         {
-            var data = await _approveStageMainRepository.DeleteApproveStageAsync(approveStageMainId);
-            await _unitOfWork.SaveChangesAsync();
-            if (data)
+            var data = false;
+            int counter = 0;
+            for (int i = 0; i < model.stageIds.Count; i++)
+            {
+                data = await _approveStageMainRepository.DeleteApproveStageAsync(model.stageIds[i]);
+                if (data)
+                    counter++;
+            }
+            if (counter == model.stageIds.Count)
+            {
+                await _unitOfWork.SaveChangesAsync();
                 return ApiResponse<bool>.Success(data, 200);
+            }
             return ApiResponse<bool>.Fail("delete", "data can not be deleted", 400);
         }
     }
