@@ -10,6 +10,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<List<DueDiligenceDesignDto>> GetDueDiligenceAsync(Enums.Language language);
         Task<ApiResponse<VM_GET_SupplierEvaluation>> GetAllAsync(SupplierEvaluationGETModel model);
         Task<ApiResponse<VM_GET_InitalRegistration>> GetInitRegistrationAsync();
+        Task<ApiResponse<BankCodesDto>> GetBankCodesAsync(int vendorId);
 
     }
 }

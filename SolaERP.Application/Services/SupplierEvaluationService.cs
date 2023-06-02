@@ -54,10 +54,20 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<VM_GET_SupplierEvaluation>.Success(viewModel, 200);
         }
-        public async Task<List<DueDiligenceDesignDto>> GetDueDiligenceAsync(Language language)
+
+        public async Task<ApiResponse<BankCodesDto>> GetBankCodesAsync(int vendorId)
         {
-            return await GetDueDesignsAsync(Language.en);
+            BankCodesDto bankCodes = new()
+            {
+                Currencies = await _repository.GetCurrenciesAsync(),
+                BankDetails = await _repository.GetVondorBankDetailsAsync(vendorId),
+            };
+
+            return ApiResponse<BankCodesDto>.Success(bankCodes, 200);
         }
+
+        public async Task<List<DueDiligenceDesignDto>> GetDueDiligenceAsync(Language language)
+             => await GetDueDesignsAsync(Language.en);
 
         public async Task<ApiResponse<VM_GET_InitalRegistration>> GetInitRegistrationAsync()
         {
@@ -86,6 +96,11 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<VM_GET_InitalRegistration>.Success(viewModel, 200);
         }
+
+
+
+
+
 
         private async Task<List<DueDiligenceDesignDto>> GetDueDesignsAsync(Language language)
         {
