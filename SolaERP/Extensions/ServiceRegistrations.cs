@@ -76,7 +76,7 @@ namespace SolaERP.Extensions
             //builder.Services.AddScoped<IFileProducer, FileProducer>();
             builder.Services.AddScoped<IStorage, LocalStorage>();
             builder.Services.AddScoped<IAnalysisDimensionService, AnalysisDimensionService>();
-            builder.Services.AddScoped<IAnalysisService, AnalysisService>();
+            builder.Services.AddScoped<IAnalysisStructureService, AnalysisStructureService>();
             builder.Services.AddScoped<IEmailNotificationService, EmailNotificationService>();
             builder.Services.AddScoped<ISupplierEvaluationService, SupplierEvaluationService>();
             builder.Services.AddScoped<IQueryBuilder, SqlQueryBuilder>();

@@ -6,15 +6,17 @@ using SolaERP.Application.UnitOfWork;
 
 namespace SolaERP.Persistence.Services
 {
-    public class AnalysisService : IAnalysisService
+    public class AnalysisStructureService : IAnalysisStructureService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly INewAnalysisStructureRepository _repository;
+        private readonly IUserService _userService;
 
-        public AnalysisService(INewAnalysisStructureRepository repository, IUnitOfWork unitOfWork)
+        public AnalysisStructureService(INewAnalysisStructureRepository repository, IUnitOfWork unitOfWork, IUserService userService)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
+            _userService = userService;
         }
 
         public async Task<bool> AddAsync(AnalysisStructureSaveModel model)
@@ -25,9 +27,10 @@ namespace SolaERP.Persistence.Services
             return result;
         }
 
-        public async Task<AnalysisStructureWithBu> GetByBUAsync(int buId)
+        public async Task<AnalysisStructureWithBu> GetByBUAsync(int buId, int procedureId, string userName)
         {
-            return await _repository.GetByBUAsync(buId);
+            int userId = await _userService.GetIdentityNameAsIntAsync(userName);
+            return await _repository.GetByBUAsync(buId, procedureId, userId);
         }
 
         public async Task<AnalysisStructure> GetByIdAsync(int id)
