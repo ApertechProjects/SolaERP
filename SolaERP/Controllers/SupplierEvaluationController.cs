@@ -28,9 +28,8 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> InitReg()
             => CreateActionResult(await _service.GetInitRegistrationAsync(User.Identity.Name));
 
-        [HttpGet("{vendorId}")]
-        public async Task<IActionResult> BankAccounts(int vendorId)
-            => CreateActionResult(await _service.GetBankCodesAsync(vendorId));
-
+        [HttpGet("[action]")]
+        public async Task<IActionResult> BankDetails()
+            => CreateActionResult(await _service.GetBankDetailsAsync(User.Identity.Name));
     }
 }
