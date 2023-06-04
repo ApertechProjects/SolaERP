@@ -12,9 +12,9 @@ namespace SolaERP.API.Controllers
     [Authorize]
     public class AnalysisStructureController : ControllerBase
     {
-        private readonly IAnalysisService _analysisService;
+        private readonly IAnalysisStructureService _analysisService;
 
-        public AnalysisStructureController(IAnalysisService analysisStructureService)
+        public AnalysisStructureController(IAnalysisStructureService analysisStructureService)
         {
             _analysisService = analysisStructureService;
         }
@@ -30,10 +30,10 @@ namespace SolaERP.API.Controllers
             return analysisStructure;
         }
 
-        [HttpGet("bu/{buId}")]
-        public async Task<ActionResult<AnalysisStructureWithBu>> GetByBUAsync(int buId)
+        [HttpGet("{buId}/{procedureId}")]
+        public async Task<ActionResult<AnalysisStructureWithBu>> GetByBUAsync(int buId, int procedureId)
         {
-            var analysisStructure = await _analysisService.GetByBUAsync(buId);
+            var analysisStructure = await _analysisService.GetByBUAsync(buId, procedureId, User.Identity.Name);
             if (analysisStructure == null)
             {
                 return NotFound();

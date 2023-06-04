@@ -1742,6 +1742,27 @@ System.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL in
 ClientConnectionId:a23d99b3-a46e-4edc-b0af-38accdaa007e
 Error Number:515,State:2,Class:16
 2023-06-02 11:00:46.572 +04:00 [ERR] Cannot insert the value NULL into column 'UserId', table 'SolaERPR.Register.Logs'; column does not allow nulls. INSERT fails.
+2023-06-02 15:41:13.290 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.IndexOutOfRangeException: BusinessUnitId
+   at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)
+   at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
+   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\User\Desktop\SolaERP\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 70
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlApproveStageMainRepository.GetByBusinessUnitId(Int32 buId) in C:\Users\User\Desktop\SolaERP\SolaERP.DataAccess\DataAccess\SqlServer\SqlApproveStageMainRepository.cs:line 122
+   at SolaERP.Persistence.Services.ApproveStageService.GetByBusinessUnitId(Int32 buId) in C:\Users\User\Desktop\SolaERP\SolaERP.Application\Services\ApproveStageService.cs:line 47
+   at SolaERP.Controllers.ApprovalController.Stage(Int32 buId) in C:\Users\User\Desktop\SolaERP\SolaERP\Controllers\ApprovalController.cs:line 37
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-06-02 15:41:13.350 +04:00 [ERR] BusinessUnitId
 2023-06-04 19:58:23.583 +04:00 [ERR] An unhandled exception has occurred while executing the request.
 System.IndexOutOfRangeException: CompanyName
    at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)

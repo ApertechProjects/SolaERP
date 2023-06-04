@@ -19,13 +19,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return await SaveAsync(0, model);
         }
 
-        public async Task<AnalysisStructureWithBu> GetByBUAsync(int buId)
+        public async Task<AnalysisStructureWithBu> GetByBUAsync(int buId, int procedureId, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC [dbo].[SP_AnalysisStructure_Load_BY_BU] @BusinessUnitId,@UserId";
+                command.CommandText = "EXEC [dbo].[SP_AnalysisStructure_Load_BY_BU] @BusinessUnitId,@UserId,@ProcedureId";
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", buId);
-                command.Parameters.AddWithValue(command, "@UserId", 1);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                command.Parameters.AddWithValue(command, "@ProcedureId", procedureId);
 
                 AnalysisStructureWithBu resultEntity = default;
                 using var reader = await command.ExecuteReaderAsync();
