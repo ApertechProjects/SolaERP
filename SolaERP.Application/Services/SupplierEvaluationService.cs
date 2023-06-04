@@ -18,13 +18,19 @@ namespace SolaERP.Persistence.Services
         private readonly IMapper _mapper;
         private readonly IBusinessUnitRepository _buRepository;
         private readonly ISupplierEvaluationRepository _repository;
+        private readonly IUserRepository _userRepository;
 
-        public SupplierEvaluationService(ISupplierEvaluationRepository repository, IUnitOfWork unitOfWork, IBusinessUnitRepository buRepository, IMapper mapper)
+        public SupplierEvaluationService(ISupplierEvaluationRepository repository,
+                                         IMapper mapper,
+                                         IUnitOfWork unitOfWork,
+                                         IBusinessUnitRepository buRepository,
+                                         IUserRepository userRepository)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
             _buRepository = buRepository;
             _mapper = mapper;
+            _userRepository = userRepository;
         }
 
         public async Task<ApiResponse<VM_GET_SupplierEvaluation>> GetAllAsync(SupplierEvaluationGETModel model)
@@ -69,37 +75,26 @@ namespace SolaERP.Persistence.Services
         public async Task<List<DueDiligenceDesignDto>> GetDueDiligenceAsync(Language language)
              => await GetDueDesignsAsync(Language.en);
 
-        public async Task<ApiResponse<VM_GET_InitalRegistration>> GetInitRegistrationAsync()
+        public async Task<ApiResponse<VM_GET_InitalRegistration>> GetInitRegistrationAsync(string userIdentity)
         {
-            CompanyInformation companyInformation = new()
-            {
-                BusinessCategories = await _repository.GetBusinessCategoriesAsync(),
-                PaymentTerms = await _repository.GetPaymentTermsAsync(),
-                Countries = await _repository.GetCountriesAsync(),
-                PrequalificationTypes = await _repository.GetPrequalificationCategoriesAsync(),
-                Services = await _repository.GetProductServicesAsync(),
-            };
+            var user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
             VM_GET_InitalRegistration viewModel = new()
             {
                 CompanyInformation = new()
                 {
+                    CompanyInfo = _mapper.Map<CompanyInfoDto>(await _repository.GetCompanyInfoChild(user.VendorId)),
                     BusinessCategories = await _repository.GetBusinessCategoriesAsync(),
                     PaymentTerms = await _repository.GetPaymentTermsAsync(),
                     Countries = await _repository.GetCountriesAsync(),
                     PrequalificationTypes = await _repository.GetPrequalificationCategoriesAsync(),
                     Services = await _repository.GetProductServicesAsync(),
                 },
-
-                ContactPerson = new()
+                ContactPerson = _mapper.Map<ContactPersonDto>(user),
             };
 
             return ApiResponse<VM_GET_InitalRegistration>.Success(viewModel, 200);
         }
-
-
-
-
 
 
         private async Task<List<DueDiligenceDesignDto>> GetDueDesignsAsync(Language language)

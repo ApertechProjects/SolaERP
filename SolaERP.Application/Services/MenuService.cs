@@ -24,7 +24,7 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<List<ParentMenuDto>>> GetUserMenusWithChildrenAsync(string name)
         {
             var menusWithPrivilages = await _menuRepository.GetUserMenuWithPrivilegesAsync(
-                await _userRepository.GetIdentityNameAsIntAsync(name));
+                await _userRepository.ConvertIdentity(name));
 
             var parentMenusWithPrivilages = menusWithPrivilages.Where(m => m.ParentId == 0).ToList();//For getting ParentMenus
 
@@ -66,7 +66,7 @@ namespace SolaERP.Persistence.Services
         }
         public async Task<ApiResponse<List<MenuWithPrivilagesDto>>> GetUserMenusWithPrivilegesAsync(string name)
         {
-            var menus = await _menuRepository.GetUserMenuWithPrivilegesAsync(await _userRepository.GetIdentityNameAsIntAsync(name));
+            var menus = await _menuRepository.GetUserMenuWithPrivilegesAsync(await _userRepository.ConvertIdentity(name));
             var menusDto = _mapper.Map<List<MenuWithPrivilagesDto>>(menus);
 
             if (menusDto != null)
@@ -76,7 +76,7 @@ namespace SolaERP.Persistence.Services
         }
         public async Task<ApiResponse<GroupMenuResponseDto>> GetGroupMenuWithPrivilegeListByGroupIdAsync(string name, int groupId)
         {
-            var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            var userId = await _userRepository.ConvertIdentity(name);
             var menus = await _menuRepository.GetUserMenuWithPrivilegesAsync(userId);
 
             GroupMenuResponseDto response = new() { Menus = _mapper.Map<List<MenuWithPrivilagesDto>>(menus) };
@@ -107,7 +107,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<AdditionalPrivilegeAccessDto>> GetAdditionalPrivilegeAccessAsync(string name)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            int userId = await _userRepository.ConvertIdentity(name);
             var users = await _menuRepository.GetAdditionalPrivilegeAccessAsync(userId);
             var dto = _mapper.Map<AdditionalPrivilegeAccessDto>(users);
             return ApiResponse<AdditionalPrivilegeAccessDto>.Success(dto, 200);

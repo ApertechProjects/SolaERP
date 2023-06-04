@@ -26,7 +26,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> DeleteAnalysisCodeAsync(AnalysisCodeDeleteModel model, string userName)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(userName);
+            int userId = await _userRepository.ConvertIdentity(userName);
             var code = false;
             int counter = 0;
             for (int i = 0; i < model.CodeIds.Count; i++)
@@ -60,7 +60,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<AnalysisDto>>> GetAnalysisCodesAsync(int dimensionId, string userName)
         {
-            var userId = await _userRepository.GetIdentityNameAsIntAsync(userName);
+            var userId = await _userRepository.ConvertIdentity(userName);
             var data = await _analysisCodeRepository.GetAnalysisCodesAsync(dimensionId, userId);
             var map = _mapper.Map<List<AnalysisDto>>(data);
             if (map.Count > 0)
@@ -70,7 +70,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<AnalysisWithBuDto>>> GetByBUIdAsync(int businessUnitId, string userName)
         {
-            var userId = await _userRepository.GetIdentityNameAsIntAsync(userName);
+            var userId = await _userRepository.ConvertIdentity(userName);
             var data = await _analysisCodeRepository.GetByBUIdAsync(businessUnitId, userId);
             var map = _mapper.Map<List<AnalysisWithBuDto>>(data);
             if (map.Count > 0)
@@ -90,7 +90,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> SaveAnalysisCodeAsync(List<AnalysisCodeSaveModel> analysisCodeSave, string name)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            int userId = await _userRepository.ConvertIdentity(name);
             var code = false;
             int counter = 0;
             for (int i = 0; i < analysisCodeSave.Count; i++)

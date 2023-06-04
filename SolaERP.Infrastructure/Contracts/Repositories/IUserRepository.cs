@@ -11,12 +11,12 @@ namespace SolaERP.Application.Contracts.Repositories
     public interface IUserRepository
     {
         Task<List<User>> GetAllAsync();
-        Task<User> GetUserByUsernameAsync(string userName);
-        Task<User> GetUserByEmailAsync(string email);
-        Task<User> GetUserByIdAsync(int userId);
-        Task<User> GetUserByEmailCode(string token);
-        Task<bool> SetUserEmailCode(string token, int id);
-        Task<int> GetIdentityNameAsIntAsync(string name);
+        Task<User> GetByUsernameAsync(string userName);
+        Task<User> GetByEmailAsync(string email);
+        Task<User> GetByIdAsync(int userId);
+        Task<User> GetByEmailCode(string token);
+        Task<bool> SetEmailCode(string token, int id);
+        Task<int> ConvertIdentity(string name);
         Task<string> GetUserNameByTokenAsync(string finderToken);
         Task<bool> UpdateUserTokenAsync(int userId, string refreshtoken, DateTime expirationDate, int refreshTokenLifeTime);
         Task<bool> ResetUserPasswordAsync(string email, string passwordHash);

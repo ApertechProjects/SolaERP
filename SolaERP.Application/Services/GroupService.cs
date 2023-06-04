@@ -175,7 +175,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> SaveGroupAsync(string identity, GroupSaveModel model)
         {
-            var userId = await _userRepository.GetIdentityNameAsIntAsync(identity);
+            var userId = await _userRepository.ConvertIdentity(identity);
             model.GroupId = await _groupRepository.AddUpdateOrDeleteGroupAsync(userId, new() { GroupId = model.GroupId, GroupName = model.GroupName, Description = model.Description });
 
             if (model.AddUsers != null)
@@ -291,7 +291,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> DeleteGroupAsync(string identity, GroupDeleteModel model)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(identity);
+            int userId = await _userRepository.ConvertIdentity(identity);
             int counter = 0;
             for (int i = 0; i < model.groupIds.Count; i++)
             {

@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Entities.SupplierEvaluation;
+﻿using SolaERP.Application.Dtos.SupplierEvaluation;
+using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Contracts.Repositories
@@ -14,6 +15,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<DueDiligenceDesign>> GetDueDiligencesDesignAsync(Enums.Language language);
         Task<List<DueDiligenceGrid>> GetDueDiligenceGridsAsync(int deuDesignId);
         Task<List<VendorBankDetails>> GetVondorBankDetailsAsync(int vendorid);
+        Task<CompanyInfo> GetCompanyInfoChild(int vendorId);
         Task<bool> DeleteCOBCAsync(int id);
         Task<bool> AddCOBCAsync();
         Task<bool> AddDueDesign(VendorDueDiligenceModel vendorDueDiligence);

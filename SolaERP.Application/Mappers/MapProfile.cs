@@ -161,6 +161,19 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.TextAreaPoint, opt => opt.MapFrom(src => src.HasTexArea))
                 .ForMember(dest => dest.BankListPoint, opt => opt.MapFrom(src => src.HasBankList))
                 .ForMember(dest => dest.DataGridPoint, opt => opt.MapFrom(src => src.HasGrid)).ReverseMap();
+
+            CreateMap<ContactPersonDto, User>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.Fullname))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber)).ReverseMap();
+            //TODO: Map Position also
+
+
+            CreateMap<CompanyInfo, CompanyInfoDto>()
+                .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.VendorName))
+                .ForMember(dest => dest.CompanyAdress, opt => opt.MapFrom(src => src.Location))
+                .ForMember(dest => dest.TaxOffice, opt => opt.MapFrom(src => src.TaxOffice))
+                .ForMember(dest => dest.RegistrationDate, opt => opt.MapFrom(src => src.CompanyRegistrationDate)).ReverseMap();
         }
     }
 }

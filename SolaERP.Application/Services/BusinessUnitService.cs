@@ -31,7 +31,7 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<List<BaseBusinessUnitDto>>> GetBusinessUnitListByUserToken(string finderToken)
         {
             var businessUnits = await _businessUnitRepository.GetBusinessUnitListByUserId(
-                await _userRepository.GetIdentityNameAsIntAsync(finderToken));
+                await _userRepository.ConvertIdentity(finderToken));
 
             var dto = _mapper.Map<List<BaseBusinessUnitDto>>(businessUnits);
 

@@ -51,7 +51,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<ApprovalStageSaveModel>> SaveApproveStageMainAsync(string name, ApprovalStageSaveModel approvalStageSaveVM)
         {
-            var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            var userId = await _userRepository.ConvertIdentity(name);
             var mainId = await _approveStageMainRepository.AddAsync(_mapper.Map<ApproveStagesMain>(approvalStageSaveVM.ApproveStagesMainDto), userId);
             approvalStageSaveVM.ApproveStagesMainDto.ApproveStageMainId = mainId;
             for (int i = 0; i < approvalStageSaveVM.ApproveStagesDetailDtos.Count; i++)

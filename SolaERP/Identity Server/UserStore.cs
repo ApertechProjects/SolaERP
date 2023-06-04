@@ -36,7 +36,7 @@ namespace SolaERP.Application.Identity_Server
 
         public async Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetUserByUsernameAsync(normalizedUserName);
+            var user = await _userRepository.GetByUsernameAsync(normalizedUserName);
             return user;
         }
 
@@ -146,7 +146,7 @@ namespace SolaERP.Application.Identity_Server
 
         public async Task<User> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetUserByEmailAsync(normalizedEmail);
+            var user = await _userRepository.GetByEmailAsync(normalizedEmail);
             return user;
         }
 

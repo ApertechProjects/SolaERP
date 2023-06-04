@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
@@ -7,6 +8,7 @@ namespace SolaERP.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SupplierEvaluationController : CustomBaseController
     {
         private readonly ISupplierEvaluationService _service;
@@ -24,7 +26,7 @@ namespace SolaERP.API.Controllers
 
         [HttpGet("[action]")]
         public async Task<IActionResult> InitReg()
-            => CreateActionResult(await _service.GetInitRegistrationAsync());
+            => CreateActionResult(await _service.GetInitRegistrationAsync(User.Identity.Name));
 
         [HttpGet("{vendorId}")]
         public async Task<IActionResult> BankAccounts(int vendorId)
