@@ -173,6 +173,7 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.VendorName))
                 .ForMember(dest => dest.CompanyAdress, opt => opt.MapFrom(src => src.Location))
                 .ForMember(dest => dest.TaxOffice, opt => opt.MapFrom(src => src.TaxOffice))
+                .ForMember(dest => dest.BusinessCategoryId, opt => opt.MapFrom(src => src.VendorBusinessCategoryId))
                 .ForMember(dest => dest.RegistrationDate, opt => opt.MapFrom(src => src.CompanyRegistrationDate)).ReverseMap();
         }
     }

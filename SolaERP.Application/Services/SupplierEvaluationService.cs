@@ -81,15 +81,11 @@ namespace SolaERP.Persistence.Services
 
             VM_GET_InitalRegistration viewModel = new()
             {
-                CompanyInformation = new()
-                {
-                    CompanyInfo = _mapper.Map<CompanyInfoDto>(await _repository.GetCompanyInfoChild(user.VendorId)),
-                    BusinessCategories = await _repository.GetBusinessCategoriesAsync(),
-                    PaymentTerms = await _repository.GetPaymentTermsAsync(),
-                    Countries = await _repository.GetCountriesAsync(),
-                    PrequalificationTypes = await _repository.GetPrequalificationCategoriesAsync(),
-                    Services = await _repository.GetProductServicesAsync(),
-                },
+                CompanyInformation = _mapper.Map<CompanyInfoDto>(await _repository.GetCompanyInfoChild(user.VendorId)),
+                BusinessCategories = await _repository.GetBusinessCategoriesAsync(),
+                PaymentTerms = await _repository.GetPaymentTermsAsync(),
+                PrequalificationTypes = await _repository.GetPrequalificationCategoriesAsync(),
+                Services = await _repository.GetProductServicesAsync(),
                 ContactPerson = _mapper.Map<ContactPersonDto>(user),
             };
 
