@@ -43,7 +43,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> SaveAsync(List<AnalysisStructureSaveModel> model, string name)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            int userId = await _userRepository.ConvertIdentity(name);
 
             var structure = false;
             int counter = 0;
@@ -67,7 +67,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> DeleteAsync(AnalysisStructureDeleteModel model, string userName)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(userName);
+            int userId = await _userRepository.ConvertIdentity(userName);
             var code = false;
             int counter = 0;
             for (int i = 0; i < model.StructureIds.Count; i++)
@@ -83,6 +83,12 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<bool>.Success(code, 200);
             }
             return ApiResponse<bool>.Fail("Analysis structure can not be deleted", 400);
+        }
+
+        public async Task<bool> CheckDimensionIdIsUsed(int dimensionId)
+        {
+            var data = await _repository.CheckDimensionIdIsUsed(dimensionId);
+            return data;
         }
     }
 }

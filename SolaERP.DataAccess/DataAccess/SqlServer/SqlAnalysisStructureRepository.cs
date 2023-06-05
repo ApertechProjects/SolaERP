@@ -86,5 +86,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
+
+        public async Task<bool> CheckDimensionIdIsUsed(int dimensionId)
+        {
+            bool result = false;
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"select dbo.[SF_CheckDimensionByAnalysisStructure] (@dimensionId) AS DimensionIsUsed";
+                command.Parameters.AddWithValue(command, "@dimensionId", dimensionId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                if (reader.Read())
+                    result = reader.Get<bool>("DimensionIsUsed");
+                return result;
+            }
+        }
     }
 }

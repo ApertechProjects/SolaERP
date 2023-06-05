@@ -9,7 +9,7 @@ namespace SolaERP.Application.Contracts.Services
     {
         #region Main
         Task<ApiResponse<ApprovalStageSaveModel>> SaveApproveStageMainAsync(string name, ApprovalStageSaveModel approvalStageSaveVM);
-        Task<ApiResponse<ApprovalStageGetModel>> GetMainByIdAsync(int approveStageMainId);
+        Task<ApiResponse<ApproveStagesMainDto>> GetMainByIdAsync(int approveStageMainId);
         Task<ApiResponse<List<ApproveStagesMainDto>>> GetByBusinessUnitId(int buId);
         Task<ApiResponse<List<ApprovalStatusDto>>> GetApproveStatus();
         Task<ApiResponse<bool>> DeleteApproveStageAsync(ApproveStageDeleteModel model);

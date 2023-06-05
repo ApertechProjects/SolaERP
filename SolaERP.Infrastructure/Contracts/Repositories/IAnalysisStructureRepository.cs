@@ -9,5 +9,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<AnalysisStructureWithBu>> GetByBUAsync(int buId,int procedureId,int userId);
         Task<bool> SaveAsync(AnalysisStructureSaveModel model);
         Task<bool> DeleteAsync(int id, int userId);
+        Task<bool> CheckDimensionIdIsUsed(int dimensionId);
     }
 }

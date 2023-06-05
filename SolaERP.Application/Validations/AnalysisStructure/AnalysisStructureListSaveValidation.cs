@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using SolaERP.Application.Dtos.AnalysisStructure;
 using SolaERP.Application.Dtos.AnaysisDimension;
+using SolaERP.Application.Models;
 using SolaERP.Persistence.Validations.AnalysisDimensionValidation;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Persistence.Validations.AnalysisStructure
 {
-    public class AnalysisStructureListSaveValidation:AbstractValidator<List<AnalysisStructureDto>>
+    public class AnalysisStructureListSaveValidation:AbstractValidator<List<AnalysisStructureSaveModel>>
     {
         public AnalysisStructureListSaveValidation()
         {
@@ -18,7 +19,7 @@ namespace SolaERP.Persistence.Validations.AnalysisStructure
         }
     }
 
-    public class AnalysisStructureSaveValidation : AbstractValidator<AnalysisStructureDto>
+    public class AnalysisStructureSaveValidation : AbstractValidator<AnalysisStructureSaveModel>
     {
         public AnalysisStructureSaveValidation()
         {

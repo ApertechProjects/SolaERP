@@ -42,7 +42,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> CheckEmailIsVerified(string email);
         Task<UserData> GetUserDataByVerifyTokenAsync(string verifyToken);
         Task<List<string>> GetAdminUsersAsync(int sequence, Language language);
-        Task<int> GetIdentityNameAsIntAsync(string name);
     }
 
     public enum Filetype { Profile = 1, Signature = 2 }

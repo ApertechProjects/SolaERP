@@ -10,5 +10,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<AnalysisStructureWithBuDto>>> GetByBUAsync(int buId, int procedureId, string userName);
         Task<ApiResponse<bool>> SaveAsync(List<AnalysisStructureSaveModel> model, string name);
         Task<ApiResponse<bool>> DeleteAsync(AnalysisStructureDeleteModel model, string userName);
+        Task<bool> CheckDimensionIdIsUsed(int dimensionId);
     }
 }

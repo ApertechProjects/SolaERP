@@ -132,6 +132,7 @@ namespace SolaERP.Extensions
             builder.Services.AddValidatorsFromAssemblyContaining<AnalysisCodeListSaveValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<AnalysisCodeDeleteValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<AnalysisStructureListSaveValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<AnalysisStructureDeleteValidation>();
             builder.Services.AddScoped<ValidationFilter>();
         }
         public static void UseIdentityService(this WebApplicationBuilder builder)
