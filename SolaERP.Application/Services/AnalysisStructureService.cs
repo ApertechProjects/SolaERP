@@ -1,8 +1,14 @@
-﻿using SolaERP.Application.Contracts.Repositories;
+﻿using AutoMapper;
+using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.AnalysisStructure;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.AnalysisDimension;
 using SolaERP.Application.Entities.AnalysisStructure;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using System.Xml.Linq;
 
 namespace SolaERP.Persistence.Services
 {
@@ -11,47 +17,72 @@ namespace SolaERP.Persistence.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly INewAnalysisStructureRepository _repository;
         private readonly IUserService _userService;
+        private readonly IUserRepository _userRepository;
+        private IMapper _mapper;
 
-        public AnalysisStructureService(INewAnalysisStructureRepository repository, IUnitOfWork unitOfWork, IUserService userService)
+        public AnalysisStructureService(INewAnalysisStructureRepository repository, IUnitOfWork unitOfWork, IUserService userService, IUserRepository userRepository, IMapper mapper)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
             _userService = userService;
+            _userRepository = userRepository;
+            _mapper = mapper;
         }
 
-        public async Task<bool> AddAsync(AnalysisStructureSaveModel model)
-        {
-            bool result = await _repository.AddAsync(model);
-            await _unitOfWork.SaveChangesAsync();
-
-            return result;
-        }
-
-        public async Task<AnalysisStructureWithBu> GetByBUAsync(int buId, int procedureId, string userName)
+        public async Task<ApiResponse<List<AnalysisStructureWithBuDto>>> GetByBUAsync(int buId, int procedureId, string userName)
         {
             int userId = await _userService.GetIdentityNameAsIntAsync(userName);
-            return await _repository.GetByBUAsync(buId, procedureId, userId);
+            var data = await _repository.GetByBUAsync(buId, procedureId, userId);
+            var map = _mapper.Map<List<AnalysisStructureWithBuDto>>(data);
+            if (map.Count > 0)
+                return ApiResponse<List<AnalysisStructureWithBuDto>>.Success(map, 200);
+            return ApiResponse<List<AnalysisStructureWithBuDto>>.Fail("Analysis Structure not found", 404);
+
         }
 
-        public async Task<AnalysisStructure> GetByIdAsync(int id)
+
+        public async Task<ApiResponse<bool>> SaveAsync(List<AnalysisStructureSaveModel> model, string name)
         {
-            return await _repository.GetByIdAsync(id);
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+
+            var structure = false;
+            int counter = 0;
+            for (int i = 0; i < model.Count; i++)
+            {
+                model[i].UserId = userId;
+                if (model[i].AnalysisStructureId < 0)
+                    model[i].AnalysisStructureId = 0;
+                structure = await _repository.SaveAsync(model[i]);
+                if (structure)
+                    counter++;
+            }
+
+            if (counter == model.Count)
+            {
+                await _unitOfWork.SaveChangesAsync();
+                return ApiResponse<bool>.Success(structure, 200);
+            }
+            return ApiResponse<bool>.Fail("Analysis structure can not be saved", 400);
         }
 
-        public async Task<bool> RemoveAsync(int id, int userId)
+        public async Task<ApiResponse<bool>> DeleteAsync(AnalysisStructureDeleteModel model, string userName)
         {
-            var result = await _repository.RemoveAsync(id, userId);
-            await _unitOfWork.SaveChangesAsync();
+            int userId = await _userRepository.GetIdentityNameAsIntAsync(userName);
+            var code = false;
+            int counter = 0;
+            for (int i = 0; i < model.StructureIds.Count; i++)
+            {
+                code = await _repository.DeleteAsync(model.StructureIds[i], userId);
+                if (code)
+                    counter++;
+            }
 
-            return result;
-        }
-
-        public async Task<bool> UpdateAsync(AnalysisStructureDeleteModel model)
-        {
-            var result = await _repository.UpdateAsync(model);
-            await _unitOfWork.SaveChangesAsync();
-
-            return result;
+            if (counter == model.StructureIds.Count)
+            {
+                await _unitOfWork.SaveChangesAsync();
+                return ApiResponse<bool>.Success(code, 200);
+            }
+            return ApiResponse<bool>.Fail("Analysis structure can not be deleted", 400);
         }
     }
 }
