@@ -1,11 +1,17 @@
-﻿using SolaERP.Application.Entities.Vendors;
+﻿
+using SolaERP.Application.Entities.SupplierEvaluation;
+using SolaERP.Application.Entities.Vendors;
 
 namespace SolaERP.Application.Contracts.Repositories
 {
-    public interface IVendorRepository : ICrudOperations<Vendors>
+    public interface IVendorRepository
     {
-        public Task<List<Vendors>> GetVendorDrafts(int userId, int businessUnitId);
-        public Task<List<Vendors>> GetVendorWFA(int userId, int businessUnitId);
-        public Task<VendorInfo> GetVendorByTaxIdAsync(string taxId);
+        Task<bool> AddBankDetailsAsync(int userId, VendorBankDetail bankDetail);
+        Task<bool> UpdateBankDetailsAsync(int userId, VendorBankDetail bankDetail);
+        Task<bool> DeleteBankDetailsAsync(int userId, int id);
+        Task<int> AddVendorAsync(int userId, Vendor vendor);
+        Task<int> UpdateVendorAsync(int userId, Vendor vendor);
+        Task<int> DeleteVendorAsync(int userId, int id);
+        Task<VendorInfo> GetVendorByTaxIdAsync(string taxId);
     }
 }

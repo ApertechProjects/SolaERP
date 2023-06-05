@@ -1,6 +1,6 @@
 ﻿namespace SolaERP.Application.Entities.SupplierEvaluation
 {
-    public class VendorBankDetails : BaseEntity
+    public class VendorBankDetail : BaseEntity
     {
         public int VendorBankDetailId { get; set; }
         public int VendorId { get; set; }

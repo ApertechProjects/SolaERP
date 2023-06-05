@@ -1,9 +1,8 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Application.Contracts.Repositories;
-using SolaERP.Application.Entities.Auth;
+﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.UnitOfWork;
-using System.Data;
+using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
@@ -16,20 +15,87 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public Task<bool> AddAsync(Vendors entity)
+
+
+        private async Task<int> ModifyVendorAsync(int userId, Vendor vendor)
         {
-            throw new NotImplementedException();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_Vendors_IUD @VendorId,
+                                                            @BusinessUnitId,
+                                                            @VendorName,
+                                                            @TaxId,
+                                                            @TaxOffice,
+                                                            @Location,
+                                                            @Website,
+                                                            @PaymentTerms,
+                                                            @CreditDays,
+                                                            @_0DaysPayment,
+                                                            @Country,
+                                                            @UserId,
+                                                            @OtherProducts,
+                                                            @ApproveStageMainId,
+                                                            @CompanyAddress,
+                                                            @CompanyRegistrationDate";
+
+
+                command.Parameters.AddWithValue(command, "@VendorId", vendor.VendorId);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", vendor.Buid);
+                command.Parameters.AddWithValue(command, "@VendorName", vendor.CompanyName);
+                command.Parameters.AddWithValue(command, "@TaxId", vendor.TaxOffice);
+                command.Parameters.AddWithValue(command, "@TaxOffice", vendor.TaxOffice);
+                command.Parameters.AddWithValue(command, "@Location", vendor.WebSite);
+                command.Parameters.AddWithValue(command, "@Website", vendor.WebSite);
+                command.Parameters.AddWithValue(command, "@PaymentTerms", vendor.PaymentTerms);
+                command.Parameters.AddWithValue(command, "@CreditDays", vendor.CreditDays);
+                command.Parameters.AddWithValue(command, "@_0DaysPayment", vendor.AgreeWithDefaultDays);
+                command.Parameters.AddWithValue(command, "@Country", vendor.City);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                command.Parameters.AddWithValue(command, "@OtherProducts", null);
+                command.Parameters.AddWithValue(command, "@ApproveStageMainId", 0);
+                command.Parameters.AddWithValue(command, "@CompanyAddress", vendor.CompanyAdress);
+                command.Parameters.AddWithValue(command, "@CompanyRegistrationDate", vendor.RegistrationDate);
+                command.Parameters.AddOutPutParameter(command, "@NewVendorId");
+
+                await command.ExecuteNonQueryAsync();
+                return Convert.ToInt32(command.Parameters["@NewVendorId"].Value);
+            }
         }
-
-
-        public Task<List<Vendors>> GetAllAsync()
+        private async Task<bool> ModifyBankDetailsAsync(int userId, VendorBankDetail bankDetail)
         {
-            throw new NotImplementedException();
-        }
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_VendorBankDetails_IUD @VendorBankDetailId,
+                                                                      @VendorId,
+                                                                      @Beneficiary,
+                                                                      @BeneficiaruTaxId,
+                                                                      @Address,
+                                                                      @AccountNumber,
+                                                                      @Bank,
+                                                                      @SWIFT,
+                                                                      @BankCode,
+                                                                      @Currency,
+                                                                      @BankTaxId,
+                                                                      @CoresspondentAccount,
+                                                                      @UserId";
 
-        public Task<Vendors> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
+
+                command.Parameters.AddWithValue(command, "@VendorBankDetailId", bankDetail.VendorBankDetailId);
+                command.Parameters.AddWithValue(command, "@VendorId", bankDetail.VendorId);
+                command.Parameters.AddWithValue(command, "@Beneficiary", bankDetail.Beneficiary);
+                command.Parameters.AddWithValue(command, "@BeneficiaruTaxId", bankDetail.BeneficiaruTaxId);
+                command.Parameters.AddWithValue(command, "@Address", bankDetail.Address);
+                command.Parameters.AddWithValue(command, "@AccountNumber", bankDetail.AccountNumber);
+                command.Parameters.AddWithValue(command, "@Bank", bankDetail.Bank);
+                command.Parameters.AddWithValue(command, "@SWIFT", bankDetail.SWIFT);
+                command.Parameters.AddWithValue(command, "@BankCode", bankDetail.BankCode);
+                command.Parameters.AddWithValue(command, "@Currency", bankDetail.Currency);
+                command.Parameters.AddWithValue(command, "@BankTaxId", bankDetail.BankTaxId);
+                command.Parameters.AddWithValue(command, "@CoresspondentAccount", bankDetail.CoresspondentAccount);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
         }
 
         public async Task<VendorInfo> GetVendorByTaxIdAsync(string taxId)
@@ -47,73 +113,58 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<Vendors>> GetVendorDrafts(int userId, int businessUnitId)
+        public async Task<bool> AddBankDetailsAsync(int userId, VendorBankDetail bankDetail)
         {
-            List<Vendors> vendorDraftList = new List<Vendors>();
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            return await ModifyBankDetailsAsync(userId, new()
             {
-                command.CommandText = "EXEC dbo.SP_VendorDraft @UserID,@BusinessUnitId";
-
-                command.Parameters.AddWithValue(command, "@UserID", userId);
-                command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
-
-                using var reader = await command.ExecuteReaderAsync();
-                while (reader.Read())
-                {
-                    vendorDraftList.Add(GetVendorDarftsFromReader(reader));
-                }
-
-                return vendorDraftList;
-            }
-
+                VendorBankDetailId = 0,
+                VendorId = bankDetail.VendorId,
+                BeneficiaruTaxId = bankDetail.BeneficiaruTaxId,
+                Bank = bankDetail.Bank,
+                BankCode = bankDetail.BankCode,
+                BankTaxId = bankDetail.BankTaxId,
+                Address = bankDetail.Address,
+                AccountNumber = bankDetail.AccountNumber,
+                SWIFT = bankDetail.SWIFT,
+                CoresspondentAccount = bankDetail.CoresspondentAccount,
+                Beneficiary = bankDetail.Beneficiary,
+                Currency = bankDetail.Currency,
+            });
         }
 
-        public Task<List<Vendors>> GetVendorWFA(int userId, int businessUnitId)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<bool> DeleteBankDetailsAsync(int userId, int id)
+             => await ModifyBankDetailsAsync(userId, new() { VendorBankDetailId = id });
+        public async Task<bool> UpdateBankDetailsAsync(int userId, VendorBankDetail bankDetail)
+             => await ModifyBankDetailsAsync(userId, bankDetail);
 
-        public Task<bool> RemoveAsync(int Id)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task UpdateAsync(Vendors entity)
+        public async Task<int> AddVendorAsync(int userId, Vendor vendor)
         {
-            throw new NotImplementedException();
-        }
-
-        private Vendors GetVendorDarftsFromReader(IDataReader reader)
-        {
-            return new Vendors
+            return await ModifyVendorAsync(userId, new()
             {
-                VendorId = reader.Get<int>("VendorId"),
-                VendorCode = reader.Get<string>("VendorCode"),
-                VendorName = reader.Get<string>("VendorName"),
-                TaxId = reader.Get<string>("TaxId"),
-                Location = reader.Get<string>("CompanyLocation"),
-                Website = reader.Get<string>("CompanyWebsite"),
-                RepresentedProducts = reader.Get<string>("RepresentedProducts"),
-                RepresentedCompanies = reader.Get<string>("RepresentedCompanies"),
-                PaymentTerms = reader.Get<string>("PaymentTermsCode"),
-                CreditDays = reader.Get<int>("CreditDays"),
-                V60DaysPayment = reader.Get<int>("AgreeWithDefaultDays"),
-                Country = reader.Get<string>("CountryCode"),
-                Status = reader.Get<int>("StatusId"),
-                StatusName = reader.Get<string>("StatusName"),
-                ApproveStatusName = reader.Get<string>("ApproveStatusName"),
-                UserId = reader.Get<int>("Id"),
-                UserStatusName = reader.Get<string>("StatusName"),
-                AppUser = new User
-                {
-                    UserId = reader.Get<int>("UserId"),
-                    FullName = reader.Get<string>("Fullname"),
-                    StatusId = reader.Get<int>("StatusId"),
-                    LastActivity = reader.Get<DateTime>("LastActivity"),
-                    UserName = reader.Get<string>("UserName"),
-                },
-            };
+                VendorId = 0,
+                BusinessCategoryId = vendor.BusinessCategoryId,
+                Buid = vendor.Buid,
+                City = vendor.City,
+                CompanyAdress = vendor.CompanyAdress,
+                CompanyName = vendor.CompanyName,
+                CreditDays = vendor.CreditDays,
+                PrequalificationCategoryId = vendor.PrequalificationCategoryId,
+                RegistrationDate = vendor.RegistrationDate,
+                AgreeWithDefaultDays = vendor.AgreeWithDefaultDays,
+                TaxId = vendor.TaxId,
+                TaxOffice = vendor.TaxOffice,
+                RepresentedCompanies = vendor.RepresentedCompanies,
+                RepresentedProducts = vendor.RepresentedProducts,
+                WebSite = vendor.WebSite,
+
+            });
         }
 
+        public async Task<int> UpdateVendorAsync(int userId, Vendor vendor)
+            => await ModifyVendorAsync(userId, vendor);
+
+        public async Task<int> DeleteVendorAsync(int userId, int id)
+            => await DeleteVendorAsync(userId, id);
     }
 }

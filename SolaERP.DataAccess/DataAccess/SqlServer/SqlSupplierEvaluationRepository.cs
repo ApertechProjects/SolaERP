@@ -5,7 +5,6 @@ using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
-using System;
 using System.Data;
 using System.Data.Common;
 
@@ -16,7 +15,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         private readonly IUnitOfWork _unitOfWork;
         public SqlSupplierEvaluationRepository(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public async Task<bool> AddDueDesign(VendorDueDiligenceModel vendorDueDiligence)
+        private async Task<bool> ModifyDueDiligence(VendorDueDiligenceModel vendorDueDiligence)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -43,11 +42,39 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         }
 
+
+        public async Task<bool> AddDueDesignAsync(VendorDueDiligenceModel model)
+        {
+            return await ModifyDueDiligence(new()
+            {
+                DueDiligenceDesignId = 0,
+                DateTimeValue = model.DateTimeValue,
+                DecimalValue = model.DecimalValue,
+                AgreementValue = model.AgreementValue,
+                CheckboxValue = model.CheckboxValue,
+                IntValue = model.IntValue,
+                RadioboxValue = model.RadioboxValue,
+                Scoring = model.Scoring,
+                TextareaValue = model.TextareaValue,
+                TextboxValue = model.TextboxValue,
+                VendorId = model.VendorId,
+            });
+        }
+
+        public async Task<bool> UpdateDueDesignAsync(VendorDueDiligenceModel model)
+            => await ModifyDueDiligence(model);
+
+
+        public async Task<bool> DeleteDueDesignAsync(int dueId)
+            => await ModifyDueDiligence(new() { DueDiligenceDesignId = dueId });
+
+
+
         public async Task<bool> AddDueDesignGrid(DueDiligenceGridModel gridModel)
         {
-            return await SaveDueDesignGridAsync(new()
+            return await ModifyDueGrid(new()
             {
-                DueDesignId = gridModel.DueDesignId,
+                DueDesignId = 0,
                 Column1 = gridModel.Column1,
                 Column2 = gridModel.Column2,
                 Column3 = gridModel.Column3,
@@ -57,7 +84,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
-        private async Task<bool> SaveDueDesignGridAsync(DueDiligenceGridUpdateModel gridModel)
+        private async Task<bool> ModifyDueGrid(DueDiligenceGridModel gridModel)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -126,7 +153,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<DueDiligenceGrid>> GetDueDiligenceGridsAsync(int dueDesignId)
+        public async Task<List<DueDiligenceGrid>> GetDueDiligenceGridAsync(int dueDesignId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -208,18 +235,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<VendorBankDetails>> GetVondorBankDetailsAsync(int vendorid)
+        public async Task<List<VendorBankDetail>> GetVondorBankDetailsAsync(int vendorid)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "EXEC SP_VendorBank_Load @vendorId";
                 command.Parameters.AddWithValue(command, "@vendorId", vendorid);
 
-                List<VendorBankDetails> resultList = new();
+                List<VendorBankDetail> resultList = new();
                 using var reader = await command.ExecuteReaderAsync();
 
                 while (reader.Read())
-                    resultList.Add(reader.GetByEntityStructure<VendorBankDetails>());
+                    resultList.Add(reader.GetByEntityStructure<VendorBankDetail>());
 
                 return resultList;
             }
@@ -257,64 +284,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             };
         }
 
-        public Task<bool> AddPrequalificationAsync(VendorPreInputModel model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> UpdatePrequalificationAsync(int id, VendorPreInputModel model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> DeletePrequalificationAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> AddDueDiligenceAsync(VendorDueDiligenceModel model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> UpdateDueDiligenceAsync(int id, VendorDueDiligenceModel model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> DeleteDueDiligenceAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> AddVendorAsync(VendorModel model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> UpdateVendorAsync(int id, VendorModel model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> DeleteVendorAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> UpdateDueDesignGrid(DueDiligenceGridUpdateModel gridModel)
-        {
-            return await SaveDueDesignGridAsync(gridModel);
-        }
-
-        public async Task<bool> DeleteDueDesignGrid(int id)
-        {
-            return await SaveDueDesignGridAsync(new() { Id = id });
-        }
 
 
 
-        private async Task<bool> SaveVendorPreAsync(int id, VendorPreInputModel model)
+        private async Task<bool> ModifyPrequalification(VendorPreInputModel model)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -322,7 +295,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                            @VendorId,@TextboxValue,@TextareaValue,@CheckboxValue,
                                                                            @RadioboxValue,@IntValue,@DecimalValue,@DateTimeValue,@Scoring";
 
-                command.Parameters.AddWithValue(command, "@VendorPrequalificationId", id);
+                command.Parameters.AddWithValue(command, "@VendorPrequalificationId", model.PrequealificationId);
                 command.Parameters.AddWithValue(command, "@PrequalificationDesignId", model?.DesignId);
                 command.Parameters.AddWithValue(command, "@TextboxValue", model?.TextBoxValue);
                 command.Parameters.AddWithValue(command, "@TextareaValue", model?.TextareaValue);
@@ -339,53 +312,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
-        private async Task<bool> SaveVendorAsync(int id, VendorModel model)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = @"EXEC SP_Vendors_IUD @VendorId,@BusinessUnitId,@VendorName,
-                                                            @TaxId,@TaxOffice,@Location,
-                                                            @Website,@PaymentTerms,@CreditDays,
-                                                            @_0DaysPayment,@Country,@UserId,
-                                                            @OtherProducts,@ApproveStageMainId,@CompanyAddress,
-                                                            @CompanyRegistrationDate";
-
-                command.Parameters.AddWithValue(command, "@VendorId", id);
-                command.Parameters.AddWithValue(command, "@BusinessUnitId", model?.BusinessUnitId);
-                command.Parameters.AddWithValue(command, "@VendorName", model?.VendorName);
-                command.Parameters.AddWithValue(command, "@TaxId", model?.TaxId);
-                command.Parameters.AddWithValue(command, "@TaxOffice", model?.TaxOffice);
-                command.Parameters.AddWithValue(command, "@Location", model?.Location);
-                command.Parameters.AddWithValue(command, "@Website", model?.Website);
-                command.Parameters.AddWithValue(command, "@PaymentTerms", model?.PaymentTerms);
-                command.Parameters.AddWithValue(command, "@CreditDays", model?.CreditDays);
-                command.Parameters.AddWithValue(command, "@_0DaysPayment", model?._0DaysPayment);
-                command.Parameters.AddWithValue(command, "@Country", model?.Country);
-                command.Parameters.AddWithValue(command, "@UserId", model?.UserId);
-                command.Parameters.AddWithValue(command, "@OtherProducts", model?.OtherProducts);
-                command.Parameters.AddWithValue(command, "@ApproveStageMainId", model?.ApproveStageMainId);
-                command.Parameters.AddWithValue(command, "@CompanyAddress", model?.CompanyAddress);
-                command.Parameters.AddWithValue(command, "@CompanyRegistrationDate", model?.CompanyRegistrationDate);
 
 
-                return await command.ExecuteNonQueryAsync() > 0;
-            }
-        }
-
-        public Task<bool> UpdateCOBCAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> DeleteCOBCAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> AddCOBCAsync()
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<CompanyInfo> GetCompanyInfoChild(int vendorId)
         {
@@ -403,5 +331,91 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return result;
             }
         }
+
+        public async Task<List<VendorNDA>> GetNDAAsync(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_VendorNDA_load @VendorId";
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+
+                List<VendorNDA> result = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    result.Add(reader.GetByEntityStructure<VendorNDA>());
+
+                return result;
+            }
+        }
+
+        public async Task<bool> AddNDAAsync(VendorNDA ndas)
+        {
+            return await ModifyNDA((VendorNDA)new()
+            {
+                VendorNDAId = ndas.VendorNDAId,
+                VendorId = ndas.VendorId,
+                BusinessUnitId = ndas.BusinessUnitId
+            });
+        }
+
+
+        public async Task<bool> DeleteNDAAsync(int ndaId)
+            => await ModifyNDA((VendorNDA)new() { VendorNDAId = ndaId });
+
+
+        private async Task<bool> ModifyNDA(VendorNDA nda)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_VendorNDA_ID @VendorNDAId,
+                                                             @VendorId,
+                                                             @BusinessUnitId";
+
+
+                command.Parameters.AddWithValue(command, "@VendorNDAId", nda.VendorNDAId);
+                command.Parameters.AddWithValue(command, "@VendorId", nda.VendorId);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", nda.BusinessUnitId);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> AddCOBCAsync(VendorCOBC cobc)
+        {
+            return await ModifyCOBC(new()
+            {
+                VendorCOBCId = cobc.VendorCOBCId,
+                VendorId = cobc.VendorId,
+                BusinessUnitId = cobc.BusinessUnitId
+            });
+        }
+
+        public async Task<bool> DeleteCOBCAsync(int id)
+            => await ModifyCOBC(new() { VendorCOBCId = id });
+
+
+        private async Task<bool> ModifyCOBC(VendorCOBC cobc)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_VendorCOBC_ID @VendorCOBCId,
+                                                              @VendorId,
+                                                              @BusinessUnitId";
+
+
+                command.Parameters.AddWithValue(command, "@VendorCOBCId", cobc.VendorCOBCId);
+                command.Parameters.AddWithValue(command, "@VendorId", cobc.VendorId);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", cobc.BusinessUnitId);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> UpdateDueDesignGrid(DueDiligenceGridModel gridModel)
+            => await ModifyDueGrid(gridModel);
+
+        public async Task<bool> DeleteDueDesignGrid(int id)
+            => await ModifyDueGrid(new() { Id = id });
     }
 }

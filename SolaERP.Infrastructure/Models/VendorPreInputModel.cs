@@ -2,6 +2,7 @@
 {
     public class VendorPreInputModel
     {
+        public int prequealificationId { get; set; }
         public int DesignId { get; set; }
         public int VendorId { get; set; }
         public string TextBoxValue { get; set; }

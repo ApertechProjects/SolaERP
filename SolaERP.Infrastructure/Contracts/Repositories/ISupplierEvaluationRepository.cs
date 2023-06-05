@@ -6,6 +6,10 @@ namespace SolaERP.Application.Contracts.Repositories
 {
     public interface ISupplierEvaluationRepository
     {
+        Task<bool> AddDueDesignAsync(VendorDueDiligenceModel model);
+        Task<bool> UpdateDueDesignAsync(VendorDueDiligenceModel model);
+        Task<bool> DeleteDueDesignAsync(int dueId);
+        Task<List<VendorNDA>> GetNDAAsync(int vendorId);
         Task<List<Country>> GetCountriesAsync();
         Task<List<BusinessCategory>> GetBusinessCategoriesAsync();
         Task<List<PrequalificationCategory>> GetPrequalificationCategoriesAsync();
@@ -13,23 +17,15 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<PaymentTerms>> GetPaymentTermsAsync();
         Task<List<Currency>> GetCurrenciesAsync();
         Task<List<DueDiligenceDesign>> GetDueDiligencesDesignAsync(Enums.Language language);
-        Task<List<DueDiligenceGrid>> GetDueDiligenceGridsAsync(int deuDesignId);
-        Task<List<VendorBankDetails>> GetVondorBankDetailsAsync(int vendorid);
+        Task<List<DueDiligenceGrid>> GetDueDiligenceGridAsync(int deuDesignId);
+        Task<List<VendorBankDetail>> GetVondorBankDetailsAsync(int vendorid);
         Task<CompanyInfo> GetCompanyInfoChild(int vendorId);
+        Task<bool> AddNDAAsync(VendorNDA ndas);
+        Task<bool> DeleteNDAAsync(int ndaId);
+        Task<bool> AddCOBCAsync(VendorCOBC cobc);
         Task<bool> DeleteCOBCAsync(int id);
-        Task<bool> AddCOBCAsync();
-        Task<bool> AddDueDesign(VendorDueDiligenceModel vendorDueDiligence);
         Task<bool> AddDueDesignGrid(DueDiligenceGridModel gridModel);
-        Task<bool> UpdateDueDesignGrid(DueDiligenceGridUpdateModel gridModel);
+        Task<bool> UpdateDueDesignGrid(DueDiligenceGridModel gridModel);
         Task<bool> DeleteDueDesignGrid(int id);
-        Task<bool> AddPrequalificationAsync(VendorPreInputModel model);
-        Task<bool> UpdatePrequalificationAsync(int id, VendorPreInputModel model);
-        Task<bool> DeletePrequalificationAsync(int id);
-        Task<bool> AddDueDiligenceAsync(VendorDueDiligenceModel model);
-        Task<bool> UpdateDueDiligenceAsync(int id, VendorDueDiligenceModel model);
-        Task<bool> DeleteDueDiligenceAsync(int id);
-        Task<bool> AddVendorAsync(VendorModel model);
-        Task<bool> UpdateVendorAsync(int id, VendorModel model);
-        Task<bool> DeleteVendorAsync(int id);
     }
 }

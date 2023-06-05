@@ -172,7 +172,7 @@ namespace SolaERP.Persistence.Services
                     if (dueDesign[i].Childs[j].HasDataGrid)
                     {
                         int childDesignId = dueDesign[i].Childs[j].DesignId;
-                        dueDesign[i].Childs[j].GridDatas = await _repository.GetDueDiligenceGridsAsync(childDesignId);
+                        dueDesign[i].Childs[j].GridDatas = await _repository.GetDueDiligenceGridAsync(childDesignId);
                     }
                 }
             }
