@@ -39,7 +39,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<User> GetUserByIdAsync(int userId)
+        public async Task<User> GetByIdAsync(int userId)
         {
             User user = null;
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -55,7 +55,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 return user;
             }
         }
-        public async Task<User> GetUserByEmailAsync(string email)
+        public async Task<User> GetByEmailAsync(string email)
         {
             User user = null;
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -72,7 +72,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<User> GetUserByEmailCode(string token)
+        public async Task<User> GetByEmailCode(string token)
         {
             User user = null;
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -90,7 +90,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         }
 
 
-        public async Task<User> GetUserByUsernameAsync(string userName)
+        public async Task<User> GetByUsernameAsync(string userName)
         {
             User user = null;
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -107,7 +107,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         }
 
 
-        public async Task<int> GetIdentityNameAsIntAsync(string name)
+        public async Task<int> ConvertIdentity(string name)
         {
             int userId = Convert.ToInt32(name);
             return userId;
@@ -456,7 +456,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         }
 
 
-        public async Task<bool> SetUserEmailCode(string token, int id)
+        public async Task<bool> SetEmailCode(string token, int id)
         {
             string query = "UPDATE Config.AppUser Set EmailVerificationToken = @token where id = @id";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)

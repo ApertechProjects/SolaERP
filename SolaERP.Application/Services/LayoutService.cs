@@ -25,7 +25,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> DeleteLayoutAsync(string name, string key)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            int userId = await _userRepository.ConvertIdentity(name);
 
             var response = await _layoutRepository.DeleteLayoutAsync(userId, key);
             _unitOfWork.SaveChangesAsync();
@@ -35,7 +35,7 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<LayoutDto>> GetUserLayoutAsync(string name, string layoutKey)
         {
             var entity = await _layoutRepository.GetUserLayoutAsync(await
-                 _userRepository.GetIdentityNameAsIntAsync(name), layoutKey);
+                 _userRepository.ConvertIdentity(name), layoutKey);
 
             var responseContent = _mapper.Map<LayoutDto>(entity);
             return responseContent is not null ? ApiResponse<LayoutDto>.Success(responseContent, 200) : ApiResponse<LayoutDto>.Fail("Failed to load user layout", 400);
@@ -44,7 +44,7 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> SaveLayoutAsync(string name, LayoutDto layout)
         {
             var entity = _mapper.Map<Layout>(layout);
-            entity.UserId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            entity.UserId = await _userRepository.ConvertIdentity(name);
             var response = await _layoutRepository.SaveLayoutAsync(entity);
             await _unitOfWork.SaveChangesAsync();
             return response ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Fail("Failed to save user layout", 400);

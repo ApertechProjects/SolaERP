@@ -40,7 +40,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<int>> UserRegisterAsync(UserRegisterModel model)
         {
-            var userExsist = await _userRepository.GetUserByEmailAsync(model.Email);
+            var userExsist = await _userRepository.GetByEmailAsync(model.Email);
 
             if (userExsist is not null)
                 return ApiResponse<int>.Fail("user", "This user is already exsist in our system", 422, false);
@@ -70,7 +70,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<UserDto> GetUserByIdAsync(int userId)
         {
-            var userDatas = await _userRepository.GetUserByIdAsync(userId);
+            var userDatas = await _userRepository.GetByIdAsync(userId);
             var userDto = _mapper.Map<UserDto>(userDatas);
             return userDto;
         }
@@ -79,7 +79,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> ResetPasswordAsync(ResetPasswordModel resetPasswordRequestDto)
         {
-            var user = await _userRepository.GetUserByEmailCode(resetPasswordRequestDto.ResetPasswordCode);
+            var user = await _userRepository.GetByEmailCode(resetPasswordRequestDto.ResetPasswordCode);
 
             if (user == null)
                 return ApiResponse<bool>.Fail("resetPasswordCode", $"You entered wrong Code: ", 422);
@@ -108,12 +108,12 @@ namespace SolaERP.Persistence.Services
 
         public async Task<int> GetIdentityNameAsIntAsync(string name)
         {
-            return await _userRepository.GetIdentityNameAsIntAsync(name);
+            return await _userRepository.ConvertIdentity(name);
         }
 
         public async Task<UserDto> GetUserByEmailAsync(string email)
         {
-            var user = await _userRepository.GetUserByEmailAsync(email);
+            var user = await _userRepository.GetByEmailAsync(email);
             var userDto = _mapper.Map<UserDto>(user);
 
             return userDto;
@@ -121,7 +121,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> SendResetPasswordEmail(string email)
         {
-            var userExsist = await _userRepository.GetUserByEmailAsync(email);
+            var userExsist = await _userRepository.GetByEmailAsync(email);
 
             Random random = new Random();
             var stringCode = random.Next(0, 999999).ToString();
@@ -129,7 +129,7 @@ namespace SolaERP.Persistence.Services
             if (userExsist == null)
                 return ApiResponse<bool>.Fail($"We can't found this email: {email}", 404);
 
-            await _userRepository.SetUserEmailCode(stringCode, userExsist.Id);
+            await _userRepository.SetEmailCode(stringCode, userExsist.Id);
 
             await _mailService.SendPasswordResetMailAsync(email, stringCode);
 
@@ -139,8 +139,8 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<UserDto>> GetUserByNameAsync(string name)
         {
-            var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
-            var user = await _userRepository.GetUserByIdAsync(userId);
+            var userId = await _userRepository.ConvertIdentity(name);
+            var user = await _userRepository.GetByIdAsync(userId);
 
             if (user is null)
                 return ApiResponse<UserDto>.Fail("User not found", 404);
@@ -160,7 +160,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<ActiveUserDto>>> GetActiveUsersWithoutCurrentUserAsync(string name)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            int userId = await _userRepository.ConvertIdentity(name);
             var users = await _userRepository.GetActiveUsersWithoutCurrentUserAsync(userId);
             var dto = _mapper.Map<List<ActiveUserDto>>(users);
 
@@ -182,7 +182,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<UserMainDto>>> GetUserWFAAsync(string name, int userStatus, int userType, int page, int limit)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            int userId = await _userRepository.ConvertIdentity(name);
             var users = await _userRepository.GetUserWFAAsync(userId, userStatus, userType, page, limit);
             var dto = _mapper.Map<List<UserMainDto>>(users.Item2);
 
@@ -194,7 +194,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string name, int userStatus, int userType, int page, int limit)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            int userId = await _userRepository.ConvertIdentity(name);
             var users = await _userRepository.GetUserAllAsync(userId, userStatus, userType, page, limit);
             var dto = _mapper.Map<List<UserMainDto>>(users.Item2);
 
@@ -207,7 +207,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string name, int userStatus, int page, int limit)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            int userId = await _userRepository.ConvertIdentity(name);
             var users = await _userRepository.GetUserCompanyAsync(userId, userStatus, page, limit);
             var dto = _mapper.Map<List<UserMainDto>>(users.Item2);
 
@@ -219,7 +219,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string name, int userStatus, int page, int limit)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            int userId = await _userRepository.ConvertIdentity(name);
             var users = await _userRepository.GetUserVendorAsync(userId, userStatus, page, limit);
             var dto = _mapper.Map<List<UserMainDto>>(users.Item2);
 
@@ -230,7 +230,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> UserChangeStatusAsync(string name, UserChangeStatusModel model)
         {
-            var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            var userId = await _userRepository.ConvertIdentity(name);
             if (model.Id == 0)
                 return ApiResponse<bool>.Fail("User not found", 404);
 
@@ -245,7 +245,7 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> UserChangeStatusAsync(string name, List<UserChangeStatusModel> model)
         {
             var table = model.ConvertToDataTable();
-            var userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            var userId = await _userRepository.ConvertIdentity(name);
             var user = await _userRepository.UserChangeStatusAsync(userId, table);
             await _unitOfWork.SaveChangesAsync();
             if (user)

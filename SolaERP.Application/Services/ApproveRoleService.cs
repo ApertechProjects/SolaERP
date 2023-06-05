@@ -37,7 +37,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> ApproveRoleDeleteAsync(ApproveRoleDeleteModel model, string userName)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(userName);
+            int userId = await _userRepository.ConvertIdentity(userName);
             var roles = false;
             int counter = 0;
             for (int i = 0; i < model.RoleIds.Count; i++)
@@ -53,7 +53,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> ApproveRoleSaveAsync(List<ApproveRoleSaveModel> model, string userName)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(userName);
+            int userId = await _userRepository.ConvertIdentity(userName);
             var roles = false;
             int counter = 0;
             for (int i = 0; i < model.Count; i++)

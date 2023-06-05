@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
@@ -371,17 +372,36 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public Task<bool> UpdateCOBCAsync()
+        {
+            throw new NotImplementedException();
+        }
 
-        //private Task<bool> SaveDueDiligenceAsync(int id, VendorDueDiligenceModel model)
-        //{
-        //    using(var command = _unitOfWork.CreateCommand() as DbCommand) 
-        //    {
-        //        command.CommandText = "EXEC "
-        //    }
-        //}
+        public Task<bool> DeleteCOBCAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
 
+        public Task<bool> AddCOBCAsync()
+        {
+            throw new NotImplementedException();
+        }
 
+        public async Task<CompanyInfo> GetCompanyInfoChild(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_GET_VENDOR @VENDOR_ID";
+                command.Parameters.AddWithValue(command, "@VENDOR_ID", vendorId);
 
+                CompanyInfo result = new();
+                using var reader = await command.ExecuteReaderAsync();
 
+                if (reader.Read())
+                    result = reader.GetByEntityStructure<CompanyInfo>();
+
+                return result;
+            }
+        }
     }
 }

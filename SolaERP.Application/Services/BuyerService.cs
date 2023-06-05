@@ -35,7 +35,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<BuyerDto>>> GetBuyersAsync(string name, string businessUnitCode)
         {
-            var buyer = await _buyerRepository.GetBuyersAsync(await _userRepository.GetIdentityNameAsIntAsync(name), businessUnitCode);
+            var buyer = await _buyerRepository.GetBuyersAsync(await _userRepository.ConvertIdentity(name), businessUnitCode);
             var buyerDto = _mapper.Map<List<BuyerDto>>(buyer);
 
             if (buyerDto != null)

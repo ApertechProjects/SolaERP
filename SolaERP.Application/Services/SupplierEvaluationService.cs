@@ -18,13 +18,19 @@ namespace SolaERP.Persistence.Services
         private readonly IMapper _mapper;
         private readonly IBusinessUnitRepository _buRepository;
         private readonly ISupplierEvaluationRepository _repository;
+        private readonly IUserRepository _userRepository;
 
-        public SupplierEvaluationService(ISupplierEvaluationRepository repository, IUnitOfWork unitOfWork, IBusinessUnitRepository buRepository, IMapper mapper)
+        public SupplierEvaluationService(ISupplierEvaluationRepository repository,
+                                         IMapper mapper,
+                                         IUnitOfWork unitOfWork,
+                                         IBusinessUnitRepository buRepository,
+                                         IUserRepository userRepository)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
             _buRepository = buRepository;
             _mapper = mapper;
+            _userRepository = userRepository;
         }
 
         public async Task<ApiResponse<VM_GET_SupplierEvaluation>> GetAllAsync(SupplierEvaluationGETModel model)
@@ -55,10 +61,55 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<VM_GET_SupplierEvaluation>.Success(viewModel, 200);
         }
 
-        public async Task<List<DueDiligenceDesignDto>> GetDueDiligenceAsync(Language language)
+        public async Task<ApiResponse<BankCodesDto>> GetBankCodesAsync(int vendorId)
         {
-            return await GetDueDesignsAsync(Language.en);
+            BankCodesDto bankCodes = new()
+            {
+                Currencies = await _repository.GetCurrenciesAsync(),
+                BankDetails = await _repository.GetVondorBankDetailsAsync(vendorId),
+            };
+
+            return ApiResponse<BankCodesDto>.Success(bankCodes, 200);
         }
+
+        public async Task<ApiResponse<VM_GET_VendorBankDetails>> GetBankDetailsAsync(string userIdentity)
+        {
+            var user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
+
+            VM_GET_VendorBankDetails bankDetails = new()
+            {
+                Currencies = await _repository.GetCurrenciesAsync(),
+                BankDetails = await _repository.GetVondorBankDetailsAsync(user.VendorId)
+            };
+
+            return ApiResponse<VM_GET_VendorBankDetails>.Success(bankDetails, 200);
+        }
+
+        public async Task<List<DueDiligenceDesignDto>> GetDueDiligenceAsync(Language language)
+             => await GetDueDesignsAsync(Language.en);
+
+
+
+
+
+        public async Task<ApiResponse<VM_GET_InitalRegistration>> GetInitRegistrationAsync(string userIdentity)
+        {
+            var user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
+
+            VM_GET_InitalRegistration viewModel = new()
+            {
+                CompanyInformation = _mapper.Map<CompanyInfoDto>(await _repository.GetCompanyInfoChild(user.VendorId)),
+                BusinessCategories = await _repository.GetBusinessCategoriesAsync(),
+                PaymentTerms = await _repository.GetPaymentTermsAsync(),
+                PrequalificationTypes = await _repository.GetPrequalificationCategoriesAsync(),
+                Services = await _repository.GetProductServicesAsync(),
+                ContactPerson = _mapper.Map<ContactPersonDto>(user),
+            };
+
+            return ApiResponse<VM_GET_InitalRegistration>.Success(viewModel, 200);
+        }
+
+
         private async Task<List<DueDiligenceDesignDto>> GetDueDesignsAsync(Language language)
         {
             List<DueDiligenceDesign> dueDiligence = await _repository.GetDueDiligencesDesignAsync(language);
@@ -127,7 +178,5 @@ namespace SolaERP.Persistence.Services
             }
             return dueDesign;
         }
-
-
     }
 }

@@ -32,7 +32,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<AnalysisDimensionDto>>> ByAnalysisDimensionId(int analysisDimensionId, string name)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            int userId = await _userRepository.ConvertIdentity(name);
             var data = await _analysisDimensionRepository.ByAnalysisDimensionId(analysisDimensionId, userId);
             var dto = _mapper.Map<List<AnalysisDimensionDto>>(data);
             return ApiResponse<List<AnalysisDimensionDto>>.Success(dto, 200);
@@ -40,7 +40,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<BuAnalysisDimensionDto>>> ByBusinessUnitId(int businessUnitId, string name)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            int userId = await _userRepository.ConvertIdentity(name);
             var data = await _analysisDimensionRepository.ByBusinessUnitId(businessUnitId, userId);
             var dto = _mapper.Map<List<BuAnalysisDimensionDto>>(data);
             return ApiResponse<List<BuAnalysisDimensionDto>>.Success(dto, 200);
@@ -48,7 +48,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> Delete(AnalysisDimensionDeleteModel model, string name)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            int userId = await _userRepository.ConvertIdentity(name);
             var code = false;
             int counter = 0;
             for (int i = 0; i < model.DimensionIds.Count; i++)
@@ -68,7 +68,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> Save(List<AnalysisDimensionDto> analysisDimension, string name)
         {
-            int userId = await _userRepository.GetIdentityNameAsIntAsync(name);
+            int userId = await _userRepository.ConvertIdentity(name);
             var dimension = false;
             int counter = 0;
             for (int i = 0; i < analysisDimension.Count; i++)

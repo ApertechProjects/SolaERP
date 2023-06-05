@@ -1763,32 +1763,45 @@ System.IndexOutOfRangeException: BusinessUnitId
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
 2023-06-02 15:41:13.350 +04:00 [ERR] BusinessUnitId
-2023-06-05 09:11:18.384 +04:00 [ERR] An unhandled exception has occurred while executing the request.
-System.NullReferenceException: Object reference not set to an instance of an object.
-   at SolaERP.DataAccess.DataAccess.SqlServer.SqlQueryBuilder.GenerateFieldName(String parameterName) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlQueryBuilder.cs:line 286
-   at SolaERP.DataAccess.DataAccess.SqlServer.SqlQueryBuilder.GetSqlElementResult(String className, String elementName, SqlElementTypes sqlElementTypes) in C:\Users\User\Desktop\solaerp\SolaERP.DataAccess\DataAccess\SqlServer\SqlQueryBuilder.cs:line 228
-   at SolaERP.API.Controllers.QueryController.GetSqlElementResult(String className, String elementName, SqlElementTypes elementTypes) in C:\Users\User\Desktop\solaerp\SolaERP\Controllers\QueryController.cs:line 35
-   at lambda_method56(Closure , Object , Object[] )
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.SyncActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeActionMethodAsync()
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeNextActionFilterAsync()
---- End of stack trace from previous location ---
+2023-06-04 19:58:23.583 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.IndexOutOfRangeException: CompanyName
+   at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)
+   at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
+   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\HP\source\Apertech\SolaERP\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 70
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetCompanyInfoChild(Int32 vendorId) in C:\Users\HP\source\Apertech\SolaERP\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 401
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetInitRegistrationAsync(String userIdentity) in C:\Users\HP\source\Apertech\SolaERP\SolaERP.Application\Services\SupplierEvaluationService.cs:line 82
+   at SolaERP.API.Controllers.SupplierEvaluationController.InitReg() in C:\Users\HP\source\Apertech\SolaERP\SolaERP\Controllers\SupplierEvaluationController.cs:line 29
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
---- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2023-06-05 09:11:18.448 +04:00 [ERR] Object reference not set to an instance of an object.
-2023-06-05 11:44:46.988 +04:00 [ERR] An unhandled exception has occurred while executing the request.
-Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "POST api/AnalysisStructure" for actions - SolaERP.API.Controllers.AnalysisStructureController.All (SolaERP.API),SolaERP.API.Controllers.AnalysisStructureController.AddAsync (SolaERP.API). Actions require a unique method/path combination for Swagger/OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
-   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
-   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
-   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerDocumentWithoutFilters(String documentName, String host, String basePath)
-   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
-   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
-   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2023-06-04 19:58:23.750 +04:00 [ERR] CompanyName
+2023-06-04 20:04:21.866 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.IndexOutOfRangeException: CompanyName
+   at System.Data.ProviderBase.BasicFieldNameLookup.GetOrdinal(String fieldName)
+   at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
+   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   at SolaERP.DataAccess.Extensions.DataReaderExtension.GetByEntityStructure[T](IDataReader reader, String[] ignoredProperties) in C:\Users\HP\source\Apertech\SolaERP\SolaERP.DataAccess\Extensions\DataReaderExtension.cs:line 70
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlSupplierEvaluationRepository.GetCompanyInfoChild(Int32 vendorId) in C:\Users\HP\source\Apertech\SolaERP\SolaERP.DataAccess\DataAccess\SqlServer\SqlSupplierEvaluationRepository.cs:line 401
+   at SolaERP.Persistence.Services.SupplierEvaluationService.GetInitRegistrationAsync(String userIdentity) in C:\Users\HP\source\Apertech\SolaERP\SolaERP.Application\Services\SupplierEvaluationService.cs:line 82
+   at SolaERP.API.Controllers.SupplierEvaluationController.InitReg() in C:\Users\HP\source\Apertech\SolaERP\SolaERP\Controllers\SupplierEvaluationController.cs:line 29
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-06-04 20:04:22.081 +04:00 [ERR] CompanyName
