@@ -176,6 +176,15 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.BusinessCategoryId, opt => opt.MapFrom(src => src.VendorBusinessCategoryId))
                 .ForMember(dest => dest.RegistrationDate, opt => opt.MapFrom(src => src.CompanyRegistrationDate)).ReverseMap();
 
+            CreateMap<NDADto, VendorNDA>()
+                .ForMember(dest => dest.VendorNDAId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.VendorId, opt => opt.MapFrom(src => src.VendorId))
+                .ForMember(dest => dest.BusinessUnitId, opt => opt.MapFrom(src => src.BusinessUnitId)).ReverseMap();
+
+
+            CreateMap<VendorBankDetailDto, VendorBankDetail>()
+                .ForMember(dest => dest.VendorBankDetailId, opt => opt.MapFrom(src => src.Id)).ReverseMap();
+
             CreateMap<AnalysisStructureWithBu, AnalysisStructureWithBuDto>().ReverseMap();
         }
     }

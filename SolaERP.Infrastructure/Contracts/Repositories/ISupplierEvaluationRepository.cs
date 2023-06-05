@@ -6,9 +6,7 @@ namespace SolaERP.Application.Contracts.Repositories
 {
     public interface ISupplierEvaluationRepository
     {
-        Task<bool> AddDueDesignAsync(VendorDueDiligenceModel model);
-        Task<bool> UpdateDueDesignAsync(VendorDueDiligenceModel model);
-        Task<bool> DeleteDueDesignAsync(int dueId);
+
         Task<List<VendorNDA>> GetNDAAsync(int vendorId);
         Task<List<Country>> GetCountriesAsync();
         Task<List<BusinessCategory>> GetBusinessCategoriesAsync();
@@ -27,5 +25,8 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> AddDueDesignGrid(DueDiligenceGridModel gridModel);
         Task<bool> UpdateDueDesignGrid(DueDiligenceGridModel gridModel);
         Task<bool> DeleteDueDesignGrid(int id);
+        Task<bool> AddDueDesignAsync(VendorDueDiligenceModel model);
+        Task<bool> UpdateDueDesignAsync(VendorDueDiligenceModel model);
+        Task<bool> DeleteDueDesignAsync(int dueId);
     }
 }

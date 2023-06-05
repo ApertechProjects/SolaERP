@@ -285,8 +285,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
-
-
         private async Task<bool> ModifyPrequalification(VendorPreInputModel model)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)

@@ -11,6 +11,8 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<VM_GET_SupplierEvaluation>> GetAllAsync(SupplierEvaluationGETModel model);
         Task<ApiResponse<VM_GET_InitalRegistration>> GetInitRegistrationAsync(string userIdentity);
         Task<ApiResponse<VM_GET_VendorBankDetails>> GetBankDetailsAsync(string userIdentity);
+        Task<ApiResponse<List<NDADto>>> GetNDAAsync(string userIdentity);
+        //Task<ApiResponse<List<COBCDto>>> GetCOBCAsync(string userIdentity);
         Task<ApiResponse<BankCodesDto>> GetBankCodesAsync(int vendorId);
     }
 }
