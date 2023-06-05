@@ -5,6 +5,7 @@ namespace SolaERP.Application.Models
 {
     public class AnalysisStructureSaveModel
     {
+        public int AnalysisStructureId { get; set; }
         public int? BusinessUnitId { get; set; }
         public int? ProcedureId { get; set; }
         public int? CatId { get; set; }

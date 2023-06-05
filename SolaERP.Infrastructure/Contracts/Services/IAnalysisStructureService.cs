@@ -1,14 +1,15 @@
-﻿using SolaERP.Application.Entities.AnalysisStructure;
+﻿using SolaERP.Application.Dtos.AnalysisStructure;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.AnalysisStructure;
 using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Contracts.Services
 {
     public interface IAnalysisStructureService
     {
-        Task<AnalysisStructure> GetByIdAsync(int id);
-        Task<AnalysisStructureWithBu> GetByBUAsync(int buId,int procedureId,string userName);
-        Task<bool> AddAsync(AnalysisStructureSaveModel model);
-        Task<bool> UpdateAsync(AnalysisStructureDeleteModel model);
-        Task<bool> RemoveAsync(int id, int userId);
+        Task<ApiResponse<List<AnalysisStructureWithBuDto>>> GetByBUAsync(int buId, int procedureId, string userName);
+        Task<ApiResponse<bool>> SaveAsync(List<AnalysisStructureSaveModel> model, string name);
+        Task<ApiResponse<bool>> DeleteAsync(AnalysisStructureDeleteModel model, string userName);
+        Task<bool> CheckDimensionIdIsUsed(int dimensionId);
     }
 }

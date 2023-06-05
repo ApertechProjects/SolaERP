@@ -106,7 +106,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-
         public async Task<int> ConvertIdentity(string name)
         {
             int userId = Convert.ToInt32(name);

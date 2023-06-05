@@ -70,7 +70,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
         private string ConvertToCSharpTypeAsString(string sqlType)
         {
-
             switch (sqlType.ToLower())
             {
                 case "bigint":
@@ -81,19 +80,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     return "byte[]";
                 case "bit":
                     return "bool";
-                case "char":
-                case "nchar":
-                case "ntext":
-                case "nvarchar":
-                case "text":
-                case "varchar":
+                case var type when
+                type.StartsWith("char") ||
+                type.StartsWith("nchar") ||
+                type.StartsWith("ntext") ||
+                type.StartsWith("nvarchar") ||
+                type.StartsWith("varchar"):
                     return "string";
                 case "date":
                 case "datetime":
                 case "datetime2":
                 case "smalldatetime":
                     return "DateTime";
-                case "decimal":
+                case var type when
+                type.StartsWith("decimal"):
                 case "money":
                 case "numeric":
                 case "smallmoney":

@@ -5,6 +5,7 @@ using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
+using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -14,12 +15,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public SqlAnalysisStructureRepository(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
 
-        public async Task<bool> AddAsync(AnalysisStructureSaveModel model)
-        {
-            return await SaveAsync(0, model);
-        }
-
-        public async Task<AnalysisStructureWithBu> GetByBUAsync(int buId, int procedureId, int userId)
+        public async Task<List<AnalysisStructureWithBu>> GetByBUAsync(int buId, int procedureId, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -28,45 +24,37 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@ProcedureId", procedureId);
 
-                AnalysisStructureWithBu resultEntity = default;
+                List<AnalysisStructureWithBu> resultEntity = new List<AnalysisStructureWithBu>();
                 using var reader = await command.ExecuteReaderAsync();
 
                 if (await reader.ReadAsync())
-                    resultEntity = reader.GetByEntityStructure<AnalysisStructureWithBu>();
+                    resultEntity.Add(reader.GetByEntityStructure<AnalysisStructureWithBu>());
 
                 return resultEntity;
             }
         }
 
-        public async Task<AnalysisStructure> GetByIdAsync(int id)
+        public async Task<bool> DeleteAsync(int id, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC [dbo].[SP_AnalysisStructure_Load] @AnalysisStructureId,@UserId";
+                command.CommandText = @"SET NOCOUNT OFF EXEC [dbo].[SP_AnalysisStructure_IUD] 
+                                      @AnalysisStructureId,NULL,
+                                      NULL,NULL,NULL,
+                                      NULL,NULL,
+                                      NULL,NULL,
+                                      NULL,NULL,
+                                      NULL,NULL,
+                                      NULL,@UserId";
+
                 command.Parameters.AddWithValue(command, "@AnalysisStructureId", id);
-                command.Parameters.AddWithValue(command, "@UserId", 1);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
 
-                using var reader = await command.ExecuteReaderAsync();
-                AnalysisStructure resultEntity = new();
-
-                if (await reader.ReadAsync())
-                    resultEntity = reader.GetByEntityStructure<AnalysisStructure>();
-
-                return resultEntity;
+                return await command.ExecuteNonQueryAsync() > 0;
             }
         }
 
-        public async Task<bool> RemoveAsync(int id, int userId)
-        {
-            return await SaveAsync(id, new() { UserId = userId });
-        }
-
-        public async Task<bool> UpdateAsync(AnalysisStructureDeleteModel model)
-        {
-            return await SaveAsync(model.AnalysisStructureId, model);
-        }
-
-        private async Task<bool> SaveAsync(int mainId, AnalysisStructureSaveModel model)
+        public async Task<bool> SaveAsync(AnalysisStructureSaveModel model)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -79,7 +67,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                       @AnalysisDimensionid8,@AnalysisDimensionid9,
                                       @AnalysisDimensionid10,@UserId";
 
-                command.Parameters.AddWithValue(command, "@AnalysisStructureId", mainId);
+                command.Parameters.AddWithValue(command, "@AnalysisStructureId", model.AnalysisStructureId);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@ProcedureId", model.ProcedureId);
                 command.Parameters.AddWithValue(command, "@CatId", model.ProcedureId);
@@ -96,6 +84,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@UserId", model.UserId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> CheckDimensionIdIsUsed(int dimensionId)
+        {
+            bool result = false;
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"select dbo.[SF_CheckDimensionByAnalysisStructure] (@dimensionId) AS DimensionIsUsed";
+                command.Parameters.AddWithValue(command, "@dimensionId", dimensionId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                if (reader.Read())
+                    result = reader.Get<bool>("DimensionIsUsed");
+                return result;
             }
         }
     }

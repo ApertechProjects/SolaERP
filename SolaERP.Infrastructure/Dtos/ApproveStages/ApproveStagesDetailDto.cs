@@ -9,7 +9,7 @@
         public bool Skip { get; set; }
         public int SkipDays { get; set; }
         public bool BackToInitiatorOnReject { get; set; }
-        //public List<ApproveStageRoleDto> ApproveStageRoles { get; set; }
+        public List<ApproveStageRoleDto> ApproveStageRoles { get; set; }
         public string Type { get; set; }
     }
 }
