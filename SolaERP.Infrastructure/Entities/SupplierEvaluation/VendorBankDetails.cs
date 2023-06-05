@@ -2,18 +2,17 @@
 {
     public class VendorBankDetails : BaseEntity
     {
-        public int BankId { get; set; }
+        public int VendorBankDetailId { get; set; }
         public int VendorId { get; set; }
-        public string BeneficiaryBankName { get; set; }
-        public string CurrencyCode { get; set; }
-        public string BankAccountNumber { get; set; }
-        public string BeneficiaryBankAddress { get; set; }
-        public string BeneficiaryBankAddress1 { get; set; }
-        public string BeneficiaryFullName { get; set; }
-        public string BeneficiaryAddress { get; set; }
-        public string BeneficiaryAddress1 { get; set; }
-        public string BeneficiaryBankCode { get; set; }
-        public string IntermediaryBankCodeNumber { get; set; }
-        public string IntermediaryBankCodeType { get; set; }
+        public string Beneficiary { get; set; }
+        public string BeneficiaruTaxId { get; set; }
+        public string Address { get; set; }
+        public string AccountNumber { get; set; }
+        public string Bank { get; set; }
+        public string SWIFT { get; set; }
+        public string BankCode { get; set; }
+        public string Currency { get; set; }
+        public string BankTaxId { get; set; }
+        public string CoresspondentAccount { get; set; }
     }
 }
