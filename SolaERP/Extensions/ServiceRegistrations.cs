@@ -22,6 +22,7 @@ using SolaERP.Infrastructure.Services;
 using SolaERP.Infrastructure.Services.Storage;
 using SolaERP.Persistence.Services;
 using SolaERP.Persistence.Validations.AnalysisCodeValidation;
+using SolaERP.Persistence.Validations.AnalysisDimensionValidation;
 using SolaERP.Persistence.Validations.AnalysisStructure;
 using SolaERP.Persistence.Validations.ApproveRoleValidation;
 using SolaERP.Persistence.Validations.UserValidation;
@@ -132,6 +133,9 @@ namespace SolaERP.Extensions
             builder.Services.AddValidatorsFromAssemblyContaining<AnalysisCodeListSaveValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<AnalysisCodeDeleteValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<AnalysisStructureListSaveValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<AnalysisStructureDeleteValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<AnalysisDimensionListSaveValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<AnalysisDimensionDeleteValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<AnalysisStructureDeleteValidation>();
             builder.Services.AddScoped<ValidationFilter>();
         }

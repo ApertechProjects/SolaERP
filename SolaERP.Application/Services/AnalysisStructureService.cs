@@ -41,18 +41,16 @@ namespace SolaERP.Persistence.Services
         }
 
 
-        public async Task<ApiResponse<bool>> SaveAsync(List<AnalysisStructureSaveModel> model, string name)
+        public async Task<ApiResponse<bool>> SaveAsync(List<AnalysisStructureDto> model, string name)
         {
             int userId = await _userRepository.ConvertIdentity(name);
-
             var structure = false;
             int counter = 0;
             for (int i = 0; i < model.Count; i++)
             {
-                model[i].UserId = userId;
                 if (model[i].AnalysisStructureId < 0)
                     model[i].AnalysisStructureId = 0;
-                structure = await _repository.SaveAsync(model[i]);
+                structure = await _repository.SaveAsync(model[i], userId);
                 if (structure)
                     counter++;
             }
