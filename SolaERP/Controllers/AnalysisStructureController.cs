@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.AnalysisStructure;
 using SolaERP.Application.Entities.AnalysisStructure;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
@@ -26,7 +27,7 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _analysisService.GetByBUAsync(businessUnitId, procedureId, User.Identity.Name));
 
         [HttpPost]
-        public async Task<IActionResult> Add(List<AnalysisStructureSaveModel> model)
+        public async Task<IActionResult> Add(List<AnalysisStructureDto> model)
            => CreateActionResult(await _analysisService.SaveAsync(model, User.Identity.Name));
 
 

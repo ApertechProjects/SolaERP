@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Persistence.Validations.AnalysisStructure
 {
-    public class AnalysisStructureListSaveValidation:AbstractValidator<List<AnalysisStructureSaveModel>>
+    public class AnalysisStructureListSaveValidation:AbstractValidator<List<AnalysisStructureDto>>
     {
         public AnalysisStructureListSaveValidation()
         {
@@ -19,7 +19,7 @@ namespace SolaERP.Persistence.Validations.AnalysisStructure
         }
     }
 
-    public class AnalysisStructureSaveValidation : AbstractValidator<AnalysisStructureSaveModel>
+    public class AnalysisStructureSaveValidation : AbstractValidator<AnalysisStructureDto>
     {
         public AnalysisStructureSaveValidation()
         {

@@ -1,5 +1,6 @@
 ﻿
 using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Dtos.AnalysisStructure;
 using SolaERP.Application.Entities.AnalysisStructure;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -54,7 +55,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> SaveAsync(AnalysisStructureSaveModel model)
+        public async Task<bool> SaveAsync(AnalysisStructureDto model,int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -81,7 +82,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@AnalysisDimensionid8", model.AnalysisDimensionid8);
                 command.Parameters.AddWithValue(command, "@AnalysisDimensionid9", model.AnalysisDimensionid9);
                 command.Parameters.AddWithValue(command, "@AnalysisDimensionid10", model.AnalysisDimensionid10);
-                command.Parameters.AddWithValue(command, "@UserId", model.UserId);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
