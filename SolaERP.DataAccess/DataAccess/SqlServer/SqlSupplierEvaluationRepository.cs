@@ -429,5 +429,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return result;
             }
         }
+
+        public async Task<Prequalification> GetPrequalificationAsync(int vendorid)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_VendorPrequalification_Load @VendorId";
+                command.Parameters.AddWithValue(command, "@VendorId", vendorid);
+
+                Prequalification result = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                if (reader.Read())
+                    result = reader.GetByEntityStructure<Prequalification>();
+
+                return result;
+            }
+        }
     }
 }

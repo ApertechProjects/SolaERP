@@ -160,6 +160,14 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<NonDisclosureAgreement>>.Success(result, 200);
         }
 
+        public async Task<ApiResponse<PrequalificationDto>> GetPrequalificationAsync(string userIdentity)
+        {
+            User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
+            Prequalification pre = await _repository.GetPrequalificationAsync(user.VendorId);
+
+            var result = _mapper.Map<PrequalificationDto>(pre);
+            return ApiResponse<PrequalificationDto>.Success(result, 200);
+        }
 
         private async Task<List<DueDiligenceDesignDto>> GetDueDesignsAsync(Language language)
         {
