@@ -4,6 +4,7 @@ using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.BusinessUnit;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.SupplierEvaluation;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Enums;
@@ -79,16 +80,15 @@ namespace SolaERP.Persistence.Services
             VM_GET_VendorBankDetails bankDetails = new()
             {
                 Currencies = await _repository.GetCurrenciesAsync(),
-                BankDetails = await _repository.GetVondorBankDetailsAsync(user.VendorId)
+                BankDetails = _mapper.Map<List<VendorBankDetailDto>>(await _repository.GetVondorBankDetailsAsync(user.VendorId))
             };
 
             return ApiResponse<VM_GET_VendorBankDetails>.Success(bankDetails, 200);
         }
 
+
         public async Task<List<DueDiligenceDesignDto>> GetDueDiligenceAsync(Language language)
              => await GetDueDesignsAsync(Language.en);
-
-
 
 
 
@@ -107,6 +107,15 @@ namespace SolaERP.Persistence.Services
             };
 
             return ApiResponse<VM_GET_InitalRegistration>.Success(viewModel, 200);
+        }
+
+        public async Task<ApiResponse<List<NDADto>>> GetNDAAsync(string userIdentity)
+        {
+            User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
+            List<VendorNDA> nda = await _repository.GetNDAAsync(user.VendorId);
+
+            var result = _mapper.Map<List<NDADto>>(nda);
+            return ApiResponse<List<NDADto>>.Success(result, 200);
         }
 
 
@@ -172,7 +181,7 @@ namespace SolaERP.Persistence.Services
                     if (dueDesign[i].Childs[j].HasDataGrid)
                     {
                         int childDesignId = dueDesign[i].Childs[j].DesignId;
-                        dueDesign[i].Childs[j].GridDatas = await _repository.GetDueDiligenceGridsAsync(childDesignId);
+                        dueDesign[i].Childs[j].GridDatas = await _repository.GetDueDiligenceGridAsync(childDesignId);
                     }
                 }
             }

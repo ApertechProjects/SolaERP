@@ -31,5 +31,10 @@ namespace SolaERP.API.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> BankDetails()
             => CreateActionResult(await _service.GetBankDetailsAsync(User.Identity.Name));
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> NonDisclosureAgreement()
+            => CreateActionResult(await _service.GetNDAAsync(User.Identity.Name));
+
     }
 }

@@ -16,7 +16,7 @@ namespace SolaERP.Controllers
             {
                 DataTable table = new DataTable();
                 connection.Open();
-                using (SqlCommand cmd = new SqlCommand("Select * from Procurement.VendorBankDetails", connection))   
+                using (SqlCommand cmd = new SqlCommand("Select * from Procurement.VendorBankDetail", connection))   
                 {
                     SqlDataAdapter dp = new SqlDataAdapter();
                     dp.SelectCommand = cmd;
