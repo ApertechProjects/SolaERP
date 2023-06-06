@@ -6,8 +6,8 @@ namespace SolaERP.Application.Contracts.Repositories
 {
     public interface ISupplierEvaluationRepository
     {
-
         Task<List<VendorNDA>> GetNDAAsync(int vendorId);
+        Task<List<VendorCOBC>> GetCOBCAsync(int vendorId);
         Task<List<Country>> GetCountriesAsync();
         Task<List<BusinessCategory>> GetBusinessCategoriesAsync();
         Task<List<PrequalificationCategory>> GetPrequalificationCategoriesAsync();

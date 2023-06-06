@@ -310,9 +310,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
-
-
-
         public async Task<CompanyInfo> GetCompanyInfoChild(int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -349,7 +346,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<bool> AddNDAAsync(VendorNDA ndas)
         {
-            return await ModifyNDA((VendorNDA)new()
+            return await ModifyNDA(new()
             {
                 VendorNDAId = ndas.VendorNDAId,
                 VendorId = ndas.VendorId,
@@ -359,7 +356,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 
         public async Task<bool> DeleteNDAAsync(int ndaId)
-            => await ModifyNDA((VendorNDA)new() { VendorNDAId = ndaId });
+            => await ModifyNDA(new() { VendorNDAId = ndaId });
 
 
         private async Task<bool> ModifyNDA(VendorNDA nda)
@@ -415,5 +412,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<bool> DeleteDueDesignGrid(int id)
             => await ModifyDueGrid(new() { Id = id });
+
+        public async Task<List<VendorCOBC>> GetCOBCAsync(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_VendorCOBC_load @VendorId";
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+
+                List<VendorCOBC> result = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    result.Add(reader.GetByEntityStructure<VendorCOBC>());
+
+                return result;
+            }
+        }
     }
 }
