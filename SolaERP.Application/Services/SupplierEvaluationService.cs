@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SixLabors.ImageSharp.ColorSpaces;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.BusinessUnit;
@@ -10,6 +11,7 @@ using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using System.Collections.Generic;
 
 namespace SolaERP.Persistence.Services
 {
@@ -86,9 +88,33 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<VM_GET_VendorBankDetails>.Success(bankDetails, 200);
         }
 
+        public async Task<ApiResponse<List<CodeOfBuConduct>>> GetCOBCAsync(string userIdentity)
+        {
+            User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
+            List<VendorCOBC> cobc = await _repository.GetCOBCAsync(user.VendorId);
 
-        public async Task<List<DueDiligenceDesignDto>> GetDueDiligenceAsync(Language language)
-             => await GetDueDesignsAsync(Language.en);
+            var buUnits = await _buRepository.GetAllAsync();
+            var result = buUnits.Where(x => cobc.Any(y => y.BusinessUnitId == x.BusinessUnitId))
+                      .Join(cobc, x => x.BusinessUnitId, y => y.BusinessUnitId, (x, y) => new CodeOfBuConduct
+                      {
+                          CobcID = y.VendorCOBCId,
+                          VendorId = user.VendorId,
+                          BusinessUnitId = x.BusinessUnitId,
+                          BusinessUnitCode = x.BusinessUnitCode,
+                          BusinessUnitName = x.BusinessUnitName,
+                          TaxId = x.TaxId,
+                          Address = x.Address,
+                          CountryCode = x.CountryCode,
+                          FullName = x.FullName,
+                          Position = x.Position
+                      })
+                      .ToList();
+
+            return ApiResponse<List<CodeOfBuConduct>>.Success(result, 200);
+        }
+
+        public async Task<ApiResponse<List<DueDiligenceDesignDto>>> GetDueDiligenceAsync(Language language)
+             => ApiResponse<List<DueDiligenceDesignDto>>.Success(await GetDueDesignsAsync(language));
 
 
 
@@ -109,13 +135,29 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<VM_GET_InitalRegistration>.Success(viewModel, 200);
         }
 
-        public async Task<ApiResponse<List<NDADto>>> GetNDAAsync(string userIdentity)
+        public async Task<ApiResponse<List<NonDisclosureAgreement>>> GetNDAAsync(string userIdentity)
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
             List<VendorNDA> nda = await _repository.GetNDAAsync(user.VendorId);
 
-            var result = _mapper.Map<List<NDADto>>(nda);
-            return ApiResponse<List<NDADto>>.Success(result, 200);
+            var buUnits = await _buRepository.GetAllAsync();
+            var result = buUnits.Where(x => nda.Any(y => y.BusinessUnitId == x.BusinessUnitId))
+                      .Join(nda, x => x.BusinessUnitId, y => y.BusinessUnitId, (x, y) => new NonDisclosureAgreement
+                      {
+                          NdaID = y.VendorNDAId,
+                          VendorId = user.VendorId,
+                          BusinessUnitId = x.BusinessUnitId,
+                          BusinessUnitCode = x.BusinessUnitCode,
+                          BusinessUnitName = x.BusinessUnitName,
+                          TaxId = x.TaxId,
+                          Address = x.Address,
+                          CountryCode = x.CountryCode,
+                          FullName = x.FullName,
+                          Position = x.Position
+                      })
+                      .ToList();
+
+            return ApiResponse<List<NonDisclosureAgreement>>.Success(result, 200);
         }
 
 
