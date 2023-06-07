@@ -59,13 +59,7 @@ namespace SolaERP.Persistence.Services
             tasks.AddRange(command.BankDetails.Select(x => _vendorRepository.AddBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x))));
 
             await Task.WhenAll(tasks);
-
             await _unitOfWork.SaveChangesAsync();
-
-            foreach (var task in tasks)
-            {
-                Console.WriteLine(task.Result);
-            }
 
             return ApiResponse<bool>.Success(tasks.All(x => x.Result), 200);
         }
