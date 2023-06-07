@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using SixLabors.ImageSharp.ColorSpaces;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.BusinessUnit;
@@ -11,7 +10,6 @@ using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
-using System.Collections.Generic;
 
 namespace SolaERP.Persistence.Services
 {
@@ -34,6 +32,11 @@ namespace SolaERP.Persistence.Services
             _buRepository = buRepository;
             _mapper = mapper;
             _userRepository = userRepository;
+        }
+
+        public Task<ApiResponse<bool>> AddAsync()
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<ApiResponse<VM_GET_SupplierEvaluation>> GetAllAsync(SupplierEvaluationGETModel model)
@@ -94,21 +97,25 @@ namespace SolaERP.Persistence.Services
             List<VendorCOBC> cobc = await _repository.GetCOBCAsync(user.VendorId);
 
             var buUnits = await _buRepository.GetAllAsync();
-            var result = buUnits.Where(x => cobc.Any(y => y.BusinessUnitId == x.BusinessUnitId))
-                      .Join(cobc, x => x.BusinessUnitId, y => y.BusinessUnitId, (x, y) => new CodeOfBuConduct
-                      {
-                          CobcID = y.VendorCOBCId,
-                          VendorId = user.VendorId,
-                          BusinessUnitId = x.BusinessUnitId,
-                          BusinessUnitCode = x.BusinessUnitCode,
-                          BusinessUnitName = x.BusinessUnitName,
-                          TaxId = x.TaxId,
-                          Address = x.Address,
-                          CountryCode = x.CountryCode,
-                          FullName = x.FullName,
-                          Position = x.Position
-                      })
-                      .ToList();
+            var matchingBuUnitsIds = cobc.Select(x => x.BusinessUnitId).ToList();
+
+            var result = buUnits
+                        .Select(x => new CodeOfBuConduct
+                        {
+                            CobcID = cobc.FirstOrDefault(y => y.BusinessUnitId == x.BusinessUnitId)?.VendorCOBCId,
+                            VendorId = user.VendorId,
+                            BusinessUnitId = x.BusinessUnitId,
+                            BusinessUnitCode = x.BusinessUnitCode,
+                            BusinessUnitName = x.BusinessUnitName,
+                            TaxId = x.TaxId,
+                            Address = x.Address,
+                            CountryCode = x.CountryCode,
+                            FullName = x.FullName,
+                            Position = x.Position,
+                            IsAgreed = matchingBuUnitsIds.Contains(x.BusinessUnitId)
+                        })
+                        .ToList();
+
 
             return ApiResponse<List<CodeOfBuConduct>>.Success(result, 200);
         }
@@ -141,21 +148,24 @@ namespace SolaERP.Persistence.Services
             List<VendorNDA> nda = await _repository.GetNDAAsync(user.VendorId);
 
             var buUnits = await _buRepository.GetAllAsync();
-            var result = buUnits.Where(x => nda.Any(y => y.BusinessUnitId == x.BusinessUnitId))
-                      .Join(nda, x => x.BusinessUnitId, y => y.BusinessUnitId, (x, y) => new NonDisclosureAgreement
-                      {
-                          NdaID = y.VendorNDAId,
-                          VendorId = user.VendorId,
-                          BusinessUnitId = x.BusinessUnitId,
-                          BusinessUnitCode = x.BusinessUnitCode,
-                          BusinessUnitName = x.BusinessUnitName,
-                          TaxId = x.TaxId,
-                          Address = x.Address,
-                          CountryCode = x.CountryCode,
-                          FullName = x.FullName,
-                          Position = x.Position
-                      })
-                      .ToList();
+            var matchingBuUnitsIds = nda.Select(y => y.BusinessUnitId).ToList();
+
+            var result = buUnits
+                .Select(x => new NonDisclosureAgreement
+                {
+                    NdaID = nda.FirstOrDefault(y => y.BusinessUnitId == x.BusinessUnitId)?.VendorNDAId,
+                    VendorId = user.VendorId,
+                    BusinessUnitId = x.BusinessUnitId,
+                    BusinessUnitCode = x.BusinessUnitCode,
+                    BusinessUnitName = x.BusinessUnitName,
+                    TaxId = x.TaxId,
+                    Address = x.Address,
+                    CountryCode = x.CountryCode,
+                    FullName = x.FullName,
+                    Position = x.Position,
+                    IsAgreed = matchingBuUnitsIds.Contains(x.BusinessUnitId)
+                })
+                .ToList();
 
             return ApiResponse<List<NonDisclosureAgreement>>.Success(result, 200);
         }
