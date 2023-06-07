@@ -3,7 +3,9 @@ using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
+using System.Data;
 using System.Data.Common;
+using System.Data.SqlClient;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -21,7 +23,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_Vendors_IUD @VendorId,
+                command.CommandText = @"DECLARE @NewVendorId int 
+                                        EXEC SP_Vendors_IUD @VendorId,
                                                             @BusinessUnitId,
                                                             @VendorName,
                                                             @TaxId,
@@ -36,11 +39,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                             @OtherProducts,
                                                             @ApproveStageMainId,
                                                             @CompanyAddress,
-                                                            @CompanyRegistrationDate";
+                                                            @CompanyRegistrationDate,
+                                                            @NewVendorId = @NewVendorId OUTPUT
+                                                            SELECT	@NewVendorId as [@NewVendorId]";
 
 
                 command.Parameters.AddWithValue(command, "@VendorId", vendor.VendorId);
-                command.Parameters.AddWithValue(command, "@BusinessUnitId", vendor.Buid);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", null);
                 command.Parameters.AddWithValue(command, "@VendorName", vendor.CompanyName);
                 command.Parameters.AddWithValue(command, "@TaxId", vendor.TaxOffice);
                 command.Parameters.AddWithValue(command, "@TaxOffice", vendor.TaxOffice);
@@ -52,13 +57,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Country", vendor.City);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@OtherProducts", null);
-                command.Parameters.AddWithValue(command, "@ApproveStageMainId", 0);
+                command.Parameters.AddWithValue(command, "@ApproveStageMainId", null);
                 command.Parameters.AddWithValue(command, "@CompanyAddress", vendor.CompanyAdress);
                 command.Parameters.AddWithValue(command, "@CompanyRegistrationDate", vendor.RegistrationDate);
-                command.Parameters.AddOutPutParameter(command, "@NewVendorId");
 
-                await command.ExecuteNonQueryAsync();
-                return Convert.ToInt32(command.Parameters["@NewVendorId"].Value);
+                int newVendorId = 0;
+
+                using var reader = await command.ExecuteReaderAsync();
+                if (reader.Read())
+                    newVendorId = reader.Get<int>("@NewVendorId");
+
+                return newVendorId;
             }
         }
         private async Task<bool> ModifyBankDetailsAsync(int userId, VendorBankDetail bankDetail)

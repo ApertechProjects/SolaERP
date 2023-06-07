@@ -7,6 +7,7 @@ using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.SupplierEvaluation;
+using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -20,23 +21,53 @@ namespace SolaERP.Persistence.Services
         private readonly IBusinessUnitRepository _buRepository;
         private readonly ISupplierEvaluationRepository _repository;
         private readonly IUserRepository _userRepository;
+        private readonly IVendorRepository _vendorRepository;
 
         public SupplierEvaluationService(ISupplierEvaluationRepository repository,
                                          IMapper mapper,
                                          IUnitOfWork unitOfWork,
                                          IBusinessUnitRepository buRepository,
-                                         IUserRepository userRepository)
+                                         IUserRepository userRepository,
+                                         IVendorRepository vendorRepository)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
             _buRepository = buRepository;
             _mapper = mapper;
             _userRepository = userRepository;
+            _vendorRepository = vendorRepository;
         }
 
-        public Task<ApiResponse<bool>> AddAsync()
+        public async Task<ApiResponse<bool>> AddAsync(string useridentity, SupplierRegisterCommand command)
         {
-            throw new NotImplementedException();
+            User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
+            int vendorId = await _vendorRepository.AddVendorAsync(user.Id, _mapper.Map<Vendor>(command.CompanyInfo));
+
+            command.DueDiligence.VendorId = vendorId;
+            command.Prequalification.VendorId = vendorId;
+            command.CodeOfBuConduct.ForEach(x => x.VendorId = vendorId);
+            command.NonDisclosureAgreement.ForEach(x => x.VendorId = vendorId);
+            command.BankDetails.ForEach(x => x.VendorId = vendorId);
+
+            List<Task<bool>> tasks = new()
+            {
+                _repository.AddDueDesignAsync(command.DueDiligence),
+            };
+
+            tasks.AddRange(command.NonDisclosureAgreement.Select(x => _repository.AddNDAAsync(_mapper.Map<VendorNDA>(x))));
+            tasks.AddRange(command.CodeOfBuConduct.Select(x => _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(x))));
+            tasks.AddRange(command.BankDetails.Select(x => _vendorRepository.AddBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x))));
+
+            await Task.WhenAll(tasks);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            foreach (var task in tasks)
+            {
+                Console.WriteLine(task.Result);
+            }
+
+            return ApiResponse<bool>.Success(tasks.All(x => x.Result), 200);
         }
 
         public async Task<ApiResponse<VM_GET_SupplierEvaluation>> GetAllAsync(SupplierEvaluationGETModel model)
