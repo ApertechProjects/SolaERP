@@ -10,7 +10,7 @@ namespace SolaERP.Application.Models
     public class ApproveStageMainInputModel
     {
         public int ApproveStageMainId { get; set; }
-        public string BusinessUnitId { get; set; }
+        public int BusinessUnitId { get; set; }
         public int ProcedureId { get; set; }
         public object ApproveStageName { get; set; }
         public object ApproveStageCode { get; set; }
