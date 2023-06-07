@@ -46,8 +46,19 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<BuAnalysisDimensionDto>>.Success(dto, 200);
         }
 
+        public async Task<List<DimensionCheckDto>> CheckDimensionIdIsUsedInStructure(List<int> dimensionIds)
+        {
+            var existDatas = await _analysisDimensionRepository.CheckDimensionIdIsUsedInStructure(dimensionIds);
+            var data = _mapper.Map<List<DimensionCheckDto>>(existDatas);
+            return data;
+        }
+
         public async Task<ApiResponse<bool>> Delete(AnalysisDimensionDeleteModel model, string name)
         {
+            var existDatas = await _analysisDimensionRepository.CheckDimensionIdIsUsedInStructure(model.DimensionIds);
+            if (existDatas.Count > 0)
+                return ApiResponse<bool>.Fail(existDatas, 400);
+
             int userId = await _userRepository.ConvertIdentity(name);
             var code = false;
             int counter = 0;

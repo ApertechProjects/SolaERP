@@ -14,15 +14,17 @@ namespace SolaERP.Persistence.Services
 {
     public class AnalysisStructureService : IAnalysisStructureService
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly INewAnalysisStructureRepository _repository;
+        private readonly IAnalysisDimensionService _dimensionService;
         private readonly IUserService _userService;
         private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private IMapper _mapper;
 
-        public AnalysisStructureService(INewAnalysisStructureRepository repository, IUnitOfWork unitOfWork, IUserService userService, IUserRepository userRepository, IMapper mapper)
+        public AnalysisStructureService(INewAnalysisStructureRepository repository, IAnalysisDimensionService dimensionService, IUnitOfWork unitOfWork, IUserService userService, IUserRepository userRepository, IMapper mapper)
         {
             _repository = repository;
+            _dimensionService = dimensionService;
             _unitOfWork = unitOfWork;
             _userService = userService;
             _userRepository = userRepository;

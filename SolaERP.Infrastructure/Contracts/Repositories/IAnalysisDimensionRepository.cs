@@ -15,5 +15,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<BuAnalysisDimension>> ByBusinessUnitId(int businessUnitId, int userId);
         Task<bool> Save(AnalysisDimensionDto analysisDimension, int userId);
         Task<bool> Delete(int analysisDimensionId, int userId);
+        Task<List<DimensionCheck>> CheckDimensionIdIsUsedInStructure(List<int> dimensionIds);
     }
 }

@@ -62,6 +62,24 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<List<DimensionCheck>> CheckDimensionIdIsUsedInStructure(List<int> dimensionIds)
+        {
+            var dimensions = string.Join(',', dimensionIds);
+            List<DimensionCheck> datas = new();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_CheckDimensionInStructure @DimensionIds";
+                command.Parameters.AddWithValue(command, "@DimensionIds", dimensions);
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (await reader.ReadAsync())
+                    datas.Add(reader.GetByEntityStructure<DimensionCheck>());
+
+                return datas;
+
+            }
+        }
+
         public async Task<bool> Delete(int analysisDimensionId, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)

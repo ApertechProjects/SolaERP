@@ -11,7 +11,8 @@ namespace SolaERP.Application.Dtos.Shared
         public int StatusCode { get; set; }
         public string Errors { get; set; }
         public int TotalData { get; set; }
-        
+        public object ResultData { get; set; }
+
         public static ApiResponse<T> Success(T data, int statusCode = 200)
         {
             return new ApiResponse<T> { Data = data, StatusCode = statusCode };
@@ -41,6 +42,11 @@ namespace SolaERP.Application.Dtos.Shared
         public static ApiResponse<T> Fail(string error, int statusCode)
         {
             return new ApiResponse<T> { Errors = error, StatusCode = statusCode, Data = GetEmptyArrayIfCollection<T>() };
+        }
+
+        public static ApiResponse<T> Fail(object resultData, int statusCode)
+        {
+            return new ApiResponse<T> { ResultData = resultData, StatusCode = statusCode };
         }
 
         public static ApiResponse<bool> Fail(string propertyName, string error, int statusCode)

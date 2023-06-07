@@ -15,6 +15,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<BuAnalysisDimensionDto>>> ByBusinessUnitId(int businessUnitId, string name);
         Task<ApiResponse<bool>> Save(List<AnalysisDimensionDto> analysisDimension, string name);
         Task<ApiResponse<bool>> Delete(AnalysisDimensionDeleteModel model, string name);
-        Task<bool> CheckDimensionIdIsUsedInStructure(int dimensionId);
+        Task<List<DimensionCheckDto>> CheckDimensionIdIsUsedInStructure(List<int> dimensionIds);
     }
 }
