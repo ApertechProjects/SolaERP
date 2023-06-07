@@ -45,5 +45,8 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> DueDiligence(Language language)
             => CreateActionResult(await _service.GetDueDiligenceAsync(language));
 
+        [HttpGet("[action]")]
+        public async Task<IActionResult> Prequalification()
+            => CreateActionResult(await _service.GetPrequalificationAsync(User.Identity.Name));
     }
 }

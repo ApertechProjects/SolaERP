@@ -18,6 +18,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<DueDiligenceGrid>> GetDueDiligenceGridAsync(int deuDesignId);
         Task<List<VendorBankDetail>> GetVondorBankDetailsAsync(int vendorid);
         Task<CompanyInfo> GetCompanyInfoChild(int vendorId);
+        Task<Prequalification> GetPrequalificationAsync(int vendorid);
         Task<bool> AddNDAAsync(VendorNDA ndas);
         Task<bool> DeleteNDAAsync(int ndaId);
         Task<bool> AddCOBCAsync(VendorCOBC cobc);
