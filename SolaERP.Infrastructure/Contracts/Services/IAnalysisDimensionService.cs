@@ -1,20 +1,15 @@
 ﻿using SolaERP.Application.Dtos.AnaysisDimension;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.Application.Contracts.Services
 {
     public interface IAnalysisDimensionService
     {
-        Task<ApiResponse<List<AnalysisDimensionDto>>> ByAnalysisDimensionId(int analysisDimensionId, string name);
-        Task<ApiResponse<List<BuAnalysisDimensionDto>>> ByBusinessUnitId(int businessUnitId, string name);
-        Task<ApiResponse<bool>> Save(List<AnalysisDimensionDto> analysisDimension, string name);
-        Task<ApiResponse<bool>> Delete(AnalysisDimensionDeleteModel model, string name);
-        Task<List<DimensionCheckDto>> CheckDimensionIdIsUsedInStructure(List<int> dimensionIds);
+        Task<ApiResponse<List<AnalysisDimensionDto>>> ByDimensionIdAsync(int analysisDimensionId, string name);
+        Task<ApiResponse<List<BuAnalysisDimensionDto>>> ByBUIdAsync(int businessUnitId, string name);
+        Task<ApiResponse<bool>> SaveAsync(List<AnalysisDimensionDto> analysisDimension, string name);
+        Task<ApiResponse<bool>> DeleteAsync(AnalysisDimensionDeleteModel model, string name);
+        Task<List<DimensionCheckDto>> CheckDimensionIdsAsync(List<int> dimensionIds);
     }
 }
