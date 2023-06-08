@@ -5,6 +5,7 @@ using SolaERP.Application.UnitOfWork;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using SolaERP.Application.Models;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -15,11 +16,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public SqlApproveStageDetailRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-        }
-
-        public Task<List<ApproveStagesDetail>> GetAllAsync()
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<List<ApproveStagesDetail>> GetApproveStageDetailsByApproveStageMainId(int approveStageMainId)
@@ -89,14 +85,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<int> SaveDetailsAsync(ApproveStagesDetail entity)
+        public async Task<int> SaveDetailsAsync(ApproveStageDetailInputModel entity)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText = "EXEC SP_ApproveStagesDetails_IUD @ApproveStageDetailsId,@ApproveStageMainId,@ApproveStageDetailsName,@Sequence,@Skip,@SkipDays,@BackToInitiatorOnReject," +
                     "@NewApproveStageDetailsId = @NewApproveStageDetailsId OUTPUT select @NewApproveStageDetailsId as NewApproveStageDetailsId";
 
-                command.Parameters.AddWithValue(command, "@ApproveStageDetailsId", entity.ApproveStageDetailsId);
+                command.Parameters.AddWithValue(command, "@ApproveStageDetailsId", entity.ApproveStageDetailsId = entity.ApproveStageDetailsId < 0 ? 0 : entity.ApproveStageDetailsId);
                 command.Parameters.AddWithValue(command, "@ApproveStageMainId", entity.ApproveStageMainId);
                 command.Parameters.AddWithValue(command, "@ApproveStageDetailsName", entity.ApproveStageDetailsName);
                 command.Parameters.AddWithValue(command, "@Sequence", entity.Sequence);

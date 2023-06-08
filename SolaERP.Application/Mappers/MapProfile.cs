@@ -189,6 +189,7 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.VendorPrequalificationId, opt => opt.MapFrom(src => src.Id)).ReverseMap();
 
             CreateMap<AnalysisStructureWithBu, AnalysisStructureWithBuDto>().ReverseMap();
+            CreateMap<ApproveStageMainInputModel, ApproveStagesMain>().ReverseMap();
         }
     }
 }
