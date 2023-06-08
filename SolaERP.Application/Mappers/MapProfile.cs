@@ -59,6 +59,7 @@ using SolaERP.Application.Entities.UOM;
 using SolaERP.Application.Entities.User;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Models;
+using SolaERP.Persistence.Services;
 
 namespace SolaERP.Persistence.Mappers
 {
@@ -187,6 +188,37 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<PrequalificationDto, Prequalification>()
                 .ForMember(dest => dest.VendorPrequalificationId, opt => opt.MapFrom(src => src.Id)).ReverseMap();
+
+            CreateMap<CodeOfBuConduct, VendorCOBC>()
+                .ForMember(dest => dest.VendorCOBCId, opt => opt.MapFrom(src => src.CobcID))
+                .ForMember(dest => dest.VendorId, opt => opt.MapFrom(src => src.VendorId))
+                .ForMember(dest => dest.BusinessUnitId, opt => opt.MapFrom(src => src.BusinessUnitId)).ReverseMap();
+
+            CreateMap<NonDisclosureAgreement, VendorNDA>()
+                .ForMember(dest => dest.VendorId, opt => opt.MapFrom(src => src.VendorId))
+                .ForMember(dest => dest.VendorNDAId, opt => opt.MapFrom(src => src.NdaID))
+                .ForMember(dest => dest.BusinessUnitId, opt => opt.MapFrom(src => src.BusinessUnitId)).ReverseMap();
+
+
+            CreateMap<CompanyInfoDto, Vendor>()
+                 .ForMember(dest => dest.VendorId, opt => opt.Ignore())
+                 .ForMember(dest => dest.Buid, opt => opt.Ignore())
+                 .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.CompanyName))
+                 .ForMember(dest => dest.TaxId, opt => opt.MapFrom(src => src.TaxId))
+                 .ForMember(dest => dest.TaxOffice, opt => opt.MapFrom(src => src.TaxOffice))
+                 .ForMember(dest => dest.CompanyAdress, opt => opt.MapFrom(src => src.CompanyAdress))
+                 .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City))
+                 .ForMember(dest => dest.WebSite, opt => opt.MapFrom(src => src.WebSite))
+                 .ForMember(dest => dest.RegistrationDate, opt => opt.MapFrom(src => src.RegistrationDate))
+                 .ForMember(dest => dest.RepresentedCompanies, opt => opt.MapFrom(src => src.RepresentedCompanies))
+                 .ForMember(dest => dest.RepresentedProducts, opt => opt.MapFrom(src => src.RepresentedProducts))
+                 .ForMember(dest => dest.CreditDays, opt => opt.MapFrom(src => src.CreditDays))
+                 .ForMember(dest => dest.PaymentTerms, opt => opt.MapFrom(src => src.PaymentTerms))
+                 .ForMember(dest => dest.AgreeWithDefaultDays, opt => opt.MapFrom(src => src.AgreeWithDefaultDays))
+                 .ForMember(dest => dest.PrequalificationCategoryId, opt => opt.MapFrom(src => src.PrequalificationCategoryId))
+                 .ForMember(dest => dest.BusinessCategoryId, opt => opt.MapFrom(src => src.BusinessCategoryId)).ReverseMap();
+
+
 
             CreateMap<AnalysisStructureWithBu, AnalysisStructureWithBuDto>().ReverseMap();
             CreateMap<ApproveStageMainInputModel, ApproveStagesMain>().ReverseMap();

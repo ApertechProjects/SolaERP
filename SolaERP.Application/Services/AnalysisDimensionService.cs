@@ -30,7 +30,7 @@ namespace SolaERP.Persistence.Services
             _mapper = mapper;
         }
 
-        public async Task<ApiResponse<List<AnalysisDimensionDto>>> ByAnalysisDimensionId(int analysisDimensionId, string name)
+        public async Task<ApiResponse<List<AnalysisDimensionDto>>> ByDimensionIdAsync(int analysisDimensionId, string name)
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var data = await _analysisDimensionRepository.ByAnalysisDimensionId(analysisDimensionId, userId);
@@ -38,7 +38,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<AnalysisDimensionDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<List<BuAnalysisDimensionDto>>> ByBusinessUnitId(int businessUnitId, string name)
+        public async Task<ApiResponse<List<BuAnalysisDimensionDto>>> ByBUIdAsync(int businessUnitId, string name)
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var data = await _analysisDimensionRepository.ByBusinessUnitId(businessUnitId, userId);
@@ -46,14 +46,14 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<BuAnalysisDimensionDto>>.Success(dto, 200);
         }
 
-        public async Task<List<DimensionCheckDto>> CheckDimensionIdIsUsedInStructure(List<int> dimensionIds)
+        public async Task<List<DimensionCheckDto>> CheckDimensionIdsAsync(List<int> dimensionIds)
         {
             var existDatas = await _analysisDimensionRepository.CheckDimensionIdIsUsedInStructure(dimensionIds);
             var data = _mapper.Map<List<DimensionCheckDto>>(existDatas);
             return data;
         }
 
-        public async Task<ApiResponse<bool>> Delete(AnalysisDimensionDeleteModel model, string name)
+        public async Task<ApiResponse<bool>> DeleteAsync(AnalysisDimensionDeleteModel model, string name)
         {
             var existDatas = await _analysisDimensionRepository.CheckDimensionIdIsUsedInStructure(model.DimensionIds);
             if (existDatas.Count > 0)
@@ -77,7 +77,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Fail("Analysis code can not be deleted", 400);
         }
 
-        public async Task<ApiResponse<bool>> Save(List<AnalysisDimensionDto> analysisDimension, string name)
+        public async Task<ApiResponse<bool>> SaveAsync(List<AnalysisDimensionDto> analysisDimension, string name)
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var dimension = false;

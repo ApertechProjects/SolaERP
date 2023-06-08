@@ -591,7 +591,7 @@ namespace SolaERP.Business.CommonLogic
                                 $"{MenuIds[i]}," +
                                 $"{V("Create", MenuIds[i])}," +
                                 $"{V("Edit", MenuIds[i])}," +
-                                $"{V("Delete", MenuIds[i])}," +
+                                $"{V("DeleteAsync", MenuIds[i])}," +
                                 $"{V("Export", MenuIds[i])}",
                                 ConfHelper.DevelopmentUrl);
                         }
@@ -605,7 +605,7 @@ namespace SolaERP.Business.CommonLogic
                                     return Convert.ToInt16(gs.Menus.Create.Contains(menuId));
                                 case "Edit":
                                     return Convert.ToInt16(gs.Menus.Edit.Contains(menuId));
-                                case "Delete":
+                                case "DeleteAsync":
                                     return Convert.ToInt16(gs.Menus.Delete.Contains(menuId));
                                 default:
                                     return Convert.ToInt16(gs.Menus.Export.Contains(menuId));

@@ -48,5 +48,9 @@ namespace SolaERP.API.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> Prequalification()
             => CreateActionResult(await _service.GetPrequalificationAsync(User.Identity.Name));
+
+        [HttpPost]
+        public async Task<IActionResult> Post(SupplierRegisterCommand command)
+            => CreateActionResult(await _service.AddAsync(User.Identity.Name, command));
     }
 }

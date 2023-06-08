@@ -19,12 +19,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_VendorDueDiligence_IUD @DueDiligenceDesignId,@VendorId
+                command.CommandText = @"EXEC SP_VendorDueDiligence_IUD @VendorDueDiligenceId,
+                                                                       @DueDiligenceDesignId,@VendorId
                                                                       ,@TextboxValue,@TextareaValue
                                                                       ,@CheckboxValue,@RadioboxValue
-`                                                                     ,@IntValue,@DecimalValue
+                                                                      ,@IntValue,@DecimalValue
                                                                       ,@DateTimeValue,@AgreementValue";
 
+                command.Parameters.AddWithValue(command, "@VendorDueDiligenceId", vendorDueDiligence.VendorDueDiligenceId);
                 command.Parameters.AddWithValue(command, "@DueDiligenceDesignId", vendorDueDiligence.DueDiligenceDesignId);
                 command.Parameters.AddWithValue(command, "@VendorId", vendorDueDiligence.VendorId);
                 command.Parameters.AddWithValue(command, "@TextboxValue", vendorDueDiligence.TextboxValue);
@@ -47,7 +49,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return await ModifyDueDiligence(new()
             {
-                DueDiligenceDesignId = 0,
+                VendorDueDiligenceId = 0,
+                DueDiligenceDesignId = model.DueDiligenceDesignId,
                 DateTimeValue = model.DateTimeValue,
                 DecimalValue = model.DecimalValue,
                 AgreementValue = model.AgreementValue,

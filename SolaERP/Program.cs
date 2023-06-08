@@ -120,6 +120,9 @@ builder.Services.AddSwaggerGen(c =>
         Description = "Our test swagger client",
     });
 
+    c.DescribeAllParametersInCamelCase();
+
+
     var jwtSecurityScheme = new OpenApiSecurityScheme
     {
         Scheme = "bearer",

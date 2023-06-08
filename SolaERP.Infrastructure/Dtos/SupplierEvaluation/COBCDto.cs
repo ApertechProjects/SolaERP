@@ -11,8 +11,9 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
 
     public class CodeOfBuConduct : BusinessUnitsAllDto
     {
-        public int CobcID { get; set; }
+        public int? CobcID { get; set; }
         public int VendorId { get; set; }
+        public bool IsAgreed { get; set; }
     }
 
 }
