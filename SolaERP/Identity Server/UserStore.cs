@@ -52,7 +52,7 @@ namespace SolaERP.Application.Identity_Server
 
         public async Task<string> GetUserNameAsync(User user, CancellationToken cancellationToken)
         {
-            return await Task.Run(() => { return user.UserName; });
+            return await Task.Run(() => { return user.Email; });
         }
 
         public Task SetNormalizedUserNameAsync(User user, string normalizedName, CancellationToken cancellationToken)
