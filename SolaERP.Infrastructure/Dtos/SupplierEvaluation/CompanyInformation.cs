@@ -27,8 +27,8 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public int CreditDays { get; set; }
         public string PaymentTerms { get; set; }
         public bool AgreeWithDefaultDays { get; set; }
-        public int PrequalificationCategoryId { get; set; }
-        public int BusinessCategoryId { get; set; }
+        public List<PrequalificationCategory> PrequalificationCategories { get; set; }
+        public List<BusinessCategory> BusinessCategories { get; set; }
     }
 
 
@@ -46,7 +46,5 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public string PaymentTerms { get; set; }
         public int AgreeWithDefaultDays { get; set; }
         public DateTime CompanyRegistrationDate { get; set; }
-        public int PrequalificationCategoryId { get; set; }
-        public int VendorBusinessCategoryId { get; set; }
     }
 }

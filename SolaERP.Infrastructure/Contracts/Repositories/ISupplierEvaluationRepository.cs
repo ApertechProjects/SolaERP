@@ -17,7 +17,9 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<DueDiligenceDesign>> GetDueDiligencesDesignAsync(Enums.Language language);
         Task<List<DueDiligenceGrid>> GetDueDiligenceGridAsync(int deuDesignId);
         Task<List<VendorBankDetail>> GetVondorBankDetailsAsync(int vendorid);
-        Task<CompanyInfo> GetCompanyInfoChild(int vendorId);
+        Task<CompanyInfo> GetCompanyInfoAsync(int vendorId);
+        Task<List<VendorPrequalification>> GetVendorPrequalificationAsync(int vendorId);
+        Task<List<VendorBuCategory>> GetVendorBuCategoriesAsync(int vendorId);
         Task<Prequalification> GetPrequalificationAsync(int vendorid);
         Task<bool> AddNDAAsync(VendorNDA ndas);
         Task<bool> DeleteNDAAsync(int ndaId);

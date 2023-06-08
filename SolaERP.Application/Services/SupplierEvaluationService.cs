@@ -127,6 +127,7 @@ namespace SolaERP.Persistence.Services
             var result = buUnits
                         .Select(x => new CodeOfBuConduct
                         {
+                            VendorFullName = user.FullName,
                             CobcID = cobc.FirstOrDefault(y => y.BusinessUnitId == x.BusinessUnitId)?.VendorCOBCId,
                             VendorId = user.VendorId,
                             BusinessUnitId = x.BusinessUnitId,
@@ -145,8 +146,8 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<CodeOfBuConduct>>.Success(result, 200);
         }
 
-        public async Task<ApiResponse<List<DueDiligenceDesignDto>>> GetDueDiligenceAsync(Language language)
-             => ApiResponse<List<DueDiligenceDesignDto>>.Success(await GetDueDesignsAsync(language));
+        public async Task<ApiResponse<List<DueDiligenceDesignDto>>> GetDueDiligenceAsync(string acceptLanguage)
+             => ApiResponse<List<DueDiligenceDesignDto>>.Success(await GetDueDesignsAsync(Language.en));
 
 
 
@@ -154,12 +155,32 @@ namespace SolaERP.Persistence.Services
         {
             var user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
+            var vendorPrequalificationTask = _repository.GetVendorPrequalificationAsync(user.VendorId);
+            var prequalificationTypesTask = _repository.GetPrequalificationCategoriesAsync();
+            var businessCategoriesTask = _repository.GetBusinessCategoriesAsync();
+            var vendorBusinessCategoriesTask = _repository.GetVendorBuCategoriesAsync(user.VendorId);
+            var companyInfoTask = _repository.GetCompanyInfoAsync(user.VendorId);
+
+            await Task.WhenAll(vendorPrequalificationTask, prequalificationTypesTask, businessCategoriesTask, vendorBusinessCategoriesTask, companyInfoTask);
+
+            var matchedPrequalificationTypes = prequalificationTypesTask.Result
+                .Where(x => vendorPrequalificationTask.Result.Select(y => y.PrequalificationCategoryId).Contains(x.Id))
+                .ToList();
+
+            var matchedBuCategories = businessCategoriesTask.Result
+                .Where(x => vendorBusinessCategoriesTask.Result.Select(y => y.VendorBusinessCategoryId).Contains(x.Id))
+                .ToList();
+
+            CompanyInfoDto companyInfo = _mapper.Map<CompanyInfoDto>(companyInfoTask.Result);
+            companyInfo.PrequalificationCategories = matchedPrequalificationTypes;
+            companyInfo.BusinessCategories = matchedBuCategories;
+
             VM_GET_InitalRegistration viewModel = new()
             {
-                CompanyInformation = _mapper.Map<CompanyInfoDto>(await _repository.GetCompanyInfoChild(user.VendorId)),
-                BusinessCategories = await _repository.GetBusinessCategoriesAsync(),
+                CompanyInformation = companyInfo,
+                BusinessCategories = businessCategoriesTask.Result,
                 PaymentTerms = await _repository.GetPaymentTermsAsync(),
-                PrequalificationTypes = await _repository.GetPrequalificationCategoriesAsync(),
+                PrequalificationTypes = prequalificationTypesTask.Result,
                 Services = await _repository.GetProductServicesAsync(),
                 ContactPerson = _mapper.Map<ContactPersonDto>(user),
             };
@@ -178,6 +199,7 @@ namespace SolaERP.Persistence.Services
             var result = buUnits
                 .Select(x => new NonDisclosureAgreement
                 {
+                    VendorFullName = user.FullName,
                     NdaID = nda.FirstOrDefault(y => y.BusinessUnitId == x.BusinessUnitId)?.VendorNDAId,
                     VendorId = user.VendorId,
                     BusinessUnitId = x.BusinessUnitId,

@@ -313,7 +313,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
-        public async Task<CompanyInfo> GetCompanyInfoChild(int vendorId)
+        public async Task<CompanyInfo> GetCompanyInfoAsync(int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -448,6 +448,41 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 return result;
             }
+        }
+
+        public async Task<List<VendorPrequalification>> GetVendorPrequalificationAsync(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_VendorPrequalificationCategory_Load @VendorId";
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+
+                List<VendorPrequalification> result = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    result.Add(reader.GetByEntityStructure<VendorPrequalification>());
+
+                return result;
+            }
+        }
+
+        public async Task<List<VendorBuCategory>> GetVendorBuCategoriesAsync(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_VendorBusinessCategory_Load @VendorId";
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+
+                List<VendorBuCategory> result = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    result.Add(reader.GetByEntityStructure<VendorBuCategory>());
+
+                return result;
+            }
+
         }
     }
 }
