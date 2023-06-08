@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Entities.ApproveStage;
+using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Contracts.Repositories
 {
@@ -6,6 +7,6 @@ namespace SolaERP.Application.Contracts.Repositories
     {
         Task<List<ApproveStagesDetail>> GetApproveStageDetailsByApproveStageMainId(int approveStageMainId);
         Task<bool> RemoveAsync(int id);
-        Task<int> SaveDetailsAsync(ApproveStagesDetail details);
+        Task<int> SaveDetailsAsync(ApproveStageDetailInputModel details);
     }
 }

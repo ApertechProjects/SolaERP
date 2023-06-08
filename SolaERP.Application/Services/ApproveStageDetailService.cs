@@ -28,10 +28,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<int> AddAsync(string authToken, ApproveStagesDetailDto entity)
         {
-            var userId = await _userRepository.ConvertIdentity(authToken);
-            var model = _mapper.Map<ApproveStagesDetail>(entity);
-            var approveStageDetail = await _approveStageDetailsRepository.SaveDetailsAsync(model);
-            return 0;
+            throw new NotImplementedException();
         }
 
         public Task<ApiResponse<List<ApproveStagesDetailDto>>> GetAllAsync()

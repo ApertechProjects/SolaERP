@@ -222,6 +222,7 @@ namespace SolaERP.Persistence.Mappers
 
 
             CreateMap<AnalysisStructureWithBu, AnalysisStructureWithBuDto>().ReverseMap();
+            CreateMap<ApproveStageMainInputModel, ApproveStagesMain>().ReverseMap();
         }
     }
 }
