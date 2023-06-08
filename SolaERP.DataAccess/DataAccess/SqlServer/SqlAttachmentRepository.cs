@@ -1,8 +1,8 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Application.Contracts.Repositories;
+﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.Attachment;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
 using System.Text;
 
@@ -37,7 +37,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<Attachment>> GetAttachmenListWithFileDataAsync(int attachmentId)
+        public async Task<List<Attachment>> GetAttachmentsWithFileDataAsync(int attachmentId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -52,7 +52,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<Attachment>> GetAttachmentListAsync(int sourceId, string reference, string sourceType)
+        public async Task<List<Attachment>> GetAttachmentsAsync(int sourceId, string reference, string sourceType)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

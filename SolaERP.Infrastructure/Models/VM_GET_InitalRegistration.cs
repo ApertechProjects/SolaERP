@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Dtos.SupplierEvaluation;
+﻿using SolaERP.Application.Dtos.Attachment;
+using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Entities.SupplierEvaluation;
 
 namespace SolaERP.Application.Models
@@ -11,5 +12,6 @@ namespace SolaERP.Application.Models
         public List<PrequalificationCategory> PrequalificationTypes { get; set; }
         public List<PaymentTerms> PaymentTerms { get; set; }
         public List<ProductService> Services { get; set; }
+        public List<AttachmentDto> Attachments { get; set; }
     }
 }

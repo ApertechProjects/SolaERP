@@ -26,8 +26,6 @@ using SolaERP.Persistence.Validations.AnalysisDimensionValidation;
 using SolaERP.Persistence.Validations.AnalysisStructure;
 using SolaERP.Persistence.Validations.ApproveRoleValidation;
 using SolaERP.Persistence.Validations.UserValidation;
-using FileService = SolaERP.Infrastructure.Services.FileService;
-using IFileService = SolaERP.Application.Contracts.Services.IFileService;
 using UserValidation = SolaERP.Application.Validations.UserValidation.UserValidation;
 
 namespace SolaERP.Extensions
@@ -73,8 +71,6 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<ILayoutService, LayoutService>();
             builder.Services.AddScoped<ILanguageService, LanguageService>();
             builder.Services.AddScoped<IVendorService, VendorService>();
-            //builder.Services.AddScoped<IFileService, FileService>();
-            //builder.Services.AddScoped<IFileProducer, FileProducer>();
             builder.Services.AddScoped<IStorage, LocalStorage>();
             builder.Services.AddScoped<IAnalysisDimensionService, AnalysisDimensionService>();
             builder.Services.AddScoped<IAnalysisStructureService, AnalysisStructureService>();
@@ -158,7 +154,6 @@ namespace SolaERP.Extensions
 
         private static void UseInfrastructureServices(this WebApplicationBuilder builder)
         {
-            //builder.Services.AddScoped<IFileService, FileService>();
         }
     }
 }

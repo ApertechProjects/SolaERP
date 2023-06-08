@@ -31,7 +31,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<AttachmentDto>>> GetAttachmentsAsync(int sourceId, string reference, string sourceType)
         {
-            var entity = await _attachmentRepository.GetAttachmentListAsync(sourceId, reference, sourceType);
+            var entity = await _attachmentRepository.GetAttachmentsAsync(sourceId, reference, sourceType);
             var result = _mapper.Map<List<AttachmentDto>>(entity);
 
             return ApiResponse<List<AttachmentDto>>.Success(result, 200);
@@ -39,7 +39,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<AttachmentWithFileDto>>> GetAttachmentWithFilesAsync(int attachmentId)
         {
-            var entity = await _attachmentRepository.GetAttachmenListWithFileDataAsync(attachmentId);
+            var entity = await _attachmentRepository.GetAttachmentsWithFileDataAsync(attachmentId);
             var result = _mapper.Map<List<AttachmentWithFileDto>>(entity);
             for (int i = 0; i < result.Count; i++)
             {

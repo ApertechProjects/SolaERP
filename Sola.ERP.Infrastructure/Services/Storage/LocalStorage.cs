@@ -15,25 +15,20 @@ namespace SolaERP.Infrastructure.Services.Storage
             _storageOption = storageOption;
         }
 
-        public Task<bool> CopyToAsync(string path, IFormFile file, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
 
         public Task DeleteAsync(string pathOrContainerName, string fileName, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public List<string> GetFilesAsync()
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<string> GetAsync(string pathOrContainerName, CancellationToken cancellationToken)
+        //{
+        //    while (!cancellationToken.IsCancellationRequested)
+        //    {
+        //        using NetworkConnection _connection = new NetworkConnection(pathOrContainerName, new(_storageOption.Value.Username, _storageOption.Value.Password));
 
-        public bool HasFile(string pathOrContainerName, string fileName, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+        //    }
+        //}
 
         public async Task<(string fileName, string pathOrContainerName)> UploadAsync(string pathOrContainerName, IFormFile file, CancellationToken cancellationToken)
         {

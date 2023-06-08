@@ -12,5 +12,8 @@
 
         public string GetSignatureFolderPath()
             => Path.Combine(BaseFolderPath, @"\signatures");
+
+        public string GetAttachmentsFolderPath()
+            => Path.Combine(BaseFolderPath, @"\attachments");
     }
 }

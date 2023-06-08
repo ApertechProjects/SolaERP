@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Options;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Attachment;
 using SolaERP.Application.Dtos.BusinessUnit;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.SupplierEvaluation;
@@ -10,6 +12,7 @@ using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
+using SolaERP.Application.Shared;
 using SolaERP.Application.UnitOfWork;
 
 namespace SolaERP.Persistence.Services
@@ -22,13 +25,19 @@ namespace SolaERP.Persistence.Services
         private readonly ISupplierEvaluationRepository _repository;
         private readonly IUserRepository _userRepository;
         private readonly IVendorRepository _vendorRepository;
+        private readonly IAttachmentRepository _attachmentRepository;
+        private readonly IStorage _storage;
+        private readonly IOptions<StorageOption> _storageOption;
 
         public SupplierEvaluationService(ISupplierEvaluationRepository repository,
                                          IMapper mapper,
                                          IUnitOfWork unitOfWork,
                                          IBusinessUnitRepository buRepository,
                                          IUserRepository userRepository,
-                                         IVendorRepository vendorRepository)
+                                         IVendorRepository vendorRepository,
+                                         IAttachmentRepository attachmentRepository,
+                                         IStorage storage,
+                                         IOptions<StorageOption> storageOption)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
@@ -36,6 +45,9 @@ namespace SolaERP.Persistence.Services
             _mapper = mapper;
             _userRepository = userRepository;
             _vendorRepository = vendorRepository;
+            _attachmentRepository = attachmentRepository;
+            _storage = storage;
+            _storageOption = storageOption;
         }
 
         public async Task<ApiResponse<bool>> AddAsync(string useridentity, SupplierRegisterCommand command)
@@ -160,8 +172,9 @@ namespace SolaERP.Persistence.Services
             var businessCategoriesTask = _repository.GetBusinessCategoriesAsync();
             var vendorBusinessCategoriesTask = _repository.GetVendorBuCategoriesAsync(user.VendorId);
             var companyInfoTask = _repository.GetCompanyInfoAsync(user.VendorId);
+            var attachmentTask = _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_LOGO.ToString());
 
-            await Task.WhenAll(vendorPrequalificationTask, prequalificationTypesTask, businessCategoriesTask, vendorBusinessCategoriesTask, companyInfoTask);
+            await Task.WhenAll(vendorPrequalificationTask, prequalificationTypesTask, businessCategoriesTask, vendorBusinessCategoriesTask, attachmentTask, companyInfoTask);
 
             var matchedPrequalificationTypes = prequalificationTypesTask.Result
                 .Where(x => vendorPrequalificationTask.Result.Select(y => y.PrequalificationCategoryId).Contains(x.Id))
@@ -183,6 +196,7 @@ namespace SolaERP.Persistence.Services
                 PrequalificationTypes = prequalificationTypesTask.Result,
                 Services = await _repository.GetProductServicesAsync(),
                 ContactPerson = _mapper.Map<ContactPersonDto>(user),
+                Attachments = _mapper.Map<List<AttachmentDto>>(attachmentTask.Result)
             };
 
             return ApiResponse<VM_GET_InitalRegistration>.Success(viewModel, 200);
