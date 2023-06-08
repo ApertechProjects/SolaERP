@@ -127,6 +127,7 @@ namespace SolaERP.Persistence.Services
             var result = buUnits
                         .Select(x => new CodeOfBuConduct
                         {
+                            VendorFullName = user.FullName,
                             CobcID = cobc.FirstOrDefault(y => y.BusinessUnitId == x.BusinessUnitId)?.VendorCOBCId,
                             VendorId = user.VendorId,
                             BusinessUnitId = x.BusinessUnitId,
@@ -198,6 +199,7 @@ namespace SolaERP.Persistence.Services
             var result = buUnits
                 .Select(x => new NonDisclosureAgreement
                 {
+                    VendorFullName = user.FullName,
                     NdaID = nda.FirstOrDefault(y => y.BusinessUnitId == x.BusinessUnitId)?.VendorNDAId,
                     VendorId = user.VendorId,
                     BusinessUnitId = x.BusinessUnitId,

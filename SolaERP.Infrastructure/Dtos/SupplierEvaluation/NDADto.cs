@@ -11,6 +11,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
 
     public class NonDisclosureAgreement : BusinessUnitsAllDto
     {
+        public string VendorFullName { get; set; }
         public int? NdaID { get; set; }
         public int VendorId { get; set; }
         public bool IsAgreed { get; set; }
