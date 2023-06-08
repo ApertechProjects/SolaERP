@@ -42,8 +42,8 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _service.GetCOBCAsync(User.Identity.Name));
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> DueDiligence(Language language)
-            => CreateActionResult(await _service.GetDueDiligenceAsync(language));
+        public async Task<IActionResult> DueDiligence()
+            => CreateActionResult(await _service.GetDueDiligenceAsync(Request.Headers.AcceptLanguage));
 
         [HttpGet("[action]")]
         public async Task<IActionResult> Prequalification()

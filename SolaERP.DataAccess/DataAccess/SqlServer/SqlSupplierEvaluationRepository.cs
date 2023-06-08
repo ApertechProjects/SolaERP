@@ -313,7 +313,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
-        public async Task<CompanyInfo> GetCompanyInfoChild(int vendorId)
+        public async Task<CompanyInfo> GetCompanyInfoAsync(int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

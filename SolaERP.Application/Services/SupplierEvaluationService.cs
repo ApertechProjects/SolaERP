@@ -145,8 +145,8 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<CodeOfBuConduct>>.Success(result, 200);
         }
 
-        public async Task<ApiResponse<List<DueDiligenceDesignDto>>> GetDueDiligenceAsync(Language language)
-             => ApiResponse<List<DueDiligenceDesignDto>>.Success(await GetDueDesignsAsync(language));
+        public async Task<ApiResponse<List<DueDiligenceDesignDto>>> GetDueDiligenceAsync(string acceptLanguage)
+             => ApiResponse<List<DueDiligenceDesignDto>>.Success(await GetDueDesignsAsync(Language.en));
 
 
 
@@ -156,7 +156,7 @@ namespace SolaERP.Persistence.Services
 
             VM_GET_InitalRegistration viewModel = new()
             {
-                CompanyInformation = _mapper.Map<CompanyInfoDto>(await _repository.GetCompanyInfoChild(user.VendorId)),
+                CompanyInformation = _mapper.Map<CompanyInfoDto>(await _repository.GetCompanyInfoAsync(user.VendorId)),
                 BusinessCategories = await _repository.GetBusinessCategoriesAsync(),
                 PaymentTerms = await _repository.GetPaymentTermsAsync(),
                 PrequalificationTypes = await _repository.GetPrequalificationCategoriesAsync(),
