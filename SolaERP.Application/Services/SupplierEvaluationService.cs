@@ -98,7 +98,7 @@ namespace SolaERP.Persistence.Services
                 CompanyInformation = companyInformation,
                 BankCodes = bankCodes,
                 BusinessUnits = _mapper.Map<List<BusinessUnitsDto>>(buUnits),
-                DueDiligenceDesign = await GetDueDesignsAsync(model.Language)
+                DueDiligenceDesign = await GetDueDesignsAsync("", model.Language)
             };
 
             return ApiResponse<VM_GET_SupplierEvaluation>.Success(viewModel, 200);
@@ -154,8 +154,8 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<CodeOfBuConduct>>.Success(result, 200);
         }
 
-        public async Task<ApiResponse<List<DueDiligenceDesignDto>>> GetDueDiligenceAsync(string acceptLanguage)
-             => ApiResponse<List<DueDiligenceDesignDto>>.Success(await GetDueDesignsAsync(Language.en));
+        public async Task<ApiResponse<List<DueDiligenceDesignDto>>> GetDueDiligenceAsync(string userIdentity, string acceptLanguage)
+             => ApiResponse<List<DueDiligenceDesignDto>>.Success(await GetDueDesignsAsync(userIdentity, Language.en));
 
 
 
@@ -236,11 +236,13 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<PrequalificationDto>.Success(result, 200);
         }
 
-        private async Task<List<DueDiligenceDesignDto>> GetDueDesignsAsync(Language language)
+        private async Task<List<DueDiligenceDesignDto>> GetDueDesignsAsync(string userIdentity, Language language)
         {
+            User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
             List<DueDiligenceDesign> dueDiligence = await _repository.GetDueDiligencesDesignAsync(language);
+            List<Application.Entities.SupplierEvaluation.VendorDueDiligence> dueDiligenceValues = await _repository.GetVendorDuesAsync(user.VendorId);
 
-            var tesMapping = dueDiligence
+            var responseModel = dueDiligence
                 .GroupBy(x => x.Title).ToList()
                 .Select(x => new DueDiligenceDesignDto
                 {
@@ -250,22 +252,22 @@ namespace SolaERP.Persistence.Services
                         DesignId = d.DesignId,
                         LineNo = d.LineNo,
                         Question = d.Question,
-                        HasTextBox = d.HasTextBox > 0,
-                        HasCheckBox = d.HasCheckBox > 0,
-                        HasRadioBox = d.HasRadioBox > 0,
-                        HasInt = d.HasInt > 0,
-                        HasDecimal = d.HasDecimal > 0,
-                        HasDateTime = d.HasDateTime > 0,
-                        HasAttachment = d.HasAttachment > 0,
-                        HasBankList = d.HasBankList > 0,
-                        HasTexArea = d.HasTexArea > 0,
+                        HasTextBox = d.HasTextBox > 0 ? true : null,
+                        HasCheckBox = d.HasCheckBox > 0 ? true : null,
+                        HasRadioBox = d.HasRadioBox > 0 ? true : null,
+                        HasInt = d.HasInt > 0 ? true : null,
+                        HasDecimal = d.HasDecimal > 0 ? true : null,
+                        HasDateTime = d.HasDateTime > 0 ? true : null,
+                        HasAttachment = d.HasAttachment > 0 ? true : null,
+                        HasBankList = d.HasBankList > 0 ? true : null,
+                        HasTexArea = d.HasTexArea > 0 ? true : null,
                         ParentCompanies = d.ParentCompanies,
-                        HasDataGrid = d.HasGrid > 0,
-                        GridRowLimit = d.GridRowLimit,
-                        GridColumnCount = d.GridColumnCount,
-                        HasAgreement = d.HasAgreement,
-                        AgreementText = d.AgreementText,
-                        GridColumns = new[]
+                        HasDataGrid = d.HasGrid > 0 ? true : null,
+                        GridRowLimit = d.GridRowLimit == 0 ? null : d.GridRowLimit,
+                        GridColumnCount = d.GridColumnCount == 0 ? null : d.GridColumnCount,
+                        HasAgreement = d.HasAgreement ? true : null,
+                        AgreementText = d.HasAgreement ? d.AgreementText : null,
+                        GridColumns = d.HasGrid == 0 ? null : new[]
                         {
                            d.Column1Alias,
                            d.Column2Alias,
@@ -273,21 +275,19 @@ namespace SolaERP.Persistence.Services
                            d.Column4Alias,
                            d.Column5Alias,
                         }.Where(col => col != null).ToArray(),
-                        GridDatas = new(),
-                        TextBoxPoint = d.HasTextBox,
-                        CheckBoxPoint = d.HasCheckBox,
-                        RadioBoxPoint = d.HasRadioBox,
-                        IntPoint = d.HasInt,
-                        DateTimePoint = d.HasDateTime,
-                        AttachmentPoint = d.HasAttachment,
-                        TextAreaPoint = d.HasTexArea,
-                        BankListPoint = d.HasBankList,
-                        DataGridPoint = d.HasGrid,
+                        TextBoxPoint = d.HasTextBox == 0 ? null : d.HasTextBox,
+                        CheckBoxPoint = d.HasCheckBox == 0 ? null : d.HasTextBox,
+                        RadioBoxPoint = d.HasRadioBox == 0 ? null : d.HasRadioBox,
+                        IntPoint = d.HasInt == 0 ? null : d.HasInt,
+                        DateTimePoint = d.HasDateTime == 0 ? null : d.HasDateTime,
+                        AttachmentPoint = d.HasAttachment == 0 ? null : d.HasAttachment,
+                        TextAreaPoint = d.HasTexArea == 0 ? null : d.HasTexArea,
+                        BankListPoint = d.HasBankList == 0 ? null : d.HasBankList,
+                        DataGridPoint = d.HasGrid == 0 ? null : d.HasGrid,
                     }).ToList()
                 }).ToList();
 
-
-            return await SetGridDatasAsync(tesMapping);
+            return await SetGridDatasAsync(responseModel);
         }
         private async Task<List<DueDiligenceDesignDto>> SetGridDatasAsync(List<DueDiligenceDesignDto> dueDesign)
         {
@@ -295,10 +295,11 @@ namespace SolaERP.Persistence.Services
             {
                 for (int j = 0; j < dueDesign[i].Childs.Count; j++)
                 {
-                    if (dueDesign[i].Childs[j].HasDataGrid)
+                    if (Convert.ToBoolean(dueDesign[i].Childs[j].HasDataGrid))
                     {
                         int childDesignId = dueDesign[i].Childs[j].DesignId;
-                        dueDesign[i].Childs[j].GridDatas = await _repository.GetDueDiligenceGridAsync(childDesignId);
+                        var gridDatas = await _repository.GetDueDiligenceGridAsync(childDesignId);
+                        dueDesign[i].Childs[j].GridDatas = gridDatas.Count > 0 ? gridDatas : null;
                     }
                 }
             }

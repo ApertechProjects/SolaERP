@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
@@ -43,7 +44,16 @@ namespace SolaERP.API.Controllers
 
         [HttpGet("[action]")]
         public async Task<IActionResult> DueDiligence()
-            => CreateActionResult(await _service.GetDueDiligenceAsync(Request.Headers.AcceptLanguage));
+           => CreateActionResult(await _service.GetDueDiligenceAsync(User.Identity.Name, Request.Headers.AcceptLanguage));
+
+        //var data = await _service.GetDueDiligenceAsync(User.Identity.Name, Request.Headers.AcceptLanguage);
+
+        //return Ok(JsonConvert.SerializeObject(data,
+        //    Formatting.None,
+        //    new JsonSerializerSettings
+        //    {
+        //        NullValueHandling = NullValueHandling.Ignore
+        //    }));
 
         [HttpGet("[action]")]
         public async Task<IActionResult> Prequalification()

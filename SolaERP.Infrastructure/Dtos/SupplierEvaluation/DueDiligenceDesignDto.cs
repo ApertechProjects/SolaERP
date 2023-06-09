@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Entities.SupplierEvaluation;
+﻿using Newtonsoft.Json;
+using SolaERP.Application.Entities.SupplierEvaluation;
 
 namespace SolaERP.Application.Dtos.SupplierEvaluation
 {
@@ -14,31 +15,58 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public int DesignId { get; set; }
         public int LineNo { get; set; }
         public string Question { get; set; }
-        public bool HasTextBox { get; set; }
-        public bool HasCheckBox { get; set; }
-        public bool HasRadioBox { get; set; }
-        public bool HasInt { get; set; }
-        public bool HasDecimal { get; set; }
-        public bool HasDateTime { get; set; }
-        public bool HasAttachment { get; set; }
-        public bool HasBankList { get; set; }
-        public bool HasTexArea { get; set; }
-        public bool ParentCompanies { get; set; }
-        public bool HasDataGrid { get; set; }
-        public int GridRowLimit { get; set; }
-        public int GridColumnCount { get; set; }
-        public bool HasAgreement { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool? HasTextBox { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool? HasCheckBox { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool? HasRadioBox { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool? HasInt { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool? HasDecimal { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool? HasDateTime { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool? HasAttachment { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool? HasBankList { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool? HasTexArea { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool? ParentCompanies { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool? HasDataGrid { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? GridRowLimit { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? GridColumnCount { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool? HasAgreement { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string AgreementText { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string[] GridColumns { get; set; }
-        public decimal TextBoxPoint { get; set; }
-        public decimal CheckBoxPoint { get; set; }
-        public decimal RadioBoxPoint { get; set; }
-        public decimal IntPoint { get; set; }
-        public decimal DateTimePoint { get; set; }
-        public decimal AttachmentPoint { get; set; }
-        public decimal TextAreaPoint { get; set; }
-        public decimal BankListPoint { get; set; }
-        public decimal DataGridPoint { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? TextBoxPoint { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? CheckBoxPoint { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? RadioBoxPoint { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? IntPoint { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? DateTimePoint { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? AttachmentPoint { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? TextAreaPoint { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? BankListPoint { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? DataGridPoint { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public List<DueDiligenceGrid> GridDatas { get; set; }
     }
+
 }

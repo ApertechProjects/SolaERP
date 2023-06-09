@@ -13,6 +13,6 @@
         public int AttachmentSubTypeId { get; set; }
         public DateTime UploadDateTime { get; set; }
         public int Size { get; set; }
-        public string SourceLink { get; set; }
+        public string FileLink { get; set; }
     }
 }

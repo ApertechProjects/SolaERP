@@ -484,5 +484,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
 
         }
+
+        public async Task<List<VendorDueDiligence>> GetVendorDuesAsync(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_VendorDueDiligence_Load @VendorId";
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+
+                List<VendorDueDiligence> result = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    result.Add(reader.GetByEntityStructure<VendorDueDiligence>());
+
+                return result;
+            }
+        }
     }
 }
