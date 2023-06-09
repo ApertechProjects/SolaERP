@@ -103,26 +103,22 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<VM_GET_SupplierEvaluation>.Success(viewModel, 200);
         }
-
-        public async Task<ApiResponse<BankCodesDto>> GetBankCodesAsync(int vendorId)
-        {
-            BankCodesDto bankCodes = new()
-            {
-                Currencies = await _repository.GetCurrenciesAsync(),
-                BankDetails = await _repository.GetVondorBankDetailsAsync(vendorId),
-            };
-
-            return ApiResponse<BankCodesDto>.Success(bankCodes, 200);
-        }
-
         public async Task<ApiResponse<VM_GET_VendorBankDetails>> GetBankDetailsAsync(string userIdentity)
         {
             var user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
+            var currencyTask = _repository.GetCurrenciesAsync();
+            var bankDetailsTask = _repository.GetVondorBankDetailsAsync(user.VendorId);
+            var attachemtsTask = _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_BNK.ToString());
+
+            await Task.WhenAll(currencyTask, bankDetailsTask);
+
+
             VM_GET_VendorBankDetails bankDetails = new()
             {
-                Currencies = await _repository.GetCurrenciesAsync(),
-                BankDetails = _mapper.Map<List<VendorBankDetailDto>>(await _repository.GetVondorBankDetailsAsync(user.VendorId))
+                Currencies = currencyTask.Result,
+                BankDetails = _mapper.Map<List<VendorBankDetailDto>>(bankDetailsTask.Result),
+                AccountVerificationLetter = _mapper.Map<List<AttachmentDto>>(attachemtsTask.Result),
             };
 
             return ApiResponse<VM_GET_VendorBankDetails>.Success(bankDetails, 200);
@@ -187,6 +183,7 @@ namespace SolaERP.Persistence.Services
             CompanyInfoDto companyInfo = _mapper.Map<CompanyInfoDto>(companyInfoTask.Result);
             companyInfo.PrequalificationCategories = matchedPrequalificationTypes;
             companyInfo.BusinessCategories = matchedBuCategories;
+            companyInfo.Attachments = _mapper.Map<List<AttachmentDto>>(attachmentTask.Result);
 
             VM_GET_InitalRegistration viewModel = new()
             {
@@ -196,7 +193,6 @@ namespace SolaERP.Persistence.Services
                 PrequalificationTypes = prequalificationTypesTask.Result,
                 Services = await _repository.GetProductServicesAsync(),
                 ContactPerson = _mapper.Map<ContactPersonDto>(user),
-                Attachments = _mapper.Map<List<AttachmentDto>>(attachmentTask.Result)
             };
 
             return ApiResponse<VM_GET_InitalRegistration>.Success(viewModel, 200);

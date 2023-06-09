@@ -1,4 +1,6 @@
 ﻿
+using SolaERP.Application.Dtos.Attachment;
+
 namespace SolaERP.Application.Dtos.SupplierEvaluation
 {
     public class VendorBankDetailDto

@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Entities;
+﻿using SolaERP.Application.Dtos.Attachment;
+using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.SupplierEvaluation;
 
 namespace SolaERP.Application.Dtos.SupplierEvaluation
@@ -29,6 +30,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public bool AgreeWithDefaultDays { get; set; }
         public List<PrequalificationCategory> PrequalificationCategories { get; set; }
         public List<BusinessCategory> BusinessCategories { get; set; }
+        public List<AttachmentDto> Attachments { get; set; }
     }
 
 

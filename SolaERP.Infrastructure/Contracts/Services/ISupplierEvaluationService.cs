@@ -13,7 +13,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<VM_GET_VendorBankDetails>> GetBankDetailsAsync(string userIdentity);
         Task<ApiResponse<List<NonDisclosureAgreement>>> GetNDAAsync(string userIdentity);
         Task<ApiResponse<List<CodeOfBuConduct>>> GetCOBCAsync(string userIdentity);
-        Task<ApiResponse<BankCodesDto>> GetBankCodesAsync(int vendorId);
+
         Task<ApiResponse<bool>> AddAsync(string userIdentity, SupplierRegisterCommand command);
     }
 }
