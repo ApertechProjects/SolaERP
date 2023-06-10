@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 using Serilog;
 using SolaERP.Application.Shared;
@@ -14,16 +15,15 @@ using SolaERP.Persistence.Mappers;
 using SolaERP.SignalR.Hubs;
 using System.Security.Claims;
 using System.Text;
-using System.Text.Json.Serialization;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers(options => { options.Filters.Add(new ValidationFilter()); }).AddNewtonsoftJson()
-.AddJsonOptions(options =>
+builder.Services.AddControllers(options => { options.Filters.Add(new ValidationFilter()); }).AddNewtonsoftJson(options =>
 {
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-}).Services
+    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+})
+.Services
 .AddFluentValidationAutoValidation()
 .AddFluentValidationClientsideAdapters();
 
