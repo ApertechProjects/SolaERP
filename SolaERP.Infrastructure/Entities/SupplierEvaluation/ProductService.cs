@@ -9,7 +9,6 @@ namespace SolaERP.Application.Entities.SupplierEvaluation
         public int Id { get; set; }
         [DbColumn("ProductServiceName")]
         public string Name { get; set; }
-        [JsonIgnore]
         public int Other { get; set; }
     }
 }
