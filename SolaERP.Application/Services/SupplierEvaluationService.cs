@@ -247,43 +247,58 @@ namespace SolaERP.Persistence.Services
                 .Select(x => new DueDiligenceDesignDto
                 {
                     Title = x.Key,
-                    Childs = x.Select(d => new DueDiligenceChildDto
+                    Childs = x.Select(d =>
                     {
-                        DesignId = d.DesignId,
-                        LineNo = d.LineNo,
-                        Question = d.Question,
-                        HasTextBox = d.HasTextBox > 0 ? true : null,
-                        HasCheckBox = d.HasCheckBox > 0 ? true : null,
-                        HasRadioBox = d.HasRadioBox > 0 ? true : null,
-                        HasInt = d.HasInt > 0 ? true : null,
-                        HasDecimal = d.HasDecimal > 0 ? true : null,
-                        HasDateTime = d.HasDateTime > 0 ? true : null,
-                        HasAttachment = d.HasAttachment > 0 ? true : null,
-                        HasBankList = d.HasBankList > 0 ? true : null,
-                        HasTexArea = d.HasTexArea > 0 ? true : null,
-                        ParentCompanies = d.ParentCompanies,
-                        HasDataGrid = d.HasGrid > 0 ? true : null,
-                        GridRowLimit = d.GridRowLimit == 0 ? null : d.GridRowLimit,
-                        GridColumnCount = d.GridColumnCount == 0 ? null : d.GridColumnCount,
-                        HasAgreement = d.HasAgreement ? true : null,
-                        AgreementText = d.HasAgreement ? d.AgreementText : null,
-                        GridColumns = d.HasGrid == 0 ? null : new[]
+                        var correspondingValue = dueDiligenceValues.FirstOrDefault(v => v.DueDiligenceDesignId == d.DesignId);
+
+                        return new DueDiligenceChildDto
                         {
-                           d.Column1Alias,
-                           d.Column2Alias,
-                           d.Column3Alias,
-                           d.Column4Alias,
-                           d.Column5Alias,
-                        }.Where(col => col != null).ToArray(),
-                        TextBoxPoint = d.HasTextBox == 0 ? null : d.HasTextBox,
-                        CheckBoxPoint = d.HasCheckBox == 0 ? null : d.HasTextBox,
-                        RadioBoxPoint = d.HasRadioBox == 0 ? null : d.HasRadioBox,
-                        IntPoint = d.HasInt == 0 ? null : d.HasInt,
-                        DateTimePoint = d.HasDateTime == 0 ? null : d.HasDateTime,
-                        AttachmentPoint = d.HasAttachment == 0 ? null : d.HasAttachment,
-                        TextAreaPoint = d.HasTexArea == 0 ? null : d.HasTexArea,
-                        BankListPoint = d.HasBankList == 0 ? null : d.HasBankList,
-                        DataGridPoint = d.HasGrid == 0 ? null : d.HasGrid,
+                            DesignId = d.DesignId,
+                            LineNo = d.LineNo,
+                            Question = d.Question,
+                            HasTextBox = d.HasTextBox > 0 ? true : null,
+                            HasCheckBox = d.HasCheckBox > 0 ? true : null,
+                            HasRadioBox = d.HasRadioBox > 0 ? true : null,
+                            HasInt = d.HasInt > 0 ? true : null,
+                            HasDecimal = d.HasDecimal > 0 ? true : null,
+                            HasDateTime = d.HasDateTime > 0 ? true : null,
+                            HasAttachment = d.HasAttachment > 0 ? true : null,
+                            HasBankList = d.HasBankList > 0 ? true : null,
+                            HasTexArea = d.HasTexArea > 0 ? true : null,
+                            ParentCompanies = d.ParentCompanies,
+                            HasDataGrid = d.HasGrid > 0 ? true : null,
+                            GridRowLimit = d.GridRowLimit > 0 ? d.GridRowLimit : null,
+                            GridColumnCount = d.GridColumnCount > 0 ? d.GridColumnCount : null,
+                            HasAgreement = d.HasAgreement ? true : null,
+                            AgreementText = d.HasAgreement ? d.AgreementText : null,
+                            GridColumns = d.HasGrid > 0 ? new[]
+                            {
+                                d.Column1Alias,
+                                d.Column2Alias,
+                                d.Column3Alias,
+                                d.Column4Alias,
+                                d.Column5Alias,
+                            }.Where(col => col != null).ToArray() : null,
+                            TextBoxPoint = d.HasTextBox > 0 ? d.HasTextBox : null,
+                            CheckBoxPoint = d.HasCheckBox > 0 ? d.HasCheckBox : null,
+                            RadioBoxPoint = d.HasRadioBox > 0 ? d.HasRadioBox : null,
+                            IntPoint = d.HasInt > 0 ? d.HasInt : null,
+                            DateTimePoint = d.HasDateTime > 0 ? d.HasDateTime : null,
+                            AttachmentPoint = d.HasAttachment > 0 ? d.HasAttachment : null,
+                            TextAreaPoint = d.HasTexArea > 0 ? d.HasTexArea : null,
+                            BankListPoint = d.HasBankList > 0 ? d.HasBankList : null,
+                            DataGridPoint = d.HasGrid > 0 ? d.HasGrid : null,
+
+                            TextboxValue = d.HasTextBox > 0 ? correspondingValue?.TextboxValue : null,
+                            TextareaValue = d.HasTexArea > 0 ? correspondingValue?.TextareaValue : null,
+                            CheckboxValue = d.HasCheckBox > 0 ? correspondingValue?.CheckboxValue : null,
+                            RadioboxValue = d.HasRadioBox > 0 ? correspondingValue?.RadioboxValue : null,
+                            IntValue = d.HasInt > 0 ? correspondingValue?.IntValue : null,
+                            DecimalValue = d.HasDecimal > 0 ? correspondingValue?.DecimalValue : null,
+                            DateTimeValue = d.HasDateTime > 0 ? correspondingValue?.DateTimeValue : null,
+                            AgreementValue = d.HasAgreement ? correspondingValue?.AgreementValue : null,
+                            Scoring = correspondingValue?.Scoring ?? null
+                        };
                     }).ToList()
                 }).ToList();
 
