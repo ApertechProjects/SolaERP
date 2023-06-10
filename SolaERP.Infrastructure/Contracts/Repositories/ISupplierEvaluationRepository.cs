@@ -15,6 +15,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<PaymentTerms>> GetPaymentTermsAsync();
         Task<List<Currency>> GetCurrenciesAsync();
         Task<List<DueDiligenceDesign>> GetDueDiligencesDesignAsync(Enums.Language language);
+        Task<List<VendorProductService>> GetVendorProductServices(int vendorId);
         Task<List<DueDiligenceGrid>> GetDueDiligenceGridAsync(int deuDesignId);
         Task<List<VendorBankDetail>> GetVondorBankDetailsAsync(int vendorid);
         Task<CompanyInfo> GetCompanyInfoAsync(int vendorId);

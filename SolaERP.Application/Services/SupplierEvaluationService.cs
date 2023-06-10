@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Options;
+using SixLabors.ImageSharp.ColorSpaces;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Attachment;
@@ -168,9 +169,18 @@ namespace SolaERP.Persistence.Services
             var businessCategoriesTask = _repository.GetBusinessCategoriesAsync();
             var vendorBusinessCategoriesTask = _repository.GetVendorBuCategoriesAsync(user.VendorId);
             var companyInfoTask = _repository.GetCompanyInfoAsync(user.VendorId);
+            var vendorProductsTask = _repository.GetVendorProductServices(user.VendorId);
             var attachmentTask = _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_LOGO.ToString());
+            var productServicesTask = _repository.GetProductServicesAsync();
 
-            await Task.WhenAll(vendorPrequalificationTask, prequalificationTypesTask, businessCategoriesTask, vendorBusinessCategoriesTask, attachmentTask, companyInfoTask);
+            await Task.WhenAll(vendorPrequalificationTask,
+                                prequalificationTypesTask,
+                                businessCategoriesTask,
+                                vendorBusinessCategoriesTask,
+                                productServicesTask,
+                                vendorProductsTask,
+                                attachmentTask,
+                                companyInfoTask);
 
             var matchedPrequalificationTypes = prequalificationTypesTask.Result
                 .Where(x => vendorPrequalificationTask.Result.Select(y => y.PrequalificationCategoryId).Contains(x.Id))
@@ -180,10 +190,15 @@ namespace SolaERP.Persistence.Services
                 .Where(x => vendorBusinessCategoriesTask.Result.Select(y => y.VendorBusinessCategoryId).Contains(x.Id))
                 .ToList();
 
+            var matchedProductServices = productServicesTask.Result
+                 .Where(x => vendorProductsTask.Result.Select(y => y.ProductServiceId).Contains(x.Id))
+                 .ToList();
+
             CompanyInfoDto companyInfo = _mapper.Map<CompanyInfoDto>(companyInfoTask.Result);
             companyInfo.PrequalificationCategories = matchedPrequalificationTypes;
             companyInfo.BusinessCategories = matchedBuCategories;
             companyInfo.Attachments = _mapper.Map<List<AttachmentDto>>(attachmentTask.Result);
+            companyInfo.ProductServices = matchedProductServices;
 
             VM_GET_InitalRegistration viewModel = new()
             {
@@ -242,65 +257,60 @@ namespace SolaERP.Persistence.Services
             List<DueDiligenceDesign> dueDiligence = await _repository.GetDueDiligencesDesignAsync(language);
             List<Application.Entities.SupplierEvaluation.VendorDueDiligence> dueDiligenceValues = await _repository.GetVendorDuesAsync(user.VendorId);
 
-            var responseModel = dueDiligence
-                .GroupBy(x => x.Title).ToList()
-                .Select(x => new DueDiligenceDesignDto
+            var groupedList = dueDiligence.GroupBy(x => x.Title).ToList();
+            var responseModel = new List<DueDiligenceDesignDto>();
+
+            foreach (var group in groupedList)
+            {
+                var dto = new DueDiligenceDesignDto { Title = group.Key, Childs = new List<DueDiligenceChildDto>() };
+                foreach (var d in group)
                 {
-                    Title = x.Key,
-                    Childs = x.Select(d =>
+                    var correspondingValue = dueDiligenceValues.FirstOrDefault(v => v.DueDiligenceDesignId == d.DesignId);
+                    var childDto = new DueDiligenceChildDto
                     {
-                        var correspondingValue = dueDiligenceValues.FirstOrDefault(v => v.DueDiligenceDesignId == d.DesignId);
-
-                        return new DueDiligenceChildDto
+                        DesignId = d.DesignId,
+                        LineNo = d.LineNo,
+                        Question = d.Question,
+                        HasTextBox = d.HasTextBox > 0 ? true : null,
+                        TextboxValue = d.HasTextBox > 0 ? correspondingValue?.TextboxValue ?? "" : null,
+                        CheckboxValue = d.HasCheckBox > 0 ? correspondingValue?.CheckboxValue : null,
+                        RadioboxValue = d.HasRadioBox > 0 ? correspondingValue?.RadioboxValue : null,
+                        IntValue = d.HasInt > 0 ? correspondingValue?.IntValue : null,
+                        DecimalValue = d.HasDecimal > 0 ? correspondingValue?.DecimalValue : null,
+                        DateTimeValue = d.HasDateTime > 0 ? correspondingValue?.DateTimeValue : null,
+                        TextareaValue = d.HasTexArea > 0 ? correspondingValue?.TextareaValue ?? "" : null,
+                        AgreementValue = d.HasAgreement ? correspondingValue?.AgreementValue : null,
+                        AgreementText = d.HasAgreement ? d.AgreementText ?? "" : null,
+                        HasCheckBox = d.HasCheckBox > 0 ? true : null,
+                        HasRadioBox = d.HasRadioBox > 0 ? true : null,
+                        HasInt = d.HasInt > 0 ? true : null,
+                        HasDecimal = d.HasDecimal > 0 ? true : null,
+                        HasDateTime = d.HasDateTime > 0 ? true : null,
+                        HasAttachment = d.HasAttachment > 0 ? true : null,
+                        Attachments = d.HasAttachment > 0 ? _mapper.Map<List<AttachmentDto>>(
+                            await _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_DUE.ToString(), d.DesignId)) : null,
+                        HasBankList = d.HasBankList > 0 ? true : null,
+                        HasTexArea = d.HasTexArea > 0 ? true : null,
+                        ParentCompanies = d.ParentCompanies,
+                        HasDataGrid = d.HasGrid > 0 ? true : null,
+                        GridRowLimit = d.GridRowLimit > 0 ? d.GridRowLimit : null,
+                        GridColumnCount = d.GridColumnCount > 0 ? d.GridColumnCount : null,
+                        HasAgreement = d.HasAgreement ? true : null,
+                        GridColumns = d.HasGrid > 0 ? new[]
                         {
-                            DesignId = d.DesignId,
-                            LineNo = d.LineNo,
-                            Question = d.Question,
-                            HasTextBox = d.HasTextBox > 0 ? true : null,
-                            HasCheckBox = d.HasCheckBox > 0 ? true : null,
-                            HasRadioBox = d.HasRadioBox > 0 ? true : null,
-                            HasInt = d.HasInt > 0 ? true : null,
-                            HasDecimal = d.HasDecimal > 0 ? true : null,
-                            HasDateTime = d.HasDateTime > 0 ? true : null,
-                            HasAttachment = d.HasAttachment > 0 ? true : null,
-                            HasBankList = d.HasBankList > 0 ? true : null,
-                            HasTexArea = d.HasTexArea > 0 ? true : null,
-                            ParentCompanies = d.ParentCompanies,
-                            HasDataGrid = d.HasGrid > 0 ? true : null,
-                            GridRowLimit = d.GridRowLimit > 0 ? d.GridRowLimit : null,
-                            GridColumnCount = d.GridColumnCount > 0 ? d.GridColumnCount : null,
-                            HasAgreement = d.HasAgreement ? true : null,
-                            AgreementText = d.HasAgreement ? d.AgreementText : null,
-                            GridColumns = d.HasGrid > 0 ? new[]
-                            {
-                                d.Column1Alias,
-                                d.Column2Alias,
-                                d.Column3Alias,
-                                d.Column4Alias,
-                                d.Column5Alias,
-                            }.Where(col => col != null).ToArray() : null,
-                            TextBoxPoint = d.HasTextBox > 0 ? d.HasTextBox : null,
-                            CheckBoxPoint = d.HasCheckBox > 0 ? d.HasCheckBox : null,
-                            RadioBoxPoint = d.HasRadioBox > 0 ? d.HasRadioBox : null,
-                            IntPoint = d.HasInt > 0 ? d.HasInt : null,
-                            DateTimePoint = d.HasDateTime > 0 ? d.HasDateTime : null,
-                            AttachmentPoint = d.HasAttachment > 0 ? d.HasAttachment : null,
-                            TextAreaPoint = d.HasTexArea > 0 ? d.HasTexArea : null,
-                            BankListPoint = d.HasBankList > 0 ? d.HasBankList : null,
-                            DataGridPoint = d.HasGrid > 0 ? d.HasGrid : null,
+                           d.Column1Alias,
+                           d.Column2Alias,
+                           d.Column3Alias,
+                           d.Column4Alias,
+                           d.Column5Alias,
+                        }.Where(col => col != null).ToArray() : null,
+                        Scoring = correspondingValue?.Scoring
+                    };
 
-                            TextboxValue = d.HasTextBox > 0 ? correspondingValue?.TextboxValue ?? "" : null,
-                            TextareaValue = d.HasTexArea > 0 ? correspondingValue?.TextareaValue ?? "" : null,
-                            CheckboxValue = d.HasCheckBox > 0 ? correspondingValue?.CheckboxValue : null,
-                            RadioboxValue = d.HasRadioBox > 0 ? correspondingValue?.RadioboxValue : null,
-                            IntValue = d.HasInt > 0 ? correspondingValue?.IntValue : null,
-                            DecimalValue = d.HasDecimal > 0 ? correspondingValue?.DecimalValue : null,
-                            DateTimeValue = d.HasDateTime > 0 ? correspondingValue?.DateTimeValue : null,
-                            AgreementValue = d.HasAgreement ? correspondingValue?.AgreementValue : null,
-                            Scoring = correspondingValue?.Scoring ?? null
-                        };
-                    }).ToList()
-                }).ToList();
+                    dto.Childs.Add(childDto);
+                }
+                responseModel.Add(dto);
+            }
 
             return await SetGridDatasAsync(responseModel);
         }

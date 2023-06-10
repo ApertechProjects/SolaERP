@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
-using Language = SolaERP.Application.Enums.Language;
 
 namespace SolaERP.API.Controllers
 {
@@ -45,15 +44,6 @@ namespace SolaERP.API.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> DueDiligence()
            => CreateActionResult(await _service.GetDueDiligenceAsync(User.Identity.Name, Request.Headers.AcceptLanguage));
-
-        //var data = await _service.GetDueDiligenceAsync(User.Identity.Name, Request.Headers.AcceptLanguage);
-
-        //return Ok(JsonConvert.SerializeObject(data,
-        //    Formatting.None,
-        //    new JsonSerializerSettings
-        //    {
-        //        NullValueHandling = NullValueHandling.Ignore
-        //    }));
 
         [HttpGet("[action]")]
         public async Task<IActionResult> Prequalification()

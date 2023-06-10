@@ -220,6 +220,9 @@ namespace SolaERP.Persistence.Mappers
             //.ForMember(dest => dest.BusinessCategoryId, opt => opt.MapFrom(src => src.BusinessCategoryId)).ReverseMap();
 
 
+            CreateMap<VendorProductService, VendorProductServiceDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.VendorProductServiceId)).ReverseMap();
+
 
             CreateMap<AnalysisStructureWithBu, AnalysisStructureWithBuDto>().ReverseMap();
             CreateMap<ApproveStageMainInputModel, ApproveStagesMain>().ReverseMap();

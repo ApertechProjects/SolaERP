@@ -52,14 +52,15 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<Attachment>> GetAttachmentsAsync(int sourceId, string reference, string sourceType)
+        public async Task<List<Attachment>> GetAttachmentsAsync(int sourceId, string reference, string sourceType, int attachmentTypeId = 0)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_AttachmentList_Load @SourceId,@Reference,@SourceType";
+                command.CommandText = "EXEC SP_AttachmentList_Load @SourceId,@Reference,@SourceType,@AttachmentTypeId";
                 command.Parameters.AddWithValue(command, "@SourceId", sourceId);
                 command.Parameters.AddWithValue(command, "@Reference", reference);
                 command.Parameters.AddWithValue(command, "@SourceType", sourceType);
+                command.Parameters.AddWithValue(command, "@AttachmentTypeId", attachmentTypeId);
 
                 using var reader = await command.ExecuteReaderAsync();
 

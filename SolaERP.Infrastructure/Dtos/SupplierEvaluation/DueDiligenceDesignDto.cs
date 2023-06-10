@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SolaERP.Application.Dtos.Attachment;
 using SolaERP.Application.Entities.SupplierEvaluation;
 
 namespace SolaERP.Application.Dtos.SupplierEvaluation
@@ -85,6 +86,8 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public bool? AgreementValue { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public decimal? Scoring { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public List<AttachmentDto> Attachments { get; set; }
 
     }
 

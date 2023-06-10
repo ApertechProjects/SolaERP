@@ -501,5 +501,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return result;
             }
         }
+
+        public async Task<List<VendorProductService>> GetVendorProductServices(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_VendorProductServices_Load @VendorId";
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+
+                List<VendorProductService> result = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    result.Add(reader.GetByEntityStructure<VendorProductService>());
+
+                return result;
+            }
+        }
     }
 }
