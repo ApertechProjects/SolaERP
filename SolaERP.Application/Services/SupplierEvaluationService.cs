@@ -170,7 +170,8 @@ namespace SolaERP.Persistence.Services
             var vendorBusinessCategoriesTask = _repository.GetVendorBuCategoriesAsync(user.VendorId);
             var companyInfoTask = _repository.GetCompanyInfoAsync(user.VendorId);
             var vendorProductsTask = _repository.GetVendorProductServices(user.VendorId);
-            var attachmentTask = _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_LOGO.ToString());
+            var venLogoAttachmentTask = _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_LOGO.ToString());
+            var venOletAttachmentTask = _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_OLET.ToString());
             var productServicesTask = _repository.GetProductServicesAsync();
 
             await Task.WhenAll(vendorPrequalificationTask,
@@ -179,7 +180,8 @@ namespace SolaERP.Persistence.Services
                                 vendorBusinessCategoriesTask,
                                 productServicesTask,
                                 vendorProductsTask,
-                                attachmentTask,
+                                venOletAttachmentTask,
+                                venLogoAttachmentTask,
                                 companyInfoTask);
 
             var matchedPrequalificationTypes = prequalificationTypesTask.Result
@@ -197,7 +199,8 @@ namespace SolaERP.Persistence.Services
             CompanyInfoDto companyInfo = _mapper.Map<CompanyInfoDto>(companyInfoTask.Result);
             companyInfo.PrequalificationCategories = matchedPrequalificationTypes;
             companyInfo.BusinessCategories = matchedBuCategories;
-            companyInfo.Attachments = _mapper.Map<List<AttachmentDto>>(attachmentTask.Result);
+            companyInfo.CompanyLogo = _mapper.Map<List<AttachmentDto>>(venLogoAttachmentTask.Result);
+            companyInfo.Attachments = _mapper.Map<List<AttachmentDto>>(venOletAttachmentTask.Result);
             companyInfo.ProductServices = matchedProductServices;
 
             VM_GET_InitalRegistration viewModel = new()
