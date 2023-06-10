@@ -3,9 +3,7 @@ using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
-using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -107,16 +105,15 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<VendorInfo> GetVendorByTaxIdAsync(string taxId)
+        public async Task<int> GetVendorByTaxIdAsync(string taxId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "exec SP_VendorListByTaxId @TaxId";
                 command.Parameters.AddWithValue(command, "@TaxId", taxId);
                 using var reader = await command.ExecuteReaderAsync();
-                VendorInfo result = new();
-
-                while (reader.Read()) result = reader.GetByEntityStructure<VendorInfo>();
+                int result = 0;
+                if (reader.Read()) result = reader.Get<int>("VendorId");
 
                 return result;
             }

@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Contracts.Services;
 using SolaERP.Business.CommonLogic;
 using SolaERP.Business.Dtos.EntityDtos.Vendor;
 using SolaERP.Business.Models;
-using SolaERP.Application.Contracts.Repositories;
-using SolaERP.Application.Contracts.Services;
 
 namespace SolaERP.Controllers
 {
@@ -59,10 +59,5 @@ namespace SolaERP.Controllers
             return await new EntityLogic(ConfHelper, _userRepository).GetActiveVendors(User.Identity.Name, businessUnitId);
         }
 
-        [HttpGet("{taxId}")]
-        public async Task<IActionResult> GetVendorByTaxIdAsync(string taxId)
-        {
-            return CreateActionResult(await _vendorService.GetVendorByTaxIdAsync(taxId));
-        }
     }
 }
