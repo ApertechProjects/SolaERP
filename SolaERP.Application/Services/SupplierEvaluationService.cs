@@ -289,8 +289,8 @@ namespace SolaERP.Persistence.Services
                             BankListPoint = d.HasBankList > 0 ? d.HasBankList : null,
                             DataGridPoint = d.HasGrid > 0 ? d.HasGrid : null,
 
-                            TextboxValue = d.HasTextBox > 0 ? correspondingValue?.TextboxValue : null,
-                            TextareaValue = d.HasTexArea > 0 ? correspondingValue?.TextareaValue : null,
+                            TextboxValue = d.HasTextBox > 0 ? correspondingValue?.TextboxValue ?? "" : null,
+                            TextareaValue = d.HasTexArea > 0 ? correspondingValue?.TextareaValue ?? "" : null,
                             CheckboxValue = d.HasCheckBox > 0 ? correspondingValue?.CheckboxValue : null,
                             RadioboxValue = d.HasRadioBox > 0 ? correspondingValue?.RadioboxValue : null,
                             IntValue = d.HasInt > 0 ? correspondingValue?.IntValue : null,
