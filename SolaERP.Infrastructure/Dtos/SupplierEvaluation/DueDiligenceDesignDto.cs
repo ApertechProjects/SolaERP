@@ -88,7 +88,8 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public decimal? Scoring { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public List<AttachmentDto> Attachments { get; set; }
-
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? DecimalPoint { get; set; }
     }
 
 }

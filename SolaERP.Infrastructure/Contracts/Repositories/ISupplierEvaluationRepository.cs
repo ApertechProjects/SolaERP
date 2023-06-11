@@ -8,7 +8,7 @@ namespace SolaERP.Application.Contracts.Repositories
     public interface ISupplierEvaluationRepository
     {
         Task<List<VendorNDA>> GetNDAAsync(int vendorId);
-        Task<List<PrequalificationDesign>> GetPrequalificationDesignsAsync(int vendorId, Language language);
+        Task<List<PrequalificationDesign>> GetPrequalificationDesignsAsync(int categoryId, Language language);
         Task<List<VendorCOBC>> GetCOBCAsync(int vendorId);
         Task<List<Country>> GetCountriesAsync();
         Task<List<BusinessCategory>> GetBusinessCategoriesAsync();
@@ -25,6 +25,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<VendorPrequalification>> GetVendorPrequalificationAsync(int vendorId);
         Task<List<VendorBuCategory>> GetVendorBuCategoriesAsync(int vendorId);
         Task<Prequalification> GetPrequalificationAsync(int vendorid);
+        Task<List<VendorPrequalificationValues>> GetVendorPrequalificationValuesAsync(int vendorId);
         Task<bool> AddNDAAsync(VendorNDA ndas);
         Task<bool> DeleteNDAAsync(int ndaId);
         Task<bool> AddCOBCAsync(VendorCOBC cobc);

@@ -14,6 +14,7 @@ using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.Shared;
 using SolaERP.Application.UnitOfWork;
+using System.Collections.Generic;
 
 namespace SolaERP.Persistence.Services
 {
@@ -57,7 +58,7 @@ namespace SolaERP.Persistence.Services
             int vendorId = await _vendorRepository.AddVendorAsync(user.Id, _mapper.Map<Vendor>(command.CompanyInfo));
 
             command.DueDiligence.VendorId = vendorId;
-            command.Prequalification.VendorId = vendorId;
+            //command.Prequalification.VendorId = vendorId;
             command.CodeOfBuConduct.ForEach(x => x.VendorId = vendorId);
             command.NonDisclosureAgreement.ForEach(x => x.VendorId = vendorId);
             command.BankDetails.ForEach(x => x.VendorId = vendorId);
@@ -245,13 +246,93 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<NonDisclosureAgreement>>.Success(result, 200);
         }
 
-        public async Task<ApiResponse<PrequalificationDto>> GetPrequalificationAsync(string userIdentity)
+
+
+        public async Task<ApiResponse<List<PrequalificationWithCategoryDto>>> GetPrequalificationAsync(string userIdentity, List<int> categoryIds, string acceptLang)
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
-            Prequalification pre = await _repository.GetPrequalificationAsync(user.VendorId);
+            List<VendorPrequalificationValues> prequalificationValues = await _repository.GetVendorPrequalificationValuesAsync(user.VendorId);
 
-            var result = _mapper.Map<PrequalificationDto>(pre);
-            return ApiResponse<PrequalificationDto>.Success(result, 200);
+            var responseModel = new List<PrequalificationWithCategoryDto>();
+            foreach (var categoryId in categoryIds)
+            {
+                List<PrequalificationDesign> prequalificationDesigns = await _repository.GetPrequalificationDesignsAsync(categoryId, Language.en);
+                var category = await _repository.GetPrequalificationCategoriesAsync();
+                var matchedCategory = category.FirstOrDefault(x => x.Id == categoryId);
+
+                var categoryDto = new PrequalificationWithCategoryDto
+                {
+                    Id = categoryId,
+                    Name = matchedCategory?.Category ?? "Unknown",
+                    Prequalifications = new List<VM_GET_Prequalification>()
+                };
+
+                var titleGroups = prequalificationDesigns.GroupBy(x => x.Title);
+                foreach (var titleGroup in titleGroups)
+                {
+                    var prequalificationTasks = titleGroup.Select(async design =>
+                    {
+                        var correspondingValue = prequalificationValues.FirstOrDefault(v => v.PrequalificationDesignId == design.PrequalificationDesignId);
+
+                        return new PrequalificationDto
+                        {
+                            LineNo = design.LineNo,
+                            Discipline = design.Discipline,
+                            Questions = design.Questions,
+                            HasTextbox = design.HasTextbox > 0 ? true : null,
+                            HasTextarea = design.HasTextarea > 0 ? true : null,
+                            HasCheckbox = design.HasCheckbox > 0 ? true : null,
+                            HasRadiobox = design.HasRadiobox > 0 ? true : null,
+                            HasInt = design.HasInt > 0 ? true : null,
+                            HasDecimal = design.HasDecimal > 0 ? true : null,
+                            HasDateTime = design.HasDateTime > 0 ? true : null,
+                            HasAttachment = design.HasAttachment > 0 ? true : null,
+                            Title = design.Title,
+                            Weight = design.Weight,
+                            HasGrid = design.HasGrid > 0 ? true : null,
+                            GridRowLimit = design.HasGrid > 0 ? design.GridRowLimit : null,
+                            GridColumnCount = design.HasGrid > 0 ? design.GridColumnCount : null,
+                            GridColumns = design.HasGrid > 0 ? new[]
+                            {
+                                 design.Column1Alias,
+                                 design.Column2Alias,
+                                 design.Column3Alias,
+                                 design.Column4Alias,
+                                 design.Column5Alias,
+                            }.Where(col => col != null).ToArray() : null,
+                            TextboxPoint = design.HasTextbox > 0 ? design.HasTextbox : null,
+                            TextareaPoint = design.HasTextarea > 0 ? design.HasTextarea : null,
+                            CheckboxPoint = design.HasCheckbox > 0 ? design.HasCheckbox : null,
+                            RadioboxPoint = design.HasRadiobox > 0 ? design.HasRadiobox : null,
+                            IntPoint = design.HasInt > 0 ? design.HasInt : null,
+                            DecimalPoint = design.HasDecimal > 0 ? design.HasDecimal : null,
+                            DateTimePoint = design.HasDateTime > 0 ? design.HasDateTime : null,
+                            Attachmentpoint = design.HasAttachment > 0 ? design.HasAttachment : null,
+                            TextboxValue = design.HasTextbox > 0 ? correspondingValue?.TextboxValue ?? "" : null,
+                            TextareaValue = design.HasTextarea > 0 ? correspondingValue?.TextareaValue ?? "" : null,
+                            CheckboxValue = design.HasCheckbox > 0 ? correspondingValue?.CheckboxValue : null,
+                            RadioboxValue = design.HasRadiobox > 0 ? correspondingValue?.RadioboxValue : null,
+                            IntValue = design.HasInt > 0 ? correspondingValue?.IntValue : null,
+                            DecimalValue = design.HasDecimal > 0 ? correspondingValue?.DecimalValue : null,
+                            DateTimeValue = design.HasDateTime > 0 ? correspondingValue?.DateTimeValue : null,
+                            Attachments = design.HasAttachment > 0 ? _mapper.Map<List<AttachmentDto>>(
+                                await _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_PREQ.ToString(), design.PrequalificationDesignId)) : null
+                        };
+                    });
+
+                    var prequalificationDtos = await Task.WhenAll(prequalificationTasks);
+                    var prequalificationDto = new VM_GET_Prequalification
+                    {
+                        Title = titleGroup.Key,
+                        Childs = prequalificationDtos.ToList()
+                    };
+
+                    categoryDto.Prequalifications.Add(prequalificationDto);
+                }
+                responseModel.Add(categoryDto);
+            }
+
+            return ApiResponse<List<PrequalificationWithCategoryDto>>.Success(responseModel, 200);
         }
 
         private async Task<List<DueDiligenceDesignDto>> GetDueDesignsAsync(string userIdentity, Language language)
@@ -307,6 +388,14 @@ namespace SolaERP.Persistence.Services
                            d.Column4Alias,
                            d.Column5Alias,
                         }.Where(col => col != null).ToArray() : null,
+                        TextBoxPoint = d.HasTextBox > 0 ? d.HasTextBox : null,
+                        TextAreaPoint = d.HasTexArea > 0 ? d.HasTexArea : null,
+                        CheckBoxPoint = d.HasCheckBox > 0 ? d.HasCheckBox : null,
+                        RadioBoxPoint = d.HasRadioBox > 0 ? d.HasRadioBox : null,
+                        IntPoint = d.HasInt > 0 ? d.HasInt : null,
+                        DecimalPoint = d.HasDecimal > 0 ? d.HasDecimal : null,
+                        DateTimePoint = d.HasDateTime > 0 ? d.HasDateTime : null,
+                        AttachmentPoint = d.HasAttachment > 0 ? d.HasAttachment : null,
                         Scoring = correspondingValue?.Scoring
                     };
 

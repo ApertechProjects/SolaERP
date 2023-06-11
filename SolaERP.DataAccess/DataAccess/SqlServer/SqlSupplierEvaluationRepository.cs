@@ -538,35 +538,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<List<VendorPrequalificationValues>> GetVendorPrequalificationValuesAsync(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_VendorPrequalification_Load @VendorId";
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
 
-        //private PrequalificationDesign GetPrequalificationDesignFromReader(IDataReader reader)
-        //{
-        //    return new()
-        //    {
-        //        Title = reader.Get<string>("Title"),
-        //        Question = reader.Get<string>("Questions"),
-        //        DesignId = reader.Get<int>("PrequalificationDesignDesignId"),
-        //        LineNo = reader.Get<int>("LineNo"),
-        //        Discipline = reader.Get<string>("Discipline"),
-        //        HasTextBox = reader.Get<decimal>("HasTextBox"),
-        //        HasCheckBox = reader.Get<decimal>("HasCheckBox"),
-        //        HasRadioBox = reader.Get<decimal>("HasRadioBox"),
-        //        HasInt = reader.Get<decimal>("HasInt"),
-        //        HasDecimal = reader.Get<decimal>("HasDecimal"),
-        //        HasDateTime = reader.Get<decimal>("HasDateTime"),
-        //        HasAttachment = reader.Get<decimal>("HasAttachment"),
-        //        HasList = reader.Get<decimal>("HasList"),
-        //        HasTextArea = reader.Get<decimal>("HasTextarea"),
-        //        HasGrid = reader.Get<decimal>("HasGrid"),
-        //        GridRowLimit = reader.Get<int>("GridRowLimit"),
-        //        GridColumnCount = reader.Get<int>("GridColumnCount"),
-        //        Column1Alias = reader.Get<string>("Column1Alias"),
-        //        Column2Alias = reader.Get<string>("Column2Alias"),
-        //        Column3Alias = reader.Get<string>("Column3Alias"),
-        //        Column4Alias = reader.Get<string>("Column4Alias"),
-        //        Column5Alias = reader.Get<string>("Column5Alias"),
-        //    };
-        //}
+                List<VendorPrequalificationValues> result = new();
+                using var reader = await command.ExecuteReaderAsync();
 
+                while (reader.Read())
+                    result.Add(reader.GetByEntityStructure<VendorPrequalificationValues>());
+
+                return result;
+            }
+        }
     }
 }

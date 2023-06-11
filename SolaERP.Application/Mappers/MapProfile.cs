@@ -187,8 +187,8 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<VendorBankDetailDto, VendorBankDetail>()
                 .ForMember(dest => dest.VendorBankDetailId, opt => opt.MapFrom(src => src.Id)).ReverseMap();
 
-            CreateMap<PrequalificationDto, Prequalification>()
-                .ForMember(dest => dest.VendorPrequalificationId, opt => opt.MapFrom(src => src.Id)).ReverseMap();
+            //CreateMap<PrequalificationDto, Prequalification>()
+            //    .ForMember(dest => dest.VendorPrequalificationId, opt => opt.MapFrom(src => src.Id)).ReverseMap();
 
             CreateMap<CodeOfBuConduct, VendorCOBC>()
                 .ForMember(dest => dest.VendorCOBCId, opt => opt.MapFrom(src => src.CobcID))
