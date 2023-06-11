@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Options;
-using SixLabors.ImageSharp.ColorSpaces;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Attachment;
@@ -46,6 +45,7 @@ namespace SolaERP.Persistence.Services
             _mapper = mapper;
             _userRepository = userRepository;
             _vendorRepository = vendorRepository;
+
             _attachmentRepository = attachmentRepository;
             _storage = storage;
             _storageOption = storageOption;
