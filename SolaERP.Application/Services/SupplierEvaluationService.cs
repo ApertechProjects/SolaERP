@@ -276,6 +276,7 @@ namespace SolaERP.Persistence.Services
 
                         return new PrequalificationDto
                         {
+                            DesignId = design.PrequalificationDesignId,
                             LineNo = design.LineNo,
                             Discipline = design.Discipline,
                             Questions = design.Questions,
