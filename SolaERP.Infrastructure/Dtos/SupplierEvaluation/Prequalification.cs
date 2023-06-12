@@ -119,5 +119,8 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public List<AttachmentDto> Attachments { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public List<PrequalificationGridData> GridDatas { get; set; }
     }
 }

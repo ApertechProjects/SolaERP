@@ -20,18 +20,9 @@ namespace SolaERP.API.Controllers
         }
 
 
-
-        [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] SupplierEvaluationGETModel model)
-            => CreateActionResult(await _service.GetAllAsync(model));
-
         [HttpGet("[action]")]
         public async Task<IActionResult> InitReg()
             => CreateActionResult(await _service.GetInitRegistrationAsync(User.Identity.Name));
-
-        [HttpGet("[action]")]
-        public async Task<IActionResult> BankDetails()
-            => CreateActionResult(await _service.GetBankDetailsAsync(User.Identity.Name));
 
         [HttpGet("[action]")]
         public async Task<IActionResult> NonDisclosureAgreement()
@@ -40,6 +31,10 @@ namespace SolaERP.API.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> CodeOfBuConduct()
             => CreateActionResult(await _service.GetCOBCAsync(User.Identity.Name));
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> BankDetails()
+            => CreateActionResult(await _service.GetBankDetailsAsync(User.Identity.Name));
 
         [HttpGet("[action]")]
         public async Task<IActionResult> DueDiligence()

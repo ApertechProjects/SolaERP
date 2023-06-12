@@ -332,8 +332,8 @@ namespace SolaERP.Persistence.Services
                 }
                 responseModel.Add(categoryDto);
             }
-
-            return ApiResponse<List<PrequalificationWithCategoryDto>>.Success(responseModel, 200);
+            var response = await SetGridDatasAsync(responseModel);
+            return ApiResponse<List<PrequalificationWithCategoryDto>>.Success(response, 200);
         }
 
         private async Task<List<DueDiligenceDesignDto>> GetDueDesignsAsync(string userIdentity, Language language)
@@ -393,6 +393,7 @@ namespace SolaERP.Persistence.Services
                         TextAreaPoint = d.HasTexArea > 0 ? d.HasTexArea : null,
                         CheckBoxPoint = d.HasCheckBox > 0 ? d.HasCheckBox : null,
                         RadioBoxPoint = d.HasRadioBox > 0 ? d.HasRadioBox : null,
+                        BankListPoint = d.HasBankList > 0 ? d.HasBankList : null,
                         IntPoint = d.HasInt > 0 ? d.HasInt : null,
                         DecimalPoint = d.HasDecimal > 0 ? d.HasDecimal : null,
                         DateTimePoint = d.HasDateTime > 0 ? d.HasDateTime : null,
@@ -423,5 +424,26 @@ namespace SolaERP.Persistence.Services
             }
             return dueDesign;
         }
+
+        private async Task<List<PrequalificationWithCategoryDto>> SetGridDatasAsync(List<PrequalificationWithCategoryDto> preualification)
+        {
+            for (int i = 0; i < preualification.Count; i++)
+            {
+                for (int j = 0; j < preualification[i].Prequalifications.Count; j++)
+                {
+                    for (int k = 0; k < preualification[i].Prequalifications[j].Childs.Count; k++)
+                    {
+                        int childDesignId = preualification[i].Prequalifications[j].Childs[k].DesignId;
+                        var gridDatas = _mapper.Map<List<Application.Dtos.SupplierEvaluation.PrequalificationGridData>>
+                            (await _repository.GetPrequalificationGridAsync(childDesignId));
+
+                        preualification[i].Prequalifications[j].Childs[k].GridDatas = preualification[i].Prequalifications[j].Childs[k].HasGrid != null ? gridDatas : null;
+                    }
+                }
+            }
+
+            return preualification;
+        }
+
     }
 }

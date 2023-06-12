@@ -554,5 +554,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return result;
             }
         }
+
+        public async Task<List<Application.Entities.SupplierEvaluation.PrequalificationGridData>> GetPrequalificationGridAsync(int preDesignId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_PrequalificationGridData_Load @PreqqualificationDesignId";
+                command.Parameters.AddWithValue(command, "@PreqqualificationDesignId", preDesignId);
+
+                List<Application.Entities.SupplierEvaluation.PrequalificationGridData> result = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    result.Add(reader.GetByEntityStructure<Application.Entities.SupplierEvaluation.PrequalificationGridData>());
+
+                return result;
+            }
+        }
     }
 }
