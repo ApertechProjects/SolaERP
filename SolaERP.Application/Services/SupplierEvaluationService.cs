@@ -14,8 +14,7 @@ using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.Shared;
 using SolaERP.Application.UnitOfWork;
-using System.Collections.Generic;
-using System.Diagnostics;
+
 
 namespace SolaERP.Persistence.Services
 {
