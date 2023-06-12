@@ -52,7 +52,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<Attachment>> GetAttachmentsAsync(int sourceId, string reference, string sourceType, int attachmentTypeId = 0)
+        public async Task<List<Attachment>> GetAttachmentsAsync(int sourceId, string reference, string sourceType, int? attachmentTypeId = null)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
