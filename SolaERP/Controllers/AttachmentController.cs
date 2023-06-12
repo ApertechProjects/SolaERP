@@ -18,7 +18,7 @@ namespace SolaERP.Controllers
         }
 
         [HttpGet("{attachmentId}")]
-        public async Task<IActionResult> ById(int attachmentId)
+        public async Task<IActionResult> Get(int attachmentId)
           => CreateActionResult(await _attachmentService.GetAttachmentWithFilesAsync(attachmentId));
 
         [HttpGet]
