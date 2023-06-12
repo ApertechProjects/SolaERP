@@ -3,7 +3,7 @@
     public class AttachmentDto
     {
         public int AttachmentId { get; set; }
-        public string FileName { get; set; }
+        public string Name { get; set; }
         public int SourceId { get; set; }
         public int SourceTypeId { get; set; }
         public string Reference { get; set; }
