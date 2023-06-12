@@ -559,8 +559,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_PrequalificationGridData_Load @PreqqualificationDesignId";
-                command.Parameters.AddWithValue(command, "@PreqqualificationDesignId", preDesignId);
+                command.CommandText = "EXEC dbo.SP_PrequalificationAllGridData_Load --@PreqqualificationDesignId";
+                // command.Parameters.AddWithValue(command, "@PreqqualificationDesignId", preDesignId);
 
                 List<Application.Entities.SupplierEvaluation.PrequalificationGridData> result = new();
                 using var reader = await command.ExecuteReaderAsync();

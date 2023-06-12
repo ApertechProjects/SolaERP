@@ -15,6 +15,7 @@ using SolaERP.Application.Models;
 using SolaERP.Application.Shared;
 using SolaERP.Application.UnitOfWork;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace SolaERP.Persistence.Services
 {
@@ -427,20 +428,24 @@ namespace SolaERP.Persistence.Services
 
         private async Task<List<PrequalificationWithCategoryDto>> SetGridDatasAsync(List<PrequalificationWithCategoryDto> preualification)
         {
-            for (int i = 0; i < preualification.Count; i++)
-            {
-                for (int j = 0; j < preualification[i].Prequalifications.Count; j++)
-                {
-                    for (int k = 0; k < preualification[i].Prequalifications[j].Childs.Count; k++)
-                    {
-                        int childDesignId = preualification[i].Prequalifications[j].Childs[k].DesignId;
-                        var gridDatas = _mapper.Map<List<Application.Dtos.SupplierEvaluation.PrequalificationGridData>>
-                            (await _repository.GetPrequalificationGridAsync(childDesignId));
+            var allGridData = await _repository.GetPrequalificationGridAsync(0);
+            var mappedGridData = _mapper.Map<List<Application.Dtos.SupplierEvaluation.PrequalificationGridData>>(allGridData);
 
-                        preualification[i].Prequalifications[j].Childs[k].GridDatas = preualification[i].Prequalifications[j].Childs[k].HasGrid != null ? gridDatas : null;
-                    }
-                }
-            }
+            Parallel.For(0, preualification.Count, i =>
+            {
+                Parallel.For(0, preualification[Convert.ToInt32(i)].Prequalifications.Count, j =>
+                {
+                    Parallel.For(0, preualification[Convert.ToInt32(i)].Prequalifications[Convert.ToInt32(j)].Childs.Count, k =>
+                    {
+                        if (preualification[Convert.ToInt32(i)].Prequalifications[Convert.ToInt32(j)].Childs[Convert.ToInt32(k)].HasGrid != null)
+                        {
+                            int childDesignId = preualification[Convert.ToInt32(i)].Prequalifications[Convert.ToInt32(j)].Childs[k].DesignId;
+                            var gridDatas = mappedGridData.Where(x => x.DesignId == childDesignId).ToList();
+                            preualification[Convert.ToInt32(i)].Prequalifications[Convert.ToInt32(j)].Childs[Convert.ToInt32(k)].GridDatas = gridDatas;
+                        }
+                    });
+                });
+            });
 
             return preualification;
         }
