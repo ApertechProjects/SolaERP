@@ -19,8 +19,8 @@ namespace SolaERP.Controllers
 
         //[HttpPost("{attachmentId}")]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Get([FromBody] int attachmentId)
-          => CreateActionResult(await _attachmentService.GetAttachmentWithFilesAsync(attachmentId));
+        public async Task<IActionResult> Get([FromBody] AttachmentGetModel model)
+          => CreateActionResult(await _attachmentService.GetAttachmentWithFilesAsync(model.AttachmentId));
 
         [HttpGet]
         public async Task<IActionResult> ByType(int sourceId, string reference, string sourceType)
