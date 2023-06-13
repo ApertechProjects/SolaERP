@@ -53,6 +53,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Title { get; set; }
 
+        [JsonIgnore]
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public int Weight { get; set; }
 
@@ -115,7 +116,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public DateTime? DateTimeValue { get; set; }
 
         // [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public decimal? Scoring { get; set; }
+        public decimal Scoring { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public List<AttachmentDto> Attachments { get; set; }
