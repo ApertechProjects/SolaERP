@@ -33,7 +33,7 @@ namespace SolaERP.Application.Contracts.Repositories
 
         Task<bool> AddPrequalification(VendorPrequalificationValues value);
         Task<bool> UpdatePrequalification(VendorPrequalificationValues value);
-        Task<bool> DeletePrequalification(VendorPrequalificationValues value);
+        Task<bool> DeletePrequalification(int vendorPreId);
 
 
         Task<bool> AddNDAAsync(VendorNDA ndas);

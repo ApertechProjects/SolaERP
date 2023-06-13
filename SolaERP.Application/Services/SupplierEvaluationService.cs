@@ -66,9 +66,7 @@ namespace SolaERP.Persistence.Services
             foreach (var item in command.BankAccounts)
             {
                 if (item.AccountVerificationLetter is not null)
-                {
                     tasks.Add(_attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(item.AccountVerificationLetter)));
-                }
             }
 
 
