@@ -3,9 +3,7 @@ using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
-using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -176,5 +174,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<int> DeleteVendorAsync(int userId, int id)
             => await DeleteVendorAsync(userId, id);
+
+        public async Task<bool> VendorChangeStatus(int vendorId, int status, int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorsChangeStatus @VendorId,
+                                                                      @UserId,
+                                                                      @Status";
+
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                command.Parameters.AddWithValue(command, "@Status", status);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
     }
 }
