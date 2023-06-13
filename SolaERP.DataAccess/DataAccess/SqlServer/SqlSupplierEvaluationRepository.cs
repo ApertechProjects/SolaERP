@@ -606,20 +606,26 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public Task<bool> AddPreGriAsync()
+        public async Task<bool> AddPreGriAsync(Application.Entities.SupplierEvaluation.PrequalificationGridData grid)
         {
-            throw new NotImplementedException();
+            return await ModifyPreGridAsync(new Application.Entities.SupplierEvaluation.PrequalificationGridData()
+            {
+                PreqqualificationGridDataId = 0,
+                PreqqualificationDesignId = grid.PreqqualificationDesignId,
+                Column1 = grid.Column1,
+                Column2 = grid.Column2,
+                Column3 = grid.Column3,
+                Column4 = grid.Column4,
+                Column5 = grid.Column5,
+            });
         }
 
-        public Task<bool> UpdatePreGriAsync()
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<bool> UpdatePreGriAsync(Application.Entities.SupplierEvaluation.PrequalificationGridData grid)
+            => await ModifyPreGridAsync(grid);
 
-        public Task<bool> DeletePreGriAsync()
-        {
-            throw new NotImplementedException();
-        }
+
+        public async Task<bool> DeletePreGriAsync(int preGridId)
+            => await ModifyPreGridAsync(new() { PreqqualificationGridDataId = preGridId });
 
 
         public async Task<bool> ModifyPreGridAsync(Application.Entities.SupplierEvaluation.PrequalificationGridData gridData)
