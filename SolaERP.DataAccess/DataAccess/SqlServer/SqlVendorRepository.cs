@@ -23,7 +23,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"DECLARE @NewVendorId int 
+                command.CommandText = @"SET NOCOUNT OFF 
+                                        DECLARE @NewVendorId int 
                                         EXEC SP_Vendors_IUD @VendorId,
                                                             @BusinessUnitId,
                                                             @VendorName,
@@ -74,7 +75,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_VendorBankDetails_IUD @VendorBankDetailId,
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorBankDetails_IUD @VendorBankDetailId,
                                                                       @VendorId,
                                                                       @Beneficiary,
                                                                       @BeneficiaruTaxId,

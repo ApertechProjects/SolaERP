@@ -57,16 +57,21 @@ namespace SolaERP.Persistence.Services
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
             int vendorId = await _vendorRepository.AddVendorAsync(user.Id, _mapper.Map<Vendor>(command.CompanyInfo));
 
-            command.DueDiligence.VendorId = vendorId;
-            //command.Prequalification.VendorId = vendorId;
             command.CodeOfBuConduct.ForEach(x => x.VendorId = vendorId);
             command.NonDisclosureAgreement.ForEach(x => x.VendorId = vendorId);
             command.BankDetails.ForEach(x => x.VendorId = vendorId);
 
-            List<Task<bool>> tasks = new()
+            List<Task<bool>> tasks = new();
+
+            foreach (var item in command.DueDiligence)
             {
-                _repository.AddDueDesignAsync(command.DueDiligence),
-            };
+                var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
+                dueInputModel.VendorId = vendorId;
+                tasks.Add(_repository.AddDueAsync(dueInputModel));
+            }
+
+
+
 
             tasks.AddRange(command.NonDisclosureAgreement.Select(x => _repository.AddNDAAsync(_mapper.Map<VendorNDA>(x))));
             tasks.AddRange(command.CodeOfBuConduct.Select(x => _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(x))));

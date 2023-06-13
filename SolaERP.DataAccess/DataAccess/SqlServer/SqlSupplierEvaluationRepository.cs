@@ -19,7 +19,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_VendorDueDiligence_IUD @VendorDueDiligenceId,
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorDueDiligence_IUD @VendorDueDiligenceId,
                                                                        @DueDiligenceDesignId,@VendorId
                                                                       ,@TextboxValue,@TextareaValue
                                                                       ,@CheckboxValue,@RadioboxValue
@@ -45,7 +45,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
-        public async Task<bool> AddDueDesignAsync(VendorDueDiligenceModel model)
+        public async Task<bool> AddDueAsync(VendorDueDiligenceModel model)
         {
             return await ModifyDueDiligence(new()
             {
@@ -64,11 +64,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             });
         }
 
-        public async Task<bool> UpdateDueDesignAsync(VendorDueDiligenceModel model)
+        public async Task<bool> UpdateDueAsync(VendorDueDiligenceModel model)
             => await ModifyDueDiligence(model);
 
 
-        public async Task<bool> DeleteDueDesignAsync(int dueId)
+        public async Task<bool> DeleteDueAsync(int dueId)
             => await ModifyDueDiligence(new() { DueDiligenceDesignId = dueId });
 
 
@@ -366,7 +366,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_VendorNDA_ID @VendorNDAId,
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorNDA_ID @VendorNDAId,
                                                              @VendorId,
                                                              @BusinessUnitId";
 
@@ -397,7 +397,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_VendorCOBC_ID @VendorCOBCId,
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorCOBC_ID @VendorCOBCId,
                                                               @VendorId,
                                                               @BusinessUnitId";
 
