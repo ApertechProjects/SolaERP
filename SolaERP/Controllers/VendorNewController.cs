@@ -18,6 +18,6 @@ namespace SolaERP.API.Controllers
 
         [HttpGet("{businessUnitId}")]
         public async Task<IActionResult> WaitingForApprovals(int businessUnitId)
-            => CreateActionResult(await _vendorService.WaitingForApprovals(businessUnitId));
+            => CreateActionResult(await _vendorService.WaitingForApprovals(businessUnitId, User.Identity.Name));
     }
 }

@@ -42,5 +42,10 @@ namespace SolaERP.Persistence.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task<ApiResponse<object>> WaitingForApprovals(int businessUnitId, int userId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
