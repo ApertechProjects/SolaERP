@@ -1,10 +1,13 @@
-﻿using SolaERP.Application.Contracts.Repositories;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.SupplierEvaluation;
+using SolaERP.Application.Entities.PrequalificationCategory;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
+using System;
 using System.Data;
 using System.Data.Common;
 
@@ -288,29 +291,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
-        private async Task<bool> ModifyPrequalification(VendorPreInputModel model)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = @"EXEC SP_VendorPrequalification_IUD @VendorPrequalificationId,@PrequalificationDesignId
-                                                                           @VendorId,@TextboxValue,@TextareaValue,@CheckboxValue,
-                                                                           @RadioboxValue,@IntValue,@DecimalValue,@DateTimeValue,@Scoring";
-
-                command.Parameters.AddWithValue(command, "@VendorPrequalificationId", model.PrequealificationId);
-                command.Parameters.AddWithValue(command, "@PrequalificationDesignId", model?.DesignId);
-                command.Parameters.AddWithValue(command, "@TextboxValue", model?.TextBoxValue);
-                command.Parameters.AddWithValue(command, "@TextareaValue", model?.TextareaValue);
-                command.Parameters.AddWithValue(command, "@CheckboxValue", model?.CheckboxValue);
-                command.Parameters.AddWithValue(command, "@RadioboxValue", model?.RadioboxValue);
-                command.Parameters.AddWithValue(command, "@IntValue", model?.IntValue);
-                command.Parameters.AddWithValue(command, "@DecimalValue", model?.DecimalValue);
-                command.Parameters.AddWithValue(command, "@DateTimeValue", model?.DateTimeValue);
-                command.Parameters.AddWithValue(command, "@Scoring", model?.Scoring);
-                command.Parameters.AddWithValue(command, "@VendorId", model?.VendorId);
-
-                return await command.ExecuteNonQueryAsync() > 0;
-            }
-        }
 
 
         public async Task<CompanyInfo> GetCompanyInfoAsync(int vendorId)
@@ -538,7 +518,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<VendorPrequalificationValues>> GetVendorPrequalificationValuesAsync(int vendorId)
+        public async Task<List<VendorPrequalificationValues>> GetPrequalificationValuesAsync(int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -571,5 +551,64 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return result;
             }
         }
+
+        public async Task<bool> AddPrequalification(VendorPrequalificationValues value)
+        {
+            return await ModifyPrequalificationAsync(new()
+            {
+                VendorPrequalificationId = 0,
+                PrequalificationDesignId = value.PrequalificationDesignId,
+                VendorId = value.VendorId,
+                TextareaValue = value.TextareaValue,
+                TextboxValue = value.TextboxValue,
+                CheckboxValue = value.CheckboxValue,
+                RadioboxValue = value.RadioboxValue,
+                IntValue = value.IntValue,
+                DecimalValue = value.DecimalValue,
+                DateTimeValue = value.DateTimeValue,
+                Scoring = value.Scoring,
+            });
+        }
+
+        public Task<bool> UpdatePrequalification(VendorPrequalificationValues value)
+            => ModifyPrequalificationAsync(value);
+
+        public Task<bool> DeletePrequalification(int vendorPreId)
+            => ModifyPrequalificationAsync(new() { VendorPrequalificationId = vendorPreId });
+
+        private async Task<bool> ModifyPrequalificationAsync(VendorPrequalificationValues values)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorPrequalification_IUD @VendorPrequalificationId,
+                                                                           @PrequalificationDesignId,
+                                                                           @VendorId,
+                                                                           @TextboxValue,
+                                                                           @TextareaValue,
+                                                                           @CheckboxValue,
+                                                                           @RadioboxValue,
+                                                                           @IntValue,
+                                                                           @DecimalValue,
+                                                                           @DateTimeValue,
+                                                                           @Scoring";
+
+
+                command.Parameters.AddWithValue(command, "@VendorPrequalificationId", values.VendorPrequalificationId);
+                command.Parameters.AddWithValue(command, "@PrequalificationDesignId", values.PrequalificationDesignId);
+                command.Parameters.AddWithValue(command, "@VendorId", values.VendorId);
+                command.Parameters.AddWithValue(command, "@TextboxValue", values.TextboxValue);
+                command.Parameters.AddWithValue(command, "@TextareaValue", values.TextareaValue);
+                command.Parameters.AddWithValue(command, "@CheckboxValue", values.CheckboxValue);
+                command.Parameters.AddWithValue(command, "@RadioboxValue", values.RadioboxValue);
+                command.Parameters.AddWithValue(command, "@IntValue", values.IntValue);
+                command.Parameters.AddWithValue(command, "@DecimalValue", values.DecimalValue);
+                command.Parameters.AddWithValue(command, "@DateTimeValue", values.DateTimeValue);
+                command.Parameters.AddWithValue(command, "@Scoring", values.Scoring);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+
     }
 }

@@ -22,11 +22,20 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<Entities.SupplierEvaluation.PrequalificationGridData>> GetPrequalificationGridAsync(int preDesignId);
         Task<List<VendorBankDetail>> GetVondorBankDetailsAsync(int vendorid);
         Task<CompanyInfo> GetCompanyInfoAsync(int vendorId);
-        Task<List<VendorDueDiligence>> GetVendorDuesAsync(int vendorId);
-        Task<List<VendorPrequalification>> GetVendorPrequalificationAsync(int vendorId);
+        Task<List<Entities.SupplierEvaluation.VendorDueDiligence>> GetVendorDuesAsync(int vendorId);
+        Task<List<Entities.SupplierEvaluation.VendorPrequalification>> GetVendorPrequalificationAsync(int vendorId);
         Task<List<VendorBuCategory>> GetVendorBuCategoriesAsync(int vendorId);
         Task<Prequalification> GetPrequalificationAsync(int vendorid);
-        Task<List<VendorPrequalificationValues>> GetVendorPrequalificationValuesAsync(int vendorId);
+        Task<List<VendorPrequalificationValues>> GetPrequalificationValuesAsync(int vendorId);
+
+
+
+
+        Task<bool> AddPrequalification(VendorPrequalificationValues value);
+        Task<bool> UpdatePrequalification(VendorPrequalificationValues value);
+        Task<bool> DeletePrequalification(VendorPrequalificationValues value);
+
+
         Task<bool> AddNDAAsync(VendorNDA ndas);
         Task<bool> DeleteNDAAsync(int ndaId);
         Task<bool> AddCOBCAsync(VendorCOBC cobc);

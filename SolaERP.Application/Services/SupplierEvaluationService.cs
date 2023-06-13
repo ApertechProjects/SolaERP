@@ -256,7 +256,7 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<List<PrequalificationWithCategoryDto>>> GetPrequalificationAsync(string userIdentity, List<int> categoryIds, string acceptLang)
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
-            List<VendorPrequalificationValues> prequalificationValues = await _repository.GetVendorPrequalificationValuesAsync(user.VendorId);
+            List<VendorPrequalificationValues> prequalificationValues = await _repository.GetPrequalificationValuesAsync(user.VendorId);
 
             var responseModel = new List<PrequalificationWithCategoryDto>();
             foreach (var categoryId in categoryIds)
