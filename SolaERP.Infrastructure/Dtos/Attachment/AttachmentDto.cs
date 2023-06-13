@@ -12,6 +12,6 @@
         public int AttachmentSubTypeId { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public int Size { get; set; }
-        public string FileLink { get; set; }
+        public string FileBase64 { get; set; }
     }
 }
