@@ -620,5 +620,33 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             throw new NotImplementedException();
         }
+
+
+        public async Task<bool> ModifyPreGridAsync(Application.Entities.SupplierEvaluation.PrequalificationGridData gridData)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_PrequalificationGridData_IUD @PreqqualificationGridDataId,
+                                                                             @PreqqualificationDesignId,
+                                                                             @Column1,
+                                                                             @Column2,
+                                                                             @Column3,
+                                                                             @Column4,
+                                                                             @Column5";
+
+
+
+                command.Parameters.AddWithValue(command, "@PreqqualificationGridDataId", gridData.PreqqualificationGridDataId);
+                command.Parameters.AddWithValue(command, "@PreqqualificationDesignId", gridData.PreqqualificationDesignId);
+                command.Parameters.AddWithValue(command, "@Column1", gridData.Column1);
+                command.Parameters.AddWithValue(command, "@Column2", gridData.Column2);
+                command.Parameters.AddWithValue(command, "@Column3", gridData.Column3);
+                command.Parameters.AddWithValue(command, "@Column4", gridData.Column4);
+                command.Parameters.AddWithValue(command, "@Column5", gridData.Column5);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
     }
 }
