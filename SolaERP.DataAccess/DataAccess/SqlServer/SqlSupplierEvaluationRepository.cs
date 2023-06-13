@@ -606,6 +606,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public Task<bool> AddPreGriAsync()
+        {
+            throw new NotImplementedException();
+        }
 
+        public Task<bool> UpdatePreGriAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeletePreGriAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
