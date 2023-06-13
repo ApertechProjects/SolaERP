@@ -78,6 +78,12 @@ namespace SolaERP.Persistence.Services
                 var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
                 dueInputModel.VendorId = vendorId;
 
+                if (item.HasDataGrid == true)
+                {
+
+                }
+
+
                 return _repository.AddDueAsync(dueInputModel);
             }));
 
