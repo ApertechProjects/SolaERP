@@ -72,6 +72,7 @@ namespace SolaERP.Persistence.Services
 
 
 
+
             tasks.AddRange(command.NonDisclosureAgreement.Select(x => _repository.AddNDAAsync(_mapper.Map<VendorNDA>(x))));
             tasks.AddRange(command.CodeOfBuConduct.Select(x => _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(x))));
             tasks.AddRange(command.BankDetails.Select(x => _vendorRepository.AddBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x))));
@@ -293,7 +294,7 @@ namespace SolaERP.Persistence.Services
                             HasDateTime = design.HasDateTime > 0 ? true : null,
                             HasAttachment = design.HasAttachment > 0 ? true : null,
                             Title = design.Title,
-                            //Weight = design.Weight,
+                            Weight = design.Weight,
                             HasGrid = design.HasGrid > 0 ? true : null,
                             GridRowLimit = design.HasGrid > 0 ? design.GridRowLimit : null,
                             GridColumnCount = design.HasGrid > 0 ? design.GridColumnCount : null,
