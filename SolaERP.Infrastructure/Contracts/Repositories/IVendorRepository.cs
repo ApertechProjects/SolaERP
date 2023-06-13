@@ -13,6 +13,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<int> UpdateVendorAsync(int userId, Vendor vendor);
         Task<int> DeleteVendorAsync(int userId, int id);
         Task<VendorInfo> GetVendorByTaxIdAsync(string taxId);
-        Task<bool> VendorChangeStatus(int vendorId, int status, int userId)
+        Task<bool> VendorChangeStatus(int vendorId, int status, int userId);
     }
 }
