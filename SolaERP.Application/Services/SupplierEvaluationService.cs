@@ -73,19 +73,30 @@ namespace SolaERP.Persistence.Services
             }));
 
 
-            tasks.AddRange(command.DueDiligence.Select(item =>
+            tasks = tasks.Concat(command.DueDiligence.SelectMany(item =>
             {
                 var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
                 dueInputModel.VendorId = vendorId;
 
+                var itemTasks = new List<Task<bool>>
+                {
+                      _repository.AddDueAsync(dueInputModel)
+                };
+
                 if (item.HasDataGrid == true)
                 {
-
+                    itemTasks.AddRange(item.GridDatas.Select(gridData =>
+                        _repository.AddDueDesignGrid(_mapper.Map<DueDiligenceGridModel>(gridData))));
                 }
 
+                if (item.Attachments is not null)
+                {
+                    itemTasks.AddRange(item.Attachments.Select(attachment =>
+                        _attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(attachment))));
+                }
 
-                return _repository.AddDueAsync(dueInputModel);
-            }));
+                return itemTasks;
+            })).ToList();
 
 
             tasks.AddRange(command.Prequalification.SelectMany(item =>
@@ -102,6 +113,12 @@ namespace SolaERP.Persistence.Services
                 {
                     tasksList.AddRange(item.Attachments.Select(attachment =>
                         _attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(attachment))));
+                }
+
+                if (item.HasGrid == true)
+                {
+                    //tasksList.AddRange(item.GridDatas.Select(gridData =>
+                    //    _repository.(_mapper.Map<DueDiligenceGridModel>(gridData))));
                 }
 
                 return tasksList;
