@@ -59,42 +59,6 @@ namespace SolaERP.Business.CommonLogic
                     VendorDrafts = await GetVendorDraft(userId, BU)
                 };
 
-                #region Verion 1
-                //if (!vendorList.WFAVendor.Any())
-                //{
-                //    vendorList.WFAVendor.Add(new VendorWFA { FullName = " " });
-                //}
-                //else
-                //{
-                //    var wfaData = vendorList.WFAVendor[0];
-                //    for (int i = 1; i < 30; i++)
-                //    {
-                //        vendorList.WFAVendor.Add(new VendorWFA
-                //        {
-                //            VendorId = wfaData.VendorId + i,
-                //            AgreeWithDefaultDays = wfaData.AgreeWithDefaultDays,
-                //            CompanyLocation = wfaData.CompanyLocation,
-                //            CompanyWebsite = wfaData.CompanyWebsite,
-                //            CountryCode = wfaData.CountryCode,
-                //            CreditDays = wfaData.CreditDays,
-                //            ExpirationDate = wfaData.ExpirationDate,
-                //            FullName = wfaData.FullName,
-                //            Id = wfaData.Id,
-                //            LastActivity = wfaData.LastActivity,
-                //            PaymentTermsCode = wfaData.PaymentTermsCode,
-                //            Position = wfaData.Position,
-                //            RepresentedCompanies = wfaData.RepresentedCompanies,
-                //            RepresentedProducts = wfaData.RepresentedProducts,
-                //            Sequence = wfaData.Sequence,
-                //            VendorName = wfaData.VendorName + i,
-                //            VendorCode = wfaData.VendorCode + i
-
-                //        });
-                //    }
-
-                //}
-                #endregion
-
                 return new ApiResult
                 {
                     Data = vendorList,
