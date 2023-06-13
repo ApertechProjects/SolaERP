@@ -59,9 +59,18 @@ namespace SolaERP.Persistence.Services
 
             command.CodeOfBuConduct.ForEach(x => x.VendorId = vendorId);
             command.NonDisclosureAgreement.ForEach(x => x.VendorId = vendorId);
-            command.BankDetails.ForEach(x => x.VendorId = vendorId);
+            command.BankAccounts.ForEach(x => x.BankDetails.VendorId = vendorId);
 
             List<Task<bool>> tasks = new();
+
+            foreach (var item in command.BankAccounts)
+            {
+                if (item.AccountVerificationLetter is not null)
+                {
+                    tasks.Add(_attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(item.AccountVerificationLetter)));
+                }
+            }
+
 
             foreach (var item in command.DueDiligence)
             {
@@ -72,13 +81,15 @@ namespace SolaERP.Persistence.Services
 
             foreach (var item in command.Prequalification)
             {
-
+                var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
+                prequalificationValue.VendorId = vendorId;
+                tasks.Add(_repository.AddPrequalification(prequalificationValue));
             }
 
 
             tasks.AddRange(command.NonDisclosureAgreement.Select(x => _repository.AddNDAAsync(_mapper.Map<VendorNDA>(x))));
             tasks.AddRange(command.CodeOfBuConduct.Select(x => _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(x))));
-            tasks.AddRange(command.BankDetails.Select(x => _vendorRepository.AddBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x))));
+            tasks.AddRange(command.BankAccounts.Select(x => _vendorRepository.AddBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x.BankDetails))));
 
             await Task.WhenAll(tasks);
             await _unitOfWork.SaveChangesAsync();
@@ -406,7 +417,7 @@ namespace SolaERP.Persistence.Services
                         DecimalPoint = d.HasDecimal > 0 ? d.HasDecimal : null,
                         DateTimePoint = d.HasDateTime > 0 ? d.HasDateTime : null,
                         AttachmentPoint = d.HasAttachment > 0 ? d.HasAttachment : null,
-                        Scoring = correspondingValue?.Scoring
+                        Scoring = correspondingValue?.Scoring ?? 0
                     };
 
                     dto.Childs.Add(childDto);

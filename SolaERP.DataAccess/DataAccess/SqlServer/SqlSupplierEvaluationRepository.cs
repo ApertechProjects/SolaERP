@@ -206,17 +206,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<Application.Entities.SupplierEvaluation.PrequalificationCategory>> GetPrequalificationCategoriesAsync()
+        public async Task<List<PrequalificationCategory>> GetPrequalificationCategoriesAsync()
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "SELECT * FROM VW_PrequalificationCategoryList";
 
-                List<Application.Entities.SupplierEvaluation.PrequalificationCategory> resultList = new();
+                List<PrequalificationCategory> resultList = new();
                 using var reader = await command.ExecuteReaderAsync();
 
                 while (reader.Read())
-                    resultList.Add(reader.GetByEntityStructure<Application.Entities.SupplierEvaluation.PrequalificationCategory>());
+                    resultList.Add(reader.GetByEntityStructure<PrequalificationCategory>());
 
                 return resultList;
             }

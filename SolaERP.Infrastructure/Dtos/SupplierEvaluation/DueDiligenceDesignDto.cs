@@ -84,8 +84,8 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public DateTime? DateTimeValue { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public bool? AgreementValue { get; set; }
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public decimal? Scoring { get; set; }
+        //[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public decimal Scoring { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public List<AttachmentDto> Attachments { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

@@ -8,6 +8,7 @@ namespace SolaERP.Application.Models
         public int AttachmentId { get; set; }
         public string FileName { get; set; }
         public string Filebase64 { get; set; }
+
         [NotMapped]
         public byte[] FileData { get => Encoding.UTF8.GetBytes(Filebase64); }
         public int SourceId { get; set; }
