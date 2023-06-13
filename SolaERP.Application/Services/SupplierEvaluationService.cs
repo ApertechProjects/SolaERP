@@ -82,6 +82,14 @@ namespace SolaERP.Persistence.Services
                 var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
                 prequalificationValue.VendorId = vendorId;
                 tasks.Add(_repository.AddPrequalification(prequalificationValue));
+
+                if (item.Attachments is not null)
+                {
+                    for (int i = 0; i < item.Attachments.Count; i++)
+                    {
+
+                    }
+                }
             }
 
 
