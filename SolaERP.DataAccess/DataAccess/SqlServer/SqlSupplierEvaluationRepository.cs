@@ -632,7 +632,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_PrequalificationGridData_IUD @PreqqualificationGridDataId,
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_PrequalificationGridData_IUD @PreqqualificationGridDataId,
                                                                              @PreqqualificationDesignId,
                                                                              @Column1,
                                                                              @Column2,

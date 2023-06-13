@@ -61,6 +61,8 @@ namespace SolaERP.Persistence.Services
             command.NonDisclosureAgreement.ForEach(x => x.VendorId = vendorId);
             command.BankAccounts.ForEach(x => x.BankDetails.VendorId = vendorId);
 
+
+
             List<Task<bool>> tasks = new();
             tasks.AddRange(command.BankAccounts.Select(x =>
             {
