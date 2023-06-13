@@ -1,13 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using SolaERP.Application.Contracts.Repositories;
+﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.SupplierEvaluation;
-using SolaERP.Application.Entities.PrequalificationCategory;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
-using System;
 using System.Data;
 using System.Data.Common;
 
@@ -209,17 +206,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<PrequalificationCategory>> GetPrequalificationCategoriesAsync()
+        public async Task<List<Application.Entities.SupplierEvaluation.PrequalificationCategory>> GetPrequalificationCategoriesAsync()
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "SELECT * FROM VW_PrequalificationCategoryList";
 
-                List<PrequalificationCategory> resultList = new();
+                List<Application.Entities.SupplierEvaluation.PrequalificationCategory> resultList = new();
                 using var reader = await command.ExecuteReaderAsync();
 
                 while (reader.Read())
-                    resultList.Add(reader.GetByEntityStructure<PrequalificationCategory>());
+                    resultList.Add(reader.GetByEntityStructure<Application.Entities.SupplierEvaluation.PrequalificationCategory>());
 
                 return resultList;
             }

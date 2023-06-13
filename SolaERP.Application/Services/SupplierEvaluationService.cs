@@ -70,7 +70,10 @@ namespace SolaERP.Persistence.Services
                 tasks.Add(_repository.AddDueAsync(dueInputModel));
             }
 
+            foreach (var item in command.Prequalification)
+            {
 
+            }
 
 
             tasks.AddRange(command.NonDisclosureAgreement.Select(x => _repository.AddNDAAsync(_mapper.Map<VendorNDA>(x))));
