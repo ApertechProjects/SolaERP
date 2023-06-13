@@ -55,7 +55,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> VendorBusinessCategoryDeleteAsync(int vendorId);
         Task<bool> VendorRepresentedCompanyAddAsync(VendorRepresentedCompany data);
         Task<bool> VendorRepresentedCompanyDeleteAsync(int vendorId);
-        Task<bool> VendorRepresentedProductAddAsync(VendorRepresentedCompany data);
+        Task<bool> VendorRepresentedProductAddAsync(RepresentedProductData data);
         Task<bool> VendorRepresentedProductDeleteAsync(int vendorId);
 
     }
