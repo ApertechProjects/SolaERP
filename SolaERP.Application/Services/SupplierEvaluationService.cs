@@ -62,44 +62,55 @@ namespace SolaERP.Persistence.Services
             command.BankAccounts.ForEach(x => x.BankDetails.VendorId = vendorId);
 
             List<Task<bool>> tasks = new();
-
-            foreach (var item in command.BankAccounts)
+            tasks.AddRange(command.BankAccounts.Select(x =>
             {
-                if (item.AccountVerificationLetter is not null)
-                    tasks.Add(_attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(item.AccountVerificationLetter)));
-            }
+                x.BankDetails.VendorId = vendorId;
+
+                if (x.AccountVerificationLetter is not null)
+                    return _attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(x.AccountVerificationLetter));
+
+                return _vendorRepository.AddBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x.BankDetails));
+            }));
 
 
-            foreach (var item in command.DueDiligence)
+            tasks.AddRange(command.DueDiligence.Select(item =>
             {
                 var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
                 dueInputModel.VendorId = vendorId;
-                tasks.Add(_repository.AddDueAsync(dueInputModel));
-            }
 
-            foreach (var item in command.Prequalification)
+                return _repository.AddDueAsync(dueInputModel);
+            }));
+
+
+            tasks.AddRange(command.Prequalification.SelectMany(item =>
             {
                 var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
                 prequalificationValue.VendorId = vendorId;
-                tasks.Add(_repository.AddPrequalification(prequalificationValue));
+
+                var tasksList = new List<Task<bool>>
+                {
+                     _repository.AddPrequalification(prequalificationValue)
+                };
 
                 if (item.Attachments is not null)
                 {
-                    for (int i = 0; i < item.Attachments.Count; i++)
-                    {
-
-                    }
+                    tasksList.AddRange(item.Attachments.Select(attachment =>
+                        _attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(attachment))));
                 }
-            }
+
+                return tasksList;
+            }));
 
 
+            command.NonDisclosureAgreement.ForEach(x => x.VendorId = vendorId);
             tasks.AddRange(command.NonDisclosureAgreement.Select(x => _repository.AddNDAAsync(_mapper.Map<VendorNDA>(x))));
+
+
+            command.CodeOfBuConduct.ForEach(x => x.VendorId = vendorId);
             tasks.AddRange(command.CodeOfBuConduct.Select(x => _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(x))));
-            tasks.AddRange(command.BankAccounts.Select(x => _vendorRepository.AddBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x.BankDetails))));
 
-            await Task.WhenAll(tasks);
+
             await _unitOfWork.SaveChangesAsync();
-
             return ApiResponse<bool>.Success(tasks.All(x => x.Result), 200);
         }
 
