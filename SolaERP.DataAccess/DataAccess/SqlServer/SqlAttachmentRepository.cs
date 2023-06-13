@@ -23,7 +23,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_Attachments_IUD @AttachmentId,@FileName,@FileData,@SourceId,@SourceType,@Reference,@ExtensionType,@AttachmentTypeId,@AttachmentSubTypeId,@UploadDateTime,@Size";
                 command.Parameters.AddWithValue(command, "@AttachmentId", attachment.AttachmentId);
                 command.Parameters.AddWithValue(command, "@FileName", attachment.FileName);
-                command.Parameters.AddWithValue(command, "@FileData", attachment.FileData);
+                command.Parameters.AddWithValue(command, "@FileData", attachment.Filebase64);
                 command.Parameters.AddWithValue(command, "@SourceId", attachment.SourceId);
                 command.Parameters.AddWithValue(command, "@SourceType", attachment.SourceType);
                 command.Parameters.AddWithValue(command, "@Reference", null);
