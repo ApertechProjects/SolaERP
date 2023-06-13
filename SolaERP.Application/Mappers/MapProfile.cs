@@ -111,10 +111,12 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<AccountCode, AccountCodeDto>().ReverseMap();
             CreateMap<RequestSaveModel, RequestMainSaveModel>().ReverseMap();
             CreateMap<SolaERP.Application.Entities.SupplierEvaluation.Currency, CurrencyDto>().ReverseMap();
-            CreateMap<Attachment, AttachmentWithFileDto>().ReverseMap();
+            CreateMap<Attachment, AttachmentWithFileDto>().
+                ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FileName))
+               .ReverseMap();
             CreateMap<Attachment, AttachmentDto>().
                 ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FileName))
-                .ReverseMap();
+               .ReverseMap();
             CreateMap<UOM, UOMDto>().ReverseMap();
             CreateMap<AdditionalPrivilegeAccess, AdditionalPrivilegeAccessDto>().ReverseMap();
             CreateMap<RequestDetailApprovalInfo, RequestDetailApprovalInfoDto>().
