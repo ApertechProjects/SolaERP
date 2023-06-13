@@ -117,8 +117,8 @@ namespace SolaERP.Persistence.Services
 
                 if (item.HasGrid == true)
                 {
-                    //tasksList.AddRange(item.GridDatas.Select(gridData =>
-                    //    _repository.(_mapper.Map<DueDiligenceGridModel>(gridData))));
+                    tasksList.AddRange(item.GridDatas.Select(gridData =>
+                        _repository.AddPreGridAsync(_mapper.Map<Application.Entities.SupplierEvaluation.PrequalificationGridData>(gridData))));
                 }
 
                 return tasksList;
