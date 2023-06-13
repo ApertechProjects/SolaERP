@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
-
-namespace SolaERP.Application.Models
+﻿namespace SolaERP.Application.Models
 {
     public class AttachmentSaveModel
     {
