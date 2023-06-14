@@ -654,5 +654,92 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<bool> PrequalificationCategoryAddAsync(PrequalificationCategoryData data)
+             => await ModifyPrequalificationCategorySaveAsync(data);
+
+        public async Task<bool> PrequalificationCategoryDeleteAsync(int vendorId)
+            => await ModifyPrequalificationCategorySaveAsync(new PrequalificationCategoryData { VendorId = vendorId });
+
+        public async Task<bool> ModifyPrequalificationCategorySaveAsync(PrequalificationCategoryData data)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_VendorPrequalificationCategory_ID @VendorId,
+                                                                                  @PrequalificationCategoryId";
+
+
+
+                command.Parameters.AddWithValue(command, "@VendorId", data.VendorId);
+                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", data.PrequalificationCategoryId);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> VendorBusinessCategoryAddAsync(VendorBusinessCategoryData data)
+            => await ModifyVendorBusinessCategorySaveAsync(data);
+
+        public async Task<bool> VendorBusinessCategoryDeleteAsync(int vendorId)
+            => await ModifyVendorBusinessCategorySaveAsync(new VendorBusinessCategoryData { VendorId = vendorId });
+
+        public async Task<bool> ModifyVendorBusinessCategorySaveAsync(VendorBusinessCategoryData data)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_VendorBusinessCategory_ID @VendorId,
+                                                                          @BusinessCategoryId";
+
+
+
+                command.Parameters.AddWithValue(command, "@VendorId", data.VendorId);
+                command.Parameters.AddWithValue(command, "@BusinessCategoryId", data.BusinessCategoryId);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> VendorRepresentedCompanyAddAsync(VendorRepresentedCompany data)
+            => await ModifyRepresentedCategorySaveAsync(data);
+
+        public async Task<bool> VendorRepresentedCompanyDeleteAsync(int vendorId)
+            => await ModifyRepresentedCategorySaveAsync(new VendorRepresentedCompany { VendorId = vendorId });
+
+        public async Task<bool> ModifyRepresentedCategorySaveAsync(VendorRepresentedCompany data)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_VendorRepresentedCompany_ID @VendorId,
+                                                                            @RepresentedCompanyName";
+
+
+
+                command.Parameters.AddWithValue(command, "@VendorId", data.VendorId);
+                command.Parameters.AddWithValue(command, "@RepresentedCompanyName", data.RepresentedCompanyName);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> VendorRepresentedProductAddAsync(RepresentedProductData data)
+             => await ModifyRepresentedProductSaveAsync(data);
+
+        public async Task<bool> VendorRepresentedProductDeleteAsync(int vendorId)
+            => await ModifyRepresentedProductSaveAsync(new RepresentedProductData { VendorId = vendorId });
+
+        public async Task<bool> ModifyRepresentedProductSaveAsync(RepresentedProductData data)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_VendorRepresentedProducts_ID @VendorId,
+                                                                            @RepresentedProductName";
+
+
+
+                command.Parameters.AddWithValue(command, "@VendorId", data.VendorId);
+                command.Parameters.AddWithValue(command, "@RepresentedProductName", data.RepresentedProductName);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
     }
 }

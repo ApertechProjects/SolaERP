@@ -28,9 +28,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<Prequalification> GetPrequalificationAsync(int vendorid);
         Task<List<VendorPrequalificationValues>> GetPrequalificationValuesAsync(int vendorId);
 
-
-
-
         Task<bool> AddPrequalification(VendorPrequalificationValues value);
         Task<bool> UpdatePrequalification(VendorPrequalificationValues value);
         Task<bool> DeletePrequalification(int vendorPreId);
@@ -49,6 +46,17 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> UpdateDueAsync(VendorDueDiligenceModel model);
         Task<bool> DeleteDueAsync(int dueId);
 
+        Task<bool> AddPreGriAsync(Entities.SupplierEvaluation.PrequalificationGridData grid);
+        Task<bool> UpdatePreGriAsync(Entities.SupplierEvaluation.PrequalificationGridData grid);
+        Task<bool> DeletePreGriAsync(int preGridId);
+        Task<bool> PrequalificationCategoryAddAsync(PrequalificationCategoryData data);
+        Task<bool> PrequalificationCategoryDeleteAsync(int vendorId);
+        Task<bool> VendorBusinessCategoryAddAsync(VendorBusinessCategoryData data);
+        Task<bool> VendorBusinessCategoryDeleteAsync(int vendorId);
+        Task<bool> VendorRepresentedCompanyAddAsync(VendorRepresentedCompany data);
+        Task<bool> VendorRepresentedCompanyDeleteAsync(int vendorId);
+        Task<bool> VendorRepresentedProductAddAsync(RepresentedProductData data);
+        Task<bool> VendorRepresentedProductDeleteAsync(int vendorId);
         Task<bool> AddPreGridAsync(Entities.SupplierEvaluation.PrequalificationGridData grid);
         Task<bool> UpdatePreGridAsync(Entities.SupplierEvaluation.PrequalificationGridData grid);
         Task<bool> DeletePreGridAsync(int preGridId);
