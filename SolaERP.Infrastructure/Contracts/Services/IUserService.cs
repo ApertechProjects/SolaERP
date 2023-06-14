@@ -41,5 +41,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<bool> CheckEmailIsVerified(string email);
         Task<UserData> GetUserDataByVerifyTokenAsync(string verifyToken);
         Task<List<string>> GetAdminUsersAsync(int sequence, Language language);
+
+        Task<bool> CheckUserVerifyByVendor(string email);
     }
 }
