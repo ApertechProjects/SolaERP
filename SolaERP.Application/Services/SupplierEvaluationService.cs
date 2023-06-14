@@ -482,7 +482,8 @@ namespace SolaERP.Persistence.Services
                         DecimalPoint = d.HasDecimal,//> 0 ? d.HasDecimal : null,
                         DateTimePoint = d.HasDateTime,//> 0 ? d.HasDateTime : null,
                         AttachmentPoint = d.HasAttachment,//> 0 ? d.HasAttachment : null,
-                        Scoring = correspondingValue?.Scoring ?? 0
+                        Scoring = correspondingValue?.Scoring ?? 0,
+                        DataGridPoint = d.HasGrid
                     };
 
                     dto.Childs.Add(childDto);
