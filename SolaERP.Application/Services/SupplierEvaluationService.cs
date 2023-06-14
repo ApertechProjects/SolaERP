@@ -59,10 +59,17 @@ namespace SolaERP.Persistence.Services
             await _repository.VendorRepresentedCompanyAddAsync(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = command.CompanyInfo.RepresentedCompanies });
             await _repository.VendorRepresentedProductAddAsync(new Application.Models.RepresentedProductData { VendorId = vendorId, RepresentedProductName = command.CompanyInfo.RepresentedCompanies });
 
-            var companyLogo = _mapper.Map<AttachmentSaveModel>(command.CompanyInfo.CompanyLogo);
-            companyLogo.SourceId = vendorId;
-            companyLogo.SourceType = SourceType.VEN_LOGO.ToString();
-            await _attachmentRepository.SaveAttachmentAsync(companyLogo);
+            var companyLogo = _mapper.Map<List<AttachmentSaveModel>>(command.CompanyInfo.CompanyLogo);
+            companyLogo.ForEach(companyLogo =>
+            {
+                companyLogo.SourceId = vendorId;
+                companyLogo.SourceType = SourceType.VEN_LOGO.ToString();
+            });
+
+            for (int i = 0; i < companyLogo.Count; i++)
+            {
+                await _attachmentRepository.SaveAttachmentAsync(companyLogo[i]);
+            }
 
             var attachments = _mapper.Map<List<AttachmentSaveModel>>(command.CompanyInfo.Attachments);
             attachments.ForEach(attachment =>
@@ -284,7 +291,7 @@ namespace SolaERP.Persistence.Services
             CompanyInfoDto companyInfo = _mapper.Map<CompanyInfoDto>(companyInfoTask.Result);
             companyInfo.PrequalificationCategories = matchedPrequalificationTypes;
             companyInfo.BusinessCategories = matchedBuCategories;
-            companyInfo.CompanyLogo = _mapper.Map<AttachmentDto>(venLogoAttachmentTask.Result[0]);
+            companyInfo.CompanyLogo = _mapper.Map<List<AttachmentDto>>(venLogoAttachmentTask.Result);
             companyInfo.Attachments = _mapper.Map<List<AttachmentDto>>(venOletAttachmentTask.Result);
             companyInfo.ProductServices = matchedProductServices;
 
