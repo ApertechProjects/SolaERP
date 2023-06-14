@@ -20,12 +20,12 @@ namespace SolaERP.Application.Entities.SupplierEvaluation
         public string Title { get; set; }
         public int Weight { get; set; }
         public decimal HasGrid { get; set; }
-        public int? GridRowLimit { get; set; }
-        public int? GridColumnCount { get; set; }
-        public string? Column1Alias { get; set; }
-        public string? Column2Alias { get; set; }
-        public string? Column3Alias { get; set; }
-        public string? Column4Alias { get; set; }
-        public string? Column5Alias { get; set; }
+        public int GridRowLimit { get; set; }
+        public int GridColumnCount { get; set; }
+        public string Column1Alias { get; set; }
+        public string Column2Alias { get; set; }
+        public string Column3Alias { get; set; }
+        public string Column4Alias { get; set; }
+        public string Column5Alias { get; set; }
     }
 }
