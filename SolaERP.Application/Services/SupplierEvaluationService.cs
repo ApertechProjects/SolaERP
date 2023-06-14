@@ -63,24 +63,24 @@ namespace SolaERP.Persistence.Services
 
 
             List<Task<bool>> tasks = new();
-            //tasks.AddRange(command.BankAccounts.Select(x =>
-            //{
-            //    x.BankDetails.VendorId = vendorId;
+            tasks.AddRange(command.BankAccounts.Select(x =>
+            {
+                x.BankDetails.VendorId = vendorId;
 
-            //    if (x.AccountVerificationLetter is not null)
-            //    {
-            //        var entity = _mapper.Map<AttachmentSaveModel>(x.AccountVerificationLetter);
-            //        entity.SourceId = vendorId;
-            //        entity.SourceType = SourceType.VEN_BNK.ToString();
+                if (x.AccountVerificationLetter is not null)
+                {
+                    var entity = _mapper.Map<AttachmentSaveModel>(x.AccountVerificationLetter);
+                    entity.SourceId = vendorId;
+                    entity.SourceType = SourceType.VEN_BNK.ToString();
 
-            //        return _attachmentRepository.SaveAttachmentAsync(entity);
-            //    }
+                    return _attachmentRepository.SaveAttachmentAsync(entity);
+                }
 
-            //    return _vendorRepository.AddBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x.BankDetails));
-            //}));
+                return _vendorRepository.AddBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x.BankDetails));
+            }));
 
 
-            tasks = tasks.Concat(command.DueDiligence.SelectMany(item =>
+            tasks = tasks.Concat(command.DueDiligence.SelectMany(item =>   //+
             {
                 var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
                 dueInputModel.VendorId = vendorId;
@@ -105,7 +105,6 @@ namespace SolaERP.Persistence.Services
                 return itemTasks;
             })).ToList();
 
-
             tasks.AddRange(command.Prequalification.SelectMany(item =>
             {
                 var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
@@ -113,7 +112,7 @@ namespace SolaERP.Persistence.Services
 
                 var tasksList = new List<Task<bool>>
                 {
-                     _repository.AddPrequalification(prequalificationValue)
+                     _repository.AddPrequalification(prequalificationValue) //+
                 };
 
                 if (item.Attachments is not null)
@@ -139,8 +138,8 @@ namespace SolaERP.Persistence.Services
             command.CodeOfBuConduct.ForEach(x => x.VendorId = vendorId);
             tasks.AddRange(command.CodeOfBuConduct.Select(x => _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(x))));
 
-
-            //await _unitOfWork.SaveChangesAsync();
+            await Task.WhenAll(tasks);
+            await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(tasks.All(x => x.Result), 200);
         }
 

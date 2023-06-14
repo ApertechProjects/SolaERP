@@ -27,7 +27,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                       ,@DateTimeValue,@AgreementValue,@Scoring";
 
                 command.Parameters.AddWithValue(command, "@VendorDueDiligenceId", vendorDueDiligence.VendorDueDiligenceId);
-                command.Parameters.AddWithValue(command, "@DueDiligenceDesignId", vendorDueDiligence.DueDiligenceDesignId);
+                command.Parameters.AddWithValue(command, "@DueDiligenceDesignId", vendorDueDiligence.DesignId);
                 command.Parameters.AddWithValue(command, "@VendorId", vendorDueDiligence.VendorId);
                 command.Parameters.AddWithValue(command, "@TextboxValue", vendorDueDiligence.TextboxValue);
                 command.Parameters.AddWithValue(command, "@TextareaValue", vendorDueDiligence.TextareaValue);
@@ -51,7 +51,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return await ModifyDueDiligence(new()
             {
                 VendorDueDiligenceId = 0,
-                DueDiligenceDesignId = model.DueDiligenceDesignId,
+                DesignId = model.DesignId,
                 DateTimeValue = model.DateTimeValue,
                 DecimalValue = model.DecimalValue,
                 AgreementValue = model.AgreementValue,
@@ -70,7 +70,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 
         public async Task<bool> DeleteDueAsync(int dueId)
-            => await ModifyDueDiligence(new() { DueDiligenceDesignId = dueId });
+            => await ModifyDueDiligence(new() { DesignId = dueId });
 
 
 
@@ -78,7 +78,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return await ModifyDueGrid(new()
             {
-                DueDesignId = 0,
+                DueDesignId = gridModel.DueDesignId,
                 Column1 = gridModel.Column1,
                 Column2 = gridModel.Column2,
                 Column3 = gridModel.Column3,

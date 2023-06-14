@@ -236,16 +236,19 @@ namespace SolaERP.Persistence.Mappers
 
 
             CreateMap<DueDiligenceChildDto, VendorDueDiligenceModel>()
+                .ForMember(dest => dest.DesignId, opt => opt.MapFrom(src => src.DesignId))
                 .ForMember(dest => dest.IntValue, opt => opt.MapFrom(src => src.IntValue))
                 .ForMember(dest => dest.TextboxValue, opt => opt.MapFrom(src => src.TextboxValue))
                 .ForMember(dest => dest.TextareaValue, opt => opt.MapFrom(src => src.TextareaValue))
                 .ForMember(dest => dest.CheckboxValue, opt => opt.MapFrom(src => src.CheckboxValue))
                 .ForMember(dest => dest.RadioboxValue, opt => opt.MapFrom(src => src.RadioboxValue))
                 .ForMember(dest => dest.DecimalValue, opt => opt.MapFrom(src => src.DecimalValue))
-                .ForMember(dest => dest.DateTimeValue, opt => opt.MapFrom(src => src.DateTimeValue)).ReverseMap();
+                .ForMember(dest => dest.DateTimeValue, opt => opt.MapFrom(src => src.DateTimeValue))
+                .ReverseMap();
 
 
             CreateMap<VendorPrequalificationValues, PrequalificationDto>()
+                .ForMember(dest => dest.DesignId, opt => opt.MapFrom(src => src.PrequalificationDesignId))
                 .ForMember(dest => dest.IntValue, opt => opt.MapFrom(src => src.IntValue))
                 .ForMember(dest => dest.TextboxValue, opt => opt.MapFrom(src => src.TextboxValue))
                 .ForMember(dest => dest.TextareaValue, opt => opt.MapFrom(src => src.TextareaValue))

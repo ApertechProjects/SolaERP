@@ -18,7 +18,7 @@
         public bool RadioboxValue { get; set; }
         public int IntValue { get; set; }
         public decimal DecimalValue { get; set; }
-        public DateTime DateTimeValue { get; set; }
+        public DateTime? DateTimeValue { get; set; }
         public decimal Scoring { get; set; }
         public int VendorPrequalificationCategoryId { get; set; }
     }
