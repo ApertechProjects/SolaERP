@@ -59,6 +59,23 @@ namespace SolaERP.Persistence.Services
             await _repository.VendorRepresentedCompanyAddAsync(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = command.CompanyInfo.RepresentedCompanies });
             await _repository.VendorRepresentedProductAddAsync(new Application.Models.RepresentedProductData { VendorId = vendorId, RepresentedProductName = command.CompanyInfo.RepresentedCompanies });
 
+            //var companyLogo = _mapper.Map<AttachmentSaveModel>(command.CompanyInfo.CompanyLogo);
+            //companyLogo.SourceId = vendorId;
+            //companyLogo.SourceType = SourceType.VEN_LOGO.ToString();
+            //await _attachmentRepository.SaveAttachmentAsync(companyLogo);
+
+            //var attachments = _mapper.Map<List<AttachmentSaveModel>>(command.CompanyInfo.Attachments);
+            //attachments.ForEach(attachment =>
+            //{
+            //    attachment.SourceId = vendorId;
+            //    attachment.SourceType = SourceType.VEN_OLET.ToString();
+            //});
+
+            //for (int i = 0; i < attachments.Count; i++)
+            //{
+            //    await _attachmentRepository.SaveAttachmentAsync(attachments[i]);
+            //}
+
             command.CodeOfBuConduct.ForEach(x => x.VendorId = vendorId);
             command.NonDisclosureAgreement.ForEach(x => x.VendorId = vendorId);
             command.BankAccounts.ForEach(x => x.BankDetails.VendorId = vendorId);
@@ -98,39 +115,39 @@ namespace SolaERP.Persistence.Services
                         _repository.AddDueDesignGrid(_mapper.Map<DueDiligenceGridModel>(gridData))));
                 }
 
-                if (item.Attachments is not null)
-                {
-                    itemTasks.AddRange(item.Attachments.Select(attachment =>
-                        _attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(attachment))));
-                }
+                //if (item.Attachments is not null)
+                //{
+                //    itemTasks.AddRange(item.Attachments.Select(attachment =>
+                //        _attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(attachment))));
+                //}
 
                 return itemTasks;
             })).ToList();
 
-            tasks.AddRange(command.Prequalification.SelectMany(item =>
-            {
-                var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
-                prequalificationValue.VendorId = vendorId;
+            //tasks.AddRange(command.Prequalification.SelectMany(item =>
+            //{
+            //    var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
+            //    prequalificationValue.VendorId = vendorId;
 
-                var tasksList = new List<Task<bool>>
-                {
-                     _repository.AddPrequalification(prequalificationValue) //+
-                };
+            //    var tasksList = new List<Task<bool>>
+            //    {
+            //         _repository.AddPrequalification(prequalificationValue) //+
+            //    };
 
-                if (item.Attachments is not null)
-                {
-                    tasksList.AddRange(item.Attachments.Select(attachment =>
-                        _attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(attachment))));
-                }
+            //    if (item.Attachments is not null)
+            //    {
+            //        tasksList.AddRange(item.Attachments.Select(attachment =>
+            //            _attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(attachment))));
+            //    }
 
-                if (item.HasGrid == true)
-                {
-                    tasksList.AddRange(item.GridDatas.Select(gridData =>
-                        _repository.AddPreGridAsync(_mapper.Map<Application.Entities.SupplierEvaluation.PrequalificationGridData>(gridData))));
-                }
+            //    if (item.HasGrid == true)
+            //    {
+            //        tasksList.AddRange(item.GridDatas.Select(gridData =>
+            //            _repository.AddPreGridAsync(_mapper.Map<Application.Entities.SupplierEvaluation.PrequalificationGridData>(gridData))));
+            //    }
 
-                return tasksList;
-            }));
+            //    return tasksList;
+            //}));
 
 
             command.NonDisclosureAgreement.ForEach(x => x.VendorId = vendorId);
@@ -267,7 +284,7 @@ namespace SolaERP.Persistence.Services
             CompanyInfoDto companyInfo = _mapper.Map<CompanyInfoDto>(companyInfoTask.Result);
             companyInfo.PrequalificationCategories = matchedPrequalificationTypes;
             companyInfo.BusinessCategories = matchedBuCategories;
-            companyInfo.CompanyLogo = _mapper.Map<List<AttachmentDto>>(venLogoAttachmentTask.Result);
+            companyInfo.CompanyLogo = _mapper.Map<AttachmentDto>(venLogoAttachmentTask.Result);
             companyInfo.Attachments = _mapper.Map<List<AttachmentDto>>(venOletAttachmentTask.Result);
             companyInfo.ProductServices = matchedProductServices;
 
