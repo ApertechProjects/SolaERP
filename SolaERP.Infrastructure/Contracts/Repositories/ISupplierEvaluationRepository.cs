@@ -46,9 +46,9 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> UpdateDueAsync(VendorDueDiligenceModel model);
         Task<bool> DeleteDueAsync(int dueId);
 
-        Task<bool> AddPreGriAsync(Entities.SupplierEvaluation.PrequalificationGridData grid);
-        Task<bool> UpdatePreGriAsync(Entities.SupplierEvaluation.PrequalificationGridData grid);
-        Task<bool> DeletePreGriAsync(int preGridId);
+        Task<bool> AddPreGridAsync(Entities.SupplierEvaluation.PrequalificationGridData grid);
+        Task<bool> UpdatePreGridAsync(Entities.SupplierEvaluation.PrequalificationGridData grid);
+        Task<bool> DeletePreGridAsync(int preGridId);
         Task<bool> PrequalificationCategoryAddAsync(PrequalificationCategoryData data);
         Task<bool> PrequalificationCategoryDeleteAsync(int vendorId);
         Task<bool> VendorBusinessCategoryAddAsync(VendorBusinessCategoryData data);

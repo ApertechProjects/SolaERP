@@ -254,6 +254,22 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.DecimalValue, opt => opt.MapFrom(src => src.DecimalValue))
                 .ForMember(dest => dest.DateTimeValue, opt => opt.MapFrom(src => src.DateTimeValue)).ReverseMap();
 
+            CreateMap<AttachmentDto, AttachmentSaveModel>()
+                 .ForMember(dest => dest.AttachmentId, opt => opt.MapFrom(src => src.AttachmentId))
+                 .ForMember(dest => dest.FileName, opt => opt.MapFrom(src => src.Name))
+                 .ForMember(dest => dest.Filebase64, opt => opt.MapFrom(src => src.FileBase64))
+                 .ForMember(dest => dest.SourceId, opt => opt.MapFrom(src => src.SourceId))
+                 .ForMember(dest => dest.SourceType, opt => opt.Ignore()) // SourceType does not exist in AttachmentDto
+                 .ForMember(dest => dest.ExtensionType, opt => opt.MapFrom(src => src.ExtensionType))
+                 .ForMember(dest => dest.AttachmentTypeId, opt => opt.MapFrom(src => src.AttachmentTypeId))
+                 .ForMember(dest => dest.AttachmentSubTypeId, opt => opt.MapFrom(src => src.AttachmentSubTypeId))
+                 .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size)).ReverseMap();
+
+
+            CreateMap<DueDiligenceGridModel, DueDiligenceGrid>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.DueDesignId, opt => opt.MapFrom(src => src.DueDesignId)).ReverseMap();
+
             CreateMap<AnalysisStructureWithBu, AnalysisStructureWithBuDto>().ReverseMap();
             CreateMap<ApproveStageMainInputModel, ApproveStagesMain>().ReverseMap();
         }

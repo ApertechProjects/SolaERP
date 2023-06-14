@@ -607,7 +607,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> AddPreGriAsync(Application.Entities.SupplierEvaluation.PrequalificationGridData grid)
+        public async Task<bool> AddPreGridAsync(Application.Entities.SupplierEvaluation.PrequalificationGridData grid)
         {
             return await ModifyPreGridAsync(new Application.Entities.SupplierEvaluation.PrequalificationGridData()
             {
@@ -621,11 +621,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             });
         }
 
-        public async Task<bool> UpdatePreGriAsync(Application.Entities.SupplierEvaluation.PrequalificationGridData grid)
+        public async Task<bool> UpdatePreGridAsync(Application.Entities.SupplierEvaluation.PrequalificationGridData grid)
             => await ModifyPreGridAsync(grid);
 
 
-        public async Task<bool> DeletePreGriAsync(int preGridId)
+        public async Task<bool> DeletePreGridAsync(int preGridId)
             => await ModifyPreGridAsync(new() { PreqqualificationGridDataId = preGridId });
 
 
@@ -633,7 +633,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_PrequalificationGridData_IUD @PreqqualificationGridDataId,
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_PrequalificationGridData_IUD @PreqqualificationGridDataId,
                                                                              @PreqqualificationDesignId,
                                                                              @Column1,
                                                                              @Column2,

@@ -61,16 +61,23 @@ namespace SolaERP.Persistence.Services
             command.NonDisclosureAgreement.ForEach(x => x.VendorId = vendorId);
             command.BankAccounts.ForEach(x => x.BankDetails.VendorId = vendorId);
 
+
             List<Task<bool>> tasks = new();
-            tasks.AddRange(command.BankAccounts.Select(x =>
-            {
-                x.BankDetails.VendorId = vendorId;
+            //tasks.AddRange(command.BankAccounts.Select(x =>
+            //{
+            //    x.BankDetails.VendorId = vendorId;
 
-                if (x.AccountVerificationLetter is not null)
-                    return _attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(x.AccountVerificationLetter));
+            //    if (x.AccountVerificationLetter is not null)
+            //    {
+            //        var entity = _mapper.Map<AttachmentSaveModel>(x.AccountVerificationLetter);
+            //        entity.SourceId = vendorId;
+            //        entity.SourceType = SourceType.VEN_BNK.ToString();
 
-                return _vendorRepository.AddBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x.BankDetails));
-            }));
+            //        return _attachmentRepository.SaveAttachmentAsync(entity);
+            //    }
+
+            //    return _vendorRepository.AddBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x.BankDetails));
+            //}));
 
 
             tasks = tasks.Concat(command.DueDiligence.SelectMany(item =>
@@ -117,8 +124,8 @@ namespace SolaERP.Persistence.Services
 
                 if (item.HasGrid == true)
                 {
-                    //tasksList.AddRange(item.GridDatas.Select(gridData =>
-                    //    _repository.(_mapper.Map<DueDiligenceGridModel>(gridData))));
+                    tasksList.AddRange(item.GridDatas.Select(gridData =>
+                        _repository.AddPreGridAsync(_mapper.Map<Application.Entities.SupplierEvaluation.PrequalificationGridData>(gridData))));
                 }
 
                 return tasksList;
@@ -133,7 +140,7 @@ namespace SolaERP.Persistence.Services
             tasks.AddRange(command.CodeOfBuConduct.Select(x => _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(x))));
 
 
-            await _unitOfWork.SaveChangesAsync();
+            //await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(tasks.All(x => x.Result), 200);
         }
 
