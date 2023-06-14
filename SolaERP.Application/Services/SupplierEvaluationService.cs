@@ -80,7 +80,7 @@ namespace SolaERP.Persistence.Services
             }));
 
 
-            tasks = tasks.Concat(command.DueDiligence.SelectMany(item =>   //+
+            tasks = tasks.Concat(command.DueDiligence.SelectMany(item =>  
             {
                 var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
                 dueInputModel.VendorId = vendorId;
