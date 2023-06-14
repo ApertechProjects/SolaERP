@@ -665,7 +665,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_VendorPrequalificationCategory_ID @VendorId,
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorPrequalificationCategory_ID @VendorId,
                                                                                   @PrequalificationCategoryId";
 
 
@@ -687,7 +687,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_VendorBusinessCategory_ID @VendorId,
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorBusinessCategory_ID @VendorId,
                                                                           @BusinessCategoryId";
 
 
@@ -709,7 +709,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_VendorRepresentedCompany_ID @VendorId,
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorRepresentedCompany_ID @VendorId,
                                                                             @RepresentedCompanyName";
 
 
@@ -731,7 +731,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_VendorRepresentedProducts_ID @VendorId,
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorRepresentedProducts_ID @VendorId,
                                                                             @RepresentedProductName";
 
 

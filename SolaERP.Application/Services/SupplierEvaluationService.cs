@@ -56,6 +56,8 @@ namespace SolaERP.Persistence.Services
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
             int vendorId = await _vendorRepository.AddVendorAsync(user.Id, _mapper.Map<Vendor>(command.CompanyInfo));
+            var da = await _repository.VendorRepresentedCompanyAddAsync(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = command.CompanyInfo.RepresentedCompanies });
+            var ta = await _repository.VendorRepresentedProductAddAsync(new Application.Models.RepresentedProductData { VendorId = vendorId, RepresentedProductName = command.CompanyInfo.RepresentedCompanies });
 
             command.CodeOfBuConduct.ForEach(x => x.VendorId = vendorId);
             command.NonDisclosureAgreement.ForEach(x => x.VendorId = vendorId);
@@ -80,7 +82,7 @@ namespace SolaERP.Persistence.Services
             }));
 
 
-            tasks = tasks.Concat(command.DueDiligence.SelectMany(item =>  
+            tasks = tasks.Concat(command.DueDiligence.SelectMany(item =>
             {
                 var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
                 dueInputModel.VendorId = vendorId;
