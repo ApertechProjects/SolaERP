@@ -611,6 +611,21 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
+        public async Task<bool> CheckUserVerifyByVendor(string email)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "Select dbo.SF_CheckUserVerifyByVendorId(@email) IsVerified";
+                command.Parameters.AddWithValue(command, "@email", email);
+                using var reader = await command.ExecuteReaderAsync();
+                bool res = false;
+                if (reader.Read())
+                    res = reader.Get<bool>("IsVerified");
+
+                return res;
+            }
+        }
+
         #endregion
     }
 }
