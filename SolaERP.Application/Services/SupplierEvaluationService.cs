@@ -139,6 +139,7 @@ namespace SolaERP.Persistence.Services
             command.CodeOfBuConduct.ForEach(x => x.VendorId = vendorId);
             tasks.AddRange(command.CodeOfBuConduct.Select(x => _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(x))));
 
+            await Task.WhenAll(tasks);
 
             //await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(tasks.All(x => x.Result), 200);
