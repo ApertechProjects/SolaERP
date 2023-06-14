@@ -420,6 +420,19 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<PrequalificationWithCategoryDto>>.Success(response, 200);
         }
 
+        public async Task<ApiResponse<bool>> SubmitAsync(string userIdentity, SupplierRegisterCommand command)
+        {
+            var result = await AddAsync(userIdentity, command);
+            User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
+
+            var submitResult = await _vendorRepository.VendorChangeStatus(user.VendorId, 1, user.Id);
+
+            if (result.Data && submitResult)
+                return ApiResponse<bool>.Success(submitResult);
+
+            return ApiResponse<bool>.Fail(false, 400);
+        }
+
         private async Task<List<DueDiligenceDesignDto>> GetDueDesignsAsync(string userIdentity, Language language)
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));

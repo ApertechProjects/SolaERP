@@ -15,6 +15,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<CodeOfBuConduct>>> GetCOBCAsync(string userIdentity);
         Task<ApiResponse<List<PrequalificationWithCategoryDto>>> GetPrequalificationAsync(string userIdentity, List<int> categoryIds, string acceptlang);
         Task<ApiResponse<bool>> AddAsync(string userIdentity, SupplierRegisterCommand command);
+        Task<ApiResponse<bool>> SubmitAsync(string userIdentity, SupplierRegisterCommand command);
 
     }
 }

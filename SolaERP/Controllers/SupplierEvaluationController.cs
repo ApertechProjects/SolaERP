@@ -47,5 +47,9 @@ namespace SolaERP.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(SupplierRegisterCommand command)
             => CreateActionResult(await _service.AddAsync(User.Identity.Name, command));
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Submit(SupplierRegisterCommand command)
+            => CreateActionResult(await _service.AddAsync(User.Identity.Name, command));
     }
 }
