@@ -59,22 +59,22 @@ namespace SolaERP.Persistence.Services
             await _repository.VendorRepresentedCompanyAddAsync(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = command.CompanyInfo.RepresentedCompanies });
             await _repository.VendorRepresentedProductAddAsync(new Application.Models.RepresentedProductData { VendorId = vendorId, RepresentedProductName = command.CompanyInfo.RepresentedCompanies });
 
-            //var companyLogo = _mapper.Map<AttachmentSaveModel>(command.CompanyInfo.CompanyLogo);
-            //companyLogo.SourceId = vendorId;
-            //companyLogo.SourceType = SourceType.VEN_LOGO.ToString();
-            //await _attachmentRepository.SaveAttachmentAsync(companyLogo);
+            var companyLogo = _mapper.Map<AttachmentSaveModel>(command.CompanyInfo.CompanyLogo);
+            companyLogo.SourceId = vendorId;
+            companyLogo.SourceType = SourceType.VEN_LOGO.ToString();
+            await _attachmentRepository.SaveAttachmentAsync(companyLogo);
 
-            //var attachments = _mapper.Map<List<AttachmentSaveModel>>(command.CompanyInfo.Attachments);
-            //attachments.ForEach(attachment =>
-            //{
-            //    attachment.SourceId = vendorId;
-            //    attachment.SourceType = SourceType.VEN_OLET.ToString();
-            //});
+            var attachments = _mapper.Map<List<AttachmentSaveModel>>(command.CompanyInfo.Attachments);
+            attachments.ForEach(attachment =>
+            {
+                attachment.SourceId = vendorId;
+                attachment.SourceType = SourceType.VEN_OLET.ToString();
+            });
 
-            //for (int i = 0; i < attachments.Count; i++)
-            //{
-            //    await _attachmentRepository.SaveAttachmentAsync(attachments[i]);
-            //}
+            for (int i = 0; i < attachments.Count; i++)
+            {
+                await _attachmentRepository.SaveAttachmentAsync(attachments[i]);
+            }
 
             command.CodeOfBuConduct.ForEach(x => x.VendorId = vendorId);
             command.NonDisclosureAgreement.ForEach(x => x.VendorId = vendorId);
@@ -115,39 +115,39 @@ namespace SolaERP.Persistence.Services
                         _repository.AddDueDesignGrid(_mapper.Map<DueDiligenceGridModel>(gridData))));
                 }
 
-                //if (item.Attachments is not null)
-                //{
-                //    itemTasks.AddRange(item.Attachments.Select(attachment =>
-                //        _attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(attachment))));
-                //}
+                if (item.Attachments is not null)
+                {
+                    itemTasks.AddRange(item.Attachments.Select(attachment =>
+                        _attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(attachment))));
+                }
 
                 return itemTasks;
             })).ToList();
 
-            //tasks.AddRange(command.Prequalification.SelectMany(item =>
-            //{
-            //    var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
-            //    prequalificationValue.VendorId = vendorId;
+            tasks.AddRange(command.Prequalification.SelectMany(item =>
+            {
+                var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
+                prequalificationValue.VendorId = vendorId;
 
-            //    var tasksList = new List<Task<bool>>
-            //    {
-            //         _repository.AddPrequalification(prequalificationValue) //+
-            //    };
+                var tasksList = new List<Task<bool>>
+                {
+                     _repository.AddPrequalification(prequalificationValue) //+
+                };
 
-            //    if (item.Attachments is not null)
-            //    {
-            //        tasksList.AddRange(item.Attachments.Select(attachment =>
-            //            _attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(attachment))));
-            //    }
+                if (item.Attachments is not null)
+                {
+                    tasksList.AddRange(item.Attachments.Select(attachment =>
+                        _attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(attachment))));
+                }
 
-            //    if (item.HasGrid == true)
-            //    {
-            //        tasksList.AddRange(item.GridDatas.Select(gridData =>
-            //            _repository.AddPreGridAsync(_mapper.Map<Application.Entities.SupplierEvaluation.PrequalificationGridData>(gridData))));
-            //    }
+                if (item.HasGrid == true)
+                {
+                    tasksList.AddRange(item.GridDatas.Select(gridData =>
+                        _repository.AddPreGridAsync(_mapper.Map<Application.Entities.SupplierEvaluation.PrequalificationGridData>(gridData))));
+                }
 
-            //    return tasksList;
-            //}));
+                return tasksList;
+            }));
 
 
             command.NonDisclosureAgreement.ForEach(x => x.VendorId = vendorId);
@@ -284,7 +284,7 @@ namespace SolaERP.Persistence.Services
             CompanyInfoDto companyInfo = _mapper.Map<CompanyInfoDto>(companyInfoTask.Result);
             companyInfo.PrequalificationCategories = matchedPrequalificationTypes;
             companyInfo.BusinessCategories = matchedBuCategories;
-            companyInfo.CompanyLogo = _mapper.Map<AttachmentDto>(venLogoAttachmentTask.Result);
+            companyInfo.CompanyLogo = _mapper.Map<AttachmentDto>(venLogoAttachmentTask.Result[0]);
             companyInfo.Attachments = _mapper.Map<List<AttachmentDto>>(venOletAttachmentTask.Result);
             companyInfo.ProductServices = matchedProductServices;
 
@@ -364,44 +364,44 @@ namespace SolaERP.Persistence.Services
                             LineNo = design.LineNo,
                             Discipline = design.Discipline,
                             Questions = design.Questions,
-                            HasTextbox = design.HasTextbox > 0 ? true : null,
-                            HasTextarea = design.HasTextarea > 0 ? true : null,
-                            HasCheckbox = design.HasCheckbox > 0 ? true : null,
-                            HasRadiobox = design.HasRadiobox > 0 ? true : null,
-                            HasInt = design.HasInt > 0 ? true : null,
-                            HasDecimal = design.HasDecimal > 0 ? true : null,
-                            HasDateTime = design.HasDateTime > 0 ? true : null,
-                            HasAttachment = design.HasAttachment > 0 ? true : null,
+                            HasTextbox = design.HasTextbox > 0,//? true : null,
+                            HasTextarea = design.HasTextarea > 0,//? true : null,
+                            HasCheckbox = design.HasCheckbox > 0,//? true : null,
+                            HasRadiobox = design.HasRadiobox > 0,// ? true : null,
+                            HasInt = design.HasInt > 0,//? true : null,
+                            HasDecimal = design.HasDecimal > 0, //? true : null,
+                            HasDateTime = design.HasDateTime > 0,//true : null,
+                            HasAttachment = design.HasAttachment > 0,//? true : null,
                             Title = design.Title,
                             Weight = design.Weight,
-                            HasGrid = design.HasGrid > 0 ? true : null,
-                            GridRowLimit = design.HasGrid > 0 ? design.GridRowLimit : null,
-                            GridColumnCount = design.HasGrid > 0 ? design.GridColumnCount : null,
-                            GridColumns = design.HasGrid > 0 ? new[]
+                            HasGrid = design.HasGrid > 0,//? true : null,
+                            GridRowLimit = design.GridRowLimit,/* > 0 ? design.GridRowLimit : null*/
+                            GridColumnCount = design.GridColumnCount,
+                            GridColumns = /*design.HasGrid > 0 ?*/ new[]
                             {
                                  design.Column1Alias,
                                  design.Column2Alias,
                                  design.Column3Alias,
                                  design.Column4Alias,
                                  design.Column5Alias,
-                            }.Where(col => col != null).ToArray() : null,
-                            TextboxPoint = design.HasTextbox > 0 ? design.HasTextbox : null,
-                            TextareaPoint = design.HasTextarea > 0 ? design.HasTextarea : null,
-                            CheckboxPoint = design.HasCheckbox > 0 ? design.HasCheckbox : null,
-                            RadioboxPoint = design.HasRadiobox > 0 ? design.HasRadiobox : null,
-                            IntPoint = design.HasInt > 0 ? design.HasInt : null,
-                            DecimalPoint = design.HasDecimal > 0 ? design.HasDecimal : null,
-                            DateTimePoint = design.HasDateTime > 0 ? design.HasDateTime : null,
-                            Attachmentpoint = design.HasAttachment > 0 ? design.HasAttachment : null,
-                            TextboxValue = design.HasTextbox > 0 ? correspondingValue?.TextboxValue ?? "" : null,
-                            TextareaValue = design.HasTextarea > 0 ? correspondingValue?.TextareaValue ?? "" : null,
-                            CheckboxValue = design.HasCheckbox > 0 ? correspondingValue?.CheckboxValue : null,
-                            RadioboxValue = design.HasRadiobox > 0 ? correspondingValue?.RadioboxValue : null,
-                            IntValue = design.HasInt > 0 ? correspondingValue?.IntValue : null,
-                            DecimalValue = design.HasDecimal > 0 ? correspondingValue?.DecimalValue : null,
-                            DateTimeValue = design.HasDateTime > 0 ? correspondingValue?.DateTimeValue : null,
+                            }.Where(col => col != null).ToArray(),
+                            TextboxPoint = design.HasTextbox,
+                            TextareaPoint = design.HasTextarea,
+                            CheckboxPoint = design.HasCheckbox,
+                            RadioboxPoint = design.HasRadiobox,
+                            IntPoint = design.HasInt,
+                            DecimalPoint = design.HasDecimal,
+                            DateTimePoint = design.HasDateTime,
+                            Attachmentpoint = design.HasAttachment,
+                            TextboxValue = correspondingValue?.TextboxValue,
+                            TextareaValue = correspondingValue?.TextareaValue,
+                            CheckboxValue = Convert.ToBoolean(correspondingValue?.CheckboxValue),
+                            RadioboxValue = Convert.ToBoolean(correspondingValue?.RadioboxValue),
+                            IntValue = Convert.ToInt32(correspondingValue?.IntValue),
+                            DecimalValue = Convert.ToDecimal(correspondingValue?.DecimalValue),
+                            DateTimeValue = Convert.ToDateTime(correspondingValue?.DateTimeValue),
                             Attachments = design.HasAttachment > 0 ? _mapper.Map<List<AttachmentDto>>(
-                                await _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_PREQ.ToString(), design.PrequalificationDesignId)) : null
+                                    await _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_PREQ.ToString(), design.PrequalificationDesignId)) : null
                         };
                     });
 
@@ -482,7 +482,8 @@ namespace SolaERP.Persistence.Services
                         DecimalPoint = d.HasDecimal,//> 0 ? d.HasDecimal : null,
                         DateTimePoint = d.HasDateTime,//> 0 ? d.HasDateTime : null,
                         AttachmentPoint = d.HasAttachment,//> 0 ? d.HasAttachment : null,
-                        Scoring = correspondingValue?.Scoring ?? 0
+                        Scoring = correspondingValue?.Scoring ?? 0,
+                        DataGridPoint = d.HasGrid
                     };
 
                     dto.Childs.Add(childDto);
