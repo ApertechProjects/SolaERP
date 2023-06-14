@@ -553,6 +553,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<bool> AddPrequalification(VendorPrequalificationValues value)
         {
+            var date = value.DateTimeValue.Value.Year < 1800 ? null : value.DateTimeValue;
             return await ModifyPrequalificationAsync(new()
             {
                 VendorPrequalificationId = 0,
@@ -564,7 +565,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RadioboxValue = value.RadioboxValue,
                 IntValue = value.IntValue,
                 DecimalValue = value.DecimalValue,
-                DateTimeValue = value.DateTimeValue,
+                DateTimeValue = date,
                 Scoring = value.Scoring,
             });
         }
