@@ -19,6 +19,10 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         public IDbCommand CreateCommand()
         {
             var command = _connection.CreateCommand();
+
+            if (_transaction is null)
+                _transaction = _connection.BeginTransaction();
+
             command.Transaction = _transaction;
 
             return command;
