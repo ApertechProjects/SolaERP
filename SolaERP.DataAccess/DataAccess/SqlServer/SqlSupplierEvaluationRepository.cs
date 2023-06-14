@@ -35,7 +35,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@RadioboxValue", vendorDueDiligence.RadioboxValue);
                 command.Parameters.AddWithValue(command, "@IntValue", vendorDueDiligence.IntValue);
                 command.Parameters.AddWithValue(command, "@DecimalValue", vendorDueDiligence.DecimalValue);
-                command.Parameters.AddWithValue(command, "@DateTimeValue", vendorDueDiligence.DateTimeValue);
+                command.Parameters.AddWithValue(command, "@DateTimeValue", vendorDueDiligence.DateTimeValue == DateTime.MinValue ? null : vendorDueDiligence.DateTimeValue);
                 command.Parameters.AddWithValue(command, "@AgreementValue", vendorDueDiligence.AgreementValue);
                 command.Parameters.AddWithValue(command, "@Scoring", vendorDueDiligence.Scoring);
 
@@ -78,6 +78,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return await ModifyDueGrid(new()
             {
+                Id = 0,
                 DueDesignId = gridModel.DueDesignId,
                 Column1 = gridModel.Column1,
                 Column2 = gridModel.Column2,
