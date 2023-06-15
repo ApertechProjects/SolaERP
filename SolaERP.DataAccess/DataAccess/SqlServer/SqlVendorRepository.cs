@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.UnitOfWork;
@@ -106,21 +107,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<VendorInfo> GetVendorByTaxIdAsync(string taxId)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "exec SP_VendorListByTaxId @TaxId";
-                command.Parameters.AddWithValue(command, "@TaxId", taxId);
-                using var reader = await command.ExecuteReaderAsync();
-                VendorInfo result = new();
-
-                while (reader.Read()) result = reader.GetByEntityStructure<VendorInfo>();
-
-                return result;
-            }
-        }
-
         public async Task<bool> AddBankDetailsAsync(int userId, VendorBankDetail bankDetail)
         {
             return await ModifyBankDetailsAsync(userId, new()
@@ -188,6 +174,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Status", status);
 
                 return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<VendorInfo> GetVendorByTaxAsync(string taxId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec SP_VendorListByTaxId @TaxId";
+                command.Parameters.AddWithValue(command, "@TaxId", taxId);
+                using var reader = await command.ExecuteReaderAsync();
+                VendorInfo vendorInfo = new VendorInfo();
+                while (reader.Read()) vendorInfo = reader.GetByEntityStructure<VendorInfo>();
+
+                return vendorInfo;
             }
         }
     }

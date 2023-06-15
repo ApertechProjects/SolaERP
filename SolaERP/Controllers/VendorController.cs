@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Contracts.Services;
 using SolaERP.Business.CommonLogic;
 using SolaERP.Business.Dtos.EntityDtos.Vendor;
 using SolaERP.Business.Models;
-using SolaERP.Application.Contracts.Repositories;
-using SolaERP.Application.Contracts.Services;
+using SolaERP.Persistence.Services;
 
 namespace SolaERP.Controllers
 {
@@ -60,9 +61,10 @@ namespace SolaERP.Controllers
         }
 
         [HttpGet("{taxId}")]
-        public async Task<IActionResult> GetVendorByTaxIdAsync(string taxId)
+        public async Task<IActionResult> GetVendorByTax(string taxId)
         {
-            return CreateActionResult(await _vendorService.GetVendorByTaxIdAsync(taxId));
+            return Ok(await _vendorService.GetVendorByTaxAsync(taxId));
         }
+
     }
 }

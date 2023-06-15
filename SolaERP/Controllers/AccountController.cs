@@ -22,6 +22,7 @@ namespace SolaERP.Controllers
         private readonly UserManager<Application.Entities.Auth.User> _userManager;
         private readonly SignInManager<Application.Entities.Auth.User> _signInManager;
         private readonly IUserService _userService;
+        private readonly IVendorService _vendorService;
         private readonly ITokenHandler _tokenHandler;
         private readonly IMapper _mapper;
         private readonly IMailService _mailService;
@@ -30,6 +31,7 @@ namespace SolaERP.Controllers
         public AccountController(UserManager<Application.Entities.Auth.User> userManager,
                                  SignInManager<Application.Entities.Auth.User> signInManager,
                                  IUserService userService,
+                                 IVendorService vendorService,
                                  ITokenHandler handler,
                                  IMapper mapper,
                                  IMailService mailService,
@@ -38,6 +40,7 @@ namespace SolaERP.Controllers
             _userService = userService;
             _signInManager = signInManager;
             _userManager = userManager;
+            _vendorService = vendorService;
             _tokenHandler = handler;
             _mapper = mapper;
             _mailService = mailService;
@@ -147,6 +150,7 @@ namespace SolaERP.Controllers
 
             dto.VerifyToken = newtoken + _tokenHandler.CreateRefreshToken();
             dto.VerifyToken = Regex.Replace(dto.VerifyToken, @"[^a-zA-Z0-9_.~\-]", "");
+            dto.VendorId = await _vendorService.GetVendorByTaxIdAsync(dto.TaxId);
             ApiResponse<int> response = response = await _userService.UserRegisterAsync(dto);
 
             AccountResponseDto account = new();

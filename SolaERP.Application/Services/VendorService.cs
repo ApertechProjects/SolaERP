@@ -2,8 +2,9 @@
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Shared;
-using SolaERP.Application.Dtos.Venndors;
 using SolaERP.Application.Entities.Vendors;
+using SolaERP.Application.UnitOfWork;
+using System.Data.Common;
 
 namespace SolaERP.Persistence.Services
 {
@@ -28,11 +29,15 @@ namespace SolaERP.Persistence.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ApiResponse<VendorInfoDto>> GetVendorByTaxIdAsync(string taxId)
+        public async Task<VendorInfo> GetVendorByTaxAsync(string taxId)
         {
-            var entity = await _vendorRepository.GetVendorByTaxIdAsync(taxId);
-            var dto = _mapper.Map<VendorInfoDto>(entity);
-            return ApiResponse<VendorInfoDto>.Success(dto, 200);
+            return await _vendorRepository.GetVendorByTaxAsync(taxId);
+        }
+
+        public async Task<int> GetVendorByTaxIdAsync(string taxId)
+        {
+            VendorInfo entity = await _vendorRepository.GetVendorByTaxAsync(taxId);
+            return entity.VendorId;
         }
 
         public Task<ApiResponse<bool>> RemoveAsync(int Id)
@@ -41,6 +46,11 @@ namespace SolaERP.Persistence.Services
         }
 
         public Task<ApiResponse<bool>> UpdateAsync(Vendors model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApiResponse<object>> WaitingForApprovals(int businessUnitId, string userId)
         {
             throw new NotImplementedException();
         }
