@@ -92,6 +92,8 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public decimal DecimalPoint { get; set; }
         public decimal Weight { get; set; }
         public decimal Outcome { get; set; }
+        public decimal AllPoint { get; set; }
+
 
     }
 

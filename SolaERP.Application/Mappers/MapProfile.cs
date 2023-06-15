@@ -167,6 +167,7 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.AttachmentPoint, opt => opt.MapFrom(src => src.HasAttachment))
                 .ForMember(dest => dest.TextAreaPoint, opt => opt.MapFrom(src => src.HasTexArea))
                 .ForMember(dest => dest.BankListPoint, opt => opt.MapFrom(src => src.HasBankList))
+                .ForMember(dest => dest.Weight, opt => opt.MapFrom(src => src.Weight))
                 .ForMember(dest => dest.DataGridPoint, opt => opt.MapFrom(src => src.HasGrid)).ReverseMap();
 
             CreateMap<ContactPersonDto, User>()

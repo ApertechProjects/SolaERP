@@ -448,13 +448,20 @@ namespace SolaERP.Persistence.Services
 
             var groupedList = dueDiligence.GroupBy(x => x.Title).ToList();
             var responseModel = new List<DueDiligenceDesignDto>();
-
+            int counter = 0;
             foreach (var group in groupedList)
             {
                 var dto = new DueDiligenceDesignDto { Title = group.Key, Childs = new List<DueDiligenceChildDto>() };
                 foreach (var d in group)
                 {
                     var correspondingValue = dueDiligenceValues.FirstOrDefault(v => v.DueDiligenceDesignId == d.DesignId);
+                    var attachments = d.HasAttachment > 0 ? _mapper.Map<List<AttachmentDto>>(
+                            await _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_DUE.ToString(), d.DesignId)) : null;
+                    counter++;
+                    int a = 7;
+                    if (counter == 10)
+                        a = 7;
+                    var fields = await CalculateScoring(correspondingValue, d, attachments?.Count > 0);
                     var childDto = new DueDiligenceChildDto
                     {
                         DesignId = d.DesignId,
@@ -476,8 +483,7 @@ namespace SolaERP.Persistence.Services
                         HasDecimal = d.HasDecimal > 0,
                         HasDateTime = d.HasDateTime > 0,
                         HasAttachment = d.HasAttachment > 0,
-                        Attachments = d.HasAttachment > 0 ? _mapper.Map<List<AttachmentDto>>(
-                            await _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_DUE.ToString(), d.DesignId)) : null,
+                        Attachments = attachments,
                         HasBankList = d.HasBankList > 0,
                         HasTexArea = d.HasTexArea > 0,
                         ParentCompanies = d.ParentCompanies,
@@ -502,8 +508,10 @@ namespace SolaERP.Persistence.Services
                         DecimalPoint = d.HasDecimal,//> 0 ? d.HasDecimal : null,
                         DateTimePoint = d.HasDateTime,//> 0 ? d.HasDateTime : null,
                         AttachmentPoint = d.HasAttachment,//> 0 ? d.HasAttachment : null,
-                        Scoring = correspondingValue?.Scoring ?? 0,
-                        DataGridPoint = d.HasGrid
+                        Scoring = fields.Scoring,
+                        DataGridPoint = d.HasGrid,
+                        AllPoint = fields.AllPoint,
+                        Weight = d.Weight
                     };
 
                     dto.Childs.Add(childDto);
@@ -513,6 +521,40 @@ namespace SolaERP.Persistence.Services
 
             return await SetGridDatasAsync(responseModel);
         }
+
+        private async Task<(decimal Scoring, decimal AllPoint)> CalculateScoring(Application.Entities.SupplierEvaluation.VendorDueDiligence inputValue, DueDiligenceDesign d, bool hasAttachment)
+        {
+
+            List<DueDiligenceGrid> dueGrid = null;
+            if (d.HasGrid > 0)
+                dueGrid = await _repository.GetDueDiligenceGridAsync(d.DesignId);
+
+            decimal scoringSum = (!string.IsNullOrWhiteSpace(inputValue?.TextboxValue) ? d.HasTextBox : 0) +
+                              (!string.IsNullOrWhiteSpace(inputValue?.TextareaValue) ? d.HasTexArea : 0) +
+                              (inputValue?.CheckboxValue == true ? d.HasCheckBox : 0) +
+                              (inputValue?.RadioboxValue == true ? d.HasRadioBox : 0) +
+                              (inputValue?.IntValue > 0 ? d.HasInt : 0) +
+                              (inputValue?.DecimalValue > 0 ? d.HasDecimal : 0) +
+                              (inputValue?.DateTimeValue != null ? d.HasDateTime : 0) +
+                              (hasAttachment ? d.HasAttachment : 0) +
+                              (dueGrid?.Count > 0 ? d.HasGrid : 0);
+
+            decimal allPoint = d.HasTextBox +
+                               d.HasTexArea +
+                               d.HasCheckBox +
+                               d.HasRadioBox +
+                               d.HasBankList +
+                               d.HasInt +
+                               d.HasDecimal +
+                               d.HasDateTime +
+                               d.HasAttachment +
+                               d.HasGrid;
+
+            decimal scoring = (scoringSum / allPoint) * 100;
+
+            return (scoring, allPoint);
+        }
+
         private async Task<List<DueDiligenceDesignDto>> SetGridDatasAsync(List<DueDiligenceDesignDto> dueDesign)
         {
             for (int i = 0; i < dueDesign.Count; i++)

@@ -27,6 +27,6 @@ namespace SolaERP.Application.Entities.SupplierEvaluation
         public string Column3Alias { get; set; }
         public string Column4Alias { get; set; }
         public string Column5Alias { get; set; }
-
+        public decimal Weight { get; set; }
     }
 }

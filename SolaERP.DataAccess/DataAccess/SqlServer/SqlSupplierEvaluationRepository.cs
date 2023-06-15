@@ -286,6 +286,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Column3Alias = reader.Get<string>("Column3Alias"),
                 Column4Alias = reader.Get<string>("Column4Alias"),
                 Column5Alias = reader.Get<string>("Column5Alias"),
+                Weight = reader.Get<decimal>("Weight"),
             };
         }
 
