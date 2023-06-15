@@ -38,6 +38,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public decimal TextboxPoint { get; set; }
         public decimal TextareaPoint { get; set; }
         public decimal CheckboxPoint { get; set; }
+        public decimal DataGridPoint { get; set; }
         public decimal RadioboxPoint { get; set; }
         public decimal IntPoint { get; set; }
         public decimal DecimalPoint { get; set; }
