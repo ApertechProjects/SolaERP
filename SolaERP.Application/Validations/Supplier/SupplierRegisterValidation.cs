@@ -8,10 +8,11 @@ namespace SolaERP.Persistence.Validations.Supplier
     {
         public SupplierRegisterValidation()
         {
-            RuleFor(x => x.CompanyInformation)
+            RuleFor(x => x.CompanyInformation).NotNull().NotEmpty()
                    .SetValidator(new CompanyValidation());
 
-            RuleForEach(x => x.BankAccounts).SetValidator(new BankAccountsValidation());
+            RuleForEach(x => x.BankAccounts).NotEmpty().NotNull()
+                .SetValidator(new BankAccountsValidation());
         }
     }
     public class BankAccountsValidation : AbstractValidator<VendorBankDetailDto>
