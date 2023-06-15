@@ -55,9 +55,18 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> AddAsync(string useridentity, SupplierRegisterCommand command)
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
-            int vendorId = await _vendorRepository.AddVendorAsync(user.Id, _mapper.Map<Vendor>(command.CompanyInfo));
-            await _repository.VendorRepresentedCompanyAddAsync(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", command.CompanyInfo.RepresentedCompanies) });
-            await _repository.VendorRepresentedProductAddAsync(new Application.Models.RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", command.CompanyInfo.RepresentedProducts) });
+            Vendor vendor = _mapper.Map<Vendor>(command.CompanyInfo);
+            vendor.VendorId = user.VendorId;
+
+            int vendorId = await _vendorRepository.UpdateVendorAsync(user.Id, vendor);
+
+
+            await _repository.DeleteRepresentedCompanyAsync(vendorId);
+            await _repository.DeleteRepresentedProductAsync(vendorId);
+
+
+            await _repository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", command.CompanyInfo.RepresentedCompanies) });
+            await _repository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", command.CompanyInfo.RepresentedProducts) });
 
             var companyLogo = _mapper.Map<List<AttachmentSaveModel>>(command.CompanyInfo.CompanyLogo);
             companyLogo.ForEach(companyLogo =>
@@ -102,7 +111,7 @@ namespace SolaERP.Persistence.Services
                     return _attachmentRepository.SaveAttachmentAsync(entity);
                 }
 
-                return _vendorRepository.AddBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x.BankDetails));
+                return _vendorRepository.UpdateBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x.BankDetails));
             }));
 
 
@@ -113,13 +122,13 @@ namespace SolaERP.Persistence.Services
 
                 var itemTasks = new List<Task<bool>>
                 {
-                      _repository.AddDueAsync(dueInputModel)
+                      _repository.UpdateDueAsync(dueInputModel)
                 };
 
                 if (item.HasDataGrid == true)
                 {
                     itemTasks.AddRange(item.GridDatas.Select(gridData =>
-                        _repository.AddDueDesignGrid(_mapper.Map<DueDiligenceGridModel>(gridData))));
+                        _repository.UpdateDueDesignGrid(_mapper.Map<DueDiligenceGridModel>(gridData))));
                 }
 
                 if (item.Attachments is not null)
@@ -138,7 +147,7 @@ namespace SolaERP.Persistence.Services
 
                 var tasksList = new List<Task<bool>>
                 {
-                     _repository.AddPrequalification(prequalificationValue) //+
+                     _repository.UpdatePrequalification(prequalificationValue) //+
                 };
 
                 if (item.Attachments is not null)
@@ -150,7 +159,7 @@ namespace SolaERP.Persistence.Services
                 if (item.HasGrid == true)
                 {
                     tasksList.AddRange(item.GridDatas.Select(gridData =>
-                        _repository.AddPreGridAsync(_mapper.Map<Application.Entities.SupplierEvaluation.PrequalificationGridData>(gridData))));
+                        _repository.UpdatePreGridAsync(_mapper.Map<Application.Entities.SupplierEvaluation.PrequalificationGridData>(gridData))));
                 }
 
                 return tasksList;
@@ -427,6 +436,7 @@ namespace SolaERP.Persistence.Services
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
             var submitResult = await _vendorRepository.VendorChangeStatus(user.VendorId, 1, user.Id);
+            await _unitOfWork.SaveChangesAsync();
 
             if (result.Data && submitResult)
                 return ApiResponse<bool>.Success(submitResult);
@@ -438,7 +448,7 @@ namespace SolaERP.Persistence.Services
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
             List<DueDiligenceDesign> dueDiligence = await _repository.GetDueDiligencesDesignAsync(language);
-            List<Application.Entities.SupplierEvaluation.VendorDueDiligence> dueDiligenceValues = await _repository.GetVendorDuesAsync(user.VendorId);
+            List<DueDiligenceValue> dueDiligenceValues = await _repository.GetVendorDuesAsync(user.VendorId);
 
             var groupedList = dueDiligence.GroupBy(x => x.Title).ToList();
             var responseModel = new List<DueDiligenceDesignDto>();
@@ -514,7 +524,7 @@ namespace SolaERP.Persistence.Services
             return await SetGridDatasAsync(responseModel);
         }
 
-        private async Task<(decimal Scoring, decimal AllPoint, decimal Outcome)> CalculateScoring(Application.Entities.SupplierEvaluation.VendorDueDiligence inputValue, DueDiligenceDesign d, bool hasAttachment)
+        private async Task<(decimal Scoring, decimal AllPoint, decimal Outcome)> CalculateScoring(ValueEntity inputValue, DueDiligenceDesign d, bool hasAttachment)
         {
 
             List<DueDiligenceGrid> dueGrid = null;

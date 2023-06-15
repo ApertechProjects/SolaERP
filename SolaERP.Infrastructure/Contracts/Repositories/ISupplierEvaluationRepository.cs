@@ -1,5 +1,6 @@
 ﻿using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Entities.SupplierEvaluation;
+using SolaERP.Application.Entities.VendorDueDiligence;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 
@@ -22,7 +23,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<Entities.SupplierEvaluation.PrequalificationGridData>> GetPrequalificationGridAsync(int preDesignId);
         Task<List<VendorBankDetail>> GetVondorBankDetailsAsync(int vendorid);
         Task<CompanyInfo> GetCompanyInfoAsync(int vendorId);
-        Task<List<VendorDueDiligence>> GetVendorDuesAsync(int vendorId);
+        Task<List<DueDiligenceValue>> GetVendorDuesAsync(int vendorId);
         Task<List<VendorPrequalification>> GetVendorPrequalificationAsync(int vendorId);
         Task<List<VendorBuCategory>> GetVendorBuCategoriesAsync(int vendorId);
         Task<Prequalification> GetPrequalificationAsync(int vendorid);
@@ -53,10 +54,10 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> PrequalificationCategoryDeleteAsync(int vendorId);
         Task<bool> VendorBusinessCategoryAddAsync(VendorBusinessCategoryData data);
         Task<bool> VendorBusinessCategoryDeleteAsync(int vendorId);
-        Task<bool> VendorRepresentedCompanyAddAsync(VendorRepresentedCompany data);
-        Task<bool> VendorRepresentedCompanyDeleteAsync(int vendorId);
-        Task<bool> VendorRepresentedProductAddAsync(RepresentedProductData data);
-        Task<bool> VendorRepresentedProductDeleteAsync(int vendorId);
+        Task<bool> AddRepresentedCompany(VendorRepresentedCompany data);
+        Task<bool> DeleteRepresentedCompanyAsync(int vendorId);
+        Task<bool> AddRepresentedProductAsync(RepresentedProductData data);
+        Task<bool> DeleteRepresentedProductAsync(int vendorId);
 
     }
 }

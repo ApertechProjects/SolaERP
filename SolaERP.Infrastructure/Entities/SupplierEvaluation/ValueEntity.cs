@@ -1,11 +1,7 @@
-﻿
-
-namespace SolaERP.Application.Entities.VendorDueDiligence
+﻿namespace SolaERP.Application.Entities.SupplierEvaluation
 {
-    public class VendorDueDiligence : BaseEntity
+    public class ValueEntity : BaseEntity
     {
-        public int VendorDueDiligenceId { get; set; }
-        public int DueDiligenceDesignId { get; set; }
         public int VendorId { get; set; }
         public string TextboxValue { get; set; }
         public string TextareaValue { get; set; }
@@ -13,9 +9,7 @@ namespace SolaERP.Application.Entities.VendorDueDiligence
         public bool RadioboxValue { get; set; }
         public int IntValue { get; set; }
         public decimal DecimalValue { get; set; }
-        public DateTime DateTimeValue { get; set; }
+        public DateTime? DateTimeValue { get; set; }
         public decimal Scoring { get; set; }
-        public bool AgreementValue { get; set; }
-
     }
 }

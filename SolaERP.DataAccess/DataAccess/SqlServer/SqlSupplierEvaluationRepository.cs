@@ -35,7 +35,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@RadioboxValue", vendorDueDiligence.RadioboxValue);
                 command.Parameters.AddWithValue(command, "@IntValue", vendorDueDiligence.IntValue);
                 command.Parameters.AddWithValue(command, "@DecimalValue", vendorDueDiligence.DecimalValue);
-                command.Parameters.AddWithValue(command, "@DateTimeValue", vendorDueDiligence.DateTimeValue == DateTime.MinValue ? null : vendorDueDiligence.DateTimeValue);
+                command.Parameters.AddWithValue(command, "@DateTimeValue", vendorDueDiligence.DateTimeValue.Value == DateTime.MinValue ? null : vendorDueDiligence.DateTimeValue.Value);
                 command.Parameters.AddWithValue(command, "@AgreementValue", vendorDueDiligence.AgreementValue);
                 command.Parameters.AddWithValue(command, "@Scoring", vendorDueDiligence.Scoring);
 
@@ -465,18 +465,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         }
 
-        public async Task<List<VendorDueDiligence>> GetVendorDuesAsync(int vendorId)
+        public async Task<List<DueDiligenceValue>> GetVendorDuesAsync(int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "EXEC SP_VendorDueDiligence_Load @VendorId";
                 command.Parameters.AddWithValue(command, "@VendorId", vendorId);
 
-                List<VendorDueDiligence> result = new();
+                List<DueDiligenceValue> result = new();
                 using var reader = await command.ExecuteReaderAsync();
 
                 while (reader.Read())
-                    result.Add(reader.GetByEntityStructure<VendorDueDiligence>());
+                    result.Add(reader.GetByEntityStructure<DueDiligenceValue>());
 
                 return result;
             }
@@ -554,7 +554,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<bool> AddPrequalification(VendorPrequalificationValues value)
         {
-            var date = value.DateTimeValue.Value.Year < 1800 ? null : value.DateTimeValue;
+            var date = value.DateTimeValue.Value == DateTime.MinValue ? null : value.DateTimeValue;
             return await ModifyPrequalificationAsync(new()
             {
                 VendorPrequalificationId = 0,
@@ -603,7 +603,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@RadioboxValue", values.RadioboxValue);
                 command.Parameters.AddWithValue(command, "@IntValue", values.IntValue);
                 command.Parameters.AddWithValue(command, "@DecimalValue", values.DecimalValue);
-                command.Parameters.AddWithValue(command, "@DateTimeValue", values.DateTimeValue);
+                command.Parameters.AddWithValue(command, "@DateTimeValue", values.DateTimeValue.Value == DateTime.MinValue ? null : values.DateTimeValue.Value);
                 command.Parameters.AddWithValue(command, "@Scoring", values.Scoring);
 
                 return await command.ExecuteNonQueryAsync() > 0;
@@ -702,10 +702,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> VendorRepresentedCompanyAddAsync(VendorRepresentedCompany data)
+        public async Task<bool> AddRepresentedCompany(VendorRepresentedCompany data)
             => await ModifyRepresentedCategorySaveAsync(data);
 
-        public async Task<bool> VendorRepresentedCompanyDeleteAsync(int vendorId)
+        public async Task<bool> DeleteRepresentedCompanyAsync(int vendorId)
             => await ModifyRepresentedCategorySaveAsync(new VendorRepresentedCompany { VendorId = vendorId });
 
         public async Task<bool> ModifyRepresentedCategorySaveAsync(VendorRepresentedCompany data)
@@ -724,10 +724,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> VendorRepresentedProductAddAsync(RepresentedProductData data)
+        public async Task<bool> AddRepresentedProductAsync(RepresentedProductData data)
              => await ModifyRepresentedProductSaveAsync(data);
 
-        public async Task<bool> VendorRepresentedProductDeleteAsync(int vendorId)
+        public async Task<bool> DeleteRepresentedProductAsync(int vendorId)
             => await ModifyRepresentedProductSaveAsync(new RepresentedProductData { VendorId = vendorId });
 
         public async Task<bool> ModifyRepresentedProductSaveAsync(RepresentedProductData data)
