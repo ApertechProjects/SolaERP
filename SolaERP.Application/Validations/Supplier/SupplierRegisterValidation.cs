@@ -14,15 +14,15 @@ namespace SolaERP.Persistence.Validations.Supplier
             RuleForEach(x => x.BankAccounts).SetValidator(new BankAccountsValidation());
         }
     }
-    public class BankAccountsValidation : AbstractValidator<BankAccountsDto>
+    public class BankAccountsValidation : AbstractValidator<VendorBankDetailDto>
     {
         public BankAccountsValidation()
         {
-            RuleFor(x => x.BankDetails.AccountNumber).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
-            RuleFor(x => x.BankDetails.Address).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
-            RuleFor(x => x.BankDetails.Bank).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
-            RuleFor(x => x.BankDetails.CoresspondentAccount).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
-            RuleFor(x => x.BankDetails.Currency).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.AccountNumber).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.Address).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.Bank).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.CoresspondentAccount).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.Currency).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
         }
     }
 

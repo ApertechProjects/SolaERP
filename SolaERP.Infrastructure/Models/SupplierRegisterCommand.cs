@@ -1,4 +1,6 @@
-﻿namespace SolaERP.Application.Models
+﻿using SolaERP.Application.Dtos.SupplierEvaluation;
+
+namespace SolaERP.Application.Models
 {
     public class SupplierRegisterCommand
     {
