@@ -53,9 +53,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         //[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Title { get; set; }
 
-        [JsonIgnore]
         //[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public int Weight { get; set; }
 
         //[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public bool HasGrid { get; set; }
@@ -123,5 +121,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
 
         //[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public List<PrequalificationGridData> GridDatas { get; set; }
+        public decimal Weight { get; set; }
+
     }
 }

@@ -365,20 +365,19 @@ namespace SolaERP.Persistence.Services
                             LineNo = design.LineNo,
                             Discipline = design.Discipline,
                             Questions = design.Questions,
-                            HasTextbox = design.HasTextbox > 0,//? true : null,
-                            HasTextarea = design.HasTextarea > 0,//? true : null,
-                            HasCheckbox = design.HasCheckbox > 0,//? true : null,
-                            HasRadiobox = design.HasRadiobox > 0,// ? true : null,
-                            HasInt = design.HasInt > 0,//? true : null,
-                            HasDecimal = design.HasDecimal > 0, //? true : null,
-                            HasDateTime = design.HasDateTime > 0,//true : null,
-                            HasAttachment = design.HasAttachment > 0,//? true : null,
+                            HasTextbox = design.HasTextbox > 0,
+                            HasTextarea = design.HasTextarea > 0,
+                            HasCheckbox = design.HasCheckbox > 0,
+                            HasRadiobox = design.HasRadiobox > 0,
+                            HasInt = design.HasInt > 0,
+                            HasDecimal = design.HasDecimal > 0,
+                            HasDateTime = design.HasDateTime > 0,
+                            HasAttachment = design.HasAttachment > 0,
                             Title = design.Title,
-                            Weight = design.Weight,
-                            HasGrid = design.HasGrid > 0,//? true : null,
-                            GridRowLimit = design.GridRowLimit,/* > 0 ? design.GridRowLimit : null*/
+                            HasGrid = design.HasGrid > 0,
+                            GridRowLimit = design.GridRowLimit,
                             GridColumnCount = design.GridColumnCount,
-                            GridColumns = /*design.HasGrid > 0 ?*/ new[]
+                            GridColumns = new[]
                             {
                                  design.Column1Alias,
                                  design.Column2Alias,
@@ -401,8 +400,9 @@ namespace SolaERP.Persistence.Services
                             IntValue = Convert.ToInt32(correspondingValue?.IntValue),
                             DecimalValue = Convert.ToDecimal(correspondingValue?.DecimalValue),
                             DateTimeValue = Convert.ToDateTime(correspondingValue?.DateTimeValue),
-                            Attachments = design.HasAttachment > 0 ? _mapper.Map<List<AttachmentDto>>(
-                                    await _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_PREQ.ToString(), design.PrequalificationDesignId)) : null
+                            Attachments = _mapper.Map<List<AttachmentDto>>(
+                                    await _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_PREQ.ToString(), design.PrequalificationDesignId)),
+                            Weight = design.Weight,
                         };
                     });
 
@@ -442,7 +442,7 @@ namespace SolaERP.Persistence.Services
 
             var groupedList = dueDiligence.GroupBy(x => x.Title).ToList();
             var responseModel = new List<DueDiligenceDesignDto>();
-            int counter = 0;
+
             foreach (var group in groupedList)
             {
                 var dto = new DueDiligenceDesignDto { Title = group.Key, Childs = new List<DueDiligenceChildDto>() };
@@ -451,10 +451,7 @@ namespace SolaERP.Persistence.Services
                     var correspondingValue = dueDiligenceValues.FirstOrDefault(v => v.DueDiligenceDesignId == d.DesignId);
                     var attachments = d.HasAttachment > 0 ? _mapper.Map<List<AttachmentDto>>(
                             await _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_DUE.ToString(), d.DesignId)) : null;
-                    counter++;
-                    int a = 7;
-                    if (counter == 10)
-                        a = 7;
+
                     var calculationResult = await CalculateScoring(correspondingValue, d, attachments?.Count > 0);
                     var childDto = new DueDiligenceChildDto
                     {

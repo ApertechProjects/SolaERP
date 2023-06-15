@@ -18,7 +18,7 @@ namespace SolaERP.Application.Entities.SupplierEvaluation
         public decimal HasAttachment { get; set; }
         public decimal HasList { get; set; }
         public string Title { get; set; }
-        public int Weight { get; set; }
+        public decimal Weight { get; set; }
         public decimal HasGrid { get; set; }
         public int GridRowLimit { get; set; }
         public int GridColumnCount { get; set; }
