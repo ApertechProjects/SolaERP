@@ -24,8 +24,8 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public string Country { get; set; }
         public string WebSite { get; set; }
         public DateTime RegistrationDate { get; set; }
-        public string RepresentedCompanies { get; set; }
-        public string RepresentedProducts { get; set; }
+        public string[] RepresentedCompanies { get; set; }
+        public string[] RepresentedProducts { get; set; }
         public int CreditDays { get; set; }
         public string PaymentTerms { get; set; }
         public bool AgreeWithDefaultDays { get; set; }
