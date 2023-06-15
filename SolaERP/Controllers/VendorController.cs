@@ -5,6 +5,7 @@ using SolaERP.Application.Contracts.Services;
 using SolaERP.Business.CommonLogic;
 using SolaERP.Business.Dtos.EntityDtos.Vendor;
 using SolaERP.Business.Models;
+using SolaERP.Persistence.Services;
 
 namespace SolaERP.Controllers
 {
@@ -57,6 +58,12 @@ namespace SolaERP.Controllers
         public async Task<ApiResult> GetActiveVendor(int businessUnitId)
         {
             return await new EntityLogic(ConfHelper, _userRepository).GetActiveVendors(User.Identity.Name, businessUnitId);
+        }
+
+        [HttpGet("{taxId}")]
+        public async Task<IActionResult> GetVendorByTax(string taxId)
+        {
+            return Ok(await _vendorService.GetVendorByTaxAsync(taxId));
         }
 
     }

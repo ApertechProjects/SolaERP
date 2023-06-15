@@ -3,6 +3,8 @@ using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Entities.Vendors;
+using SolaERP.Application.UnitOfWork;
+using System.Data.Common;
 
 namespace SolaERP.Persistence.Services
 {
@@ -25,6 +27,11 @@ namespace SolaERP.Persistence.Services
         public Task<ApiResponse<List<Vendors>>> GetAllAsync()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<VendorInfo> GetVendorByTaxAsync(string taxId)
+        {
+            return await _vendorRepository.GetVendorByTaxAsync(taxId);
         }
 
         public async Task<int> GetVendorByTaxIdAsync(string taxId)
