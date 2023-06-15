@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
-using Language = SolaERP.Application.Enums.Language;
 
 namespace SolaERP.API.Controllers
 {
@@ -21,18 +20,9 @@ namespace SolaERP.API.Controllers
         }
 
 
-
-        [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] SupplierEvaluationGETModel model)
-            => CreateActionResult(await _service.GetAllAsync(model));
-
         [HttpGet("[action]")]
         public async Task<IActionResult> InitReg()
             => CreateActionResult(await _service.GetInitRegistrationAsync(User.Identity.Name));
-
-        [HttpGet("[action]")]
-        public async Task<IActionResult> BankDetails()
-            => CreateActionResult(await _service.GetBankDetailsAsync(User.Identity.Name));
 
         [HttpGet("[action]")]
         public async Task<IActionResult> NonDisclosureAgreement()
@@ -43,24 +33,23 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _service.GetCOBCAsync(User.Identity.Name));
 
         [HttpGet("[action]")]
+        public async Task<IActionResult> BankDetails()
+            => CreateActionResult(await _service.GetBankDetailsAsync(User.Identity.Name));
+
+        [HttpGet("[action]")]
         public async Task<IActionResult> DueDiligence()
            => CreateActionResult(await _service.GetDueDiligenceAsync(User.Identity.Name, Request.Headers.AcceptLanguage));
 
-        //var data = await _service.GetDueDiligenceAsync(User.Identity.Name, Request.Headers.AcceptLanguage);
-
-        //return Ok(JsonConvert.SerializeObject(data,
-        //    Formatting.None,
-        //    new JsonSerializerSettings
-        //    {
-        //        NullValueHandling = NullValueHandling.Ignore
-        //    }));
-
         [HttpGet("[action]")]
-        public async Task<IActionResult> Prequalification()
-            => CreateActionResult(await _service.GetPrequalificationAsync(User.Identity.Name));
+        public async Task<IActionResult> Prequalification([FromQuery] List<int> ids)
+            => CreateActionResult(await _service.GetPrequalificationAsync(User.Identity.Name, ids, Request.Headers.AcceptLanguage));
 
         [HttpPost]
         public async Task<IActionResult> Post(SupplierRegisterCommand command)
+            => CreateActionResult(await _service.AddAsync(User.Identity.Name, command));
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Submit(SupplierRegisterCommand command)
             => CreateActionResult(await _service.AddAsync(User.Identity.Name, command));
     }
 }

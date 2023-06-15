@@ -14,8 +14,6 @@ namespace SolaERP.Application.Validations.UserValidation
             RuleFor(x => x.Password).NotEmpty().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.ConfirmPassword).NotEmpty().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.Gender).GreaterThanOrEqualTo(0).WithMessage("Please, enter {PropertyName}").NotEmpty().WithMessage("Please, enter {PropertyName}");
-            RuleFor(x => x.UserType).NotEmpty().WithMessage("Please, enter {PropertyName}");
-
         }
     }
 }

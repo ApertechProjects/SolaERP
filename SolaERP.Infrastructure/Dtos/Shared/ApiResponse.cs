@@ -7,7 +7,6 @@ namespace SolaERP.Application.Dtos.Shared
     public class ApiResponse<T>
     {
         public T Data { get; set; }
-        [JsonIgnore]
         public int StatusCode { get; set; }
         public string Errors { get; set; }
         public int TotalData { get; set; }

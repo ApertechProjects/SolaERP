@@ -23,14 +23,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_Attachments_IUD @AttachmentId,@FileName,@FileData,@SourceId,@SourceType,@Reference,@ExtensionType,@AttachmentTypeId,@AttachmentSubTypeId,@UploadDateTime,@Size";
                 command.Parameters.AddWithValue(command, "@AttachmentId", attachment.AttachmentId);
                 command.Parameters.AddWithValue(command, "@FileName", attachment.FileName);
-                command.Parameters.AddWithValue(command, "@FileData", attachment.FileData);
+                command.Parameters.AddWithValue(command, "@FileData", attachment.Filebase64);
                 command.Parameters.AddWithValue(command, "@SourceId", attachment.SourceId);
                 command.Parameters.AddWithValue(command, "@SourceType", attachment.SourceType);
                 command.Parameters.AddWithValue(command, "@Reference", null);
                 command.Parameters.AddWithValue(command, "@ExtensionType", attachment.ExtensionType);
                 command.Parameters.AddWithValue(command, "@AttachmentTypeId", attachment.AttachmentTypeId);
                 command.Parameters.AddWithValue(command, "@AttachmentSubTypeId", attachment.AttachmentSubTypeId);
-                command.Parameters.AddWithValue(command, "@UploadDateTime", DateTime.Now);
+                command.Parameters.AddWithValue(command, "@UploadDateTime", DateTime.UtcNow.Date);
                 command.Parameters.AddWithValue(command, "@Size", attachment.Size);
 
                 return await command.ExecuteNonQueryAsync() > 0;
@@ -52,14 +52,15 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<Attachment>> GetAttachmentsAsync(int sourceId, string reference, string sourceType)
+        public async Task<List<Attachment>> GetAttachmentsAsync(int sourceId, string reference, string sourceType, int? attachmentTypeId = null)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_AttachmentList_Load @SourceId,@Reference,@SourceType";
+                command.CommandText = "EXEC SP_AttachmentList_Load @SourceId,@Reference,@SourceType,@AttachmentTypeId";
                 command.Parameters.AddWithValue(command, "@SourceId", sourceId);
                 command.Parameters.AddWithValue(command, "@Reference", reference);
                 command.Parameters.AddWithValue(command, "@SourceType", sourceType);
+                command.Parameters.AddWithValue(command, "@AttachmentTypeId", attachmentTypeId);
 
                 using var reader = await command.ExecuteReaderAsync();
 

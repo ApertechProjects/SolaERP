@@ -111,8 +111,14 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<AccountCode, AccountCodeDto>().ReverseMap();
             CreateMap<RequestSaveModel, RequestMainSaveModel>().ReverseMap();
             CreateMap<SolaERP.Application.Entities.SupplierEvaluation.Currency, CurrencyDto>().ReverseMap();
-            CreateMap<Attachment, AttachmentWithFileDto>().ReverseMap();
-            CreateMap<Attachment, AttachmentDto>().ReverseMap();
+            CreateMap<Attachment, AttachmentWithFileDto>().
+                ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FileName)).
+                ForMember(dest => dest.LastModifiedDate, opt => opt.MapFrom(src => src.UploadDateTime))
+               .ReverseMap();
+            CreateMap<Attachment, AttachmentDto>().
+                ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FileName)).
+                ForMember(dest => dest.LastModifiedDate, opt => opt.MapFrom(src => src.UploadDateTime))
+               .ReverseMap();
             CreateMap<UOM, UOMDto>().ReverseMap();
             CreateMap<AdditionalPrivilegeAccess, AdditionalPrivilegeAccessDto>().ReverseMap();
             CreateMap<RequestDetailApprovalInfo, RequestDetailApprovalInfoDto>().
@@ -161,6 +167,7 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.AttachmentPoint, opt => opt.MapFrom(src => src.HasAttachment))
                 .ForMember(dest => dest.TextAreaPoint, opt => opt.MapFrom(src => src.HasTexArea))
                 .ForMember(dest => dest.BankListPoint, opt => opt.MapFrom(src => src.HasBankList))
+                .ForMember(dest => dest.Weight, opt => opt.MapFrom(src => src.Weight))
                 .ForMember(dest => dest.DataGridPoint, opt => opt.MapFrom(src => src.HasGrid)).ReverseMap();
 
             CreateMap<ContactPersonDto, User>()
@@ -187,8 +194,8 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<VendorBankDetailDto, VendorBankDetail>()
                 .ForMember(dest => dest.VendorBankDetailId, opt => opt.MapFrom(src => src.Id)).ReverseMap();
 
-            CreateMap<PrequalificationDto, Prequalification>()
-                .ForMember(dest => dest.VendorPrequalificationId, opt => opt.MapFrom(src => src.Id)).ReverseMap();
+            //CreateMap<PrequalificationDto, Prequalification>()
+            //    .ForMember(dest => dest.VendorPrequalificationId, opt => opt.MapFrom(src => src.Id)).ReverseMap();
 
             CreateMap<CodeOfBuConduct, VendorCOBC>()
                 .ForMember(dest => dest.VendorCOBCId, opt => opt.MapFrom(src => src.CobcID))
@@ -219,6 +226,80 @@ namespace SolaERP.Persistence.Mappers
             //.ForMember(dest => dest.PrequalificationCategoryId, opt => opt.MapFrom(src => src.PrequalificationCategoryId))
             //.ForMember(dest => dest.BusinessCategoryId, opt => opt.MapFrom(src => src.BusinessCategoryId)).ReverseMap();
 
+
+            CreateMap<VendorProductService, VendorProductServiceDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.VendorProductServiceId)).ReverseMap();
+
+
+            CreateMap<Application.Dtos.SupplierEvaluation.PrequalificationGridData, Application.Entities.SupplierEvaluation.PrequalificationGridData>()
+                .ForMember(dest => dest.PreqqualificationGridDataId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.PreqqualificationDesignId, opt => opt.MapFrom(src => src.DesignId)).ReverseMap();
+
+
+            CreateMap<DueDiligenceChildDto, VendorDueDiligenceModel>()
+                .ForMember(dest => dest.DesignId, opt => opt.MapFrom(src => src.DesignId))
+                .ForMember(dest => dest.IntValue, opt => opt.MapFrom(src => src.IntValue))
+                .ForMember(dest => dest.TextboxValue, opt => opt.MapFrom(src => src.TextboxValue))
+                .ForMember(dest => dest.TextareaValue, opt => opt.MapFrom(src => src.TextareaValue))
+                .ForMember(dest => dest.CheckboxValue, opt => opt.MapFrom(src => src.CheckboxValue))
+                .ForMember(dest => dest.RadioboxValue, opt => opt.MapFrom(src => src.RadioboxValue))
+                .ForMember(dest => dest.DecimalValue, opt => opt.MapFrom(src => src.DecimalValue))
+                .ForMember(dest => dest.DateTimeValue, opt => opt.MapFrom(src => src.DateTimeValue))
+                .ReverseMap();
+
+
+            CreateMap<VendorPrequalificationValues, PrequalificationDto>()
+                .ForMember(dest => dest.DesignId, opt => opt.MapFrom(src => src.PrequalificationDesignId))
+                .ForMember(dest => dest.IntValue, opt => opt.MapFrom(src => src.IntValue))
+                .ForMember(dest => dest.TextboxValue, opt => opt.MapFrom(src => src.TextboxValue))
+                .ForMember(dest => dest.TextareaValue, opt => opt.MapFrom(src => src.TextareaValue))
+                .ForMember(dest => dest.CheckboxValue, opt => opt.MapFrom(src => src.CheckboxValue))
+                .ForMember(dest => dest.RadioboxValue, opt => opt.MapFrom(src => src.RadioboxValue))
+                .ForMember(dest => dest.DecimalValue, opt => opt.MapFrom(src => src.DecimalValue))
+                .ForMember(dest => dest.DateTimeValue, opt => opt.MapFrom(src => src.DateTimeValue)).ReverseMap();
+
+            CreateMap<AttachmentDto, AttachmentSaveModel>()
+                 .ForMember(dest => dest.AttachmentId, opt => opt.MapFrom(src => src.AttachmentId))
+                 .ForMember(dest => dest.FileName, opt => opt.MapFrom(src => src.Name))
+                 .ForMember(dest => dest.Filebase64, opt => opt.MapFrom(src => src.FileBase64))
+                 .ForMember(dest => dest.SourceId, opt => opt.MapFrom(src => src.SourceId))
+                 .ForMember(dest => dest.SourceType, opt => opt.Ignore()) // SourceType does not exist in AttachmentDto
+                 .ForMember(dest => dest.ExtensionType, opt => opt.MapFrom(src => src.ExtensionType))
+                 .ForMember(dest => dest.AttachmentTypeId, opt => opt.MapFrom(src => src.AttachmentTypeId))
+                 .ForMember(dest => dest.AttachmentSubTypeId, opt => opt.MapFrom(src => src.AttachmentSubTypeId))
+                 .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size)).ReverseMap();
+
+
+            CreateMap<DueDiligenceGridModel, DueDiligenceGrid>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.DueDesignId, opt => opt.MapFrom(src => src.DueDesignId)).ReverseMap();
+
+            CreateMap<Attachment, AttachmentDto>()
+                .ForMember(dest => dest.AttachmentId, opt => opt.MapFrom(src => src.AttachmentId))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FileName))
+                .ForMember(dest => dest.SourceId, opt => opt.MapFrom(src => src.SourceId))
+                .ForMember(dest => dest.SourceTypeId, opt => opt.MapFrom(src => src.SourceTypeId))
+                .ForMember(dest => dest.Reference, opt => opt.MapFrom(src => src.Reference))
+                .ForMember(dest => dest.ExtensionType, opt => opt.MapFrom(src => src.ExtensionType))
+                .ForMember(dest => dest.AttachmentTypeId, opt => opt.MapFrom(src => src.AttachmentTypeId))
+                .ForMember(dest => dest.AttachmentSubTypeId, opt => opt.MapFrom(src => src.AttachmentSubTypeId))
+                .ForMember(dest => dest.LastModifiedDate, opt => opt.MapFrom(src => src.UploadDateTime))
+                .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))
+                .ForMember(dest => dest.FileBase64, opt => opt.MapFrom(src => src.FileData)).ReverseMap();
+
+            CreateMap<AttachmentDto, Attachment>()
+                .ForMember(dest => dest.AttachmentId, opt => opt.MapFrom(src => src.AttachmentId))
+                .ForMember(dest => dest.FileName, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.SourceId, opt => opt.MapFrom(src => src.SourceId))
+                .ForMember(dest => dest.SourceTypeId, opt => opt.MapFrom(src => src.SourceTypeId))
+                .ForMember(dest => dest.Reference, opt => opt.MapFrom(src => src.Reference))
+                .ForMember(dest => dest.ExtensionType, opt => opt.MapFrom(src => src.ExtensionType))
+                .ForMember(dest => dest.AttachmentTypeId, opt => opt.MapFrom(src => src.AttachmentTypeId))
+                .ForMember(dest => dest.AttachmentSubTypeId, opt => opt.MapFrom(src => src.AttachmentSubTypeId))
+                .ForMember(dest => dest.UploadDateTime, opt => opt.MapFrom(src => src.LastModifiedDate))
+                .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))
+                .ForMember(dest => dest.FileData, opt => opt.MapFrom(src => src.FileBase64))
+                .ForMember(dest => dest.FileLink, opt => opt.Ignore()).ReverseMap();
 
 
             CreateMap<AnalysisStructureWithBu, AnalysisStructureWithBuDto>().ReverseMap();

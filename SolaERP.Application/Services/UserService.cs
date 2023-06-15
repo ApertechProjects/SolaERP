@@ -395,5 +395,11 @@ namespace SolaERP.Persistence.Services
             var users = await _userRepository.GetAdminUsersAsync(sequence, language);
             return users;
         }
+
+        public async Task<bool> CheckUserVerifyByVendor(string email)
+        {
+            var result = await _userRepository.CheckUserVerifyByVendor(email);
+            return result;
+        }
     }
 }

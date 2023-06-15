@@ -21,6 +21,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public string TaxOffice { get; set; }
         public string CompanyAdress { get; set; }
         public string City { get; set; }
+        public string Country { get; set; }
         public string WebSite { get; set; }
         public DateTime RegistrationDate { get; set; }
         public string RepresentedCompanies { get; set; }
@@ -28,8 +29,11 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public int CreditDays { get; set; }
         public string PaymentTerms { get; set; }
         public bool AgreeWithDefaultDays { get; set; }
+        public string Other { get; set; }
+        public List<ProductService> ProductServices { get; set; }
         public List<PrequalificationCategory> PrequalificationCategories { get; set; }
         public List<BusinessCategory> BusinessCategories { get; set; }
+        public List<AttachmentDto> CompanyLogo { get; set; }
         public List<AttachmentDto> Attachments { get; set; }
     }
 

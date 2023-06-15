@@ -16,13 +16,7 @@ namespace SolaERP.Controllers
             _menuService = menuService;
         }
 
-        /// <summary>
-        /// Gets the list of users.
-        /// </summary>
-        /// <remarks>
-        /// This endpoint returns the list of all users in the system.
-        /// </remarks>
-        /// <returns>The list of users.</returns>
+
         [HttpGet]
         public async Task<IActionResult> GetUserMenusWithChildren()
             => CreateActionResult(await _menuService.GetUserMenusWithChildrenAsync(User.Identity.Name));

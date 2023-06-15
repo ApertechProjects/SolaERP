@@ -1,15 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
-
-namespace SolaERP.Application.Models
+﻿namespace SolaERP.Application.Models
 {
     public class AttachmentSaveModel
     {
         public int AttachmentId { get; set; }
         public string FileName { get; set; }
         public string Filebase64 { get; set; }
-        [NotMapped]
-        public byte[] FileData { get => Encoding.UTF8.GetBytes(Filebase64); }
         public int SourceId { get; set; }
         public string SourceType { get; set; }
         public string ExtensionType { get; set; }

@@ -11,4 +11,10 @@ namespace SolaERP.Application.Models
         public List<AttachmentDto> AccountVerificationLetter { get; set; }
 
     }
+
+    public class BankAccountsDto
+    {
+        public VendorBankDetailDto BankDetails { get; set; }
+        public AttachmentDto AccountVerificationLetter { get; set; }
+    }
 }

@@ -19,15 +19,15 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_VendorDueDiligence_IUD @VendorDueDiligenceId,
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorDueDiligence_IUD @VendorDueDiligenceId,
                                                                        @DueDiligenceDesignId,@VendorId
                                                                       ,@TextboxValue,@TextareaValue
                                                                       ,@CheckboxValue,@RadioboxValue
                                                                       ,@IntValue,@DecimalValue
-                                                                      ,@DateTimeValue,@AgreementValue";
+                                                                      ,@DateTimeValue,@AgreementValue,@Scoring";
 
                 command.Parameters.AddWithValue(command, "@VendorDueDiligenceId", vendorDueDiligence.VendorDueDiligenceId);
-                command.Parameters.AddWithValue(command, "@DueDiligenceDesignId", vendorDueDiligence.DueDiligenceDesignId);
+                command.Parameters.AddWithValue(command, "@DueDiligenceDesignId", vendorDueDiligence.DesignId);
                 command.Parameters.AddWithValue(command, "@VendorId", vendorDueDiligence.VendorId);
                 command.Parameters.AddWithValue(command, "@TextboxValue", vendorDueDiligence.TextboxValue);
                 command.Parameters.AddWithValue(command, "@TextareaValue", vendorDueDiligence.TextareaValue);
@@ -35,8 +35,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@RadioboxValue", vendorDueDiligence.RadioboxValue);
                 command.Parameters.AddWithValue(command, "@IntValue", vendorDueDiligence.IntValue);
                 command.Parameters.AddWithValue(command, "@DecimalValue", vendorDueDiligence.DecimalValue);
-                command.Parameters.AddWithValue(command, "@DateTimeValue", vendorDueDiligence.DateTimeValue);
+                command.Parameters.AddWithValue(command, "@DateTimeValue", vendorDueDiligence.DateTimeValue == DateTime.MinValue ? null : vendorDueDiligence.DateTimeValue);
                 command.Parameters.AddWithValue(command, "@AgreementValue", vendorDueDiligence.AgreementValue);
+                command.Parameters.AddWithValue(command, "@Scoring", vendorDueDiligence.Scoring);
 
 
                 return await command.ExecuteNonQueryAsync() > 0;
@@ -45,12 +46,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
-        public async Task<bool> AddDueDesignAsync(VendorDueDiligenceModel model)
+        public async Task<bool> AddDueAsync(VendorDueDiligenceModel model)
         {
             return await ModifyDueDiligence(new()
             {
                 VendorDueDiligenceId = 0,
-                DueDiligenceDesignId = model.DueDiligenceDesignId,
+                DesignId = model.DesignId,
                 DateTimeValue = model.DateTimeValue,
                 DecimalValue = model.DecimalValue,
                 AgreementValue = model.AgreementValue,
@@ -64,12 +65,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             });
         }
 
-        public async Task<bool> UpdateDueDesignAsync(VendorDueDiligenceModel model)
+        public async Task<bool> UpdateDueAsync(VendorDueDiligenceModel model)
             => await ModifyDueDiligence(model);
 
 
-        public async Task<bool> DeleteDueDesignAsync(int dueId)
-            => await ModifyDueDiligence(new() { DueDiligenceDesignId = dueId });
+        public async Task<bool> DeleteDueAsync(int dueId)
+            => await ModifyDueDiligence(new() { DesignId = dueId });
 
 
 
@@ -77,7 +78,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return await ModifyDueGrid(new()
             {
-                DueDesignId = 0,
+                Id = 0,
+                DueDesignId = gridModel.DueDesignId,
                 Column1 = gridModel.Column1,
                 Column2 = gridModel.Column2,
                 Column3 = gridModel.Column3,
@@ -284,33 +286,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Column3Alias = reader.Get<string>("Column3Alias"),
                 Column4Alias = reader.Get<string>("Column4Alias"),
                 Column5Alias = reader.Get<string>("Column5Alias"),
+                Weight = reader.Get<decimal>("Weight"),
             };
         }
 
 
-        private async Task<bool> ModifyPrequalification(VendorPreInputModel model)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = @"EXEC SP_VendorPrequalification_IUD @VendorPrequalificationId,@PrequalificationDesignId
-                                                                           @VendorId,@TextboxValue,@TextareaValue,@CheckboxValue,
-                                                                           @RadioboxValue,@IntValue,@DecimalValue,@DateTimeValue,@Scoring";
-
-                command.Parameters.AddWithValue(command, "@VendorPrequalificationId", model.PrequealificationId);
-                command.Parameters.AddWithValue(command, "@PrequalificationDesignId", model?.DesignId);
-                command.Parameters.AddWithValue(command, "@TextboxValue", model?.TextBoxValue);
-                command.Parameters.AddWithValue(command, "@TextareaValue", model?.TextareaValue);
-                command.Parameters.AddWithValue(command, "@CheckboxValue", model?.CheckboxValue);
-                command.Parameters.AddWithValue(command, "@RadioboxValue", model?.RadioboxValue);
-                command.Parameters.AddWithValue(command, "@IntValue", model?.IntValue);
-                command.Parameters.AddWithValue(command, "@DecimalValue", model?.DecimalValue);
-                command.Parameters.AddWithValue(command, "@DateTimeValue", model?.DateTimeValue);
-                command.Parameters.AddWithValue(command, "@Scoring", model?.Scoring);
-                command.Parameters.AddWithValue(command, "@VendorId", model?.VendorId);
-
-                return await command.ExecuteNonQueryAsync() > 0;
-            }
-        }
 
 
         public async Task<CompanyInfo> GetCompanyInfoAsync(int vendorId)
@@ -366,7 +346,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_VendorNDA_ID @VendorNDAId,
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorNDA_ID @VendorNDAId,
                                                              @VendorId,
                                                              @BusinessUnitId";
 
@@ -397,7 +377,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_VendorCOBC_ID @VendorCOBCId,
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorCOBC_ID @VendorCOBCId,
                                                               @VendorId,
                                                               @BusinessUnitId";
 
@@ -499,6 +479,270 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     result.Add(reader.GetByEntityStructure<VendorDueDiligence>());
 
                 return result;
+            }
+        }
+
+        public async Task<List<VendorProductService>> GetVendorProductServices(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_VendorProductServices_Load @VendorId";
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+
+                List<VendorProductService> result = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    result.Add(reader.GetByEntityStructure<VendorProductService>());
+
+                return result;
+            }
+        }
+
+        public async Task<List<PrequalificationDesign>> GetPrequalificationDesignsAsync(int categoryId, Language language)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_PrequalificationDesign_Load @CategoryId,@LanguageCode";
+
+                command.Parameters.AddWithValue(command, "@CategoryId", categoryId);
+                command.Parameters.AddWithValue(command, "@LanguageCode", language.ToString());
+
+                List<PrequalificationDesign> result = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    result.Add(reader.GetByEntityStructure<PrequalificationDesign>());
+
+                return result;
+            }
+        }
+
+        public async Task<List<VendorPrequalificationValues>> GetPrequalificationValuesAsync(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_VendorPrequalification_Load @VendorId";
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+
+                List<VendorPrequalificationValues> result = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    result.Add(reader.GetByEntityStructure<VendorPrequalificationValues>());
+
+                return result;
+            }
+        }
+
+        public async Task<List<Application.Entities.SupplierEvaluation.PrequalificationGridData>> GetPrequalificationGridAsync(int preDesignId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC dbo.SP_PrequalificationAllGridData_Load --@PreqqualificationDesignId";
+                // command.Parameters.AddWithValue(command, "@PreqqualificationDesignId", preDesignId);
+
+                List<Application.Entities.SupplierEvaluation.PrequalificationGridData> result = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    result.Add(reader.GetByEntityStructure<Application.Entities.SupplierEvaluation.PrequalificationGridData>());
+
+                return result;
+            }
+        }
+
+        public async Task<bool> AddPrequalification(VendorPrequalificationValues value)
+        {
+            var date = value.DateTimeValue.Value.Year < 1800 ? null : value.DateTimeValue;
+            return await ModifyPrequalificationAsync(new()
+            {
+                VendorPrequalificationId = 0,
+                PrequalificationDesignId = value.PrequalificationDesignId,
+                VendorId = value.VendorId,
+                TextareaValue = value.TextareaValue,
+                TextboxValue = value.TextboxValue,
+                CheckboxValue = value.CheckboxValue,
+                RadioboxValue = value.RadioboxValue,
+                IntValue = value.IntValue,
+                DecimalValue = value.DecimalValue,
+                DateTimeValue = date,
+                Scoring = value.Scoring,
+            });
+        }
+
+        public Task<bool> UpdatePrequalification(VendorPrequalificationValues value)
+            => ModifyPrequalificationAsync(value);
+
+        public Task<bool> DeletePrequalification(int vendorPreId)
+            => ModifyPrequalificationAsync(new() { VendorPrequalificationId = vendorPreId });
+
+        private async Task<bool> ModifyPrequalificationAsync(VendorPrequalificationValues values)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorPrequalification_IUD @VendorPrequalificationId,
+                                                                           @PrequalificationDesignId,
+                                                                           @VendorId,
+                                                                           @TextboxValue,
+                                                                           @TextareaValue,
+                                                                           @CheckboxValue,
+                                                                           @RadioboxValue,
+                                                                           @IntValue,
+                                                                           @DecimalValue,
+                                                                           @DateTimeValue,
+                                                                           @Scoring";
+
+
+                command.Parameters.AddWithValue(command, "@VendorPrequalificationId", values.VendorPrequalificationId);
+                command.Parameters.AddWithValue(command, "@PrequalificationDesignId", values.PrequalificationDesignId);
+                command.Parameters.AddWithValue(command, "@VendorId", values.VendorId);
+                command.Parameters.AddWithValue(command, "@TextboxValue", values.TextboxValue);
+                command.Parameters.AddWithValue(command, "@TextareaValue", values.TextareaValue);
+                command.Parameters.AddWithValue(command, "@CheckboxValue", values.CheckboxValue);
+                command.Parameters.AddWithValue(command, "@RadioboxValue", values.RadioboxValue);
+                command.Parameters.AddWithValue(command, "@IntValue", values.IntValue);
+                command.Parameters.AddWithValue(command, "@DecimalValue", values.DecimalValue);
+                command.Parameters.AddWithValue(command, "@DateTimeValue", values.DateTimeValue);
+                command.Parameters.AddWithValue(command, "@Scoring", values.Scoring);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> AddPreGridAsync(Application.Entities.SupplierEvaluation.PrequalificationGridData grid)
+        {
+            return await ModifyPreGridAsync(new Application.Entities.SupplierEvaluation.PrequalificationGridData()
+            {
+                PreqqualificationGridDataId = 0,
+                PreqqualificationDesignId = grid.PreqqualificationDesignId,
+                Column1 = grid.Column1,
+                Column2 = grid.Column2,
+                Column3 = grid.Column3,
+                Column4 = grid.Column4,
+                Column5 = grid.Column5,
+            });
+        }
+
+        public async Task<bool> UpdatePreGridAsync(Application.Entities.SupplierEvaluation.PrequalificationGridData grid)
+            => await ModifyPreGridAsync(grid);
+
+
+        public async Task<bool> DeletePreGridAsync(int preGridId)
+            => await ModifyPreGridAsync(new() { PreqqualificationGridDataId = preGridId });
+
+
+        public async Task<bool> ModifyPreGridAsync(Application.Entities.SupplierEvaluation.PrequalificationGridData gridData)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_PrequalificationGridData_IUD @PreqqualificationGridDataId,
+                                                                             @PreqqualificationDesignId,
+                                                                             @Column1,
+                                                                             @Column2,
+                                                                             @Column3,
+                                                                             @Column4,
+                                                                             @Column5";
+
+
+
+                command.Parameters.AddWithValue(command, "@PreqqualificationGridDataId", gridData.PreqqualificationGridDataId);
+                command.Parameters.AddWithValue(command, "@PreqqualificationDesignId", gridData.PreqqualificationDesignId);
+                command.Parameters.AddWithValue(command, "@Column1", gridData.Column1);
+                command.Parameters.AddWithValue(command, "@Column2", gridData.Column2);
+                command.Parameters.AddWithValue(command, "@Column3", gridData.Column3);
+                command.Parameters.AddWithValue(command, "@Column4", gridData.Column4);
+                command.Parameters.AddWithValue(command, "@Column5", gridData.Column5);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> PrequalificationCategoryAddAsync(PrequalificationCategoryData data)
+             => await ModifyPrequalificationCategorySaveAsync(data);
+
+        public async Task<bool> PrequalificationCategoryDeleteAsync(int vendorId)
+            => await ModifyPrequalificationCategorySaveAsync(new PrequalificationCategoryData { VendorId = vendorId });
+
+        public async Task<bool> ModifyPrequalificationCategorySaveAsync(PrequalificationCategoryData data)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorPrequalificationCategory_ID @VendorId,
+                                                                                  @PrequalificationCategoryId";
+
+
+
+                command.Parameters.AddWithValue(command, "@VendorId", data.VendorId);
+                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", data.PrequalificationCategoryId);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> VendorBusinessCategoryAddAsync(VendorBusinessCategoryData data)
+            => await ModifyVendorBusinessCategorySaveAsync(data);
+
+        public async Task<bool> VendorBusinessCategoryDeleteAsync(int vendorId)
+            => await ModifyVendorBusinessCategorySaveAsync(new VendorBusinessCategoryData { VendorId = vendorId });
+
+        public async Task<bool> ModifyVendorBusinessCategorySaveAsync(VendorBusinessCategoryData data)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorBusinessCategory_ID @VendorId,
+                                                                          @BusinessCategoryId";
+
+
+
+                command.Parameters.AddWithValue(command, "@VendorId", data.VendorId);
+                command.Parameters.AddWithValue(command, "@BusinessCategoryId", data.BusinessCategoryId);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> VendorRepresentedCompanyAddAsync(VendorRepresentedCompany data)
+            => await ModifyRepresentedCategorySaveAsync(data);
+
+        public async Task<bool> VendorRepresentedCompanyDeleteAsync(int vendorId)
+            => await ModifyRepresentedCategorySaveAsync(new VendorRepresentedCompany { VendorId = vendorId });
+
+        public async Task<bool> ModifyRepresentedCategorySaveAsync(VendorRepresentedCompany data)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorRepresentedCompany_ID @VendorId,
+                                                                            @RepresentedCompanyName";
+
+
+
+                command.Parameters.AddWithValue(command, "@VendorId", data.VendorId);
+                command.Parameters.AddWithValue(command, "@RepresentedCompanyName", data.RepresentedCompanyName);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> VendorRepresentedProductAddAsync(RepresentedProductData data)
+             => await ModifyRepresentedProductSaveAsync(data);
+
+        public async Task<bool> VendorRepresentedProductDeleteAsync(int vendorId)
+            => await ModifyRepresentedProductSaveAsync(new RepresentedProductData { VendorId = vendorId });
+
+        public async Task<bool> ModifyRepresentedProductSaveAsync(RepresentedProductData data)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorRepresentedProducts_ID @VendorId,
+                                                                            @RepresentedProductName";
+
+
+
+                command.Parameters.AddWithValue(command, "@VendorId", data.VendorId);
+                command.Parameters.AddWithValue(command, "@RepresentedProductName", data.RepresentedProductName);
+
+                return await command.ExecuteNonQueryAsync() > 0;
             }
         }
     }

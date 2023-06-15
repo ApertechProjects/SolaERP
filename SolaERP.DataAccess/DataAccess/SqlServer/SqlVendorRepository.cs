@@ -21,7 +21,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"DECLARE @NewVendorId int 
+                command.CommandText = @"SET NOCOUNT OFF 
+                                        DECLARE @NewVendorId int 
                                         EXEC SP_Vendors_IUD @VendorId,
                                                             @BusinessUnitId,
                                                             @VendorName,
@@ -72,7 +73,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_VendorBankDetails_IUD @VendorBankDetailId,
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorBankDetails_IUD @VendorBankDetailId,
                                                                       @VendorId,
                                                                       @Beneficiary,
                                                                       @BeneficiaruTaxId,
@@ -172,5 +173,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<int> DeleteVendorAsync(int userId, int id)
             => await DeleteVendorAsync(userId, id);
+
+        public async Task<bool> VendorChangeStatus(int vendorId, int status, int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorsChangeStatus @VendorId,
+                                                                      @UserId,
+                                                                      @Status";
+
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                command.Parameters.AddWithValue(command, "@Status", status);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
     }
 }

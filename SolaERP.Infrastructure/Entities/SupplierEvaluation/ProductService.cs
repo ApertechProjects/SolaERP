@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Attributes;
+﻿using Newtonsoft.Json;
+using SolaERP.Application.Attributes;
 
 namespace SolaERP.Application.Entities.SupplierEvaluation
 {
