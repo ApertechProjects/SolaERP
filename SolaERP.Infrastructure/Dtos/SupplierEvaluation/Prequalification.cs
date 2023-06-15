@@ -122,6 +122,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         //[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public List<PrequalificationGridData> GridDatas { get; set; }
         public decimal Weight { get; set; }
+        public decimal Outcome { get; set; }
 
     }
 }
