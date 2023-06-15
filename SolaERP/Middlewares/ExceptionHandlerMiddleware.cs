@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
-using SolaERP.Application.Exceptions;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Exceptions;
 using System.Text.Json;
 
 namespace SolaERP.Middlewares
@@ -22,10 +22,10 @@ namespace SolaERP.Middlewares
                         _ => 500
                     };
                     handler.Response.StatusCode = statusCode;
+
                     _logger.LogError(errorFeatures.Error.Message);
                     var result = ApiResponse<NoContentDto>.Fail(errorFeatures.Error.Message, 400);
                     await handler.Response.WriteAsync(JsonSerializer.Serialize(result));
-
                 });
             });
         }

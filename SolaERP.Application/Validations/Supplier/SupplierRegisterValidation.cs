@@ -8,7 +8,7 @@ namespace SolaERP.Persistence.Validations.Supplier
     {
         public SupplierRegisterValidation()
         {
-            RuleFor(x => x.CompanyInfo)
+            RuleFor(x => x.CompanyInformation)
                    .SetValidator(new CompanyValidation());
 
             RuleForEach(x => x.BankAccounts).SetValidator(new BankAccountsValidation());

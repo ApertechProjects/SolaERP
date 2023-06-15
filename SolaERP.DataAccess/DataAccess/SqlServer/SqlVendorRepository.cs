@@ -70,11 +70,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return newVendorId;
             }
         }
-        private async Task<bool> ModifyBankDetailsAsync(int userId, VendorBankDetail bankDetail)
+        private async Task<int> ModifyBankDetailsAsync(int userId, VendorBankDetail bankDetail)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorBankDetails_IUD @VendorBankDetailId,
+                command.CommandText = @"DECLARE	 @NewVendorBankId int
+                                        SET NOCOUNT OFF EXEC SP_VendorBankDetails_IUD @VendorBankDetailId,
                                                                       @VendorId,
                                                                       @Beneficiary,
                                                                       @BeneficiaruTaxId,
@@ -86,7 +87,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                       @Currency,
                                                                       @BankTaxId,
                                                                       @CoresspondentAccount,
-                                                                      @UserId";
+                                                                      @UserId,
+                                                                      @NewVendorBankId = @NewVendorBankId OUTPUT
+                                                                      SELECT @NewVendorBankId as N'NewVendorBankId'";
 
 
                 command.Parameters.AddWithValue(command, "@VendorBankDetailId", bankDetail.VendorBankDetailId);
@@ -103,11 +106,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@CoresspondentAccount", bankDetail.CoresspondentAccount);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
-                return await command.ExecuteNonQueryAsync() > 0;
+                using var reader = await command.ExecuteReaderAsync();
+
+                int id = 0;
+                if (reader.Read())
+                    id = reader.Get<int>("NewVendorBankId");
+
+
+                return id;
             }
         }
 
-        public async Task<bool> AddBankDetailsAsync(int userId, VendorBankDetail bankDetail)
+        public async Task<int> AddBankDetailsAsync(int userId, VendorBankDetail bankDetail)
         {
             return await ModifyBankDetailsAsync(userId, new()
             {
@@ -126,9 +136,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             });
         }
 
-        public async Task<bool> DeleteBankDetailsAsync(int userId, int id)
+        public async Task<int> DeleteBankDetailsAsync(int userId, int id)
              => await ModifyBankDetailsAsync(userId, new() { VendorBankDetailId = id });
-        public async Task<bool> UpdateBankDetailsAsync(int userId, VendorBankDetail bankDetail)
+        public async Task<int> UpdateBankDetailsAsync(int userId, VendorBankDetail bankDetail)
              => await ModifyBankDetailsAsync(userId, bankDetail);
 
 

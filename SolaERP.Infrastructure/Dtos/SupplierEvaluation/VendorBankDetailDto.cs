@@ -1,4 +1,6 @@
 ﻿
+using SolaERP.Application.Dtos.Attachment;
+
 namespace SolaERP.Application.Dtos.SupplierEvaluation
 {
     public class VendorBankDetailDto
@@ -15,5 +17,6 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public string Currency { get; set; }
         public string BankTaxId { get; set; }
         public string CoresspondentAccount { get; set; }
+        public List<AttachmentDto> AccountVerificationLetter { get; set; }
     }
 }
