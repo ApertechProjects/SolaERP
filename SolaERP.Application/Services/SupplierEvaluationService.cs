@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.Configuration.Annotations;
 using Microsoft.Extensions.Options;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
@@ -15,7 +14,7 @@ using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.Shared;
 using SolaERP.Application.UnitOfWork;
-
+using PrequalificationGridData = SolaERP.Application.Entities.SupplierEvaluation.PrequalificationGridData;
 
 namespace SolaERP.Persistence.Services
 {
@@ -355,7 +354,6 @@ namespace SolaERP.Persistence.Services
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
             List<VendorPrequalificationValues> prequalificationValues = await _repository.GetPrequalificationValuesAsync(user.VendorId);
-
             var responseModel = new List<PrequalificationWithCategoryDto>();
             foreach (var categoryId in categoryIds)
             {
@@ -375,8 +373,10 @@ namespace SolaERP.Persistence.Services
                 {
                     var prequalificationTasks = titleGroup.Select(async design =>
                     {
+                        var attachments = _mapper.Map<List<AttachmentDto>>(
+                        await _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_PREQ.ToString(), design.PrequalificationDesignId));
                         var correspondingValue = prequalificationValues.FirstOrDefault(v => v.PrequalificationDesignId == design.PrequalificationDesignId);
-
+                        var calculationResult = await PrequalificationCalculateScoring(correspondingValue, design, attachments?.Count > 0);
                         return new PrequalificationDto
                         {
                             DesignId = design.PrequalificationDesignId,
@@ -419,9 +419,11 @@ namespace SolaERP.Persistence.Services
                             IntValue = Convert.ToInt32(correspondingValue?.IntValue),
                             DecimalValue = Convert.ToDecimal(correspondingValue?.DecimalValue),
                             DateTimeValue = Convert.ToDateTime(correspondingValue?.DateTimeValue),
-                            Attachments = _mapper.Map<List<AttachmentDto>>(
-                                    await _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_PREQ.ToString(), design.PrequalificationDesignId)),
+                            Attachments = attachments,
                             Weight = design.Weight,
+                            Outcome = calculationResult.Outcome,
+                            Scoring = calculationResult.Scoring,
+                            AllPoint = calculationResult.AllPoint
                         };
                     });
 
@@ -534,9 +536,43 @@ namespace SolaERP.Persistence.Services
             return await SetGridDatasAsync(responseModel);
         }
 
+        private async Task<(decimal Scoring, decimal AllPoint, decimal Outcome)> PrequalificationCalculateScoring(ValueEntity inputValue, PrequalificationDesign d, bool hasAttachment)
+        {
+            List<PrequalificationGridData> dueGrid = null;
+            if (d.HasGrid > 0)
+                dueGrid = await _repository.GetPrequalificationGridAsync(d.PrequalificationDesignId);
+
+            decimal scoringSum = (!string.IsNullOrWhiteSpace(inputValue?.TextboxValue) ? d.HasTextbox : 0) +
+                              (!string.IsNullOrWhiteSpace(inputValue?.TextareaValue) ? d.HasTextarea : 0) +
+                              (inputValue?.CheckboxValue == true ? d.HasCheckbox : 0) +
+                              (inputValue?.RadioboxValue == true ? d.HasRadiobox : 0) +
+                              (inputValue?.IntValue > 0 ? d.HasInt : 0) +
+                              (inputValue?.DecimalValue > 0 ? d.HasDecimal : 0) +
+                              (inputValue?.DateTimeValue != null ? d.HasDateTime : 0) +
+                              (hasAttachment ? d.HasAttachment : 0) +
+                              (dueGrid?.Count > 0 ? d.HasGrid : 0);
+
+            decimal allPoint = d.HasAttachment +
+                               d.HasCheckbox +
+                               d.HasList +
+                               d.HasDateTime +
+                               d.HasDecimal +
+                               d.HasGrid +
+                               d.HasInt +
+                               d.HasRadiobox +
+                               d.HasTextarea +
+                               d.HasTextbox;
+
+            decimal scoring = 0;
+            if (allPoint > 0)
+                scoring = (scoringSum / allPoint) * 100;
+            decimal outcome = (scoring * d.Weight) / 100;
+
+            return (scoring, allPoint, outcome);
+        }
+
         private async Task<(decimal Scoring, decimal AllPoint, decimal Outcome)> CalculateScoring(ValueEntity inputValue, DueDiligenceDesign d, bool hasAttachment)
         {
-
             List<DueDiligenceGrid> dueGrid = null;
             if (d.HasGrid > 0)
                 dueGrid = await _repository.GetDueDiligenceGridAsync(d.DesignId);
