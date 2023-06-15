@@ -572,6 +572,7 @@ namespace SolaERP.Persistence.Services
                                d.HasTextbox;
 
             decimal scoring = 0;
+
             if (allPoint > 0)
                 scoring = (scoringSum / allPoint) * 100;
 
@@ -606,6 +607,7 @@ namespace SolaERP.Persistence.Services
                                d.HasDateTime +
                                d.HasAttachment +
                                d.HasGrid;
+
 
             decimal scoring = (scoringSum / allPoint) * 100;
             decimal outcome = (scoring * d.Weight) / 100;
