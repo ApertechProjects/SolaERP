@@ -461,7 +461,7 @@ namespace SolaERP.Persistence.Services
                     int a = 7;
                     if (counter == 10)
                         a = 7;
-                    var fields = await CalculateScoring(correspondingValue, d, attachments?.Count > 0);
+                    var calculationResult = await CalculateScoring(correspondingValue, d, attachments?.Count > 0);
                     var childDto = new DueDiligenceChildDto
                     {
                         DesignId = d.DesignId,
@@ -508,10 +508,11 @@ namespace SolaERP.Persistence.Services
                         DecimalPoint = d.HasDecimal,//> 0 ? d.HasDecimal : null,
                         DateTimePoint = d.HasDateTime,//> 0 ? d.HasDateTime : null,
                         AttachmentPoint = d.HasAttachment,//> 0 ? d.HasAttachment : null,
-                        Scoring = fields.Scoring,
                         DataGridPoint = d.HasGrid,
-                        AllPoint = fields.AllPoint,
-                        Weight = d.Weight
+                        Weight = d.Weight,
+                        AllPoint = calculationResult.AllPoint,
+                        Scoring = calculationResult.Scoring,
+                        Outcome = calculationResult.Outcome,
                     };
 
                     dto.Childs.Add(childDto);
@@ -522,7 +523,7 @@ namespace SolaERP.Persistence.Services
             return await SetGridDatasAsync(responseModel);
         }
 
-        private async Task<(decimal Scoring, decimal AllPoint)> CalculateScoring(Application.Entities.SupplierEvaluation.VendorDueDiligence inputValue, DueDiligenceDesign d, bool hasAttachment)
+        private async Task<(decimal Scoring, decimal AllPoint, decimal Outcome)> CalculateScoring(Application.Entities.SupplierEvaluation.VendorDueDiligence inputValue, DueDiligenceDesign d, bool hasAttachment)
         {
 
             List<DueDiligenceGrid> dueGrid = null;
@@ -551,8 +552,9 @@ namespace SolaERP.Persistence.Services
                                d.HasGrid;
 
             decimal scoring = (scoringSum / allPoint) * 100;
+            decimal outcome = (scoring * d.Weight) / 100;
 
-            return (scoring, allPoint);
+            return (scoring, allPoint, outcome);
         }
 
         private async Task<List<DueDiligenceDesignDto>> SetGridDatasAsync(List<DueDiligenceDesignDto> dueDesign)
