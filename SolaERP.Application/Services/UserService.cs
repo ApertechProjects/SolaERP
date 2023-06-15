@@ -45,9 +45,6 @@ namespace SolaERP.Persistence.Services
             if (userExsist is not null)
                 return ApiResponse<int>.Fail("user", "This user is already exsist in our system", 422, false);
 
-            if (model.UserType == Application.Enums.UserRegisterType.SupplierUser && model.VendorId == 0)
-                return ApiResponse<int>.Fail("company", "Company name required for Supplier user", 422, false);
-
             if (model.Password != model.ConfirmPassword)
                 return ApiResponse<int>.Fail("password", "Password doesn't match with confirm password", 422, false);
 
