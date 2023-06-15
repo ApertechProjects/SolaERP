@@ -553,7 +553,7 @@ namespace SolaERP.Persistence.Services
             decimal scoring = (scoringSum / allPoint) * 100;
             decimal outcome = (scoring * d.Weight) / 100;
 
-            return (scoring, allPoint);
+            return (scoring, allPoint, outcome);
         }
 
         private async Task<List<DueDiligenceDesignDto>> SetGridDatasAsync(List<DueDiligenceDesignDto> dueDesign)
