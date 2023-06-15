@@ -56,8 +56,8 @@ namespace SolaERP.Persistence.Services
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
             int vendorId = await _vendorRepository.AddVendorAsync(user.Id, _mapper.Map<Vendor>(command.CompanyInfo));
-            await _repository.VendorRepresentedCompanyAddAsync(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = command.CompanyInfo.RepresentedCompanies });
-            await _repository.VendorRepresentedProductAddAsync(new Application.Models.RepresentedProductData { VendorId = vendorId, RepresentedProductName = command.CompanyInfo.RepresentedCompanies });
+            await _repository.VendorRepresentedCompanyAddAsync(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", command.CompanyInfo.RepresentedCompanies) });
+            await _repository.VendorRepresentedProductAddAsync(new Application.Models.RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", command.CompanyInfo.RepresentedProducts) });
 
             var companyLogo = _mapper.Map<List<AttachmentSaveModel>>(command.CompanyInfo.CompanyLogo);
             companyLogo.ForEach(companyLogo =>
@@ -216,7 +216,6 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<VM_GET_VendorBankDetails>.Success(bankDetails, 200);
         }
-
         public async Task<ApiResponse<List<CodeOfBuConduct>>> GetCOBCAsync(string userIdentity)
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
@@ -246,7 +245,6 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<List<CodeOfBuConduct>>.Success(result, 200);
         }
-
         public async Task<ApiResponse<List<DueDiligenceDesignDto>>> GetDueDiligenceAsync(string userIdentity, string acceptLanguage)
              => ApiResponse<List<DueDiligenceDesignDto>>.Success(await GetDueDesignsAsync(userIdentity, Language.en));
 
@@ -307,7 +305,6 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<VM_GET_InitalRegistration>.Success(viewModel, 200);
         }
-
         public async Task<ApiResponse<List<NonDisclosureAgreement>>> GetNDAAsync(string userIdentity)
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
@@ -336,9 +333,6 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<List<NonDisclosureAgreement>>.Success(result, 200);
         }
-
-
-
         public async Task<ApiResponse<List<PrequalificationWithCategoryDto>>> GetPrequalificationAsync(string userIdentity, List<int> categoryIds, string acceptLang)
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
