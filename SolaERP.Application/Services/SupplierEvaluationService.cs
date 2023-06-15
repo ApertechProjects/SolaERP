@@ -393,6 +393,7 @@ namespace SolaERP.Persistence.Services
                             HasAttachment = design.HasAttachment > 0,
                             Title = design.Title,
                             HasGrid = design.HasGrid > 0,
+                            DataGridPoint = design.HasGrid,
                             GridRowLimit = design.GridRowLimit,
                             GridColumnCount = design.GridColumnCount,
                             GridColumns = new[]
