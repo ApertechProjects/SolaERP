@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
@@ -13,11 +12,7 @@ namespace SolaERP.API.Controllers
     public class SupplierEvaluationController : CustomBaseController
     {
         private readonly ISupplierEvaluationService _service;
-
-        public SupplierEvaluationController(ISupplierEvaluationService service)
-        {
-            _service = service;
-        }
+        public SupplierEvaluationController(ISupplierEvaluationService service) => _service = service;
 
 
         [HttpGet("[action]")]
