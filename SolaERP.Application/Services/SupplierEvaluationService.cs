@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Configuration.Annotations;
 using Microsoft.Extensions.Options;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
@@ -55,7 +56,7 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> AddAsync(string useridentity, SupplierRegisterCommand command)
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
-            Vendor vendor = _mapper.Map<Vendor>(command.CompanyInfo);
+            Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
             vendor.VendorId = user.VendorId;
 
             int vendorId = await _vendorRepository.UpdateVendorAsync(user.Id, vendor);
@@ -65,10 +66,10 @@ namespace SolaERP.Persistence.Services
             await _repository.DeleteRepresentedProductAsync(vendorId);
 
 
-            await _repository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", command.CompanyInfo.RepresentedCompanies) });
-            await _repository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", command.CompanyInfo.RepresentedProducts) });
+            await _repository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", command?.CompanyInformation?.RepresentedCompanies) });
+            await _repository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", command?.CompanyInformation?.RepresentedProducts) });
 
-            var companyLogo = _mapper.Map<List<AttachmentSaveModel>>(command.CompanyInfo.CompanyLogo);
+            var companyLogo = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.CompanyLogo);
             companyLogo.ForEach(companyLogo =>
             {
                 companyLogo.SourceId = vendorId;
@@ -80,7 +81,7 @@ namespace SolaERP.Persistence.Services
                 await _attachmentRepository.SaveAttachmentAsync(companyLogo[i]);
             }
 
-            var attachments = _mapper.Map<List<AttachmentSaveModel>>(command.CompanyInfo.Attachments);
+            var attachments = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.Attachments);
             attachments.ForEach(attachment =>
             {
                 attachment.SourceId = vendorId;
@@ -92,30 +93,32 @@ namespace SolaERP.Persistence.Services
                 await _attachmentRepository.SaveAttachmentAsync(attachments[i]);
             }
 
-            command.CodeOfBuConduct.ForEach(x => x.VendorId = vendorId);
-            command.NonDisclosureAgreement.ForEach(x => x.VendorId = vendorId);
-            command.BankAccounts.ForEach(x => x.BankDetails.VendorId = vendorId);
+            command?.CodeOfBuConduct.ForEach(x => x.VendorId = vendorId);
+            command?.NonDisclosureAgreement.ForEach(x => x.VendorId = vendorId);
+            command?.BankAccounts.ForEach(x => x.VendorId = vendorId);
 
 
             List<Task<bool>> tasks = new();
-            tasks.AddRange(command.BankAccounts.Select(x =>
+            foreach (var x in command.BankAccounts)
             {
-                x.BankDetails.VendorId = vendorId;
+                var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x));
+                x.VendorId = vendorId;
 
-                if (x.AccountVerificationLetter is not null)
+                if (x.AccountVerificationLetter != null)
                 {
-                    var entity = _mapper.Map<AttachmentSaveModel>(x.AccountVerificationLetter);
-                    entity.SourceId = vendorId;
-                    entity.SourceType = SourceType.VEN_BNK.ToString();
+                    tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
+                    {
+                        var entity = _mapper.Map<AttachmentSaveModel>(attachment);
+                        entity.SourceId = detaildId;
+                        entity.SourceType = SourceType.VEN_BNK.ToString();
 
-                    return _attachmentRepository.SaveAttachmentAsync(entity);
+                        return _attachmentRepository.SaveAttachmentAsync(entity);
+                    }));
                 }
-
-                return _vendorRepository.UpdateBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x.BankDetails));
-            }));
+            }
 
 
-            tasks = tasks.Concat(command.DueDiligence.SelectMany(item =>
+            tasks = tasks.Concat(command?.DueDiligence?.SelectMany(item =>
             {
                 var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
                 dueInputModel.VendorId = vendorId;
@@ -140,7 +143,7 @@ namespace SolaERP.Persistence.Services
                 return itemTasks;
             })).ToList();
 
-            tasks.AddRange(command.Prequalification.SelectMany(item =>
+            tasks.AddRange(command?.Prequalification?.SelectMany(item =>
             {
                 var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
                 prequalificationValue.VendorId = vendorId;
@@ -166,12 +169,12 @@ namespace SolaERP.Persistence.Services
             }));
 
 
-            command.NonDisclosureAgreement.ForEach(x => x.VendorId = vendorId);
-            tasks.AddRange(command.NonDisclosureAgreement.Select(x => _repository.AddNDAAsync(_mapper.Map<VendorNDA>(x))));
+            command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
+            tasks.AddRange(command?.NonDisclosureAgreement?.Select(x => _repository.AddNDAAsync(_mapper.Map<VendorNDA>(x))));
 
 
-            command.CodeOfBuConduct.ForEach(x => x.VendorId = vendorId);
-            tasks.AddRange(command.CodeOfBuConduct.Select(x => _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(x))));
+            command?.CodeOfBuConduct?.ForEach(x => x.VendorId = vendorId);
+            tasks.AddRange(command?.CodeOfBuConduct?.Select(x => _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(x))));
 
             await Task.WhenAll(tasks);
             await _unitOfWork.SaveChangesAsync();
@@ -211,16 +214,22 @@ namespace SolaERP.Persistence.Services
 
             var currencyTask = _repository.GetCurrenciesAsync();
             var bankDetailsTask = _repository.GetVondorBankDetailsAsync(user.VendorId);
-            var attachemtsTask = _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_BNK.ToString());
 
             await Task.WhenAll(currencyTask, bankDetailsTask);
+
+            var bankAccount = _mapper.Map<List<VendorBankDetailDto>>(bankDetailsTask.Result);
+
+            foreach (var item in bankAccount)
+            {
+                var attachment = _mapper.Map<List<AttachmentDto>>(await _attachmentRepository.GetAttachmentsAsync(item.Id, null, SourceType.VEN_BNK.ToString()));
+                item.AccountVerificationLetter = attachment;
+            }
 
 
             VM_GET_VendorBankDetails bankDetails = new()
             {
                 Currencies = currencyTask.Result,
-                BankDetails = _mapper.Map<List<VendorBankDetailDto>>(bankDetailsTask.Result),
-                AccountVerificationLetter = _mapper.Map<List<AttachmentDto>>(attachemtsTask.Result),
+                BankDetails = bankAccount,
             };
 
             return ApiResponse<VM_GET_VendorBankDetails>.Success(bankDetails, 200);
