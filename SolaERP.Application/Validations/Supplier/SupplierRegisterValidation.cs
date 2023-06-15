@@ -10,6 +10,19 @@ namespace SolaERP.Persistence.Validations.Supplier
         {
             RuleFor(x => x.CompanyInfo)
                    .SetValidator(new CompanyValidation());
+
+            RuleForEach(x => x.BankAccounts).SetValidator(new BankAccountsValidation());
+        }
+    }
+    public class BankAccountsValidation : AbstractValidator<BankAccountsDto>
+    {
+        public BankAccountsValidation()
+        {
+            RuleFor(x => x.BankDetails.AccountNumber).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.BankDetails.Address).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.BankDetails.Bank).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.BankDetails.CoresspondentAccount).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.BankDetails.Currency).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
         }
     }
 
@@ -26,4 +39,6 @@ namespace SolaERP.Persistence.Validations.Supplier
         }
 
     }
+
+
 }
