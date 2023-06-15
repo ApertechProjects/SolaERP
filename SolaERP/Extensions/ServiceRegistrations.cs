@@ -4,7 +4,6 @@ using SolaERP.Application;
 using SolaERP.Application.Contracts.Common;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
-using SolaERP.Application.Entities.AnalysisStructure;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Identity_Server;
 using SolaERP.Application.Models;
@@ -25,6 +24,7 @@ using SolaERP.Persistence.Validations.AnalysisCodeValidation;
 using SolaERP.Persistence.Validations.AnalysisDimensionValidation;
 using SolaERP.Persistence.Validations.AnalysisStructure;
 using SolaERP.Persistence.Validations.ApproveRoleValidation;
+using SolaERP.Persistence.Validations.Supplier;
 using SolaERP.Persistence.Validations.UserValidation;
 using UserValidation = SolaERP.Application.Validations.UserValidation.UserValidation;
 
@@ -133,6 +133,7 @@ namespace SolaERP.Extensions
             builder.Services.AddValidatorsFromAssemblyContaining<AnalysisDimensionListSaveValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<AnalysisDimensionDeleteValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<AnalysisStructureDeleteValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<SupplierRegisterValidation>();
             builder.Services.AddScoped<ValidationFilter>();
         }
         public static void UseIdentityService(this WebApplicationBuilder builder)
