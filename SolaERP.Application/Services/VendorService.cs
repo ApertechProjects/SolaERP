@@ -29,8 +29,8 @@ namespace SolaERP.Persistence.Services
 
         public async Task<int> GetVendorByTaxIdAsync(string taxId)
         {
-            int entity = await _vendorRepository.GetVendorByTaxIdAsync(taxId);
-            return entity;
+            VendorInfo entity = await _vendorRepository.GetVendorByTaxAsync(taxId);
+            return entity.VendorId;
         }
 
         public Task<ApiResponse<bool>> RemoveAsync(int Id)
@@ -43,7 +43,7 @@ namespace SolaERP.Persistence.Services
             throw new NotImplementedException();
         }
 
-        public Task<ApiResponse<object>> WaitingForApprovals(int businessUnitId, int userId)
+        public Task<ApiResponse<object>> WaitingForApprovals(int businessUnitId, string userId)
         {
             throw new NotImplementedException();
         }
