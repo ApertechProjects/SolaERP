@@ -355,6 +355,9 @@ namespace SolaERP.Persistence.Services
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
             List<VendorPrequalificationValues> prequalificationValues = await _repository.GetPrequalificationValuesAsync(user.VendorId);
             var responseModel = new List<PrequalificationWithCategoryDto>();
+
+            var gridDatas = await _repository.GetPrequalificationGridAsync(user.VendorId);
+
             foreach (var categoryId in categoryIds)
             {
                 List<PrequalificationDesign> prequalificationDesigns = await _repository.GetPrequalificationDesignsAsync(categoryId, Language.en);
@@ -375,8 +378,10 @@ namespace SolaERP.Persistence.Services
                     {
                         var attachments = _mapper.Map<List<AttachmentDto>>(
                         await _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_PREQ.ToString(), design.PrequalificationDesignId));
+
                         var correspondingValue = prequalificationValues.FirstOrDefault(v => v.PrequalificationDesignId == design.PrequalificationDesignId);
-                        var calculationResult = await PrequalificationCalculateScoring(correspondingValue, design, attachments?.Count > 0);
+                        var calculationResult = CalculateScoring(correspondingValue, design, gridDatas, attachments?.Count > 0);
+
                         return new PrequalificationDto
                         {
                             DesignId = design.PrequalificationDesignId,
@@ -536,11 +541,14 @@ namespace SolaERP.Persistence.Services
             return await SetGridDatasAsync(responseModel);
         }
 
-        private async Task<(decimal Scoring, decimal AllPoint, decimal Outcome)> PrequalificationCalculateScoring(ValueEntity inputValue, PrequalificationDesign d, bool hasAttachment)
+        private (decimal Scoring, decimal AllPoint, decimal Outcome) CalculateScoring(ValueEntity inputValue, PrequalificationDesign d, List<PrequalificationGridData> allDesignGrid, bool hasAttachment)
         {
-            List<PrequalificationGridData> dueGrid = null;
+
+            List<PrequalificationGridData> correspondingDesignGrid = null;
+
             if (d.HasGrid > 0)
-                dueGrid = await _repository.GetPrequalificationGridAsync(d.PrequalificationDesignId);
+                correspondingDesignGrid = allDesignGrid.Where(x => x.PreqqualificationDesignId == d.PrequalificationDesignId).ToList();
+
 
             decimal scoringSum = (!string.IsNullOrWhiteSpace(inputValue?.TextboxValue) ? d.HasTextbox : 0) +
                               (!string.IsNullOrWhiteSpace(inputValue?.TextareaValue) ? d.HasTextarea : 0) +
@@ -550,11 +558,11 @@ namespace SolaERP.Persistence.Services
                               (inputValue?.DecimalValue > 0 ? d.HasDecimal : 0) +
                               (inputValue?.DateTimeValue != null ? d.HasDateTime : 0) +
                               (hasAttachment ? d.HasAttachment : 0) +
-                              (dueGrid?.Count > 0 ? d.HasGrid : 0);
+                              (correspondingDesignGrid?.Count > 0 ? d.HasGrid : 0);
 
             decimal allPoint = d.HasAttachment +
                                d.HasCheckbox +
-                               d.HasList +
+                               //d.HasList +
                                d.HasDateTime +
                                d.HasDecimal +
                                d.HasGrid +
@@ -566,6 +574,7 @@ namespace SolaERP.Persistence.Services
             decimal scoring = 0;
             if (allPoint > 0)
                 scoring = (scoringSum / allPoint) * 100;
+
             decimal outcome = (scoring * d.Weight) / 100;
 
             return (scoring, allPoint, outcome);
