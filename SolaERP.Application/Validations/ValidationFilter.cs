@@ -21,7 +21,11 @@ namespace SolaERP.Application.Validations
                .Where(x => x.Value.Errors.Count > 0)
                .Select(x => x.Key.Split(".").Last())
                .ToList();
-                context.Result = new ObjectResult(ApiResponse<bool>.Fail(propert, errorTex, 422));
+                context.Result = new ObjectResult(ApiResponse<bool>.Fail(propert, errorTex, 422))
+                {
+                    StatusCode = 422,
+                    Value = ApiResponse<bool>.Fail(propert, errorTex, 422),
+                };
             }
 
 
