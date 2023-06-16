@@ -95,7 +95,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@VendorBankDetailId", bankDetail.VendorBankDetailId);
                 command.Parameters.AddWithValue(command, "@VendorId", bankDetail.VendorId);
                 command.Parameters.AddWithValue(command, "@Beneficiary", bankDetail.Beneficiary);
-                command.Parameters.AddWithValue(command, "@BeneficiaruTaxId", bankDetail.BeneficiaryTaxId);
+                command.Parameters.AddWithValue(command, "@BeneficiaruTaxId", bankDetail.BeneficiaruTaxId);
                 command.Parameters.AddWithValue(command, "@Address", bankDetail.Address);
                 command.Parameters.AddWithValue(command, "@AccountNumber", bankDetail.AccountNumber);
                 command.Parameters.AddWithValue(command, "@Bank", bankDetail.Bank);
@@ -103,7 +103,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@BankCode", bankDetail.BankCode);
                 command.Parameters.AddWithValue(command, "@Currency", bankDetail.Currency);
                 command.Parameters.AddWithValue(command, "@BankTaxId", bankDetail.BankTaxId);
-                command.Parameters.AddWithValue(command, "@CoresspondentAccount", bankDetail.CorrespondentAccount);
+                command.Parameters.AddWithValue(command, "@CoresspondentAccount", bankDetail.CoresspondentAccount);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 using var reader = await command.ExecuteReaderAsync();
@@ -123,14 +123,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 VendorBankDetailId = 0,
                 VendorId = bankDetail.VendorId,
-                BeneficiaryTaxId = bankDetail.BeneficiaryTaxId,
+                BeneficiaruTaxId = bankDetail.BeneficiaruTaxId,
                 Bank = bankDetail.Bank,
                 BankCode = bankDetail.BankCode,
                 BankTaxId = bankDetail.BankTaxId,
                 Address = bankDetail.Address,
                 AccountNumber = bankDetail.AccountNumber,
                 SWIFT = bankDetail.SWIFT,
-                CorrespondentAccount = bankDetail.CorrespondentAccount,
+                CoresspondentAccount = bankDetail.CoresspondentAccount,
                 Beneficiary = bankDetail.Beneficiary,
                 Currency = bankDetail.Currency,
             });

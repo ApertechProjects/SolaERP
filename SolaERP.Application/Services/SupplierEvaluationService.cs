@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Html;
 using Microsoft.Extensions.Options;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
@@ -6,11 +7,13 @@ using SolaERP.Application.Dtos.Attachment;
 using SolaERP.Application.Dtos.BusinessUnit;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.SupplierEvaluation;
+using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
+using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
 using SolaERP.Application.Shared;
 using SolaERP.Application.UnitOfWork;
@@ -29,6 +32,9 @@ namespace SolaERP.Persistence.Services
         private readonly IAttachmentRepository _attachmentRepository;
         private readonly IStorage _storage;
         private readonly IOptions<StorageOption> _storageOption;
+        private readonly IEmailNotificationService _emailNotificationService;
+        private readonly IMailService _mailService;
+        private readonly IUserService _userService;
 
         public SupplierEvaluationService(ISupplierEvaluationRepository repository,
                                          IMapper mapper,
@@ -38,7 +44,10 @@ namespace SolaERP.Persistence.Services
                                          IVendorRepository vendorRepository,
                                          IAttachmentRepository attachmentRepository,
                                          IStorage storage,
-                                         IOptions<StorageOption> storageOption)
+                                         IOptions<StorageOption> storageOption,
+                                         IEmailNotificationService emailNotificationService,
+                                         IMailService mailService,
+                                         IUserService userService)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
@@ -50,6 +59,7 @@ namespace SolaERP.Persistence.Services
             _attachmentRepository = attachmentRepository;
             _storage = storage;
             _storageOption = storageOption;
+            _emailNotificationService = emailNotificationService;
         }
 
         public async Task<ApiResponse<bool>> AddAsync(string useridentity, SupplierRegisterCommand command)
@@ -452,6 +462,47 @@ namespace SolaERP.Persistence.Services
 
             var submitResult = await _vendorRepository.VendorChangeStatus(user.VendorId, 1, user.Id);
             await _unitOfWork.SaveChangesAsync();
+
+            //List<Task> emails = new List<Task>();
+            //Language language = user.Language.GetLanguageEnumValue();
+            //var companyName = await _emailNotificationService.GetCompanyName(user.Email);
+            //#region RegistratedUser
+            //var templateDataForRegistrationPending = await _emailNotificationService.GetEmailTemplateData(language, EmailTemplateKey.RGA);
+            //VM_RegistrationPending registrationPending = new VM_RegistrationPending()
+            //{
+            //    FullName = user.FullName,
+            //    UserName = user.UserName,
+            //    Header = templateDataForRegistrationPending.Header,
+            //    Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, user.UserName)),
+            //    Language = language,
+            //    CompanyName = companyName,
+            //};
+
+            //Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject, registrationPending, registrationPending.TemplateName(), registrationPending.ImageName(), new List<string> { user.Email });
+            //emails.Add(VerEmail);
+
+            //var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
+            //for (int i = 0; i < Enum.GetNames(typeof(Language)).Length; i++)
+            //{
+            //    string enumElement = Enum.GetNames(typeof(Language))[i];
+            //    var sendUsers = await _userService.GetAdminUsersAsync(1, enumElement.GetLanguageEnumValue());
+            //    if (sendUsers.Count > 0)
+            //    {
+            //        var templateData = templates[i];
+            //        VM_RegistrationIsPendingAdminApprove adminApprove = new VM_RegistrationIsPendingAdminApprove()
+            //        {
+            //            Body = new HtmlString(templateData.Body),
+            //            CompanyName = companyName,
+            //            Header = templateData.Header,
+            //            UserName = userData.UserName,
+            //            CompanyOrVendorName = companyName,
+            //            Language = templateData.Language.GetLanguageEnumValue(),
+            //        };
+            //        Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), sendUsers);
+            //        emails.Add(RegEmail);
+            //    }
+            //}
+            //await Task.WhenAll(emails);
 
             if (result.Data && submitResult)
                 return ApiResponse<bool>.Success(submitResult);
