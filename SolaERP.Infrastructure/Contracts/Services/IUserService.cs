@@ -38,6 +38,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> DeleteGroupFromUserAsync(List<int> groupsIds, int userId);
         Task<ApiResponse<UserDto>> GetUserByNameAsync(string name);
         Task<ApiResponse<bool>> ConfirmEmail(string verifyToken);
+        Task<string> CheckUserType(string verifyToken);
         Task<bool> CheckEmailIsVerified(string email);
         Task<UserData> GetUserDataByVerifyTokenAsync(string verifyToken);
         Task<List<string>> GetAdminUsersAsync(int sequence, Language language);

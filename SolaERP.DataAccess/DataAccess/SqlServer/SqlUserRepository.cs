@@ -626,6 +626,21 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
+        public async Task<string> CheckUserType(string verifyToken)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "Select dbo.SF_GetUserTypeByVerify(@verifyToken) VerifyToken";
+                command.Parameters.AddWithValue(command, "@verifyToken", verifyToken);
+                using var reader = await command.ExecuteReaderAsync();
+                string res = string.Empty;
+                if (reader.Read())
+                    res = reader.Get<string>("VerifyToken");
+
+                return res;
+            }
+        }
+
         #endregion
     }
 }

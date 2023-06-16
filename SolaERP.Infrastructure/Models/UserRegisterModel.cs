@@ -19,7 +19,7 @@ namespace SolaERP.Application.Models
         public int VendorId { get; set; }
         [JsonIgnore]
         public Guid UserToken { get; set; }
-        public UserRegisterType UserType { get; set; }
+        public int UserTypeId { get; set; }
         [JsonIgnore]
         public string VerifyToken { get; set; }
         public Language Language { get; set; }

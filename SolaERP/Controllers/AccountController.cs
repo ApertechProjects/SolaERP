@@ -94,50 +94,55 @@ namespace SolaERP.Controllers
             var result = await _userService.ConfirmEmail(verifyToken);
             if (result.StatusCode == 200)
             {
-                UserData userData = await _userService.GetUserDataByVerifyTokenAsync(verifyToken);
-                Language language = userData.Language.GetLanguageEnumValue();
-                var companyName = await _emailNotificationService.GetCompanyName(userData.Email);
-                #region RegistratedUser
-                var templateDataForRegistrationPending = await _emailNotificationService.GetEmailTemplateData(language, EmailTemplateKey.RGA);
-                VM_RegistrationPending registrationPending = new VM_RegistrationPending()
+                var userType = await _userService.CheckUserType(verifyToken);
+                if (userType == "0")
+                    return CreateActionResult(result);
+                else
                 {
-                    FullName = userData.FullName,
-                    UserName = userData.UserName,
-                    Header = templateDataForRegistrationPending.Header,
-                    Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, userData.UserName)),
-                    Language = language,
-                    CompanyName = companyName,
-                };
-
-                Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject, registrationPending, registrationPending.TemplateName(), registrationPending.ImageName(), new List<string> { userData.Email });
-                emails.Add(VerEmail);
-
-                #endregion
-                #region AdminUsers
-                var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
-                for (int i = 0; i < Enum.GetNames(typeof(Language)).Length; i++)
-                {
-                    string enumElement = Enum.GetNames(typeof(Language))[i];
-                    var sendUsers = await _userService.GetAdminUsersAsync(1, enumElement.GetLanguageEnumValue());
-                    if (sendUsers.Count > 0)
+                    UserData userData = await _userService.GetUserDataByVerifyTokenAsync(verifyToken);
+                    Language language = userData.Language.GetLanguageEnumValue();
+                    var companyName = await _emailNotificationService.GetCompanyName(userData.Email);
+                    #region RegistratedUser
+                    var templateDataForRegistrationPending = await _emailNotificationService.GetEmailTemplateData(language, EmailTemplateKey.RGA);
+                    VM_RegistrationPending registrationPending = new VM_RegistrationPending()
                     {
-                        var templateData = templates[i];
-                        VM_RegistrationIsPendingAdminApprove adminApprove = new VM_RegistrationIsPendingAdminApprove()
-                        {
-                            Body = new HtmlString(templateData.Body),
-                            CompanyName = companyName,
-                            Header = templateData.Header,
-                            UserName = userData.UserName,
-                            CompanyOrVendorName = companyName,
-                            Language = templateData.Language.GetLanguageEnumValue(),
-                        };
-                        Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), sendUsers);
-                        emails.Add(RegEmail);
-                    }
-                }
+                        FullName = userData.FullName,
+                        UserName = userData.UserName,
+                        Header = templateDataForRegistrationPending.Header,
+                        Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, userData.UserName)),
+                        Language = language,
+                        CompanyName = companyName,
+                    };
 
-                await Task.WhenAll(emails);
-                #endregion
+                    Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject, registrationPending, registrationPending.TemplateName(), registrationPending.ImageName(), new List<string> { userData.Email });
+                    emails.Add(VerEmail);
+
+                    #endregion
+                    #region AdminUsers
+                    var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
+                    for (int i = 0; i < Enum.GetNames(typeof(Language)).Length; i++)
+                    {
+                        string enumElement = Enum.GetNames(typeof(Language))[i];
+                        var sendUsers = await _userService.GetAdminUsersAsync(1, enumElement.GetLanguageEnumValue());
+                        if (sendUsers.Count > 0)
+                        {
+                            var templateData = templates[i];
+                            VM_RegistrationIsPendingAdminApprove adminApprove = new VM_RegistrationIsPendingAdminApprove()
+                            {
+                                Body = new HtmlString(templateData.Body),
+                                CompanyName = companyName,
+                                Header = templateData.Header,
+                                UserName = userData.UserName,
+                                CompanyOrVendorName = companyName,
+                                Language = templateData.Language.GetLanguageEnumValue(),
+                            };
+                            Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), sendUsers);
+                            emails.Add(RegEmail);
+                        }
+                    }
+                    await Task.WhenAll(emails);
+                    #endregion
+                }
             }
             return CreateActionResult(result);
         }
