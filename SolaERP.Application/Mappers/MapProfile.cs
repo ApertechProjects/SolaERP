@@ -260,7 +260,7 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<AttachmentDto, AttachmentSaveModel>()
                  .ForMember(dest => dest.AttachmentId, opt => opt.MapFrom(src => src.AttachmentId))
-                 .ForMember(dest => dest.FileName, opt => opt.MapFrom(src => src.Name))
+                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                  .ForMember(dest => dest.Filebase64, opt => opt.MapFrom(src => src.FileBase64))
                  .ForMember(dest => dest.SourceId, opt => opt.MapFrom(src => src.SourceId))
                  .ForMember(dest => dest.SourceType, opt => opt.Ignore()) // SourceType does not exist in AttachmentDto

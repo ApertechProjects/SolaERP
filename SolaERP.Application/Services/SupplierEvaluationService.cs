@@ -73,11 +73,11 @@ namespace SolaERP.Persistence.Services
 
             int vendorId = await _vendorRepository.UpdateVendorAsync(user.Id, vendor);
 
-            var a = await _repository.DeleteRepresentedCompanyAsync(vendorId);
-            var ab = await _repository.DeleteRepresentedProductAsync(vendorId);
+            await _repository.DeleteRepresentedCompanyAsync(vendorId);
+            await _repository.DeleteRepresentedProductAsync(vendorId);
 
-            var ty = await _repository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", command?.CompanyInformation?.RepresentedCompanies) });
-            var tt = await _repository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", command?.CompanyInformation?.RepresentedProducts) });
+            await _repository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", command?.CompanyInformation?.RepresentedCompanies) });
+            await _repository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", command?.CompanyInformation?.RepresentedProducts) });
 
             var companyLogo = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.CompanyLogo);
             companyLogo.ForEach(companyLogo =>
@@ -88,7 +88,7 @@ namespace SolaERP.Persistence.Services
 
             for (int i = 0; i < companyLogo.Count; i++)
             {
-                var aaaa = await _attachmentRepository.SaveAttachmentAsync(companyLogo[i]);
+                await _attachmentRepository.SaveAttachmentAsync(companyLogo[i]);
             }
 
             var attachments = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.Attachments);
@@ -100,7 +100,7 @@ namespace SolaERP.Persistence.Services
 
             for (int i = 0; i < attachments.Count; i++)
             {
-                var aaaaaa = await _attachmentRepository.SaveAttachmentAsync(attachments[i]);
+                await _attachmentRepository.SaveAttachmentAsync(attachments[i]);
             }
 
             command?.CodeOfBuConduct.ForEach(x => x.VendorId = vendorId);

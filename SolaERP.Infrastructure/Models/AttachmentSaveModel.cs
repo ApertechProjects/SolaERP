@@ -3,7 +3,7 @@
     public class AttachmentSaveModel
     {
         public int AttachmentId { get; set; }
-        public string FileName { get; set; }
+        public string Name { get; set; }
         public string Filebase64 { get; set; }
         public int SourceId { get; set; }
         public string SourceType { get; set; }

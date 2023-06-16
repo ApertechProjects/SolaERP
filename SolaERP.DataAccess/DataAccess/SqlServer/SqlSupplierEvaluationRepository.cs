@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Contracts.Repositories;
+﻿using Newtonsoft.Json.Linq;
+using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Enums;
@@ -7,6 +8,7 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
+using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -35,7 +37,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@RadioboxValue", vendorDueDiligence.RadioboxValue);
                 command.Parameters.AddWithValue(command, "@IntValue", vendorDueDiligence.IntValue);
                 command.Parameters.AddWithValue(command, "@DecimalValue", vendorDueDiligence.DecimalValue);
-                command.Parameters.AddWithValue(command, "@DateTimeValue", vendorDueDiligence.DateTimeValue.Value == DateTime.MinValue ? null : vendorDueDiligence.DateTimeValue.Value);
+                command.Parameters.AddWithValue(command, "@DateTimeValue", vendorDueDiligence.DateTimeValue.Value);
                 command.Parameters.AddWithValue(command, "@AgreementValue", vendorDueDiligence.AgreementValue);
                 command.Parameters.AddWithValue(command, "@Scoring", vendorDueDiligence.Scoring);
 
@@ -66,7 +68,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
         public async Task<bool> UpdateDueAsync(VendorDueDiligenceModel model)
-            => await ModifyDueDiligence(model);
+        {
+            if (model.DateTimeValue.Value.Date.Year < 1800)
+                model.DateTimeValue = null;
+            return await ModifyDueDiligence(model);
+        }
 
 
         public async Task<bool> DeleteDueAsync(int dueId)
@@ -554,7 +560,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<bool> AddPrequalification(VendorPrequalificationValues value)
         {
-            var date = value.DateTimeValue.Value == DateTime.MinValue ? null : value.DateTimeValue;
+            if (value.DateTimeValue.Value.Date.Year < 1800)
+                value.DateTimeValue = null;
             return await ModifyPrequalificationAsync(new()
             {
                 VendorPrequalificationId = 0,
@@ -566,7 +573,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RadioboxValue = value.RadioboxValue,
                 IntValue = value.IntValue,
                 DecimalValue = value.DecimalValue,
-                DateTimeValue = date,
+                DateTimeValue = value.DateTimeValue,
                 Scoring = value.Scoring,
             });
         }
@@ -579,6 +586,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         private async Task<bool> ModifyPrequalificationAsync(VendorPrequalificationValues values)
         {
+            if (values.DateTimeValue.Value.Date.Year < 1800)
+                values.DateTimeValue = null;
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorPrequalification_IUD @VendorPrequalificationId,
@@ -603,7 +612,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@RadioboxValue", values.RadioboxValue);
                 command.Parameters.AddWithValue(command, "@IntValue", values.IntValue);
                 command.Parameters.AddWithValue(command, "@DecimalValue", values.DecimalValue);
-                command.Parameters.AddWithValue(command, "@DateTimeValue", values.DateTimeValue.Value == DateTime.MinValue ? null : values.DateTimeValue.Value);
+                command.Parameters.AddWithValue(command, "@DateTimeValue", values.DateTimeValue.Value);
                 command.Parameters.AddWithValue(command, "@Scoring", values.Scoring);
 
                 return await command.ExecuteNonQueryAsync() > 0;
