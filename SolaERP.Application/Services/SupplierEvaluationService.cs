@@ -17,6 +17,7 @@ using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
 using SolaERP.Application.Shared;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.Persistence.TemporaryModel;
 using PrequalificationGridData = SolaERP.Application.Entities.SupplierEvaluation.PrequalificationGridData;
 
 namespace SolaERP.Persistence.Services
@@ -60,6 +61,8 @@ namespace SolaERP.Persistence.Services
             _storage = storage;
             _storageOption = storageOption;
             _emailNotificationService = emailNotificationService;
+            _mailService = mailService;
+            _userService = userService;
         }
 
         public async Task<ApiResponse<bool>> AddAsync(string useridentity, SupplierRegisterCommand command)
@@ -70,11 +73,11 @@ namespace SolaERP.Persistence.Services
 
             int vendorId = await _vendorRepository.UpdateVendorAsync(user.Id, vendor);
 
-            await _repository.DeleteRepresentedCompanyAsync(vendorId);
-            await _repository.DeleteRepresentedProductAsync(vendorId);
+            var a = await _repository.DeleteRepresentedCompanyAsync(vendorId);
+            var ab = await _repository.DeleteRepresentedProductAsync(vendorId);
 
-            await _repository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", command?.CompanyInformation?.RepresentedCompanies) });
-            await _repository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", command?.CompanyInformation?.RepresentedProducts) });
+            var ty = await _repository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", command?.CompanyInformation?.RepresentedCompanies) });
+            var tt = await _repository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", command?.CompanyInformation?.RepresentedProducts) });
 
             var companyLogo = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.CompanyLogo);
             companyLogo.ForEach(companyLogo =>
@@ -85,7 +88,7 @@ namespace SolaERP.Persistence.Services
 
             for (int i = 0; i < companyLogo.Count; i++)
             {
-                await _attachmentRepository.SaveAttachmentAsync(companyLogo[i]);
+                var aaaa = await _attachmentRepository.SaveAttachmentAsync(companyLogo[i]);
             }
 
             var attachments = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.Attachments);
@@ -97,7 +100,7 @@ namespace SolaERP.Persistence.Services
 
             for (int i = 0; i < attachments.Count; i++)
             {
-                await _attachmentRepository.SaveAttachmentAsync(attachments[i]);
+                var aaaaaa = await _attachmentRepository.SaveAttachmentAsync(attachments[i]);
             }
 
             command?.CodeOfBuConduct.ForEach(x => x.VendorId = vendorId);
@@ -463,49 +466,52 @@ namespace SolaERP.Persistence.Services
             var submitResult = await _vendorRepository.VendorChangeStatus(user.VendorId, 1, user.Id);
             await _unitOfWork.SaveChangesAsync();
 
-            //List<Task> emails = new List<Task>();
-            //Language language = user.Language.GetLanguageEnumValue();
-            //var companyName = await _emailNotificationService.GetCompanyName(user.Email);
-            //#region RegistratedUser
-            //var templateDataForRegistrationPending = await _emailNotificationService.GetEmailTemplateData(language, EmailTemplateKey.RGA);
-            //VM_RegistrationPending registrationPending = new VM_RegistrationPending()
-            //{
-            //    FullName = user.FullName,
-            //    UserName = user.UserName,
-            //    Header = templateDataForRegistrationPending.Header,
-            //    Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, user.UserName)),
-            //    Language = language,
-            //    CompanyName = companyName,
-            //};
+            List<Task> emails = new List<Task>();
+            Language language = "en".GetLanguageEnumValue();
+            var companyName = await _emailNotificationService.GetCompanyName(user.Email);
+            var templateDataForRegistrationPending = await _emailNotificationService.GetEmailTemplateData(language, EmailTemplateKey.RGA);
+            VM_RegistrationPending registrationPending = new VM_RegistrationPending()
+            {
+                FullName = user.FullName,
+                UserName = user.UserName,
+                Header = templateDataForRegistrationPending.Header,
+                Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, user.UserName)),
+                Language = language,
+                CompanyName = companyName,
+            };
 
-            //Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject, registrationPending, registrationPending.TemplateName(), registrationPending.ImageName(), new List<string> { user.Email });
-            //emails.Add(VerEmail);
+            Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject,
+                                                           registrationPending,
+                                                           registrationPending.TemplateName(),
+                                                           registrationPending.ImageName(),
+                                                           new List<string> { user.Email });
+            emails.Add(VerEmail);
 
-            //var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
-            //for (int i = 0; i < Enum.GetNames(typeof(Language)).Length; i++)
-            //{
-            //    string enumElement = Enum.GetNames(typeof(Language))[i];
-            //    var sendUsers = await _userService.GetAdminUsersAsync(1, enumElement.GetLanguageEnumValue());
-            //    if (sendUsers.Count > 0)
-            //    {
-            //        var templateData = templates[i];
-            //        VM_RegistrationIsPendingAdminApprove adminApprove = new VM_RegistrationIsPendingAdminApprove()
-            //        {
-            //            Body = new HtmlString(templateData.Body),
-            //            CompanyName = companyName,
-            //            Header = templateData.Header,
-            //            UserName = userData.UserName,
-            //            CompanyOrVendorName = companyName,
-            //            Language = templateData.Language.GetLanguageEnumValue(),
-            //        };
-            //        Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), sendUsers);
-            //        emails.Add(RegEmail);
-            //    }
-            //}
-            //await Task.WhenAll(emails);
+            var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
+            for (int i = 0; i < Enum.GetNames(typeof(Language)).Length; i++)
+            {
+                string enumElement = Enum.GetNames(typeof(Language))[i];
+                var sendUsers = await _userService.GetAdminUsersAsync(1, enumElement.GetLanguageEnumValue());
+                if (sendUsers.Count > 0)
+                {
+                    var templateData = templates[i];
+                    VM_RegistrationIsPendingAdminApprove adminApprove = new VM_RegistrationIsPendingAdminApprove()
+                    {
+                        Body = new HtmlString(templateData.Body),
+                        CompanyName = companyName,
+                        Header = templateData.Header,
+                        UserName = user.UserName,
+                        CompanyOrVendorName = companyName,
+                        Language = templateData.Language.GetLanguageEnumValue(),
+                    };
+                    Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), sendUsers);
+                    emails.Add(RegEmail);
+                }
+            }
+            await Task.WhenAll(emails);
 
             if (result.Data && submitResult)
-                return ApiResponse<bool>.Success(submitResult);
+                return ApiResponse<bool>.Success(200);
 
             return ApiResponse<bool>.Fail(false, 400);
         }
