@@ -598,12 +598,10 @@ namespace SolaERP.Persistence.Services
 
         private (decimal Scoring, decimal AllPoint, decimal Outcome) CalculateScoring(ValueEntity inputValue, PrequalificationDesign d, List<PrequalificationGridData> allDesignGrid, bool hasAttachment)
         {
-
             List<PrequalificationGridData> correspondingDesignGrid = null;
 
             if (d.HasGrid > 0)
                 correspondingDesignGrid = allDesignGrid.Where(x => x.PreqqualificationDesignId == d.PrequalificationDesignId).ToList();
-
 
             decimal scoringSum = (!string.IsNullOrWhiteSpace(inputValue?.TextboxValue) ? d.HasTextbox : 0) +
                               (!string.IsNullOrWhiteSpace(inputValue?.TextareaValue) ? d.HasTextarea : 0) +
