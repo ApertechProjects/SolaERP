@@ -60,10 +60,8 @@ namespace SolaERP.Persistence.Services
 
             int vendorId = await _vendorRepository.UpdateVendorAsync(user.Id, vendor);
 
-
             await _repository.DeleteRepresentedCompanyAsync(vendorId);
             await _repository.DeleteRepresentedProductAsync(vendorId);
-
 
             await _repository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", command?.CompanyInformation?.RepresentedCompanies) });
             await _repository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", command?.CompanyInformation?.RepresentedProducts) });
@@ -562,7 +560,6 @@ namespace SolaERP.Persistence.Services
 
             decimal allPoint = d.HasAttachment +
                                d.HasCheckbox +
-                               //d.HasList +
                                d.HasDateTime +
                                d.HasDecimal +
                                d.HasGrid +
