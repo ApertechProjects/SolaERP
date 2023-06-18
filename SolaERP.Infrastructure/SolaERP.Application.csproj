@@ -9,19 +9,17 @@
   <ItemGroup>
     <Compile Remove="Entities\ApproveStage\**" />
     <Compile Remove="Entities\Log\**" />
-    <Compile Remove="ViewModels\**" />
     <EmbeddedResource Remove="Entities\ApproveStage\**" />
     <EmbeddedResource Remove="Entities\Log\**" />
-    <EmbeddedResource Remove="ViewModels\**" />
     <None Remove="Entities\ApproveStage\**" />
     <None Remove="Entities\Log\**" />
-    <None Remove="ViewModels\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.0" />
     <PackageReference Include="FluentValidation" Version="11.3.0" />
     <PackageReference Include="MediatR" Version="12.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Html.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />

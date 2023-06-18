@@ -7,7 +7,6 @@ using SolaERP.Application.Dtos.Attachment;
 using SolaERP.Application.Dtos.BusinessUnit;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.SupplierEvaluation;
-using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.SupplierEvaluation;
@@ -17,7 +16,7 @@ using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
 using SolaERP.Application.Shared;
 using SolaERP.Application.UnitOfWork;
-using SolaERP.Persistence.TemporaryModel;
+using SolaERP.Infrastructure.ViewModels;
 using PrequalificationGridData = SolaERP.Application.Entities.SupplierEvaluation.PrequalificationGridData;
 
 namespace SolaERP.Persistence.Services
