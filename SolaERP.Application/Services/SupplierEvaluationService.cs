@@ -474,7 +474,7 @@ namespace SolaERP.Persistence.Services
                 FullName = user.FullName,
                 UserName = user.UserName,
                 Header = templateDataForRegistrationPending.Header,
-                Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, user.UserName)),
+                Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, user.FullName)),
                 Language = language,
                 CompanyName = companyName,
             };

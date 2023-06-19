@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Group;
@@ -8,8 +10,10 @@ using SolaERP.Application.Dtos.UserDto;
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Enums;
+using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.Infrastructure.ViewModels;
 using SolaERP.Persistence.Utils;
 
 namespace SolaERP.Persistence.Services
@@ -21,13 +25,15 @@ namespace SolaERP.Persistence.Services
         private readonly IMailService _mailService;
         private readonly IMapper _mapper;
         private readonly ITokenHandler _tokenHandler;
+        private readonly IEmailNotificationService _emailNotificationService;
         //private readonly IFileProducer _producer;
 
         public UserService(IUserRepository userRepository,
                            IUnitOfWork unitOfWork,
                            IMapper mapper,
                            IMailService mailService,
-                           ITokenHandler tokenHandler)
+                           ITokenHandler tokenHandler,
+                           IEmailNotificationService emailNotificationService)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
@@ -35,6 +41,7 @@ namespace SolaERP.Persistence.Services
             _mapper = mapper;
             _tokenHandler = tokenHandler;
             //_producer = producer;
+            _emailNotificationService = emailNotificationService;
         }
 
 
@@ -71,7 +78,6 @@ namespace SolaERP.Persistence.Services
             var userDto = _mapper.Map<UserDto>(userDatas);
             return userDto;
         }
-
 
 
         public async Task<ApiResponse<bool>> ResetPasswordAsync(ResetPasswordModel resetPasswordRequestDto)
@@ -369,6 +375,59 @@ namespace SolaERP.Persistence.Services
             var user = await _userRepository.ConfirmEmail(verifyToken);
             await _unitOfWork.SaveChangesAsync();
 
+            if (user)
+            {
+                var userType = await CheckUserType(verifyToken);
+                if (userType == "0")
+                    return ApiResponse<bool>.Success(true, 200);
+                else
+                {
+                    List<Task> emails = new List<Task>();
+                    UserData userData = await GetUserDataByVerifyTokenAsync(verifyToken);
+                    Language language = userData.Language.GetLanguageEnumValue();
+                    var companyName = await _emailNotificationService.GetCompanyName(userData.Email);
+                    #region RegistratedUser
+                    var templateDataForRegistrationPending = await _emailNotificationService.GetEmailTemplateData(language, EmailTemplateKey.RGA);
+                    VM_RegistrationPending registrationPending = new VM_RegistrationPending()
+                    {
+                        FullName = userData.FullName,
+                        UserName = userData.UserName,
+                        Header = templateDataForRegistrationPending.Header,
+                        Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, userData.FullName)),
+                        Language = language,
+                        CompanyName = companyName,
+                    };
+
+                    Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject, registrationPending, registrationPending.TemplateName(), registrationPending.ImageName(), new List<string> { userData.Email });
+                    emails.Add(VerEmail);
+
+                    #endregion
+                    #region AdminUsers
+                    var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
+                    for (int i = 0; i < Enum.GetNames(typeof(Language)).Length; i++)
+                    {
+                        string enumElement = Enum.GetNames(typeof(Language))[i];
+                        var sendUsers = await GetAdminUsersAsync(1, enumElement.GetLanguageEnumValue());
+                        if (sendUsers.Count > 0)
+                        {
+                            var templateData = templates[i];
+                            VM_RegistrationIsPendingAdminApprove adminApprove = new VM_RegistrationIsPendingAdminApprove()
+                            {
+                                Body = new HtmlString(templateData.Body),
+                                CompanyName = companyName,
+                                Header = templateData.Header,
+                                UserName = userData.UserName,
+                                CompanyOrVendorName = companyName,
+                                Language = templateData.Language.GetLanguageEnumValue(),
+                            };
+                            Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), sendUsers);
+                            emails.Add(RegEmail);
+                        }
+                    }
+                    await Task.WhenAll(emails);
+                    #endregion
+                }
+            }
             if (user)
                 return ApiResponse<bool>.Success(true, 200);
 
