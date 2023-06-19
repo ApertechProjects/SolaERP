@@ -29,8 +29,8 @@ namespace SolaERP.Infrastructure.ViewModels
         {
             return Language switch
             {
-                Language.az => new HtmlString(string.Format(Body?.ToString(), @$"<a href={_configuration["Mail:ServerUrlUI"]}>Müştəri Portalına</a>")),
-                Language.en => new HtmlString(string.Format(Body?.ToString(), @$"<a href={_configuration["Mail:ServerUrlUI"]}>Client Portal</a>")),
+                Language.az => new HtmlString(string.Format(Body?.ToString(), @$"<b><a href={_configuration["Mail:ServerUrlUI"]}>Müştəri Portalına</a></b>")),
+                Language.en => new HtmlString(string.Format(Body?.ToString(), @$"<b><a href={_configuration["Mail:ServerUrlUI"]}>Client Portal</a></b>")),
             };
         }
 

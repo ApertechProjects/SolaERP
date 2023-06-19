@@ -76,6 +76,7 @@ namespace SolaERP.Persistence.Services
             await _repository.DeleteRepresentedProductAsync(vendorId);
 
             await _repository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", command?.CompanyInformation?.RepresentedCompanies) });
+
             await _repository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", command?.CompanyInformation?.RepresentedProducts) });
 
             var companyLogo = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.CompanyLogo);
@@ -102,9 +103,9 @@ namespace SolaERP.Persistence.Services
                 await _attachmentRepository.SaveAttachmentAsync(attachments[i]);
             }
 
-            command?.CodeOfBuConduct.ForEach(x => x.VendorId = vendorId);
-            command?.NonDisclosureAgreement.ForEach(x => x.VendorId = vendorId);
-            command?.BankAccounts.ForEach(x => x.VendorId = vendorId);
+            command?.CodeOfBuConduct?.ForEach(x => x.VendorId = vendorId);
+            command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
+            command?.BankAccounts?.ForEach(x => x.VendorId = vendorId);
 
 
             List<Task<bool>> tasks = new();
@@ -179,14 +180,18 @@ namespace SolaERP.Persistence.Services
 
 
             command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
-            tasks.AddRange(command?.NonDisclosureAgreement?.Select(x => _repository.AddNDAAsync(_mapper.Map<VendorNDA>(x))));
+            if (command?.NonDisclosureAgreement != null && command?.NonDisclosureAgreement?.Count > 0)
+                tasks.AddRange(command?.NonDisclosureAgreement?.Select(x => _repository.AddNDAAsync(_mapper.Map<VendorNDA>(x))));
 
 
             command?.CodeOfBuConduct?.ForEach(x => x.VendorId = vendorId);
-            tasks.AddRange(command?.CodeOfBuConduct?.Select(x => _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(x))));
+
+            if (command?.CodeOfBuConduct != null && command?.CodeOfBuConduct?.Count > 0)
+                tasks.AddRange(command?.CodeOfBuConduct?.Select(x => _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(x))));
 
             await Task.WhenAll(tasks);
             await _unitOfWork.SaveChangesAsync();
+
             return ApiResponse<bool>.Success(tasks.All(x => x.Result), 200);
         }
 
@@ -314,11 +319,11 @@ namespace SolaERP.Persistence.Services
                  .ToList();
 
             CompanyInfoDto companyInfo = _mapper.Map<CompanyInfoDto>(companyInfoTask.Result);
-            companyInfo.PrequalificationCategories = matchedPrequalificationTypes;
+            companyInfo.PrequalificationTypes = matchedPrequalificationTypes;
             companyInfo.BusinessCategories = matchedBuCategories;
             companyInfo.CompanyLogo = _mapper.Map<List<AttachmentDto>>(venLogoAttachmentTask.Result);
             companyInfo.Attachments = _mapper.Map<List<AttachmentDto>>(venOletAttachmentTask.Result);
-            companyInfo.ProductServices = matchedProductServices;
+            companyInfo.Services = matchedProductServices;
 
             VM_GET_InitalRegistration viewModel = new()
             {
@@ -510,7 +515,7 @@ namespace SolaERP.Persistence.Services
             await Task.WhenAll(emails);
 
             if (result.Data && submitResult)
-                return ApiResponse<bool>.Success(200);
+                return ApiResponse<bool>.Success(true,200);
 
             return ApiResponse<bool>.Fail(false, 400);
         }

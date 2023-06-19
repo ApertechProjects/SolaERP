@@ -19,30 +19,39 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         private async Task<bool> ModifyDueDiligence(VendorDueDiligenceModel vendorDueDiligence)
         {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            try
             {
-                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorDueDiligence_IUD @VendorDueDiligenceId,
+                using (var command = _unitOfWork.CreateCommand() as DbCommand)
+                {
+                    command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorDueDiligence_IUD @VendorDueDiligenceId,
                                                                        @DueDiligenceDesignId,@VendorId
                                                                       ,@TextboxValue,@TextareaValue
                                                                       ,@CheckboxValue,@RadioboxValue
                                                                       ,@IntValue,@DecimalValue
                                                                       ,@DateTimeValue,@AgreementValue,@Scoring";
 
-                command.Parameters.AddWithValue(command, "@VendorDueDiligenceId", vendorDueDiligence.VendorDueDiligenceId);
-                command.Parameters.AddWithValue(command, "@DueDiligenceDesignId", vendorDueDiligence.DesignId);
-                command.Parameters.AddWithValue(command, "@VendorId", vendorDueDiligence.VendorId);
-                command.Parameters.AddWithValue(command, "@TextboxValue", vendorDueDiligence.TextboxValue);
-                command.Parameters.AddWithValue(command, "@TextareaValue", vendorDueDiligence.TextareaValue);
-                command.Parameters.AddWithValue(command, "@CheckboxValue", vendorDueDiligence.CheckboxValue);
-                command.Parameters.AddWithValue(command, "@RadioboxValue", vendorDueDiligence.RadioboxValue);
-                command.Parameters.AddWithValue(command, "@IntValue", vendorDueDiligence.IntValue);
-                command.Parameters.AddWithValue(command, "@DecimalValue", vendorDueDiligence.DecimalValue);
-                command.Parameters.AddWithValue(command, "@DateTimeValue", vendorDueDiligence.DateTimeValue.Value);
-                command.Parameters.AddWithValue(command, "@AgreementValue", vendorDueDiligence.AgreementValue);
-                command.Parameters.AddWithValue(command, "@Scoring", vendorDueDiligence.Scoring);
+                    command.Parameters.AddWithValue(command, "@VendorDueDiligenceId", vendorDueDiligence.VendorDueDiligenceId);
+                    command.Parameters.AddWithValue(command, "@DueDiligenceDesignId", vendorDueDiligence.DesignId);
+                    command.Parameters.AddWithValue(command, "@VendorId", vendorDueDiligence.VendorId);
+                    command.Parameters.AddWithValue(command, "@TextboxValue", vendorDueDiligence.TextboxValue);
+                    command.Parameters.AddWithValue(command, "@TextareaValue", vendorDueDiligence.TextareaValue);
+                    command.Parameters.AddWithValue(command, "@CheckboxValue", vendorDueDiligence.CheckboxValue);
+                    command.Parameters.AddWithValue(command, "@RadioboxValue", vendorDueDiligence.RadioboxValue);
+                    command.Parameters.AddWithValue(command, "@IntValue", vendorDueDiligence.IntValue);
+                    command.Parameters.AddWithValue(command, "@DecimalValue", vendorDueDiligence.DecimalValue);
+                    command.Parameters.AddWithValue(command, "@DateTimeValue", vendorDueDiligence.DateTimeValue);
+                    command.Parameters.AddWithValue(command, "@AgreementValue", vendorDueDiligence.AgreementValue);
+                    command.Parameters.AddWithValue(command, "@Scoring", vendorDueDiligence.Scoring);
 
 
-                return await command.ExecuteNonQueryAsync() > 0;
+                    return await command.ExecuteNonQueryAsync() > 0;
+                }
+
+            }
+            catch (Exception ex) 
+            {
+                Console.WriteLine(ex.Message);
+                return false;
             }
 
         }
@@ -612,7 +621,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@RadioboxValue", values.RadioboxValue);
                 command.Parameters.AddWithValue(command, "@IntValue", values.IntValue);
                 command.Parameters.AddWithValue(command, "@DecimalValue", values.DecimalValue);
-                command.Parameters.AddWithValue(command, "@DateTimeValue", values.DateTimeValue.Value);
+                command.Parameters.AddWithValue(command, "@DateTimeValue", values.DateTimeValue);
                 command.Parameters.AddWithValue(command, "@Scoring", values.Scoring);
 
                 return await command.ExecuteNonQueryAsync() > 0;
