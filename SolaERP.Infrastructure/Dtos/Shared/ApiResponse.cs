@@ -8,7 +8,7 @@ namespace SolaERP.Application.Dtos.Shared
     {
         public T Data { get; set; }
         public int StatusCode { get; set; }
-        public string Errors { get; set; }
+        public object Errors { get; set; }
         public int TotalData { get; set; }
         public object ResultData { get; set; }
 
@@ -43,9 +43,9 @@ namespace SolaERP.Application.Dtos.Shared
             return new ApiResponse<T> { Errors = error, StatusCode = statusCode, Data = GetEmptyArrayIfCollection<T>() };
         }
 
-        public static ApiResponse<T> Fail(object resultData, int statusCode)
+        public static ApiResponse<T> Fail(object errors, int statusCode)
         {
-            return new ApiResponse<T> { ResultData = resultData, StatusCode = statusCode };
+            return new ApiResponse<T> { Errors = errors, StatusCode = statusCode };
         }
 
         public static ApiResponse<bool> Fail(string propertyName, string error, int statusCode)
@@ -55,9 +55,7 @@ namespace SolaERP.Application.Dtos.Shared
                 { char.ToLower(propertyName[0]) + propertyName.Substring(1), error }
             };
 
-            var jsonResult = JsonConvert.SerializeObject(errorss);
-
-            return new ApiResponse<bool> { Errors = jsonResult, StatusCode = statusCode, Data = false };
+            return new ApiResponse<bool> { Errors = errorss, StatusCode = statusCode, Data = false };
         }
 
 
@@ -68,9 +66,7 @@ namespace SolaERP.Application.Dtos.Shared
                 { char.ToLower(propertyName[0]) + propertyName.Substring(1), error }
             };
 
-            var jsonResult = JsonConvert.SerializeObject(errorss);
-
-            return new ApiResponse<T> { Errors = jsonResult, StatusCode = statusCode };
+            return new ApiResponse<T> { Errors = errorss, StatusCode = statusCode };
         }
 
         public static ApiResponse<T> Fail(List<string> propertyName, List<ModelErrorCollection> error, int statusCode)
@@ -81,11 +77,9 @@ namespace SolaERP.Application.Dtos.Shared
                 errorss.Add(char.ToLower(propertyName[i][0]) + propertyName[i].Substring(1), error[i][0].ErrorMessage);
             }
 
-            string jsonResult = JsonConvert.SerializeObject(errorss);
-
             return new ApiResponse<T>
             {
-                Errors = jsonResult,
+                Errors = errorss,
                 StatusCode = statusCode
             };
         }
