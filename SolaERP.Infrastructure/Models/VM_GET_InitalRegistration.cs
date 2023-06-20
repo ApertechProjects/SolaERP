@@ -12,6 +12,7 @@ namespace SolaERP.Application.Models
         public List<PrequalificationCategory> PrequalificationTypes { get; set; }
         public List<PaymentTerms> PaymentTerms { get; set; }
         public List<ProductService> Services { get; set; }
+        public List<Country> Countries { get; set; }
 
     }
 }

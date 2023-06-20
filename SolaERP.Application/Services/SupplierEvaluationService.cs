@@ -295,6 +295,7 @@ namespace SolaERP.Persistence.Services
             var venLogoAttachmentTask = _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_LOGO.ToString());
             var venOletAttachmentTask = _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_OLET.ToString());
             var productServicesTask = _repository.GetProductServicesAsync();
+            var countries = _repository.GetCountriesAsync();
 
             await Task.WhenAll(vendorPrequalificationTask,
                                 prequalificationTypesTask,
@@ -304,7 +305,8 @@ namespace SolaERP.Persistence.Services
                                 vendorProductsTask,
                                 venOletAttachmentTask,
                                 venLogoAttachmentTask,
-                                companyInfoTask);
+                                companyInfoTask,
+                                countries);
 
             var matchedPrequalificationTypes = prequalificationTypesTask.Result
                 .Where(x => vendorPrequalificationTask.Result.Select(y => y.PrequalificationCategoryId).Contains(x.Id))
@@ -333,6 +335,7 @@ namespace SolaERP.Persistence.Services
                 PrequalificationTypes = prequalificationTypesTask.Result,
                 Services = await _repository.GetProductServicesAsync(),
                 ContactPerson = _mapper.Map<ContactPersonDto>(user),
+                Countries = await countries,
             };
 
             return ApiResponse<VM_GET_InitalRegistration>.Success(viewModel, 200);
@@ -515,7 +518,7 @@ namespace SolaERP.Persistence.Services
             await Task.WhenAll(emails);
 
             if (result.Data && submitResult)
-                return ApiResponse<bool>.Success(true,200);
+                return ApiResponse<bool>.Success(true, 200);
 
             return ApiResponse<bool>.Fail(false, 400);
         }
