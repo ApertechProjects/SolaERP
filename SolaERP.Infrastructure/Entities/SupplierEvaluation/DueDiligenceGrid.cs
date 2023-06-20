@@ -13,5 +13,6 @@ namespace SolaERP.Application.Entities.SupplierEvaluation
         public string Column3 { get; set; }
         public string Column4 { get; set; }
         public string Column5 { get; set; }
+        public int Type { get; set; }
     }
 }

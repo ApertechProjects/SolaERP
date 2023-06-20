@@ -2,8 +2,10 @@
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Groups;
+using SolaERP.Application.Entities.Language;
 using SolaERP.Application.Entities.User;
 using SolaERP.Application.Enums;
+using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
@@ -50,7 +52,9 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
                 while (reader.Read())
                 {
+                    string languageString = reader.GetString("Language");
                     user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate", "VerifyToken", "Language");
+                    user.Language = languageString.GetLanguageEnumValue();
                 }
                 return user;
             }
@@ -162,7 +166,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@Inactive", entity.InActive);
                 command.Parameters.AddWithValue(command, "@ChangeUserId", entity.UserId);
                 command.Parameters.AddWithValue(command, "@VerifyToken", entity.VerifyToken);
-                command.Parameters.AddWithValue(command, "@Language", Language.en.ToString());
+                command.Parameters.AddWithValue(command, "@Language", Application.Enums.Language.en.ToString());
                 command.Parameters.AddOutPutParameter(command, "@NewId");
                 await command.ExecuteNonQueryAsync();
                 var result = Convert.ToInt32(command.Parameters["@NewId"].Value);
@@ -595,7 +599,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<List<string>> GetAdminUsersAsync(int sequence, Language language)
+        public async Task<List<string>> GetAdminUsersAsync(int sequence, Application.Enums.Language language)
         {
             List<string> userData = new List<string>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)

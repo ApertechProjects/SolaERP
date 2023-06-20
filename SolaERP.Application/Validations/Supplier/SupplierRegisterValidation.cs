@@ -10,11 +10,21 @@ namespace SolaERP.Persistence.Validations.Supplier
         {
             RuleFor(x => x.CompanyInformation).NotNull().NotEmpty()
                    .SetValidator(new CompanyValidation());
-
-            //RuleForEach(x => x.BankAccounts)
-            //    .SetValidator(new BankAccountsValidation());
+            When(x => x.DueDiligence != null, () =>
+            {
+                RuleForEach(x => x.DueDiligence).SetValidator(new DueDiligenceValidation());
+            });
         }
     }
+
+    public class DueDiligenceValidation : AbstractValidator<DueDiligenceChildDto>
+    {
+        public DueDiligenceValidation()
+        {
+            RuleFor(x => x.DesignId).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
+        }
+    }
+
     public class BankAccountsValidation : AbstractValidator<VendorBankDetailDto>
     {
         public BankAccountsValidation()

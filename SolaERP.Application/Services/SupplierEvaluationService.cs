@@ -17,6 +17,7 @@ using SolaERP.Application.Models;
 using SolaERP.Application.Shared;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Infrastructure.ViewModels;
+using System.Reflection.Emit;
 using PrequalificationGridData = SolaERP.Application.Entities.SupplierEvaluation.PrequalificationGridData;
 
 namespace SolaERP.Persistence.Services
@@ -80,6 +81,7 @@ namespace SolaERP.Persistence.Services
             await _repository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", command?.CompanyInformation?.RepresentedProducts) });
 
             var companyLogo = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.CompanyLogo);
+
             companyLogo.ForEach(companyLogo =>
             {
                 companyLogo.SourceId = vendorId;
@@ -88,7 +90,10 @@ namespace SolaERP.Persistence.Services
 
             for (int i = 0; i < companyLogo.Count; i++)
             {
-                await _attachmentRepository.SaveAttachmentAsync(companyLogo[i]);
+                if (companyLogo[i].Type == 2)
+                    await _attachmentRepository.DeleteAttachmentAsync(companyLogo[i].AttachmentId);
+                else
+                    await _attachmentRepository.SaveAttachmentAsync(companyLogo[i]);
             }
 
             var attachments = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.Attachments);
@@ -100,30 +105,42 @@ namespace SolaERP.Persistence.Services
 
             for (int i = 0; i < attachments.Count; i++)
             {
-                await _attachmentRepository.SaveAttachmentAsync(attachments[i]);
+                if (attachments[i].Type == 2)
+                    await _attachmentRepository.DeleteAttachmentAsync(attachments[i].AttachmentId);
+                else
+                    await _attachmentRepository.SaveAttachmentAsync(attachments[i]);
             }
 
             command?.CodeOfBuConduct?.ForEach(x => x.VendorId = vendorId);
             command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
             command?.BankAccounts?.ForEach(x => x.VendorId = vendorId);
 
-
             List<Task<bool>> tasks = new();
             foreach (var x in command.BankAccounts)
             {
-                var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x));
-                x.VendorId = vendorId;
-
-                if (x.AccountVerificationLetter != null)
+                if (x.Type == 2)
+                    await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
+                else
                 {
-                    tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
-                    {
-                        var entity = _mapper.Map<AttachmentSaveModel>(attachment);
-                        entity.SourceId = detaildId;
-                        entity.SourceType = SourceType.VEN_BNK.ToString();
+                    var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x));
+                    x.VendorId = vendorId;
 
-                        return _attachmentRepository.SaveAttachmentAsync(entity);
-                    }));
+                    if (x.AccountVerificationLetter != null)
+                    {
+                        if (x.Type == 2)
+                            tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
+                            {
+                                return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
+                            }));
+                        else
+                            tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
+                            {
+                                var entity = _mapper.Map<AttachmentSaveModel>(attachment);
+                                entity.SourceId = detaildId;
+                                entity.SourceType = SourceType.VEN_BNK.ToString();
+                                return _attachmentRepository.SaveAttachmentAsync(entity);
+                            }));
+                    }
                 }
             }
 
@@ -133,15 +150,21 @@ namespace SolaERP.Persistence.Services
                 var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
                 dueInputModel.VendorId = vendorId;
 
-                var itemTasks = new List<Task<bool>>
-                {
-                      _repository.UpdateDueAsync(dueInputModel)
-                };
+                var itemTasks = new List<Task<bool>>(); //
+                if (dueInputModel.Type == 2)
+                    itemTasks.Add(_repository.DeleteDueAsync(dueInputModel.VendorDueDiligenceId));
+                else
+                    itemTasks.Add(_repository.UpdateDueAsync(dueInputModel));
 
                 if (item.HasDataGrid == true)
                 {
                     itemTasks.AddRange(item.GridDatas.Select(gridData =>
-                        _repository.UpdateDueDesignGrid(_mapper.Map<DueDiligenceGridModel>(gridData))));
+                    {
+                        if (gridData.Type == 2)
+                            return _repository.DeleteDueDesignGrid(gridData.Id);
+                        else
+                            return _repository.UpdateDueDesignGrid(_mapper.Map<DueDiligenceGridModel>(gridData));
+                    }));
                 }
 
                 if (item.Attachments is not null)
@@ -471,8 +494,8 @@ namespace SolaERP.Persistence.Services
             await _unitOfWork.SaveChangesAsync();
 
             List<Task> emails = new List<Task>();
-            Language language = "en".GetLanguageEnumValue();
-            var companyName = await _emailNotificationService.GetCompanyName(user.Email);
+            Language language = user.Language.ToString().GetLanguageEnumValue();
+            var companyName = await _emailNotificationService.GetCompanyName(command.CompanyInformation.CompanyName);
             var templateDataForRegistrationPending = await _emailNotificationService.GetEmailTemplateData(language, EmailTemplateKey.RGA);
             VM_RegistrationPending registrationPending = new VM_RegistrationPending()
             {
@@ -508,14 +531,14 @@ namespace SolaERP.Persistence.Services
                         CompanyOrVendorName = companyName,
                         Language = templateData.Language.GetLanguageEnumValue(),
                     };
-                    Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), sendUsers);
+                    Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), new List<string> { "hulya.garibli@apertech.net" });
                     emails.Add(RegEmail);
                 }
             }
             await Task.WhenAll(emails);
 
             if (result.Data && submitResult)
-                return ApiResponse<bool>.Success(true,200);
+                return ApiResponse<bool>.Success(true, 200);
 
             return ApiResponse<bool>.Fail(false, 400);
         }
