@@ -181,15 +181,21 @@ namespace SolaERP.Persistence.Services
                 var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
                 prequalificationValue.VendorId = vendorId;
 
-                var tasksList = new List<Task<bool>>
-                {
-                     _repository.UpdatePrequalification(prequalificationValue) //+
-                };
+                var tasksList = new List<Task<bool>>();
+                if (prequalificationValue.Type == 2)
+                    _repository.DeletePrequalification(prequalificationValue.VendorPrequalificationId);//+
+                else
+                    _repository.UpdatePrequalification(prequalificationValue); //+
 
                 if (item.Attachments is not null)
                 {
-                    tasksList.AddRange(item.Attachments.Select(attachment =>
-                        _attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(attachment))));
+                    for (int i = 0; i < item.Attachments.Count; i++)
+                    {
+                        if (item.Attachments[i].Type == 2)
+                            tasksList.Add(_attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(item.Attachments[i])));
+                        else
+                            tasksList.Add(_attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId);
+                    }
                 }
 
                 if (item.HasGrid == true)

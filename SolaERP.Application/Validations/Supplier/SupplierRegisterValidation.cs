@@ -10,10 +10,10 @@ namespace SolaERP.Persistence.Validations.Supplier
         {
             RuleFor(x => x.CompanyInformation).NotNull().NotEmpty()
                    .SetValidator(new CompanyValidation());
-            When(x => x.DueDiligence != null, () =>
-            {
-                RuleForEach(x => x.DueDiligence).SetValidator(new DueDiligenceValidation());
-            });
+            //When(x => x.DueDiligence != null, () =>
+            //{
+            //    RuleForEach(x => x.DueDiligence).SetValidator(new DueDiligenceValidation());
+            //});
         }
     }
 
