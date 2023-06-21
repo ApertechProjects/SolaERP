@@ -1,4 +1,7 @@
-﻿namespace SolaERP.Application.Entities.SupplierEvaluation
+﻿using SolaERP.Application.Attributes;
+using SolaERP.Application.Enums;
+
+namespace SolaERP.Application.Entities.SupplierEvaluation
 {
     public class VendorBankDetail : BaseEntity
     {

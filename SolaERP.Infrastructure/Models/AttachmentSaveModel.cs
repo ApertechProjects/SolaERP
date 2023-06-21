@@ -11,5 +11,6 @@
         public int AttachmentTypeId { get; set; }
         public int AttachmentSubTypeId { get; set; }
         public int Size { get; set; }
+        public int Type { get; set; }
     }
 }

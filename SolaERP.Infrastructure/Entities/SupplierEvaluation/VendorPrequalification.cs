@@ -12,5 +12,6 @@
         public int VendorPrequalificationId { get; set; }
         public int PrequalificationDesignId { get; set; }
         public int VendorPrequalificationCategoryId { get; set; }
+        public int Type { get; set; }
     }
 }

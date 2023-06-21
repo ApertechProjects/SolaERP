@@ -14,5 +14,6 @@
         public DateTime? DateTimeValue { get; set; }
         public bool AgreementValue { get; set; }
         public decimal Scoring { get; set; }
+        public int Type { get; set; }
     }
 }
