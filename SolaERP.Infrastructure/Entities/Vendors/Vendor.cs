@@ -10,7 +10,7 @@
         public string CompanyAdress { get; set; }
         public string City { get; set; }
         public string WebSite { get; set; }
-        public DateTime RegistrationDate { get; set; }
+        public DateTime? RegistrationDate { get; set; }
         public string RepresentedCompanies { get; set; }
         public string RepresentedProducts { get; set; }
         public int CreditDays { get; set; }

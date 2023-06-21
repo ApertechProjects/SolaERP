@@ -17,6 +17,7 @@ using SolaERP.Application.Models;
 using SolaERP.Application.Shared;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Infrastructure.ViewModels;
+using SolaERP.Persistence.Utils;
 using PrequalificationGridData = SolaERP.Application.Entities.SupplierEvaluation.PrequalificationGridData;
 
 namespace SolaERP.Persistence.Services
@@ -69,6 +70,8 @@ namespace SolaERP.Persistence.Services
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
             Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
             vendor.VendorId = user.VendorId;
+
+            vendor.RegistrationDate = vendor.RegistrationDate.ConvertDateToValidDate();
 
             int vendorId = await _vendorRepository.UpdateVendorAsync(user.Id, vendor);
 
@@ -132,7 +135,7 @@ namespace SolaERP.Persistence.Services
             {
                 var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
                 dueInputModel.VendorId = vendorId;
-
+                dueInputModel.DateTimeValue = dueInputModel.DateTimeValue.ConvertDateToValidDate();
                 var itemTasks = new List<Task<bool>>
                 {
                       _repository.UpdateDueAsync(dueInputModel)
@@ -157,6 +160,7 @@ namespace SolaERP.Persistence.Services
             {
                 var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
                 prequalificationValue.VendorId = vendorId;
+                prequalificationValue.DateTimeValue = prequalificationValue.DateTimeValue.ConvertDateToValidDate();
 
                 var tasksList = new List<Task<bool>>
                 {
@@ -475,7 +479,6 @@ namespace SolaERP.Persistence.Services
 
             List<Task> emails = new List<Task>();
             Language language = "en".GetLanguageEnumValue();
-            var companyName = await _emailNotificationService.GetCompanyName(user.Email);
             var templateDataForRegistrationPending = await _emailNotificationService.GetEmailTemplateData(language, EmailTemplateKey.RGA);
             VM_RegistrationPending registrationPending = new VM_RegistrationPending()
             {
@@ -505,10 +508,10 @@ namespace SolaERP.Persistence.Services
                     VM_RegistrationIsPendingAdminApprove adminApprove = new VM_RegistrationIsPendingAdminApprove()
                     {
                         Body = new HtmlString(templateData.Body),
-                        CompanyName = companyName,
+                        CompanyName = command.CompanyInformation.CompanyName,
                         Header = templateData.Header,
                         UserName = user.UserName,
-                        CompanyOrVendorName = companyName,
+                        CompanyOrVendorName = command.CompanyInformation.CompanyName,
                         Language = templateData.Language.GetLanguageEnumValue(),
                     };
                     Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), sendUsers);

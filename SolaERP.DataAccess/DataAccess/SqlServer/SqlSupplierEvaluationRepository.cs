@@ -78,8 +78,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<bool> UpdateDueAsync(VendorDueDiligenceModel model)
         {
-            if (model.DateTimeValue.Value.Date.Year < 1800)
-                model.DateTimeValue = null;
             return await ModifyDueDiligence(model);
         }
 
@@ -569,8 +567,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<bool> AddPrequalification(VendorPrequalificationValues value)
         {
-            if (value.DateTimeValue.Value.Date.Year < 1800)
-                value.DateTimeValue = null;
             return await ModifyPrequalificationAsync(new()
             {
                 VendorPrequalificationId = 0,
@@ -595,8 +591,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         private async Task<bool> ModifyPrequalificationAsync(VendorPrequalificationValues values)
         {
-            if (values.DateTimeValue.Value.Date.Year < 1800)
-                values.DateTimeValue = null;
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorPrequalification_IUD @VendorPrequalificationId,
