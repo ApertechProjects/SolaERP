@@ -152,7 +152,7 @@ namespace SolaERP.Persistence.Services
             {
                 var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
                 dueInputModel.VendorId = vendorId;
-
+                dueInputModel.DateTimeValue = dueInputModel.DateTimeValue.ConvertDateToValidDate();
                 var itemTasks = new List<Task<bool>>
                 {
                       _repository.UpdateDueAsync(dueInputModel)
@@ -197,7 +197,7 @@ namespace SolaERP.Persistence.Services
                         if (item.Attachments[i].Type == 2)
                             tasksList.Add(_attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(item.Attachments[i])));
                         else
-                            tasksList.Add(_attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId);
+                            tasksList.Add(_attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId));
                     }
                 }
 
