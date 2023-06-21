@@ -487,7 +487,7 @@ namespace SolaERP.Persistence.Services
                 Header = templateDataForRegistrationPending.Header,
                 Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, user.FullName)),
                 Language = language,
-                CompanyName = companyName,
+                CompanyName = command.CompanyInformation.CompanyName,
             };
 
             Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject,
