@@ -123,7 +123,7 @@ namespace SolaERP.Persistence.Services
             {
                 if (x.Type == 2 && x.Id > 0)
                     await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
-                else if (x.Type != 2)
+                else
                 {
                     var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x));
                     x.VendorId = vendorId;
@@ -159,13 +159,14 @@ namespace SolaERP.Persistence.Services
 
                 if (item.HasDataGrid == true)
                 {
-                    itemTasks.AddRange(item.GridDatas.Select(gridData =>
+                    itemTasks.AddRange(item?.GridDatas?.Select(gridData =>
                     {
                         if (gridData.Type == 2 && gridData.Id > 0)
                             return _repository.DeleteDueDesignGrid(gridData.Id);
-                        else if (gridData.Type != 2)
-                            return _repository.UpdateDueDesignGrid(_mapper.Map<DueDiligenceGridModel>(gridData));
-                    }));
+
+                        return _repository.UpdateDueDesignGrid(_mapper.Map<DueDiligenceGridModel>(gridData));
+
+                    }) ?? Enumerable.Empty<Task<bool>>());
                 }
 
                 if (item.Attachments is not null)
@@ -184,10 +185,7 @@ namespace SolaERP.Persistence.Services
                 prequalificationValue.DateTimeValue = prequalificationValue.DateTimeValue.ConvertDateToValidDate();
 
                 var tasksList = new List<Task<bool>>();
-                if (prequalificationValue.Type == 2)
-                    _repository.DeletePrequalification(prequalificationValue.VendorPrequalificationId);//+
-                else
-                    _repository.UpdatePrequalification(prequalificationValue); //+
+                _repository.UpdatePrequalification(prequalificationValue); //+
 
                 if (item.Attachments is not null)
                 {
@@ -195,7 +193,7 @@ namespace SolaERP.Persistence.Services
                     {
                         if (item.Attachments[i].Type == 2 && item.Attachments[i].AttachmentId > 0)
                             tasksList.Add(_attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(item.Attachments[i])));
-                        else if (item.Attachments[i].Type != 2)
+                        else
                             tasksList.Add(_attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId));
                     }
                 }
