@@ -41,7 +41,7 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _service.GetPrequalificationAsync(User.Identity.Name, ids, Request.Headers.AcceptLanguage));
 
         [HttpPost]
-        //[MaxLength]
+        [RequestSizeLimit(100_000_000)]
         public async Task<IActionResult> Post(SupplierRegisterCommand command)
             => CreateActionResult(await _service.AddAsync(User.Identity.Name, command));
 
