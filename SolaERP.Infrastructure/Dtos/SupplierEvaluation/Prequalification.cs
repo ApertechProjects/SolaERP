@@ -58,5 +58,6 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public decimal Outcome { get; set; }
         public decimal Scoring { get; set; }
         public decimal AllPoint { get; set; }
+        public bool Disabled { get; set; }
     }
 }
