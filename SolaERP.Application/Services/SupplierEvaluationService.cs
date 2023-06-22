@@ -622,6 +622,7 @@ namespace SolaERP.Persistence.Services
                         AllPoint = calculationResult.AllPoint,
                         Scoring = calculationResult.Scoring,
                         Outcome = calculationResult.Outcome,
+                        Disabled = d.Disabled
                     };
 
                     dto.Childs.Add(childDto);
