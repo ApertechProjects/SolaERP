@@ -48,7 +48,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 }
 
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return false;
@@ -300,6 +300,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Column4Alias = reader.Get<string>("Column4Alias"),
                 Column5Alias = reader.Get<string>("Column5Alias"),
                 Weight = reader.Get<decimal>("Weight"),
+                Disabled = reader.Get<bool>("Disabled")
             };
         }
 
