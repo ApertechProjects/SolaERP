@@ -93,9 +93,9 @@ namespace SolaERP.Persistence.Services
 
             for (int i = 0; i < companyLogo.Count; i++)
             {
-                if (companyLogo[i].Type == 2)
+                if (companyLogo[i].Type == 2 && companyLogo[i].AttachmentId > 0)
                     await _attachmentRepository.DeleteAttachmentAsync(companyLogo[i].AttachmentId);
-                else
+                else if (companyLogo[i].Type != 2)
                     await _attachmentRepository.SaveAttachmentAsync(companyLogo[i]);
             }
 
@@ -108,9 +108,9 @@ namespace SolaERP.Persistence.Services
 
             for (int i = 0; i < attachments.Count; i++)
             {
-                if (attachments[i].Type == 2)
+                if (attachments[i].Type == 2 && companyLogo[i].AttachmentId > 0)
                     await _attachmentRepository.DeleteAttachmentAsync(attachments[i].AttachmentId);
-                else
+                else if (companyLogo[i].Type != 2)
                     await _attachmentRepository.SaveAttachmentAsync(attachments[i]);
             }
 
@@ -121,28 +121,27 @@ namespace SolaERP.Persistence.Services
             List<Task<bool>> tasks = new();
             foreach (var x in command.BankAccounts)
             {
-                if (x.Type == 2)
+                if (x.Type == 2 && x.Id > 0)
                     await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
-                else
+                else if (x.Type != 2)
                 {
                     var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x));
                     x.VendorId = vendorId;
 
                     if (x.AccountVerificationLetter != null)
                     {
-                        if (x.Type == 2)
-                            tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
-                            {
+                        tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
+                        {
+                            if (attachment.Type == 2 && attachment.AttachmentId > 0)
                                 return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
-                            }));
-                        else
-                            tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
+                            else
                             {
                                 var entity = _mapper.Map<AttachmentSaveModel>(attachment);
                                 entity.SourceId = detaildId;
                                 entity.SourceType = SourceType.VEN_BNK.ToString();
                                 return _attachmentRepository.SaveAttachmentAsync(entity);
-                            }));
+                            }
+                        }));
                     }
                 }
             }
@@ -162,9 +161,9 @@ namespace SolaERP.Persistence.Services
                 {
                     itemTasks.AddRange(item.GridDatas.Select(gridData =>
                     {
-                        if (gridData.Type == 2)
+                        if (gridData.Type == 2 && gridData.Id > 0)
                             return _repository.DeleteDueDesignGrid(gridData.Id);
-                        else
+                        else if (gridData.Type != 2)
                             return _repository.UpdateDueDesignGrid(_mapper.Map<DueDiligenceGridModel>(gridData));
                     }));
                 }
@@ -194,9 +193,9 @@ namespace SolaERP.Persistence.Services
                 {
                     for (int i = 0; i < item.Attachments.Count; i++)
                     {
-                        if (item.Attachments[i].Type == 2)
+                        if (item.Attachments[i].Type == 2 && item.Attachments[i].AttachmentId > 0)
                             tasksList.Add(_attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(item.Attachments[i])));
-                        else
+                        else if (item.Attachments[i].Type != 2)
                             tasksList.Add(_attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId));
                     }
                 }
