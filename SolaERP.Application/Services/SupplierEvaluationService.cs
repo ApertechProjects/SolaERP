@@ -132,9 +132,9 @@ namespace SolaERP.Persistence.Services
 
             for (int i = 0; i < attachments.Count; i++)
             {
-                if (attachments[i].Type == 2 && companyLogo[i].AttachmentId > 0)
+                if (attachments[i].Type == 2 && attachments[i].AttachmentId > 0)
                     await _attachmentRepository.DeleteAttachmentAsync(attachments[i].AttachmentId);
-                else if (companyLogo[i].Type != 2)
+                else if (attachments[i].Type != 2)
                     await _attachmentRepository.SaveAttachmentAsync(attachments[i]);
             }
 
