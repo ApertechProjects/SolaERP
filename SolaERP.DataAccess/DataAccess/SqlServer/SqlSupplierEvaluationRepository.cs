@@ -758,5 +758,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
+
+        public async Task<Application.Entities.Vendors.VendorRepresentedProduct> GetRepresentedProductAsync(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_VendorRepresentedProducts_Load @VendorId";
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+
+                Application.Entities.Vendors.VendorRepresentedProduct product = null;
+                using var reader = await command.ExecuteReaderAsync();
+
+                if (reader.Read())
+                    product = reader.GetByEntityStructure<Application.Entities.Vendors.VendorRepresentedProduct>();
+
+                return product;
+            }
+        }
     }
 }

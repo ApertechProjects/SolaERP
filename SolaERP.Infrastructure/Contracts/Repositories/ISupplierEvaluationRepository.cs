@@ -1,6 +1,7 @@
 ﻿using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.VendorDueDiligence;
+using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 
@@ -9,6 +10,7 @@ namespace SolaERP.Application.Contracts.Repositories
     public interface ISupplierEvaluationRepository
     {
         Task<List<VendorNDA>> GetNDAAsync(int vendorId);
+        Task<VendorRepresentedProduct> GetRepresentedProductAsync(int vendorId);
         Task<List<PrequalificationDesign>> GetPrequalificationDesignsAsync(int categoryId, Language language);
         Task<List<VendorCOBC>> GetCOBCAsync(int vendorId);
         Task<List<Country>> GetCountriesAsync();
