@@ -47,9 +47,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@VendorId", vendor.VendorId);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", null);
                 command.Parameters.AddWithValue(command, "@VendorName", vendor.CompanyName);
-                command.Parameters.AddWithValue(command, "@TaxId", vendor.TaxOffice);
+                command.Parameters.AddWithValue(command, "@TaxId", vendor.TaxId);
                 command.Parameters.AddWithValue(command, "@TaxOffice", vendor.TaxOffice);
-                command.Parameters.AddWithValue(command, "@Location", vendor.WebSite);
+                command.Parameters.AddWithValue(command, "@Location", vendor.City);
                 command.Parameters.AddWithValue(command, "@Website", vendor.WebSite);
                 command.Parameters.AddWithValue(command, "@PaymentTerms", vendor.PaymentTerms);
                 command.Parameters.AddWithValue(command, "@CreditDays", vendor.CreditDays);

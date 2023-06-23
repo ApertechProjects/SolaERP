@@ -1,6 +1,6 @@
 ﻿namespace SolaERP.Application.Enums
 {
-    public enum CrudType
+    public enum OperationType
     {
         Insert = 0,
         Update = 1,

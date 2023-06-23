@@ -1,5 +1,7 @@
 ﻿
 using SolaERP.Application.Dtos.Attachment;
+using SolaERP.Application.Enums;
+using System.Reflection.Emit;
 
 namespace SolaERP.Application.Dtos.SupplierEvaluation
 {
@@ -18,5 +20,6 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public string BankTaxId { get; set; }
         public string CoresspondentAccount { get; set; }
         public List<AttachmentDto> AccountVerificationLetter { get; set; }
+        public int Type { get; set; }
     }
 }

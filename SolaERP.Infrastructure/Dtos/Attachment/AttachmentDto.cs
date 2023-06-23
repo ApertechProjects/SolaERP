@@ -13,5 +13,6 @@
         public DateTime LastModifiedDate { get; set; }
         public int Size { get; set; }
         public string FileBase64 { get; set; }
+        public int Type { get; set; }
     }
 }
