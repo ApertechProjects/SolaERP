@@ -318,6 +318,7 @@ namespace SolaERP.Persistence.Services
             var vendorPrequalificationTask = _repository.GetVendorPrequalificationAsync(user.VendorId);
             var prequalificationTypesTask = _repository.GetPrequalificationCategoriesAsync();
             var businessCategoriesTask = _repository.GetBusinessCategoriesAsync();
+            var vendorRepresentedProduct = _repository.GetRepresentedProductAsync(user.VendorId);
             var vendorBusinessCategoriesTask = _repository.GetVendorBuCategoriesAsync(user.VendorId);
             var companyInfoTask = _repository.GetCompanyInfoAsync(user.VendorId);
             var vendorProductsTask = _repository.GetVendorProductServices(user.VendorId);
@@ -334,6 +335,7 @@ namespace SolaERP.Persistence.Services
                                 vendorProductsTask,
                                 venOletAttachmentTask,
                                 venLogoAttachmentTask,
+                                vendorRepresentedProduct,
                                 companyInfoTask,
                                 countries);
 
@@ -355,6 +357,7 @@ namespace SolaERP.Persistence.Services
             companyInfo.CompanyLogo = _mapper.Map<List<AttachmentDto>>(venLogoAttachmentTask.Result);
             companyInfo.Attachments = _mapper.Map<List<AttachmentDto>>(venOletAttachmentTask.Result);
             companyInfo.Services = matchedProductServices;
+            companyInfo.RepresentedProducts = vendorRepresentedProduct.Result.RepresentedProductName.Split(",");
 
             VM_GET_InitalRegistration viewModel = new()
             {
