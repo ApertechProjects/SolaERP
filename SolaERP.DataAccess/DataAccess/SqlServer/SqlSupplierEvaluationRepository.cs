@@ -787,7 +787,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 if (reader.Read())
-                    reader.GetByEntityStructure<Application.Entities.Vendors.VendorRepresentedCompany>();
+                    company = reader.GetByEntityStructure<Application.Entities.Vendors.VendorRepresentedCompany>();
 
                 return company;
             }
