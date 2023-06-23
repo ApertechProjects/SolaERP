@@ -193,11 +193,48 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 command.CommandText = "exec SP_VendorListByTaxId @TaxId";
                 command.Parameters.AddWithValue(command, "@TaxId", taxId);
+
                 using var reader = await command.ExecuteReaderAsync();
                 VendorInfo vendorInfo = new VendorInfo();
-                while (reader.Read()) vendorInfo = reader.GetByEntityStructure<VendorInfo>();
 
+                while (reader.Read()) vendorInfo = reader.GetByEntityStructure<VendorInfo>();
                 return vendorInfo;
+            }
+        }
+
+        public async Task<List<VendorWFA>> WaitingForApprovals(int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec SP_VendorWFA @userId";
+                command.Parameters.AddWithValue(command, "@userId", userId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                List<VendorWFA> data = new List<VendorWFA>();
+
+                while (reader.Read())
+                {
+                    data.Add(reader.GetByEntityStructure<VendorWFA>());
+                }
+                return data;
+            }
+        }
+
+        public async Task<List<VendorAll>> All(int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec SP_VendorAll @userId";
+                command.Parameters.AddWithValue(command, "@userId", userId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                List<VendorAll> data = new List<VendorAll>();
+
+                while (reader.Read())
+                {
+                    data.Add(reader.GetByEntityStructure<VendorAll>());
+                }
+                return data;
             }
         }
     }

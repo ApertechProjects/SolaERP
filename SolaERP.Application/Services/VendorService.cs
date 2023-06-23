@@ -11,11 +11,13 @@ namespace SolaERP.Persistence.Services
     public class VendorService : IVendorService
     {
         private readonly IVendorRepository _vendorRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public VendorService(IVendorRepository vendorRepository, IMapper mapper)
+        public VendorService(IVendorRepository vendorRepository, IUserRepository userRepository, IMapper mapper)
         {
             _vendorRepository = vendorRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
 
@@ -50,9 +52,24 @@ namespace SolaERP.Persistence.Services
             throw new NotImplementedException();
         }
 
-        public Task<ApiResponse<object>> WaitingForApprovals(int businessUnitId, string userId)
+        public async Task<ApiResponse<List<VendorWFA>>> WaitingForApprovals(string userName)
         {
-            throw new NotImplementedException();
+            int userId = await _userRepository.ConvertIdentity(userName);
+            var data = await _vendorRepository.WaitingForApprovals(userId);
+            var dto = _mapper.Map<List<VendorWFA>>(data);
+            if (dto.Count > 0)
+                return ApiResponse<List<VendorWFA>>.Success(dto);
+            return ApiResponse<List<VendorWFA>>.Fail("Data not found", 404);
+        }
+
+        public async Task<ApiResponse<List<VendorAll>>> All(string userName)
+        {
+            int userId = await _userRepository.ConvertIdentity(userName);
+            var data = await _vendorRepository.All(userId);
+            var dto = _mapper.Map<List<VendorAll>>(data);
+            if (dto.Count > 0)
+                return ApiResponse<List<VendorAll>>.Success(dto);
+            return ApiResponse<List<VendorAll>>.Fail("Data not found", 404);
         }
     }
 }

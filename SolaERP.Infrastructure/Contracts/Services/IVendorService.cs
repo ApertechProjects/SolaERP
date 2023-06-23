@@ -7,6 +7,7 @@ namespace SolaERP.Application.Contracts.Services
     {
         Task<int> GetVendorByTaxIdAsync(string taxId);
         Task<VendorInfo> GetVendorByTaxAsync(string taxId);
-        Task<ApiResponse<object>> WaitingForApprovals(int businessUnitId, string userId);
+        Task<ApiResponse<List<VendorWFA>>> WaitingForApprovals(string userName);
+        Task<ApiResponse<List<VendorAll>>> All(string userName);
     }
 }
