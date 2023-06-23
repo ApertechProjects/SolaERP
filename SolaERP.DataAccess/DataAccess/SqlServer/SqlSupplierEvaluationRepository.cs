@@ -776,9 +776,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public Task<Application.Entities.Vendors.VendorRepresentedCompany> GetRepresentedCompanyAsync(int vendorId)
+        public async Task<Application.Entities.Vendors.VendorRepresentedCompany> GetRepresentedCompanyAsync(int vendorId)
         {
-            throw new NotImplementedException();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_VendorRepresentedCompany_Load @VendorId";
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+
+                VendorRepresentedCompany company = null;
+                using var reader = await command.ExecuteReaderAsync();
+
+                if (reader.Read())
+                    reader.GetByEntityStructure<Application.Entities.Vendors.VendorRepresentedCompany>();
+
+            }
         }
     }
 }

@@ -321,6 +321,7 @@ namespace SolaERP.Persistence.Services
             var vendorBusinessCategoriesTask = _repository.GetVendorBuCategoriesAsync(user.VendorId);
             var companyInfoTask = _repository.GetCompanyInfoAsync(user.VendorId);
             var vendorProductsTask = _repository.GetVendorProductServices(user.VendorId);
+            var vendorRepresentedCompany = _repository.GetRepresentedCompanyAsync(user.VendorId);
             var venLogoAttachmentTask = _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_LOGO.ToString());
             var venOletAttachmentTask = _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_OLET.ToString());
             var productServicesTask = _repository.GetProductServicesAsync();
@@ -329,6 +330,7 @@ namespace SolaERP.Persistence.Services
             await Task.WhenAll(vendorPrequalificationTask,
                                 prequalificationTypesTask,
                                 businessCategoriesTask,
+                                vendorRepresentedCompany,
                                 vendorBusinessCategoriesTask,
                                 productServicesTask,
                                 vendorProductsTask,
@@ -357,6 +359,7 @@ namespace SolaERP.Persistence.Services
             companyInfo.Attachments = _mapper.Map<List<AttachmentDto>>(venOletAttachmentTask.Result);
             companyInfo.City = companyInfo.City ?? "";
             companyInfo.RepresentedProducts = vendorRepresentedProduct.Result.RepresentedProductName.Split(",");
+            companyInfo.RepresentedCompanies = vendorRepresentedCompany.Result.RepresentedCompanyName.Split(",");
 
             companyInfo.Services = matchedProductServices;
             var contactPerson = _mapper.Map<ContactPersonDto>(user);
