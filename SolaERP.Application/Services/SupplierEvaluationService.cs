@@ -327,6 +327,8 @@ namespace SolaERP.Persistence.Services
             var productServicesTask = _repository.GetProductServicesAsync();
             var countries = _repository.GetCountriesAsync();
 
+
+
             await Task.WhenAll(vendorPrequalificationTask,
                                 prequalificationTypesTask,
                                 businessCategoriesTask,
