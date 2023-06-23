@@ -24,12 +24,23 @@ namespace SolaERP.Controllers
         }
 
         [Authorize]
-        [HttpGet("{BU}")]
+        [HttpGet]
+        public async Task<IActionResult> WaitingForApprovals()
+            => CreateActionResult(await _vendorService.WaitingForApprovals(User.Identity.Name));
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> All()
+          => CreateActionResult(await _vendorService.All(User.Identity.Name));
+
+        [Authorize]
+        [HttpGet("{bu}")]
         public async Task<ApiResult> GetWFAandAllVendorList(int BU)
         {
             return await new EntityLogic(ConfHelper).GetVendorList(User.Identity.Name, BU);
         }
 
+        [HttpGet]
         [HttpGet("{vendorId}")]
         [Authorize]
         public async Task<ApiResult> GetVendorDetails(int vendorId)

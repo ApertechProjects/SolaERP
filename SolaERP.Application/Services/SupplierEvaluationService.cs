@@ -356,9 +356,11 @@ namespace SolaERP.Persistence.Services
             companyInfo.BusinessCategories = matchedBuCategories;
             companyInfo.CompanyLogo = _mapper.Map<List<AttachmentDto>>(venLogoAttachmentTask.Result);
             companyInfo.Attachments = _mapper.Map<List<AttachmentDto>>(venOletAttachmentTask.Result);
-            companyInfo.Services = matchedProductServices;
-            companyInfo.RepresentedProducts = vendorRepresentedProduct.Result.RepresentedProductName.Split(",");
+            companyInfo.City = companyInfo.City ?? "";
 
+            companyInfo.Services = matchedProductServices;
+            var contactPerson = _mapper.Map<ContactPersonDto>(user);
+            contactPerson.Position = contactPerson.Position ?? "";
             VM_GET_InitalRegistration viewModel = new()
             {
                 CompanyInformation = companyInfo,
@@ -366,7 +368,7 @@ namespace SolaERP.Persistence.Services
                 PaymentTerms = await _repository.GetPaymentTermsAsync(),
                 PrequalificationTypes = prequalificationTypesTask.Result,
                 Services = await _repository.GetProductServicesAsync(),
-                ContactPerson = _mapper.Map<ContactPersonDto>(user),
+                ContactPerson = contactPerson,
                 Countries = await countries,
             };
 
