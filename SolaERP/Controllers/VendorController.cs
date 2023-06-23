@@ -34,13 +34,11 @@ namespace SolaERP.Controllers
           => CreateActionResult(await _vendorService.All(User.Identity.Name));
 
         [Authorize]
-        [HttpGet("{bu}")]
-        public async Task<ApiResult> GetWFAandAllVendorList(int BU)
-        {
-            return await new EntityLogic(ConfHelper).GetVendorList(User.Identity.Name, BU);
-        }
+        [HttpGet("{businessUnitId}")]
+        public async Task<IActionResult> Vendors(int businessUnitId)
+            => CreateActionResult(await _vendorService.Vendors(businessUnitId, User.Identity.Name));
 
-        [HttpGet]
+
         [HttpGet("{vendorId}")]
         [Authorize]
         public async Task<ApiResult> GetVendorDetails(int vendorId)

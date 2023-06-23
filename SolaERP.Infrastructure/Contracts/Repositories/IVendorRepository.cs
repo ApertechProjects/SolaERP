@@ -16,5 +16,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> VendorChangeStatus(int vendorId, int status, int userId);
         Task<List<VendorWFA>> WaitingForApprovals(int userId);
         Task<List<VendorAll>> All(int userId);
+        Task<List<VendorInfo>> Vendors(int businessUnitId, int userId);
     }
 }
