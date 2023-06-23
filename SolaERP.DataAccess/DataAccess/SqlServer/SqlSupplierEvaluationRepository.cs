@@ -775,5 +775,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return product;
             }
         }
+
+        public Task<Application.Entities.Vendors.VendorRepresentedCompany> GetRepresentedCompanyAsync(int vendorId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
