@@ -783,12 +783,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = "EXEC SP_VendorRepresentedCompany_Load @VendorId";
                 command.Parameters.AddWithValue(command, "@VendorId", vendorId);
 
-                VendorRepresentedCompany company = null;
+                Application.Entities.Vendors.VendorRepresentedCompany company = null;
                 using var reader = await command.ExecuteReaderAsync();
 
                 if (reader.Read())
                     reader.GetByEntityStructure<Application.Entities.Vendors.VendorRepresentedCompany>();
 
+                return company;
             }
         }
     }
