@@ -671,10 +671,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> PrequalificationCategoryAddAsync(PrequalificationCategoryData data)
+        public async Task<bool> AddPrequalificationCategoryAsync(PrequalificationCategoryData data)
              => await ModifyPrequalificationCategorySaveAsync(data);
 
-        public async Task<bool> PrequalificationCategoryDeleteAsync(int vendorId)
+        public async Task<bool> DeletePrequalificationCategoryAsync(int vendorId)
             => await ModifyPrequalificationCategorySaveAsync(new PrequalificationCategoryData { VendorId = vendorId });
 
         public async Task<bool> ModifyPrequalificationCategorySaveAsync(PrequalificationCategoryData data)
@@ -693,10 +693,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> VendorBusinessCategoryAddAsync(VendorBusinessCategoryData data)
+        public async Task<bool> AddVendorBusinessCategoryAsync(VendorBusinessCategoryData data)
             => await ModifyVendorBusinessCategorySaveAsync(data);
 
-        public async Task<bool> VendorBusinessCategoryDeleteAsync(int vendorId)
+        public async Task<bool> DeleteVendorBusinessCategoryAsync(int vendorId)
             => await ModifyVendorBusinessCategorySaveAsync(new VendorBusinessCategoryData { VendorId = vendorId });
 
         public async Task<bool> ModifyVendorBusinessCategorySaveAsync(VendorBusinessCategoryData data)
@@ -754,6 +754,54 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@VendorId", data.VendorId);
                 command.Parameters.AddWithValue(command, "@RepresentedProductName", data.RepresentedProductName);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> AddProductServiceAsync(ProductService productService)
+          => await ModifyProductServiceAsync(productService);
+
+        public async Task<bool> DeleteProductServiceAsync(int id)
+          => await ModifyProductServiceAsync(new ProductService { Id = id });
+
+        public async Task<bool> ModifyProductServiceAsync(ProductService data)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_ProductServices_ID @VendorId,
+                                                                            @ProductServiceId";
+
+
+
+                command.Parameters.AddWithValue(command, "@VendorId", data.Id);
+                command.Parameters.AddWithValue(command, "@ProductServiceId", data.Name);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public Task<bool> AddPequalificationCategoryAsync(PrequalificationCategory category)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeletePequalificationCategoryAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> ModifyPrequalificationCategoryAsync(PrequalificationCategory data)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorPrequalificationCategory_ID @VendorId,
+                                                                            @PrequalificationCategoryId";
+
+
+
+                command.Parameters.AddWithValue(command, "@VendorId", data.Id);
+                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", data.Id);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }

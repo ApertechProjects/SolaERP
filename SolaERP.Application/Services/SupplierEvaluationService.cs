@@ -76,12 +76,36 @@ namespace SolaERP.Persistence.Services
 
             int vendorId = await _vendorRepository.UpdateVendorAsync(user.Id, vendor);
 
-            await _repository.DeleteRepresentedCompanyAsync(vendorId);
             await _repository.DeleteRepresentedProductAsync(vendorId);
+            await _repository.DeleteRepresentedCompanyAsync(vendorId);
 
             await _repository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", command?.CompanyInformation?.RepresentedCompanies) });
-
             await _repository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", command?.CompanyInformation?.RepresentedProducts) });
+            List<Task<bool>> tasks = new();
+
+            #region BusinessCategory
+            await _repository.DeleteVendorBusinessCategoryAsync(vendorId);
+            for (int i = 0; i < command.CompanyInformation.BusinessCategories.Count; i++)
+            {
+                tasks.Add(_repository.AddVendorBusinessCategoryAsync(new VendorBusinessCategoryData { VendorId = vendorId, BusinessCategoryId = command.CompanyInformation.BusinessCategories[i].Id }));
+            }
+            #endregion
+
+            #region ProductServices
+            await _repository.DeleteProductServiceAsync(vendorId);
+            for (int i = 0; i < command.CompanyInformation.BusinessCategories.Count; i++)
+            {
+                tasks.Add(_repository.AddProductServiceAsync(new ProductService { Id = vendorId, Name = command.CompanyInformation.BusinessCategories[i].Name }));
+            }
+            #endregion
+
+            #region PrequalificationCategory
+            await _repository.DeletePrequalificationCategoryAsync(vendorId);
+            for (int i = 0; i < command.CompanyInformation.PrequalificationTypes.Count; i++)
+            {
+                tasks.Add(_repository.AddPrequalificationCategoryAsync(new PrequalificationCategoryData { VendorId = vendorId, PrequalificationCategoryId = command.CompanyInformation.PrequalificationTypes[i].Id }));
+            }
+            #endregion
 
             var companyLogo = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.CompanyLogo);
 
@@ -118,7 +142,6 @@ namespace SolaERP.Persistence.Services
             command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
             command?.BankAccounts?.ForEach(x => x.VendorId = vendorId);
 
-            List<Task<bool>> tasks = new();
             foreach (var x in command.BankAccounts)
             {
                 if (x.Type == 2 && x.Id > 0)
@@ -519,35 +542,35 @@ namespace SolaERP.Persistence.Services
                 CompanyName = command.CompanyInformation.CompanyName,
             };
 
-            Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject,
-                                                           registrationPending,
-                                                           registrationPending.TemplateName(),
-                                                           registrationPending.ImageName(),
-                                                           new List<string> { user.Email });
-            emails.Add(VerEmail);
+            //Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject,
+            //                                               registrationPending,
+            //                                               registrationPending.TemplateName(),
+            //                                               registrationPending.ImageName(),
+            //                                               new List<string> { user.Email });
+            //emails.Add(VerEmail);
 
-            var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
-            for (int i = 0; i < Enum.GetNames(typeof(Language)).Length; i++)
-            {
-                string enumElement = Enum.GetNames(typeof(Language))[i];
-                var sendUsers = await _userService.GetAdminUsersAsync(1, enumElement.GetLanguageEnumValue());
-                if (sendUsers.Count > 0)
-                {
-                    var templateData = templates[i];
-                    VM_RegistrationIsPendingAdminApprove adminApprove = new VM_RegistrationIsPendingAdminApprove()
-                    {
-                        Body = new HtmlString(templateData.Body),
-                        CompanyName = command.CompanyInformation.CompanyName,
-                        Header = templateData.Header,
-                        UserName = user.UserName,
-                        CompanyOrVendorName = command.CompanyInformation.CompanyName,
-                        Language = templateData.Language.GetLanguageEnumValue(),
-                    };
-                    Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), new List<string> { "hulya.garibli@apertech.net" });
-                    emails.Add(RegEmail);
-                }
-            }
-            await Task.WhenAll(emails);
+            //var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
+            //for (int i = 0; i < Enum.GetNames(typeof(Language)).Length; i++)
+            //{
+            //    string enumElement = Enum.GetNames(typeof(Language))[i];
+            //    var sendUsers = await _userService.GetAdminUsersAsync(1, enumElement.GetLanguageEnumValue());
+            //    if (sendUsers.Count > 0)
+            //    {
+            //        var templateData = templates[i];
+            //        VM_RegistrationIsPendingAdminApprove adminApprove = new VM_RegistrationIsPendingAdminApprove()
+            //        {
+            //            Body = new HtmlString(templateData.Body),
+            //            CompanyName = command.CompanyInformation.CompanyName,
+            //            Header = templateData.Header,
+            //            UserName = user.UserName,
+            //            CompanyOrVendorName = command.CompanyInformation.CompanyName,
+            //            Language = templateData.Language.GetLanguageEnumValue(),
+            //        };
+            //        Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), new List<string> { "hulya.garibli@apertech.net" });
+            //        emails.Add(RegEmail);
+            //    }
+            //}
+            //await Task.WhenAll(emails);
 
             if (result.Data && submitResult)
                 return ApiResponse<bool>.Success(true, 200);
