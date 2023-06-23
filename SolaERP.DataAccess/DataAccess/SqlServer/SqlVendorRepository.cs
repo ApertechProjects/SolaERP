@@ -237,5 +237,24 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return data;
             }
         }
+
+        public async Task<List<VendorInfo>> Vendors(int businessUnitId, int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec SP_VendorList @userId, @businessUnitId";
+                command.Parameters.AddWithValue(command, "@userId", userId);
+                command.Parameters.AddWithValue(command, "@businessUnitId", businessUnitId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                List<VendorInfo> data = new List<VendorInfo>();
+
+                while (reader.Read())
+                {
+                    data.Add(reader.GetByEntityStructure<VendorInfo>());
+                }
+                return data;
+            }
+        }
     }
 }

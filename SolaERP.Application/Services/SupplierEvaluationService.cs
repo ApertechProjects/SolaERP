@@ -109,7 +109,7 @@ namespace SolaERP.Persistence.Services
 
             var companyLogo = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.CompanyLogo);
 
-            companyLogo.ForEach(companyLogo =>
+            companyLogo?.ForEach(companyLogo =>
             {
                 companyLogo.SourceId = vendorId;
                 companyLogo.SourceType = SourceType.VEN_LOGO.ToString();

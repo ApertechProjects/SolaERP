@@ -2,6 +2,7 @@
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.Venndors;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.UnitOfWork;
 using System.Data.Common;
@@ -70,6 +71,16 @@ namespace SolaERP.Persistence.Services
             if (dto.Count > 0)
                 return ApiResponse<List<VendorAll>>.Success(dto);
             return ApiResponse<List<VendorAll>>.Fail("Data not found", 404);
+        }
+
+        public async Task<ApiResponse<List<VendorInfoDto>>> Vendors(int businessUnitId, string name)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            var data = await _vendorRepository.Vendors(businessUnitId, userId);
+            var dto = _mapper.Map<List<VendorInfoDto>>(data);
+            if (dto.Count > 0)
+                return ApiResponse<List<VendorInfoDto>>.Success(dto);
+            return ApiResponse<List<VendorInfoDto>>.Fail("Data not found", 404);
         }
     }
 }
