@@ -26,7 +26,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<VendorBankDetail>> GetVondorBankDetailsAsync(int vendorid);
         Task<CompanyInfo> GetCompanyInfoAsync(int vendorId);
         Task<List<DueDiligenceValue>> GetVendorDuesAsync(int vendorId);
-        Task<List<VendorPrequalification>> GetVendorPrequalificationAsync(int vendorId);
+        Task<List<Entities.SupplierEvaluation.VendorPrequalification>> GetVendorPrequalificationAsync(int vendorId);
         Task<List<VendorBuCategory>> GetVendorBuCategoriesAsync(int vendorId);
         Task<Prequalification> GetPrequalificationAsync(int vendorid);
         Task<List<VendorPrequalificationValues>> GetPrequalificationValuesAsync(int vendorId);
@@ -56,7 +56,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> PrequalificationCategoryDeleteAsync(int vendorId);
         Task<bool> VendorBusinessCategoryAddAsync(VendorBusinessCategoryData data);
         Task<bool> VendorBusinessCategoryDeleteAsync(int vendorId);
-        Task<bool> AddRepresentedCompany(VendorRepresentedCompany data);
+        Task<bool> AddRepresentedCompany(SolaERP.Application.Models.VendorRepresentedCompany data);
         Task<bool> DeleteRepresentedCompanyAsync(int vendorId);
         Task<bool> AddRepresentedProductAsync(RepresentedProductData data);
         Task<bool> DeleteRepresentedProductAsync(int vendorId);
