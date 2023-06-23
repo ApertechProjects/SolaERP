@@ -53,14 +53,20 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> AddPreGridAsync(Entities.SupplierEvaluation.PrequalificationGridData grid);
         Task<bool> UpdatePreGridAsync(Entities.SupplierEvaluation.PrequalificationGridData grid);
         Task<bool> DeletePreGridAsync(int preGridId);
-        Task<bool> PrequalificationCategoryAddAsync(PrequalificationCategoryData data);
-        Task<bool> PrequalificationCategoryDeleteAsync(int vendorId);
-        Task<bool> VendorBusinessCategoryAddAsync(VendorBusinessCategoryData data);
-        Task<bool> VendorBusinessCategoryDeleteAsync(int vendorId);
-        Task<bool> AddRepresentedCompany(SolaERP.Application.Models.VendorRepresentedCompany data);
+        Task<bool> AddPrequalificationCategoryAsync(PrequalificationCategoryData data);
+        Task<bool> DeletePrequalificationCategoryAsync(int vendorId);
+        Task<bool> AddVendorBusinessCategoryAsync(VendorBusinessCategoryData data);
+        Task<bool> DeleteVendorBusinessCategoryAsync(int vendorId);
+        Task<bool> AddRepresentedCompany(VendorRepresentedCompany data);
         Task<bool> DeleteRepresentedCompanyAsync(int vendorId);
         Task<bool> AddRepresentedProductAsync(RepresentedProductData data);
         Task<bool> DeleteRepresentedProductAsync(int vendorId);
+
+        Task<bool> AddProductServiceAsync(ProductService productService);
+        Task<bool> DeleteProductServiceAsync(int id);
+
+        Task<bool> AddPequalificationCategoryAsync(PrequalificationCategory category);
+        Task<bool> DeletePequalificationCategoryAsync(int id);
 
     }
 }
