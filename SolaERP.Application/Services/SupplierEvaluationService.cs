@@ -357,6 +357,7 @@ namespace SolaERP.Persistence.Services
             companyInfo.CompanyLogo = _mapper.Map<List<AttachmentDto>>(venLogoAttachmentTask.Result);
             companyInfo.Attachments = _mapper.Map<List<AttachmentDto>>(venOletAttachmentTask.Result);
             companyInfo.City = companyInfo.City ?? "";
+            companyInfo.RepresentedProducts = vendorRepresentedProduct.Result.RepresentedProductName.Split(",");
 
             companyInfo.Services = matchedProductServices;
             var contactPerson = _mapper.Map<ContactPersonDto>(user);
