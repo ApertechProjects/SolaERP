@@ -62,7 +62,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> AddRepresentedProductAsync(RepresentedProductData data);
         Task<bool> DeleteRepresentedProductAsync(int vendorId);
 
-        Task<bool> AddProductServiceAsync(ProductService productService);
+        Task<bool> AddProductServiceAsync(ProductServiceData productService);
         Task<bool> DeleteProductServiceAsync(int id);
 
         Task<bool> AddPequalificationCategoryAsync(PrequalificationCategory category);

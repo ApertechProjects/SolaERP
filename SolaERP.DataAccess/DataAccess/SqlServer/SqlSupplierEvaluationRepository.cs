@@ -759,13 +759,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> AddProductServiceAsync(ProductService productService)
+        public async Task<bool> AddProductServiceAsync(ProductServiceData productService)
           => await ModifyProductServiceAsync(productService);
 
         public async Task<bool> DeleteProductServiceAsync(int id)
-          => await ModifyProductServiceAsync(new ProductService { Id = id });
+          => await ModifyProductServiceAsync(new ProductServiceData { VendorId = id });
 
-        public async Task<bool> ModifyProductServiceAsync(ProductService data)
+        public async Task<bool> ModifyProductServiceAsync(ProductServiceData data)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -774,8 +774,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 
 
-                command.Parameters.AddWithValue(command, "@VendorId", data.Id);
-                command.Parameters.AddWithValue(command, "@ProductServiceId", data.Name);
+                command.Parameters.AddWithValue(command, "@VendorId", data.VendorId);
+                command.Parameters.AddWithValue(command, "@ProductServiceId", data.ProductServiceId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }

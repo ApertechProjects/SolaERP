@@ -76,7 +76,7 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<List<VendorInfoDto>>> Vendors(int businessUnitId, string name)
         {
             int userId = await _userRepository.ConvertIdentity(name);
-            var data = await _vendorRepository.Vendors(businessUnitId, userId);
+            var data = await _vendorRepository.Get(businessUnitId, userId);
             var dto = _mapper.Map<List<VendorInfoDto>>(data);
             if (dto.Count > 0)
                 return ApiResponse<List<VendorInfoDto>>.Success(dto);

@@ -95,7 +95,7 @@ namespace SolaERP.Persistence.Services
             await _repository.DeleteProductServiceAsync(vendorId);
             for (int i = 0; i < command.CompanyInformation.BusinessCategories.Count; i++)
             {
-                tasks.Add(_repository.AddProductServiceAsync(new ProductService { Id = vendorId, Name = command.CompanyInformation.BusinessCategories[i].Name }));
+                tasks.Add(_repository.AddProductServiceAsync(new ProductServiceData { VendorId = vendorId, ProductServiceId = command.CompanyInformation.BusinessCategories[i].Id }));
             }
             #endregion
 
@@ -371,7 +371,7 @@ namespace SolaERP.Persistence.Services
                 .ToList();
 
             var matchedBuCategories = businessCategoriesTask.Result
-                .Where(x => vendorBusinessCategoriesTask.Result.Select(y => y.VendorBusinessCategoryId).Contains(x.Id))
+                .Where(x => vendorBusinessCategoriesTask.Result.Select(y => y.BusinessCategoryId).Contains(x.Id))
                 .ToList();
 
             var matchedProductServices = productServicesTask.Result
