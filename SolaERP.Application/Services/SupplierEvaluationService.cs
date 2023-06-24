@@ -199,6 +199,9 @@ namespace SolaERP.Persistence.Services
                     itemTasks.AddRange(item.Attachments.Select(attachment =>
                     {
                         var attachedFile = _mapper.Map<AttachmentSaveModel>(attachment);
+
+                        attachedFile.SourceId = vendorId;
+                        attachedFile.AttachmentTypeId = item.DesignId;
                         attachedFile.SourceType = SourceType.VEN_DUE.ToString();
 
                         return _attachmentRepository.SaveAttachmentAsync(attachedFile);
@@ -226,7 +229,10 @@ namespace SolaERP.Persistence.Services
                         {
                             var attachedFile = _mapper.Map<AttachmentSaveModel>(item.Attachments[i]);
 
+                            attachedFile.SourceId = vendorId;
+                            attachedFile.AttachmentTypeId = item.DesignId;
                             attachedFile.SourceType = SourceType.VEN_PREQ.ToString();
+
                             tasksList.Add(_attachmentRepository.SaveAttachmentAsync(attachedFile));
                         }
                         else
