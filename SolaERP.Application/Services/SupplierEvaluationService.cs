@@ -67,9 +67,6 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> AddAsync(string useridentity, SupplierRegisterCommand command)
         {
-            var testDataForView = command.DueDiligence.Where(x => x.DesignId == 0).ToList();
-
-
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
             Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
             vendor.VendorId = user.VendorId;
