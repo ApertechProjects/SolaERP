@@ -18,7 +18,6 @@ using SolaERP.Application.Shared;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Infrastructure.ViewModels;
 using SolaERP.Persistence.Utils;
-using System.Reflection.Emit;
 using PrequalificationGridData = SolaERP.Application.Entities.SupplierEvaluation.PrequalificationGridData;
 
 namespace SolaERP.Persistence.Services
@@ -68,6 +67,9 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> AddAsync(string useridentity, SupplierRegisterCommand command)
         {
+            var testDataForView = command.DueDiligence.Where(x => x.DesignId == 0).ToList();
+
+
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
             Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
             vendor.VendorId = user.VendorId;
@@ -187,7 +189,10 @@ namespace SolaERP.Persistence.Services
                         if (gridData.Type == 2 && gridData.Id > 0)
                             return _repository.DeleteDueDesignGrid(gridData.Id);
 
-                        return _repository.UpdateDueDesignGrid(_mapper.Map<DueDiligenceGridModel>(gridData));
+                        var gridDatas = _mapper.Map<DueDiligenceGridModel>(gridData);
+                        gridDatas.DueDesignId = item.DesignId;
+
+                        return _repository.UpdateDueDesignGrid(gridDatas);
 
                     }) ?? Enumerable.Empty<Task<bool>>());
                 }
@@ -195,7 +200,13 @@ namespace SolaERP.Persistence.Services
                 if (item.Attachments is not null)
                 {
                     itemTasks.AddRange(item.Attachments.Select(attachment =>
-                        _attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(attachment))));
+                    {
+                        var attachtedFile = _mapper.Map<AttachmentSaveModel>(attachment);
+                        attachtedFile.SourceType = SourceType.VEN_DUE.ToString();
+
+                        return _attachmentRepository.SaveAttachmentAsync(attachtedFile);
+                    }));
+
                 }
 
                 return itemTasks;
@@ -215,16 +226,29 @@ namespace SolaERP.Persistence.Services
                     for (int i = 0; i < item.Attachments.Count; i++)
                     {
                         if (item.Attachments[i].Type == 2 && item.Attachments[i].AttachmentId > 0)
-                            tasksList.Add(_attachmentRepository.SaveAttachmentAsync(_mapper.Map<AttachmentSaveModel>(item.Attachments[i])));
+                        {
+                            var attachedFile = _mapper.Map<AttachmentSaveModel>(item.Attachments[i]);
+
+                            attachedFile.SourceType = SourceType.VEN_PREQ.ToString();
+                            tasksList.Add(_attachmentRepository.SaveAttachmentAsync(attachedFile));
+                        }
                         else
+                        {
+                            item.Attachments[i].SourceTypeId = (int)SourceType.VEN_PREQ;
                             tasksList.Add(_attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId));
+                        }
                     }
                 }
 
                 if (item.HasGrid == true)
                 {
                     tasksList.AddRange(item.GridDatas.Select(gridData =>
-                        _repository.UpdatePreGridAsync(_mapper.Map<Application.Entities.SupplierEvaluation.PrequalificationGridData>(gridData))));
+                    {
+                        var gridDatas = _mapper.Map<PrequalificationGridData>(gridData);
+                        gridDatas.PreqqualificationDesignId = item.DesignId;
+
+                        return _repository.UpdatePreGridAsync(gridDatas);
+                    }));
                 }
 
                 return tasksList;
