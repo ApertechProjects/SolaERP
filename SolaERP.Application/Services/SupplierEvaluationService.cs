@@ -68,6 +68,12 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> AddAsync(string useridentity, SupplierRegisterCommand command)
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
+
+            user.PhoneNumber = command.CompanyInformation.PhoneNumber;
+            user.Description = command.CompanyInformation.Position;
+
+            await _userRepository.SaveUserAsync(user);
+
             Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
             vendor.VendorId = user.VendorId;
 
@@ -75,11 +81,16 @@ namespace SolaERP.Persistence.Services
 
             int vendorId = await _vendorRepository.UpdateVendorAsync(user.Id, vendor);
 
+            #region Represented Company & Represented Products
+
             await _repository.DeleteRepresentedProductAsync(vendorId);
             await _repository.DeleteRepresentedCompanyAsync(vendorId);
 
             await _repository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", command?.CompanyInformation?.RepresentedCompanies) });
             await _repository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", command?.CompanyInformation?.RepresentedProducts) });
+
+            #endregion
+
             List<Task<bool>> tasks = new();
 
             #region BusinessCategory
@@ -89,7 +100,7 @@ namespace SolaERP.Persistence.Services
                 tasks.Add(_repository.AddVendorBusinessCategoryAsync(new VendorBusinessCategoryData { VendorId = vendorId, BusinessCategoryId = command.CompanyInformation.BusinessCategories[i].Id }));
             }
             #endregion
-
+            //
             #region ProductServices
             await _repository.DeleteProductServiceAsync(vendorId);
             for (int i = 0; i < command.CompanyInformation.BusinessCategories.Count; i++)
@@ -97,7 +108,7 @@ namespace SolaERP.Persistence.Services
                 tasks.Add(_repository.AddProductServiceAsync(new ProductServiceData { VendorId = vendorId, ProductServiceId = command.CompanyInformation.BusinessCategories[i].Id }));
             }
             #endregion
-
+            //
             #region PrequalificationCategory
             await _repository.DeletePrequalificationCategoryAsync(vendorId);
             for (int i = 0; i < command.CompanyInformation.PrequalificationTypes.Count; i++)
@@ -105,6 +116,8 @@ namespace SolaERP.Persistence.Services
                 tasks.Add(_repository.AddPrequalificationCategoryAsync(new PrequalificationCategoryData { VendorId = vendorId, PrequalificationCategoryId = command.CompanyInformation.PrequalificationTypes[i].Id }));
             }
             #endregion
+            //
+            #region Company Information Logo
 
             var companyLogo = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.CompanyLogo);
 
@@ -114,6 +127,7 @@ namespace SolaERP.Persistence.Services
                 companyLogo.SourceType = SourceType.VEN_LOGO.ToString();
             });
 
+
             for (int i = 0; i < companyLogo.Count; i++)
             {
                 if (companyLogo[i].Type == 2 && companyLogo[i].AttachmentId > 0)
@@ -121,6 +135,10 @@ namespace SolaERP.Persistence.Services
                 else if (companyLogo[i].Type != 2)
                     await _attachmentRepository.SaveAttachmentAsync(companyLogo[i]);
             }
+
+            #endregion
+            //
+            #region Company Information Attachments
 
             var attachments = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.Attachments);
             attachments.ForEach(attachment =>
@@ -137,9 +155,17 @@ namespace SolaERP.Persistence.Services
                     await _attachmentRepository.SaveAttachmentAsync(attachments[i]);
             }
 
+            #endregion
+            //
+            #region Stting Vendor Ids (COBC,NDA,Bank Accounts
+
             command?.CodeOfBuConduct?.ForEach(x => x.VendorId = vendorId);
             command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
             command?.BankAccounts?.ForEach(x => x.VendorId = vendorId);
+
+            #endregion
+            //
+            #region Bank Accounts
 
             foreach (var x in command.BankAccounts)
             {
@@ -168,18 +194,22 @@ namespace SolaERP.Persistence.Services
                 }
             }
 
+            #endregion
+            //
+            #region DueDiligence
 
             tasks = tasks.Concat(command?.DueDiligence?.SelectMany(item =>
             {
                 var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
                 dueInputModel.VendorId = vendorId;
                 dueInputModel.DateTimeValue = dueInputModel.DateTimeValue.ConvertDateToValidDate();
+
                 var itemTasks = new List<Task<bool>>
                 {
-                      _repository.UpdateDueAsync(dueInputModel)
+                     _repository.UpdateDueAsync(dueInputModel)
                 };
 
-                if (item.HasDataGrid == true)
+                if (item?.HasDataGrid == true)
                 {
                     itemTasks.AddRange(item?.GridDatas?.Select(gridData =>
                     {
@@ -194,9 +224,9 @@ namespace SolaERP.Persistence.Services
                     }) ?? Enumerable.Empty<Task<bool>>());
                 }
 
-                if (item.Attachments is not null)
+                if (item?.Attachments is not null)
                 {
-                    itemTasks.AddRange(item.Attachments.Select(attachment =>
+                    itemTasks.AddRange(item?.Attachments?.Select(attachment =>
                     {
                         var attachedFile = _mapper.Map<AttachmentSaveModel>(attachment);
 
@@ -212,6 +242,10 @@ namespace SolaERP.Persistence.Services
                 return itemTasks;
             })).ToList();
 
+            #endregion
+            //
+            #region Prequalification
+
             tasks.AddRange(command?.Prequalification?.SelectMany(item =>
             {
                 var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
@@ -221,9 +255,9 @@ namespace SolaERP.Persistence.Services
                 var tasksList = new List<Task<bool>>();
                 _repository.UpdatePrequalification(prequalificationValue); //+
 
-                if (item.Attachments is not null)
+                if (item?.Attachments is not null)
                 {
-                    for (int i = 0; i < item.Attachments.Count; i++)
+                    for (int i = 0; i < item?.Attachments.Count; i++)
                     {
                         if (item.Attachments[i].Type == 2 && item.Attachments[i].AttachmentId > 0)
                         {
@@ -257,21 +291,34 @@ namespace SolaERP.Persistence.Services
             }));
 
 
+            #endregion
+            //
+            #region NDA
+
             command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
             if (command?.NonDisclosureAgreement != null && command?.NonDisclosureAgreement?.Count > 0)
                 tasks.AddRange(command?.NonDisclosureAgreement?.Select(x => _repository.AddNDAAsync(_mapper.Map<VendorNDA>(x))));
 
+            #endregion
+            //
+            #region COBC
 
             command?.CodeOfBuConduct?.ForEach(x => x.VendorId = vendorId);
 
             if (command?.CodeOfBuConduct != null && command?.CodeOfBuConduct?.Count > 0)
                 tasks.AddRange(command?.CodeOfBuConduct?.Select(x => _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(x))));
 
+            #endregion
+
+
             await Task.WhenAll(tasks);
             await _unitOfWork.SaveChangesAsync();
 
             return ApiResponse<bool>.Success(tasks.All(x => x.Result), 200);
         }
+
+
+
 
         public async Task<ApiResponse<VM_GET_SupplierEvaluation>> GetAllAsync(SupplierEvaluationGETModel model)
         {

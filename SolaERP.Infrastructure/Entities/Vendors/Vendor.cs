@@ -19,5 +19,18 @@
         public int AgreeWithDefaultDays { get; set; }
         public int PrequalificationCategoryId { get; set; }
         public int BusinessCategoryId { get; set; }
+
+        public decimal? Rating { get; set; }
+        public int? BlackList { get; set; }
+        public string? BlackListDescription { get; set; }
+        public int? ReviseNo { get; set; }
+        public DateTime? ReviseDate { get; set; }
+        public string Description { get; set; }
+        public string Address2 { get; set; }
+        public string DefaultCurrency { get; set; }
+        public string Postal { get; set; }
+        public string PhoneNo { get; set; }
+        public string Email { get; set; }
+        public string ContactPerson { get; set; }
     }
 }

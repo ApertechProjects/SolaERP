@@ -77,9 +77,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
         public async Task<bool> UpdateDueAsync(VendorDueDiligenceModel model)
-        {
-            return await ModifyDueDiligence(model);
-        }
+            => await ModifyDueDiligence(model);
 
 
         public async Task<bool> DeleteDueAsync(int dueId)
@@ -117,7 +115,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Column4", gridModel.Column4);
                 command.Parameters.AddWithValue(command, "@Column5", gridModel.Column5);
 
-                return await command.ExecuteNonQueryAsync() > 0;
+
+                bool result = await command.ExecuteNonQueryAsync() > 0;
+                return result;
             }
         }
 

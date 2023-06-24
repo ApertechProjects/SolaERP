@@ -40,6 +40,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                             @ApproveStageMainId,
                                                             @CompanyAddress,
                                                             @CompanyRegistrationDate,
+                                                            @Rating,
+                                                            @BlackList,
+                                                            @BlackListDescription,
+                                                            @ReviseNo,
+                                                            @ReviseDate,
+                                                            @Description,
+                                                            @Address2,
+                                                            @DefaultCurrency,
+                                                            @Postal,
+                                                            @PhoneNo,
+                                                            @Email,
+                                                            @ContactPerson,
                                                             @NewVendorId = @NewVendorId OUTPUT
                                                             SELECT	@NewVendorId as [@NewVendorId]";
 
@@ -60,6 +72,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@ApproveStageMainId", null);
                 command.Parameters.AddWithValue(command, "@CompanyAddress", vendor.CompanyAdress);
                 command.Parameters.AddWithValue(command, "@CompanyRegistrationDate", vendor.RegistrationDate);
+                command.Parameters.AddWithValue(command, "@Rating", vendor.Rating);
+                command.Parameters.AddWithValue(command, "@BlackList", vendor.BlackList);
+                command.Parameters.AddWithValue(command, "@BlackListDescription", vendor.BlackListDescription);
+                command.Parameters.AddWithValue(command, "@ReviseNo", vendor.ReviseNo);
+                command.Parameters.AddWithValue(command, "@ReviseDate", vendor.ReviseDate);
+                command.Parameters.AddWithValue(command, "@Description", vendor.Description);
+                command.Parameters.AddWithValue(command, "@Address2", vendor.Address2);
+                command.Parameters.AddWithValue(command, "@DefaultCurrency", vendor.DefaultCurrency);
+                command.Parameters.AddWithValue(command, "@Postal", vendor.Postal);
+                command.Parameters.AddWithValue(command, "@PhoneNo", vendor.PhoneNo);
+                command.Parameters.AddWithValue(command, "@Email", vendor.Email);
+                command.Parameters.AddWithValue(command, "@ContactPerson", vendor.ContactPerson);
 
                 int newVendorId = 0;
 

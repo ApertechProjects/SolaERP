@@ -16,6 +16,8 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
 
     public class CompanyInfoDto
     {
+        public string Position { get; set; }
+        public string PhoneNumber { get; set; }
         public string CompanyName { get; set; }
         public string TaxId { get; set; }
         public string TaxOffice { get; set; }
