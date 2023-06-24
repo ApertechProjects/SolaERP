@@ -122,7 +122,11 @@ namespace SolaERP.Controllers
                     Token = HttpUtility.HtmlDecode(dto.VerifyToken),
                 };
 
-                await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification, emailVerification.TemplateName(), emailVerification.ImageName(), new List<string> { dto.Email });
+                Response.OnCompleted(async () =>
+                {
+                    await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification, emailVerification.TemplateName(), emailVerification.ImageName(), new List<string> { dto.Email });
+                });
+
 
                 account.UserId = response.Data;
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
