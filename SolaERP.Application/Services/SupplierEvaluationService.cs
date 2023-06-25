@@ -157,7 +157,7 @@ namespace SolaERP.Persistence.Services
 
             #endregion
             //
-            #region Stting Vendor Ids (COBC,NDA,Bank Accounts
+            #region Setting Vendor Ids (COBC,NDA,Bank Accounts
 
             command?.CodeOfBuConduct?.ForEach(x => x.VendorId = vendorId);
             command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
@@ -197,99 +197,105 @@ namespace SolaERP.Persistence.Services
             #endregion
             //
             #region DueDiligence
-
-            tasks = tasks.Concat(command?.DueDiligence?.SelectMany(item =>
+            if (command.DueDiligence is not null)
             {
-                var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
-                dueInputModel.VendorId = vendorId;
-                dueInputModel.DateTimeValue = dueInputModel.DateTimeValue.ConvertDateToValidDate();
+                tasks = tasks.Concat(command?.DueDiligence?.SelectMany(item =>
+                {
+                    var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
+                    dueInputModel.VendorId = vendorId;
+                    dueInputModel.DateTimeValue = dueInputModel.DateTimeValue.ConvertDateToValidDate();
 
-                var itemTasks = new List<Task<bool>>
+                    var itemTasks = new List<Task<bool>>
                 {
                      _repository.UpdateDueAsync(dueInputModel)
                 };
 
-                if (item?.HasDataGrid == true)
-                {
-                    itemTasks.AddRange(item?.GridDatas?.Select(gridData =>
+                    if (item?.HasDataGrid == true)
                     {
-                        if (gridData.Type == 2 && gridData.Id > 0)
-                            return _repository.DeleteDueDesignGrid(gridData.Id);
+                        itemTasks.AddRange(item?.GridDatas?.Select(gridData =>
+                        {
+                            if (gridData.Type == 2 && gridData.Id > 0)
+                                return _repository.DeleteDueDesignGrid(gridData.Id);
 
-                        var gridDatas = _mapper.Map<DueDiligenceGridModel>(gridData);
-                        gridDatas.DueDesignId = item.DesignId;
+                            var gridDatas = _mapper.Map<DueDiligenceGridModel>(gridData);
+                            gridDatas.DueDesignId = item.DesignId;
 
-                        return _repository.UpdateDueDesignGrid(gridDatas);
+                            return _repository.UpdateDueDesignGrid(gridDatas);
 
-                    }) ?? Enumerable.Empty<Task<bool>>());
-                }
+                        }) ?? Enumerable.Empty<Task<bool>>());
+                    }
 
-                if (item?.Attachments is not null)
-                {
-                    itemTasks.AddRange(item?.Attachments?.Select(attachment =>
+                    if (item?.Attachments is not null)
                     {
-                        var attachedFile = _mapper.Map<AttachmentSaveModel>(attachment);
+                        itemTasks.AddRange(item?.Attachments?.Select(attachment =>
+                        {
+                            var attachedFile = _mapper.Map<AttachmentSaveModel>(attachment);
 
-                        attachedFile.SourceId = vendorId;
-                        attachedFile.AttachmentTypeId = item.DesignId;
-                        attachedFile.SourceType = SourceType.VEN_DUE.ToString();
+                            attachedFile.SourceId = vendorId;
+                            attachedFile.AttachmentTypeId = item.DesignId;
+                            attachedFile.SourceType = SourceType.VEN_DUE.ToString();
 
-                        return _attachmentRepository.SaveAttachmentAsync(attachedFile);
-                    }));
+                            return _attachmentRepository.SaveAttachmentAsync(attachedFile);
+                        }));
 
-                }
+                    }
 
-                return itemTasks;
-            })).ToList();
+                    return itemTasks;
+                })).ToList();
+
+            }
 
             #endregion
             //
             #region Prequalification
 
-            tasks.AddRange(command?.Prequalification?.SelectMany(item =>
+            if (command.Prequalification is not null)
             {
-                var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
-                prequalificationValue.VendorId = vendorId;
-                prequalificationValue.DateTimeValue = prequalificationValue.DateTimeValue.ConvertDateToValidDate();
-
-                var tasksList = new List<Task<bool>>();
-                _repository.UpdatePrequalification(prequalificationValue); //+
-
-                if (item?.Attachments is not null)
+                tasks.AddRange(command?.Prequalification?.SelectMany(item =>
                 {
-                    for (int i = 0; i < item?.Attachments.Count; i++)
+                    var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
+                    prequalificationValue.VendorId = vendorId;
+                    prequalificationValue.DateTimeValue = prequalificationValue.DateTimeValue.ConvertDateToValidDate();
+
+                    var tasksList = new List<Task<bool>>();
+                    _repository.UpdatePrequalification(prequalificationValue); //+
+
+                    if (item?.Attachments is not null)
                     {
-                        if (item.Attachments[i].Type == 2 && item.Attachments[i].AttachmentId > 0)
+                        for (int i = 0; i < item?.Attachments.Count; i++)
                         {
-                            var attachedFile = _mapper.Map<AttachmentSaveModel>(item.Attachments[i]);
+                            if (item.Attachments[i].Type == 2 && item.Attachments[i].AttachmentId > 0)
+                            {
+                                var attachedFile = _mapper.Map<AttachmentSaveModel>(item.Attachments[i]);
 
-                            attachedFile.SourceId = vendorId;
-                            attachedFile.AttachmentTypeId = item.DesignId;
-                            attachedFile.SourceType = SourceType.VEN_PREQ.ToString();
+                                attachedFile.SourceId = vendorId;
+                                attachedFile.AttachmentTypeId = item.DesignId;
+                                attachedFile.SourceType = SourceType.VEN_PREQ.ToString();
 
-                            tasksList.Add(_attachmentRepository.SaveAttachmentAsync(attachedFile));
-                        }
-                        else
-                        {
-                            tasksList.Add(_attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId));
+                                tasksList.Add(_attachmentRepository.SaveAttachmentAsync(attachedFile));
+                            }
+                            else
+                            {
+                                tasksList.Add(_attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId));
+                            }
                         }
                     }
-                }
 
-                if (item.HasGrid == true)
-                {
-                    tasksList.AddRange(item.GridDatas.Select(gridData =>
+                    if (item.HasGrid == true)
                     {
-                        var gridDatas = _mapper.Map<PrequalificationGridData>(gridData);
-                        gridDatas.PreqqualificationDesignId = item.DesignId;
+                        tasksList.AddRange(item.GridDatas.Select(gridData =>
+                        {
+                            var gridDatas = _mapper.Map<PrequalificationGridData>(gridData);
+                            gridDatas.PreqqualificationDesignId = item.DesignId;
 
-                        return _repository.UpdatePreGridAsync(gridDatas);
-                    }));
-                }
+                            return _repository.UpdatePreGridAsync(gridDatas);
+                        }));
+                    }
 
-                return tasksList;
-            }));
+                    return tasksList;
+                }));
 
+            }
 
             #endregion
             //
