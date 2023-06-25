@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
-using System.ComponentModel.DataAnnotations;
 
 namespace SolaERP.API.Controllers
 {

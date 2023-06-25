@@ -582,7 +582,8 @@ namespace SolaERP.Persistence.Services
                             Weight = design.Weight,
                             Outcome = calculationResult.Outcome,
                             Scoring = calculationResult.Scoring,
-                            AllPoint = calculationResult.AllPoint
+                            AllPoint = calculationResult.AllPoint,
+                            Disabled = design.Disabled,
                         };
                     });
 
