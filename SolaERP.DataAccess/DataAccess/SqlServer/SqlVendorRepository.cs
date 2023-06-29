@@ -1,5 +1,6 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.Email;
+using SolaERP.Application.Entities.PrequalificationCategory;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Models;
@@ -231,9 +232,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec SP_VendorWFA @userId";
+                command.CommandText = @"exec SP_VendorWFA @userId
+                                      @PrequalificationCategoryId,
+                                      @BusinessCategoryId,@ProductServiceId,@VendorTypeId";
+
+
 
                 command.Parameters.AddWithValue(command, "@userId", userId);
+                command.Parameters.AddWithValue(command, "@VendorTypeId", userId);
+                command.Parameters.AddWithValue(command, "@ProductServiceId", userId);
+                command.Parameters.AddWithValue(command, "@BusinessCategoryId", userId);
+                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", userId);
 
                 using var reader = await command.ExecuteReaderAsync();
                 List<VendorWFA> data = new List<VendorWFA>();
