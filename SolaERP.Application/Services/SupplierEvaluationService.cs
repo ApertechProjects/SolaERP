@@ -79,7 +79,7 @@ namespace SolaERP.Persistence.Services
 
             vendor.RegistrationDate = vendor.RegistrationDate.ConvertDateToValidDate();
 
-            int vendorId = await _vendorRepository.UpdateVendorAsync(user.Id, vendor);
+            int vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
 
             #region Represented Company & Represented Products
 
@@ -613,7 +613,7 @@ namespace SolaERP.Persistence.Services
             var result = await AddAsync(userIdentity, command);
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
-            var submitResult = await _vendorRepository.VendorChangeStatus(user.VendorId, 1, user.Id);
+            var submitResult = await _vendorRepository.ChangeStatusAsync(user.VendorId, 1, user.Id);
             await _unitOfWork.SaveChangesAsync();
 
             List<Task> emails = new List<Task>();

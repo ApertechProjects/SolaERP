@@ -63,11 +63,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_RequestMainApprove @UserId,@RequestMainId,@ApproveStatus,@Comment";
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_RequestMainApprove @UserId,@RequestMainId,@ApprovalStatus,@Comment";
 
                 command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
-                command.Parameters.AddWithValue(command, "@ApproveStatus", approveStatus);
+                command.Parameters.AddWithValue(command, "@ApprovalStatus", approveStatus);
                 command.Parameters.AddWithValue(command, "@Comment", comment);
 
                 return await command.ExecuteNonQueryAsync() > 0;
@@ -238,7 +238,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RequestMainId = reader.Get<int>("RequestMainId"),
                 BusinessUnitCode = reader.Get<string>("BusinessUnitCode"),
                 BusinessUnitName = reader.Get<string>("BusinessUnitName"),
-                ApproveStatus = reader.Get<string>("ApproveStatus"),
+                ApproveStatus = reader.Get<string>("ApprovalStatus"),
                 ApproveStatusName = reader.Get<string>("ApproveStatusName"),
                 EmployeeCode = reader.Get<string>("EmployeeCode"),
                 EmployeeName = reader.Get<string>("EmployeeName"),
@@ -282,7 +282,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 CurrencyCode = reader.Get<string>("Currency"),
                 LogisticsTotal = reader.Get<decimal>("LogisticsTotal"),
                 Destination = reader.Get<int>("Destination"),
-                ApproveStatus = reader.Get<string>("ApproveStatus"),
+                ApproveStatus = reader.Get<string>("ApprovalStatus"),
                 AccountCode = reader.Get<string>("AccountCode"),
                 AccountName = reader.Get<string>("AccountName")
             };
@@ -334,7 +334,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RequestComment = reader.Get<string>("RequestComment"),
                 OperatorComment = reader.Get<string>("OperatorComment"),
                 QualityRequired = reader.Get<string>("QualityRequired"),
-                ApproveStatus = reader.Get<string>("ApproveStatus"),
+                ApproveStatus = reader.Get<string>("ApprovalStatus"),
                 ApproveStatusName = reader.Get<string>("ApproveStatusName"),
                 Status = reader.Get<int>("Status"),
                 StatusName = reader.Get<string>("ApproveStatusName")
@@ -411,7 +411,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@ItemCode", itemCode == "all" ? "%" : itemCode);
                 command.Parameters.AddWithValue(command, "@DateFrom", requestMain.DateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", requestMain.DateTo);
-                command.Parameters.AddWithValue(command, "@ApproveStatus", approveStatus == "all" ? "%" : approveStatus);
+                command.Parameters.AddWithValue(command, "@ApprovalStatus", approveStatus == "all" ? "%" : approveStatus);
                 command.Parameters.AddWithValue(command, "@Status", status == "all" ? "%" : status);
 
                 using var reader = await command.ExecuteReaderAsync();

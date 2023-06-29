@@ -166,7 +166,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
              => await ModifyBankDetailsAsync(userId, bankDetail);
 
 
-        public async Task<int> AddVendorAsync(int userId, Vendor vendor)
+        public async Task<int> AddAsync(int userId, Vendor vendor)
         {
             return await ModifyVendorAsync(userId, new()
             {
@@ -189,19 +189,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             });
         }
 
-        public async Task<int> UpdateVendorAsync(int userId, Vendor vendor)
+        public async Task<int> UpdateAsync(int userId, Vendor vendor)
             => await ModifyVendorAsync(userId, vendor);
 
-        public async Task<int> DeleteVendorAsync(int userId, int id)
-            => await DeleteVendorAsync(userId, id);
+        public async Task<int> DeleteAsync(int userId, int id)
+            => await DeleteAsync(userId, id);
 
-        public async Task<bool> VendorChangeStatus(int vendorId, int status, int userId)
+        public async Task<bool> ChangeStatusAsync(int vendorId, int status, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorsChangeStatus @VendorId,
-                                                                      @UserId,
-                                                                      @Status";
+                                                                                    @UserId,
+                                                                                    @Status";
 
                 command.Parameters.AddWithValue(command, "@VendorId", vendorId);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
@@ -211,7 +211,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<VendorInfo> GetVendorByTaxAsync(string taxId)
+        public async Task<VendorInfo> GetByTaxAsync(string taxId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -226,7 +226,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<VendorWFA>> WaitingForApprovals(int userId)
+        public async Task<List<VendorWFA>> GetWFAAsync(int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -244,7 +244,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<VendorAll>> All(int userId)
+        public async Task<List<VendorAll>> GetAll(int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -274,9 +274,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 List<VendorInfo> data = new List<VendorInfo>();
 
                 while (reader.Read())
-                {
                     data.Add(reader.GetByEntityStructure<VendorInfo>());
-                }
+
                 return data;
             }
         }

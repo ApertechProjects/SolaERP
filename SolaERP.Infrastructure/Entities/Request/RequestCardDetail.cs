@@ -4,7 +4,7 @@
     {
         public int RequestDetailId { get; set; }
         public int RequestMainId { get; set; }
-        //public int ApproveStatus { get; set; }
+        //public int ApprovalStatus { get; set; }
         public string LineNo { get; set; }
         public DateTime RequestDate { get; set; }
         public DateTime RequestDeadline { get; set; }
