@@ -301,5 +301,32 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return data;
             }
         }
+
+        public async Task<List<VendorWFA>> GetHeld(int userId, VendorFilter filter)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_VendorHeld @UserId,
+                                      @PrequalificationCategoryId,
+                                      @BusinessCategoryId,
+                                      @ProductServiceId,
+                                      @VendorTypeId";
+
+
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                command.Parameters.AddWithValue(command, "@VendorTypeId", string.Join(",", filter.VendorTypeId));
+                command.Parameters.AddWithValue(command, "@ProductServiceId", string.Join(",", filter.ProductServiceId));
+                command.Parameters.AddWithValue(command, "@BusinessCategoryId", string.Join(",", filter.BusinessCategoryId));
+                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", string.Join(",", filter.BusinessCategoryId));
+
+                List<VendorWFA> data = new List<VendorWFA>();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    data.Add(reader.GetByEntityStructure<VendorWFA>());
+
+                return data;
+            }
+        }
     }
 }
