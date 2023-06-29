@@ -2,6 +2,7 @@
 using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
+using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
@@ -226,20 +227,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<VendorWFA>> GetWFAAsync(int userId)
+        public async Task<List<VendorWFA>> GetWFAAsync(int userId, VendorFilter filter)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "exec SP_VendorWFA @userId";
+
                 command.Parameters.AddWithValue(command, "@userId", userId);
 
                 using var reader = await command.ExecuteReaderAsync();
                 List<VendorWFA> data = new List<VendorWFA>();
 
                 while (reader.Read())
-                {
                     data.Add(reader.GetByEntityStructure<VendorWFA>());
-                }
+
                 return data;
             }
         }

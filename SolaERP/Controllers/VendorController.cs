@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Models;
 using SolaERP.Controllers;
 
 namespace SolaERP.API.Controllers
@@ -21,6 +22,9 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Filters()
             => CreateActionResult(await _service.GetFiltersAsync());
 
+        //[HttpGet]
+        //public async Task<IActionResult> GetWFA([FromQuery] VendorFilter filter)
+        //    => CreateActionResult(await)
 
     }
 }

@@ -4,6 +4,7 @@ using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.Venndors;
 using SolaERP.Application.Entities.Vendors;
+using SolaERP.Application.Models;
 using SolaERP.Application.ViewModels;
 
 namespace SolaERP.Persistence.Services
@@ -36,36 +37,10 @@ namespace SolaERP.Persistence.Services
         }
 
 
-        public async Task<ApiResponse<List<VendorWFA>>> GetWFAAsync(string userName)
-        {
-            int userId = await _userRepository.ConvertIdentity(userName);
 
-            var data = await _repository.GetWFAAsync(userId);
-            var dto = _mapper.Map<List<VendorWFA>>(data);
-            if (dto.Count > 0)
-                return ApiResponse<List<VendorWFA>>.Success(dto);
-            return ApiResponse<List<VendorWFA>>.Fail("Data not found", 404);
-        }
 
-        public async Task<ApiResponse<List<VendorAll>>> GetAll(string userName)
-        {
-            int userId = await _userRepository.ConvertIdentity(userName);
-            var data = await _repository.GetAll(userId);
-            var dto = _mapper.Map<List<VendorAll>>(data);
-            if (dto.Count > 0)
-                return ApiResponse<List<VendorAll>>.Success(dto);
-            return ApiResponse<List<VendorAll>>.Fail("Data not found", 404);
-        }
 
-        public async Task<ApiResponse<List<VendorInfoDto>>> Vendors(int businessUnitId, string name)
-        {
-            int userId = await _userRepository.ConvertIdentity(name);
-            var data = await _repository.Get(businessUnitId, userId);
-            var dto = _mapper.Map<List<VendorInfoDto>>(data);
-            if (dto.Count > 0)
-                return ApiResponse<List<VendorInfoDto>>.Success(dto);
-            return ApiResponse<List<VendorInfoDto>>.Fail("Data not found", 404);
-        }
+
 
         public async Task<ApiResponse<VM_GetVendorFilters>> GetFiltersAsync()
         {
@@ -82,6 +57,11 @@ namespace SolaERP.Persistence.Services
             };
 
             return ApiResponse<VM_GetVendorFilters>.Success(viewModel, 200);
+        }
+
+        public Task<ApiResponse<List<VendorWFA>>> GetWFAAsync(string userIdentity, VendorFilter filter)
+        {
+            throw new NotImplementedException();
         }
     }
 }
