@@ -2,8 +2,10 @@
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Dtos.Venndors;
 using SolaERP.Application.Entities.Vendors;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.ViewModels;
 
@@ -27,6 +29,15 @@ namespace SolaERP.Persistence.Services
             _supplierEvaluationRepository = supplierEvaluationRepository;
         }
 
+        public async Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity, VendorFilter filter, Status status, ApprovalStatus approval)
+        {
+            List<VendorAll> allVendors = await _repository.GetAll(Convert.ToInt32(userIdentity),
+                filter, (int)status, (int)approval);
+
+            List<VendorAllDto> dto = _mapper.Map<List<VendorAllDto>>(allVendors);
+            return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
+        }
+
         public async Task<VendorInfo> GetByTaxAsync(string taxId)
             => await _repository.GetByTaxAsync(taxId);
 
@@ -35,9 +46,6 @@ namespace SolaERP.Persistence.Services
             VendorInfo entity = await _repository.GetByTaxAsync(taxId);
             return entity.VendorId;
         }
-
-
-
 
 
 
@@ -59,9 +67,12 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<VM_GetVendorFilters>.Success(viewModel, 200);
         }
 
-        public Task<ApiResponse<List<VendorWFA>>> GetWFAAsync(string userIdentity, VendorFilter filter)
+
+        public async Task<ApiResponse<List<VendorWFADto>>> GetWFAAsync(string userIdentity, VendorFilter filter)
         {
-            throw new NotImplementedException();
+            List<VendorWFA> vendorWFAs = await _repository.GetWFAAsync(Convert.ToInt32(userIdentity), filter);
+            List<VendorWFADto> vendorAllDtos = _mapper.Map<List<VendorWFADto>>(vendorWFAs);
+            return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
         }
     }
 }

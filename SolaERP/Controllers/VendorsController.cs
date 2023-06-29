@@ -26,17 +26,17 @@ namespace SolaERP.Controllers
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> WaitingForApprovals()
-            => CreateActionResult(await _vendorService.GetWFAAsync(User.Identity.Name));
+            => CreateActionResult(await _vendorService.GetWFAAsync(User.Identity.Name, new()));
 
-        [Authorize]
-        [HttpGet]
-        public async Task<IActionResult> All()
-          => CreateActionResult(await _vendorService.GetAll(User.Identity.Name));
+        //[Authorize]
+        //[HttpGet]
+        //public async Task<IActionResult> All()
+        //  => CreateActionResult(await _vendorService.GetAll(User.Identity.Name));
 
-        [Authorize]
-        [HttpGet("{businessUnitId}")]
-        public async Task<IActionResult> Vendors(int businessUnitId)
-            => CreateActionResult(await _vendorService.Vendors(businessUnitId, User.Identity.Name));
+        //[Authorize]
+        //[HttpGet("{businessUnitId}")]
+        //public async Task<IActionResult> Vendors(int businessUnitId)
+        //    => CreateActionResult(await _vendorService.Vendors(businessUnitId, User.Identity.Name));
 
 
         [HttpGet("{vendorId}")]

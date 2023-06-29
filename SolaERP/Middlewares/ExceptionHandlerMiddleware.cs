@@ -24,7 +24,7 @@ namespace SolaERP.Middlewares
                     handler.Response.StatusCode = statusCode;
 
                     _logger.LogError(errorFeatures.Error.StackTrace);
-                    var result = ApiResponse<NoContentDto>.Fail(errorFeatures.Error.StackTrace, 400);
+                    var result = ApiResponse<NoContentDto>.Fail(errorFeatures.Error, 400);
                     await handler.Response.WriteAsync(JsonSerializer.Serialize(result));
                 });
             });

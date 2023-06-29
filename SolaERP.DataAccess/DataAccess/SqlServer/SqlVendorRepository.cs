@@ -235,7 +235,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"exec SP_VendorWFA @userId
+                command.CommandText = @"exec SP_VendorWFA @userId,
                                       @PrequalificationCategoryId,
                                       @BusinessCategoryId,@ProductServiceId,@VendorTypeId";
 
@@ -261,7 +261,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"exec SP_VendorAll @userId @PrequalificationCategoryId,
+                command.CommandText = @"exec SP_VendorAll @userId, @PrequalificationCategoryId,
                                       @BusinessCategoryId,@ProductServiceId,@VendorTypeId,
                                       @status,@ApproveStatus";
 
