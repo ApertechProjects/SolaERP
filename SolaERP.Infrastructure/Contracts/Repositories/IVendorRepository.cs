@@ -1,6 +1,8 @@
 ﻿
+using SolaERP.Application.Entities.Status;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Contracts.Repositories
@@ -16,7 +18,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<VendorInfo> GetByTaxAsync(string taxId);
         Task<bool> ChangeStatusAsync(int vendorId, int status, int userId);
         Task<List<VendorWFA>> GetWFAAsync(int userId, VendorFilter filter);
-        Task<List<VendorAll>> GetAll(int userId);
+        Task<List<VendorAll>> GetAll(int userId, VendorFilter filter, Enums.Status status, ApprovalStatus approval);
         Task<List<VendorInfo>> Get(int businessUnitId, int userId);
     }
 }

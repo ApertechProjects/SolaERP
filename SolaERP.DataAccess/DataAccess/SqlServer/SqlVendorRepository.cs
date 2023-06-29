@@ -1,11 +1,14 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.ApproveStages;
 using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Entities.PrequalificationCategory;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
+using System;
 using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
@@ -239,10 +242,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 
                 command.Parameters.AddWithValue(command, "@userId", userId);
-                command.Parameters.AddWithValue(command, "@VendorTypeId", userId);
-                command.Parameters.AddWithValue(command, "@ProductServiceId", userId);
-                command.Parameters.AddWithValue(command, "@BusinessCategoryId", userId);
-                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", userId);
+                command.Parameters.AddWithValue(command, "@VendorTypeId", string.Join(",", filter.VendorTypeId));
+                command.Parameters.AddWithValue(command, "@ProductServiceId", string.Join(",", filter.ProductServiceId));
+                command.Parameters.AddWithValue(command, "@BusinessCategoryId", string.Join(",", filter.BusinessCategoryId));
+                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", string.Join(",", filter.BusinessCategoryId));
 
                 using var reader = await command.ExecuteReaderAsync();
                 List<VendorWFA> data = new List<VendorWFA>();
@@ -254,20 +257,29 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<VendorAll>> GetAll(int userId)
+        public async Task<List<VendorAll>> GetAll(int userId, VendorFilter filter, int status, int approval)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec SP_VendorAll @userId";
+                command.CommandText = @"exec SP_VendorAll @userId @PrequalificationCategoryId,
+                                      @BusinessCategoryId,@ProductServiceId,@VendorTypeId,
+                                      @status,@ApproveStatus";
+
+
                 command.Parameters.AddWithValue(command, "@userId", userId);
+                command.Parameters.AddWithValue(command, "@VendorTypeId", string.Join(",", filter.VendorTypeId));
+                command.Parameters.AddWithValue(command, "@ProductServiceId", string.Join(",", filter.ProductServiceId));
+                command.Parameters.AddWithValue(command, "@BusinessCategoryId", string.Join(",", filter.BusinessCategoryId));
+                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", string.Join(",", filter.BusinessCategoryId));
+                command.Parameters.AddWithValue(command, "@status", status);
+                command.Parameters.AddWithValue(command, "@ApproveStatus", approval);
 
                 using var reader = await command.ExecuteReaderAsync();
                 List<VendorAll> data = new List<VendorAll>();
 
                 while (reader.Read())
-                {
                     data.Add(reader.GetByEntityStructure<VendorAll>());
-                }
+
                 return data;
             }
         }
