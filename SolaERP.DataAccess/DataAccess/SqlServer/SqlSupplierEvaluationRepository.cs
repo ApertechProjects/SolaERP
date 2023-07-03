@@ -28,7 +28,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                       ,@TextboxValue,@TextareaValue
                                                                       ,@CheckboxValue,@RadioboxValue
                                                                       ,@IntValue,@DecimalValue
-                                                                      ,@DateTimeValue,@AgreementValue,@Scoring";
+                                                                      ,@DateTimeValue,@AgreementValue,@Scoring,@BankListValue";
 
                     command.Parameters.AddWithValue(command, "@VendorDueDiligenceId", vendorDueDiligence.VendorDueDiligenceId);
                     command.Parameters.AddWithValue(command, "@DueDiligenceDesignId", vendorDueDiligence.DesignId);
@@ -42,6 +42,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     command.Parameters.AddWithValue(command, "@DateTimeValue", vendorDueDiligence.DateTimeValue);
                     command.Parameters.AddWithValue(command, "@AgreementValue", vendorDueDiligence.AgreementValue);
                     command.Parameters.AddWithValue(command, "@Scoring", vendorDueDiligence.Scoring);
+                    command.Parameters.AddWithValue(command, "@BankListValue", vendorDueDiligence.BankListValue);
 
 
                     return await command.ExecuteNonQueryAsync() > 0;
@@ -73,6 +74,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 TextareaValue = model.TextareaValue,
                 TextboxValue = model.TextboxValue,
                 VendorId = model.VendorId,
+                BankListValue = model.BankListValue,
             });
         }
 

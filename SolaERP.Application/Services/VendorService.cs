@@ -58,6 +58,11 @@ namespace SolaERP.Persistence.Services
             return entity.VendorId;
         }
 
+        public async Task<ApiResponse<List<VendorAll>>> GetDraftAsync(string userIdentity, VendorFilter filter)
+        {
+            var data = await _repository.GetDraftAsync(Convert.ToInt32(userIdentity), filter);
+            return ApiResponse<List<VendorAll>>.Success(data, 200);
+        }
 
         public async Task<ApiResponse<VM_GetVendorFilters>> GetFiltersAsync()
         {

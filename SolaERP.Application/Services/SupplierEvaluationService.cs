@@ -735,6 +735,7 @@ namespace SolaERP.Persistence.Services
                         AttachmentPoint = d.HasAttachment,//> 0 ? d.HasAttachment : null,
                         DataGridPoint = d.HasGrid,
                         Weight = d.Weight,
+                        BankListValue = correspondingValue.BankListValue,
                         AllPoint = calculationResult.AllPoint,
                         Scoring = calculationResult.Scoring,
                         Outcome = calculationResult.Outcome,

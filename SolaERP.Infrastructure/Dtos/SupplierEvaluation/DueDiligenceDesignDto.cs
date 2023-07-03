@@ -71,6 +71,8 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         //
         public string TextboxValue { get; set; }
         //
+        public string BankListValue { get; set; }
+        //
         public string TextareaValue { get; set; }
         //
         public bool CheckboxValue { get; set; }
@@ -84,7 +86,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public DateTime DateTimeValue { get; set; }
         //
         public bool AgreementValue { get; set; }
-        ////
+        //
         public decimal Scoring { get; set; }
         //
         public List<AttachmentDto> Attachments { get; set; }
