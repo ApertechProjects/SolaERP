@@ -32,7 +32,7 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _service.GetWFAAsync(User.Identity.Name, filter));
 
         [HttpGet]
-        public async Task<IActionResult> GetDraft([FromQuery] VendorFilter filter, [FromQuery] Status status, [FromQuery] ApprovalStatus approval)
+        public async Task<IActionResult> GetDraft([FromQuery] VendorFilter filter)
             => CreateActionResult(await _service.GetDraftAsync(User.Identity.Name, filter));
 
     }
