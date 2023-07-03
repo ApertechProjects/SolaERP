@@ -29,6 +29,25 @@ namespace SolaERP.Persistence.Services
             _supplierEvaluationRepository = supplierEvaluationRepository;
         }
 
+        public async Task<ApiResponse<bool>> ChangeStatusAsync(TaxModel taxModel, string userIdentity)
+        {
+            var userId = await _userRepository.ConvertIdentity(userIdentity);
+            int counter = 0;
+            for (int i = 0; i < taxModel.TaxIds.Count; i++)
+            {
+                var taxId = await GetByTaxIdAsync(taxModel.TaxIds[i]);
+                var result = await _repository.ChangeStatusAsync(taxId, taxModel.Status, userId);
+                if (result)
+                    counter++;
+            }
+
+
+            if (counter == taxModel.TaxIds.Count)
+                return ApiResponse<bool>.Success(200);
+            else
+                return ApiResponse<bool>.Fail("Problem detected", 400);
+        }
+
         public async Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity, VendorFilter filter, Status status, ApprovalStatus approval)
         {
             List<VendorAll> allVendors = await _repository.GetAll(Convert.ToInt32(userIdentity),
@@ -70,6 +89,12 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<VM_GetVendorFilters>.Success(viewModel, 200);
         }
 
+        public async Task<ApiResponse<List<VendorWFADto>>> GetHeldAsync(string userIdentity, VendorFilter filter)
+        {
+            List<VendorWFA> vendorWFAs = await _repository.GetHeldAsync(Convert.ToInt32(userIdentity), filter);
+            List<VendorWFADto> vendorAllDtos = _mapper.Map<List<VendorWFADto>>(vendorWFAs);
+            return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
+        }
 
         public async Task<ApiResponse<List<VendorWFADto>>> GetWFAAsync(string userIdentity, VendorFilter filter)
         {

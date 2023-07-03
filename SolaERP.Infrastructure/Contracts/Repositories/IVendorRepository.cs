@@ -15,8 +15,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<int> DeleteAsync(int userId, int id);
         Task<VendorInfo> GetByTaxAsync(string taxId);
         Task<bool> ChangeStatusAsync(int vendorId, int status, int userId);
-
-
         Task<List<VendorWFA>> GetWFAAsync(int userId, VendorFilter filter);
         Task<List<VendorAll>> GetAll(int userId, VendorFilter filter, int status, int approval);
         Task<List<VendorWFA>> GetHeldAsync(int userId, VendorFilter filter);
