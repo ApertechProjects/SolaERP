@@ -128,7 +128,7 @@ namespace SolaERP.Persistence.Services
             });
 
 
-            for (int i = 0; i < companyLogo.Count; i++)
+            for (int i = 0; i < companyLogo.Count; i++) //+
             {
                 if (companyLogo[i].Type == 2 && companyLogo[i].AttachmentId > 0)
                     await _attachmentRepository.DeleteAttachmentAsync(companyLogo[i].AttachmentId);
@@ -178,7 +178,7 @@ namespace SolaERP.Persistence.Services
 
                     if (x.AccountVerificationLetter != null)
                     {
-                        tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
+                        tasks.AddRange(x.AccountVerificationLetter.Select(attachment => //+
                         {
                             if (attachment.Type == 2 && attachment.AttachmentId > 0)
                                 return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
@@ -229,13 +229,15 @@ namespace SolaERP.Persistence.Services
                     {
                         itemTasks.AddRange(item?.Attachments?.Select(attachment =>
                         {
-                            var attachedFile = _mapper.Map<AttachmentSaveModel>(attachment);
-
-                            attachedFile.SourceId = vendorId;
-                            attachedFile.AttachmentTypeId = item.DesignId;
-                            attachedFile.SourceType = SourceType.VEN_DUE.ToString();
-
-                            return _attachmentRepository.SaveAttachmentAsync(attachedFile);
+                            if (attachment.Type == 2 && attachment.AttachmentId > 0)
+                                return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
+                            else
+                            {
+                                var attachedFile = _mapper.Map<AttachmentSaveModel>(attachment);
+                                attachedFile.SourceId = vendorId;
+                                attachedFile.SourceType = SourceType.VEN_DUE.ToString();
+                                return _attachmentRepository.SaveAttachmentAsync(attachedFile);
+                            }
                         }));
 
                     }
@@ -266,6 +268,10 @@ namespace SolaERP.Persistence.Services
                         {
                             if (item.Attachments[i].Type == 2 && item.Attachments[i].AttachmentId > 0)
                             {
+                                tasksList.Add(_attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId));
+                            }
+                            else
+                            {
                                 var attachedFile = _mapper.Map<AttachmentSaveModel>(item.Attachments[i]);
 
                                 attachedFile.SourceId = vendorId;
@@ -273,10 +279,6 @@ namespace SolaERP.Persistence.Services
                                 attachedFile.SourceType = SourceType.VEN_PREQ.ToString();
 
                                 tasksList.Add(_attachmentRepository.SaveAttachmentAsync(attachedFile));
-                            }
-                            else
-                            {
-                                tasksList.Add(_attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId));
                             }
                         }
                     }
