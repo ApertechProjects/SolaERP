@@ -18,6 +18,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<VendorWFADto>>> GetWFAAsync(string userIdentity, VendorFilter filter);
         Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity, VendorFilter filter, Enums.Status status, ApprovalStatus approval);
         Task<ApiResponse<List<VendorWFADto>>> GetHeldAsync(string userIdentity, VendorFilter filter);
-        Task<ApiResponse<bool>> ChangeStatusAsync(string userIdentity, string tax, int status);
+        Task<ApiResponse<bool>> ChangeStatusAsync(TaxModel taxModel, string userIdentity);
     }
 }
