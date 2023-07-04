@@ -76,19 +76,19 @@ namespace SolaERP.Persistence.Services
             var analysisDimension = await _dimensionRepository.ByAnalysisDimensionId(dimensionId, userId);
             var businessUnit = await _businessUnitRepository.GetByIdAsync(Convert.ToInt32(analysisDimension?.BusinessUnitId));
 
-            var map = analysisCodes.Select(ac => new AnalysisDto
+            var map = analysisCodes?.Select(ac => new AnalysisDto
             {
                 AnalysisCodesId = ac.AnalysisCodesId,
                 BusinessUnitId = businessUnit.BusinessUnitId,
-                BusinessUnitName = businessUnit.BusinessUnitName,
-                AnalysisDimensionCode = analysisDimension.AnalysisDimensionCode,
+                BusinessUnitName = businessUnit?.BusinessUnitName,
+                AnalysisDimensionCode = analysisDimension?.AnalysisDimensionCode,
                 AnalysisDimensionId = analysisDimension.AnalysisDimensionId,
-                AnalysisCode = ac.AnalysisCode,
-                AnalysisName = ac.AnalysisName,
+                AnalysisCode = ac?.AnalysisCode,
+                AnalysisName = ac?.AnalysisName,
                 Status = ac.Status,
-                Description = ac.Description,
-                AdditionalDescription = ac.AdditionalDescription,
-                AdditionalDescription2 = ac.AdditionalDescription2,
+                Description = ac?.Description,
+                AdditionalDescription = ac?.AdditionalDescription,
+                AdditionalDescription2 = ac?.AdditionalDescription2,
                 LinkedAnalysisDimensionid = ac.LinkedAnalysisDimensionid,
                 IsLinked = ac.IsLinked,
                 Date1 = ac.Date1,
