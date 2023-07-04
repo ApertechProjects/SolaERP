@@ -39,5 +39,9 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> GetHeld([FromQuery] VendorFilter filter)
          => CreateActionResult(await _service.GetHeldAsync(User.Identity.Name, filter));
 
+        [HttpGet("{vendorId}")]
+        public async Task<IActionResult> Get(int vendorId)
+            => CreateActionResult(await _service.GetVendorCard(vendorId));
+
     }
 }

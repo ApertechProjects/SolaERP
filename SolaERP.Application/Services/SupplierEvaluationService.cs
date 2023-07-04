@@ -341,7 +341,7 @@ namespace SolaERP.Persistence.Services
             BankCodesDto bankCodes = new()
             {
                 Currencies = await _repository.GetCurrenciesAsync(),
-                BankDetails = await _repository.GetVondorBankDetailsAsync(model.VendorId),
+                BankDetails = await _repository.GetVendorBankDetailsAsync(model.VendorId),
             };
             List<BusinessUnits> buUnits = await _buRepository.GetAllAsync();
 
@@ -360,7 +360,7 @@ namespace SolaERP.Persistence.Services
             var user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
             var currencyTask = _repository.GetCurrenciesAsync();
-            var bankDetailsTask = _repository.GetVondorBankDetailsAsync(user.VendorId);
+            var bankDetailsTask = _repository.GetVendorBankDetailsAsync(user.VendorId);
 
             await Task.WhenAll(currencyTask, bankDetailsTask);
 

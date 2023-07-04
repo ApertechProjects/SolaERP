@@ -255,7 +255,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<VendorBankDetail>> GetVondorBankDetailsAsync(int vendorid)
+        public async Task<List<VendorBankDetail>> GetVendorBankDetailsAsync(int vendorid)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

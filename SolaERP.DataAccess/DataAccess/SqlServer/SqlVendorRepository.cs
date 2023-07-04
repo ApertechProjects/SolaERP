@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.ApproveStages;
 using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Entities.PrequalificationCategory;
@@ -354,6 +355,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     data.Add(reader.GetByEntityStructure<VendorAll>());
 
                 return data;
+            }
+        }
+
+        public async Task<VendorCard> GetHeader(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"Exec SP_Vendor_load @VendorId";
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+                using var reader = await command.ExecuteReaderAsync();
+                VendorCard vendorCard = new VendorCard();
+
+                if (reader.Read())
+                    vendorCard = reader.GetByEntityStructure<VendorCard>();
+
+                return vendorCard;
             }
         }
     }

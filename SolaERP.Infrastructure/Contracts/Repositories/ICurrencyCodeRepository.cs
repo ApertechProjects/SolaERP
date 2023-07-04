@@ -10,6 +10,6 @@ namespace SolaERP.Application.Contracts.Repositories
 {
     public interface ICurrencyCodeRepository : ICrudOperations<Currency>
     {
-        Task<List<Currency>> GetCurrencyCodesByBusinessUnitCode(string businessUnitCode);
+        Task<List<Currency>> CurrencyCodes(string businessUnitCode);
     }
 }

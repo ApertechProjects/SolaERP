@@ -24,7 +24,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<VendorProductService>> GetVendorProductServices(int vendorId);
         Task<List<DueDiligenceGrid>> GetDueDiligenceGridAsync(int dueDesignId);
         Task<List<Entities.SupplierEvaluation.PrequalificationGridData>> GetPrequalificationGridAsync(int preDesignId);
-        Task<List<VendorBankDetail>> GetVondorBankDetailsAsync(int vendorid);
+        Task<List<VendorBankDetail>> GetVendorBankDetailsAsync(int vendorid);
         Task<CompanyInfo> GetCompanyInfoAsync(int vendorId);
         Task<List<DueDiligenceValue>> GetVendorDuesAsync(int vendorId);
         Task<List<Entities.SupplierEvaluation.VendorPrequalification>> GetVendorPrequalificationAsync(int vendorId);

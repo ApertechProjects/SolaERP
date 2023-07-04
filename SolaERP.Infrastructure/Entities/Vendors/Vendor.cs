@@ -1,6 +1,6 @@
 ﻿namespace SolaERP.Application.Entities.Vendors
 {
-    public class Vendor
+    public class Vendor : BaseEntity
     {
         public int VendorId { get; set; }
         public int Buid { get; set; }
