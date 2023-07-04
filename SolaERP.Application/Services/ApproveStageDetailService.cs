@@ -21,24 +21,10 @@ namespace SolaERP.Persistence.Services
             _mapper = mapper;
         }
 
-        public Task AddAsync(ApproveStagesDetailDto model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<int> AddAsync(string authToken, ApproveStagesDetailDto entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ApiResponse<List<ApproveStagesDetailDto>>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<ApiResponse<List<ApproveStagesDetailDto>>> GetDetailByIdAsync(int approveStageMainId)
         {
-            var approveDetailById = await _approveStageDetailsRepository.GetApproveStageDetailsByApproveStageMainId(approveStageMainId);
+            var approveDetailById = await _approveStageDetailsRepository.GetByMainIdAsync(approveStageMainId);
             var dto = _mapper.Map<List<ApproveStagesDetailDto>>(approveDetailById);
             return ApiResponse<List<ApproveStagesDetailDto>>.Success(dto, 200);
         }
@@ -52,14 +38,5 @@ namespace SolaERP.Persistence.Services
 
 
 
-        public Task<ApiResponse<bool>> UpdateAsync(ApproveStagesDetailDto model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> UpdateAsync(string authToken, ApproveStagesDetailDto entity)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

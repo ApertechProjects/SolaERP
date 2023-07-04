@@ -17,7 +17,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<List<ApproveStageRole>> GetApproveStageRolesByApproveStageDetailId(int approveStageDetailId)
+        public async Task<List<ApproveStageRole>> GetByDetailIdAsync(int approveStageDetailId)
         {
             List<ApproveStageRole> approveStageRoles = new List<ApproveStageRole>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)

@@ -7,6 +7,7 @@ using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Entities.ApproveStage;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using System.Collections.Generic;
 
 namespace SolaERP.Persistence.Services
 {
@@ -107,6 +108,29 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<bool>.Success(data, 200);
             }
             return ApiResponse<bool>.Fail("delete", "data can not be deleted", 400);
+        }
+
+        public async Task<ApiResponse<ApprovalStageDto>> GetApprovalStageAsync(int mainId)
+        {
+            var approvalStageMain = await _approveStageMainRepository.GetApprovalStageHeaderLoad(mainId);
+            var approvalStageDetail = await _approveStageDetailRepository.GetByMainIdAsync(mainId);
+
+            var mainModel = _mapper.Map<ApprovalStageDto>(approvalStageMain);
+            var detailModel = _mapper.Map<List<ApprovalStageDetailDto>>(approvalStageDetail);
+
+
+            detailModel?.ForEach(async detail =>
+            {
+                var rolesModel = _mapper.Map<List<ApprovalStageRoleDto>>
+                (await _approveStageRoleRepository.GetByDetailIdAsync(detail.ApproveStageDetailsId));
+
+                detail.Roles = rolesModel;
+            });
+
+            if (mainModel is not null)
+                mainModel.Details = detailModel;
+
+            return ApiResponse<ApprovalStageDto>.Success(mainModel, 200);
         }
     }
 }

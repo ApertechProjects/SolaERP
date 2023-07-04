@@ -18,7 +18,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<List<ApproveStagesDetail>> GetApproveStageDetailsByApproveStageMainId(int approveStageMainId)
+        public async Task<List<ApproveStagesDetail>> GetByMainIdAsync(int approveStageMainId)
         {
             var result = await Task.Run(() =>
             {

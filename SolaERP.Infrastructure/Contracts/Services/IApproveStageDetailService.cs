@@ -3,7 +3,7 @@ using SolaERP.Application.Dtos.Shared;
 
 namespace SolaERP.Application.Contracts.Services
 {
-    public interface IApproveStageDetailService : ICrudService<ApproveStagesDetailDto>, ILoggableCrudService<ApproveStagesDetailDto>
+    public interface IApproveStageDetailService
     {
         Task<ApiResponse<List<ApproveStagesDetailDto>>> GetDetailByIdAsync(int approveStageMainId);
     }

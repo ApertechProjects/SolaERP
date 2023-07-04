@@ -5,7 +5,7 @@ namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IApproveStageDetailRepository
     {
-        Task<List<ApproveStagesDetail>> GetApproveStageDetailsByApproveStageMainId(int approveStageMainId);
+        Task<List<ApproveStagesDetail>> GetByMainIdAsync(int approveStageMainId);
         Task<bool> RemoveAsync(int id);
         Task<int> SaveDetailsAsync(ApproveStageDetailInputModel details);
     }
