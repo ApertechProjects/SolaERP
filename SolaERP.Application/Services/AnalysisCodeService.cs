@@ -15,13 +15,22 @@ namespace SolaERP.Persistence.Services
         private readonly IMapper _mapper;
         private readonly IAnalysisStructureRepository _analysisCodeRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IBusinessUnitRepository _businessUnitRepository;
+        private readonly IAnalysisDimensionRepository _dimensionRepository;
 
-        public AnalysisCodeService(IMapper mapper, IUnitOfWork unitOfWork, IAnalysisStructureRepository analysisCodeRepository, IUserRepository userRepository)
+        public AnalysisCodeService(IMapper mapper,
+                                   IUnitOfWork unitOfWork,
+                                   IAnalysisStructureRepository analysisCodeRepository,
+                                   IAnalysisDimensionRepository dimensionRepository,
+                                   IUserRepository userRepository,
+                                   IBusinessUnitRepository businessUnitRepository)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _analysisCodeRepository = analysisCodeRepository;
             _userRepository = userRepository;
+            _dimensionRepository = dimensionRepository;
+            _businessUnitRepository = businessUnitRepository;
         }
 
         public async Task<ApiResponse<bool>> DeleteAnalysisCodeAsync(AnalysisCodeDeleteModel model, string userName)
@@ -62,9 +71,14 @@ namespace SolaERP.Persistence.Services
         {
             var userId = await _userRepository.ConvertIdentity(userName);
             var data = await _analysisCodeRepository.GetAnalysisCodesAsync(dimensionId, userId);
+            var analysisDimension = await _dimensionRepository.ByAnalysisDimensionId(dimensionId, userId);
+            var businessUnit = await _businessUnitRepository.GetByIdAsync(Convert.ToInt32(analysisDimension?.BusinessUnitId));
+
+
             var map = _mapper.Map<List<AnalysisDto>>(data);
             if (map.Count > 0)
                 return ApiResponse<List<AnalysisDto>>.Success(map, 200);
+
             return ApiResponse<List<AnalysisDto>>.Fail("Analysis Codes is empty", 400);
         }
 
