@@ -104,14 +104,21 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<VendorGetModel>> GetVendorCard(int vendorId)
         {
             var header = _mapper.Map<VendorCardDto>(await _repository.GetHeader(vendorId));
-            var currency = _currencyCodeRepository.CurrencyCodes(header.BusinessUnitCode);
+            var currency = string.IsNullOrEmpty(header.BusinessUnitCode) ? new List<Application.Entities.Currency.Currency>() : await _currencyCodeRepository.CurrencyCodes(header.BusinessUnitCode);
             var paymentTerms = _supplierEvaluationRepository.GetPaymentTermsAsync();
-            await Task.WhenAll(currency);
+            var bankDetails = _supplierEvaluationRepository.GetVendorBankDetailsAsync(vendorId);
+            await Task.WhenAll
+                (
+                    paymentTerms,
+                    bankDetails
+                );
+
             VendorGetModel vendorModel = new VendorGetModel()
             {
                 Header = header,
-                Currencies = currency.Result,
+                Currencies = currency,
                 PaymentTerms = paymentTerms.Result,
+                VendorBankDetails = bankDetails.Result.Select(x => new VendorBankDetailDto { Bank = x.Bank, Currency = x.Currency, AccountNumber = x.AccountNumber }).ToList(),
             };
             return ApiResponse<VendorGetModel>.Success(vendorModel);
         }
