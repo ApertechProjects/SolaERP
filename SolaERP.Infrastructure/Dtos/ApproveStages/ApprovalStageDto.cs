@@ -12,11 +12,9 @@ namespace SolaERP.Application.Dtos.ApproveStages
 
     public class ApprovalStageDetailDto : ApproveStagesDetailDto
     {
-        public List<ApprovalStageRoleDto> Roles { get; set; }
+      
     }
 
-
-    public class ApprovalStageRoleDto : ApproveStageRoleDto { }
 }
 
 

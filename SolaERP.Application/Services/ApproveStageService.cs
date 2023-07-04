@@ -117,15 +117,14 @@ namespace SolaERP.Persistence.Services
 
             var mainModel = _mapper.Map<ApprovalStageDto>(approvalStageMain);
             var detailModel = _mapper.Map<List<ApprovalStageDetailDto>>(approvalStageDetail);
-
-
-            detailModel?.ForEach(async detail =>
+          
+            foreach (var item in detailModel)
             {
-                var rolesModel = _mapper.Map<List<ApprovalStageRoleDto>>
-                (await _approveStageRoleRepository.GetByDetailIdAsync(detail.ApproveStageDetailsId));
+                var rolesModel = _mapper.Map<List<ApproveStageRoleDto>>
+                (await _approveStageRoleRepository.GetByDetailIdAsync(item.ApproveStageDetailsId));
 
-                detail.Roles = rolesModel;
-            });
+                item.ApproveStageRoles = rolesModel;
+            }
 
             if (mainModel is not null)
                 mainModel.Details = detailModel;
