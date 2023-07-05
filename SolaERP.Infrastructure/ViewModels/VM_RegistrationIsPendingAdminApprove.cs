@@ -39,7 +39,7 @@ namespace SolaERP.Infrastructure.ViewModels
             return Language switch
             {
                 Language.en => new HtmlString($"Submitted User Name : {UserName}"),
-                Language.az => new HtmlString($"Qeydiyyatdan keçən istifadəçi : {CompanyName}"),
+                Language.az => new HtmlString($"Qeydiyyatdan keçən istifadəçi : {UserName}"),
             };
         }
 
@@ -47,7 +47,7 @@ namespace SolaERP.Infrastructure.ViewModels
         {
             return Language switch
             {
-                Language.en => new HtmlString($"Company : {UserName}"),
+                Language.en => new HtmlString($"Company : {CompanyName}"),
                 Language.az => new HtmlString($"Şirkət : {CompanyName}"),
             };
         }
