@@ -206,9 +206,9 @@ namespace SolaERP.Persistence.Services
                     dueInputModel.DateTimeValue = dueInputModel.DateTimeValue.ConvertDateToValidDate();
 
                     var itemTasks = new List<Task<bool>>
-                {
+                    {
                      _repository.UpdateDueAsync(dueInputModel)
-                };
+                    };
 
                     if (item?.HasDataGrid == true)
                     {
@@ -219,7 +219,7 @@ namespace SolaERP.Persistence.Services
 
                             var gridDatas = _mapper.Map<DueDiligenceGridModel>(gridData);
                             gridDatas.DueDesignId = item.DesignId;
-                            gridData.VendorId = vendorId;
+                            gridDatas.VendorId = vendorId;
 
                             return _repository.UpdateDueDesignGrid(gridDatas);
 
