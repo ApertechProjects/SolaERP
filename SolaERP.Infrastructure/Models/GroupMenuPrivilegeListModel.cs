@@ -1,21 +1,68 @@
-﻿using System.Text.Json.Serialization;
+﻿using SolaERP.Application.Attributes;
+using System.Text.Json.Serialization;
 
 namespace SolaERP.Application.Models
 {
     public class GroupMenuPrivilegeListModel
     {
         public int MenuId { get; set; }
+        [NotInclude]
         public bool Create { get; set; }
+        [NotInclude]
         public bool Edit { get; set; }
+        [NotInclude]
         public bool Delete { get; set; }
+        [NotInclude]
         public bool Export { get; set; }
         [JsonIgnore]
-        public int CreateInt { get; set; }
+        public int CreateResult 
+        {
+            get
+            {
+                return Convert.ToInt32(Create);
+            } 
+            set
+            {
+                CreateResult = value;
+            }
+        }
         [JsonIgnore]
-        public int EditInt { get; set; }
+        public int EditResult
+        {
+            get
+            {
+                return Convert.ToInt32(Edit);
+            }
+            set
+            {
+                CreateResult = value;
+            }
+        }
         [JsonIgnore]
-        public int DeleteInt { get; set; }
+        public int DeleteResult
+        {
+            get
+            {
+                return Convert.ToInt32(Delete);
+            }
+            set
+            {
+                CreateResult = value;
+            }
+        }
+
         [JsonIgnore]
-        public int ExportInt { get; set; }
+        public int ExportResult
+        {
+            get
+            {
+                return Convert.ToInt32(Export);
+            }
+            set
+            {
+                CreateResult = value;
+            }
+        }
+
     }
 }
