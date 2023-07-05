@@ -93,109 +93,109 @@ namespace SolaERP.Persistence.Services
 
             List<Task<bool>> tasks = new();
 
-            //#region BusinessCategory
-            //await _repository.DeleteVendorBusinessCategoryAsync(vendorId);
-            //for (int i = 0; i < command.CompanyInformation.BusinessCategories.Count; i++)
-            //{
-            //    tasks.Add(_repository.AddVendorBusinessCategoryAsync(new VendorBusinessCategoryData { VendorId = vendorId, BusinessCategoryId = command.CompanyInformation.BusinessCategories[i].Id }));
-            //}
-            //#endregion
-            ////
-            //#region ProductServices
-            //await _repository.DeleteProductServiceAsync(vendorId);
-            //for (int i = 0; i < command.CompanyInformation.BusinessCategories.Count; i++)
-            //{
-            //    tasks.Add(_repository.AddProductServiceAsync(new ProductServiceData { VendorId = vendorId, ProductServiceId = command.CompanyInformation.BusinessCategories[i].Id }));
-            //}
-            //#endregion
-            ////
-            //#region PrequalificationCategory
-            //await _repository.DeletePrequalificationCategoryAsync(vendorId);
-            //for (int i = 0; i < command.CompanyInformation.PrequalificationTypes.Count; i++)
-            //{
-            //    tasks.Add(_repository.AddPrequalificationCategoryAsync(new PrequalificationCategoryData { VendorId = vendorId, PrequalificationCategoryId = command.CompanyInformation.PrequalificationTypes[i].Id }));
-            //}
-            //#endregion
-            ////
-            //#region Company Information Logo
+            #region BusinessCategory
+            await _repository.DeleteVendorBusinessCategoryAsync(vendorId);
+            for (int i = 0; i < command.CompanyInformation.BusinessCategories.Count; i++)
+            {
+                tasks.Add(_repository.AddVendorBusinessCategoryAsync(new VendorBusinessCategoryData { VendorId = vendorId, BusinessCategoryId = command.CompanyInformation.BusinessCategories[i].Id }));
+            }
+            #endregion
+            //
+            #region ProductServices
+            await _repository.DeleteProductServiceAsync(vendorId);
+            for (int i = 0; i < command.CompanyInformation.BusinessCategories.Count; i++)
+            {
+                tasks.Add(_repository.AddProductServiceAsync(new ProductServiceData { VendorId = vendorId, ProductServiceId = command.CompanyInformation.BusinessCategories[i].Id }));
+            }
+            #endregion
+            //
+            #region PrequalificationCategory
+            await _repository.DeletePrequalificationCategoryAsync(vendorId);
+            for (int i = 0; i < command.CompanyInformation.PrequalificationTypes.Count; i++)
+            {
+                tasks.Add(_repository.AddPrequalificationCategoryAsync(new PrequalificationCategoryData { VendorId = vendorId, PrequalificationCategoryId = command.CompanyInformation.PrequalificationTypes[i].Id }));
+            }
+            #endregion
+            //
+            #region Company Information Logo
 
-            //var companyLogo = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.CompanyLogo);
+            var companyLogo = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.CompanyLogo);
 
-            //companyLogo?.ForEach(companyLogo =>
-            //{
-            //    companyLogo.SourceId = vendorId;
-            //    companyLogo.SourceType = SourceType.VEN_LOGO.ToString();
-            //});
+            companyLogo?.ForEach(companyLogo =>
+            {
+                companyLogo.SourceId = vendorId;
+                companyLogo.SourceType = SourceType.VEN_LOGO.ToString();
+            });
 
 
-            //for (int i = 0; i < companyLogo.Count; i++) //+
-            //{
-            //    if (companyLogo[i].Type == 2 && companyLogo[i].AttachmentId > 0)
-            //        await _attachmentRepository.DeleteAttachmentAsync(companyLogo[i].AttachmentId);
-            //    else if (companyLogo[i].Type != 2)
-            //        await _attachmentRepository.SaveAttachmentAsync(companyLogo[i]);
-            //}
+            for (int i = 0; i < companyLogo.Count; i++) //+
+            {
+                if (companyLogo[i].Type == 2 && companyLogo[i].AttachmentId > 0)
+                    await _attachmentRepository.DeleteAttachmentAsync(companyLogo[i].AttachmentId);
+                else if (companyLogo[i].Type != 2)
+                    await _attachmentRepository.SaveAttachmentAsync(companyLogo[i]);
+            }
 
-            //#endregion
-            ////
-            //#region Company Information Attachments
+            #endregion
+            //
+            #region Company Information Attachments
 
-            //var attachments = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.Attachments);
-            //attachments.ForEach(attachment =>
-            //{
-            //    attachment.SourceId = vendorId;
-            //    attachment.SourceType = SourceType.VEN_OLET.ToString();
-            //});
+            var attachments = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.Attachments);
+            attachments.ForEach(attachment =>
+            {
+                attachment.SourceId = vendorId;
+                attachment.SourceType = SourceType.VEN_OLET.ToString();
+            });
 
-            //for (int i = 0; i < attachments.Count; i++)
-            //{
-            //    if (attachments[i].Type == 2 && attachments[i].AttachmentId > 0)
-            //        await _attachmentRepository.DeleteAttachmentAsync(attachments[i].AttachmentId);
-            //    else if (attachments[i].Type != 2)
-            //        await _attachmentRepository.SaveAttachmentAsync(attachments[i]);
-            //}
+            for (int i = 0; i < attachments.Count; i++)
+            {
+                if (attachments[i].Type == 2 && attachments[i].AttachmentId > 0)
+                    await _attachmentRepository.DeleteAttachmentAsync(attachments[i].AttachmentId);
+                else if (attachments[i].Type != 2)
+                    await _attachmentRepository.SaveAttachmentAsync(attachments[i]);
+            }
 
-            //#endregion
-            ////
-            //#region Setting Vendor Ids (COBC,NDA,Bank Accounts)
+            #endregion
+            //
+            #region Setting Vendor Ids (COBC,NDA,Bank Accounts)
 
-            //command?.CodeOfBuConduct?.ForEach(x => x.VendorId = vendorId);
-            //command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
-            //command?.BankAccounts?.ForEach(x => x.VendorId = vendorId);
+            command?.CodeOfBuConduct?.ForEach(x => x.VendorId = vendorId);
+            command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
+            command?.BankAccounts?.ForEach(x => x.VendorId = vendorId);
 
-            //#endregion
-            ////
-            //#region Bank Accounts
+            #endregion
+            //
+            #region Bank Accounts
 
-            //foreach (var x in command.BankAccounts)
-            //{
-            //    if (x.Type == 2 && x.Id > 0)
-            //        await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
-            //    else
-            //    {
-            //        var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x));
-            //        x.VendorId = vendorId;
+            foreach (var x in command.BankAccounts)
+            {
+                if (x.Type == 2 && x.Id > 0)
+                    await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
+                else
+                {
+                    var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x));
+                    x.VendorId = vendorId;
 
-            //        if (x.AccountVerificationLetter != null)
-            //        {
-            //            tasks.AddRange(x.AccountVerificationLetter.Select(attachment => //+
-            //            {
-            //                if (attachment.Type == 2 && attachment.AttachmentId > 0)
-            //                    return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
-            //                else
-            //                {
-            //                    var entity = _mapper.Map<AttachmentSaveModel>(attachment);
-            //                    entity.SourceId = detaildId;
-            //                    entity.SourceType = SourceType.VEN_BNK.ToString();
-            //                    return _attachmentRepository.SaveAttachmentAsync(entity);
-            //                }
-            //            }));
-            //        }
-            //    }
-            //}
+                    if (x.AccountVerificationLetter != null)
+                    {
+                        tasks.AddRange(x.AccountVerificationLetter.Select(attachment => //+
+                        {
+                            if (attachment.Type == 2 && attachment.AttachmentId > 0)
+                                return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
+                            else
+                            {
+                                var entity = _mapper.Map<AttachmentSaveModel>(attachment);
+                                entity.SourceId = detaildId;
+                                entity.SourceType = SourceType.VEN_BNK.ToString();
+                                return _attachmentRepository.SaveAttachmentAsync(entity);
+                            }
+                        }));
+                    }
+                }
+            }
 
-            //#endregion
-            ////
+            #endregion
+            //
             #region DueDiligence
             if (command.DueDiligence is not null)
             {
@@ -249,57 +249,57 @@ namespace SolaERP.Persistence.Services
             }
 
             #endregion
-            //
-            //#region Prequalification
 
-            //if (command.Prequalification is not null)
-            //{
-            //    tasks.AddRange(command?.Prequalification?.SelectMany(item =>
-            //    {
-            //        var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
-            //        prequalificationValue.VendorId = vendorId;
-            //        prequalificationValue.DateTimeValue = prequalificationValue.DateTimeValue.ConvertDateToValidDate();
+            #region Prequalification
 
-            //        var tasksList = new List<Task<bool>>();
-            //        _repository.UpdatePrequalification(prequalificationValue); //+
+            if (command.Prequalification is not null)
+            {
+                tasks.AddRange(command?.Prequalification?.SelectMany(item =>
+                {
+                    var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
+                    prequalificationValue.VendorId = vendorId;
+                    prequalificationValue.DateTimeValue = prequalificationValue.DateTimeValue.ConvertDateToValidDate();
 
-            //        if (item?.Attachments is not null)
-            //        {
-            //            for (int i = 0; i < item?.Attachments.Count; i++)
-            //            {
-            //                if (item.Attachments[i].Type == 2 && item.Attachments[i].AttachmentId > 0)
-            //                {
-            //                    tasksList.Add(_attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId));
-            //                }
-            //                else
-            //                {
-            //                    var attachedFile = _mapper.Map<AttachmentSaveModel>(item.Attachments[i]);
+                    var tasksList = new List<Task<bool>>();
+                    _repository.UpdatePrequalification(prequalificationValue); //+
 
-            //                    attachedFile.SourceId = vendorId;
-            //                    attachedFile.AttachmentTypeId = item.DesignId;
-            //                    attachedFile.SourceType = SourceType.VEN_PREQ.ToString();
+                    if (item?.Attachments is not null)
+                    {
+                        for (int i = 0; i < item?.Attachments.Count; i++)
+                        {
+                            if (item.Attachments[i].Type == 2 && item.Attachments[i].AttachmentId > 0)
+                            {
+                                tasksList.Add(_attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId));
+                            }
+                            else
+                            {
+                                var attachedFile = _mapper.Map<AttachmentSaveModel>(item.Attachments[i]);
 
-            //                    tasksList.Add(_attachmentRepository.SaveAttachmentAsync(attachedFile));
-            //                }
-            //            }
-            //        }
+                                attachedFile.SourceId = vendorId;
+                                attachedFile.AttachmentTypeId = item.DesignId;
+                                attachedFile.SourceType = SourceType.VEN_PREQ.ToString();
 
-            //        if (item.HasGrid == true)
-            //        {
-            //            tasksList.AddRange(item.GridDatas.Select(gridData =>
-            //            {
-            //                var gridDatas = _mapper.Map<PrequalificationGridData>(gridData);
-            //                gridDatas.PreqqualificationDesignId = item.DesignId;
-            //                gridDatas.VendorId = vendorId;
+                                tasksList.Add(_attachmentRepository.SaveAttachmentAsync(attachedFile));
+                            }
+                        }
+                    }
 
-            //                return _repository.UpdatePreGridAsync(gridDatas);
-            //            }));
-            //        }
+                    if (item.HasGrid == true)
+                    {
+                        tasksList.AddRange(item.GridDatas.Select(gridData =>
+                        {
+                            var gridDatas = _mapper.Map<PrequalificationGridData>(gridData);
+                            gridDatas.PreqqualificationDesignId = item.DesignId;
+                            gridDatas.VendorId = vendorId;
 
-            //        return tasksList;
-            //    }));
+                            return _repository.UpdatePreGridAsync(gridDatas);
+                        }));
+                    }
 
-            //}
+                    return tasksList;
+                }));
+
+            }
 
             //#endregion
             //
