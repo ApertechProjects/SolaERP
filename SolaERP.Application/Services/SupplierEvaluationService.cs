@@ -635,35 +635,35 @@ namespace SolaERP.Persistence.Services
                 CompanyName = command.CompanyInformation.CompanyName,
             };
 
-            //Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject,
-            //                                               registrationPending,
-            //                                               registrationPending.TemplateName(),
-            //                                               registrationPending.ImageName(),
-            //                                               new List<string> { user.Email });
-            //emails.Add(VerEmail);
+            Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject,
+                                                           registrationPending,
+                                                           registrationPending.TemplateName(),
+                                                           registrationPending.ImageName(),
+                                                           new List<string> { user.Email });
+            emails.Add(VerEmail);
 
-            //var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
-            //for (int i = 0; i < Enum.GetNames(typeof(Language)).Length; i++)
-            //{
-            //    string enumElement = Enum.GetNames(typeof(Language))[i];
-            //    var sendUsers = await _userService.GetAdminUsersAsync(1, enumElement.GetLanguageEnumValue());
-            //    if (sendUsers.Count > 0)
-            //    {
-            //        var templateData = templates[i];
-            //        VM_RegistrationIsPendingAdminApprove adminApprove = new VM_RegistrationIsPendingAdminApprove()
-            //        {
-            //            Body = new HtmlString(templateData.Body),
-            //            CompanyName = command.CompanyInformation.CompanyName,
-            //            Header = templateData.Header,
-            //            UserName = user.UserName,
-            //            CompanyOrVendorName = command.CompanyInformation.CompanyName,
-            //            Language = templateData.Language.GetLanguageEnumValue(),
-            //        };
-            //        Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), new List<string> { "hulya.garibli@apertech.net" });
-            //        emails.Add(RegEmail);
-            //    }
-            //}
-            //await Task.WhenAll(emails);
+            var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
+            for (int i = 0; i < Enum.GetNames(typeof(Language)).Length; i++)
+            {
+                string enumElement = Enum.GetNames(typeof(Language))[i];
+                var sendUsers = await _userService.GetAdminUsersAsync(1, enumElement.GetLanguageEnumValue());
+                if (sendUsers.Count > 0)
+                {
+                    var templateData = templates[i];
+                    VM_RegistrationIsPendingAdminApprove adminApprove = new VM_RegistrationIsPendingAdminApprove()
+                    {
+                        Body = new HtmlString(templateData.Body),
+                        CompanyName = command.CompanyInformation.CompanyName,
+                        Header = templateData.Header,
+                        UserName = user.UserName,
+                        CompanyOrVendorName = command.CompanyInformation.CompanyName,
+                        Language = templateData.Language.GetLanguageEnumValue(),
+                    };
+                    Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), new List<string> { "hulya.garibli@apertech.net" });
+                    emails.Add(RegEmail);
+                }
+            }
+            await Task.WhenAll(emails);
 
             if (result.Data && submitResult)
                 return ApiResponse<bool>.Success(true, 200);
