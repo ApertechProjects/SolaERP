@@ -35,7 +35,7 @@ namespace SolaERP.Application.Models
             }
             set
             {
-                CreateResult = value;
+                EditResult = value;
             }
         }
         [JsonIgnore]
@@ -47,7 +47,7 @@ namespace SolaERP.Application.Models
             }
             set
             {
-                CreateResult = value;
+                DeleteResult = value;
             }
         }
 
@@ -60,7 +60,7 @@ namespace SolaERP.Application.Models
             }
             set
             {
-                CreateResult = value;
+                ExportResult = value;
             }
         }
 
