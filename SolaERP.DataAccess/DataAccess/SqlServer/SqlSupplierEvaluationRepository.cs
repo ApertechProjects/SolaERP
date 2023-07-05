@@ -98,6 +98,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Column3 = gridModel.Column3,
                 Column4 = gridModel.Column4,
                 Column5 = gridModel.Column5,
+                VendorId = gridModel.VendorId,
             });
         }
 
@@ -107,7 +108,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = @"SET NOCOUNT OFF EXEC SP_DueDiligenceGridData_IUD @DueDiligenceGridDataId,@DueDiligenceDesignId,
-                                                                                         @Column1,@Column2,@Column3,@Column4,@Column5";
+                                                                                         @Column1,@Column2,@Column3,@Column4,@Column5,@VendorId";
 
                 command.Parameters.AddWithValue(command, "@DueDiligenceGridDataId", gridModel.Id);
                 command.Parameters.AddWithValue(command, "@DueDiligenceDesignId", gridModel.DueDesignId);
@@ -116,6 +117,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Column3", gridModel.Column3);
                 command.Parameters.AddWithValue(command, "@Column4", gridModel.Column4);
                 command.Parameters.AddWithValue(command, "@Column5", gridModel.Column5);
+                command.Parameters.AddWithValue(command, "@VendorId", gridModel.VendorId);
 
 
                 bool result = await command.ExecuteNonQueryAsync() > 0;
@@ -657,7 +659,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                              @Column2,
                                                                              @Column3,
                                                                              @Column4,
-                                                                             @Column5";
+                                                                             @Column5,
+                                                                             @VendorId";
 
 
 
@@ -668,6 +671,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Column3", gridData.Column3);
                 command.Parameters.AddWithValue(command, "@Column4", gridData.Column4);
                 command.Parameters.AddWithValue(command, "@Column5", gridData.Column5);
+                command.Parameters.AddWithValue(command, "@VendorId", gridData.Column5);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }

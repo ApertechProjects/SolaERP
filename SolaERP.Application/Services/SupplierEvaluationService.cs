@@ -219,6 +219,7 @@ namespace SolaERP.Persistence.Services
 
                             var gridDatas = _mapper.Map<DueDiligenceGridModel>(gridData);
                             gridDatas.DueDesignId = item.DesignId;
+                            gridData.VendorId = vendorId;
 
                             return _repository.UpdateDueDesignGrid(gridDatas);
 
@@ -290,6 +291,7 @@ namespace SolaERP.Persistence.Services
                         {
                             var gridDatas = _mapper.Map<PrequalificationGridData>(gridData);
                             gridDatas.PreqqualificationDesignId = item.DesignId;
+                            gridDatas.VendorId = vendorId;
 
                             return _repository.UpdatePreGridAsync(gridDatas);
                         }));
