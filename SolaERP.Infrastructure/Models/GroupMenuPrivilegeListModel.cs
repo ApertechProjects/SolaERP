@@ -7,60 +7,60 @@ namespace SolaERP.Application.Models
     {
         public int MenuId { get; set; }
         [NotInclude]
-        public bool CreateR { get; set; }
+        public bool Create { get; set; }
         [NotInclude]
-        public bool EditR { get; set; }
+        public bool Edit { get; set; }
         [NotInclude]
-        public bool DeleteR { get; set; }
+        public bool Delete { get; set; }
         [NotInclude]
-        public bool ExportR { get; set; }
+        public bool Export { get; set; }
         [JsonIgnore]
-        public int Create 
+        public int CreateResult 
         {
             get
             {
-                return Convert.ToInt32(CreateR);
+                return Convert.ToInt32(Create);
             } 
             set
             {
-                Create = value;
+                CreateResult = value;
             }
         }
         [JsonIgnore]
-        public int Edit
+        public int EditResult
         {
             get
             {
-                return Convert.ToInt32(EditR);
+                return Convert.ToInt32(Edit);
             }
             set
             {
-                Create = value;
+                EditResult = value;
             }
         }
         [JsonIgnore]
-        public int Delete
+        public int DeleteResult
         {
             get
             {
-                return Convert.ToInt32(DeleteR);
+                return Convert.ToInt32(Delete);
             }
             set
             {
-                Create = value;
+                DeleteResult = value;
             }
         }
 
         [JsonIgnore]
-        public int Export
+        public int ExportResult
         {
             get
             {
-                return Convert.ToInt32(ExportR);
+                return Convert.ToInt32(Export);
             }
             set
             {
-                Create = value;
+                ExportResult = value;
             }
         }
 
