@@ -14,6 +14,7 @@ namespace SolaERP.Application.Entities.SupplierEvaluation
         public string Column4 { get; set; }
         public string Column5 { get; set; }
         public int VendorId { get; set; }
+        [DbIgnore]
         public int Type { get; set; }
     }
 }
