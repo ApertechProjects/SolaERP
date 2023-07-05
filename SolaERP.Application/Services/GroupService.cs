@@ -204,7 +204,24 @@ namespace SolaERP.Persistence.Services
                 await DeleteBuyersAsync(model.RemoveBuyers, model.GroupId);
 
             if (model.AddMenus != null)
-                await _groupRepository.AddMenuAsync(model.GroupId, model.AddMenus.ConvertToDataTable());
+            {
+                for (int i = 0; i < model.AddMenus.Count; i++)
+                {
+                    model.AddMenus[i].CreateInt = Convert.ToInt32(model.AddMenus[i].Create);
+                    model.AddMenus[i].EditInt = Convert.ToInt32(model.AddMenus[i].Edit);
+                    model.AddMenus[i].DeleteInt = Convert.ToInt32(model.AddMenus[i].Delete);
+                    model.AddMenus[i].ExportInt = Convert.ToInt32(model.AddMenus[i].Export);
+                }
+                var list = model.AddMenus.Select(x => new GroupMenuPrivilegeListModel
+                {
+                    CreateInt = x.CreateInt,
+                    EditInt = x.EditInt,
+                    DeleteInt = x.DeleteInt,
+                    ExportInt = x.ExportInt,
+                }).ToList();
+                await _groupRepository.AddMenuAsync(model.GroupId, list.ConvertToDataTable());
+
+            }
             if (model.RemoveMenus != null)
                 await _groupRepository.DeleteMenuAsync(model.GroupId, model.RemoveMenus.ConvertListToDataTable());
 
