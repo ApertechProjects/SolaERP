@@ -236,6 +236,7 @@ namespace SolaERP.Persistence.Services
                                 var attachedFile = _mapper.Map<AttachmentSaveModel>(attachment);
                                 attachedFile.SourceId = vendorId;
                                 attachedFile.SourceType = SourceType.VEN_DUE.ToString();
+                                attachedFile.AttachmentTypeId = item.DesignId;
                                 return _attachmentRepository.SaveAttachmentAsync(attachedFile);
                             }
                         }));

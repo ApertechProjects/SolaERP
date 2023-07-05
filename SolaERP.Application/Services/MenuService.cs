@@ -4,6 +4,7 @@ using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Menu;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.User;
+using System.Xml.Linq;
 
 namespace SolaERP.Persistence.Services
 {
@@ -111,6 +112,14 @@ namespace SolaERP.Persistence.Services
             var users = await _menuRepository.GetAdditionalPrivilegeAccessAsync(userId);
             var dto = _mapper.Map<AdditionalPrivilegeAccessDto>(users);
             return ApiResponse<AdditionalPrivilegeAccessDto>.Success(dto, 200);
+        }
+
+        public async Task<ApiResponse<List<MenuWithPrivilagesDto>>> GetMenuWithPrivilegeListByGroupIdAsync(int groupId)
+        {
+            var menus = await _menuRepository.GetMenuWithPrivilegesAsync(groupId);
+            var dto = _mapper.Map<List<MenuWithPrivilagesDto>>(menus);
+            return ApiResponse<List<MenuWithPrivilagesDto>>.Success(dto, 200);
+
         }
     }
 }

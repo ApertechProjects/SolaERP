@@ -6,6 +6,7 @@ using SolaERP.Application.Entities.User;
 using SolaERP.Application.UnitOfWork;
 using System.Data;
 using System.Data.Common;
+using SolaERP.Application.Entities.Auth;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -91,6 +92,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     user = reader.GetByEntityStructure<AdditionalPrivilegeAccess>();
                 }
                 return user;
+            }
+        }
+
+        public async Task<List<MenuWithPrivilages>> GetMenuWithPrivilegesAsync(int groupId)
+        {
+            List<MenuWithPrivilages> userMenus = new List<MenuWithPrivilages>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC dbo.SP_Menu_Load @groupId";
+                command.Parameters.AddWithValue(command, "@groupId", groupId);
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    userMenus.Add(reader.GetByEntityStructure<MenuWithPrivilages>());
+
+                return userMenus;
             }
         }
     }
