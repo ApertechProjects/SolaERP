@@ -21,5 +21,8 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Column5 { get; set; }
+
+        [JsonIgnore]
+        public int VendorId { get; set; }
     }
 }

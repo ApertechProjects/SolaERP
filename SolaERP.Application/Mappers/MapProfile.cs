@@ -187,6 +187,7 @@ namespace SolaERP.Persistence.Mappers
                 //.ForMember(dest => dest.BusinessCategoryId, opt => opt.MapFrom(src => src.VendorBusinessCategoryId))
                 .ForMember(dest => dest.PaymentTerms, opt => opt.MapFrom(src => src.PaymentTerms))
                 .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Location))
+                .ForMember(dest => dest.CompanyAdress, opt => opt.MapFrom(src => src.CompanyAdress))
                 .ForMember(dest => dest.RegistrationDate, opt => opt.MapFrom(src => src.CompanyRegistrationDate)).ReverseMap();
 
             CreateMap<NDADto, VendorNDA>()
@@ -239,7 +240,8 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<Application.Dtos.SupplierEvaluation.PrequalificationGridData, Application.Entities.SupplierEvaluation.PrequalificationGridData>()
                 .ForMember(dest => dest.PreqqualificationGridDataId, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.PreqqualificationDesignId, opt => opt.MapFrom(src => src.DesignId)).ReverseMap();
+                .ForMember(dest => dest.PreqqualificationDesignId, opt => opt.MapFrom(src => src.DesignId))
+                .ForMember(dest => dest.VendorId, opt => opt.MapFrom(src => src.VendorId)).ReverseMap();
 
 
             CreateMap<DueDiligenceChildDto, VendorDueDiligenceModel>()
@@ -278,7 +280,8 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<DueDiligenceGridModel, DueDiligenceGrid>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.DueDesignId, opt => opt.MapFrom(src => src.DueDesignId)).ReverseMap();
+                .ForMember(dest => dest.DueDesignId, opt => opt.MapFrom(src => src.DueDesignId))
+                .ForMember(dest => dest.VendorId, opt => opt.MapFrom(src => src.VendorId)).ReverseMap();
 
             CreateMap<Attachment, AttachmentDto>()
                 .ForMember(dest => dest.AttachmentId, opt => opt.MapFrom(src => src.AttachmentId))

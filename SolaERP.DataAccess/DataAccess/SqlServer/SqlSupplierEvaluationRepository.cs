@@ -175,12 +175,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<DueDiligenceGrid>> GetDueDiligenceGridAsync(int dueDesignId)
+        public async Task<List<DueDiligenceGrid>> GetDueDiligenceGridAsync(int dueDesignId, int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_DueDiligenceGridData_Load @dueDesignId";
+                command.CommandText = "EXEC SP_DueDiligenceGridData_Load @dueDesignId,@vendorId";
                 command.Parameters.AddWithValue(command, "@dueDesignId", dueDesignId);
+                command.Parameters.AddWithValue(command, "@vendorId", vendorId);
 
                 List<DueDiligenceGrid> resultList = new();
                 using var reader = await command.ExecuteReaderAsync();

@@ -21,9 +21,10 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             var command = _connection.CreateCommand();
 
             if (_transaction is null)
-                _transaction = _connection.BeginTransaction();
+                _transaction = _connection.BeginTransaction(IsolationLevel.ReadCommitted);
 
             command.Transaction = _transaction;
+            //command.Transaction.IsolationLevel = IsolationLevel.ReadCommitted;
 
             return command;
         }

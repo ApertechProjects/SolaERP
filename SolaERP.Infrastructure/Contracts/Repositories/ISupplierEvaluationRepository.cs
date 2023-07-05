@@ -22,7 +22,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<Currency>> GetCurrenciesAsync();
         Task<List<DueDiligenceDesign>> GetDueDiligencesDesignAsync(Enums.Language language);
         Task<List<VendorProductService>> GetVendorProductServices(int vendorId);
-        Task<List<DueDiligenceGrid>> GetDueDiligenceGridAsync(int dueDesignId);
+        Task<List<DueDiligenceGrid>> GetDueDiligenceGridAsync(int dueDesignId, int vendorId);
         Task<List<Entities.SupplierEvaluation.PrequalificationGridData>> GetPrequalificationGridAsync(int preDesignId);
         Task<List<VendorBankDetail>> GetVondorBankDetailsAsync(int vendorid);
         Task<CompanyInfo> GetCompanyInfoAsync(int vendorId);

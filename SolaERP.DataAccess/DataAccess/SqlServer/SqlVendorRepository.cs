@@ -119,7 +119,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                       @CoresspondentAccount,
                                                                       @UserId,
                                                                       @NewVendorBankId = @NewVendorBankId OUTPUT
-                                                                      SELECT @NewVendorBankId as N'NewVendorBankId'";
+                                                                      SELECT @NewVendorBankId as N'@NewVendorBankId'";
 
 
                 command.Parameters.AddWithValue(command, "@VendorBankDetailId", bankDetail.VendorBankDetailId);
@@ -140,7 +140,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 int id = 0;
                 if (reader.Read())
-                    id = reader.Get<int>("NewVendorBankId");
+                    id = reader.Get<int>("@NewVendorBankId");
 
 
                 return id;

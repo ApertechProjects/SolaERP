@@ -47,6 +47,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public string TaxOffice { get; set; }
         public string Location { get; set; }
         public string Country { get; set; }
+        public string CompanyAdress { get; set; }
         public string Website { get; set; }
         public string RepresentedCompanies { get; set; }
         public string RepresentedProducts { get; set; }
