@@ -106,11 +106,17 @@ namespace SolaERP.Persistence.Services
             var header = _mapper.Map<VendorCardDto>(await _repository.GetHeader(vendorId));
             var currency = string.IsNullOrEmpty(header.BusinessUnitCode) ? new List<Application.Entities.Currency.Currency>() : await _currencyCodeRepository.CurrencyCodes(header.BusinessUnitCode);
             var paymentTerms = _supplierEvaluationRepository.GetPaymentTermsAsync();
+            var deliveryTerms = _supplierEvaluationRepository.GetDeliveryTermsAsync();
             var bankDetails = _supplierEvaluationRepository.GetVendorBankDetailsAsync(vendorId);
+            var businessCategory = _supplierEvaluationRepository.GetVendorBuCategoriesAsync(vendorId);
+            var users = _supplierEvaluationRepository.GetVendorUsers(vendorId);
+            var score = _supplierEvaluationRepository.Scores(vendorId);
             await Task.WhenAll
                 (
                     paymentTerms,
-                    bankDetails
+                    deliveryTerms,
+                    bankDetails,
+                    users
                 );
 
             VendorGetModel vendorModel = new VendorGetModel()
@@ -118,8 +124,13 @@ namespace SolaERP.Persistence.Services
                 Header = header,
                 Currencies = currency,
                 PaymentTerms = paymentTerms.Result,
+                DeliveryTerms = deliveryTerms.Result,
                 VendorBankDetails = bankDetails.Result.Select(x => new VendorBankDetailDto { Bank = x.Bank, Currency = x.Currency, AccountNumber = x.AccountNumber }).ToList(),
+                VendorUsers = users.Result,
+                VendorBuCategories = businessCategory.Result,
+                Score = score.Result
             };
+
             return ApiResponse<VendorGetModel>.Success(vendorModel);
         }
 

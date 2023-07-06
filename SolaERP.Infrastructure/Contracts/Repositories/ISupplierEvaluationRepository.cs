@@ -19,6 +19,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<PrequalificationCategory>> GetPrequalificationCategoriesAsync();
         Task<List<ProductService>> GetProductServicesAsync();
         Task<List<PaymentTerms>> GetPaymentTermsAsync();
+        Task<List<DeliveryTerms>> GetDeliveryTermsAsync();
         Task<List<Currency>> GetCurrenciesAsync();
         Task<List<DueDiligenceDesign>> GetDueDiligencesDesignAsync(Enums.Language language);
         Task<List<VendorProductService>> GetVendorProductServices(int vendorId);
@@ -67,6 +68,10 @@ namespace SolaERP.Application.Contracts.Repositories
 
         Task<bool> AddPequalificationCategoryAsync(PrequalificationCategory category);
         Task<bool> DeletePequalificationCategoryAsync(int id);
+
+        Task<List<VendorUser>> GetVendorUsers(int vendorId);
+        Task<List<Score>> Scores(int vendorId);
+
 
     }
 }
