@@ -2,8 +2,10 @@
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Dtos.Venndors;
+using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
@@ -14,16 +16,19 @@ namespace SolaERP.Persistence.Services
     public class VendorService : IVendorService
     {
         private readonly IVendorRepository _repository;
+        private readonly ICurrencyCodeRepository _currencyCodeRepository;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly ISupplierEvaluationRepository _supplierEvaluationRepository;
 
         public VendorService(IVendorRepository vendorRepository,
+            ICurrencyCodeRepository currencyCodeRepository,
             IUserRepository userRepository,
             IMapper mapper,
             ISupplierEvaluationRepository supplierEvaluationRepository)
         {
             _repository = vendorRepository;
+            _currencyCodeRepository = currencyCodeRepository;
             _userRepository = userRepository;
             _mapper = mapper;
             _supplierEvaluationRepository = supplierEvaluationRepository;
@@ -94,6 +99,39 @@ namespace SolaERP.Persistence.Services
             List<VendorWFA> vendorWFAs = await _repository.GetHeldAsync(Convert.ToInt32(userIdentity), filter);
             List<VendorWFADto> vendorAllDtos = _mapper.Map<List<VendorWFADto>>(vendorWFAs);
             return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
+        }
+
+        public async Task<ApiResponse<VendorGetModel>> GetVendorCard(int vendorId)
+        {
+            var header = _mapper.Map<VendorCardDto>(await _repository.GetHeader(vendorId));
+            var currency = string.IsNullOrEmpty(header.BusinessUnitCode) ? new List<Application.Entities.Currency.Currency>() : await _currencyCodeRepository.CurrencyCodes(header.BusinessUnitCode);
+            var paymentTerms = _supplierEvaluationRepository.GetPaymentTermsAsync();
+            var deliveryTerms = _supplierEvaluationRepository.GetDeliveryTermsAsync();
+            var bankDetails = _supplierEvaluationRepository.GetVendorBankDetailsAsync(vendorId);
+            var businessCategory = _supplierEvaluationRepository.GetVendorBuCategoriesAsync(vendorId);
+            var users = _supplierEvaluationRepository.GetVendorUsers(vendorId);
+            var score = _supplierEvaluationRepository.Scores(vendorId);
+            await Task.WhenAll
+                (
+                    paymentTerms,
+                    deliveryTerms,
+                    bankDetails,
+                    users
+                );
+
+            VendorGetModel vendorModel = new VendorGetModel()
+            {
+                Header = header,
+                Currencies = currency,
+                PaymentTerms = paymentTerms.Result,
+                DeliveryTerms = deliveryTerms.Result,
+                VendorBankDetails = bankDetails.Result.Select(x => new VendorBankDetailDto { Bank = x.Bank, Currency = x.Currency, AccountNumber = x.AccountNumber }).ToList(),
+                VendorUsers = users.Result,
+                VendorBuCategories = businessCategory.Result,
+                Score = score.Result
+            };
+
+            return ApiResponse<VendorGetModel>.Success(vendorModel);
         }
 
         public async Task<ApiResponse<List<VendorWFADto>>> GetWFAAsync(string userIdentity, VendorFilter filter)

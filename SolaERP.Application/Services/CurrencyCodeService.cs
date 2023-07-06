@@ -34,7 +34,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<CurrencyDto>>> GetCurrencyCodesByBusinessUnitCode(string businessUnitCode)
         {
-            var currCodes = await _currencyCodeRepository.GetCurrencyCodesByBusinessUnitCode(businessUnitCode);
+            var currCodes = await _currencyCodeRepository.CurrencyCodes(businessUnitCode);
             var dto = _mapper.Map<List<CurrencyDto>>(currCodes);
             return ApiResponse<List<CurrencyDto>>.Success(dto, 200);
         }

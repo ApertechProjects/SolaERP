@@ -1,4 +1,5 @@
 ﻿
+using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Models;
@@ -20,5 +21,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<VendorWFA>> GetHeldAsync(int userId, VendorFilter filter);
         Task<List<VendorAll>> GetDraftAsync(int userId, VendorFilter filter);
         Task<List<VendorInfo>> Get(int businessUnitId, int userId);
+        Task<VendorCard> GetHeader(int vendorId);
     }
 }

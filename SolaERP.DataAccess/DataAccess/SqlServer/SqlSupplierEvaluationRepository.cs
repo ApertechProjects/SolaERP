@@ -2,6 +2,7 @@
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Entities.SupplierEvaluation;
+using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -226,6 +227,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<List<DeliveryTerms>> GetDeliveryTermsAsync()
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SELECT * FROM VW_DeliveryTerms_List";
+
+                List<DeliveryTerms> resultList = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<DeliveryTerms>());
+
+                return resultList;
+            }
+        }
+
         public async Task<List<PrequalificationCategory>> GetPrequalificationCategoriesAsync()
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -258,7 +275,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<VendorBankDetail>> GetVondorBankDetailsAsync(int vendorid)
+        public async Task<List<VendorBankDetail>> GetVendorBankDetailsAsync(int vendorid)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -449,18 +466,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<VendorPrequalification>> GetVendorPrequalificationAsync(int vendorId)
+        public async Task<List<Application.Entities.SupplierEvaluation.VendorPrequalification>> GetVendorPrequalificationAsync(int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "EXEC SP_VendorPrequalificationCategory_Load @VendorId";
                 command.Parameters.AddWithValue(command, "@VendorId", vendorId);
 
-                List<VendorPrequalification> result = new();
+                List<Application.Entities.SupplierEvaluation.VendorPrequalification> result = new();
                 using var reader = await command.ExecuteReaderAsync();
 
                 while (reader.Read())
-                    result.Add(reader.GetByEntityStructure<VendorPrequalification>());
+                    result.Add(reader.GetByEntityStructure<Application.Entities.SupplierEvaluation.VendorPrequalification>());
 
                 return result;
             }
@@ -722,13 +739,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> AddRepresentedCompany(VendorRepresentedCompany data)
+        public async Task<bool> AddRepresentedCompany(Application.Models.VendorRepresentedCompany data)
             => await ModifyRepresentedCategorySaveAsync(data);
 
         public async Task<bool> DeleteRepresentedCompanyAsync(int vendorId)
-            => await ModifyRepresentedCategorySaveAsync(new VendorRepresentedCompany { VendorId = vendorId });
+            => await ModifyRepresentedCategorySaveAsync(new Application.Models.VendorRepresentedCompany { VendorId = vendorId });
 
-        public async Task<bool> ModifyRepresentedCategorySaveAsync(VendorRepresentedCompany data)
+        public async Task<bool> ModifyRepresentedCategorySaveAsync(Application.Models.VendorRepresentedCompany data)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -845,6 +862,41 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     company = reader.GetByEntityStructure<Application.Entities.Vendors.VendorRepresentedCompany>();
 
                 return company;
+            }
+        }
+
+
+        public async Task<List<Application.Entities.Vendors.VendorUser>> GetVendorUsers(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_VendorUsers_Load @VendorId";
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+
+                List<VendorUser> result = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    result.Add(reader.GetByEntityStructure<VendorUser>());
+
+                return result;
+            }
+        }
+
+        public async Task<List<Score>> Scores(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_VendorScoring_Load @VendorId";
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+
+                List<Score> result = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    result.Add(reader.GetByEntityStructure<Score>());
+
+                return result;
             }
         }
     }
