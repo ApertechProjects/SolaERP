@@ -37,21 +37,9 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> Stage(int buId)
             => CreateActionResult(await _approveStageMainService.GetByBusinessUnitId(buId));
 
-        [HttpGet("{approveStageMainId}")]
-        public async Task<IActionResult> StageHeader(int approveStageMainId)
-            => CreateActionResult(await _approveStageMainService.GetMainByIdAsync(approveStageMainId));
-
-        [HttpGet("{approveStageMainId}")]
-        public async Task<IActionResult> StageDetail(int approveStageMainId)
-            => CreateActionResult(await _approveStageDetailService.GetDetailByIdAsync(approveStageMainId));
-
         [HttpGet("{mainId}")]
         public async Task<IActionResult> ApprovalStage(int mainId)
            => CreateActionResult(await _approveStageMainService.GetApprovalStageAsync(mainId));
-
-        [HttpGet("{approveStageDetailId}")]
-        public async Task<IActionResult> StageRole(int approveStageDetailId)
-            => CreateActionResult(await _approveStageRoleService.GetRoleAsync(approveStageDetailId));
 
         [HttpGet("{businessUnitId}")]
         public async Task<IActionResult> Roles(int businessUnitId)
