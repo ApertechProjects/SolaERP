@@ -77,8 +77,12 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<GroupUser, GroupUserDto>().ReverseMap();
             CreateMap<MenuWithPrivilagesDto, MenuWithPrivilages>().ReverseMap();
             CreateMap<ApproveStagesMain, ApproveStagesMainDto>().ReverseMap();
-            CreateMap<ApproveStagesMain, ApprovalStageDto>().ReverseMap();
-            CreateMap<ApproveStagesDetail, ApprovalStageDetailDto>().ReverseMap();
+            CreateMap<ApproveStagesMain, ApprovalStageDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ApproveStageMainId))
+                .ReverseMap();
+            CreateMap<ApproveStagesDetail, ApprovalStageDetailDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ApproveStageDetailsId))
+                .ReverseMap();
             CreateMap<ApproveStagesDetail, ApproveStagesDetailDto>().ReverseMap();
             CreateMap<Procedure, ProcedureDto>().ReverseMap();
             CreateMap<ApproveStageRole, ApproveStageRoleDto>().ReverseMap();

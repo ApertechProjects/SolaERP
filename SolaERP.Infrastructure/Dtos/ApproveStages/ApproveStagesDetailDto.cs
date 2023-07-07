@@ -2,7 +2,7 @@
 {
     public class ApproveStagesDetailDto
     {
-        public int ApproveStageDetailsId { get; set; }
+        public int Id { get; set; }
         public int ApproveStageMainId { get; set; }
         public string ApproveStageDetailsName { get; set; }
         public int Sequence { get; set; }

@@ -44,7 +44,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                             @Country,
                                                             @UserId,
                                                             @OtherProducts,
-                                                            @ApproveStageMainId,
+                                                            @Id,
                                                             @CompanyAddress,
                                                             @CompanyRegistrationDate,
                                                             @Rating,
@@ -76,7 +76,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Country", vendor.Country);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@OtherProducts", null);
-                command.Parameters.AddWithValue(command, "@ApproveStageMainId", null);
+                command.Parameters.AddWithValue(command, "@Id", null);
                 command.Parameters.AddWithValue(command, "@CompanyAddress", vendor.CompanyAdress);
                 command.Parameters.AddWithValue(command, "@CompanyRegistrationDate", vendor.RegistrationDate);
                 command.Parameters.AddWithValue(command, "@Rating", vendor.Rating);
