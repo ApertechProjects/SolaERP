@@ -64,7 +64,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = query;
-                command.Parameters.AddWithValue(command, "@approveStageRoleId", entity.ApproveStageRoleId = entity.ApproveStageRoleId < 0 ? 0 : entity.ApproveStageRoleId);
+                command.Parameters.AddWithValue(command, "@approveStageRoleId", entity.Id = entity.Id < 0 ? 0 : entity.Id);
                 command.Parameters.AddWithValue(command, "@approveStageDetailId", entity.ApproveStageDetailId);
                 command.Parameters.AddWithValue(command, "@approveRoleId", entity.ApproveRoleId);
                 command.Parameters.AddWithValue(command, "@amountFrom", entity.AmountFrom);
@@ -78,7 +78,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return new ApproveStageRole
             {
-                ApproveStageRoleId = reader.Get<int>("ApproveStageRoleId"),
+                Id = reader.Get<int>("Id"),
                 ApproveStageDetailId = reader.Get<int>("ApproveStageDetailId"),
                 ApproveRoleId = reader.Get<int>("ApproveRoleId"),
                 ApproveRoleName = reader.Get<string>("ApproveRoleName"),
