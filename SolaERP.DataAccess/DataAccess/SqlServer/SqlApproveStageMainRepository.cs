@@ -1,13 +1,13 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Application.Contracts.Repositories;
+﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.ApproveStage;
 using SolaERP.Application.Entities.ApproveStages;
 using SolaERP.Application.Entities.Procedure;
+using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using SolaERP.Application.Models;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -140,7 +140,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return new ApproveStagesMain
             {
-                ApproveStageMainId = reader.Get<int>("Id"),
+                ApproveStageMainId = reader.Get<int>("ApproveStageMainId"),
                 ApproveStageName = reader.Get<string>("ApproveStageName"),
                 ProcedureId = reader.Get<int>("ProcedureId"),
                 ProcedureName = reader.Get<string>("ProcedureName"),
