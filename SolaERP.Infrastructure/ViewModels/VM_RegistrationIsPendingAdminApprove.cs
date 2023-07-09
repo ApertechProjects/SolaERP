@@ -15,15 +15,9 @@ namespace SolaERP.Infrastructure.ViewModels
         }
         public string UserName { get; set; }
         public string CompanyOrVendorName { get; set; }
-        public string TemplateName()
-        {
-            return @"RegistrationIsPendingAdminApprove.cshtml";
-        }
+        public string TemplateName => @"RegistrationIsPendingAdminApprove.cshtml";
 
-        public string ImageName()
-        {
-            return @"registrationPending.png";
-        }
+        public string ImageName => @"registrationPending.png";
 
         public HtmlString? GenerateBody()
         {

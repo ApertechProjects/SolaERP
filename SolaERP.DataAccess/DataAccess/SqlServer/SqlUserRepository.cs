@@ -599,7 +599,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<List<string>> GetAdminUsersAsync(int sequence, Application.Enums.Language language)
+        public async Task<List<string>> GetAdminUserMailsAsync(int sequence, Application.Enums.Language language)
         {
             List<string> userData = new List<string>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)

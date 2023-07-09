@@ -92,6 +92,8 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<ApprovalStatusDto>>.Fail("get", "Approval status is empty", 404, true);
         }
 
+
+
         public async Task<ApiResponse<bool>> DeleteApproveStageAsync(ApproveStageDeleteModel model)
         {
             var data = false;
@@ -117,7 +119,7 @@ namespace SolaERP.Persistence.Services
 
             var mainModel = _mapper.Map<ApprovalStageDto>(approvalStageMain);
             var detailModel = _mapper.Map<List<ApprovalStageDetailDto>>(approvalStageDetail);
-          
+
             foreach (var item in detailModel)
             {
                 var rolesModel = _mapper.Map<List<ApproveStageRoleDto>>
