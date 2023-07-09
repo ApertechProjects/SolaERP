@@ -41,7 +41,6 @@ using SolaERP.Application.Entities.Attachment;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Buyer;
-using SolaERP.Application.Entities.Currency;
 using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Entities.Groups;
 using SolaERP.Application.Entities.Item_Code;
@@ -60,7 +59,6 @@ using SolaERP.Application.Entities.UOM;
 using SolaERP.Application.Entities.User;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Models;
-using SolaERP.Persistence.Services;
 
 namespace SolaERP.Persistence.Mappers
 {
@@ -76,7 +74,9 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<Groups, GroupsDto>().ReverseMap();
             CreateMap<GroupUser, GroupUserDto>().ReverseMap();
             CreateMap<MenuWithPrivilagesDto, MenuWithPrivilages>().ReverseMap();
-            CreateMap<ApproveStagesMain, ApproveStagesMainDto>().ReverseMap();
+            CreateMap<ApproveStagesMain, ApproveStagesMainDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ApproveStageMainId))
+                .ReverseMap();
             CreateMap<ApproveStagesMain, ApprovalStageDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ApproveStageMainId))
                 .ReverseMap();
