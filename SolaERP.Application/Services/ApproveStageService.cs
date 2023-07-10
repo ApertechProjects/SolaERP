@@ -50,7 +50,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<ApproveStagesMainDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<ApprovalStageSaveModel>> SaveApproveStageMainAsync(string name, ApprovalStageSaveModel approvalStageSaveVM)
+        public async Task<ApiResponse<bool>> SaveApproveStageMainAsync(string name, ApprovalStageSaveModel approvalStageSaveVM)
         {
             var userId = await _userRepository.ConvertIdentity(name);
             var mainId = await _approveStageMainRepository.SaveApproveStageMainAsync(approvalStageSaveVM.ApproveStagesMain, userId);
@@ -58,7 +58,7 @@ namespace SolaERP.Persistence.Services
             for (int i = 0; i < approvalStageSaveVM.ApproveStagesDetailDtos.Count; i++)
             {
                 if (approvalStageSaveVM.ApproveStagesDetailDtos[i].Type == "remove")
-                    await _approveStageDetailRepository.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageDetailsId);
+                    await _approveStageDetailRepository.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].Id);
                 else
                 {
                     approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageMainId = mainId;
@@ -78,7 +78,7 @@ namespace SolaERP.Persistence.Services
             }
 
             await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<ApprovalStageSaveModel>.Success(approvalStageSaveVM, 200);
+            return ApiResponse<bool>.Success(true, 200);
         }
 
         public async Task<ApiResponse<List<ApprovalStatusDto>>> GetApproveStatus()
