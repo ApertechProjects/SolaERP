@@ -899,5 +899,53 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return result;
             }
         }
+
+        public async Task<List<Shipment>> Shipments()
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SELECT * FROM VW_Shipment_List";
+
+                List<Shipment> resultList = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<Shipment>());
+
+                return resultList;
+            }
+        }
+
+        public async Task<List<WithHoldingTaxData>> WithHoldingTaxDatas()
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SELECT * FROM VW_WithHoldingTax_List";
+
+                List<WithHoldingTaxData> resultList = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<WithHoldingTaxData>());
+
+                return resultList;
+            }
+        }
+
+        public async Task<List<TaxData>> TaxDatas()
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SELECT * FROM VW_Tax_List";
+
+                List<TaxData> resultList = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<TaxData>());
+
+                return resultList;
+            }
+        }
     }
 }
