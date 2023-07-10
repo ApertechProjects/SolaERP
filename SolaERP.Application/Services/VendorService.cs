@@ -111,11 +111,19 @@ namespace SolaERP.Persistence.Services
             var businessCategory = _supplierEvaluationRepository.GetVendorBuCategoriesAsync(vendorId);
             var users = _supplierEvaluationRepository.GetVendorUsers(vendorId);
             var score = _supplierEvaluationRepository.Scores(vendorId);
+            var shipment = _supplierEvaluationRepository.Shipments();
+            var withHoldingTax = _supplierEvaluationRepository.WithHoldingTaxDatas();
+            var tax = _supplierEvaluationRepository.TaxDatas();
+            var itemCategories = _supplierEvaluationRepository.GetBusinessCategoriesAsync();
             await Task.WhenAll
                 (
                     paymentTerms,
                     deliveryTerms,
                     bankDetails,
+                    users,
+                    shipment,
+                    withHoldingTax,
+                    tax,
                     users
                 );
 
@@ -128,7 +136,10 @@ namespace SolaERP.Persistence.Services
                 VendorBankDetails = bankDetails.Result.Select(x => new VendorBankDetailDto { Bank = x.Bank, Currency = x.Currency, AccountNumber = x.AccountNumber }).ToList(),
                 VendorUsers = users.Result,
                 VendorBuCategories = businessCategory.Result,
-                Score = score.Result
+                Score = score.Result,
+                Shipments = shipment.Result,
+                WithHoldingTaxDatas = withHoldingTax.Result,
+                TaxDatas = tax.Result,
             };
 
             return ApiResponse<VendorGetModel>.Success(vendorModel);

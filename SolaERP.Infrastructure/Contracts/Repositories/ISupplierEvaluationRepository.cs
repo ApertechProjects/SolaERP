@@ -71,7 +71,8 @@ namespace SolaERP.Application.Contracts.Repositories
 
         Task<List<VendorUser>> GetVendorUsers(int vendorId);
         Task<List<Score>> Scores(int vendorId);
-
-
+        Task<List<Shipment>> Shipments();
+        Task<List<WithHoldingTaxData>> WithHoldingTaxDatas();
+        Task<List<TaxData>> TaxDatas();
     }
 }

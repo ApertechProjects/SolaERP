@@ -22,5 +22,8 @@ namespace SolaERP.Application.Models
         public List<VendorUser> VendorUsers { get; set; }
         public List<VendorBuCategory> VendorBuCategories { get; set; }
         public List<Score> Score { get; set; }
+        public List<Shipment> Shipments { get; set; }
+        public List<WithHoldingTaxData> WithHoldingTaxDatas { get; set; }
+        public List<TaxData> TaxDatas { get; set; }
     }
 }
