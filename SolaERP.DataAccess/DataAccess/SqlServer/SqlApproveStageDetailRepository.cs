@@ -92,7 +92,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = "EXEC SP_ApproveStagesDetails_IUD @ApproveStageDetailsId,@ApproveStageMainId,@ApproveStageDetailsName,@Sequence,@Skip,@SkipDays,@BackToInitiatorOnReject," +
                     "@NewApproveStageDetailsId = @NewApproveStageDetailsId OUTPUT select @NewApproveStageDetailsId as NewApproveStageDetailsId";
 
-                command.Parameters.AddWithValue(command, "@ApproveStageDetailsId", entity.ApproveStageDetailsId = entity.ApproveStageDetailsId < 0 ? 0 : entity.ApproveStageDetailsId);
+                command.Parameters.AddWithValue(command, "@ApproveStageDetailsId", entity.Id = entity.Id < 0 ? 0 : entity.Id);
                 command.Parameters.AddWithValue(command, "@ApproveStageMainId", entity.ApproveStageMainId);
                 command.Parameters.AddWithValue(command, "@ApproveStageDetailsName", entity.ApproveStageDetailsName);
                 command.Parameters.AddWithValue(command, "@Sequence", entity.Sequence);
