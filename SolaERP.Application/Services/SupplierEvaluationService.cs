@@ -9,6 +9,7 @@ using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.BusinessUnits;
+using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
@@ -621,6 +622,8 @@ namespace SolaERP.Persistence.Services
             var submitResult = await _vendorRepository.ChangeStatusAsync(user.VendorId, 1, user.Id);
             await _unitOfWork.SaveChangesAsync();
 
+
+
             List<Task> emails = new List<Task>();
             Language language = "en".GetLanguageEnumValue();
             var companyName = await _emailNotificationService.GetCompanyName(user.Email);
@@ -643,32 +646,39 @@ namespace SolaERP.Persistence.Services
             emails.Add(VerEmail);
 
             var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
-            for (int i = 0; i < Enum.GetNames(typeof(Language)).Length; i++)
+            foreach (var lang in Enum.GetValues<Language>())
             {
-                string enumElement = Enum.GetNames(typeof(Language))[i];
-                var sendUsers = await _userService.GetAdminUsersAsync(1, enumElement.GetLanguageEnumValue());
-                if (sendUsers.Count > 0)
+                var sendUserMails = await _userService.GetAdminUserMailsAsync(1, lang);
+                if (sendUserMails.Count > 0)
                 {
-                    var templateData = templates[i];
-                    VM_RegistrationIsPendingAdminApprove adminApprove = new VM_RegistrationIsPendingAdminApprove()
-                    {
-                        Body = new HtmlString(templateData.Body),
-                        CompanyName = command.CompanyInformation.CompanyName,
-                        Header = templateData.Header,
-                        UserName = user.UserName,
-                        CompanyOrVendorName = command.CompanyInformation.CompanyName,
-                        Language = templateData.Language.GetLanguageEnumValue(),
-                    };
-                    Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), new List<string> { "hulya.garibli@apertech.net" });
+                    var templateData = templates.First(x => x.Language == lang.ToString());
+                    VM_RegistrationIsPendingAdminApprove adminApprove = GetVM(command, user, templateData);
+                    Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName, adminApprove.ImageName, sendUserMails);
                     emails.Add(RegEmail);
                 }
             }
+
             await Task.WhenAll(emails);
 
+
+
             //if (result.Data && submitResult)
-                return ApiResponse<bool>.Success(true, 200);
+            return ApiResponse<bool>.Success(true, 200);
 
             //return ApiResponse<bool>.Fail(false, 400);
+        }
+
+        private static VM_RegistrationIsPendingAdminApprove GetVM(SupplierRegisterCommand command, User user, EmailTemplateData templateData)
+        {
+            return new()
+            {
+                Body = new HtmlString(templateData.Body),
+                CompanyName = command.CompanyInformation.CompanyName,
+                Header = templateData.Header,
+                UserName = user.UserName,
+                CompanyOrVendorName = command.CompanyInformation.CompanyName,
+                Language = templateData.Language.GetLanguageEnumValue(),
+            };
         }
 
         private async Task<List<DueDiligenceDesignDto>> GetDueDesignsAsync(string userIdentity, Language language)
