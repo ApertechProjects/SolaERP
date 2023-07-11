@@ -33,7 +33,7 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _service.GetWFAAsync(User.Identity.Name, filter));
 
         [HttpPost]
-        public async Task<IActionResult> GetDraft([FromQuery] VendorFilter filter)
+        public async Task<IActionResult> GetDraft(VendorFilter filter)
             => CreateActionResult(await _service.GetDraftAsync(User.Identity.Name, filter));
 
         [HttpPost]
@@ -45,8 +45,8 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _service.GetVendorCard(vendorId));
 
         [HttpPost]
-        public async Task<IActionResult> SendToApprove(int vendorId, int approveStageMainId)
-            => CreateActionResult(await _service.SendToApproveAsync(vendorId, approveStageMainId));
+        public async Task<IActionResult> SendToApprove(int vendorId)
+            => CreateActionResult(await _service.SendToApproveAsync(vendorId));
 
         [HttpPost]
         public async Task<IActionResult> Approve(VendorApproveModel model)

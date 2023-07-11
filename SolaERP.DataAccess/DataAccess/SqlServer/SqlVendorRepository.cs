@@ -393,15 +393,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> SendToApprove(int vendorId, int stageMainId)
+        public async Task<bool> SendToApprove(int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_VendorSendToApprove @VendorId,@ApproveStageMainId";
-
-
+                command.CommandText = @"EXEC SP_VendorSendToApprove @VendorId";
                 command.Parameters.AddWithValue(command, "@VendorId", vendorId);
-                command.Parameters.AddWithValue(command, "@ApproveStageMainId", stageMainId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }

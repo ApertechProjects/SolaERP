@@ -23,6 +23,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<VendorInfo>> Get(int businessUnitId, int userId);
         Task<VendorCard> GetHeader(int vendorId);
         Task<bool> ApproveAsync(VendorApproveModel model);
-        Task<bool> SendToApprove(int vendorId, int stageMainId);
+        Task<bool> SendToApprove(int vendorId);
     }
 }

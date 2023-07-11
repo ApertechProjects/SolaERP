@@ -153,7 +153,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
         }
 
-        public async Task<ApiResponse<bool>> SendToApproveAsync(int vendorId, int stageMainId)
-            => ApiResponse<bool>.Success(await _repository.SendToApprove(vendorId, stageMainId));
+        public async Task<ApiResponse<bool>> SendToApproveAsync(int vendorId)
+            => ApiResponse<bool>.Success(await _repository.SendToApprove(vendorId));
     }
 }
