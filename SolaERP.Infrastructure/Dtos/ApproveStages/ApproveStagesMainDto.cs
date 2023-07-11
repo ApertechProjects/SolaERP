@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public int ProcedureId { get; set; }
+        public int BusinessUnitId { get; set; }
         public object ProcedureName { get; set; }
         public object ApproveStageName { get; set; }
         public object ApproveStageCode { get; set; }
