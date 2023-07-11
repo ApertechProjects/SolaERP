@@ -144,7 +144,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 ProcedureId = reader.Get<int>("ProcedureId"),
                 ProcedureName = reader.Get<string>("ProcedureName"),
                 ApproveStageCode = reader.Get<string>("ApproveStageCode"),
-                ReApproveOnChange = reader.Get<bool>("ReApproveOnChange")
+                ReApproveOnChange = reader.Get<bool>("ReApproveOnChange"),
+                BusinessUnitId = reader.Get<int>("BusinessUnitId")
             };
         }
 

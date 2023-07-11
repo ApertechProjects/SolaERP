@@ -3,6 +3,7 @@
     public class ApproveStagesMain : BaseEntity
     {
         public int ApproveStageMainId { get; set; }
+        public int BusinessUnitId { get; set; }
         public int ProcedureId { get; set; }
         public string ProcedureName { get; set; }
         public string ApproveStageName { get; set; }
