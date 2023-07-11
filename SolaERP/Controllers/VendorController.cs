@@ -43,5 +43,13 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Get(int vendorId)
             => CreateActionResult(await _service.GetVendorCard(vendorId));
 
+        [HttpPost]
+        public async Task<IActionResult> SendToApprove(int vendorId, int approveStageMainId)
+            => CreateActionResult(await _service.SendToApproveAsync(vendorId, approveStageMainId));
+
+        [HttpPost]
+        public async Task<IActionResult> Approve(VendorApproveModel model)
+            => CreateActionResult(await _service.ApproveAsync(User.Identity.Name, model));
+
     }
 }

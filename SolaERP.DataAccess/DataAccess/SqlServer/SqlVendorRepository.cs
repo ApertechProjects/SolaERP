@@ -1,6 +1,7 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.ApproveStages;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Entities.PrequalificationCategory;
 using SolaERP.Application.Entities.Status;
@@ -12,6 +13,7 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System;
 using System.Data.Common;
+using System.Xml.Linq;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -371,6 +373,37 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     vendorCard = reader.GetByEntityStructure<VendorCard>();
 
                 return vendorCard;
+            }
+        }
+
+        public async Task<bool> ApproveAsync(VendorApproveModel model)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_VendorsApprove @VendorId,@UserId,@ApproveStatusId,@Comment,@Sequence";
+
+
+                command.Parameters.AddWithValue(command, "@VendorId", model.VendorId);
+                command.Parameters.AddWithValue(command, "@UserId", model.UserId);
+                command.Parameters.AddWithValue(command, "@ApproveStatusId", model.ApproveStatusId);
+                command.Parameters.AddWithValue(command, "@Comment", model.Comment);
+                command.Parameters.AddWithValue(command, "@Sequence", model.Sequence);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> SendToApprove(int vendorId, int stageMainId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_VendorSendToApprove @VendorId,@ApproveStageMainId";
+
+
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+                command.Parameters.AddWithValue(command, "@ApproveStageMainId", stageMainId);
+
+                return await command.ExecuteNonQueryAsync() > 0;
             }
         }
     }
