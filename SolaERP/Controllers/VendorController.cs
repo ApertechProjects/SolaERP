@@ -23,12 +23,12 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Filters()
             => CreateActionResult(await _service.GetFiltersAsync());
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] VendorFilter filter, [FromQuery] Status status, [FromQuery] ApprovalStatus approval)
+        [SourceKeysForAttachment]
+        public async Task<IActionResult> GetAll(VendorFilter filter, Status status, ApprovalStatus approval)
             => CreateActionResult(await _service.GetAllAsync(User.Identity.Name, filter, status, approval));
 
         [HttpGet]
-        public async Task<IActionResult> GetWFA([FromQuery] VendorFilter filter)
+        public async Task<IActionResult> GetWFA(VendorFilter filter)
             => CreateActionResult(await _service.GetWFAAsync(User.Identity.Name, filter));
 
         [HttpGet]
