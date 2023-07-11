@@ -4,6 +4,7 @@ using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
+using SolaERP.Persistence.Services;
 
 namespace SolaERP.API.Controllers
 {
@@ -51,5 +52,9 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Approve(VendorApproveModel model)
             => CreateActionResult(await _service.ApproveAsync(User.Identity.Name, model));
 
+
+        [HttpGet("{taxId}")]
+        public async Task<IActionResult> GetByTax(string taxId)
+            => Ok(await _service.GetByTaxAsync(taxId));
     }
 }
