@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace SolaERP.Application.Models
 {
-    internal class VendorApproveModel
+    public class VendorApproveModel
     {
+        public int VendorId { get; set; }
+
+        [JsonIgnore]
+        public int UserId { get; set; }
+        public int ApproveStatusId { get; set; }
+        public string Comment { get; set; }
+        public int Sequence { get; set; }
     }
 }
