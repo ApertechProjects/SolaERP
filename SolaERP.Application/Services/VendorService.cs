@@ -63,8 +63,7 @@ namespace SolaERP.Persistence.Services
         }
         public async Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity, VendorAllCommandRequest request)
         {
-            List<VendorAll> allVendors = await _repository.GetAll(Convert.ToInt32(userIdentity),
-                request.Filter, (int)request.Status, (int)request.Approval);
+            List<VendorAll> allVendors = await _repository.GetAll(Convert.ToInt32(userIdentity), request);
 
             List<VendorAllDto> dto = _mapper.Map<List<VendorAllDto>>(allVendors);
             return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
@@ -153,7 +152,9 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
         }
 
-        public async Task<ApiResponse<bool>> SendToApproveAsync(int vendorId)
-            => ApiResponse<bool>.Success(await _repository.SendToApprove(vendorId));
+        public async Task<ApiResponse<bool>> SendToApproveAsync(VendorSendToApproveRequest request)
+            => ApiResponse<bool>.Success(await _repository.SendToApprove(request));
+
+
     }
 }

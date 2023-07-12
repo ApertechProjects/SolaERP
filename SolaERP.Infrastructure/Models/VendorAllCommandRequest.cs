@@ -7,10 +7,14 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Models
 {
-    public class VendorAllCommandRequest
+    public class VendorAllCommandRequest : VendorFilter
     {
-        public VendorFilter Filter { get; set; }
-        public Enums.Status Status { get; set; }
-        public ApprovalStatus Approval { get; set; }
+        public List<int> Status { get; set; }
+        public List<int> Approval { get; set; }
+    }
+
+    public class VendorSendToApproveRequest
+    {
+        public List<int> VendorIds { get; set; }
     }
 }

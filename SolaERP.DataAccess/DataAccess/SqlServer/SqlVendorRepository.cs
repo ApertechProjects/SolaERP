@@ -261,7 +261,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<VendorAll>> GetAll(int userId, VendorFilter filter, int status, int approval)
+        public async Task<List<VendorAll>> GetAll(int userId, VendorAllCommandRequest request)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -271,12 +271,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 
                 command.Parameters.AddWithValue(command, "@userId", userId);
-                command.Parameters.AddWithValue(command, "@VendorTypeId", string.Join(",", filter.VendorTypeId));
-                command.Parameters.AddWithValue(command, "@ProductServiceId", string.Join(",", filter.ProductServiceId));
-                command.Parameters.AddWithValue(command, "@BusinessCategoryId", string.Join(",", filter.BusinessCategoryId));
-                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", string.Join(",", filter.BusinessCategoryId));
-                command.Parameters.AddWithValue(command, "@status", status);
-                command.Parameters.AddWithValue(command, "@ApproveStatus", approval);
+                command.Parameters.AddWithValue(command, "@VendorTypeId", string.Join(",", request.VendorTypeId));
+                command.Parameters.AddWithValue(command, "@ProductServiceId", string.Join(",", request.ProductServiceId));
+                command.Parameters.AddWithValue(command, "@BusinessCategoryId", string.Join(",", request.BusinessCategoryId));
+                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", string.Join(",", request.BusinessCategoryId));
+                command.Parameters.AddWithValue(command, "@status", string.Join(",", request.Status));
+                command.Parameters.AddWithValue(command, "@ApproveStatus", string.Join(",", request.Approval));
 
                 using var reader = await command.ExecuteReaderAsync();
                 List<VendorAll> data = new List<VendorAll>();
@@ -393,12 +393,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> SendToApprove(int vendorId)
+        public async Task<bool> SendToApprove(VendorSendToApproveRequest request)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = @"EXEC SP_VendorSendToApprove @VendorId";
-                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+                command.Parameters.AddWithValue(command, "@VendorId", string.Join(",", request.VendorIds));
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
