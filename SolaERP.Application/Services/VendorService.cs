@@ -10,6 +10,7 @@ using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
+using SolaERP.Application.UnitOfWork;
 using SolaERP.Application.ViewModels;
 
 namespace SolaERP.Persistence.Services
@@ -20,19 +21,22 @@ namespace SolaERP.Persistence.Services
         private readonly ICurrencyCodeRepository _currencyCodeRepository;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ISupplierEvaluationRepository _supplierEvaluationRepository;
 
         public VendorService(IVendorRepository vendorRepository,
             ICurrencyCodeRepository currencyCodeRepository,
             IUserRepository userRepository,
             IMapper mapper,
-            ISupplierEvaluationRepository supplierEvaluationRepository)
+            ISupplierEvaluationRepository supplierEvaluationRepository,
+            IUnitOfWork unitOfWork)
         {
             _repository = vendorRepository;
             _currencyCodeRepository = currencyCodeRepository;
             _userRepository = userRepository;
             _mapper = mapper;
             _supplierEvaluationRepository = supplierEvaluationRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<ApiResponse<bool>> ApproveAsync(string userIdentity, VendorApproveModel model)
@@ -153,7 +157,13 @@ namespace SolaERP.Persistence.Services
         }
 
         public async Task<ApiResponse<bool>> SendToApproveAsync(VendorSendToApproveRequest request)
-            => ApiResponse<bool>.Success(await _repository.SendToApprove(request));
+        {
+
+            bool isSuccessFull = await _repository.SendToApprove(request);
+            await _unitOfWork.SaveChangesAsync();
+
+            ApiResponse<bool>.Success();
+        }
 
 
     }

@@ -397,8 +397,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_VendorSendToApprove @VendorId";
-                command.Parameters.AddWithValue(command, "@VendorId", string.Join(",", request.VendorIds));
+                var result = string.Join(",", request.VendorIds);
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorSendToApprove @VendorId";
+                command.Parameters.AddWithValue(command, "@VendorId", result);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
