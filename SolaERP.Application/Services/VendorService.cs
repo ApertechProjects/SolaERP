@@ -158,11 +158,12 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> SendToApproveAsync(VendorSendToApproveRequest request)
         {
-
             bool isSuccessFull = await _repository.SendToApprove(request);
             await _unitOfWork.SaveChangesAsync();
 
-            ApiResponse<bool>.Success();
+            return isSuccessFull ? ApiResponse<bool>.Success(isSuccessFull, 200)
+                :
+                ApiResponse<bool>.Success(isSuccessFull, 200);
         }
 
 
