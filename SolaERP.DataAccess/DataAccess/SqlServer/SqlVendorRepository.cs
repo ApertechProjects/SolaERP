@@ -403,5 +403,32 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
+
+        public async Task<List<VendorWFA>> GetRejectedAsync(int userId, VendorFilter filter)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_VendorRejected @UserId,
+                                            @PrequalificationCategoryId,
+                                            @BusinessCategoryId,
+                                            @ProductServiceId,
+                                            @VendorTypeId";
+
+                command.Parameters.AddWithValue(command, "@userId", userId);
+                command.Parameters.AddWithValue(command, "@VendorTypeId", string.Join(",", filter.VendorTypeId));
+                command.Parameters.AddWithValue(command, "@ProductServiceId", string.Join(",", filter.ProductServiceId));
+                command.Parameters.AddWithValue(command, "@BusinessCategoryId", string.Join(",", filter.BusinessCategoryId));
+                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", string.Join(",", filter.BusinessCategoryId));
+
+                using var reader = await command.ExecuteReaderAsync();
+                List<VendorWFA> data = new List<VendorWFA>();
+
+                while (reader.Read())
+                    data.Add(reader.GetByEntityStructure<VendorWFA>());
+
+                return data;
+
+            }
+        }
     }
 }

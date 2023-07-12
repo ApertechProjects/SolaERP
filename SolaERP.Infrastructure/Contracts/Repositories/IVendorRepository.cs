@@ -22,6 +22,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<VendorAll>> GetDraftAsync(int userId, VendorFilter filter);
         Task<List<VendorInfo>> Get(int businessUnitId, int userId);
         Task<VendorCard> GetHeader(int vendorId);
+        Task<List<VendorWFA>> GetRejectedAsync(int userId, VendorFilter filter);
         Task<bool> ApproveAsync(VendorApproveModel model);
         Task<bool> SendToApprove(int vendorId);
     }

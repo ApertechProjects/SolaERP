@@ -320,8 +320,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<ApproveStageMainInputModel, ApproveStagesMain>().ReverseMap();
 
             CreateMap<VendorCard, VendorCardDto>()
-                .ForMember(dest => dest.VendorId, opt => opt.MapFrom(src =>
-                src.VendorId))
+                .ForMember(dest => dest.VendorId, opt => opt.MapFrom(src => src.VendorId))
                 .ForMember(dest => dest.BlackList, opt => opt.MapFrom(src => src.BlackList))
                 .ForMember(dest => dest.BlackListDescription, opt => opt.MapFrom(src => src.BlackListDescription))
                 .ForMember(dest => dest.Rating, opt => opt.MapFrom(src => src.Rating))
@@ -359,6 +358,8 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.CompanyRegistrationDate, opt => opt.MapFrom(src => src.CompanyRegistrationDate))
                 .ForMember(dest => dest.TaxOffice, opt => opt.MapFrom(src => src.TaxOffice))
                 .ReverseMap();
+
+            CreateMap<VendorWFA, VendorWFADto>().ReverseMap();
         }
     }
 }
