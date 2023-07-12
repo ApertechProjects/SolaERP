@@ -16,7 +16,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<VendorInfo> GetByTaxAsync(string taxId);
         Task<ApiResponse<List<VendorAll>>> GetDraftAsync(string userIdentity, VendorFilter filter);
         Task<ApiResponse<List<VendorWFADto>>> GetWFAAsync(string userIdentity, VendorFilter filter);
-        Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity, VendorFilter filter, Enums.Status status, ApprovalStatus approval);
+        Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity, VendorAllCommandRequest);
         Task<ApiResponse<List<VendorWFADto>>> GetHeldAsync(string userIdentity, VendorFilter filter);
         Task<ApiResponse<bool>> ChangeStatusAsync(TaxModel taxModel, string userIdentity);
         Task<ApiResponse<VendorGetModel>> GetVendorCard(int vendorId);

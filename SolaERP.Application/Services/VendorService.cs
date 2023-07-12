@@ -61,10 +61,10 @@ namespace SolaERP.Persistence.Services
             else
                 return ApiResponse<bool>.Fail("Problem detected", 400);
         }
-        public async Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity, VendorFilter filter, Status status, ApprovalStatus approval)
+        public async Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity, VendorAllCommandRequest request)
         {
             List<VendorAll> allVendors = await _repository.GetAll(Convert.ToInt32(userIdentity),
-                filter, (int)status, (int)approval);
+                request.Filter, (int)request.Status, (int)request.Approval);
 
             List<VendorAllDto> dto = _mapper.Map<List<VendorAllDto>>(allVendors);
             return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
