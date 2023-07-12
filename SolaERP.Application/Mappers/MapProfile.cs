@@ -360,6 +360,7 @@ namespace SolaERP.Persistence.Mappers
                 .ReverseMap();
 
             CreateMap<VendorWFA, VendorWFADto>().ReverseMap();
+            CreateMap<VendorAllDto, VendorAll>().ReverseMap();
         }
     }
 }
