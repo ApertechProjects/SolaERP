@@ -93,10 +93,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@BuId", buId);
 
                 using var reader = await command.ExecuteReaderAsync();
+
                 while (reader.Read())
-                {
-                    approveStagesMain.Add(reader.GetByEntityStructure<ApproveStagesMain>());
-                }
+                    approveStagesMain.Add(reader.GetByEntityStructure<ApproveStagesMain>("BusinessUnitId"));
+
                 return approveStagesMain;
             }
         }

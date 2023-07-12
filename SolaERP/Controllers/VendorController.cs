@@ -24,6 +24,14 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Filters()
             => CreateActionResult(await _service.GetFiltersAsync());
 
+        [HttpGet("{vendorId}")]
+        public async Task<IActionResult> Get(int vendorId)
+            => CreateActionResult(await _service.GetVendorCard(vendorId));
+
+        [HttpGet("{taxId}")]
+        public async Task<IActionResult> GetByTax(string taxId)
+          => Ok(await _service.GetByTaxAsync(taxId));
+
         [HttpPost]
         public async Task<IActionResult> GetAll(VendorAllCommandRequest request)
             => CreateActionResult(await _service.GetAllAsync(User.Identity.Name, request));
@@ -40,9 +48,6 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> GetHeld(VendorFilter filter)
          => CreateActionResult(await _service.GetHeldAsync(User.Identity.Name, filter));
 
-        [HttpGet("{vendorId}")]
-        public async Task<IActionResult> Get(int vendorId)
-            => CreateActionResult(await _service.GetVendorCard(vendorId));
 
         [HttpPost]
         public async Task<IActionResult> SendToApprove(int vendorId)
@@ -53,8 +58,6 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _service.ApproveAsync(User.Identity.Name, model));
 
 
-        [HttpGet("{taxId}")]
-        public async Task<IActionResult> GetByTax(string taxId)
-            => Ok(await _service.GetByTaxAsync(taxId));
+
     }
 }
