@@ -25,8 +25,8 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _service.GetFiltersAsync());
 
         [HttpPost]
-        public async Task<IActionResult> GetAll(VendorFilter filter, Status status, ApprovalStatus approval)
-            => CreateActionResult(await _service.GetAllAsync(User.Identity.Name, filter, status, approval));
+        public async Task<IActionResult> GetAll(VendorAllCommandRequest request)
+            => CreateActionResult(await _service.GetAllAsync(User.Identity.Name, request));
 
         [HttpPost]
         public async Task<IActionResult> GetWFA(VendorFilter filter)
