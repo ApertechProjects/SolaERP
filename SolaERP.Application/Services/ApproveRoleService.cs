@@ -52,7 +52,7 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<bool>.Success(roles, 200);
             }
 
-            return ApiResponse<bool>.Fail("approveRole", "Data can not be deleted", 500);
+            return ApiResponse<bool>.Fail("Data can not be deleted", 500);
         }
 
         public async Task<ApiResponse<bool>> ApproveRoleSaveAsync(List<ApproveRoleSaveModel> model, string userName)
@@ -71,7 +71,7 @@ namespace SolaERP.Persistence.Services
             if (model.Count == counter)
                 return ApiResponse<bool>.Success(roles, 200);
 
-            return ApiResponse<bool>.Fail("approveRole", "Data can not be saved", 500);
+            return ApiResponse<bool>.Fail("Data can not be saved", 500);
         }
 
         public async Task<ApiResponse<List<ApproveRoleDto>>> GetAllAsync()
