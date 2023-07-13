@@ -48,10 +48,21 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> GetHeld(VendorFilter filter)
          => CreateActionResult(await _service.GetHeldAsync(User.Identity.Name, filter));
 
+        [HttpPost]
+        public async Task<IActionResult> GetApproved(VendorFilter filter)
+         => CreateActionResult(await _service.GetApprovedAsync(User.Identity.Name));
+
+        [HttpPost]
+        public async Task<IActionResult> GetRejected(VendorFilter filter)
+         => CreateActionResult(await _service.GetRejectedAsync(User.Identity.Name, filter));
 
         [HttpPost]
         public async Task<IActionResult> SendToApprove(VendorSendToApproveRequest request)
             => CreateActionResult(await _service.SendToApproveAsync(request));
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeStatus(TaxModel model)
+                   => CreateActionResult(await _service.ChangeStatusAsync(model, User.Identity.Name));
 
         [HttpPost]
         public async Task<IActionResult> Approve(VendorApproveModel model)

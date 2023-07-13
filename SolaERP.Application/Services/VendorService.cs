@@ -72,6 +72,15 @@ namespace SolaERP.Persistence.Services
             List<VendorAllDto> dto = _mapper.Map<List<VendorAllDto>>(allVendors);
             return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
         }
+
+        public async Task<ApiResponse<List<VendorAllDto>>> GetApprovedAsync(string userIdentity)
+        {
+            var approvedByCurrentUser = await _repository.GetApprovedAsync(Convert.ToInt32(userIdentity));
+            var dto = _mapper.Map<List<VendorAllDto>>(approvedByCurrentUser);
+
+            return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
+        }
+
         public async Task<VendorInfo> GetByTaxAsync(string taxId)
             => await _repository.GetByTaxAsync(taxId);
         public async Task<int> GetByTaxIdAsync(string taxId)
@@ -106,6 +115,14 @@ namespace SolaERP.Persistence.Services
             List<VendorWFADto> vendorAllDtos = _mapper.Map<List<VendorWFADto>>(vendorWFAs);
             return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
         }
+        public async Task<ApiResponse<List<VendorWFADto>>> GetRejectedAsync(string userIdentity, VendorFilter filter)
+        {
+            var rejectedByCurrentUser = await _repository.GetRejectedAsync(Convert.ToInt32(userIdentity), filter);
+            var rejectedByCurrentUserDto = _mapper.Map<List<VendorWFADto>>(rejectedByCurrentUser);
+
+            return ApiResponse<List<VendorWFADto>>.Success(rejectedByCurrentUserDto, 200);
+        }
+
         public async Task<ApiResponse<VendorGetModel>> GetVendorCard(int vendorId)
         {
             var header = _mapper.Map<VendorCardDto>(await _repository.GetHeader(vendorId));

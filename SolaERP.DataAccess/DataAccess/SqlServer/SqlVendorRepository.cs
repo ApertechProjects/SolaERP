@@ -219,7 +219,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
-
         public async Task<VendorInfo> GetByTaxAsync(string taxId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -234,7 +233,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return vendorInfo;
             }
         }
-
         public async Task<List<VendorWFA>> GetWFAAsync(int userId, VendorFilter filter)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -260,7 +258,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return data;
             }
         }
-
         public async Task<List<VendorAll>> GetAll(int userId, VendorAllCommandRequest request)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -287,7 +284,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return data;
             }
         }
-
         public async Task<List<VendorInfo>> Get(int businessUnitId, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -305,7 +301,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return data;
             }
         }
-
         public async Task<List<VendorWFA>> GetHeldAsync(int userId, VendorFilter filter)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -332,7 +327,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return data;
             }
         }
-
         public async Task<List<VendorAll>> GetDraftAsync(int userId, VendorFilter filter)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -359,7 +353,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return data;
             }
         }
-
         public async Task<VendorCard> GetHeader(int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -375,7 +368,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return vendorCard;
             }
         }
-
         public async Task<bool> ApproveAsync(VendorApproveModel model)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -392,7 +384,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
-
         public async Task<bool> SendToApprove(VendorSendToApproveRequest request)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -404,7 +395,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
-
         public async Task<List<VendorWFA>> GetRejectedAsync(int userId, VendorFilter filter)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -429,6 +419,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 return data;
 
+            }
+        }
+        public async Task<List<VendorAll>> GetApprovedAsync(int userId)
+        {
+            List<VendorAll> data = new();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_VendorApproved @UserId";
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                    data.Add(reader.GetByEntityStructure<VendorAll>());
+
+                return data;
             }
         }
     }
