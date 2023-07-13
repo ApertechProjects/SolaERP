@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Newtonsoft.Json;
 using SolaERP.Application.Dtos;
 using SolaERP.Application.Dtos.Account;
 using SolaERP.Application.Dtos.AnalysisCode;
@@ -12,6 +13,7 @@ using SolaERP.Application.Dtos.BusinessUnit;
 using SolaERP.Application.Dtos.Buyer;
 using SolaERP.Application.Dtos.Currency;
 using SolaERP.Application.Dtos.Email;
+using SolaERP.Application.Dtos.GridLayout;
 using SolaERP.Application.Dtos.Group;
 using SolaERP.Application.Dtos.Item_Code;
 using SolaERP.Application.Dtos.Language;
@@ -42,6 +44,7 @@ using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Buyer;
 using SolaERP.Application.Entities.Currency;
 using SolaERP.Application.Entities.Email;
+using SolaERP.Application.Entities.GridLayout;
 using SolaERP.Application.Entities.Groups;
 using SolaERP.Application.Entities.Item_Code;
 using SolaERP.Application.Entities.Language;
@@ -307,6 +310,12 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<AnalysisStructureWithBu, AnalysisStructureWithBuDto>().ReverseMap();
             CreateMap<ApproveStageMainInputModel, ApproveStagesMain>().ReverseMap();
+
+            CreateMap<GridLayout, GridLayoutDto>()
+                .ForMember(dest => dest.LayoutData, opt=> opt.MapFrom(src => src.LayoutData))
+                .ReverseMap()
+                .ForMember(dest => dest.LayoutData, opt => opt.MapFrom(src => src.LayoutData.ToString()))
+;
         }
     }
 }
