@@ -53,8 +53,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
-
-                return await command.ExecuteNonQueryAsync() > 0;
+                var result = await command.ExecuteNonQueryAsync();
+                return result > 0;
             }
         }
 

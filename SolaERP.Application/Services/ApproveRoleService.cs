@@ -43,10 +43,14 @@ namespace SolaERP.Persistence.Services
             for (int i = 0; i < model.RoleIds.Count; i++)
             {
                 roles = await _approveRoleRepository.ApproveRoleDeleteAsync(model.RoleIds[i], userId);
+                counter++;
             }
             await _unitOfWork.SaveChangesAsync();
             if (model.RoleIds.Count == counter)
+            {
+
                 return ApiResponse<bool>.Success(roles, 200);
+            }
 
             return ApiResponse<bool>.Fail("approveRole", "Data can not be deleted", 500);
         }
