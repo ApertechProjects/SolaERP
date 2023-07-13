@@ -72,6 +72,15 @@ namespace SolaERP.Persistence.Services
             List<VendorAllDto> dto = _mapper.Map<List<VendorAllDto>>(allVendors);
             return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
         }
+
+        public async Task<ApiResponse<List<VendorAllDto>>> GetApprovedAsync(string userIdentity)
+        {
+            var approvedByCurrentUser = await _repository.GetApprovedAsync(Convert.ToInt32(userIdentity));
+            var dto = _mapper.Map<List<VendorAllDto>>(approvedByCurrentUser);
+
+            return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
+        }
+
         public async Task<VendorInfo> GetByTaxAsync(string taxId)
             => await _repository.GetByTaxAsync(taxId);
         public async Task<int> GetByTaxIdAsync(string taxId)
