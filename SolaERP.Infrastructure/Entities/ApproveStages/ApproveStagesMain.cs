@@ -3,12 +3,13 @@
     public class ApproveStagesMain : BaseEntity
     {
         public int ApproveStageMainId { get; set; }
+        public int BusinessUnitId { get; set; }
         public int ProcedureId { get; set; }
-        public object ProcedureName { get; set; }
-        public object ApproveStageName { get; set; }
-        public object ApproveStageCode { get; set; }
+        public string ProcedureName { get; set; }
+        public string ApproveStageName { get; set; }
+        public string ApproveStageCode { get; set; }
         public bool ReApproveOnChange { get; set; }
-        public object CreatedUser { get; set; }
+        public string CreatedUser { get; set; }
         public DateTime CreatedDate { get; set; }
         public int StageCount { get; set; }
     }

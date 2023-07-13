@@ -4,6 +4,7 @@ using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
+using SolaERP.Persistence.Services;
 
 namespace SolaERP.API.Controllers
 {
@@ -23,25 +24,40 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Filters()
             => CreateActionResult(await _service.GetFiltersAsync());
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] VendorFilter filter, [FromQuery] Status status, [FromQuery] ApprovalStatus approval)
-            => CreateActionResult(await _service.GetAllAsync(User.Identity.Name, filter, status, approval));
-
-        [HttpGet]
-        public async Task<IActionResult> GetWFA([FromQuery] VendorFilter filter)
-            => CreateActionResult(await _service.GetWFAAsync(User.Identity.Name, filter));
-
-        [HttpGet]
-        public async Task<IActionResult> GetDraft([FromQuery] VendorFilter filter)
-            => CreateActionResult(await _service.GetDraftAsync(User.Identity.Name, filter));
-
-        [HttpGet]
-        public async Task<IActionResult> GetHeld([FromQuery] VendorFilter filter)
-         => CreateActionResult(await _service.GetHeldAsync(User.Identity.Name, filter));
-
         [HttpGet("{vendorId}")]
         public async Task<IActionResult> Get(int vendorId)
             => CreateActionResult(await _service.GetVendorCard(vendorId));
+
+        [HttpGet("{taxId}")]
+        public async Task<IActionResult> GetByTax(string taxId)
+          => Ok(await _service.GetByTaxAsync(taxId));
+
+        [HttpPost]
+        public async Task<IActionResult> GetAll(VendorAllCommandRequest request)
+            => CreateActionResult(await _service.GetAllAsync(User.Identity.Name, request));
+
+        [HttpPost]
+        public async Task<IActionResult> GetWFA(VendorFilter filter)
+            => CreateActionResult(await _service.GetWFAAsync(User.Identity.Name, filter));
+
+        [HttpPost]
+        public async Task<IActionResult> GetDraft(VendorFilter filter)
+            => CreateActionResult(await _service.GetDraftAsync(User.Identity.Name, filter));
+
+        [HttpPost]
+        public async Task<IActionResult> GetHeld(VendorFilter filter)
+         => CreateActionResult(await _service.GetHeldAsync(User.Identity.Name, filter));
+
+
+        [HttpPost]
+        public async Task<IActionResult> SendToApprove(VendorSendToApproveRequest request)
+            => CreateActionResult(await _service.SendToApproveAsync(request));
+
+        [HttpPost]
+        public async Task<IActionResult> Approve(VendorApproveModel model)
+            => CreateActionResult(await _service.ApproveAsync(User.Identity.Name, model));
+
+
 
     }
 }

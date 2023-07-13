@@ -5,10 +5,12 @@ using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Dtos.Venndors;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
+using SolaERP.Application.UnitOfWork;
 using SolaERP.Application.ViewModels;
 
 namespace SolaERP.Persistence.Services
@@ -19,19 +21,30 @@ namespace SolaERP.Persistence.Services
         private readonly ICurrencyCodeRepository _currencyCodeRepository;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ISupplierEvaluationRepository _supplierEvaluationRepository;
 
         public VendorService(IVendorRepository vendorRepository,
             ICurrencyCodeRepository currencyCodeRepository,
             IUserRepository userRepository,
             IMapper mapper,
-            ISupplierEvaluationRepository supplierEvaluationRepository)
+            ISupplierEvaluationRepository supplierEvaluationRepository,
+            IUnitOfWork unitOfWork)
         {
             _repository = vendorRepository;
             _currencyCodeRepository = currencyCodeRepository;
             _userRepository = userRepository;
             _mapper = mapper;
             _supplierEvaluationRepository = supplierEvaluationRepository;
+            _unitOfWork = unitOfWork;
+        }
+
+        public async Task<ApiResponse<bool>> ApproveAsync(string userIdentity, VendorApproveModel model)
+        {
+            User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
+
+            model.UserId = user.Id;
+            return ApiResponse<bool>.Success(await _repository.ApproveAsync(model), 200);
         }
 
         public async Task<ApiResponse<bool>> ChangeStatusAsync(TaxModel taxModel, string userIdentity)
@@ -52,31 +65,25 @@ namespace SolaERP.Persistence.Services
             else
                 return ApiResponse<bool>.Fail("Problem detected", 400);
         }
-
-        public async Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity, VendorFilter filter, Status status, ApprovalStatus approval)
+        public async Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity, VendorAllCommandRequest request)
         {
-            List<VendorAll> allVendors = await _repository.GetAll(Convert.ToInt32(userIdentity),
-                filter, (int)status, (int)approval);
+            List<VendorAll> allVendors = await _repository.GetAll(Convert.ToInt32(userIdentity), request);
 
             List<VendorAllDto> dto = _mapper.Map<List<VendorAllDto>>(allVendors);
             return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
         }
-
         public async Task<VendorInfo> GetByTaxAsync(string taxId)
             => await _repository.GetByTaxAsync(taxId);
-
         public async Task<int> GetByTaxIdAsync(string taxId)
         {
             VendorInfo entity = await _repository.GetByTaxAsync(taxId);
             return entity.VendorId;
         }
-
         public async Task<ApiResponse<List<VendorAll>>> GetDraftAsync(string userIdentity, VendorFilter filter)
         {
             var data = await _repository.GetDraftAsync(Convert.ToInt32(userIdentity), filter);
             return ApiResponse<List<VendorAll>>.Success(data, 200);
         }
-
         public async Task<ApiResponse<VM_GetVendorFilters>> GetFiltersAsync()
         {
             var prequalificationTypesTask = _supplierEvaluationRepository.GetPrequalificationCategoriesAsync();
@@ -93,14 +100,12 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<VM_GetVendorFilters>.Success(viewModel, 200);
         }
-
         public async Task<ApiResponse<List<VendorWFADto>>> GetHeldAsync(string userIdentity, VendorFilter filter)
         {
             List<VendorWFA> vendorWFAs = await _repository.GetHeldAsync(Convert.ToInt32(userIdentity), filter);
             List<VendorWFADto> vendorAllDtos = _mapper.Map<List<VendorWFADto>>(vendorWFAs);
             return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
         }
-
         public async Task<ApiResponse<VendorGetModel>> GetVendorCard(int vendorId)
         {
             var header = _mapper.Map<VendorCardDto>(await _repository.GetHeader(vendorId));
@@ -144,12 +149,23 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<VendorGetModel>.Success(vendorModel);
         }
-
         public async Task<ApiResponse<List<VendorWFADto>>> GetWFAAsync(string userIdentity, VendorFilter filter)
         {
             List<VendorWFA> vendorWFAs = await _repository.GetWFAAsync(Convert.ToInt32(userIdentity), filter);
             List<VendorWFADto> vendorAllDtos = _mapper.Map<List<VendorWFADto>>(vendorWFAs);
             return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
         }
+
+        public async Task<ApiResponse<bool>> SendToApproveAsync(VendorSendToApproveRequest request)
+        {
+            bool isSuccessFull = await _repository.SendToApprove(request);
+            await _unitOfWork.SaveChangesAsync();
+
+            return isSuccessFull ? ApiResponse<bool>.Success(isSuccessFull, 200)
+                :
+                ApiResponse<bool>.Success(isSuccessFull, 200);
+        }
+
+
     }
 }

@@ -1,11 +1,11 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Application.Contracts.Repositories;
+﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.ApproveStage;
+using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using SolaERP.Application.Models;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -96,8 +96,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@ApproveStageMainId", entity.ApproveStageMainId);
                 command.Parameters.AddWithValue(command, "@ApproveStageDetailsName", entity.ApproveStageDetailsName);
                 command.Parameters.AddWithValue(command, "@Sequence", entity.Sequence);
-                command.Parameters.AddWithValue(command, "@Skip", entity.Skip);
-                command.Parameters.AddWithValue(command, "@SkipDays", entity.SkipDays);
+                command.Parameters.AddWithValue(command, "@Skip", entity?.Skip);
+                command.Parameters.AddWithValue(command, "@SkipDays", entity?.SkipDays);
                 command.Parameters.AddWithValue(command, "@BackToInitiatorOnReject", entity.BackToInitiatorOnReject);
 
                 command.Parameters.Add("@NewApproveStageDetailsId", SqlDbType.Int);

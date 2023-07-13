@@ -17,10 +17,13 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<VendorInfo> GetByTaxAsync(string taxId);
         Task<bool> ChangeStatusAsync(int vendorId, int status, int userId);
         Task<List<VendorWFA>> GetWFAAsync(int userId, VendorFilter filter);
-        Task<List<VendorAll>> GetAll(int userId, VendorFilter filter, int status, int approval);
+        Task<List<VendorAll>> GetAll(int userId, VendorAllCommandRequest request);
         Task<List<VendorWFA>> GetHeldAsync(int userId, VendorFilter filter);
         Task<List<VendorAll>> GetDraftAsync(int userId, VendorFilter filter);
         Task<List<VendorInfo>> Get(int businessUnitId, int userId);
         Task<VendorCard> GetHeader(int vendorId);
+        Task<List<VendorWFA>> GetRejectedAsync(int userId, VendorFilter filter);
+        Task<bool> ApproveAsync(VendorApproveModel model);
+        Task<bool> SendToApprove(VendorSendToApproveRequest request);
     }
 }

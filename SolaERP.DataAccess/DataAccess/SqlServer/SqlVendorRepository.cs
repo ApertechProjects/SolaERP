@@ -1,6 +1,7 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.ApproveStages;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Entities.PrequalificationCategory;
 using SolaERP.Application.Entities.Status;
@@ -12,6 +13,7 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System;
 using System.Data.Common;
+using System.Xml.Linq;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -259,7 +261,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<VendorAll>> GetAll(int userId, VendorFilter filter, int status, int approval)
+        public async Task<List<VendorAll>> GetAll(int userId, VendorAllCommandRequest request)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -269,12 +271,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 
                 command.Parameters.AddWithValue(command, "@userId", userId);
-                command.Parameters.AddWithValue(command, "@VendorTypeId", string.Join(",", filter.VendorTypeId));
-                command.Parameters.AddWithValue(command, "@ProductServiceId", string.Join(",", filter.ProductServiceId));
-                command.Parameters.AddWithValue(command, "@BusinessCategoryId", string.Join(",", filter.BusinessCategoryId));
-                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", string.Join(",", filter.BusinessCategoryId));
-                command.Parameters.AddWithValue(command, "@status", status);
-                command.Parameters.AddWithValue(command, "@ApproveStatus", approval);
+                command.Parameters.AddWithValue(command, "@VendorTypeId", string.Join(",", request.VendorTypeId));
+                command.Parameters.AddWithValue(command, "@ProductServiceId", string.Join(",", request.ProductServiceId));
+                command.Parameters.AddWithValue(command, "@BusinessCategoryId", string.Join(",", request.BusinessCategoryId));
+                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", string.Join(",", request.BusinessCategoryId));
+                command.Parameters.AddWithValue(command, "@status", string.Join(",", request.Status));
+                command.Parameters.AddWithValue(command, "@ApproveStatus", string.Join(",", request.Approval));
 
                 using var reader = await command.ExecuteReaderAsync();
                 List<VendorAll> data = new List<VendorAll>();
@@ -371,6 +373,62 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     vendorCard = reader.GetByEntityStructure<VendorCard>();
 
                 return vendorCard;
+            }
+        }
+
+        public async Task<bool> ApproveAsync(VendorApproveModel model)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_VendorsApprove @VendorId,@UserId,@ApproveStatusId,@Comment,@Sequence";
+
+
+                command.Parameters.AddWithValue(command, "@VendorId", model.VendorId);
+                command.Parameters.AddWithValue(command, "@UserId", model.UserId);
+                command.Parameters.AddWithValue(command, "@ApproveStatusId", model.ApproveStatusId);
+                command.Parameters.AddWithValue(command, "@Comment", model.Comment);
+                command.Parameters.AddWithValue(command, "@Sequence", model.Sequence);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> SendToApprove(VendorSendToApproveRequest request)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                var result = string.Join(",", request.VendorIds);
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorSendToApprove @VendorId";
+                command.Parameters.AddWithValue(command, "@VendorId", result);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<List<VendorWFA>> GetRejectedAsync(int userId, VendorFilter filter)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_VendorRejected @UserId,
+                                            @PrequalificationCategoryId,
+                                            @BusinessCategoryId,
+                                            @ProductServiceId,
+                                            @VendorTypeId";
+
+                command.Parameters.AddWithValue(command, "@userId", userId);
+                command.Parameters.AddWithValue(command, "@VendorTypeId", string.Join(",", filter.VendorTypeId));
+                command.Parameters.AddWithValue(command, "@ProductServiceId", string.Join(",", filter.ProductServiceId));
+                command.Parameters.AddWithValue(command, "@BusinessCategoryId", string.Join(",", filter.BusinessCategoryId));
+                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", string.Join(",", filter.BusinessCategoryId));
+
+                using var reader = await command.ExecuteReaderAsync();
+                List<VendorWFA> data = new List<VendorWFA>();
+
+                while (reader.Read())
+                    data.Add(reader.GetByEntityStructure<VendorWFA>());
+
+                return data;
+
             }
         }
     }

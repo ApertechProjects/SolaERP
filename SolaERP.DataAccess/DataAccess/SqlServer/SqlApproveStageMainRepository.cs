@@ -93,10 +93,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@BuId", buId);
 
                 using var reader = await command.ExecuteReaderAsync();
+
                 while (reader.Read())
-                {
-                    approveStagesMain.Add(reader.GetByEntityStructure<ApproveStagesMain>());
-                }
+                    approveStagesMain.Add(reader.GetByEntityStructure<ApproveStagesMain>("BusinessUnitId"));
+
                 return approveStagesMain;
             }
         }
@@ -143,6 +143,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 ApproveStageName = reader.Get<string>("ApproveStageName"),
                 ProcedureId = reader.Get<int>("ProcedureId"),
                 ProcedureName = reader.Get<string>("ProcedureName"),
+                ApproveStageCode = reader.Get<string>("ApproveStageCode"),
+                ReApproveOnChange = reader.Get<bool>("ReApproveOnChange"),
+                BusinessUnitId = reader.Get<int>("BusinessUnitId")
             };
         }
 
