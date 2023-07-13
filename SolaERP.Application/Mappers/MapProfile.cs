@@ -352,7 +352,6 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.RepresentedCompanies, opt => opt.MapFrom(src => src.RepresentedCompanies))
                 .ForMember(dest => dest.CreditDays, opt => opt.MapFrom(src => src.CreditDays))
                 .ForMember(dest => dest._60DaysPayment, opt => opt.MapFrom(src => src._60DaysPayment))
-                .ForMember(dest => dest.BusinessUnitId, opt => opt.MapFrom(src => src.BusinessUnitId))
                 .ForMember(dest => dest.OtherProducts, opt => opt.MapFrom(src => src.OtherProducts))
                 .ForMember(dest => dest.ApproveStageMainId, opt => opt.MapFrom(src => src.ApproveStageMainId))
                 .ForMember(dest => dest.CompanyRegistrationDate, opt => opt.MapFrom(src => src.CompanyRegistrationDate))

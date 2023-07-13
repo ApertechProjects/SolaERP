@@ -47,20 +47,20 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(await _repository.ApproveAsync(model), 200);
         }
 
-        public async Task<ApiResponse<bool>> ChangeStatusAsync(TaxModel taxModel, string userIdentity)
+        public async Task<ApiResponse<bool>> ChangeStatusAsync(VendorStatusModel taxModel, string userIdentity)
         {
             var userId = await _userRepository.ConvertIdentity(userIdentity);
             int counter = 0;
-            for (int i = 0; i < taxModel.TaxIds.Count; i++)
+            for (int i = 0; i < taxModel.VendorIds.Count; i++)
             {
-                var taxId = await GetByTaxIdAsync(taxModel.TaxIds[i]);
+                var taxId = await GetByTaxIdAsync(taxModel.VendorIds[i]);
                 var result = await _repository.ChangeStatusAsync(taxId, taxModel.Status, userId);
                 if (result)
                     counter++;
             }
 
 
-            if (counter == taxModel.TaxIds.Count)
+            if (counter == taxModel.VendorIds.Count)
                 return ApiResponse<bool>.Success(200);
             else
                 return ApiResponse<bool>.Fail("Problem detected", 400);
@@ -137,6 +137,7 @@ namespace SolaERP.Persistence.Services
             var withHoldingTax = _supplierEvaluationRepository.WithHoldingTaxDatas();
             var tax = _supplierEvaluationRepository.TaxDatas();
             var itemCategories = _supplierEvaluationRepository.GetBusinessCategoriesAsync();
+
             await Task.WhenAll
                 (
                     paymentTerms,

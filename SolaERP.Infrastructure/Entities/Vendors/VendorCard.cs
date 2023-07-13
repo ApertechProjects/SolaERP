@@ -60,12 +60,11 @@ namespace SolaERP.Application.Entities.Vendors
         public int CreditDays { get; set; }
         [DbColumn("60DaysPayment")]
         public int _60DaysPayment { get; set; }
-        public int BusinessUnitId { get; set; }
-        public string BusinessUnitCode { get; set; }
+
         public string OtherProducts { get; set; }
         public int ApproveStageMainId { get; set; }
         public DateTime CompanyRegistrationDate { get; set; }
         public string TaxOffice { get; set; }
-      
+
     }
 }
