@@ -48,6 +48,9 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> GetHeld(VendorFilter filter)
          => CreateActionResult(await _service.GetHeldAsync(User.Identity.Name, filter));
 
+        [HttpPost]
+        public async Task<IActionResult> GetRejected(VendorFilter filter)
+         => CreateActionResult(await _service.GetRejectedAsync(User.Identity.Name, filter));
 
         [HttpPost]
         public async Task<IActionResult> SendToApprove(VendorSendToApproveRequest request)
