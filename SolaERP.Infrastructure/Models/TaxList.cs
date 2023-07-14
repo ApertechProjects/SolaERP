@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Models
 {
-    public class TaxModel
+    public class VendorStatusModel
     {
-        public List<string> TaxIds { get; set; }
+        public List<string> VendorIds { get; set; }
         public int Status { get; set; }
     }
 }

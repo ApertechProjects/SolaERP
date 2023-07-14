@@ -1,18 +1,11 @@
 ﻿using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Dtos.Vendors;
-using SolaERP.Application.Entities.Currency;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Currency = SolaERP.Application.Entities.Currency.Currency;
 
 namespace SolaERP.Application.Models
 {
-    public class VendorGetModel
+    public class VM_VendorCard
     {
         public VendorCardDto Header { get; set; }
         public List<Currency> Currencies { get; set; }

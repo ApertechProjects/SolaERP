@@ -61,7 +61,7 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _service.SendToApproveAsync(request));
 
         [HttpPost]
-        public async Task<IActionResult> ChangeStatus(TaxModel model)
+        public async Task<IActionResult> ChangeStatus(VendorStatusModel model)
                    => CreateActionResult(await _service.ChangeStatusAsync(model, User.Identity.Name));
 
         [HttpPost]

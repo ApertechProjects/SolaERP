@@ -359,6 +359,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 command.CommandText = @"Exec SP_Vendor_load @VendorId";
                 command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+
                 using var reader = await command.ExecuteReaderAsync();
                 VendorCard vendorCard = new VendorCard();
 
