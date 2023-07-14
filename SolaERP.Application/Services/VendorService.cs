@@ -136,7 +136,7 @@ namespace SolaERP.Persistence.Services
             var itemCategories = _supplierRepository.GetBusinessCategoriesAsync();
 
             await Task.WhenAll
-                (
+                  (
                     paymentTerms,
                     deliveryTerms,
                     bankDetails,
@@ -146,7 +146,7 @@ namespace SolaERP.Persistence.Services
                     tax,
                     users,
                     currency
-                );
+                  );
 
             VM_VendorCard vendorModel = new VM_VendorCard()
             {
