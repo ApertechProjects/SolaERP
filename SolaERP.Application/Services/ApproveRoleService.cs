@@ -48,11 +48,10 @@ namespace SolaERP.Persistence.Services
             await _unitOfWork.SaveChangesAsync();
             if (model.RoleIds.Count == counter)
             {
-
                 return ApiResponse<bool>.Success(roles, 200);
             }
 
-            return ApiResponse<bool>.Fail("Data can not be deleted", 500);
+            return ApiResponse<bool>.Success("Some stage can not be deleted because they are used in another form");
         }
 
         public async Task<ApiResponse<bool>> ApproveRoleSaveAsync(List<ApproveRoleSaveModel> model, string userName)

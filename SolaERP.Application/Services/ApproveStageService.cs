@@ -50,7 +50,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<ApproveStagesMainDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<bool>> SaveApproveStageMainAsync(string name, ApprovalStageSaveModel approvalStageSaveVM)
+        public async Task<ApiResponse<int>> SaveApproveStageMainAsync(string name, ApprovalStageSaveModel approvalStageSaveVM)
         {
             var userId = await _userRepository.ConvertIdentity(name);
             var mainId = await _approveStageMainRepository.SaveApproveStageMainAsync(approvalStageSaveVM.ApproveStagesMain, userId);
@@ -78,7 +78,7 @@ namespace SolaERP.Persistence.Services
             }
 
             await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<bool>.Success(true, 200);
+            return ApiResponse<int>.Success(mainId, 200);
         }
 
         public async Task<ApiResponse<List<ApprovalStatusDto>>> GetApproveStatus()
@@ -109,7 +109,7 @@ namespace SolaERP.Persistence.Services
                 await _unitOfWork.SaveChangesAsync();
                 return ApiResponse<bool>.Success(data, 200);
             }
-            return ApiResponse<bool>.Fail("delete", "data can not be deleted", 400);
+            return ApiResponse<bool>.Success("data can not be deleted");
         }
 
         public async Task<ApiResponse<ApprovalStageDto>> GetApprovalStageAsync(int mainId)
