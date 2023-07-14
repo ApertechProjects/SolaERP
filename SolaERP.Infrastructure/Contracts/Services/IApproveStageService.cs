@@ -8,7 +8,7 @@ namespace SolaERP.Application.Contracts.Services
     public interface IApproveStageService
     {
         #region Main
-        Task<ApiResponse<bool>> SaveApproveStageMainAsync(string name, ApprovalStageSaveModel approvalStageSaveVM);
+        Task<ApiResponse<int>> SaveApproveStageMainAsync(string name, ApprovalStageSaveModel approvalStageSaveVM);
         Task<ApiResponse<ApproveStagesMainDto>> GetMainByIdAsync(int approveStageMainId);
         Task<ApiResponse<List<ApproveStagesMainDto>>> GetByBusinessUnitId(int buId);
         Task<ApiResponse<List<ApprovalStatusDto>>> GetApproveStatus();
