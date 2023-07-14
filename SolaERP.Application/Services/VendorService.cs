@@ -62,6 +62,16 @@ namespace SolaERP.Persistence.Services
             else
                 return ApiResponse<bool>.Fail("Problem detected", 400);
         }
+
+        public async Task<ApiResponse<bool>> DeleteAsync(string userIdentity, int VendorId)
+        {
+            var operationResult = await _repository.DeleteAsync(Convert.ToInt32(userIdentity), VendorId);
+            bool isSuccessfull = operationResult != 0;
+
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(isSuccessfull, 200);
+        }
+
         public async Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity, VendorAllCommandRequest request)
         {
             List<VendorAll> allVendors = await _repository.GetAll(Convert.ToInt32(userIdentity), request);

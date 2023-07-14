@@ -202,7 +202,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             => await ModifyVendorAsync(userId, vendor);
 
         public async Task<int> DeleteAsync(int userId, int id)
-            => await DeleteAsync(userId, id);
+            => await ModifyVendorAsync(userId, new() { VendorId = id });
 
         public async Task<bool> ChangeStatusAsync(int vendorId, int status, int userId)
         {

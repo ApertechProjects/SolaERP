@@ -68,7 +68,9 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Approve(VendorApproveModel model)
             => CreateActionResult(await _service.ApproveAsync(User.Identity.Name, model));
 
-
+        [HttpDelete("{vendorId}")]
+        public async Task<IActionResult> Delete(int vendorId)
+            => CreateActionResult(await _service.DeleteAsync(User.Identity.Name, vendorId));
 
     }
 }
