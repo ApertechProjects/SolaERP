@@ -2,7 +2,6 @@
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
-using Currency = SolaERP.Application.Entities.Currency.Currency;
 
 namespace SolaERP.Application.Models
 {
