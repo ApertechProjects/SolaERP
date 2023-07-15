@@ -204,7 +204,9 @@ namespace SolaERP.Persistence.Services
                 await DeleteBuyersAsync(model.RemoveBuyers, model.GroupId);
 
             if (model.AddMenus != null)
+            {
                 await _groupRepository.AddMenuAsync(model.GroupId, model.AddMenus.ConvertToDataTable());
+            }
             if (model.RemoveMenus != null)
                 await _groupRepository.DeleteMenuAsync(model.GroupId, model.RemoveMenus.ConvertListToDataTable());
 

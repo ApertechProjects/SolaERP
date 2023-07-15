@@ -7,6 +7,7 @@ using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Entities.ApproveStage;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using System.Collections.Generic;
 
 namespace SolaERP.Persistence.Services
 {
@@ -49,7 +50,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<ApproveStagesMainDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<ApprovalStageSaveModel>> SaveApproveStageMainAsync(string name, ApprovalStageSaveModel approvalStageSaveVM)
+        public async Task<ApiResponse<int>> SaveApproveStageMainAsync(string name, ApprovalStageSaveModel approvalStageSaveVM)
         {
             var userId = await _userRepository.ConvertIdentity(name);
             var mainId = await _approveStageMainRepository.SaveApproveStageMainAsync(approvalStageSaveVM.ApproveStagesMain, userId);
@@ -57,7 +58,7 @@ namespace SolaERP.Persistence.Services
             for (int i = 0; i < approvalStageSaveVM.ApproveStagesDetailDtos.Count; i++)
             {
                 if (approvalStageSaveVM.ApproveStagesDetailDtos[i].Type == "remove")
-                    await _approveStageDetailRepository.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageDetailsId);
+                    await _approveStageDetailRepository.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].Id);
                 else
                 {
                     approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageMainId = mainId;
@@ -66,7 +67,7 @@ namespace SolaERP.Persistence.Services
                     for (int j = 0; j < approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRoles.Count; j++)
                     {
                         if (approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRoles[j].Type == "remove")
-                            await _approveStageRoleRepository.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRoles[j].ApproveStageRoleId);
+                            await _approveStageRoleRepository.RemoveAsync(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRoles[j].Id);
                         else
                         {
                             approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRoles[j].ApproveStageDetailId = detailId;
@@ -77,7 +78,7 @@ namespace SolaERP.Persistence.Services
             }
 
             await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<ApprovalStageSaveModel>.Success(approvalStageSaveVM, 200);
+            return ApiResponse<int>.Success(mainId, 200);
         }
 
         public async Task<ApiResponse<List<ApprovalStatusDto>>> GetApproveStatus()
@@ -90,6 +91,8 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<List<ApprovalStatusDto>>.Fail("get", "Approval status is empty", 404, true);
         }
+
+
 
         public async Task<ApiResponse<bool>> DeleteApproveStageAsync(ApproveStageDeleteModel model)
         {
@@ -106,7 +109,29 @@ namespace SolaERP.Persistence.Services
                 await _unitOfWork.SaveChangesAsync();
                 return ApiResponse<bool>.Success(data, 200);
             }
-            return ApiResponse<bool>.Fail("delete", "data can not be deleted", 400);
+            return ApiResponse<bool>.Success("data can not be deleted");
+        }
+
+        public async Task<ApiResponse<ApprovalStageDto>> GetApprovalStageAsync(int mainId)
+        {
+            var approvalStageMain = await _approveStageMainRepository.GetApprovalStageHeaderLoad(mainId);
+            var approvalStageDetail = await _approveStageDetailRepository.GetByMainIdAsync(mainId);
+
+            var mainModel = _mapper.Map<ApprovalStageDto>(approvalStageMain);
+            var detailModel = _mapper.Map<List<ApprovalStageDetailDto>>(approvalStageDetail);
+
+            foreach (var item in detailModel)
+            {
+                var rolesModel = _mapper.Map<List<ApproveStageRoleDto>>
+                (await _approveStageRoleRepository.GetByDetailIdAsync(item.Id));
+
+                item.ApproveStageRoles = rolesModel;
+            }
+
+            if (mainModel is not null)
+                mainModel.Details = detailModel;
+
+            return ApiResponse<ApprovalStageDto>.Success(mainModel, 200);
         }
     }
 }

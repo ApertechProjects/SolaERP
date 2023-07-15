@@ -35,12 +35,19 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<BuyerDto>>> GetBuyersAsync(string name, string businessUnitCode)
         {
-            var buyer = await _buyerRepository.GetBuyersAsync(await _userRepository.ConvertIdentity(name), businessUnitCode);
-            var buyerDto = _mapper.Map<List<BuyerDto>>(buyer);
+            try
+            {
+                var buyer = await _buyerRepository.GetBuyersAsync(await _userRepository.ConvertIdentity(name), businessUnitCode);
+                var buyerDto = _mapper.Map<List<BuyerDto>>(buyer);
 
-            if (buyerDto != null)
-                return ApiResponse<List<BuyerDto>>.Success(buyerDto, 200);
+                if (buyerDto != null)
+                    return ApiResponse<List<BuyerDto>>.Success(buyerDto, 200);
 
+            }
+            catch (Exception)
+            {
+                return ApiResponse<List<BuyerDto>>.Fail("buyer", "Buyer is empty", 400, true);
+            }
             return ApiResponse<List<BuyerDto>>.Fail("buyer", "Buyer is empty", 400, true);
         }
 

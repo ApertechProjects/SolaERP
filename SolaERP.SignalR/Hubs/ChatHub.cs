@@ -23,7 +23,7 @@ namespace SolaERP.SignalR.Hubs
             //    ConnectionId = Context.ConnectionId,
             //};
             //ClientSource.Source.Add(client);
-            //await Clients.All.SendAsync("userJoined", userName);
+            //await Clients.GetAll.SendAsync("userJoined", userName);
             //await Clients.Others.SendAsync("activeUsers", ClientSource.Source);
             #endregion
 

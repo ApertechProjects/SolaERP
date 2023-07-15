@@ -407,7 +407,7 @@ namespace SolaERP.Persistence.Services
                     for (int i = 0; i < Enum.GetNames(typeof(Language)).Length; i++)
                     {
                         string enumElement = Enum.GetNames(typeof(Language))[i];
-                        var sendUsers = await GetAdminUsersAsync(1, enumElement.GetLanguageEnumValue());
+                        var sendUsers = await GetAdminUserMailsAsync(1, enumElement.GetLanguageEnumValue());
                         if (sendUsers.Count > 0)
                         {
                             var templateData = templates[i];
@@ -420,7 +420,7 @@ namespace SolaERP.Persistence.Services
                                 CompanyOrVendorName = companyName,
                                 Language = templateData.Language.GetLanguageEnumValue(),
                             };
-                            Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), sendUsers);
+                            Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName, adminApprove.ImageName, sendUsers);
                             emails.Add(RegEmail);
                         }
                     }
@@ -446,9 +446,9 @@ namespace SolaERP.Persistence.Services
             return result;
         }
 
-        public async Task<List<string>> GetAdminUsersAsync(int sequence, Language language)
+        public async Task<List<string>> GetAdminUserMailsAsync(int sequence, Language language)
         {
-            var users = await _userRepository.GetAdminUsersAsync(sequence, language);
+            var users = await _userRepository.GetAdminUserMailsAsync(sequence, language);
             return users;
         }
 

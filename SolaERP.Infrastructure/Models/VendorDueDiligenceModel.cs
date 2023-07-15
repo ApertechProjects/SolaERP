@@ -6,6 +6,7 @@
         public int DesignId { get; set; }
         public int VendorId { get; set; }
         public string TextboxValue { get; set; }
+        public string BankListValue { get; set; }
         public string TextareaValue { get; set; }
         public bool CheckboxValue { get; set; }
         public bool RadioboxValue { get; set; }

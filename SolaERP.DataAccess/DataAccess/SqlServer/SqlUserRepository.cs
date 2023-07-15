@@ -400,11 +400,11 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_UserApprove @Id,@Sequence,@ApproveStatus,@UserId,@Comment";
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_UserApprove @Id,@Sequence,@ApprovalStatus,@UserId,@Comment";
 
                 command.Parameters.AddWithValue(command, "@Id", model.Id);
                 command.Parameters.AddWithValue(command, "@Sequence", model.Sequence);
-                command.Parameters.AddWithValue(command, "@ApproveStatus", model.ApproveStatus);
+                command.Parameters.AddWithValue(command, "@ApprovalStatus", model.ApproveStatus);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@Comment", model.Comment);
 
@@ -599,7 +599,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<List<string>> GetAdminUsersAsync(int sequence, Application.Enums.Language language)
+        public async Task<List<string>> GetAdminUserMailsAsync(int sequence, Application.Enums.Language language)
         {
             List<string> userData = new List<string>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)

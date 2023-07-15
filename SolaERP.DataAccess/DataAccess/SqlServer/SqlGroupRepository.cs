@@ -26,7 +26,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_GroupMenuBulk_I  @GroupId,@MenuType";
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_GroupMenuBulk_I  @GroupId,@MenuType";
 
                 command.Parameters.AddWithValue(command, "@GroupId", groupId);
                 command.Parameters.AddTableValue(command, "@MenuType", GroupRepoConstants.AddMenu, table);

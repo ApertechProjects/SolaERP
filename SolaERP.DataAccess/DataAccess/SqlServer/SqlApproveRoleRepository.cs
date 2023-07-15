@@ -48,13 +48,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                                   @BusinessUnitId,
                                                                                   @UserId";
 
-                command.Parameters.AddWithValue(command, "@ApproveRoleId", model.ApproveRoleId);
+                command.Parameters.AddWithValue(command, "@ApproveRoleId", model.ApproveRoleId < 0 ? 0 : model.ApproveRoleId);
                 command.Parameters.AddWithValue(command, "@ApproveRoleName", model.ApproveRoleName);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
-
-                return await command.ExecuteNonQueryAsync() > 0;
+                var result = await command.ExecuteNonQueryAsync();
+                return result > 0;
             }
         }
 

@@ -46,7 +46,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public async Task<List<Currency>> GetCurrencyCodesByBusinessUnitCode(string businessUnitCode)
+        public async Task<List<Currency>> CurrencyCodes(string businessUnitCode)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

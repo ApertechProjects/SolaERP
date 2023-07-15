@@ -2,85 +2,186 @@
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.SupplierEvaluation;
+using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Dtos.Venndors;
+using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
+using SolaERP.Application.Enums;
+using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
-using System.Data.Common;
+using SolaERP.Application.ViewModels;
 
 namespace SolaERP.Persistence.Services
 {
     public class VendorService : IVendorService
     {
-        private readonly IVendorRepository _vendorRepository;
+        private readonly IVendorRepository _repository;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly ISupplierEvaluationRepository _supplierRepository;
 
-        public VendorService(IVendorRepository vendorRepository, IUserRepository userRepository, IMapper mapper)
+        public VendorService(IVendorRepository vendorRepository,
+            IUserRepository userRepository,
+            IMapper mapper,
+            ISupplierEvaluationRepository supplierRepository,
+            IUnitOfWork unitOfWork)
         {
-            _vendorRepository = vendorRepository;
+            _repository = vendorRepository;
             _userRepository = userRepository;
             _mapper = mapper;
+            _supplierRepository = supplierRepository;
+            _unitOfWork = unitOfWork;
         }
 
-        public Task AddAsync(Vendors model)
+        public async Task<ApiResponse<bool>> ApproveAsync(string userIdentity, VendorApproveModel model)
         {
-            throw new NotImplementedException();
+            User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
+
+            model.UserId = user.Id;
+            return ApiResponse<bool>.Success(await _repository.ApproveAsync(model), 200);
         }
 
-        public Task<ApiResponse<List<Vendors>>> GetAllAsync()
+        public async Task<ApiResponse<bool>> ChangeStatusAsync(VendorStatusModel taxModel, string userIdentity)
         {
-            throw new NotImplementedException();
+            var userId = await _userRepository.ConvertIdentity(userIdentity);
+            int counter = 0;
+            for (int i = 0; i < taxModel.VendorIds.Count; i++)
+            {
+                var taxId = await GetByTaxIdAsync(taxModel.VendorIds[i]);
+                var result = await _repository.ChangeStatusAsync(taxId, taxModel.Status, userId);
+                if (result)
+                    counter++;
+            }
+
+
+            if (counter == taxModel.VendorIds.Count)
+                return ApiResponse<bool>.Success(200);
+            else
+                return ApiResponse<bool>.Fail("Problem detected", 400);
+        }
+        public async Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity, VendorAllCommandRequest request)
+        {
+            List<VendorAll> allVendors = await _repository.GetAll(Convert.ToInt32(userIdentity), request);
+
+            List<VendorAllDto> dto = _mapper.Map<List<VendorAllDto>>(allVendors);
+            return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
         }
 
-        public async Task<VendorInfo> GetVendorByTaxAsync(string taxId)
+        public async Task<ApiResponse<List<VendorAllDto>>> GetApprovedAsync(string userIdentity)
         {
-            return await _vendorRepository.GetVendorByTaxAsync(taxId);
+            var approvedByCurrentUser = await _repository.GetApprovedAsync(Convert.ToInt32(userIdentity));
+            var dto = _mapper.Map<List<VendorAllDto>>(approvedByCurrentUser);
+
+            return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
         }
 
-        public async Task<int> GetVendorByTaxIdAsync(string taxId)
+        public async Task<VendorInfo> GetByTaxAsync(string taxId)
+            => await _repository.GetByTaxAsync(taxId);
+        public async Task<int> GetByTaxIdAsync(string taxId)
         {
-            VendorInfo entity = await _vendorRepository.GetVendorByTaxAsync(taxId);
+            VendorInfo entity = await _repository.GetByTaxAsync(taxId);
             return entity.VendorId;
         }
-
-        public Task<ApiResponse<bool>> RemoveAsync(int Id)
+        public async Task<ApiResponse<List<VendorAll>>> GetDraftAsync(string userIdentity, VendorFilter filter)
         {
-            throw new NotImplementedException();
+            var data = await _repository.GetDraftAsync(Convert.ToInt32(userIdentity), filter);
+            return ApiResponse<List<VendorAll>>.Success(data, 200);
+        }
+        public async Task<ApiResponse<VM_GetVendorFilters>> GetFiltersAsync()
+        {
+            var prequalificationTypesTask = _supplierRepository.GetPrequalificationCategoriesAsync();
+            var businessCategoriesTask = _supplierRepository.GetBusinessCategoriesAsync();
+            var productServicesTask = _supplierRepository.GetProductServicesAsync();
+
+            await Task.WhenAll(prequalificationTypesTask, businessCategoriesTask, productServicesTask);
+            VM_GetVendorFilters viewModel = new()
+            {
+                PrequalificationCategories = prequalificationTypesTask.Result,
+                BusinessCategories = businessCategoriesTask.Result,
+                ProductServices = productServicesTask.Result,
+            };
+
+            return ApiResponse<VM_GetVendorFilters>.Success(viewModel, 200);
+        }
+        public async Task<ApiResponse<List<VendorWFADto>>> GetHeldAsync(string userIdentity, VendorFilter filter)
+        {
+            List<VendorWFA> vendorWFAs = await _repository.GetHeldAsync(Convert.ToInt32(userIdentity), filter);
+            List<VendorWFADto> vendorAllDtos = _mapper.Map<List<VendorWFADto>>(vendorWFAs);
+            return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
+        }
+        public async Task<ApiResponse<List<VendorWFADto>>> GetRejectedAsync(string userIdentity, VendorFilter filter)
+        {
+            var rejectedByCurrentUser = await _repository.GetRejectedAsync(Convert.ToInt32(userIdentity), filter);
+            var rejectedByCurrentUserDto = _mapper.Map<List<VendorWFADto>>(rejectedByCurrentUser);
+
+            return ApiResponse<List<VendorWFADto>>.Success(rejectedByCurrentUserDto, 200);
+        }
+        public async Task<ApiResponse<VM_VendorCard>> GetVendorCard(int vendorId)
+        {
+            var header = _mapper.Map<VendorCardDto>(await _repository.GetHeader(vendorId));
+
+            var paymentTerms = _supplierRepository.GetPaymentTermsAsync();
+            var deliveryTerms = _supplierRepository.GetDeliveryTermsAsync();
+            var currency = _supplierRepository.GetCurrenciesAsync();
+            var bankDetails = _supplierRepository.GetVendorBankDetailsAsync(vendorId);
+            var businessCategory = _supplierRepository.GetVendorBuCategoriesAsync(vendorId);
+            var users = _supplierRepository.GetVendorUsers(vendorId);
+            var score = _supplierRepository.Scores(vendorId);
+            var shipment = _supplierRepository.Shipments();
+            var withHoldingTax = _supplierRepository.WithHoldingTaxDatas();
+            var tax = _supplierRepository.TaxDatas();
+            var itemCategories = _supplierRepository.GetBusinessCategoriesAsync();
+
+            await Task.WhenAll
+                  (
+                    paymentTerms,
+                    deliveryTerms,
+                    bankDetails,
+                    users,
+                    shipment,
+                    withHoldingTax,
+                    tax,
+                    users,
+                    currency
+                  );
+
+            VM_VendorCard vendorModel = new VM_VendorCard()
+            {
+                Header = header,
+                Currencies = currency.Result,
+                PaymentTerms = paymentTerms.Result,
+                DeliveryTerms = deliveryTerms.Result,
+                VendorBankDetails = bankDetails.Result.Select(x => new VendorBankDetailDto { Bank = x.Bank, Currency = x.Currency, AccountNumber = x.AccountNumber }).ToList(),
+                VendorUsers = users.Result,
+                VendorBuCategories = businessCategory.Result,
+                Score = score.Result,
+                Shipments = shipment.Result,
+                WithHoldingTaxDatas = withHoldingTax.Result,
+                TaxDatas = tax.Result,
+            };
+
+            return ApiResponse<VM_VendorCard>.Success(vendorModel);
+        }
+        public async Task<ApiResponse<List<VendorWFADto>>> GetWFAAsync(string userIdentity, VendorFilter filter)
+        {
+            List<VendorWFA> vendorWFAs = await _repository.GetWFAAsync(Convert.ToInt32(userIdentity), filter);
+            List<VendorWFADto> vendorAllDtos = _mapper.Map<List<VendorWFADto>>(vendorWFAs);
+            return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
         }
 
-        public Task<ApiResponse<bool>> UpdateAsync(Vendors model)
+        public async Task<ApiResponse<bool>> SendToApproveAsync(VendorSendToApproveRequest request)
         {
-            throw new NotImplementedException();
+            bool isSuccessFull = await _repository.SendToApprove(request);
+            await _unitOfWork.SaveChangesAsync();
+
+            return isSuccessFull ? ApiResponse<bool>.Success(isSuccessFull, 200)
+                :
+                ApiResponse<bool>.Success(isSuccessFull, 200);
         }
 
-        public async Task<ApiResponse<List<VendorWFA>>> WaitingForApprovals(string userName)
-        {
-            int userId = await _userRepository.ConvertIdentity(userName);
-            var data = await _vendorRepository.WaitingForApprovals(userId);
-            var dto = _mapper.Map<List<VendorWFA>>(data);
-            if (dto.Count > 0)
-                return ApiResponse<List<VendorWFA>>.Success(dto);
-            return ApiResponse<List<VendorWFA>>.Fail("Data not found", 404);
-        }
 
-        public async Task<ApiResponse<List<VendorAll>>> All(string userName)
-        {
-            int userId = await _userRepository.ConvertIdentity(userName);
-            var data = await _vendorRepository.All(userId);
-            var dto = _mapper.Map<List<VendorAll>>(data);
-            if (dto.Count > 0)
-                return ApiResponse<List<VendorAll>>.Success(dto);
-            return ApiResponse<List<VendorAll>>.Fail("Data not found", 404);
-        }
-
-        public async Task<ApiResponse<List<VendorInfoDto>>> Vendors(int businessUnitId, string name)
-        {
-            int userId = await _userRepository.ConvertIdentity(name);
-            var data = await _vendorRepository.Get(businessUnitId, userId);
-            var dto = _mapper.Map<List<VendorInfoDto>>(data);
-            if (dto.Count > 0)
-                return ApiResponse<List<VendorInfoDto>>.Success(dto);
-            return ApiResponse<List<VendorInfoDto>>.Fail("Data not found", 404);
-        }
     }
 }

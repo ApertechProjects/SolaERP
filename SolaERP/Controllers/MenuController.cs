@@ -30,6 +30,10 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _menuService.GetGroupMenuWithPrivilegeListByGroupIdAsync(User.Identity.Name, groupId));
 
         [HttpGet]
+        public async Task<IActionResult> GetGroupMenuWithPrivilege(int groupId)
+            => CreateActionResult(await _menuService.GetMenuWithPrivilegeListByGroupIdAsync(groupId));
+
+        [HttpGet]
         public async Task<IActionResult> GetAdditionalPrivilegeAccessAsync()
         => CreateActionResult(await _menuService.GetAdditionalPrivilegeAccessAsync(User.Identity.Name));
     }

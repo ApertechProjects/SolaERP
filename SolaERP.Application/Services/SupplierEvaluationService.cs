@@ -9,6 +9,7 @@ using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.BusinessUnits;
+using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
@@ -79,7 +80,7 @@ namespace SolaERP.Persistence.Services
 
             vendor.RegistrationDate = vendor.RegistrationDate.ConvertDateToValidDate();
 
-            int vendorId = await _vendorRepository.UpdateVendorAsync(user.Id, vendor);
+            int vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
 
             #region Represented Company & Represented Products
 
@@ -128,7 +129,7 @@ namespace SolaERP.Persistence.Services
             });
 
 
-            for (int i = 0; i < companyLogo.Count; i++)
+            for (int i = 0; i < companyLogo.Count; i++) //+
             {
                 if (companyLogo[i].Type == 2 && companyLogo[i].AttachmentId > 0)
                     await _attachmentRepository.DeleteAttachmentAsync(companyLogo[i].AttachmentId);
@@ -157,7 +158,7 @@ namespace SolaERP.Persistence.Services
 
             #endregion
             //
-            #region Setting Vendor Ids (COBC,NDA,Bank Accounts
+            #region Setting Vendor Ids (COBC,NDA,Bank Accounts)
 
             command?.CodeOfBuConduct?.ForEach(x => x.VendorId = vendorId);
             command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
@@ -178,7 +179,7 @@ namespace SolaERP.Persistence.Services
 
                     if (x.AccountVerificationLetter != null)
                     {
-                        tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
+                        tasks.AddRange(x.AccountVerificationLetter.Select(attachment => //+
                         {
                             if (attachment.Type == 2 && attachment.AttachmentId > 0)
                                 return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
@@ -206,9 +207,9 @@ namespace SolaERP.Persistence.Services
                     dueInputModel.DateTimeValue = dueInputModel.DateTimeValue.ConvertDateToValidDate();
 
                     var itemTasks = new List<Task<bool>>
-                {
+                    {
                      _repository.UpdateDueAsync(dueInputModel)
-                };
+                    };
 
                     if (item?.HasDataGrid == true)
                     {
@@ -219,6 +220,7 @@ namespace SolaERP.Persistence.Services
 
                             var gridDatas = _mapper.Map<DueDiligenceGridModel>(gridData);
                             gridDatas.DueDesignId = item.DesignId;
+                            gridDatas.VendorId = vendorId;
 
                             return _repository.UpdateDueDesignGrid(gridDatas);
 
@@ -229,13 +231,16 @@ namespace SolaERP.Persistence.Services
                     {
                         itemTasks.AddRange(item?.Attachments?.Select(attachment =>
                         {
-                            var attachedFile = _mapper.Map<AttachmentSaveModel>(attachment);
-
-                            attachedFile.SourceId = vendorId;
-                            attachedFile.AttachmentTypeId = item.DesignId;
-                            attachedFile.SourceType = SourceType.VEN_DUE.ToString();
-
-                            return _attachmentRepository.SaveAttachmentAsync(attachedFile);
+                            if (attachment.Type == 2 && attachment.AttachmentId > 0)
+                                return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
+                            else
+                            {
+                                var attachedFile = _mapper.Map<AttachmentSaveModel>(attachment);
+                                attachedFile.SourceId = vendorId;
+                                attachedFile.SourceType = SourceType.VEN_DUE.ToString();
+                                attachedFile.AttachmentTypeId = item.DesignId;
+                                return _attachmentRepository.SaveAttachmentAsync(attachedFile);
+                            }
                         }));
 
                     }
@@ -246,7 +251,7 @@ namespace SolaERP.Persistence.Services
             }
 
             #endregion
-            //
+
             #region Prequalification
 
             if (command.Prequalification is not null)
@@ -266,6 +271,10 @@ namespace SolaERP.Persistence.Services
                         {
                             if (item.Attachments[i].Type == 2 && item.Attachments[i].AttachmentId > 0)
                             {
+                                tasksList.Add(_attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId));
+                            }
+                            else
+                            {
                                 var attachedFile = _mapper.Map<AttachmentSaveModel>(item.Attachments[i]);
 
                                 attachedFile.SourceId = vendorId;
@@ -273,10 +282,6 @@ namespace SolaERP.Persistence.Services
                                 attachedFile.SourceType = SourceType.VEN_PREQ.ToString();
 
                                 tasksList.Add(_attachmentRepository.SaveAttachmentAsync(attachedFile));
-                            }
-                            else
-                            {
-                                tasksList.Add(_attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId));
                             }
                         }
                     }
@@ -287,6 +292,7 @@ namespace SolaERP.Persistence.Services
                         {
                             var gridDatas = _mapper.Map<PrequalificationGridData>(gridData);
                             gridDatas.PreqqualificationDesignId = item.DesignId;
+                            gridDatas.VendorId = vendorId;
 
                             return _repository.UpdatePreGridAsync(gridDatas);
                         }));
@@ -339,7 +345,7 @@ namespace SolaERP.Persistence.Services
             BankCodesDto bankCodes = new()
             {
                 Currencies = await _repository.GetCurrenciesAsync(),
-                BankDetails = await _repository.GetVondorBankDetailsAsync(model.VendorId),
+                BankDetails = await _repository.GetVendorBankDetailsAsync(model.VendorId),
             };
             List<BusinessUnits> buUnits = await _buRepository.GetAllAsync();
 
@@ -358,7 +364,7 @@ namespace SolaERP.Persistence.Services
             var user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
             var currencyTask = _repository.GetCurrenciesAsync();
-            var bankDetailsTask = _repository.GetVondorBankDetailsAsync(user.VendorId);
+            var bankDetailsTask = _repository.GetVendorBankDetailsAsync(user.VendorId);
 
             await Task.WhenAll(currencyTask, bankDetailsTask);
 
@@ -604,7 +610,7 @@ namespace SolaERP.Persistence.Services
                 }
                 responseModel.Add(categoryDto);
             }
-            var response = await SetGridDatasAsync(responseModel);
+            var response = await SetGridDatasAsync(responseModel, user.VendorId);
             return ApiResponse<List<PrequalificationWithCategoryDto>>.Success(response, 200);
         }
 
@@ -613,8 +619,10 @@ namespace SolaERP.Persistence.Services
             var result = await AddAsync(userIdentity, command);
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
-            var submitResult = await _vendorRepository.VendorChangeStatus(user.VendorId, 1, user.Id);
+            var submitResult = await _vendorRepository.ChangeStatusAsync(user.VendorId, 1, user.Id);
             await _unitOfWork.SaveChangesAsync();
+
+
 
             List<Task> emails = new List<Task>();
             Language language = "en".GetLanguageEnumValue();
@@ -630,40 +638,47 @@ namespace SolaERP.Persistence.Services
                 CompanyName = command.CompanyInformation.CompanyName,
             };
 
-            //Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject,
-            //                                               registrationPending,
-            //                                               registrationPending.TemplateName(),
-            //                                               registrationPending.ImageName(),
-            //                                               new List<string> { user.Email });
-            //emails.Add(VerEmail);
+            Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject,
+                                                           registrationPending,
+                                                           registrationPending.TemplateName(),
+                                                           registrationPending.ImageName(),
+                                                           new List<string> { user.Email });
+            emails.Add(VerEmail);
 
-            //var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
-            //for (int i = 0; i < Enum.GetNames(typeof(Language)).Length; i++)
-            //{
-            //    string enumElement = Enum.GetNames(typeof(Language))[i];
-            //    var sendUsers = await _userService.GetAdminUsersAsync(1, enumElement.GetLanguageEnumValue());
-            //    if (sendUsers.Count > 0)
-            //    {
-            //        var templateData = templates[i];
-            //        VM_RegistrationIsPendingAdminApprove adminApprove = new VM_RegistrationIsPendingAdminApprove()
-            //        {
-            //            Body = new HtmlString(templateData.Body),
-            //            CompanyName = command.CompanyInformation.CompanyName,
-            //            Header = templateData.Header,
-            //            UserName = user.UserName,
-            //            CompanyOrVendorName = command.CompanyInformation.CompanyName,
-            //            Language = templateData.Language.GetLanguageEnumValue(),
-            //        };
-            //        Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName(), adminApprove.ImageName(), new List<string> { "hulya.garibli@apertech.net" });
-            //        emails.Add(RegEmail);
-            //    }
-            //}
-            //await Task.WhenAll(emails);
+            var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
+            foreach (var lang in Enum.GetValues<Language>())
+            {
+                var sendUserMails = await _userService.GetAdminUserMailsAsync(1, lang);
+                if (sendUserMails.Count > 0)
+                {
+                    var templateData = templates.First(x => x.Language == lang.ToString());
+                    VM_RegistrationIsPendingAdminApprove adminApprove = GetVM(command, user, templateData);
+                    Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName, adminApprove.ImageName, sendUserMails);
+                    emails.Add(RegEmail);
+                }
+            }
 
-            if (result.Data && submitResult)
-                return ApiResponse<bool>.Success(true, 200);
+            await Task.WhenAll(emails);
 
-            return ApiResponse<bool>.Fail(false, 400);
+
+
+            //if (result.Data && submitResult)
+            return ApiResponse<bool>.Success(true, 200);
+
+            //return ApiResponse<bool>.Fail(false, 400);
+        }
+
+        private static VM_RegistrationIsPendingAdminApprove GetVM(SupplierRegisterCommand command, User user, EmailTemplateData templateData)
+        {
+            return new()
+            {
+                Body = new HtmlString(templateData.Body),
+                CompanyName = command.CompanyInformation.CompanyName,
+                Header = templateData.Header,
+                UserName = user.UserName,
+                CompanyOrVendorName = command.CompanyInformation.CompanyName,
+                Language = templateData.Language.GetLanguageEnumValue(),
+            };
         }
 
         private async Task<List<DueDiligenceDesignDto>> GetDueDesignsAsync(string userIdentity, Language language)
@@ -684,7 +699,7 @@ namespace SolaERP.Persistence.Services
                     var attachments = d.HasAttachment > 0 ? _mapper.Map<List<AttachmentDto>>(
                             await _attachmentRepository.GetAttachmentsAsync(user.VendorId, null, SourceType.VEN_DUE.ToString(), d.DesignId)) : null;
 
-                    var calculationResult = await CalculateScoring(correspondingValue, d, attachments?.Count > 0);
+                    var calculationResult = await CalculateScoring(correspondingValue, d, user.VendorId, attachments?.Count > 0);
                     var childDto = new DueDiligenceChildDto
                     {
                         DesignId = d.DesignId,
@@ -733,6 +748,7 @@ namespace SolaERP.Persistence.Services
                         AttachmentPoint = d.HasAttachment,//> 0 ? d.HasAttachment : null,
                         DataGridPoint = d.HasGrid,
                         Weight = d.Weight,
+                        BankListValue = correspondingValue?.BankListValue,
                         AllPoint = calculationResult.AllPoint,
                         Scoring = calculationResult.Scoring,
                         Outcome = calculationResult.Outcome,
@@ -744,7 +760,7 @@ namespace SolaERP.Persistence.Services
                 responseModel.Add(dto);
             }
 
-            return await SetGridDatasAsync(responseModel);
+            return await SetGridDatasAsync(responseModel, user.VendorId);
         }
 
         private (decimal Scoring, decimal AllPoint, decimal Outcome) CalculateScoring(ValueEntity inputValue, PrequalificationDesign d, List<PrequalificationGridData> allDesignGrid, bool hasAttachment)
@@ -784,11 +800,11 @@ namespace SolaERP.Persistence.Services
             return (scoring, allPoint, outcome);
         }
 
-        private async Task<(decimal Scoring, decimal AllPoint, decimal Outcome)> CalculateScoring(ValueEntity inputValue, DueDiligenceDesign d, bool hasAttachment)
+        private async Task<(decimal Scoring, decimal AllPoint, decimal Outcome)> CalculateScoring(ValueEntity inputValue, DueDiligenceDesign d, int vendorId, bool hasAttachment)
         {
             List<DueDiligenceGrid> dueGrid = null;
             if (d.HasGrid > 0)
-                dueGrid = await _repository.GetDueDiligenceGridAsync(d.DesignId);
+                dueGrid = await _repository.GetDueDiligenceGridAsync(d.DesignId, vendorId);
 
             decimal scoringSum = (!string.IsNullOrWhiteSpace(inputValue?.TextboxValue) ? d.HasTextBox : 0) +
                               (!string.IsNullOrWhiteSpace(inputValue?.TextareaValue) ? d.HasTexArea : 0) +
@@ -818,7 +834,7 @@ namespace SolaERP.Persistence.Services
             return (scoring, allPoint, outcome);
         }
 
-        private async Task<List<DueDiligenceDesignDto>> SetGridDatasAsync(List<DueDiligenceDesignDto> dueDesign)
+        private async Task<List<DueDiligenceDesignDto>> SetGridDatasAsync(List<DueDiligenceDesignDto> dueDesign, int vendorId)
         {
             for (int i = 0; i < dueDesign.Count; i++)
             {
@@ -827,7 +843,7 @@ namespace SolaERP.Persistence.Services
                     if (Convert.ToBoolean(dueDesign[i].Childs[j].HasDataGrid))
                     {
                         int childDesignId = dueDesign[i].Childs[j].DesignId;
-                        var gridDatas = await _repository.GetDueDiligenceGridAsync(childDesignId);
+                        var gridDatas = await _repository.GetDueDiligenceGridAsync(childDesignId, vendorId);
                         dueDesign[i].Childs[j].GridDatas = gridDatas.Count > 0 ? gridDatas : null;
                     }
                 }
@@ -835,10 +851,12 @@ namespace SolaERP.Persistence.Services
             return dueDesign;
         }
 
-        private async Task<List<PrequalificationWithCategoryDto>> SetGridDatasAsync(List<PrequalificationWithCategoryDto> preualification)
+        private async Task<List<PrequalificationWithCategoryDto>> SetGridDatasAsync(List<PrequalificationWithCategoryDto> preualification, int vendorId)
         {
             var allGridData = await _repository.GetPrequalificationGridAsync(0);
+            allGridData = allGridData.Where(x => x.VendorId == vendorId).ToList();
             var mappedGridData = _mapper.Map<List<Application.Dtos.SupplierEvaluation.PrequalificationGridData>>(allGridData);
+
 
             Parallel.For(0, preualification.Count, i =>
             {

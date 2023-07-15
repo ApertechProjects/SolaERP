@@ -1,6 +1,6 @@
 ﻿namespace SolaERP.Application.Entities.Vendors
 {
-    public class Vendor
+    public class Vendor : BaseEntity
     {
         public int VendorId { get; set; }
         public int Buid { get; set; }
@@ -22,7 +22,7 @@
 
         public decimal? Rating { get; set; }
         public int? BlackList { get; set; }
-        public string? BlackListDescription { get; set; }
+        public string BlackListDescription { get; set; }
         public int? ReviseNo { get; set; }
         public DateTime? ReviseDate { get; set; }
         public string Description { get; set; }

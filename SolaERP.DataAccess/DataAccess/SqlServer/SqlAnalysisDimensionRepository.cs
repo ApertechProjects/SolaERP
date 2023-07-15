@@ -24,11 +24,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<List<AnalysisDimension>> ByAnalysisDimensionId(int analysisDimensionId, int userId)
+        public async Task<AnalysisDimension> ByAnalysisDimensionId(int analysisDimensionId, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                List<AnalysisDimension> resultList = new();
+                AnalysisDimension result = null;
 
                 command.CommandText = "EXEC [dbo].[SP_AnalysisDimension_Load] @analysisDimensionId,@userId";
                 command.Parameters.AddWithValue(command, "@analysisDimensionId", analysisDimensionId);
@@ -37,9 +37,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 while (await reader.ReadAsync())
-                    resultList.Add(reader.GetByEntityStructure<AnalysisDimension>());
+                    result = reader.GetByEntityStructure<AnalysisDimension>();
 
-                return resultList;
+                return result;
             }
         }
 

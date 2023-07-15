@@ -2,6 +2,7 @@
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Entities.SupplierEvaluation;
+using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -28,7 +29,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                       ,@TextboxValue,@TextareaValue
                                                                       ,@CheckboxValue,@RadioboxValue
                                                                       ,@IntValue,@DecimalValue
-                                                                      ,@DateTimeValue,@AgreementValue,@Scoring";
+                                                                      ,@DateTimeValue,@AgreementValue,@Scoring,@BankListValue";
 
                     command.Parameters.AddWithValue(command, "@VendorDueDiligenceId", vendorDueDiligence.VendorDueDiligenceId);
                     command.Parameters.AddWithValue(command, "@DueDiligenceDesignId", vendorDueDiligence.DesignId);
@@ -42,6 +43,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     command.Parameters.AddWithValue(command, "@DateTimeValue", vendorDueDiligence.DateTimeValue);
                     command.Parameters.AddWithValue(command, "@AgreementValue", vendorDueDiligence.AgreementValue);
                     command.Parameters.AddWithValue(command, "@Scoring", vendorDueDiligence.Scoring);
+                    command.Parameters.AddWithValue(command, "@BankListValue", vendorDueDiligence.BankListValue);
 
 
                     return await command.ExecuteNonQueryAsync() > 0;
@@ -73,6 +75,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 TextareaValue = model.TextareaValue,
                 TextboxValue = model.TextboxValue,
                 VendorId = model.VendorId,
+                BankListValue = model.BankListValue,
             });
         }
 
@@ -96,6 +99,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Column3 = gridModel.Column3,
                 Column4 = gridModel.Column4,
                 Column5 = gridModel.Column5,
+                VendorId = gridModel.VendorId,
             });
         }
 
@@ -105,7 +109,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = @"SET NOCOUNT OFF EXEC SP_DueDiligenceGridData_IUD @DueDiligenceGridDataId,@DueDiligenceDesignId,
-                                                                                         @Column1,@Column2,@Column3,@Column4,@Column5";
+                                                                                         @Column1,@Column2,@Column3,@Column4,@Column5,@VendorId";
 
                 command.Parameters.AddWithValue(command, "@DueDiligenceGridDataId", gridModel.Id);
                 command.Parameters.AddWithValue(command, "@DueDiligenceDesignId", gridModel.DueDesignId);
@@ -114,6 +118,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Column3", gridModel.Column3);
                 command.Parameters.AddWithValue(command, "@Column4", gridModel.Column4);
                 command.Parameters.AddWithValue(command, "@Column5", gridModel.Column5);
+                command.Parameters.AddWithValue(command, "@VendorId", gridModel.VendorId);
 
 
                 bool result = await command.ExecuteNonQueryAsync() > 0;
@@ -171,12 +176,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<DueDiligenceGrid>> GetDueDiligenceGridAsync(int dueDesignId)
+        public async Task<List<DueDiligenceGrid>> GetDueDiligenceGridAsync(int dueDesignId, int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_DueDiligenceGridData_Load @dueDesignId";
+                command.CommandText = "EXEC SP_DueDiligenceGridData_Load @dueDesignId,@vendorId";
                 command.Parameters.AddWithValue(command, "@dueDesignId", dueDesignId);
+                command.Parameters.AddWithValue(command, "@vendorId", vendorId);
 
                 List<DueDiligenceGrid> resultList = new();
                 using var reader = await command.ExecuteReaderAsync();
@@ -221,6 +227,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<List<DeliveryTerms>> GetDeliveryTermsAsync()
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SELECT * FROM VW_DeliveryTerms_List";
+
+                List<DeliveryTerms> resultList = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<DeliveryTerms>());
+
+                return resultList;
+            }
+        }
+
         public async Task<List<PrequalificationCategory>> GetPrequalificationCategoriesAsync()
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -253,7 +275,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<VendorBankDetail>> GetVondorBankDetailsAsync(int vendorid)
+        public async Task<List<VendorBankDetail>> GetVendorBankDetailsAsync(int vendorid)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -444,18 +466,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<VendorPrequalification>> GetVendorPrequalificationAsync(int vendorId)
+        public async Task<List<Application.Entities.SupplierEvaluation.VendorPrequalification>> GetVendorPrequalificationAsync(int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "EXEC SP_VendorPrequalificationCategory_Load @VendorId";
                 command.Parameters.AddWithValue(command, "@VendorId", vendorId);
 
-                List<VendorPrequalification> result = new();
+                List<Application.Entities.SupplierEvaluation.VendorPrequalification> result = new();
                 using var reader = await command.ExecuteReaderAsync();
 
                 while (reader.Read())
-                    result.Add(reader.GetByEntityStructure<VendorPrequalification>());
+                    result.Add(reader.GetByEntityStructure<Application.Entities.SupplierEvaluation.VendorPrequalification>());
 
                 return result;
             }
@@ -655,7 +677,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                              @Column2,
                                                                              @Column3,
                                                                              @Column4,
-                                                                             @Column5";
+                                                                             @Column5,
+                                                                             @VendorId";
 
 
 
@@ -666,6 +689,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Column3", gridData.Column3);
                 command.Parameters.AddWithValue(command, "@Column4", gridData.Column4);
                 command.Parameters.AddWithValue(command, "@Column5", gridData.Column5);
+                command.Parameters.AddWithValue(command, "@VendorId", gridData.Column5);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
@@ -715,13 +739,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> AddRepresentedCompany(VendorRepresentedCompany data)
+        public async Task<bool> AddRepresentedCompany(Application.Models.VendorRepresentedCompany data)
             => await ModifyRepresentedCategorySaveAsync(data);
 
         public async Task<bool> DeleteRepresentedCompanyAsync(int vendorId)
-            => await ModifyRepresentedCategorySaveAsync(new VendorRepresentedCompany { VendorId = vendorId });
+            => await ModifyRepresentedCategorySaveAsync(new Application.Models.VendorRepresentedCompany { VendorId = vendorId });
 
-        public async Task<bool> ModifyRepresentedCategorySaveAsync(VendorRepresentedCompany data)
+        public async Task<bool> ModifyRepresentedCategorySaveAsync(Application.Models.VendorRepresentedCompany data)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -838,6 +862,89 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     company = reader.GetByEntityStructure<Application.Entities.Vendors.VendorRepresentedCompany>();
 
                 return company;
+            }
+        }
+
+
+        public async Task<List<Application.Entities.Vendors.VendorUser>> GetVendorUsers(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_VendorUsers_Load @VendorId";
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+
+                List<VendorUser> result = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    result.Add(reader.GetByEntityStructure<VendorUser>());
+
+                return result;
+            }
+        }
+
+        public async Task<List<Score>> Scores(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_VendorScoring_Load @VendorId";
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+
+                List<Score> result = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    result.Add(reader.GetByEntityStructure<Score>());
+
+                return result;
+            }
+        }
+
+        public async Task<List<Shipment>> Shipments()
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SELECT * FROM VW_Shipment_List";
+
+                List<Shipment> resultList = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<Shipment>());
+
+                return resultList;
+            }
+        }
+
+        public async Task<List<WithHoldingTaxData>> WithHoldingTaxDatas()
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SELECT * FROM VW_WithHoldingTax_List";
+
+                List<WithHoldingTaxData> resultList = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<WithHoldingTaxData>());
+
+                return resultList;
+            }
+        }
+
+        public async Task<List<TaxData>> TaxDatas()
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SELECT * FROM VW_Tax_List";
+
+                List<TaxData> resultList = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<TaxData>());
+
+                return resultList;
             }
         }
     }

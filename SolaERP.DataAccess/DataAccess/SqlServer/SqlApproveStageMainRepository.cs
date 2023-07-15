@@ -1,13 +1,12 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Application.Contracts.Repositories;
+﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.ApproveStage;
 using SolaERP.Application.Entities.ApproveStages;
-using SolaERP.Application.Entities.Procedure;
+using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using SolaERP.Application.Models;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -30,9 +29,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = $"SET NOCOUNT OFF exec SP_ApproveStagesMain_IUD @ApproveStageMainId,@NewApproveStageMainId = @NewApproveStageMainId OUTPUT select @NewApproveStageMainId as NewApproveStageMainId";
+                command.CommandText = $"SET NOCOUNT OFF exec SP_ApproveStagesMain_IUD @Id,@NewApproveStageMainId = @NewApproveStageMainId OUTPUT select @NewApproveStageMainId as NewApproveStageMainId";
                 IDbDataParameter dbDataParameter = command.CreateParameter();
-                dbDataParameter.ParameterName = "@ApproveStageMainId";
+                dbDataParameter.ParameterName = "@Id";
                 dbDataParameter.Value = approveStageMainId;
                 command.Parameters.Add(dbDataParameter);
                 command.Parameters.Add("@NewApproveStageMainId", SqlDbType.Int);
@@ -94,10 +93,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@BuId", buId);
 
                 using var reader = await command.ExecuteReaderAsync();
+
                 while (reader.Read())
-                {
-                    approveStagesMain.Add(reader.GetByEntityStructure<ApproveStagesMain>());
-                }
+                    approveStagesMain.Add(reader.GetByEntityStructure<ApproveStagesMain>("BusinessUnitId"));
+
                 return approveStagesMain;
             }
         }
@@ -144,6 +143,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 ApproveStageName = reader.Get<string>("ApproveStageName"),
                 ProcedureId = reader.Get<int>("ProcedureId"),
                 ProcedureName = reader.Get<string>("ProcedureName"),
+                ApproveStageCode = reader.Get<string>("ApproveStageCode"),
+                ReApproveOnChange = reader.Get<bool>("ReApproveOnChange"),
+                BusinessUnitId = reader.Get<int>("BusinessUnitId")
             };
         }
 

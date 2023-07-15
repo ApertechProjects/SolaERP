@@ -30,6 +30,7 @@ using SolaERP.Application.Dtos.Translate;
 using SolaERP.Application.Dtos.UOM;
 using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Dtos.UserDto;
+using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Dtos.Venndors;
 using SolaERP.Application.Entities.AccountCode;
 using SolaERP.Application.Entities.AnalysisCode;
@@ -42,7 +43,6 @@ using SolaERP.Application.Entities.Attachment;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Buyer;
-using SolaERP.Application.Entities.Currency;
 using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Entities.GridLayout;
 using SolaERP.Application.Entities.Groups;
@@ -62,7 +62,6 @@ using SolaERP.Application.Entities.UOM;
 using SolaERP.Application.Entities.User;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Models;
-using SolaERP.Persistence.Services;
 
 namespace SolaERP.Persistence.Mappers
 {
@@ -78,10 +77,19 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<Groups, GroupsDto>().ReverseMap();
             CreateMap<GroupUser, GroupUserDto>().ReverseMap();
             CreateMap<MenuWithPrivilagesDto, MenuWithPrivilages>().ReverseMap();
-            CreateMap<ApproveStagesMain, ApproveStagesMainDto>().ReverseMap();
+            CreateMap<ApproveStagesMain, ApproveStagesMainDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ApproveStageMainId))
+                .ReverseMap();
+            CreateMap<ApproveStagesMain, ApprovalStageDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ApproveStageMainId))
+                .ReverseMap();
+            CreateMap<ApproveStagesDetail, ApprovalStageDetailDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ApproveStageDetailsId))
+                .ReverseMap();
             CreateMap<ApproveStagesDetail, ApproveStagesDetailDto>().ReverseMap();
             CreateMap<Procedure, ProcedureDto>().ReverseMap();
             CreateMap<ApproveStageRole, ApproveStageRoleDto>().ReverseMap();
+            //CreateMap<ApproveStageRole, ApprovalStageRoleDto>().ReverseMap();
             CreateMap<Role, ApproveRoleDto>().ReverseMap();
             CreateMap<ApproveRole, ApproveRoleDto>().ReverseMap();
             CreateMap<BusinessUnitForGroup, BusinessUnitForGroupDto>().ReverseMap();
@@ -187,6 +195,7 @@ namespace SolaERP.Persistence.Mappers
                 //.ForMember(dest => dest.BusinessCategoryId, opt => opt.MapFrom(src => src.VendorBusinessCategoryId))
                 .ForMember(dest => dest.PaymentTerms, opt => opt.MapFrom(src => src.PaymentTerms))
                 .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Location))
+                .ForMember(dest => dest.CompanyAdress, opt => opt.MapFrom(src => src.CompanyAddress))
                 .ForMember(dest => dest.RegistrationDate, opt => opt.MapFrom(src => src.CompanyRegistrationDate)).ReverseMap();
 
             CreateMap<NDADto, VendorNDA>()
@@ -239,7 +248,8 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<Application.Dtos.SupplierEvaluation.PrequalificationGridData, Application.Entities.SupplierEvaluation.PrequalificationGridData>()
                 .ForMember(dest => dest.PreqqualificationGridDataId, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.PreqqualificationDesignId, opt => opt.MapFrom(src => src.DesignId)).ReverseMap();
+                .ForMember(dest => dest.PreqqualificationDesignId, opt => opt.MapFrom(src => src.DesignId))
+                .ForMember(dest => dest.VendorId, opt => opt.MapFrom(src => src.VendorId)).ReverseMap();
 
 
             CreateMap<DueDiligenceChildDto, VendorDueDiligenceModel>()
@@ -278,7 +288,8 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<DueDiligenceGridModel, DueDiligenceGrid>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.DueDesignId, opt => opt.MapFrom(src => src.DueDesignId)).ReverseMap();
+                .ForMember(dest => dest.DueDesignId, opt => opt.MapFrom(src => src.DueDesignId))
+                .ForMember(dest => dest.VendorId, opt => opt.MapFrom(src => src.VendorId)).ReverseMap();
 
             CreateMap<Attachment, AttachmentDto>()
                 .ForMember(dest => dest.AttachmentId, opt => opt.MapFrom(src => src.AttachmentId))
@@ -311,11 +322,47 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<AnalysisStructureWithBu, AnalysisStructureWithBuDto>().ReverseMap();
             CreateMap<ApproveStageMainInputModel, ApproveStagesMain>().ReverseMap();
 
-            CreateMap<GridLayout, GridLayoutDto>()
-                .ForMember(dest => dest.LayoutData, opt=> opt.MapFrom(src => src.LayoutData))
-                .ReverseMap()
-                .ForMember(dest => dest.LayoutData, opt => opt.MapFrom(src => src.LayoutData.ToString()))
-;
+            CreateMap<VendorCard, VendorCardDto>()
+                .ForMember(dest => dest.VendorId, opt => opt.MapFrom(src => src.VendorId))
+                .ForMember(dest => dest.BlackList, opt => opt.MapFrom(src => src.BlackList))
+                .ForMember(dest => dest.BlackListDescription, opt => opt.MapFrom(src => src.BlackListDescription))
+                .ForMember(dest => dest.Rating, opt => opt.MapFrom(src => src.Rating))
+                .ForMember(dest => dest.ReviseNo, opt => opt.MapFrom(src => src.ReviseNo))
+                .ForMember(dest => dest.ReviseDate, opt => opt.MapFrom(src => src.ReviseDate))
+                .ForMember(dest => dest.ApproveStatus, opt => opt.MapFrom(src => src.ApproveStatus))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.VendorCode, opt => opt.MapFrom(src => src.VendorCode))
+                .ForMember(dest => dest.TaxId, opt => opt.MapFrom(src => src.TaxId))
+                .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country))
+                .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Location))
+                .ForMember(dest => dest.VendorName, opt => opt.MapFrom(src => src.VendorName))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                .ForMember(dest => dest.Address1, opt => opt.MapFrom(src => src.CompanyAddress))
+                .ForMember(dest => dest.Postal_ZIP, opt => opt.MapFrom(src => src.Postal_ZIP))
+                .ForMember(dest => dest.EmailAddress, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.DefaultCurrency, opt => opt.MapFrom(src => src.DefaultCurrency))
+                .ForMember(dest => dest.Website, opt => opt.MapFrom(src => src.Website))
+                .ForMember(dest => dest.Address2, opt => opt.MapFrom(src => src.Address2))
+                .ForMember(dest => dest.Phone_Mobile, opt => opt.MapFrom(src => src.PhoneNo))
+                .ForMember(dest => dest.ContactPerson, opt => opt.MapFrom(src => src.ContactPerson))
+                .ForMember(dest => dest.VendorType, opt => opt.MapFrom(src => src.VendorType))
+                .ForMember(dest => dest.ShipVia, opt => opt.MapFrom(src => src.ShipmentId))
+                .ForMember(dest => dest.DeliveryTerms, opt => opt.MapFrom(src => src.DeliveryTermId))
+                .ForMember(dest => dest.PaymentTerms, opt => opt.MapFrom(src => src.PaymentTerms))
+                .ForMember(dest => dest.WithHoldingTaxId, opt => opt.MapFrom(src => src.WithHoldingTaxId))
+                .ForMember(dest => dest.TaxId, opt => opt.MapFrom(src => src.TaxesId))
+                .ForMember(dest => dest.RepresentedProducts, opt => opt.MapFrom(src => src.RepresentedProducts))
+                .ForMember(dest => dest.RepresentedCompanies, opt => opt.MapFrom(src => src.RepresentedCompanies))
+                .ForMember(dest => dest.CreditDays, opt => opt.MapFrom(src => src.CreditDays))
+                .ForMember(dest => dest._60DaysPayment, opt => opt.MapFrom(src => src._60DaysPayment))
+                .ForMember(dest => dest.OtherProducts, opt => opt.MapFrom(src => src.OtherProducts))
+                .ForMember(dest => dest.ApproveStageMainId, opt => opt.MapFrom(src => src.ApproveStageMainId))
+                .ForMember(dest => dest.CompanyRegistrationDate, opt => opt.MapFrom(src => src.CompanyRegistrationDate))
+                .ForMember(dest => dest.TaxOffice, opt => opt.MapFrom(src => src.TaxOffice))
+                .ReverseMap();
+
+            CreateMap<VendorWFA, VendorWFADto>().ReverseMap();
+            CreateMap<VendorAllDto, VendorAll>().ReverseMap();
         }
     }
 }

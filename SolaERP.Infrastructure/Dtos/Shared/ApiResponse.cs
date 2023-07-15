@@ -25,6 +25,11 @@ namespace SolaERP.Application.Dtos.Shared
             return new ApiResponse<T> { StatusCode = statusCode };
         }
 
+        public static ApiResponse<T> Success(string message)
+        {
+            return new ApiResponse<T> { StatusCode = 200, Errors = message };
+        }
+
         private static T GetEmptyArrayIfCollection<T>()
         {
             if (typeof(T).GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICollection<>)))

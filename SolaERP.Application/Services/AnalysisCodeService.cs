@@ -4,6 +4,7 @@ using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.AnalysisCode;
 using SolaERP.Application.Dtos.AnaysisDimension;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.AnalysisCode;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 
@@ -15,13 +16,22 @@ namespace SolaERP.Persistence.Services
         private readonly IMapper _mapper;
         private readonly IAnalysisStructureRepository _analysisCodeRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IBusinessUnitRepository _businessUnitRepository;
+        private readonly IAnalysisDimensionRepository _dimensionRepository;
 
-        public AnalysisCodeService(IMapper mapper, IUnitOfWork unitOfWork, IAnalysisStructureRepository analysisCodeRepository, IUserRepository userRepository)
+        public AnalysisCodeService(IMapper mapper,
+                                   IUnitOfWork unitOfWork,
+                                   IAnalysisStructureRepository analysisCodeRepository,
+                                   IAnalysisDimensionRepository dimensionRepository,
+                                   IUserRepository userRepository,
+                                   IBusinessUnitRepository businessUnitRepository)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _analysisCodeRepository = analysisCodeRepository;
             _userRepository = userRepository;
+            _dimensionRepository = dimensionRepository;
+            _businessUnitRepository = businessUnitRepository;
         }
 
         public async Task<ApiResponse<bool>> DeleteAnalysisCodeAsync(AnalysisCodeDeleteModel model, string userName)
@@ -61,11 +71,32 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<List<AnalysisDto>>> GetAnalysisCodesAsync(int dimensionId, string userName)
         {
             var userId = await _userRepository.ConvertIdentity(userName);
-            var data = await _analysisCodeRepository.GetAnalysisCodesAsync(dimensionId, userId);
-            var map = _mapper.Map<List<AnalysisDto>>(data);
-            if (map.Count > 0)
-                return ApiResponse<List<AnalysisDto>>.Success(map, 200);
-            return ApiResponse<List<AnalysisDto>>.Fail("Analysis Codes is empty", 400);
+            var analysisCodes = await _analysisCodeRepository.GetAnalysisCodesAsync(dimensionId, userId);
+
+            var analysisDimension = await _dimensionRepository.ByAnalysisDimensionId(dimensionId, userId);
+            var businessUnit = await _businessUnitRepository.GetByIdAsync(Convert.ToInt32(analysisDimension?.BusinessUnitId));
+
+            var map = analysisCodes?.Select(ac => new AnalysisDto
+            {
+                AnalysisCodesId = ac.AnalysisCodesId,
+                BusinessUnitId = businessUnit.BusinessUnitId,
+                BusinessUnitName = businessUnit?.BusinessUnitName,
+                AnalysisDimensionCode = analysisDimension?.AnalysisDimensionCode,
+                AnalysisDimensionId = analysisDimension.AnalysisDimensionId,
+                AnalysisCode = ac?.AnalysisCode,
+                AnalysisName = ac?.AnalysisName,
+                Status = ac.Status,
+                Description = ac?.Description,
+                AdditionalDescription = ac?.AdditionalDescription,
+                AdditionalDescription2 = ac?.AdditionalDescription2,
+                LinkedAnalysisDimensionid = ac.LinkedAnalysisDimensionid,
+                IsLinked = ac.IsLinked,
+                Date1 = ac.Date1,
+                Date2 = ac.Date2,
+                IsModified = ac.IsModified,
+            }).ToList();
+
+            return ApiResponse<List<AnalysisDto>>.Success(map, 200);
         }
 
         public async Task<ApiResponse<List<AnalysisWithBuDto>>> GetByBUIdAsync(int businessUnitId, string userName)

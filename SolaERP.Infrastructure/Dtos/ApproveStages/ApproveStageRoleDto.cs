@@ -2,7 +2,7 @@
 {
     public class ApproveStageRoleDto
     {
-        public int ApproveStageRoleId { get; set; }
+        public int Id { get; set; }
         public int ApproveStageDetailId { get; set; }
         public int ApproveRoleId { get; set; }
         public decimal AmountFrom { get; set; }

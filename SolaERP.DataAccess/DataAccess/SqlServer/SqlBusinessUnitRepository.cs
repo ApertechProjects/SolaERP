@@ -102,6 +102,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "SELECT * FROM FN_GetBusinessUnit_By_Id(@BusinessUnitId)";
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", id);
+
                 using var reader = await command.ExecuteReaderAsync();
 
                 if (reader.Read())
