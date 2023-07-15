@@ -1,11 +1,4 @@
-﻿using SolaERP.Application.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Application.Dtos.Vendors
+﻿namespace SolaERP.Application.Dtos.Vendors
 {
     public class VendorCardDto
     {
@@ -59,12 +52,13 @@ namespace SolaERP.Application.Dtos.Vendors
         public string RepresentedCompanies { get; set; }
         public int CreditDays { get; set; }
         public int _60DaysPayment { get; set; }
-        public int BusinessUnitId { get; set; } 
-        public string BusinessUnitCode { get; set; } 
+        public int BusinessUnitId { get; set; }
+        public string BusinessUnitCode { get; set; }
         public string OtherProducts { get; set; }
         public int ApproveStageMainId { get; set; }
         public DateTime CompanyRegistrationDate { get; set; }
         public string TaxOffice { get; set; }
 
+        public Attachment.AttachmentWithFileDto Logo { get; set; }
     }
 }

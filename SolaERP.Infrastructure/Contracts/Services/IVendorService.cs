@@ -23,6 +23,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<VM_VendorCard>> GetVendorCard(int vendorId);
         Task<ApiResponse<bool>> ApproveAsync(string userIdentity, VendorApproveModel model);
         Task<ApiResponse<bool>> SendToApproveAsync(VendorSendToApproveRequest request);
+        Task<ApiResponse<bool>> SaveAsync(string userIdentity, VendorCardDto vendor);
         Task<ApiResponse<List<VendorAllDto>>> GetApprovedAsync(string userIdentity);
         Task<ApiResponse<bool>> DeleteAsync(string userIdentity, int VendorId);
     }

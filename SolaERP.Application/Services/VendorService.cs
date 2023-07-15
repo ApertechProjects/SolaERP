@@ -22,18 +22,21 @@ namespace SolaERP.Persistence.Services
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ISupplierEvaluationRepository _supplierRepository;
+        private readonly IAttachmentRepository _attachment;
 
         public VendorService(IVendorRepository vendorRepository,
-            IUserRepository userRepository,
-            IMapper mapper,
-            ISupplierEvaluationRepository supplierRepository,
-            IUnitOfWork unitOfWork)
+                             IUserRepository userRepository,
+                             IMapper mapper,
+                             ISupplierEvaluationRepository supplierRepository,
+                             IUnitOfWork unitOfWork,
+                             IAttachmentRepository attachment)
         {
             _repository = vendorRepository;
             _userRepository = userRepository;
             _mapper = mapper;
             _supplierRepository = supplierRepository;
             _unitOfWork = unitOfWork;
+            _attachment = attachment;
         }
 
         public async Task<ApiResponse<bool>> ApproveAsync(string userIdentity, VendorApproveModel model)
@@ -43,7 +46,6 @@ namespace SolaERP.Persistence.Services
             model.UserId = user.Id;
             return ApiResponse<bool>.Success(await _repository.ApproveAsync(model), 200);
         }
-
         public async Task<ApiResponse<bool>> ChangeStatusAsync(VendorStatusModel taxModel, string userIdentity)
         {
             var userId = await _userRepository.ConvertIdentity(userIdentity);
@@ -62,7 +64,6 @@ namespace SolaERP.Persistence.Services
             else
                 return ApiResponse<bool>.Fail("Problem detected", 400);
         }
-
         public async Task<ApiResponse<bool>> DeleteAsync(string userIdentity, int VendorId)
         {
             var operationResult = await _repository.DeleteAsync(Convert.ToInt32(userIdentity), VendorId);
@@ -71,7 +72,6 @@ namespace SolaERP.Persistence.Services
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(isSuccessfull, 200);
         }
-
         public async Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity, VendorAllCommandRequest request)
         {
             List<VendorAll> allVendors = await _repository.GetAll(Convert.ToInt32(userIdentity), request);
@@ -79,7 +79,6 @@ namespace SolaERP.Persistence.Services
             List<VendorAllDto> dto = _mapper.Map<List<VendorAllDto>>(allVendors);
             return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
         }
-
         public async Task<ApiResponse<List<VendorAllDto>>> GetApprovedAsync(string userIdentity)
         {
             var approvedByCurrentUser = await _repository.GetApprovedAsync(Convert.ToInt32(userIdentity));
@@ -87,7 +86,6 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
         }
-
         public async Task<VendorInfo> GetByTaxAsync(string taxId)
             => await _repository.GetByTaxAsync(taxId);
         public async Task<int> GetByTaxIdAsync(string taxId)
@@ -178,8 +176,33 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<List<VendorWFADto>>> GetWFAAsync(string userIdentity, VendorFilter filter)
         {
             List<VendorWFA> vendorWFAs = await _repository.GetWFAAsync(Convert.ToInt32(userIdentity), filter);
+
             List<VendorWFADto> vendorAllDtos = _mapper.Map<List<VendorWFADto>>(vendorWFAs);
             return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
+        }
+
+        public async Task<ApiResponse<bool>> SaveAsync(string userIdentity, VendorCardDto vendorDto)
+        {
+            Vendor vendor = _mapper.Map<Vendor>(vendorDto);
+            int userId = Convert.ToInt32(userIdentity);
+            int vendorId = 0;
+
+            if (vendor.IsNewVendor())
+                vendorId = await _repository.AddAsync(userId, vendor);
+
+            vendorId = await _repository.UpdateAsync(userId, vendor);
+            if (vendorDto.Logo is not null)
+            {
+                var vendorLogo = _mapper.Map<AttachmentSaveModel>(vendorDto.Logo);
+
+                vendorLogo.SourceId = vendorId;
+                vendorLogo.SourceType = SourceType.VEN_LOGO.ToString();
+
+                await _attachment.SaveAttachmentAsync(vendorLogo);
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<Vendor>.CreateApiResponse(x => x.VendorId > 0, vendor);
         }
 
         public async Task<ApiResponse<bool>> SendToApproveAsync(VendorSendToApproveRequest request)

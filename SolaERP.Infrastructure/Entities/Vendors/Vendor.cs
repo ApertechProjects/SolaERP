@@ -32,5 +32,9 @@
         public string PhoneNo { get; set; }
         public string Email { get; set; }
         public string ContactPerson { get; set; }
+
+        public bool IsNewVendor() => VendorId <= 0;
+
+
     }
 }

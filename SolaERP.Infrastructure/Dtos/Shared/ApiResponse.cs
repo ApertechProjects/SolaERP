@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
+using SolaERP.Application.Constants;
 using JsonIgnoreAttribute = Newtonsoft.Json.JsonIgnoreAttribute;
 
 namespace SolaERP.Application.Dtos.Shared
@@ -87,6 +88,14 @@ namespace SolaERP.Application.Dtos.Shared
                 Errors = errorss,
                 StatusCode = statusCode
             };
+        }
+
+        public static ApiResponse<bool> CreateApiResponse(Func<T, bool> predicate, T data, int statusCode = 400, string erorrMessage = ResultMessageConstants.OperationUnsucces)
+        {
+            if (predicate(data))
+                return new ApiResponse<bool> { Data = true, StatusCode = statusCode };
+
+            return new ApiResponse<bool> { Data = false, StatusCode = statusCode, Errors = erorrMessage };
         }
     }
 }

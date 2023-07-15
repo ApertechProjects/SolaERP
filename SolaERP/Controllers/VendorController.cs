@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
@@ -63,6 +64,10 @@ namespace SolaERP.API.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeStatus(VendorStatusModel model)
                    => CreateActionResult(await _service.ChangeStatusAsync(model, User.Identity.Name));
+
+        [HttpPost]
+        public async Task<IActionResult> Save(VendorCardDto vendor)
+            => CreateActionResult(await _service.SaveAsync(User.Identity.Name, vendor));
 
         [HttpPost]
         public async Task<IActionResult> Approve(VendorApproveModel model)
