@@ -136,6 +136,7 @@ namespace SolaERP.Persistence.Services
             var currency = _supplierRepository.GetCurrenciesAsync();
             var bankDetails = _supplierRepository.GetVendorBankDetailsAsync(vendorId);
             var vendorBuCategories = _supplierRepository.GetVendorBuCategoriesAsync(vendorId);
+            var buCategories = _supplierRepository.GetBusinessCategoriesAsync();
             var users = _supplierRepository.GetVendorUsers(vendorId);
             var score = _supplierRepository.Scores(vendorId);
             var shipment = _supplierRepository.Shipments();
@@ -153,8 +154,16 @@ namespace SolaERP.Persistence.Services
                     withHoldingTax,
                     tax,
                     users,
-                    currency
+                    currency,
+                    buCategories
                   );
+
+
+
+            var matchedBuCategories = buCategories.Result
+                .Where(x => vendorBuCategories.Result.Select(y => y.BusinessCategoryId).Contains(x.Id))
+                .ToList();
+
 
             VM_VendorCard vendorModel = new VM_VendorCard()
             {
@@ -164,7 +173,7 @@ namespace SolaERP.Persistence.Services
                 DeliveryTerms = deliveryTerms.Result,
                 VendorBankDetails = bankDetails.Result.Select(x => new VendorBankDetailDto { Bank = x.Bank, Currency = x.Currency, AccountNumber = x.AccountNumber }).ToList(),
                 VendorUsers = users.Result,
-                VendorBuCategories = vendorBuCategories.Result,
+                ItemCategories = matchedBuCategories,
                 Score = score.Result,
                 Shipments = shipment.Result,
                 WithHoldingTaxDatas = withHoldingTax.Result,
