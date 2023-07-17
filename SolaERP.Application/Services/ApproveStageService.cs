@@ -103,11 +103,11 @@ namespace SolaERP.Persistence.Services
                 if (data)
                     counter++;
             }
+
+            await _unitOfWork.SaveChangesAsync();
+
             if (counter == model.stageIds.Count)
-            {
-                await _unitOfWork.SaveChangesAsync();
                 return ApiResponse<bool>.Success(data, 200);
-            }
             else if (model.stageIds.Count == 1 && counter == 0)
                 return ApiResponse<bool>.Fail("data can not be deleted", 400);
             else

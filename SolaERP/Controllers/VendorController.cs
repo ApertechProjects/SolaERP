@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Vendors;
-using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
-using SolaERP.Persistence.Services;
 
 namespace SolaERP.API.Controllers
 {
@@ -73,9 +70,9 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Approve(VendorApproveModel model)
             => CreateActionResult(await _service.ApproveAsync(User.Identity.Name, model));
 
-        [HttpDelete("{vendorId}")]
-        public async Task<IActionResult> Delete(int vendorId)
-            => CreateActionResult(await _service.DeleteAsync(User.Identity.Name, vendorId));
+        [HttpPost]
+        public async Task<IActionResult> Delete(VendorDeleteModel model)
+            => CreateActionResult(await _service.DeleteAsync(User.Identity.Name, model));
 
     }
 }

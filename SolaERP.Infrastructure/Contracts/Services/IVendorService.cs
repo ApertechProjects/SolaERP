@@ -1,9 +1,6 @@
 ﻿using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.Vendors;
-using SolaERP.Application.Dtos.Venndors;
-using SolaERP.Application.Entities.Status;
 using SolaERP.Application.Entities.Vendors;
-using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.ViewModels;
 
@@ -25,6 +22,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> SendToApproveAsync(VendorSendToApproveRequest request);
         Task<ApiResponse<bool>> SaveAsync(string userIdentity, VendorCardDto vendor);
         Task<ApiResponse<List<VendorAllDto>>> GetApprovedAsync(string userIdentity);
-        Task<ApiResponse<bool>> DeleteAsync(string userIdentity, int VendorId);
+        Task<ApiResponse<bool>> DeleteAsync(string userIdentity, VendorDeleteModel model);
     }
 }

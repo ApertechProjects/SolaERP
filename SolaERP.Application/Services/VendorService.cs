@@ -4,9 +4,7 @@ using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Dtos.Vendors;
-using SolaERP.Application.Dtos.Venndors;
 using SolaERP.Application.Entities.Auth;
-using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
@@ -64,13 +62,22 @@ namespace SolaERP.Persistence.Services
             else
                 return ApiResponse<bool>.Fail("Problem detected", 400);
         }
-        public async Task<ApiResponse<bool>> DeleteAsync(string userIdentity, int VendorId)
+        public async Task<ApiResponse<bool>> DeleteAsync(string userIdentity, VendorDeleteModel model)
         {
-            var operationResult = await _repository.DeleteAsync(Convert.ToInt32(userIdentity), VendorId);
-            bool isSuccessfull = operationResult != 0;
+            int counter = 0;
+            for (int i = 0; i < model.Ids.Count; i++)
+            {
+                var operationResult = await _repository.DeleteAsync(Convert.ToInt32(userIdentity), model.Ids[0]);
+                bool isSuccessfull = operationResult != 0;
+                if (isSuccessfull)
+                    counter++;
+            }
 
             await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<bool>.Success(isSuccessfull, 200);
+            if (counter == model.Ids.Count)
+                return ApiResponse<bool>.Success(true, 200);
+            else
+                return ApiResponse<bool>.Success("some datas can not be deleted");
         }
         public async Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity, VendorAllCommandRequest request)
         {
@@ -136,11 +143,11 @@ namespace SolaERP.Persistence.Services
             var currency = _supplierRepository.GetCurrenciesAsync();
             var bankDetails = _supplierRepository.GetVendorBankDetailsAsync(vendorId);
             var businessCategory = _supplierRepository.GetVendorBuCategoriesAsync(vendorId);
-            var users = _supplierRepository.GetVendorUsers(vendorId);
             var score = _supplierRepository.Scores(vendorId);
             var shipment = _supplierRepository.Shipments();
             var withHoldingTax = _supplierRepository.WithHoldingTaxDatas();
             var tax = _supplierRepository.TaxDatas();
+            var users = _supplierRepository.GetVendorUsers(vendorId);
             var itemCategories = _supplierRepository.GetBusinessCategoriesAsync();
 
             await Task.WhenAll
