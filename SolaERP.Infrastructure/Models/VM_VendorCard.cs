@@ -13,7 +13,7 @@ namespace SolaERP.Application.Models
         public List<DeliveryTerms> DeliveryTerms { get; set; }
         public List<VendorBankDetailDto> VendorBankDetails { get; set; }
         public List<VendorUser> VendorUsers { get; set; }
-        public List<VendorBuCategory> VendorBuCategories { get; set; }
+        public List<BusinessCategory> ItemCategories { get; set; }
         public List<Score> Score { get; set; }
         public List<Shipment> Shipments { get; set; }
         public List<WithHoldingTaxData> WithHoldingTaxDatas { get; set; }

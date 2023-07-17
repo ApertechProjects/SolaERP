@@ -27,7 +27,7 @@ namespace SolaERP.API.Controllers
 
         [HttpGet("{vendorId}")]
         public async Task<IActionResult> Get(int vendorId)
-            => CreateActionResult(await _service.GetVendorCard(vendorId));
+            => CreateActionResult(await _service.GetAsync(vendorId));
 
         [HttpGet("{taxId}")]
         public async Task<IActionResult> GetByTax(string taxId)

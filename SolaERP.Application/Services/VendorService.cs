@@ -127,7 +127,7 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<List<VendorWFADto>>.Success(rejectedByCurrentUserDto, 200);
         }
-        public async Task<ApiResponse<VM_VendorCard>> GetVendorCard(int vendorId)
+        public async Task<ApiResponse<VM_VendorCard>> GetAsync(int vendorId)
         {
             var header = _mapper.Map<VendorCardDto>(await _repository.GetHeader(vendorId));
 
@@ -135,7 +135,7 @@ namespace SolaERP.Persistence.Services
             var deliveryTerms = _supplierRepository.GetDeliveryTermsAsync();
             var currency = _supplierRepository.GetCurrenciesAsync();
             var bankDetails = _supplierRepository.GetVendorBankDetailsAsync(vendorId);
-            var businessCategory = _supplierRepository.GetVendorBuCategoriesAsync(vendorId);
+            var vendorBuCategories = _supplierRepository.GetVendorBuCategoriesAsync(vendorId);
             var users = _supplierRepository.GetVendorUsers(vendorId);
             var score = _supplierRepository.Scores(vendorId);
             var shipment = _supplierRepository.Shipments();
@@ -164,7 +164,7 @@ namespace SolaERP.Persistence.Services
                 DeliveryTerms = deliveryTerms.Result,
                 VendorBankDetails = bankDetails.Result.Select(x => new VendorBankDetailDto { Bank = x.Bank, Currency = x.Currency, AccountNumber = x.AccountNumber }).ToList(),
                 VendorUsers = users.Result,
-                VendorBuCategories = businessCategory.Result,
+                VendorBuCategories = vendorBuCategories.Result,
                 Score = score.Result,
                 Shipments = shipment.Result,
                 WithHoldingTaxDatas = withHoldingTax.Result,
