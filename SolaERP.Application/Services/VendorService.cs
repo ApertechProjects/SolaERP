@@ -1,4 +1,17 @@
-﻿namespace SolaERP.Persistence.Services
+﻿using AutoMapper;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.SupplierEvaluation;
+using SolaERP.Application.Dtos.Vendors;
+using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Entities.Vendors;
+using SolaERP.Application.Enums;
+using SolaERP.Application.Models;
+using SolaERP.Application.UnitOfWork;
+using SolaERP.Application.ViewModels;
+
+namespace SolaERP.Persistence.Services
 {
     public class VendorService : IVendorService
     {
@@ -136,7 +149,6 @@
             var shipment = _supplierRepository.Shipments();
             var withHoldingTax = _supplierRepository.WithHoldingTaxDatas();
             var tax = _supplierRepository.TaxDatas();
-            var users = _supplierRepository.GetVendorUsers(vendorId);
             var itemCategories = _supplierRepository.GetBusinessCategoriesAsync();
 
             await Task.WhenAll
@@ -166,7 +178,7 @@
                 Currencies = currency.Result,
                 PaymentTerms = paymentTerms.Result,
                 DeliveryTerms = deliveryTerms.Result,
-                VendorBankDetails = bankDetails.Result.Select(x => new VendorBankDetailDto { Bank = x.Bank, Currency = x.Currency, AccountNumber = x.AccountNumber }).ToList(),
+                VendorBankDetails = bankDetails.Result.Select(x => new VendorBankDetailDto { Id = x.VendorBankDetailId, Bank = x.Bank, Currency = x.Currency, AccountNumber = x.AccountNumber }).ToList(),
                 VendorUsers = users.Result,
                 ItemCategories = matchedBuCategories,
                 Score = score.Result,
