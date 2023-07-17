@@ -7,7 +7,6 @@ using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Entities.ApproveStage;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
-using System.Collections.Generic;
 
 namespace SolaERP.Persistence.Services
 {
@@ -109,7 +108,10 @@ namespace SolaERP.Persistence.Services
                 await _unitOfWork.SaveChangesAsync();
                 return ApiResponse<bool>.Success(data, 200);
             }
-            return ApiResponse<bool>.Success("data can not be deleted");
+            else if (model.stageIds.Count == 1 && counter == 0)
+                return ApiResponse<bool>.Fail("data can not be deleted", 400);
+            else
+                return ApiResponse<bool>.Success("some datas can not be deleted");
         }
 
         public async Task<ApiResponse<ApprovalStageDto>> GetApprovalStageAsync(int mainId)

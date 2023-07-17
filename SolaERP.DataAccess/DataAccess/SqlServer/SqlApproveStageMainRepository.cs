@@ -27,17 +27,24 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<bool> DeleteApproveStageAsync(int approveStageMainId)
         {
-            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            try
             {
-                command.CommandText = $"SET NOCOUNT OFF exec SP_ApproveStagesMain_IUD @Id,@NewApproveStageMainId = @NewApproveStageMainId OUTPUT select @NewApproveStageMainId as NewApproveStageMainId";
-                IDbDataParameter dbDataParameter = command.CreateParameter();
-                dbDataParameter.ParameterName = "@Id";
-                dbDataParameter.Value = approveStageMainId;
-                command.Parameters.Add(dbDataParameter);
-                command.Parameters.Add("@NewApproveStageMainId", SqlDbType.Int);
-                command.Parameters["@NewApproveStageMainId"].Direction = ParameterDirection.Output;
-                var value = await command.ExecuteNonQueryAsync();
-                return value >= 0;
+                using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+                {
+                    command.CommandText = $"SET NOCOUNT OFF exec SP_ApproveStagesMain_IUD @Id,@NewApproveStageMainId = @NewApproveStageMainId OUTPUT select @NewApproveStageMainId as NewApproveStageMainId";
+                    IDbDataParameter dbDataParameter = command.CreateParameter();
+                    dbDataParameter.ParameterName = "@Id";
+                    dbDataParameter.Value = approveStageMainId;
+                    command.Parameters.Add(dbDataParameter);
+                    command.Parameters.Add("@NewApproveStageMainId", SqlDbType.Int);
+                    command.Parameters["@NewApproveStageMainId"].Direction = ParameterDirection.Output;
+                    var value = await command.ExecuteNonQueryAsync();
+                    return value >= 0;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
 
