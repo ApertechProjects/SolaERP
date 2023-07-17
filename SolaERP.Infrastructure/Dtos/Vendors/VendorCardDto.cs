@@ -55,7 +55,7 @@
         public int BusinessUnitId { get; set; }
         public string BusinessUnitCode { get; set; }
         public string OtherProducts { get; set; }
-        public int ApproveStageMainId { get; set; }
+        //public int ApproveStageMainId { get; set; }
         public DateTime CompanyRegistrationDate { get; set; }
         public string TaxOffice { get; set; }
 

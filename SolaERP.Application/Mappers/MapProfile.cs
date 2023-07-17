@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Newtonsoft.Json;
 using SolaERP.Application.Dtos;
 using SolaERP.Application.Dtos.Account;
 using SolaERP.Application.Dtos.AnalysisCode;
@@ -285,6 +284,7 @@ namespace SolaERP.Persistence.Mappers
                  .ForMember(dest => dest.AttachmentSubTypeId, opt => opt.MapFrom(src => src.AttachmentSubTypeId))
                  .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size)).ReverseMap();
 
+            CreateMap<AttachmentWithFileDto, AttachmentSaveModel>().ReverseMap();
 
             CreateMap<DueDiligenceGridModel, DueDiligenceGrid>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -356,14 +356,25 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.CreditDays, opt => opt.MapFrom(src => src.CreditDays))
                 .ForMember(dest => dest._60DaysPayment, opt => opt.MapFrom(src => src._60DaysPayment))
                 .ForMember(dest => dest.OtherProducts, opt => opt.MapFrom(src => src.OtherProducts))
-                .ForMember(dest => dest.ApproveStageMainId, opt => opt.MapFrom(src => src.ApproveStageMainId))
+                //.ForMember(dest => dest.ApproveStageMainId, opt => opt.MapFrom(src => src.ApproveStageMainId))
                 .ForMember(dest => dest.CompanyRegistrationDate, opt => opt.MapFrom(src => src.CompanyRegistrationDate))
                 .ForMember(dest => dest.TaxOffice, opt => opt.MapFrom(src => src.TaxOffice))
                 .ReverseMap();
 
+
             CreateMap<VendorWFA, VendorWFADto>().ReverseMap();
             CreateMap<VendorAllDto, VendorAll>().ReverseMap();
-            CreateMap<Vendor, VendorCardDto>().ReverseMap();
+            CreateMap<Vendor, VendorCardDto>()
+                .ForMember(dest => dest.RepresentedProducts, opt => opt.MapFrom(src => src.RepresentedProducts))
+                .ForMember(dest => dest.Address1, opt => opt.MapFrom(src => src.CompanyAdress))
+                .ForMember(dest => dest.RepresentedCompanies, opt => opt.MapFrom(src => src.RepresentedCompanies))
+                .ForMember(dest => dest.VendorName, opt => opt.MapFrom(src => src.CompanyName))
+                .ForMember(dest => dest.CompanyRegistrationDate, opt => opt.MapFrom(src => src.RegistrationDate))
+                .ForMember(dest => dest.Postal_ZIP, opt => opt.MapFrom(src => src.Postal))
+                .ForMember(dest => dest.Phone_Mobile, opt => opt.MapFrom(src => src.PhoneNo))
+                .ForMember(dest => dest.EmailAddress, opt => opt.MapFrom(src => src.Email))
+                .ReverseMap();
+
             CreateMap<GridLayout, GridLayoutDto>().ReverseMap();
         }
     }
