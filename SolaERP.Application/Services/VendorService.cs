@@ -180,7 +180,7 @@ namespace SolaERP.Persistence.Services
                 Currencies = currency.Result,
                 PaymentTerms = paymentTerms.Result,
                 DeliveryTerms = deliveryTerms.Result,
-                VendorBankDetails = bankDetails.Result.Select(x => new VendorBankDetailDto { Id = x.VendorBankDetailId, Bank = x.Bank, Currency = x.Currency, AccountNumber = x.AccountNumber }).ToList(),
+                VendorBankDetails = bankDetails.Result,
                 VendorUsers = users.Result,
                 ItemCategories = matchedBuCategories,
                 Score = score.Result,
