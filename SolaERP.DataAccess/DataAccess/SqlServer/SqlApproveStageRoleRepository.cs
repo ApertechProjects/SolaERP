@@ -42,7 +42,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var commad = _unitOfWork.CreateCommand() as DbCommand)
             {
-                commad.CommandText = $"exec SP_ApproveStageRoles_IUD @roleId";
+                commad.CommandText = $"SET NOCOUNT OFF exec SP_ApproveStageRoles_IUD @roleId";
                 IDbDataParameter dbDataParameter = commad.CreateParameter();
                 dbDataParameter.ParameterName = "@roleId";
                 dbDataParameter.Value = Id;

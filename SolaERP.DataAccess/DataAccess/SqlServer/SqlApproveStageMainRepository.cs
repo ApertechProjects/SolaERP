@@ -110,7 +110,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<int> SaveApproveStageMainAsync(ApproveStageMainInputModel entity, int userId)
         {
-            string query = "exec SP_ApproveStagesMain_IUD @approveStageMainId,@procedureId,@businessUnitId,@approveStageName,@approveStageCode,@reApproveOnChange,@userId," +
+            string query = "SET NOCOUNT OFF exec SP_ApproveStagesMain_IUD @approveStageMainId,@procedureId,@businessUnitId,@approveStageName,@approveStageCode,@reApproveOnChange,@userId," +
                "                                         @NewApproveStageMainId = @NewApproveStageMainId OUTPUT select @NewApproveStageMainId as NewApproveStageMainId";
 
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
