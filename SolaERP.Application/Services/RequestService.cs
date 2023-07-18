@@ -71,12 +71,12 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<bool>.Fail("Request must be selected", 200);
 
             List<string> failedMailList = new List<string>();
-            string userName = await _userRepository.GetUserNameByTokenAsync(name);
+            var user = await _userRepository.GetByIdAsync(userId);
             for (int i = 0; i < changeStatusParametersDtos.RequestMainIds.Count; i++)
             {
                 await _requestMainRepository.RequestMainChangeStatusAsync(userId, changeStatusParametersDtos.RequestMainIds[i], changeStatusParametersDtos.ApproveStatus, changeStatusParametersDtos.Comment);
 
-                string messageBody = $"Request {GetMailText(changeStatusParametersDtos.ApproveStatus)} by " + userName;
+                string messageBody = $"Request {GetMailText(changeStatusParametersDtos.ApproveStatus)} by " + user.UserName;
                 await _mailService.SendSafeMailsAsync(await GetFollowUserEmailsForRequestAsync(changeStatusParametersDtos.RequestMainIds[i]), "Request Information", messageBody, false);
 
             }
