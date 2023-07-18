@@ -152,6 +152,7 @@ namespace SolaERP.Persistence.Services
             var withHoldingTax = _supplierRepository.WithHoldingTaxDatas();
             var tax = _supplierRepository.TaxDatas();
             var itemCategories = _supplierRepository.GetBusinessCategoriesAsync();
+            var countries = _supplierRepository.GetCountriesAsync();
 
             await Task.WhenAll
                   (
@@ -164,7 +165,8 @@ namespace SolaERP.Persistence.Services
                     tax,
                     users,
                     currency,
-                    buCategories
+                    buCategories,
+                    countries
                   );
 
 

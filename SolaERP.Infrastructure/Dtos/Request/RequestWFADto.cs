@@ -17,8 +17,8 @@
         public string StatusName { get; set; }
         public string ApproveStatus { get; set; }
         public string ApproveStatusName { get; set; }
-        public string EmployeeCode { get; set; }
-        public string EmployeeName { get; set; }
+        public string BuyerCode { get; set; }
+        public string BuyerName { get; set; }
         public string SupplierCode { get; set; }
         public string RequestComment { get; set; }
         public string OperatorComment { get; set; }

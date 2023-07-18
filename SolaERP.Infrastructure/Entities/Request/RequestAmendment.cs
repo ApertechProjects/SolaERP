@@ -8,8 +8,8 @@
         public string BusinessUnitName { get; set; }
         public int RequestTypeId { get; set; }
         public string RequestNo { get; set; }
-        public string EmployeeCode { get; set; }
-        public string EmployeeName { get; set; }
+        public string BuyerCode { get; set; }
+        public string BuyerName { get; set; }
         public DateTime EntryDate { get; set; }
         public DateTime RequestDeadline { get; set; }
         public int UserId { get; set; }
@@ -20,7 +20,7 @@
         public string OperatorComment { get; set; }
         public string QualityRequired { get; set; }
         public string CurrencyCode { get; set; }
-        public decimal LogisticTotal { get; set; }
+        public decimal LogisticsTotal { get; set; }
 
     }
 }
