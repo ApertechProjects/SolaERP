@@ -185,25 +185,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<int> AddAsync(int userId, Vendor vendor)
         {
-            return await ModifyVendorAsync(userId, new()
-            {
-                VendorId = 0,
-                BusinessCategoryId = vendor.BusinessCategoryId,
-                Buid = vendor.Buid,
-                City = vendor.City,
-                CompanyAdress = vendor.CompanyAdress,
-                CompanyName = vendor.CompanyName,
-                CreditDays = vendor.CreditDays,
-                PrequalificationCategoryId = vendor.PrequalificationCategoryId,
-                RegistrationDate = vendor.RegistrationDate,
-                AgreeWithDefaultDays = vendor.AgreeWithDefaultDays,
-                TaxId = vendor.TaxId,
-                TaxOffice = vendor.TaxOffice,
-                RepresentedCompanies = vendor.RepresentedCompanies,
-                RepresentedProducts = vendor.RepresentedProducts,
-                WebSite = vendor.WebSite,
-
-            });
+            vendor.VendorId = 0;
+            return await ModifyVendorAsync(userId, vendor);
         }
 
         public async Task<int> UpdateAsync(int userId, Vendor vendor)

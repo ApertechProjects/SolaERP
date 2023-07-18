@@ -211,10 +211,8 @@ namespace SolaERP.Persistence.Services
             int userId = Convert.ToInt32(userIdentity);
             int vendorId = 0;
 
-            if (vendor.IsNewVendor())
-                vendorId = await _repository.AddAsync(userId, vendor);
-
-            vendorId = await _repository.UpdateAsync(userId, vendor);
+            vendorId = vendor.IsNewVendor() ? await _repository.AddAsync(userId, vendor) :
+                                              await _repository.UpdateAsync(userId, vendor);
 
             await _supplierRepository.DeleteRepresentedProductAsync(vendorId);
             await _supplierRepository.DeleteRepresentedCompanyAsync(vendorId);
