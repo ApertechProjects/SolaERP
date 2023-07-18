@@ -59,7 +59,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<int> AddAsync(ApproveStageRole entity)
         {
-            string query = "exec SP_ApproveStageRoles_IUD  @approveStageRoleId,@approveStageDetailId,@approveRoleId,@amountFrom,@amountTo";
+            string query = "SET NOCOUNT OFF exec SP_ApproveStageRoles_IUD  @approveStageRoleId,@approveStageDetailId,@approveRoleId,@amountFrom,@amountTo";
 
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
