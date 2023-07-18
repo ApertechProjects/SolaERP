@@ -90,12 +90,6 @@ namespace SolaERP.Application.Dtos.Shared
             };
         }
 
-        public static ApiResponse<bool> CreateApiResponse(Func<T, bool> predicate, T data, int statusCode = 400, string erorrMessage = ResultMessageConstants.OperationUnsucces)
-        {
-            if (predicate(data))
-                return new ApiResponse<bool> { Data = true, StatusCode = 200 };
 
-            return new ApiResponse<bool> { Data = false, StatusCode = statusCode, Errors = erorrMessage };
-        }
     }
 }

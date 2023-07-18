@@ -259,7 +259,8 @@ namespace SolaERP.Persistence.Services
             await Task.WhenAll(tasks);
 
             await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<Vendor>.CreateApiResponse(x => x.VendorId > 0, vendor);
+            return vendorId > 0 ? ApiResponse<bool>.Success(true, 200) :
+                                  ApiResponse<bool>.Success(false, 400);
         }
 
         public async Task<ApiResponse<bool>> SendToApproveAsync(VendorSendToApproveRequest request)
