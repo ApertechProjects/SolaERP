@@ -10,6 +10,7 @@ namespace SolaERP.Application.Validations.ApproveStageValidation
         {
             RuleFor(x => x.ProcedureId).NotEmpty().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.ApproveStageName).NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.ApproveStageCode).NotEmpty().WithMessage("Please, enter {PropertyName}");
         }
     }
 }

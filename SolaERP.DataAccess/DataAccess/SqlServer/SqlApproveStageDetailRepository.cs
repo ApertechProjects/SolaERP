@@ -50,7 +50,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = $"exec SP_ApproveStagesDetails_IUD @detailId,@NewApproveStageDetailsId = @NewApproveStageDetailsId OUTPUT select @NewApproveStageDetailsId as NewApproveStageDetailsId";
+                command.CommandText = $"SET NOCOUNT OFF exec SP_ApproveStagesDetails_IUD @detailId,@NewApproveStageDetailsId = @NewApproveStageDetailsId OUTPUT select @NewApproveStageDetailsId as NewApproveStageDetailsId";
                 IDbDataParameter dbDataParameter = command.CreateParameter();
                 dbDataParameter.ParameterName = "@detailId";
                 dbDataParameter.Value = id;
@@ -89,7 +89,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = "EXEC SP_ApproveStagesDetails_IUD @ApproveStageDetailsId,@ApproveStageMainId,@ApproveStageDetailsName,@Sequence,@Skip,@SkipDays,@BackToInitiatorOnReject," +
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_ApproveStagesDetails_IUD @ApproveStageDetailsId,@ApproveStageMainId,@ApproveStageDetailsName,@Sequence,@Skip,@SkipDays,@BackToInitiatorOnReject," +
                     "@NewApproveStageDetailsId = @NewApproveStageDetailsId OUTPUT select @NewApproveStageDetailsId as NewApproveStageDetailsId";
 
                 command.Parameters.AddWithValue(command, "@ApproveStageDetailsId", entity.Id = entity.Id < 0 ? 0 : entity.Id);

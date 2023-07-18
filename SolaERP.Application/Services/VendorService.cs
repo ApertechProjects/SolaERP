@@ -189,6 +189,7 @@ namespace SolaERP.Persistence.Services
                 Shipments = shipment.Result,
                 WithHoldingTaxDatas = withHoldingTax.Result,
                 TaxDatas = tax.Result,
+                Countries = countries.Result,
             };
 
             return ApiResponse<VM_VendorCard>.Success(vendorModel);
