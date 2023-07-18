@@ -84,7 +84,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", requestMain.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@ItemCode", itemCode == "all" ? "%" : itemCode);
                 command.Parameters.AddWithValue(command, "@DateFrom", requestMain.DateFrom);
-                command.Parameters.AddWithValue(command, "DateTo", requestMain.DateTo);
+                command.Parameters.AddWithValue(command, "@DateTo", requestMain.DateTo);
 
                 using var reader = await command.ExecuteReaderAsync();
 

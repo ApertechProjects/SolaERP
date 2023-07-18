@@ -61,6 +61,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                             @PhoneNo,
                                                             @Email,
                                                             @ContactPerson,
+                                                            @DeliveryTermId,
+                                                            @WithHoldingTaxId,
+                                                            @TaxesId,
+                                                            @ShipmentId,
                                                             @NewVendorId = @NewVendorId OUTPUT
                                                             SELECT	@NewVendorId as [@NewVendorId]";
 
@@ -77,7 +81,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@_0DaysPayment", vendor.AgreeWithDefaultDays);
                 command.Parameters.AddWithValue(command, "@Country", vendor.Country);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
-                command.Parameters.AddWithValue(command, "@OtherProducts", null);
+                command.Parameters.AddWithValue(command, "@OtherProducts", vendor.OtherProducts);
                 command.Parameters.AddWithValue(command, "@Id", null);
                 command.Parameters.AddWithValue(command, "@CompanyAddress", vendor.CompanyAdress);
                 command.Parameters.AddWithValue(command, "@CompanyRegistrationDate", vendor.RegistrationDate);
@@ -93,6 +97,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@PhoneNo", vendor.PhoneNo);
                 command.Parameters.AddWithValue(command, "@Email", vendor.Email);
                 command.Parameters.AddWithValue(command, "@ContactPerson", vendor.ContactPerson);
+                command.Parameters.AddWithValue(command, "@WithHoldingTaxId", vendor.WithHoldingTaxId);
+                command.Parameters.AddWithValue(command, "@ShipmentId", vendor.ShipmentId);
+                command.Parameters.AddWithValue(command, "@TaxesId", vendor.TaxesId);
+                command.Parameters.AddWithValue(command, "@DeliveryTermId", vendor.DeliveryTermId);
 
                 int newVendorId = 0;
 

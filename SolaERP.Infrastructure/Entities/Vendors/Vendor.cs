@@ -32,7 +32,11 @@
         public string PhoneNo { get; set; }
         public string Email { get; set; }
         public string ContactPerson { get; set; }
-
+        public int ShipmentId { get; set; }
+        public int DeliveryTermId { get; set; }
+        public string OtherProducts { get; set; }
+        public int WithHoldingTaxId { get; set; }
+        public int TaxesId { get; set; }
         public bool IsNewVendor() => VendorId <= 0;
 
 

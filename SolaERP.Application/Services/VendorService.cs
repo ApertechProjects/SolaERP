@@ -5,11 +5,13 @@ using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Application.ViewModels;
+using System.Threading.Tasks;
 
 namespace SolaERP.Persistence.Services
 {
@@ -199,7 +201,10 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> SaveAsync(string userIdentity, VendorCardDto vendorDto)
         {
+            User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
+            List<Task<bool>> tasks = new();
             Vendor vendor = _mapper.Map<Vendor>(vendorDto);
+
             int userId = Convert.ToInt32(userIdentity);
             int vendorId = 0;
 
@@ -207,6 +212,14 @@ namespace SolaERP.Persistence.Services
                 vendorId = await _repository.AddAsync(userId, vendor);
 
             vendorId = await _repository.UpdateAsync(userId, vendor);
+
+            await _supplierRepository.DeleteRepresentedProductAsync(vendorId);
+            await _supplierRepository.DeleteRepresentedCompanyAsync(vendorId);
+
+            await _supplierRepository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", vendor?.RepresentedCompanies) });
+            await _supplierRepository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", vendor?.RepresentedProducts) });
+
+
             if (vendorDto.Logo is not null)
             {
                 var vendorLogo = _mapper.Map<AttachmentSaveModel>(vendorDto.Logo);
@@ -216,6 +229,34 @@ namespace SolaERP.Persistence.Services
 
                 await _attachment.SaveAttachmentAsync(vendorLogo);
             }
+
+            foreach (var x in vendorDto.BankAccounts)
+            {
+                if (x.Type == 2 && x.Id > 0)
+                    await _repository.DeleteBankDetailsAsync(user.Id, x.Id);
+                else
+                {
+                    var detaildId = await _repository.UpdateBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x));
+                    x.VendorId = vendorId;
+
+                    if (x.AccountVerificationLetter != null)
+                    {
+                        tasks.AddRange(x.AccountVerificationLetter.Select(attachment => //+
+                        {
+                            if (attachment.Type == 2 && attachment.AttachmentId > 0)
+                                return _attachment.DeleteAttachmentAsync(attachment.AttachmentId);
+                            else
+                            {
+                                var entity = _mapper.Map<AttachmentSaveModel>(attachment);
+                                entity.SourceId = detaildId;
+                                entity.SourceType = SourceType.VEN_BNK.ToString();
+                                return _attachment.SaveAttachmentAsync(entity);
+                            }
+                        }));
+                    }
+                }
+            }
+            await Task.WhenAll(tasks);
 
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<Vendor>.CreateApiResponse(x => x.VendorId > 0, vendor);

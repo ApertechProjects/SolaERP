@@ -26,6 +26,7 @@ using SolaERP.Persistence.Validations.AnalysisStructure;
 using SolaERP.Persistence.Validations.ApproveRoleValidation;
 using SolaERP.Persistence.Validations.Supplier;
 using SolaERP.Persistence.Validations.UserValidation;
+using SolaERP.Persistence.Validations.Vendor;
 using UserValidation = SolaERP.Application.Validations.UserValidation.UserValidation;
 
 namespace SolaERP.Extensions
@@ -136,6 +137,7 @@ namespace SolaERP.Extensions
             builder.Services.AddValidatorsFromAssemblyContaining<AnalysisDimensionDeleteValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<AnalysisStructureDeleteValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<SupplierRegisterValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<VendorCardValidation>();
             builder.Services.AddScoped<ValidationFilter>();
         }
         public static void UseIdentityService(this WebApplicationBuilder builder)

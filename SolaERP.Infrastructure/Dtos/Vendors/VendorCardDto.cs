@@ -1,4 +1,6 @@
-﻿namespace SolaERP.Application.Dtos.Vendors
+﻿using SolaERP.Application.Dtos.SupplierEvaluation;
+
+namespace SolaERP.Application.Dtos.Vendors
 {
     public class VendorCardDto
     {
@@ -58,7 +60,7 @@
         //public int ApproveStageMainId { get; set; }
         public DateTime CompanyRegistrationDate { get; set; }
         public string TaxOffice { get; set; }
-
         public Attachment.AttachmentWithFileDto Logo { get; set; }
+        public List<VendorBankDetailDto> BankAccounts { get; set; }
     }
 }

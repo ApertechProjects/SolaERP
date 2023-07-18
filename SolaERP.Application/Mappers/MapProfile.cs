@@ -373,6 +373,11 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.Postal_ZIP, opt => opt.MapFrom(src => src.Postal))
                 .ForMember(dest => dest.Phone_Mobile, opt => opt.MapFrom(src => src.PhoneNo))
                 .ForMember(dest => dest.EmailAddress, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.ShipVia, opt => opt.MapFrom(src => src.ShipmentId))
+                .ForMember(dest => dest.PaymentTerms, opt => opt.MapFrom(src => src.PaymentTerms))
+                .ForMember(dest => dest.TaxId, opt => opt.MapFrom(src => src.TaxId))
+                .ForMember(dest => dest.DeliveryTerms, opt => opt.MapFrom(src => src.DeliveryTermId))
+                .ForMember(dest => dest.Tax, opt => opt.MapFrom(src => src.TaxesId))
                 .ReverseMap();
 
             CreateMap<GridLayout, GridLayoutDto>().ReverseMap();
