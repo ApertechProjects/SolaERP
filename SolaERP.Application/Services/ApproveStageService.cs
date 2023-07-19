@@ -52,6 +52,10 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<int>> SaveApproveStageMainAsync(string name, ApprovalStageSaveModel approvalStageSaveVM)
         {
             var userId = await _userRepository.ConvertIdentity(name);
+            bool ExistVendor = await _approveStageMainRepository.CheckVendorStage();
+            if (approvalStageSaveVM.ApproveStagesMain.ProcedureKey == "VENDR" && approvalStageSaveVM.ApproveStagesMain.ApproveStageMainId == 0 && ExistVendor)
+                return ApiResponse<int>.Fail("Approve stage already exist by Vendor", 400);
+
             var mainId = await _approveStageMainRepository.SaveApproveStageMainAsync(approvalStageSaveVM.ApproveStagesMain, userId);
             approvalStageSaveVM.ApproveStagesMain.ApproveStageMainId = mainId;
             for (int i = 0; i < approvalStageSaveVM.ApproveStagesDetailDtos.Count; i++)

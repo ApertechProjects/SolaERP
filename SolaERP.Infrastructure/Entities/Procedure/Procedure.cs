@@ -6,8 +6,6 @@ namespace SolaERP.Application.Entities.Procedure
     {
         public int ProcedureId { get; set; }
         public string ProcedureName { get; set; }
-
-        [DbIgnore]
         public string ProcedureKey { get; set; }
     }
 }
