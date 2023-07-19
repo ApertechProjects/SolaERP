@@ -3,6 +3,7 @@ using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Request;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -109,11 +110,11 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> SendToApproveAsync(string name, int requestMainId)
         {
             int userId = await _userRepository.ConvertIdentity(name);
-            string userName = await _userRepository.GetUserNameByTokenAsync(name);
+            User userName = await _userRepository.GetByIdAsync(userId);
             var result = await _requestMainRepository.SendRequestToApproveAsync(userId, requestMainId);
             await _unitOfWork.SaveChangesAsync();
 
-            string messageBody = "Request sended to approve by " + userName;
+            string messageBody = "Request sended to approve by " + userName.FullName;
 
             await _mailService.SendSafeMailsAsync(await GetFollowUserEmailsForRequestAsync(requestMainId), "Request Information", messageBody, false);
 

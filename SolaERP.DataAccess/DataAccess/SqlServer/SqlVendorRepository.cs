@@ -133,7 +133,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                       SELECT @NewVendorBankId as N'@NewVendorBankId'";
 
 
-                command.Parameters.AddWithValue(command, "@VendorBankDetailId", bankDetail.VendorBankDetailId);
+                command.Parameters.AddWithValue(command, "@VendorBankDetailId", bankDetail.Id);
                 command.Parameters.AddWithValue(command, "@VendorId", bankDetail.VendorId);
                 command.Parameters.AddWithValue(command, "@Beneficiary", bankDetail.Beneficiary);
                 command.Parameters.AddWithValue(command, "@BeneficiaruTaxId", bankDetail.BeneficiaruTaxId);
@@ -162,7 +162,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return await ModifyBankDetailsAsync(userId, new()
             {
-                VendorBankDetailId = 0,
+                Id = 0,
                 VendorId = bankDetail.VendorId,
                 BeneficiaruTaxId = bankDetail.BeneficiaruTaxId,
                 Bank = bankDetail.Bank,
@@ -178,7 +178,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
         public async Task<int> DeleteBankDetailsAsync(int userId, int id)
-             => await ModifyBankDetailsAsync(userId, new() { VendorBankDetailId = id });
+             => await ModifyBankDetailsAsync(userId, new() { Id = id });
         public async Task<int> UpdateBankDetailsAsync(int userId, VendorBankDetail bankDetail)
              => await ModifyBankDetailsAsync(userId, bankDetail);
 
