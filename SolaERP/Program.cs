@@ -65,6 +65,7 @@ var logger = new LoggerConfiguration()
 
 
 
+
 builder.Services
     .AddFluentEmail(builder.Configuration["Mail:Mail"])
     .AddRazorRenderer()
@@ -90,29 +91,25 @@ builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-    .AddCookie(options =>
-{
-    options.LoginPath = "/Account/Login";
-    options.AccessDeniedPath = "/Account/Login";
-})
-    .AddJwtBearer(options =>
- {
-     options.RequireHttpsMetadata = false;
-     options.SaveToken = true;
-     options.TokenValidationParameters = new()
-     {
-         ValidateAudience = false,
-         ValidateIssuer = false,
-         ValidateLifetime = true,
-         ValidateIssuerSigningKey = true,
-         ValidAudience = builder.Configuration["Token:Audience"],
-         ValidIssuer = builder.Configuration["Token:Issuer"],
-         IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
-         NameClaimType = ClaimTypes.NameIdentifier,
-         LifetimeValidator = (notBefore, expires, securityToken, validationParametrs) => expires != null ? expires > DateTime.UtcNow : false
-     };
- });
+
+}).AddJwtBearer(options =>
+  {
+      options.RequireHttpsMetadata = false;
+      options.SaveToken = true;
+
+      options.TokenValidationParameters = new()
+      {
+          ValidateAudience = false,
+          ValidateIssuer = false,
+          ValidateLifetime = true,
+          ValidateIssuerSigningKey = true,
+          ValidAudience = builder.Configuration["Token:Audience"],
+          ValidIssuer = builder.Configuration["Token:Issuer"],
+          IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
+          NameClaimType = ClaimTypes.NameIdentifier,
+          LifetimeValidator = (notBefore, expires, securityToken, validationParametrs) => expires != null ? expires > DateTime.UtcNow : false
+      };
+  });
 
 builder.Services.AddSwaggerGen(c =>
 {
