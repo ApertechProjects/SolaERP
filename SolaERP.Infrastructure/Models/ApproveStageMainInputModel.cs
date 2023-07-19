@@ -12,6 +12,7 @@ namespace SolaERP.Application.Models
         public int ApproveStageMainId { get; set; }
         public int BusinessUnitId { get; set; }
         public int ProcedureId { get; set; }
+        public string ProcedureKey { get; set; }
         public string ApproveStageName { get; set; }
         public string ApproveStageCode { get; set; }
         public bool ReApproveOnChange { get; set; }

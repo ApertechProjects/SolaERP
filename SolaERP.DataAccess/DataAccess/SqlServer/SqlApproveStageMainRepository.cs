@@ -25,6 +25,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
+        public async Task<bool> CheckVendorStage()
+        {
+            int count = 0;
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC [dbo].[SP_CheckStageVendor]";
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    count = reader.Get<int>("Count");
+                }
+                return count > 0;
+            }
+        }
+
         public async Task<bool> DeleteApproveStageAsync(int approveStageMainId)
         {
             try

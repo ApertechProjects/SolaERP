@@ -74,10 +74,13 @@ namespace SolaERP.Persistence.Services
             var user = await _userRepository.GetByIdAsync(userId);
             for (int i = 0; i < changeStatusParametersDtos.RequestMainIds.Count; i++)
             {
-                await _requestMainRepository.RequestMainChangeStatusAsync(userId, changeStatusParametersDtos.RequestMainIds[i], changeStatusParametersDtos.ApproveStatus, changeStatusParametersDtos.Comment);
+                var result = await _requestMainRepository.RequestMainChangeStatusAsync(userId, changeStatusParametersDtos.RequestMainIds[i], changeStatusParametersDtos.ApproveStatus, changeStatusParametersDtos.Comment);
 
-                string messageBody = $"Request {GetMailText(changeStatusParametersDtos.ApproveStatus)} by " + user.UserName;
-                await _mailService.SendSafeMailsAsync(await GetFollowUserEmailsForRequestAsync(changeStatusParametersDtos.RequestMainIds[i]), "Request Information", messageBody, false);
+                if (result)
+                {
+                    string messageBody = $"Request {GetMailText(changeStatusParametersDtos.ApproveStatus)} by " + user.UserName;
+                    await _mailService.SendSafeMailsAsync(await GetFollowUserEmailsForRequestAsync(changeStatusParametersDtos.RequestMainIds[i]), "Request Information", messageBody, false);
+                }
 
             }
             await _unitOfWork.SaveChangesAsync();

@@ -11,5 +11,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<ApprovalStatus>> GetApprovalStatusList();
         Task<bool> DeleteApproveStageAsync(int approveStageMainId);
         Task<int> SaveApproveStageMainAsync(ApproveStageMainInputModel entity, int userId);
+        Task<bool> CheckVendorStage();
     }
 }
