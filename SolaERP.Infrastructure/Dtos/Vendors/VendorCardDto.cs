@@ -40,7 +40,7 @@ namespace SolaERP.Application.Dtos.Vendors
         public string ContactPerson { get; set; }
 
 
-        public int VendorType { get; set; }
+        //public int VendorType { get; set; }
         public int ShipVia { get; set; }
         public int DeliveryTerms { get; set; }
         public string PaymentTerms { get; set; }
