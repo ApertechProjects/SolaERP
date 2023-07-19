@@ -1805,3 +1805,26 @@ System.IndexOutOfRangeException: CompanyName
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
 2023-06-04 20:04:22.081 +04:00 [ERR] CompanyName
+2023-07-19 15:51:49.450 +04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: SqlCommand DeriveParameters only supports CommandType.StoredProcedure, not CommandType. Text.
+   at System.Data.SqlClient.SqlCommand.DeriveParameters()
+   at System.Data.SqlClient.SqlCommandBuilder.DeriveParameters(SqlCommand command)
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlQueryBuilder.GetSqlElementParameters(String sqlElementName, CommandType type) in C:\Users\HP\source\Apertech\SolaERP\SolaERP.DataAccess\DataAccess\SqlServer\SqlQueryBuilder.cs:line 179
+   at SolaERP.DataAccess.DataAccess.SqlServer.SqlQueryBuilder.GenerateClassFieldsFromSqlElement(String className, String sqlElementName, CommandType type) in C:\Users\HP\source\Apertech\SolaERP\SolaERP.DataAccess\DataAccess\SqlServer\SqlQueryBuilder.cs:line 199
+   at SolaERP.API.Controllers.QueryController.GenerateClass(String className, String elementName, CommandType type) in C:\Users\HP\source\Apertech\SolaERP\SolaERP\Controllers\QueryController.cs:line 29
+   at lambda_method76(Closure , Object , Object[] )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.SyncActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeActionMethodAsync()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeNextActionFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2023-07-19 15:51:49.573 +04:00 [ERR] SqlCommand DeriveParameters only supports CommandType.StoredProcedure, not CommandType. Text.
