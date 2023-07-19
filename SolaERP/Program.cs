@@ -58,9 +58,10 @@ builder.Services.AddCors(options =>
 
 var logger = new LoggerConfiguration()
     .WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"), "logs")
-    //.WriteTo.File("logs.txt")
+    .WriteTo.File("logs.txt")
     .Enrich.FromLogContext()
     .MinimumLevel.Error()
+    .WriteTo.Seq(builder.Configuration["Log:Seq"])
     .CreateLogger();
 
 
