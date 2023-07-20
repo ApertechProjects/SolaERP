@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MediatR;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Shared;
@@ -11,6 +12,7 @@ using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Application.ViewModels;
+using SolaERP.Persistence.Utils;
 using System.Threading.Tasks;
 
 namespace SolaERP.Persistence.Services
@@ -86,13 +88,47 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity, VendorAllCommandRequest request)
         {
             List<VendorAll> allVendors = await _repository.GetAll(Convert.ToInt32(userIdentity), request);
+            if (!string.IsNullOrEmpty(request.Text?.ToString()))
+            {
+                string text = request.Text.ToLower();
+                allVendors = allVendors.Where(x => x.TaxId.CheckNullAndApplyLower().Contains(text) ||
+                                              x.BusinessCategory.CheckNullAndApplyLower().Contains(text) ||
+                                              x.CompanyAddress.CheckNullAndApplyLower().Contains(text) ||
+                                              x.Country.CheckNullAndApplyLower().Contains(text) ||
+                                              x.Description.CheckNullAndApplyLower().Contains(text) ||
+                                              x.PrequalificationCategory.CheckNullAndApplyLower().Contains(text) ||
+                                              x.ProductService.CheckNullAndApplyLower().Contains(text) ||
+                                              x.StatusName.CheckNullAndApplyLower().Contains(text) ||
+                                              x.VendorCode.CheckNullAndApplyLower().Contains(text) ||
+                                              x.VendorName.CheckNullAndApplyLower().Contains(text) ||
+                                              x.ApproveStatusName.CheckNullAndApplyLower().Contains(text) ||
+                                              x.CountryCode.CheckNullAndApplyLower().Contains(text)).ToList();
+            }
 
             List<VendorAllDto> dto = _mapper.Map<List<VendorAllDto>>(allVendors);
             return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
         }
-        public async Task<ApiResponse<List<VendorAllDto>>> GetApprovedAsync(string userIdentity)
+        public async Task<ApiResponse<List<VendorAllDto>>> GetApprovedAsync(string userIdentity,string text)
         {
             var approvedByCurrentUser = await _repository.GetApprovedAsync(Convert.ToInt32(userIdentity));
+
+            if (!string.IsNullOrEmpty(text?.ToString()))
+            {
+                text = text.ToLower();
+                approvedByCurrentUser = approvedByCurrentUser.Where(x => x.TaxId.CheckNullAndApplyLower().Contains(text) ||
+                                              x.BusinessCategory.CheckNullAndApplyLower().Contains(text) ||
+                                              x.CompanyAddress.CheckNullAndApplyLower().Contains(text) ||
+                                              x.Country.CheckNullAndApplyLower().Contains(text) ||
+                                              x.Description.CheckNullAndApplyLower().Contains(text) ||
+                                              x.PrequalificationCategory.CheckNullAndApplyLower().Contains(text) ||
+                                              x.ProductService.CheckNullAndApplyLower().Contains(text) ||
+                                              x.StatusName.CheckNullAndApplyLower().Contains(text) ||
+                                              x.VendorCode.CheckNullAndApplyLower().Contains(text) ||
+                                              x.VendorName.CheckNullAndApplyLower().Contains(text) ||
+                                              x.ApproveStatusName.CheckNullAndApplyLower().Contains(text) ||
+                                              x.CountryCode.CheckNullAndApplyLower().Contains(text)).ToList();
+            }
+
             var dto = _mapper.Map<List<VendorAllDto>>(approvedByCurrentUser);
 
             return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
@@ -107,6 +143,20 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<List<VendorAll>>> GetDraftAsync(string userIdentity, VendorFilter filter)
         {
             var data = await _repository.GetDraftAsync(Convert.ToInt32(userIdentity), filter);
+            if (!string.IsNullOrEmpty(filter.Text?.ToString()))
+            {
+                string text = filter.Text.ToLower();
+                data = data.Where(x => x.TaxId.CheckNullAndApplyLower().Contains(text) ||
+                                              x.BusinessCategory.CheckNullAndApplyLower().Contains(text) ||
+                                              x.CompanyAddress.CheckNullAndApplyLower().Contains(text) ||
+                                              x.Country.CheckNullAndApplyLower().Contains(text) ||
+                                              x.Description.CheckNullAndApplyLower().Contains(text) ||
+                                              x.PrequalificationCategory.CheckNullAndApplyLower().Contains(text) ||
+                                              x.ProductService.CheckNullAndApplyLower().Contains(text) ||
+                                              x.StatusName.CheckNullAndApplyLower().Contains(text) ||
+                                              x.VendorCode.CheckNullAndApplyLower().Contains(text) ||
+                                              x.VendorName.CheckNullAndApplyLower().Contains(text)).ToList();
+            }
             return ApiResponse<List<VendorAll>>.Success(data, 200);
         }
         public async Task<ApiResponse<VM_GetVendorFilters>> GetFiltersAsync()
@@ -128,12 +178,40 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<List<VendorWFADto>>> GetHeldAsync(string userIdentity, VendorFilter filter)
         {
             List<VendorWFA> vendorWFAs = await _repository.GetHeldAsync(Convert.ToInt32(userIdentity), filter);
+            if (!string.IsNullOrEmpty(filter.Text?.ToString()))
+            {
+                string text = filter.Text.ToLower();
+                vendorWFAs = vendorWFAs.Where(x => x.TaxId.CheckNullAndApplyLower().Contains(text) ||
+                                              x.BusinessCategory.CheckNullAndApplyLower().Contains(text) ||
+                                              x.CompanyAddress.CheckNullAndApplyLower().Contains(text) ||
+                                              x.Country.CheckNullAndApplyLower().Contains(text) ||
+                                              x.Description.CheckNullAndApplyLower().Contains(text) ||
+                                              x.PrequalificationCategory.CheckNullAndApplyLower().Contains(text) ||
+                                              x.ProductService.CheckNullAndApplyLower().Contains(text) ||
+                                              x.StatusName.CheckNullAndApplyLower().Contains(text) ||
+                                              x.VendorCode.CheckNullAndApplyLower().Contains(text) ||
+                                              x.VendorName.CheckNullAndApplyLower().Contains(text)).ToList();
+            }
             List<VendorWFADto> vendorAllDtos = _mapper.Map<List<VendorWFADto>>(vendorWFAs);
             return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
         }
         public async Task<ApiResponse<List<VendorWFADto>>> GetRejectedAsync(string userIdentity, VendorFilter filter)
         {
             var rejectedByCurrentUser = await _repository.GetRejectedAsync(Convert.ToInt32(userIdentity), filter);
+            if (!string.IsNullOrEmpty(filter.Text?.ToString()))
+            {
+                string text = filter.Text.ToLower();
+                rejectedByCurrentUser = rejectedByCurrentUser.Where(x => x.TaxId.CheckNullAndApplyLower().Contains(text) ||
+                                              x.BusinessCategory.CheckNullAndApplyLower().Contains(text) ||
+                                              x.CompanyAddress.CheckNullAndApplyLower().Contains(text) ||
+                                              x.Country.CheckNullAndApplyLower().Contains(text) ||
+                                              x.Description.CheckNullAndApplyLower().Contains(text) ||
+                                              x.PrequalificationCategory.CheckNullAndApplyLower().Contains(text) ||
+                                              x.ProductService.CheckNullAndApplyLower().Contains(text) ||
+                                              x.StatusName.CheckNullAndApplyLower().Contains(text) ||
+                                              x.VendorCode.CheckNullAndApplyLower().Contains(text) ||
+                                              x.VendorName.CheckNullAndApplyLower().Contains(text)).ToList();
+            }
             var rejectedByCurrentUserDto = _mapper.Map<List<VendorWFADto>>(rejectedByCurrentUser);
 
             return ApiResponse<List<VendorWFADto>>.Success(rejectedByCurrentUserDto, 200);
@@ -203,16 +281,16 @@ namespace SolaERP.Persistence.Services
             if (!string.IsNullOrEmpty(filter.Text?.ToString()))
             {
                 string text = filter.Text.ToLower();
-                vendorWFAs = vendorWFAs.Where(x => ((x.TaxId ?? "").ToLower().Contains(text, StringComparison.OrdinalIgnoreCase) ||
-                                              (x.BusinessCategory ?? "".ToLower().Contains(text, StringComparison.OrdinalIgnoreCase) ||
-                                              x.CompanyAddress.ToLower().Contains(text, StringComparison.OrdinalIgnoreCase) ||
-                                              x.Country.ToLower().Contains(text, StringComparison.OrdinalIgnoreCase) ||
-                                              x.Description.ToLower().Contains(text, StringComparison.OrdinalIgnoreCase) ||
-                                              x.PrequalificationCategory.ToLower().Contains(text, StringComparison.OrdinalIgnoreCase) ||
-                                              x.ProductService.ToLower().Contains(text, StringComparison.OrdinalIgnoreCase) ||
-                                              x.StatusName.ToLower().Contains(text, StringComparison.OrdinalIgnoreCase) ||
-                                              x.VendorCode.ToLower().Contains(text, StringComparison.OrdinalIgnoreCase) ||
-                                              x.VendorName.ToLower().Contains(text, StringComparison.OrdinalIgnoreCase))).ToList();
+                vendorWFAs = vendorWFAs.Where(x => x.TaxId.CheckNullAndApplyLower().Contains(text) ||
+                                              x.BusinessCategory.CheckNullAndApplyLower().Contains(text) ||
+                                              x.CompanyAddress.CheckNullAndApplyLower().Contains(text) ||
+                                              x.Country.CheckNullAndApplyLower().Contains(text) ||
+                                              x.Description.CheckNullAndApplyLower().Contains(text) ||
+                                              x.PrequalificationCategory.CheckNullAndApplyLower().Contains(text) ||
+                                              x.ProductService.CheckNullAndApplyLower().Contains(text) ||
+                                              x.StatusName.CheckNullAndApplyLower().Contains(text) ||
+                                              x.VendorCode.CheckNullAndApplyLower().Contains(text) ||
+                                              x.VendorName.CheckNullAndApplyLower().Contains(text)).ToList();
             }
 
             List<VendorWFADto> vendorAllDtos = _mapper.Map<List<VendorWFADto>>(vendorWFAs);
