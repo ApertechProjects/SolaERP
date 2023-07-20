@@ -8,6 +8,7 @@ namespace SolaERP.Application.Models
         public List<int> BusinessCategoryId { get; set; }
         public List<int> ProductServiceId { get; set; }
         public List<int> VendorTypeId { get; set; }
+        public string Text { get; set; }
     }
 
 

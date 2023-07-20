@@ -200,6 +200,21 @@ namespace SolaERP.Persistence.Services
         {
             List<VendorWFA> vendorWFAs = await _repository.GetWFAAsync(Convert.ToInt32(userIdentity), filter);
 
+            if (!string.IsNullOrEmpty(filter.Text?.ToString()))
+            {
+                string text = filter.Text.ToLower();
+                vendorWFAs = vendorWFAs.Where(x => ((x.TaxId ?? "").ToLower().Contains(text, StringComparison.OrdinalIgnoreCase) ||
+                                              (x.BusinessCategory ?? "".ToLower().Contains(text, StringComparison.OrdinalIgnoreCase) ||
+                                              x.CompanyAddress.ToLower().Contains(text, StringComparison.OrdinalIgnoreCase) ||
+                                              x.Country.ToLower().Contains(text, StringComparison.OrdinalIgnoreCase) ||
+                                              x.Description.ToLower().Contains(text, StringComparison.OrdinalIgnoreCase) ||
+                                              x.PrequalificationCategory.ToLower().Contains(text, StringComparison.OrdinalIgnoreCase) ||
+                                              x.ProductService.ToLower().Contains(text, StringComparison.OrdinalIgnoreCase) ||
+                                              x.StatusName.ToLower().Contains(text, StringComparison.OrdinalIgnoreCase) ||
+                                              x.VendorCode.ToLower().Contains(text, StringComparison.OrdinalIgnoreCase) ||
+                                              x.VendorName.ToLower().Contains(text, StringComparison.OrdinalIgnoreCase))).ToList();
+            }
+
             List<VendorWFADto> vendorAllDtos = _mapper.Map<List<VendorWFADto>>(vendorWFAs);
             return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
         }
