@@ -364,7 +364,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_VendorsApprove @VendorId,@UserId,@ApproveStatusId,@Comment,@Sequence";
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorsApprove @VendorId,@UserId,@ApproveStatusId,@Comment,@Sequence";
 
 
                 command.Parameters.AddWithValue(command, "@VendorId", model.VendorId);
@@ -372,8 +372,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@ApproveStatusId", model.ApproveStatusId);
                 command.Parameters.AddWithValue(command, "@Comment", model.Comment);
                 command.Parameters.AddWithValue(command, "@Sequence", model.Sequence);
-
-                return await command.ExecuteNonQueryAsync() > 0;
+                var data = await command.ExecuteNonQueryAsync() > 0;
+                return data;
             }
         }
         public async Task<bool> SendToApprove(VendorSendToApproveRequest request)

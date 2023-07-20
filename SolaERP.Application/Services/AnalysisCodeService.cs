@@ -54,18 +54,13 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Fail("Analysis code can not be deleted", 400);
         }
 
-        public async Task<ApiResponse<List<IGrouping<int, AnalysisCodeDto>>>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest)
+        public async Task<ApiResponse<List<AnalysisCodeDto>>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest)
         {
             var analysisCodes = await _analysisCodeRepository.GetAnalysisCodesAsync(getRequest.Businessunitid, getRequest.ProcedureName);
-            List<AnalysisCodeDto> analysis = _mapper.Map<List<AnalysisCodeDto>>(analysisCodes);
+            var analysis = _mapper.Map<List<AnalysisCodeDto>>(analysisCodes);
 
-            var groupingReult = analysis.GroupBy(x => x.Sequence).ToList();
-
-
-            var analysisCodeResult = _mapper.Map<List<AnalysisCodeDto>>(analysisCodes);
-
-            return analysisCodeResult.Count > 0 ? ApiResponse<List<IGrouping<int, AnalysisCodeDto>>>.Success(groupingReult, 200) :
-                  ApiResponse<List<IGrouping<int, AnalysisCodeDto>>>.Fail("analysisCodes", "Analysis codes is empty", 404, true);
+            return analysis.Count > 0 ? ApiResponse<List<AnalysisCodeDto>>.Success(analysis, 200) :
+                  ApiResponse<List<AnalysisCodeDto>>.Fail("analysisCodes", "Analysis codes is empty", 404, true);
         }
 
         public async Task<ApiResponse<List<AnalysisDto>>> GetAnalysisCodesAsync(int dimensionId, string userName)

@@ -44,7 +44,9 @@ namespace SolaERP.Persistence.Services
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
             model.UserId = user.Id;
-            return ApiResponse<bool>.Success(await _repository.ApproveAsync(model), 200);
+            var result = await _repository.ApproveAsync(model);
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(result, 200);
         }
         public async Task<ApiResponse<bool>> ChangeStatusAsync(VendorStatusModel taxModel, string userIdentity)
         {
