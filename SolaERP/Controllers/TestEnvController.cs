@@ -45,7 +45,7 @@ namespace SolaERP.API.Controllers
         //public async Task<IActionResult> TestDueDiligence()
         //{
 
-        //    //return Ok(await _supplierEvaluationService.GetAllAsync());
+        //    //return Ok(await _supplierEvaluationService.GetStatusList());
         //}
 
     }
