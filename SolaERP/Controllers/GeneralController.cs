@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SolaERP.Application.Contracts.Services;
 using SolaERP.Business.CommonLogic;
 using SolaERP.Business.Dtos.Wrappers;
 using SolaERP.Business.Models;
@@ -9,11 +10,13 @@ namespace SolaERP.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
-    public class GeneralController : ControllerBase
+    public class GeneralController : CustomBaseController
     {
-        public GeneralController(ConfHelper confHelper)
+        private readonly IStatusService _statusService;
+        public GeneralController(ConfHelper confHelper, IStatusService statusService)
         {
             ConfHelper = confHelper;
+            _statusService = statusService;
         }
 
         public ConfHelper ConfHelper { get; }
@@ -79,6 +82,8 @@ namespace SolaERP.Controllers
             return await new EntityLogic(ConfHelper).GetGroupAdditionalPrivileges(token, groupId);
         }
 
-
+        [HttpGet]
+        public async Task<IActionResult> GetStatusList()
+           => CreateActionResult(await _statusService.GetAllAsync());
     }
 }
