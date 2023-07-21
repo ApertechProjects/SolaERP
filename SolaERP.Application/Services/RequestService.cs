@@ -195,7 +195,7 @@ namespace SolaERP.Persistence.Services
                 {
                     var requestDetailDto = model.Details[i];
                     requestDetailDto.RequestMainId = resultModel.RequestMainId;
-                    if (requestDetailDto.Type == "remove" && requestDetailDto.RequestDetailId > 0)
+                    if (requestDetailDto.Type == Application.Enums.OperationType.Delete && requestDetailDto.RequestDetailId > 0)
                     {
                         await RemoveDetailAsync(requestDetailDto.RequestDetailId);
                     }
