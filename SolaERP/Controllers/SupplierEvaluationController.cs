@@ -15,28 +15,28 @@ namespace SolaERP.API.Controllers
         public SupplierEvaluationController(ISupplierEvaluationService service) => _service = service;
 
 
-        [HttpGet("[action]")]
-        public async Task<IActionResult> InitReg()
-            => CreateActionResult(await _service.GetInitRegistrationAsync(User.Identity.Name));
+        [HttpGet]
+        public async Task<IActionResult> InitReg(int? vendorId = null)
+            => CreateActionResult(await _service.GetInitRegistrationAsync(User.Identity.Name, vendorId));
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> NonDisclosureAgreement()
-            => CreateActionResult(await _service.GetNDAAsync(User.Identity.Name));
+        public async Task<IActionResult> NonDisclosureAgreement(int? vendorId = null)
+            => CreateActionResult(await _service.GetNDAAsync(User.Identity.Name, vendorId));
 
         [HttpGet("[action]")]
         public async Task<IActionResult> CodeOfBuConduct()
             => CreateActionResult(await _service.GetCOBCAsync(User.Identity.Name));
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> BankDetails()
-            => CreateActionResult(await _service.GetBankDetailsAsync(User.Identity.Name));
+        public async Task<IActionResult> BankDetails(int? vendorId = null)
+            => CreateActionResult(await _service.GetBankDetailsAsync(User.Identity.Name, vendorId));
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> DueDiligence()
-           => CreateActionResult(await _service.GetDueDiligenceAsync(User.Identity.Name, Request.Headers.AcceptLanguage));
+        public async Task<IActionResult> DueDiligence(int? vendorId = null)
+           => CreateActionResult(await _service.GetDueDiligenceAsync(User.Identity.Name, Request.Headers.AcceptLanguage, vendorId));
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> Prequalification([FromQuery] List<int> ids)
+        public async Task<IActionResult> Prequalification([FromQuery] List<int> ids, int? vendorId = null)
             => CreateActionResult(await _service.GetPrequalificationAsync(User.Identity.Name, ids, Request.Headers.AcceptLanguage));
 
         [HttpPost]
