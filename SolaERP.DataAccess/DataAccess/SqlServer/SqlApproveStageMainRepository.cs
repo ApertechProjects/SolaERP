@@ -4,6 +4,7 @@ using SolaERP.Application.Entities.ApproveStages;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
+using System;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
@@ -20,7 +21,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
-        public async Task<int> AddAsync(ApproveStagesMain entity, int userId = 0)
+        public async Task<int> AddAsync(ApprovalStagesMain entity, int userId = 0)
         {
             throw new NotImplementedException();
         }
@@ -68,14 +69,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public Task<List<ApproveStagesMain>> GetAllAsync()
+        public Task<List<ApprovalStagesMain>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ApproveStagesMain> GetApprovalStageHeaderLoad(int approvalStageMainId)
+        public async Task<ApprovalStagesMain> GetApprovalStageHeaderLoad(int approvalStageMainId)
         {
-            ApproveStagesMain approveStagesMain = null;
+            ApprovalStagesMain approveStagesMain = null;
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "EXEC dbo.SP_ApproveStageHeader_Load_BY_MainId @approvalStageMainId";
@@ -106,9 +107,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         }
 
-        public async Task<List<ApproveStagesMain>> GetByBusinessUnitId(int buId)
+        public async Task<List<ApprovalStagesMain>> GetByBusinessUnitId(int buId)
         {
-            List<ApproveStagesMain> approveStagesMain = new List<ApproveStagesMain>();
+            List<ApprovalStagesMain> approveStagesMain = new List<ApprovalStagesMain>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "Exec dbo.SP_ApproveStageMain_Load_BY_BU @BuId";
@@ -117,7 +118,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 while (reader.Read())
-                    approveStagesMain.Add(reader.GetByEntityStructure<ApproveStagesMain>("BusinessUnitId"));
+                    approveStagesMain.Add(reader.GetByEntityStructure<ApprovalStagesMain>("BusinessUnitId"));
 
                 return approveStagesMain;
             }
@@ -152,14 +153,32 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public Task<int> UpdateAsync(ApproveStagesMain entity, int userId)
+        public async Task<List<ApprovalStages>> Stages(int businessUnitId, string procedureKey)
+        {
+            List<ApprovalStages> approveStagesMain = new List<ApprovalStages>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "Exec dbo.SP_ApproveStages_List @procedureKey, @businessUnitId";
+                command.Parameters.AddWithValue(command, "@procedureKey", procedureKey);
+                command.Parameters.AddWithValue(command, "@businessUnitId", businessUnitId);
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    approveStagesMain.Add(reader.GetByEntityStructure<ApprovalStages>());
+
+                return approveStagesMain;
+            }
+        }
+
+        public Task<int> UpdateAsync(ApprovalStagesMain entity, int userId)
         {
             throw new NotImplementedException();
         }
 
-        private ApproveStagesMain GetFromReader(IDataReader reader)
+        private ApprovalStagesMain GetFromReader(IDataReader reader)
         {
-            return new ApproveStagesMain
+            return new ApprovalStagesMain
             {
                 ApproveStageMainId = reader.Get<int>("ApproveStageMainId"),
                 ApproveStageName = reader.Get<string>("ApproveStageName"),

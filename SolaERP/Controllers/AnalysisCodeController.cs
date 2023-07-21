@@ -24,6 +24,10 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _analysisCodeService.GetAnalysisCodesAsync(getRequest));
 
         [HttpGet("{dimensionId}")]
+        public async Task<IActionResult> AnalysisCodes(int dimensionId)
+         => CreateActionResult(await _analysisCodeService.GetAnalysisCodeListAsync(dimensionId, User.Identity.Name));
+
+        [HttpGet("{dimensionId}")]
         public async Task<IActionResult> ByDimension(int dimensionId)
             => CreateActionResult(await _analysisCodeService.GetAnalysisCodesAsync(dimensionId, User.Identity.Name));
 
@@ -39,6 +43,7 @@ namespace SolaERP.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(AnalysisCodeDeleteModel model)
            => CreateActionResult(await _analysisCodeService.DeleteAnalysisCodeAsync(model, User.Identity.Name));
+
 
     }
 }

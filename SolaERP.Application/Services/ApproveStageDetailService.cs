@@ -22,11 +22,11 @@ namespace SolaERP.Persistence.Services
         }
 
 
-        public async Task<ApiResponse<List<ApproveStagesDetailDto>>> GetDetailByIdAsync(int approveStageMainId)
+        public async Task<ApiResponse<List<ApprovalStagesDetailDto>>> GetDetailByIdAsync(int approveStageMainId)
         {
             var approveDetailById = await _approveStageDetailsRepository.GetByMainIdAsync(approveStageMainId);
-            var dto = _mapper.Map<List<ApproveStagesDetailDto>>(approveDetailById);
-            return ApiResponse<List<ApproveStagesDetailDto>>.Success(dto, 200);
+            var dto = _mapper.Map<List<ApprovalStagesDetailDto>>(approveDetailById);
+            return ApiResponse<List<ApprovalStagesDetailDto>>.Success(dto, 200);
         }
 
         public async Task<ApiResponse<bool>> RemoveAsync(int Id)

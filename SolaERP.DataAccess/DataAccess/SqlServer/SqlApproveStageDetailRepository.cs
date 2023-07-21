@@ -18,11 +18,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<List<ApproveStagesDetail>> GetByMainIdAsync(int approveStageMainId)
+        public async Task<List<ApprovalStagesDetail>> GetByMainIdAsync(int approveStageMainId)
         {
             var result = await Task.Run(() =>
             {
-                List<ApproveStagesDetail> approveStagesDetail = new List<ApproveStagesDetail>();
+                List<ApprovalStagesDetail> approveStagesDetail = new List<ApprovalStagesDetail>();
 
                 using (var command = _unitOfWork.CreateCommand())
                 {
@@ -33,7 +33,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                     while (reader.Read())
                     {
-                        approveStagesDetail.Add(reader.GetByEntityStructure<ApproveStagesDetail>());
+                        approveStagesDetail.Add(reader.GetByEntityStructure<ApprovalStagesDetail>());
                     }
                     return approveStagesDetail;
                 }
@@ -41,7 +41,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return result;
         }
 
-        public Task<ApproveStagesDetail> GetByIdAsync(int id)
+        public Task<ApprovalStagesDetail> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
@@ -62,12 +62,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public Task UpdateAsync(ApproveStagesDetail entity)
+        public Task UpdateAsync(ApprovalStagesDetail entity)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<int> AddRangeAsync(List<ApproveStagesDetail> entities)
+        public async Task<int> AddRangeAsync(List<ApprovalStagesDetail> entities)
         {
             string query = "exec SP_ApproveStagesDetails_IUD @approveStageDetailId,@approveStageMainId,@approveStageDetailName,@sequence";
 

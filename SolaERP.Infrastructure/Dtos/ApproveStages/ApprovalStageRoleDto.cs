@@ -1,6 +1,6 @@
 ﻿namespace SolaERP.Application.Dtos.ApproveStages
 {
-    public class ApproveStageRoleDto
+    public class ApprovalStageRoleDto
     {
         public int Id { get; set; }
         public int ApproveStageDetailId { get; set; }

@@ -85,6 +85,10 @@ namespace SolaERP.Controllers
         [HttpDelete("{requestFollowId}")]
         public async Task<IActionResult> DeleteFollowUser(int requestFollowId)
             => CreateActionResult(await _requestService.DeleteFollowUserAsync(requestFollowId));
+
+        [HttpGet("{keyCode}/{businessUnitId}")]
+        public async Task<IActionResult> GetDefaultApprovalStage(string keyCode, int businessUnitId) //return data by Request Type(SR/LR/PR/RR)
+            => CreateActionResult(await _requestService.GetDefaultApprovalStage(keyCode, businessUnitId));
     }
 }
 

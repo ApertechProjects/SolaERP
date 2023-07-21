@@ -17,9 +17,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<List<ApproveStageRole>> GetByDetailIdAsync(int approveStageDetailId)
+        public async Task<List<ApprovalStageRole>> GetByDetailIdAsync(int approveStageDetailId)
         {
-            List<ApproveStageRole> approveStageRoles = new List<ApproveStageRole>();
+            List<ApprovalStageRole> approveStageRoles = new List<ApprovalStageRole>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "EXEC dbo.SP_ApproveStageRoles_Load @approveStageDetailsId";
@@ -33,7 +33,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public Task<ApproveStageRole> GetByIdAsync(int id)
+        public Task<ApprovalStageRole> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
@@ -52,12 +52,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public Task<int> UpdateAsync(ApproveStageRole entity, int userId = 0)
+        public Task<int> UpdateAsync(ApprovalStageRole entity, int userId = 0)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<int> AddAsync(ApproveStageRole entity)
+        public async Task<int> AddAsync(ApprovalStageRole entity)
         {
             string query = "SET NOCOUNT OFF exec SP_ApproveStageRoles_IUD  @approveStageRoleId,@approveStageDetailId,@approveRoleId,@amountFrom,@amountTo";
 
@@ -74,9 +74,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        private ApproveStageRole GetFromReader(IDataReader reader)
+        private ApprovalStageRole GetFromReader(IDataReader reader)
         {
-            return new ApproveStageRole
+            return new ApprovalStageRole
             {
                 Id = reader.Get<int>("Id"),
                 ApproveStageDetailId = reader.Get<int>("ApproveStageDetailId"),

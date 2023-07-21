@@ -2,7 +2,7 @@
 
 namespace SolaERP.Application.Models
 {
-    public class VendorFilter
+    public class VendorFilter : BaseFilterModel
     {
         public List<int> PrequalificationCategoryId { get; set; }
         public List<int> BusinessCategoryId { get; set; }

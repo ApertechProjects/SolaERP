@@ -187,6 +187,7 @@ namespace SolaERP.Persistence.Services
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var users = await _userRepository.GetUserWFAAsync(userId, userStatus, userType, page, limit);
+
             var dto = _mapper.Map<List<UserMainDto>>(users.Item2);
 
             if (dto.Count > 0)

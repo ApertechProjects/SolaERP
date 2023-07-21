@@ -4,10 +4,10 @@ using SolaERP.Application.Dtos.Shared;
 namespace SolaERP.Application.Contracts.Services
 {
     public interface IApproveStageRoleService :
-        ICrudService<ApproveStageRoleDto>,
-        ILoggableCrudService<ApproveStageRoleDto>
+        ICrudService<ApprovalStageRoleDto>,
+        ILoggableCrudService<ApprovalStageRoleDto>
     //IReturnableAddAsync<ApproveStageRoleDto>
     {
-        Task<ApiResponse<List<ApproveStageRoleDto>>> GetRoleAsync(int approveStageDetailsId);
+        Task<ApiResponse<List<ApprovalStageRoleDto>>> GetRoleAsync(int approveStageDetailsId);
     }
 }

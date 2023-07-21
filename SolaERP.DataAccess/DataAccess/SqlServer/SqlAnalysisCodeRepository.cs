@@ -19,7 +19,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> DeleteAnalysisCodeAsync(int analysisCodeId,int userId)
+        public async Task<bool> DeleteAnalysisCodeAsync(int analysisCodeId, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
@@ -44,19 +44,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<AnalysisCode>> GetAnalysisCodesAsync(int businessUnitId, string procedureName)
+        public async Task<AnalysisCode> GetAnalysisCodesAsync(int businessUnitId, string procedureName, int catId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_AnalisisCodesList @BusinessUnitId,@ProcedureName";
+                command.CommandText = "EXEC SP_AnalisisCodesList @BusinessUnitId,@ProcedureName,@CatId";
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
                 command.Parameters.AddWithValue(command, "@ProcedureName", procedureName);
+                command.Parameters.AddWithValue(command, "@CatId", catId);
 
                 using var reader = await command.ExecuteReaderAsync();
-                List<AnalysisCode> resultList = new();
+                AnalysisCode resultList = new();
 
                 while (reader.Read())
-                    resultList.Add(reader.GetByEntityStructure<AnalysisCode>());
+                    resultList = reader.GetByEntityStructure<AnalysisCode>();
 
                 return resultList;
             }
@@ -66,8 +67,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_AnalysisCodes_Load @analysisCodeId,@userId";
-                command.Parameters.AddWithValue(command, "@analysisCodeId", analysisCodeId);
+                command.CommandText = "EXEC SP_AnalysisCodes_Load @analysisDimensionId,@userId";
+                command.Parameters.AddWithValue(command, "@analysisDimensionId", analysisCodeId);
                 command.Parameters.AddWithValue(command, "@userId", userId);
 
                 using var reader = await command.ExecuteReaderAsync();

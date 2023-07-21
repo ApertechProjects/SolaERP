@@ -3,7 +3,7 @@ using SolaERP.Application.Dtos.ApproveStages;
 
 namespace SolaERP.Application.Validations.ApproveStageValidation
 {
-    public class ApproveStageRoleValidation : AbstractValidator<ApproveStageRoleDto>
+    public class ApproveStageRoleValidation : AbstractValidator<ApprovalStageRoleDto>
     {
         public ApproveStageRoleValidation()
         {

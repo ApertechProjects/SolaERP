@@ -5,6 +5,8 @@ using SolaERP.Application.Dtos.AnalysisCode;
 using SolaERP.Application.Dtos.AnaysisDimension;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Entities.AnalysisCode;
+using SolaERP.Application.Entities.AnalysisDimension;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 
@@ -54,13 +56,42 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Fail("Analysis code can not be deleted", 400);
         }
 
-        public async Task<ApiResponse<List<AnalysisCodeDto>>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest)
+        public async Task<ApiResponse<List<AnalysisListDto>>> GetAnalysisCodeListAsync(int dimensionId, string userName)
         {
-            var analysisCodes = await _analysisCodeRepository.GetAnalysisCodesAsync(getRequest.Businessunitid, getRequest.ProcedureName);
-            var analysis = _mapper.Map<List<AnalysisCodeDto>>(analysisCodes);
+            var userId = await _userRepository.ConvertIdentity(userName);
+            var analysisCodes = await _analysisCodeRepository.GetAnalysisCodesAsync(dimensionId, userId);
+            var analysisListDtos = analysisCodes.Select(x => new AnalysisListDto
+            {
+                AnalysisCodesId = x.AnalysisCodesId,
+                AnalysisCode = x.AnalysisCode,
+                AnalysisName = x.AnalysisName
+            }).ToList();
+            if (analysisListDtos.Count == 0)
+                return ApiResponse<List<AnalysisListDto>>.Fail("Data not found", 404);
+            return ApiResponse<List<AnalysisListDto>>.Success(analysisListDtos);
+        }
 
-            return analysis.Count > 0 ? ApiResponse<List<AnalysisCodeDto>>.Success(analysis, 200) :
-                  ApiResponse<List<AnalysisCodeDto>>.Fail("analysisCodes", "Analysis codes is empty", 404, true);
+        public async Task<ApiResponse<AnalysisCodeDto>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest)
+        {
+            var analysisCodes = await _analysisCodeRepository.GetAnalysisCodesAsync(getRequest.BusinessUnitId, getRequest.ProcedureName, getRequest.CatId);
+            //AnalysisCode1 analysisCode1 = new AnalysisCode1 { AnalysisDimensionCode1 = analysisCodes.AnalysisDimensionCode1, AnalysisDimensionName1 = analysisCodes.AnalysisDimensionName1 };
+
+            var analysis = _mapper.Map<AnalysisCodeDto>(analysisCodes);
+            //var groupedData = analysis.GroupBy(d => d.AnalysisDimensionId1)
+            //                        .Select(group =>
+            //                        {
+            //                            return new AnalysisCode1
+            //                            {
+            //                                AnalysisDimensionCode1 = group.First().AnalysisDimensionCode1,
+            //                                AnalysisDimensionName1 = group.First().AnalysisDimensionName1
+            //                            };
+
+            //                        })
+            //                        .ToList();
+
+
+            return analysis != null ? ApiResponse<AnalysisCodeDto>.Success(analysis, 200) :
+                  ApiResponse<AnalysisCodeDto>.Fail("analysisCodes", "Analysis codes is empty", 404, true);
         }
 
         public async Task<ApiResponse<List<AnalysisDto>>> GetAnalysisCodesAsync(int dimensionId, string userName)
