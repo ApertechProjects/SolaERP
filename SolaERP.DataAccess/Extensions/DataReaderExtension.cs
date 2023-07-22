@@ -107,8 +107,6 @@ namespace SolaERP.DataAccess.Extensions
             return scriptBuilder.ToString();
         }
 
-
-
         private static string GetReaderGetMethod(string propertyType)
         {
             switch (propertyType)
@@ -128,6 +126,34 @@ namespace SolaERP.DataAccess.Extensions
                     throw new ArgumentException($"Unsupported property type: {propertyType}");
             }
         }
+
+        public static List<T> GetDataByFilter<T>(this List<T> list, string filter)
+        {
+            if (string.IsNullOrEmpty(filter))
+                return list;
+
+            List<T> values = new List<T>();
+            filter = filter.ToLower();
+            var properties = typeof(T).GetProperties();
+            foreach (var item in list)
+            {
+                foreach (PropertyInfo property in properties)
+                {
+                    if (property.PropertyType == typeof(String) && property.GetValue(item, null).ToString().CheckNullAndApplyLower().Contains(filter))
+                    {
+                        values.Add(item);
+                    }
+                }
+            }
+            return values;
+        }
+
+        public static string CheckNullAndApplyLower(this string value)
+        {
+            value = value ?? "";
+            return value.ToLower();
+        }
+
 
     }
 }

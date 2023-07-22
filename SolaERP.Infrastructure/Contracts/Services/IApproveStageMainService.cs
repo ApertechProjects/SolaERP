@@ -3,9 +3,9 @@ using SolaERP.Application.Dtos.Shared;
 
 namespace SolaERP.Application.Contracts.Services
 {
-    public interface IApproveStageMainService : ICrudService<ApproveStagesMainDto>, ILoggableCrudService<ApproveStagesMainDto>
+    public interface IApproveStageMainService : ICrudService<ApprovalStagesMainDto>, ILoggableCrudService<ApprovalStagesMainDto>
     {
-        Task<ApiResponse<ApproveStagesMainDto>> GetApproveStageMainByApprovalStageMainId(int approveStageMainId);
-        Task<ApiResponse<List<ApproveStagesMainDto>>> GetByBusinessUnitId(int buId);
+        Task<ApiResponse<ApprovalStagesMainDto>> GetApproveStageMainByApprovalStageMainId(int approveStageMainId);
+        Task<ApiResponse<List<ApprovalStagesMainDto>>> GetByBusinessUnitId(int buId);
     }
 }

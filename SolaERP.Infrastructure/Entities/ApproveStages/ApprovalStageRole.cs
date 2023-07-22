@@ -1,6 +1,6 @@
 ﻿namespace SolaERP.Application.Entities.ApproveStage
 {
-    public class ApproveStageRole : BaseEntity
+    public class ApprovalStageRole : BaseEntity
     {
         public int Id { get; set; }
         public int ApproveStageDetailId { get; set; }

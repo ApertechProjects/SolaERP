@@ -2,8 +2,8 @@
 
 namespace SolaERP.Application.Contracts.Repositories
 {
-    public interface IApproveStageRoleRepository : IReturnableAddAsync<ApproveStageRole>
+    public interface IApproveStageRoleRepository : IReturnableAddAsync<ApprovalStageRole>
     {
-        Task<List<ApproveStageRole>> GetByDetailIdAsync(int detailId);
+        Task<List<ApprovalStageRole>> GetByDetailIdAsync(int detailId);
     }
 }

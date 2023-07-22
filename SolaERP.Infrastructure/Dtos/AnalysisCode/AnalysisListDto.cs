@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Dtos.AnalysisCode
 {
-    public class AnalysisCodeWithSequenceDto
+    public class AnalysisListDto
     {
-        public int Sequence { get; set; }
-        public List<AnalysisCodeDto> AnalysisCodes { get; set; }
+        public int AnalysisCodesId { get; set; }
+        public string AnalysisCode { get; set; }
+        public string AnalysisName { get; set; }
     }
 }

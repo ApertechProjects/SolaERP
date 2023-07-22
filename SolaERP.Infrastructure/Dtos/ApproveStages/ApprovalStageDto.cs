@@ -4,13 +4,13 @@
 
 namespace SolaERP.Application.Dtos.ApproveStages
 {
-    public class ApprovalStageDto : ApproveStagesMainDto
+    public class ApprovalStageDto : ApprovalStagesMainDto
     {
         public List<ApprovalStageDetailDto> Details { get; set; }
     }
 
 
-    public class ApprovalStageDetailDto : ApproveStagesDetailDto
+    public class ApprovalStageDetailDto : ApprovalStagesDetailDto
     {
     }
 

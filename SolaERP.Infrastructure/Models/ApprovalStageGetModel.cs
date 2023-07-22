@@ -17,6 +17,6 @@ namespace SolaERP.Application.Models
         public bool ReApproveOnChange { get; set; }
         public object CreatedUser { get; set; }
         public DateTime CreatedDate { get; set; }
-        public List<ApproveStagesDetailDto> MyProperty { get; set; }
+        public List<ApprovalStagesDetailDto> MyProperty { get; set; }
     }
 }

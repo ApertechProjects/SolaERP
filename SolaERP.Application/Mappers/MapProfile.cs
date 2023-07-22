@@ -77,18 +77,18 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<Groups, GroupsDto>().ReverseMap();
             CreateMap<GroupUser, GroupUserDto>().ReverseMap();
             CreateMap<MenuWithPrivilagesDto, MenuWithPrivilages>().ReverseMap();
-            CreateMap<ApproveStagesMain, ApproveStagesMainDto>()
+            CreateMap<ApprovalStagesMain, ApprovalStagesMainDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ApproveStageMainId))
                 .ReverseMap();
-            CreateMap<ApproveStagesMain, ApprovalStageDto>()
+            CreateMap<ApprovalStagesMain, ApprovalStageDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ApproveStageMainId))
                 .ReverseMap();
-            CreateMap<ApproveStagesDetail, ApprovalStageDetailDto>()
+            CreateMap<ApprovalStagesDetail, ApprovalStageDetailDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ApproveStageDetailsId))
                 .ReverseMap();
-            CreateMap<ApproveStagesDetail, ApproveStagesDetailDto>().ReverseMap();
+            CreateMap<ApprovalStagesDetail, ApprovalStagesDetailDto>().ReverseMap();
             CreateMap<Procedure, ProcedureDto>().ReverseMap();
-            CreateMap<ApproveStageRole, ApproveStageRoleDto>().ReverseMap();
+            CreateMap<ApprovalStageRole, ApprovalStageRoleDto>().ReverseMap();
             //CreateMap<ApproveStageRole, ApprovalStageRoleDto>().ReverseMap();
             CreateMap<Role, ApproveRoleDto>().ReverseMap();
             CreateMap<ApproveRole, ApproveRoleDto>().ReverseMap();
@@ -110,7 +110,6 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<Status, StatusDto>().ReverseMap();
             CreateMap<Buyer, BuyerDto>().ReverseMap();
             CreateMap<ActiveUser, ActiveUserDto>().ReverseMap();
-            CreateMap<AnalysisCode, AnalysisCodeDto>().ReverseMap();
             CreateMap<AnalysisCodes, AnalysisCodesDto>().ReverseMap();
             CreateMap<RequestApprovalInfo, RequestApprovalInfoDto>().ReverseMap();
             CreateMap<RequestDetail, RequestDetailsWithAnalysisCodeDto>().ReverseMap();
@@ -321,7 +320,7 @@ namespace SolaERP.Persistence.Mappers
 
 
             CreateMap<AnalysisStructureWithBu, AnalysisStructureWithBuDto>().ReverseMap();
-            CreateMap<ApproveStageMainInputModel, ApproveStagesMain>().ReverseMap();
+            CreateMap<ApproveStageMainInputModel, ApprovalStagesMain>().ReverseMap();
 
             CreateMap<VendorCard, VendorCardDto>()
                 .ForMember(dest => dest.VendorId, opt => opt.MapFrom(src => src.VendorId))
@@ -381,6 +380,7 @@ namespace SolaERP.Persistence.Mappers
                 .ReverseMap();
 
             CreateMap<GridLayout, GridLayoutDto>().ReverseMap();
+            CreateMap<AnalysisCode, AnalysisCodeDto>().ReverseMap();
         }
     }
 }

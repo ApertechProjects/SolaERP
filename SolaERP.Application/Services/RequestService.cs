@@ -195,7 +195,7 @@ namespace SolaERP.Persistence.Services
                 {
                     var requestDetailDto = model.Details[i];
                     requestDetailDto.RequestMainId = resultModel.RequestMainId;
-                    if (requestDetailDto.Type == "remove" && requestDetailDto.RequestDetailId > 0)
+                    if (requestDetailDto.Type == Application.Enums.OperationType.Delete && requestDetailDto.RequestDetailId > 0)
                     {
                         await RemoveDetailAsync(requestDetailDto.RequestDetailId);
                     }
@@ -300,17 +300,16 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(result, 200);
         }
 
-        public Task PushNotfication(string[] tos, string messageBody, string subject)
-        {
-            throw new NotImplementedException();
-        }
-
-
         private async Task<string[]> GetFollowUserEmailsForRequestAsync(int requestMainId)
         {
             var data = await _requestMainRepository.RequestFollowUserLoadAsync(requestMainId);
             return data.Select(x => x.Email).ToArray();
         }
 
+        public async Task<ApiResponse<int>> GetDefaultApprovalStage(string keyCode, int businessUnitId)
+        {
+            var data = await _requestMainRepository.GetDefaultApprovalStage(keyCode, businessUnitId);
+            return ApiResponse<int>.Success(data, 200);
+        }
     }
 }
