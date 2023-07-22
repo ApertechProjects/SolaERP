@@ -61,6 +61,7 @@ using SolaERP.Application.Entities.UOM;
 using SolaERP.Application.Entities.User;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Models;
+using SolaERP.Persistence.Services;
 
 namespace SolaERP.Persistence.Mappers
 {
@@ -68,7 +69,7 @@ namespace SolaERP.Persistence.Mappers
     {
         public MapProfile()
         {
-            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<User, UserDto>().ForMember(dest => dest.UserType, opt => opt.MapFrom(src => src.UserTypeId)).ReverseMap();
             CreateMap<User, UserRegisterModel>().ReverseMap();
             CreateMap<BusinessUnits, BusinessUnitsAllDto>().ReverseMap();
             CreateMap<BusinessUnits, BusinessUnitsDto>().ReverseMap();
