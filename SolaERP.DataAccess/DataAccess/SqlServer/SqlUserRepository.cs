@@ -315,12 +315,10 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             int totalDataCount = 0;
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec SP_UsersAll @UserType,@UserStatus,@UserId,@Limit,@Page, @count OUTPUT";
+                command.CommandText = "exec SP_UsersAll @UserType,@UserStatus,@UserId, @count OUTPUT";
 
                 command.Parameters.AddWithValue(command, "@UserType", userType is -1 ? "%" : string.Join(',', userType));
                 command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
-                command.Parameters.AddWithValue(command, "@Limit", 100);
-                command.Parameters.AddWithValue(command, "@Page", page);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 var totalDataCountParam = new SqlParameter("@count", SqlDbType.Int) { Direction = ParameterDirection.Output };
