@@ -8,7 +8,8 @@ namespace SolaERP.Application.Contracts.Services
     public interface IAnalysisCodeService
     {
         Task<ApiResponse<bool>> DeleteAnalysisCodeAsync(AnalysisCodeDeleteModel model, string name);
-        public Task<ApiResponse<AnalysisCodeDto>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest);
+        public Task<ApiResponse<List<AnalysisCodeModel>>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest);
+        //public Task<ApiResponse<List<IGrouping<int,AnalysisCodeModel>>>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest);
         public Task<ApiResponse<List<AnalysisListDto>>> GetAnalysisCodeListAsync(int dimensionId, string userName);
         public Task<ApiResponse<List<AnalysisDto>>> GetAnalysisCodesAsync(int dimensionId, string userName);
         Task<ApiResponse<List<AnalysisWithBuDto>>> GetByBUIdAsync(int businessUnitId, string userName);

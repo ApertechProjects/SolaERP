@@ -62,6 +62,7 @@ using SolaERP.Application.Entities.User;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Models;
 using SolaERP.Persistence.Services;
+using AnalysisCodes = SolaERP.Application.Entities.AnalysisCode.AnalysisCodes;
 
 namespace SolaERP.Persistence.Mappers
 {
