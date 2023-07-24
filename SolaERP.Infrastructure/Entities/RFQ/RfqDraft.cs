@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Entities.RFQ
 {
-    internal class RfqDraft
+    public class RfqDraft
     {
     }
 }
