@@ -42,8 +42,8 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _userService.GetUserWFAAsync(User.Identity.Name, userStatus, userType, page, limit));
 
         [HttpGet]
-        public async Task<IActionResult> GetUserAllAsync(int userStatus, int userType, int page, int limit)
-        => CreateActionResult(await _userService.GetUserAllAsync(User.Identity.Name, userStatus, userType, page, limit));
+        public async Task<IActionResult> GetUserAllAsync(int userStatus, int userType, string text, int page, int limit)
+        => CreateActionResult(await _userService.GetUserAllAsync(User.Identity.Name, userStatus, userType, text, page, limit));
 
         [HttpGet]
         public async Task<IActionResult> GetUserCompanyAsync([FromQuery] int userStatus, int page, int limit)
