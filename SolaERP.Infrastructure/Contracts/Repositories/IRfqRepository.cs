@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Contracts.Repositories
 {
-    internal interface IRfqRepository
+    public interface IRfqRepository
     {
     }
 }
