@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Models
 {
-    internal class RfqFilter
+    public class RfqFilter
     {
+        public int BusinessUnitId { get; set; }
+        public string ItemCode { get; set; }
+        public string Emergency { get; set; }
+        public DateTime DateFrom { get; set; }
+        public DateTime DateTo { get; set; }
+        public string RFQType { get; set; }
+        public string ProcurementType { get; set; }
     }
 }
