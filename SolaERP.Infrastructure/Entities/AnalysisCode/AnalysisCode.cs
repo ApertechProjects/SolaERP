@@ -4,6 +4,7 @@ namespace SolaERP.Application.Entities.AnalysisCode
 {
     public class AnalysisCode : BaseEntity
     {
+        public int CatId { get; set; }
         public int AnalysisDimensionId1 { get; set; }
         public string AnalysisDimensionCode1 { get; set; }
         public string AnalysisDimensionName1 { get; set; }

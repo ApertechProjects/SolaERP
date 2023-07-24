@@ -7,6 +7,7 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
 using System.Data.SqlClient;
+using AnalysisCodes = SolaERP.Application.Entities.AnalysisCode.AnalysisCodes;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -44,20 +45,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<AnalysisCode> GetAnalysisCodesAsync(int businessUnitId, string procedureName, int catId)
+        public async Task<List<AnalysisCode>> GetAnalysisCodesAsync(int businessUnitId, string procedureName)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_AnalisisCodesList @BusinessUnitId,@ProcedureName,@CatId";
+                command.CommandText = "EXEC SP_AnalisisCodesList @BusinessUnitId,@ProcedureName";
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
                 command.Parameters.AddWithValue(command, "@ProcedureName", procedureName);
-                command.Parameters.AddWithValue(command, "@CatId", catId);
 
                 using var reader = await command.ExecuteReaderAsync();
-                AnalysisCode resultList = new();
+                List<AnalysisCode> resultList = new();
 
                 while (reader.Read())
-                    resultList = reader.GetByEntityStructure<AnalysisCode>();
+                    resultList.Add(reader.GetByEntityStructure<AnalysisCode>());
 
                 return resultList;
             }
@@ -100,7 +100,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<AnalysisCodes>> GetAnalysisCodesByDimensionIdAsync(int dimensionId)
+        public async Task<List<Application.Entities.AnalysisCode.AnalysisCodes>> GetAnalysisCodesByDimensionIdAsync(int dimensionId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

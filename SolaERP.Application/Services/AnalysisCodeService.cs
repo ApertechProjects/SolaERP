@@ -9,6 +9,7 @@ using SolaERP.Application.Entities.AnalysisDimension;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using System.Collections.Generic;
 
 namespace SolaERP.Persistence.Services
 {
@@ -71,27 +72,72 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<AnalysisListDto>>.Success(analysisListDtos);
         }
 
-        public async Task<ApiResponse<AnalysisCodeDto>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest)
+        public async Task<ApiResponse<List<AnalysisCodeModel>>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest)
         {
-            var analysisCodes = await _analysisCodeRepository.GetAnalysisCodesAsync(getRequest.BusinessUnitId, getRequest.ProcedureName, getRequest.CatId);
-            //AnalysisCode1 analysisCode1 = new AnalysisCode1 { AnalysisDimensionCode1 = analysisCodes.AnalysisDimensionCode1, AnalysisDimensionName1 = analysisCodes.AnalysisDimensionName1 };
+            List<AnalysisCodeModel> analysisCodeModel = new List<AnalysisCodeModel>();
+            var analysisCodes = await _analysisCodeRepository.GetAnalysisCodesAsync(getRequest.BusinessUnitId, getRequest.ProcedureName);
 
-            var analysis = _mapper.Map<AnalysisCodeDto>(analysisCodes);
-            //var groupedData = analysis.GroupBy(d => d.AnalysisDimensionId1)
-            //                        .Select(group =>
-            //                        {
-            //                            return new AnalysisCode1
-            //                            {
-            //                                AnalysisDimensionCode1 = group.First().AnalysisDimensionCode1,
-            //                                AnalysisDimensionName1 = group.First().AnalysisDimensionName1
-            //                            };
+            var analysisCodeModel2 = analysisCodes.Select(analysisCode => new AnalysisCodeModel
+            {
+                CatId = analysisCode.CatId,
+                Analysis = new Analysisis
+                {
+                    AnalysisCode1 = new AnalysisCode1
+                    {
+                        AnalysisDimensionId1 = analysisCode.AnalysisDimensionId1,
+                        AnalysisDimensionCode1 = analysisCode.AnalysisDimensionCode1
+                    },
+                    AnalysisCode2 = new AnalysisCode2
+                    {
+                        AnalysisDimensionId2 = analysisCode.AnalysisDimensionId2,
+                        AnalysisDimensionCode2 = analysisCode.AnalysisDimensionCode2
+                    },
+                    AnalysisCode3 = new AnalysisCode3
+                    {
+                        AnalysisDimensionId3 = analysisCode.AnalysisDimensionId3,
+                        AnalysisDimensionCode3 = analysisCode.AnalysisDimensionCode3
+                    },
+                    AnalysisCode4 = new AnalysisCode4
+                    {
+                        AnalysisDimensionId4 = analysisCode.AnalysisDimensionId4,
+                        AnalysisDimensionCode4 = analysisCode.AnalysisDimensionCode4
+                    },
+                    AnalysisCode5 = new AnalysisCode5
+                    {
+                        AnalysisDimensionId5 = analysisCode.AnalysisDimensionId5,
+                        AnalysisDimensionCode5 = analysisCode.AnalysisDimensionCode5
+                    },
+                    AnalysisCode6 = new AnalysisCode6
+                    {
+                        AnalysisDimensionId6 = analysisCode.AnalysisDimensionId6,
+                        AnalysisDimensionCode6 = analysisCode.AnalysisDimensionCode6
+                    },
+                    AnalysisCode7 = new AnalysisCode7
+                    {
+                        AnalysisDimensionId7 = analysisCode.AnalysisDimensionId7,
+                        AnalysisDimensionCode7 = analysisCode.AnalysisDimensionCode7
+                    },
+                    AnalysisCode8 = new AnalysisCode8
+                    {
+                        AnalysisDimensionId8 = analysisCode.AnalysisDimensionId8,
+                        AnalysisDimensionCode8 = analysisCode.AnalysisDimensionCode8
+                    },
+                    AnalysisCode9 = new AnalysisCode9
+                    {
+                        AnalysisDimensionId9 = analysisCode.AnalysisDimensionId9,
+                        AnalysisDimensionCode9 = analysisCode.AnalysisDimensionCode9
+                    },
+                    AnalysisCode10 = new AnalysisCode10
+                    {
+                        AnalysisDimensionId10 = analysisCode.AnalysisDimensionId10,
+                        AnalysisDimensionCode10 = analysisCode.AnalysisDimensionCode10
+                    },
+                }
+            }).ToList();
 
-            //                        })
-            //                        .ToList();
 
-
-            return analysis != null ? ApiResponse<AnalysisCodeDto>.Success(analysis, 200) :
-                  ApiResponse<AnalysisCodeDto>.Fail("analysisCodes", "Analysis codes is empty", 404, true);
+            return analysisCodeModel != null ? ApiResponse<List<AnalysisCodeModel>>.Success(analysisCodeModel2, 200) :
+                  ApiResponse<List<AnalysisCodeModel>>.Fail("analysisCodes", "Analysis codes is empty", 404, true);
         }
 
         public async Task<ApiResponse<List<AnalysisDto>>> GetAnalysisCodesAsync(int dimensionId, string userName)

@@ -275,7 +275,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 UserId = reader.Get<int>("UserId"),
                 Requester = reader.Get<int>("Requester"),
                 Status = reader.Get<int>("Status"),
-                //SupplierCode = reader.Get<string>("SupplierCode"),
                 RequestComment = reader.Get<string>("RequestComment"),
                 OperatorComment = reader.Get<string>("OperatorComment"),
                 QualityRequired = reader.Get<string>("QualityRequired"),
@@ -284,7 +283,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Destination = reader.Get<int>("Destination"),
                 ApproveStatus = reader.Get<string>("ApproveStatus"),
                 AccountCode = reader.Get<string>("AccountCode"),
-                AccountName = reader.Get<string>("AccountName")
+                AccountName = reader.Get<string>("AccountName"),
+                Buyer = reader.Get<string>("Buyer")
             };
         }
 
