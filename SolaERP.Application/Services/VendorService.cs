@@ -249,32 +249,33 @@ namespace SolaERP.Persistence.Services
                 await _attachment.SaveAttachmentAsync(vendorLogo);
             }
 
-            foreach (var x in vendorDto.BankAccounts)
-            {
-                if (x.Type == 2 && x.Id > 0)
-                    await _repository.DeleteBankDetailsAsync(user.Id, x.Id);
-                else
+            if (vendorDto.BankAccounts is not null)
+                foreach (var x in vendorDto?.BankAccounts)
                 {
-                    var detaildId = await _repository.UpdateBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x));
-                    x.VendorId = vendorId;
-
-                    if (x.AccountVerificationLetter != null)
+                    if (x.Type == 2 && x.Id > 0)
+                        await _repository.DeleteBankDetailsAsync(user.Id, x.Id);
+                    else
                     {
-                        tasks.AddRange(x.AccountVerificationLetter.Select(attachment => //+
+                        var detaildId = await _repository.UpdateBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x));
+                        x.VendorId = vendorId;
+
+                        if (x.AccountVerificationLetter != null)
                         {
-                            if (attachment.Type == 2 && attachment.AttachmentId > 0)
-                                return _attachment.DeleteAttachmentAsync(attachment.AttachmentId);
-                            else
+                            tasks.AddRange(x.AccountVerificationLetter.Select(attachment => //+
                             {
-                                var entity = _mapper.Map<AttachmentSaveModel>(attachment);
-                                entity.SourceId = detaildId;
-                                entity.SourceType = SourceType.VEN_BNK.ToString();
-                                return _attachment.SaveAttachmentAsync(entity);
-                            }
-                        }));
+                                if (attachment.Type == 2 && attachment.AttachmentId > 0)
+                                    return _attachment.DeleteAttachmentAsync(attachment.AttachmentId);
+                                else
+                                {
+                                    var entity = _mapper.Map<AttachmentSaveModel>(attachment);
+                                    entity.SourceId = detaildId;
+                                    entity.SourceType = SourceType.VEN_BNK.ToString();
+                                    return _attachment.SaveAttachmentAsync(entity);
+                                }
+                            }));
+                        }
                     }
                 }
-            }
             await Task.WhenAll(tasks);
 
             await _unitOfWork.SaveChangesAsync();
