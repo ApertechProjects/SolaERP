@@ -378,6 +378,7 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.TaxId, opt => opt.MapFrom(src => src.TaxId))
                 .ForMember(dest => dest.DeliveryTerms, opt => opt.MapFrom(src => src.DeliveryTermId))
                 .ForMember(dest => dest.Tax, opt => opt.MapFrom(src => src.TaxesId))
+                .ForMember(dest => dest._60DaysPayment, opt => opt.MapFrom(src => src.AgreeWithDefaultDays))
                 .ReverseMap();
 
             CreateMap<GridLayout, GridLayoutDto>().ReverseMap();

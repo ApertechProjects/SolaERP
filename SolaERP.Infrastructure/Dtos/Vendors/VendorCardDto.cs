@@ -53,7 +53,7 @@ namespace SolaERP.Application.Dtos.Vendors
         public string RepresentedProducts { get; set; }
         public string RepresentedCompanies { get; set; }
         public int CreditDays { get; set; }
-        public int _60DaysPayment { get; set; }
+        public bool _60DaysPayment { get; set; }
         public int BusinessUnitId { get; set; }
         public string BusinessUnitCode { get; set; }
         public string OtherProducts { get; set; }

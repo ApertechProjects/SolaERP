@@ -516,6 +516,7 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<List<NonDisclosureAgreement>>.Success(result, 200);
         }
+
         public async Task<ApiResponse<List<PrequalificationWithCategoryDto>>> GetPrequalificationAsync(string userIdentity, List<int> categoryIds, string acceptLang)
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
