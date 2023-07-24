@@ -206,6 +206,7 @@ namespace SolaERP.Persistence.Services
                 users.Item2 = users.Item2.GetDataByFilter(text);
                 page = 1;
             }
+
             var dto = _mapper.Map<List<UserMainDto>>(users.Item2);
 
 
