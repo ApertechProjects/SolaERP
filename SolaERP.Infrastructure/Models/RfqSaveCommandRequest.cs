@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using SolaERP.Application.Enums;
+﻿using SolaERP.Application.Enums;
+using System.Text.Json.Serialization;
 
 namespace SolaERP.Application.Models
 {
