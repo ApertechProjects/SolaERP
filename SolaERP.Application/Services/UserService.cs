@@ -13,6 +13,7 @@ using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.ViewModels;
 using SolaERP.Persistence.Utils;
 
@@ -196,10 +197,16 @@ namespace SolaERP.Persistence.Services
 
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string name, int userStatus, int userType, int page, int limit)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string name, int userStatus, int userType, string text, int page, int limit)
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var users = await _userRepository.GetUserAllAsync(userId, userStatus, userType, page, limit);
+            if (!string.IsNullOrEmpty(text))
+            {
+                users.Item2 = users.Item2.GetDataByFilter(text);
+                page = 1;
+            }
+
             var dto = _mapper.Map<List<UserMainDto>>(users.Item2);
 
 
