@@ -24,6 +24,14 @@ namespace SolaERP.Persistence.Services
             _mapper = mapper;
         }
 
+        public async Task<ApiResponse<List<RfqAllDto>>> GetAllAsync(RfqAllFilter filter)
+        {
+            var rfqAlls = await _repository.GetAllAsync(filter);
+            var dto = _mapper.Map<List<RfqAllDto>>(rfqAlls);
+
+            return ApiResponse<List<RfqAllDto>>.Success(dto, 200);
+        }
+
         public async Task<ApiResponse<List<RfqDraftDto>>> GetDraftsAsync(RfqFilter filter)
         {
             var rfqDrafts = await _repository.GetDraftsAsync(filter);

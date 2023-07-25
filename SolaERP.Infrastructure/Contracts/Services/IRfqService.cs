@@ -12,5 +12,6 @@ namespace SolaERP.Application.Contracts.Services
     public interface IRfqService
     {
         Task<ApiResponse<List<RfqDraftDto>>> GetDraftsAsync(RfqFilter filter);
+        Task<ApiResponse<List<RfqAllDto>>> GetAllAsync(RfqAllFilter filter);
     }
 }

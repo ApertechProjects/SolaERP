@@ -11,6 +11,7 @@ namespace SolaERP.Application.Contracts.Repositories
     public interface IRfqRepository
     {
         Task<List<RfqDraft>> GetDraftsAsync(RfqFilter filter);
+        Task<List<RfqAll>> GetAllAsync(RfqAllFilter filter);
 
     }
 }

@@ -9,7 +9,7 @@ namespace SolaERP.Application.Models
         public Emergency Emergency { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
-        public string RFQType { get; set; }
+        public RfqType RFQType { get; set; }
         public ProcurementType ProcurementType { get; set; }
     }
 

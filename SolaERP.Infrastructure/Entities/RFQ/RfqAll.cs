@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Entities.RFQ
 {
-    public class RfqDraft : RFQBase
+    public class RfqAll : RFQBase
     {
+        public string Status { get; set; }
     }
 }
