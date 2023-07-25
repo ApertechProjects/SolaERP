@@ -12,6 +12,11 @@ namespace SolaERP.Application.Contracts.Repositories
     {
         Task<List<RfqDraft>> GetDraftsAsync(RfqFilter filter);
         Task<List<RfqAll>> GetAllAsync(RfqAllFilter filter);
+        Task<List<SingleSourceReasonModel>> GetSingleSourceReasonsAsync();
+
+        Task<int> AddMainAsync(RfqSaveCommandRequest request);
+        Task<int> UpdateMainAsync(RfqSaveCommandRequest request);
+        Task<int> DeleteMainsync(int id, int userId);
 
     }
 }

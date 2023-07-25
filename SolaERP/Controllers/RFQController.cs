@@ -23,5 +23,13 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> GetAll([FromQuery] RfqAllFilter filter)
             => CreateActionResult(await _service.GetAllAsync(filter));
 
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetSingleSourceReasons()
+            => CreateActionResult(await _service.GetSingleSourceReasonsAsync());
+
+        [HttpPost]
+        public async Task<IActionResult> Save(RfqSaveCommandRequest request)
+            => CreateActionResult(await _service.AddRfqMainAsync(request, User.Identity.Name));
+
     }
 }

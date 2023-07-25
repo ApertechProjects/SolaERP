@@ -5,8 +5,7 @@ using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+
 
 namespace SolaERP.Persistence.Services
 {
@@ -24,6 +23,16 @@ namespace SolaERP.Persistence.Services
             _mapper = mapper;
         }
 
+        public async Task<ApiResponse<int>> AddRfqMainAsync(RfqSaveCommandRequest request, string useridentity)
+        {
+            request.UserId = Convert.ToInt32(useridentity);
+            int newMainID = await _repository.AddMainAsync(request);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return ApiResponse<int>.Success(newMainID, 200);
+        }
+
         public async Task<ApiResponse<List<RfqAllDto>>> GetAllAsync(RfqAllFilter filter)
         {
             var rfqAlls = await _repository.GetAllAsync(filter);
@@ -39,5 +48,8 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<List<RfqDraftDto>>.Success(dto, 200);
         }
+
+        public async Task<ApiResponse<List<SingleSourceReasonModel>>> GetSingleSourceReasonsAsync()
+            => ApiResponse<List<SingleSourceReasonModel>>.Success(await _repository.GetSingleSourceReasonsAsync(), 200);
     }
 }
