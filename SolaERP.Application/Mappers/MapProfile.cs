@@ -22,6 +22,7 @@ using SolaERP.Application.Dtos.LogInfo;
 using SolaERP.Application.Dtos.Menu;
 using SolaERP.Application.Dtos.Procedure;
 using SolaERP.Application.Dtos.Request;
+using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Dtos.Status;
 using SolaERP.Application.Dtos.Supplier;
 using SolaERP.Application.Dtos.SupplierEvaluation;
@@ -53,6 +54,7 @@ using SolaERP.Application.Entities.LogInfo;
 using SolaERP.Application.Entities.Menu;
 using SolaERP.Application.Entities.Procedure;
 using SolaERP.Application.Entities.Request;
+using SolaERP.Application.Entities.RFQ;
 using SolaERP.Application.Entities.Status;
 using SolaERP.Application.Entities.Supplier;
 using SolaERP.Application.Entities.SupplierEvaluation;
@@ -380,6 +382,10 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.Tax, opt => opt.MapFrom(src => src.TaxesId))
                 .ForMember(dest => dest._60DaysPayment, opt => opt.MapFrom(src => src.AgreeWithDefaultDays))
                 .ReverseMap();
+
+            CreateMap<RfqDraft, RfqDraftDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RFQMainId))
+                .ForMember(dest => dest.BusinessCategory, opt => opt.Ignore()).ReverseMap();
 
             CreateMap<GridLayout, GridLayoutDto>().ReverseMap();
             CreateMap<AnalysisCode, AnalysisCodeDto>().ReverseMap();

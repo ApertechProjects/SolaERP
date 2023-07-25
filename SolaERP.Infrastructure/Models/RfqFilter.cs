@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SolaERP.Application.Enums;
 
 namespace SolaERP.Application.Models
 {
@@ -10,10 +6,15 @@ namespace SolaERP.Application.Models
     {
         public int BusinessUnitId { get; set; }
         public string ItemCode { get; set; }
-        public string Emergency { get; set; }
+        public Emergency Emergency { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
         public string RFQType { get; set; }
-        public string ProcurementType { get; set; }
+        public ProcurementType ProcurementType { get; set; }
+    }
+
+    public class RfqAllFilter : RfqFilter
+    {
+        public Status Status { get; set; }
     }
 }

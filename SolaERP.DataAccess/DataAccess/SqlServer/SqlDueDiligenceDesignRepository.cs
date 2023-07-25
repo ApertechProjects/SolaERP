@@ -1,15 +1,15 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Application.Contracts.Repositories;
+﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.Attachment;
 using SolaERP.Application.Entities.DueDiligenceDesign;
 using SolaERP.Application.Entities.VendorDueDiligence;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlDueDiligenceDesignRepository : IDueDiligenceDesignRepository
+    public class SqlDueDiligenceDesignRepository //: IDueDiligenceDesignRepository
     {
         private readonly IUnitOfWork _unitOfWork;
         public SqlDueDiligenceDesignRepository(IUnitOfWork unitOfWork)

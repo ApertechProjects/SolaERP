@@ -10,7 +10,7 @@ namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IRfqRepository
     {
-        List<RfqDraft> GetRFQsAsync(RfqFilter filter);
+        Task<List<RfqDraft>> GetDraftsAsync(RfqFilter filter);
 
     }
 }
