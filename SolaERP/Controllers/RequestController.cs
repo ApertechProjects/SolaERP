@@ -40,7 +40,7 @@ namespace SolaERP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> WaitingForApproval(RequestWFAGetModel requestWFAGetParametersDto)
-            => CreateActionResult(await _requestService.iUser.Identity.Name, requestWFAGetParametersDto));
+            => CreateActionResult(await _requestService.GetWFAAsync(User.Identity.Name, requestWFAGetParametersDto));
 
         [HttpPost]
         public async Task<IActionResult> All(RequestMainGetModel requestMainParameters)
