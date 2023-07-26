@@ -1,8 +1,8 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Application.Contracts.Repositories;
+﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
@@ -284,7 +284,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 ApproveStatus = reader.Get<string>("ApproveStatus"),
                 AccountCode = reader.Get<string>("AccountCode"),
                 AccountName = reader.Get<string>("AccountName"),
-                Buyer = reader.Get<string>("Buyer")
+                Buyer = reader.Get<string>("Buyer"),
+                PotentialVendor = reader.Get<string>("PotentialVendor"),
+                Priority = reader.Get<int>("Priority")
             };
         }
 
