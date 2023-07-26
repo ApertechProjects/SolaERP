@@ -15,5 +15,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<RfqAllDto>>> GetAllAsync(RfqAllFilter filter);
         Task<ApiResponse<int>> AddRfqMainAsync(RfqSaveCommandRequest request, string userIdentity);
         Task<ApiResponse<List<SingleSourceReasonModel>>> GetSingleSourceReasonsAsync();
+        Task<ApiResponse<List<RequestRfqDto>>> GetRequestsForRFQ(string userIdentity, RFQRequestModel model);
     }
 }

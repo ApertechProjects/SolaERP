@@ -21,6 +21,18 @@ namespace SolaERP.DataAccess.Extensions
             command.Parameters.Add(parameter);
         }
 
+
+        public static void AddTableValue(this IDataParameterCollection parameters, IDbCommand command, string typeName, object value)
+        {
+            SqlParameter parameter = command.CreateParameter() as SqlParameter;
+            parameter.ParameterName = "@" + typeName;
+            parameter.SqlDbType = SqlDbType.Structured;
+            parameter.TypeName = typeName;
+            parameter.Value = value;
+
+            parameters.Add(parameter);
+        }
+
         public static void AddOutPutParameter(this IDataParameterCollection parameters, IDbCommand command, string parameterName)
         {
             IDbDataParameter parameter = command.CreateParameter();
@@ -38,7 +50,7 @@ namespace SolaERP.DataAccess.Extensions
             parameter.Value = dataTable;
             parameter.TypeName = typeName;
 
-            parameters.Add(parameter);  
+            parameters.Add(parameter);
 
         }
     }

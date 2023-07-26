@@ -1,5 +1,8 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Entities.Buyer;
 using SolaERP.Application.Entities.RFQ;
+using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
@@ -218,8 +221,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return singleSourceReasons;
             }
         }
-
-
         private SingleSourceReasonModel GetReasonsFromReader(IDataReader reader)
         {
             return new()
@@ -229,6 +230,58 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Other = reader.Get<int>("Other")
             };
         }
+
+        public Task<bool> AddDetailsAsync(RfqDetailsSaveRequestModel model)
+            => ModifyRfqDetailAsync(new()
+            {
+                RFQMainId = model.RFQMainId,
+                Details = model.Details
+            });
+
+
+        public Task<bool> UpdateDetailsAsync(RfqDetailsSaveRequestModel model)
+            => ModifyRfqDetailAsync(model);
+
+        public Task<bool> DeleteDetailsAsync(int detailId)
+            => ModifyRfqDetailAsync(new() { RFQMainId = detailId });
+
+
+        private async Task<bool> ModifyRfqDetailAsync(RfqDetailsSaveRequestModel model)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_RFQDetails_IUD @RFQMainId,@Data";
+
+
+                command.Parameters.AddWithValue(command, "@RFQMainId", model.RFQMainId);
+                command.Parameters.AddTableValue(command, "RFQDetailsType", model.Details.ConvertToDataTable());
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+
+
+        public async Task<List<RequestForRFQ>> GetRequestsForRfq(RFQRequestModel model)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_RFQCreateRequestList @BusinessUnitId,@Businesscategoryid,@Buyer,@UserId";
+
+
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@Businesscategoryid", string.Join(",", model.BusinessCategoryIds));
+                command.Parameters.AddWithValue(command, "@Buyer", model.Buyer);
+                command.Parameters.AddWithValue(command, "@UserId", model.UserId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                List<RequestForRFQ> requestListForRfq = new();
+
+                while (reader.Read()) requestListForRfq.Add(reader.GetByEntityStructure<RequestForRFQ>());
+                return requestListForRfq;
+            }
+        }
+
 
         #endregion
 

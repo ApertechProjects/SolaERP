@@ -24,6 +24,10 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _service.GetAllAsync(filter));
 
         [HttpGet("[action]")]
+        public async Task<IActionResult> GetRequestFroRFQ([FromQuery] RFQRequestModel model)
+            => CreateActionResult(await _service.GetRequestsForRFQ(User.Identity.Name, model));
+
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetSingleSourceReasons()
             => CreateActionResult(await _service.GetSingleSourceReasonsAsync());
 
