@@ -49,6 +49,14 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<RfqDraftDto>>.Success(dto, 200);
         }
 
+        public async Task<ApiResponse<List<RequestRfqDto>>> GetRequestsForRFQ(string userIdentity, RFQRequestModel model)
+        {
+            model.UserId = Convert.ToInt32(userIdentity);
+            var rfqRequests = await _repository.GetRequestsForRfq(model);
+            var dto = _mapper.Map<List<RequestRfqDto>>(rfqRequests);
+            return ApiResponse<List<RequestRfqDto>>.Success(dto, 200);
+        }
+
         public async Task<ApiResponse<List<SingleSourceReasonModel>>> GetSingleSourceReasonsAsync()
             => ApiResponse<List<SingleSourceReasonModel>>.Success(await _repository.GetSingleSourceReasonsAsync(), 200);
     }

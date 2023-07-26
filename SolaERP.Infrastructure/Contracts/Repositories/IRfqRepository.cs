@@ -18,5 +18,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> UpdateDetailsAsync(RfqDetailsSaveRequestModel model);
         Task<bool> DeleteDetailsAsync(int detailId);
 
+        Task<List<RequestForRFQ>> GetRequestsForRfq(RFQRequestModel model);
+
     }
 }
