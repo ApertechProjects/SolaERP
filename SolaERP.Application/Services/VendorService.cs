@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using MediatR;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Shared;
-using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Dtos.Venndors;
 using SolaERP.Application.Entities.Auth;
@@ -14,9 +12,6 @@ using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Application.ViewModels;
 using SolaERP.DataAccess.Extensions;
-using SolaERP.Persistence.Utils;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SolaERP.Persistence.Services
 {
@@ -94,7 +89,9 @@ namespace SolaERP.Persistence.Services
             allVendors = allVendors.GetDataByFilter(request.Text);
 
             List<VendorAllDto> dto = _mapper.Map<List<VendorAllDto>>(allVendors);
-            return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
+            if (dto.Count > 0)
+                return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
+            return ApiResponse<List<VendorAllDto>>.Fail("Data not found", 404);
         }
         public async Task<ApiResponse<List<VendorAllDto>>> GetApprovedAsync(string userIdentity, string text)
         {
@@ -102,7 +99,9 @@ namespace SolaERP.Persistence.Services
             approvedByCurrentUser = approvedByCurrentUser.GetDataByFilter(text);
 
             var dto = _mapper.Map<List<VendorAllDto>>(approvedByCurrentUser);
-            return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
+            if (dto.Count > 0)
+                return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
+            return ApiResponse<List<VendorAllDto>>.Fail("Data not found", 404);
         }
         public async Task<VendorInfo> GetByTaxAsync(string taxId)
             => await _repository.GetByTaxAsync(taxId);
@@ -115,7 +114,9 @@ namespace SolaERP.Persistence.Services
         {
             var data = await _repository.GetDraftAsync(Convert.ToInt32(userIdentity), filter);
             data = data.GetDataByFilter(filter.Text);
-            return ApiResponse<List<VendorAll>>.Success(data, 200);
+            if (data.Count > 0)
+                return ApiResponse<List<VendorAll>>.Success(data, 200);
+            return ApiResponse<List<VendorAll>>.Fail("Data not found", 404);
         }
         public async Task<ApiResponse<VM_GetVendorFilters>> GetFiltersAsync()
         {
@@ -139,15 +140,19 @@ namespace SolaERP.Persistence.Services
             vendorWFAs = vendorWFAs.GetDataByFilter(filter.Text);
 
             List<VendorWFADto> vendorAllDtos = _mapper.Map<List<VendorWFADto>>(vendorWFAs);
-            return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
+            if (vendorAllDtos.Count > 0)
+                return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
+            return ApiResponse<List<VendorWFADto>>.Fail("Data not found", 404);
         }
         public async Task<ApiResponse<List<VendorWFADto>>> GetRejectedAsync(string userIdentity, VendorFilter filter)
         {
             var rejectedByCurrentUser = await _repository.GetRejectedAsync(Convert.ToInt32(userIdentity), filter);
             rejectedByCurrentUser = rejectedByCurrentUser.GetDataByFilter(filter.Text);
             var rejectedByCurrentUserDto = _mapper.Map<List<VendorWFADto>>(rejectedByCurrentUser);
+            if (rejectedByCurrentUserDto.Count > 0)
+                return ApiResponse<List<VendorWFADto>>.Success(rejectedByCurrentUserDto, 200);
 
-            return ApiResponse<List<VendorWFADto>>.Success(rejectedByCurrentUserDto, 200);
+            return ApiResponse<List<VendorWFADto>>.Fail("Data not found", 404);
         }
         public async Task<ApiResponse<VM_VendorCard>> GetAsync(int vendorId)
         {
@@ -217,7 +222,10 @@ namespace SolaERP.Persistence.Services
             }
 
             List<VendorWFADto> vendorAllDtos = _mapper.Map<List<VendorWFADto>>(vendorWFAs);
-            return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
+            if (vendorWFAs.Count > 0)
+                return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
+            return ApiResponse<List<VendorWFADto>>.Fail("Data not found", 404);
+
         }
 
         public async Task<ApiResponse<bool>> SaveAsync(string userIdentity, VendorCardDto vendorDto)
