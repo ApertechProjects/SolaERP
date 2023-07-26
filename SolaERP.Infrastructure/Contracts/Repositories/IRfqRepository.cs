@@ -1,10 +1,5 @@
 ﻿using SolaERP.Application.Entities.RFQ;
 using SolaERP.Application.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.Application.Contracts.Repositories
 {
@@ -17,6 +12,11 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<int> AddMainAsync(RfqSaveCommandRequest request);
         Task<int> UpdateMainAsync(RfqSaveCommandRequest request);
         Task<int> DeleteMainsync(int id, int userId);
+
+
+        Task<bool> AddDetailsAsync(RfqDetailsSaveRequestModel model);
+        Task<bool> UpdateDetailsAsync(RfqDetailsSaveRequestModel model);
+        Task<bool> DeleteDetailsAsync(int detailId);
 
     }
 }

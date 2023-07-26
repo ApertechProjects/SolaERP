@@ -230,6 +230,37 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             };
         }
 
+        public Task<bool> AddDetailsAsync(RfqDetailsSaveRequestModel model)
+            => ModifyRfqDetailAsync(new()
+            {
+                RFQMainId = model.RFQMainId,
+                Details = model.Details
+            });
+
+
+        public Task<bool> UpdateDetailsAsync(RfqDetailsSaveRequestModel model)
+            => ModifyRfqDetailAsync(model);
+
+        public Task<bool> DeleteDetailsAsync(int detailId)
+            => ModifyRfqDetailAsync(new() { RFQMainId = detailId });
+
+
+
+        private async Task<bool> ModifyRfqDetailAsync(RfqDetailsSaveRequestModel model)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_RFQDetails_IUD @RFQMainId,@Data";
+
+
+                command.Parameters.AddWithValue(command, "@RFQMainId", model.RFQMainId);
+                command.Parameters.AddTableValue(command, "RFQDetailsType", model.Details.ConvertToDataTable());
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+
         #endregion
 
     }
