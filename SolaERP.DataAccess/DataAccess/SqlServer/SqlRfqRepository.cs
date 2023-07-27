@@ -231,32 +231,29 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             };
         }
 
-        public Task<bool> AddDetailsAsync(RfqDetailsSaveRequestModel model)
-            => ModifyRfqDetailAsync(new()
-            {
-                RFQMainId = model.RFQMainId,
-                Details = model.Details
-            });
+        public async Task<bool> AddDetailsAsync(List<RfqDetail> details, int rfqMainId)
+            => await ModifyRfqDetailAsync(details, rfqMainId);
 
 
-        public Task<bool> UpdateDetailsAsync(RfqDetailsSaveRequestModel model)
-            => ModifyRfqDetailAsync(model);
 
-        public Task<bool> DeleteDetailsAsync(int detailId)
-            => ModifyRfqDetailAsync(new() { RFQMainId = detailId });
+        //public Task<bool> UpdateDetailsAsync(RfqDetailsSaveRequestModel model)
+        //    => ModifyRfqDetailAsync(model);
+
+        //public Task<bool> DeleteDetailsAsync(int detailId)
+        //    => ModifyRfqDetailAsync(new() { RFQMainId = detailId });
 
 
-        private async Task<bool> ModifyRfqDetailAsync(RfqDetailsSaveRequestModel model)
+        private async Task<bool> ModifyRfqDetailAsync(List<RfqDetail> details, int mainId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = @"SET NOCOUNT OFF EXEC SP_RFQDetails_IUD @RFQMainId,@Data";
 
 
-                command.Parameters.AddWithValue(command, "@RFQMainId", model.RFQMainId);
-                command.Parameters.AddTableValue(command, "RFQDetailsType", model.Details.ConvertToDataTable());
-
-                return await command.ExecuteNonQueryAsync() > 0;
+                command.Parameters.AddWithValue(command, "@RFQMainId", mainId);
+                command.Parameters.AddTableValue(command, "@Data", "RFQDetailsType", details.ConvertToDataTable());
+                var res = await command.ExecuteNonQueryAsync();
+                return res > 0;
             }
         }
 
@@ -279,6 +276,32 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 while (reader.Read()) requestListForRfq.Add(reader.GetByEntityStructure<RequestForRFQ>());
                 return requestListForRfq;
+            }
+        }
+
+        public async Task<bool> SaveRFqRequestDetailsAsync(List<RfqRequestDetail> details)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_RFQRequestDetails_IUD @Data";
+                command.Parameters.AddTableValue(command, "@Data", "RFQRequestDetailsType", details.ConvertToDataTable()); ;
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<List<RfqVendor>> GetVendorsForRfqAync(int businessCategoryId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RFQVendorsToSend @BusinessCategoryId";
+                command.Parameters.AddWithValue(command, "@BusinessCategoryId", businessCategoryId);
+
+                List<RfqVendor> rfqVendors = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read()) rfqVendors.Add(reader.GetByEntityStructure<RfqVendor>());
+                return rfqVendors;
             }
         }
 

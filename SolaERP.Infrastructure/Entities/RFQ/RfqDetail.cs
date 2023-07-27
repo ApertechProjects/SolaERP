@@ -1,4 +1,6 @@
-﻿namespace SolaERP.Application.Entities.RFQ
+﻿using SolaERP.Application.Attributes;
+
+namespace SolaERP.Application.Entities.RFQ
 {
     public class RfqDetail
     {
@@ -10,5 +12,19 @@
         public string UOM { get; set; }
         public decimal Quantity { get; set; }
         public Guid GUID { get; set; }
+
+        [NotInclude]
+        public List<RfqRequestDetail> LineDetails { get; set; }
+    }
+
+
+    public class RfqRequestDetail
+    {
+        public int Id { get; set; }
+        public int RequestDetailId { get; set; }
+        public decimal Quantity { get; set; }
+        public string UOM { get; set; }
+        public Guid GUID { get; set; }
+
     }
 }

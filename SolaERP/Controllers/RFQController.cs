@@ -19,6 +19,10 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> GetDrafts([FromQuery] RfqFilter filter)
             => CreateActionResult(await _service.GetDraftsAsync(filter));
 
+        [HttpGet("{businessCategoryId}")]
+        public async Task<IActionResult> GetRFQVendors(int businessCategoryId)
+            => CreateActionResult(await _service.GetRFQVendorsAsync(businessCategoryId));
+
         [HttpGet("[action]")]
         public async Task<IActionResult> GetBusinessCategories()
             => CreateActionResult(await _service.GetBuCategoriesAsync());
@@ -37,7 +41,7 @@ namespace SolaERP.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Save(RfqSaveCommandRequest request)
-            => CreateActionResult(await _service.AddRfqMainAsync(request, User.Identity.Name));
+            => CreateActionResult(await _service.SaveRfqAsync(request, User.Identity.Name));
 
     }
 }

@@ -22,10 +22,10 @@ namespace SolaERP.DataAccess.Extensions
         }
 
 
-        public static void AddTableValue(this IDataParameterCollection parameters, IDbCommand command, string typeName, object value)
+        public static void AddTableValue(this IDataParameterCollection parameters, IDbCommand command, string parameterName, string typeName, object value)
         {
             SqlParameter parameter = command.CreateParameter() as SqlParameter;
-            parameter.ParameterName = "@" + typeName;
+            parameter.ParameterName = parameterName;
             parameter.SqlDbType = SqlDbType.Structured;
             parameter.TypeName = typeName;
             parameter.Value = value;

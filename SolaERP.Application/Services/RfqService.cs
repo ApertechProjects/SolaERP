@@ -3,6 +3,7 @@ using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.RFQ;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -25,13 +26,18 @@ namespace SolaERP.Persistence.Services
             _evaluationRepository = evaluationRepository;
         }
 
-        public async Task<ApiResponse<int>> AddRfqMainAsync(RfqSaveCommandRequest request, string useridentity)
+        public async Task<ApiResponse<int>> SaveRfqAsync(RfqSaveCommandRequest request, string useridentity)
         {
             request.UserId = Convert.ToInt32(useridentity);
             int newMainID = await _repository.AddMainAsync(request);
 
-            await _unitOfWork.SaveChangesAsync();
+            bool result = await _repository.AddDetailsAsync(request.RfqDetails, newMainID);
+            foreach (var requestList in request.RfqDetails)
+            {
+                await _repository.SaveRFqRequestDetailsAsync(requestList.LineDetails);
+            }
 
+            await _unitOfWork.SaveChangesAsync();
             return ApiResponse<int>.Success(newMainID, 200);
         }
 
@@ -67,5 +73,11 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<SingleSourceReasonModel>>> GetSingleSourceReasonsAsync()
             => ApiResponse<List<SingleSourceReasonModel>>.Success(await _repository.GetSingleSourceReasonsAsync(), 200);
+
+        public async Task<ApiResponse<List<RfqVendor>>> GetRFQVendorsAsync(int buCategoryId)
+        {
+            var rfqVendors = await _repository.GetVendorsForRfqAync(buCategoryId);
+            return ApiResponse<List<RfqVendor>>.Success(rfqVendors, 200);
+        }
     }
 }

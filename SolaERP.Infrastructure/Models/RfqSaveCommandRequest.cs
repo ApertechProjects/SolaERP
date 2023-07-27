@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Enums;
+﻿using SolaERP.Application.Entities.RFQ;
+using SolaERP.Application.Enums;
 using System.Text.Json.Serialization;
 
 namespace SolaERP.Application.Models
@@ -27,6 +28,8 @@ namespace SolaERP.Application.Models
 
         [JsonIgnore]
         public int UserId { get; set; }
+
+        public List<RfqDetail> RfqDetails { get; set; }
 
     }
 }
