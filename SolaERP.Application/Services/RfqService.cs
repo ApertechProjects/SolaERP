@@ -3,6 +3,7 @@ using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 
@@ -16,11 +17,12 @@ namespace SolaERP.Persistence.Services
         private readonly IMapper _mapper;
         private readonly ISupplierEvaluationRepository _evaluationRepository;
 
-        public RfqService(IUnitOfWork unitOfWork, IRfqRepository repository, IMapper mapper)
+        public RfqService(IUnitOfWork unitOfWork, IRfqRepository repository, IMapper mapper, ISupplierEvaluationRepository evaluationRepository)
         {
             _unitOfWork = unitOfWork;
             _repository = repository;
             _mapper = mapper;
+            _evaluationRepository = evaluationRepository;
         }
 
         public async Task<ApiResponse<int>> AddRfqMainAsync(RfqSaveCommandRequest request, string useridentity)
@@ -39,6 +41,12 @@ namespace SolaERP.Persistence.Services
             var dto = _mapper.Map<List<RfqAllDto>>(rfqAlls);
 
             return ApiResponse<List<RfqAllDto>>.Success(dto, 200);
+        }
+
+        public async Task<ApiResponse<List<BusinessCategory>>> GetBuCategoriesAsync()
+        {
+            var data = await _evaluationRepository.GetBusinessCategoriesAsync();
+            return ApiResponse<List<BusinessCategory>>.Success(data, 200);
         }
 
         public async Task<ApiResponse<List<RfqDraftDto>>> GetDraftsAsync(RfqFilter filter)
