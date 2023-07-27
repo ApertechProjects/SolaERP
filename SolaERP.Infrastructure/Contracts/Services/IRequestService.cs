@@ -28,5 +28,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> SaveFollowUserAsync(RequestFollowSaveModel saveModel);
         Task<ApiResponse<bool>> DeleteFollowUserAsync(int requestFollowId);
         Task<ApiResponse<int>> GetDefaultApprovalStage(string keyCode, int businessUnitId);
+        Task<ApiResponse<List<int>>> CategoryList();
     }
 }

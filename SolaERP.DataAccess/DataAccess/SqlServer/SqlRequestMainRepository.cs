@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -6,6 +7,7 @@ using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -40,7 +42,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             throw new NotImplementedException();
         }
-        
+
         public async Task<List<RequestTypes>> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -522,6 +524,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 if (reader.Read())
                     mainId = reader.Get<int>("ApproveStageMainId");
                 return mainId;
+            }
+        }
+
+        public async Task<List<int>> CategoryList()
+        {
+            List<int> list = new List<int>();
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = $"exec dbo.SP_RequestCatList";
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                    list.Add(reader.Get<int>("CatId"));
+                return list;
             }
         }
     }
