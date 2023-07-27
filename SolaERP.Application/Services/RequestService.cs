@@ -311,5 +311,11 @@ namespace SolaERP.Persistence.Services
             var data = await _requestMainRepository.GetDefaultApprovalStage(keyCode, businessUnitId);
             return ApiResponse<int>.Success(data, 200);
         }
+
+        public async Task<ApiResponse<List<int>>> CategoryList()
+        {
+            var data = await _requestMainRepository.CategoryList();
+            return ApiResponse<List<int>>.Success(data, 200);
+        }
     }
 }
