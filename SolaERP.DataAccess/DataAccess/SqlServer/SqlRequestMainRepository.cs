@@ -40,7 +40,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             throw new NotImplementedException();
         }
-
+        
         public async Task<List<RequestTypes>> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -76,7 +76,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<RequestMainDraft>> GetMainRequestDraftsAsync(RequestMainDraftModel requestMain)
         {
-            string itemCode = string.Join(',', requestMain.ItemCodes);
+            string itemCode = string.Join(',', requestMain.ItemCode);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainDrafts]", new ReplaceParams { ParamName = "APT", Value = requestMain.BusinessUnitCode });
@@ -154,7 +154,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<RequestAmendment>> GetApproveAmendmentRequestsAsync(int userId, RequestApproveAmendmentModel requestParametersDto)
         {
-            string itemCode = string.Join(',', requestParametersDto.ItemCodes);
+            string itemCode = string.Join(',', requestParametersDto.ItemCode);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainApproveAmendment]", new ReplaceParams { ParamName = "APT", Value = requestParametersDto.BusinessUnitCode });
@@ -403,7 +403,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<RequestMainAll>> GetAllAsync(RequestMainGetModel requestMain)
         {
-            string itemCode = string.Join(',', requestMain.ItemCodes);
+            string itemCode = string.Join(',', requestMain.ItemCode);
             string approveStatus = string.Join(',', requestMain.ApproveStatus);
             string status = string.Join(',', requestMain.Status);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
