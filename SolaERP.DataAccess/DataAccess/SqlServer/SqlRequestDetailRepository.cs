@@ -50,6 +50,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                     @AnalysisCode8Id, 
                                                                     @AnalysisCode9Id, 
                                                                     @AnalysisCode10Id,
+                                                                    @Catid,
                                                                     @NewRequestDetailsId";
 
                 command.Parameters.AddWithValue(command, "@RequestDetailId", entity.RequestDetailId);

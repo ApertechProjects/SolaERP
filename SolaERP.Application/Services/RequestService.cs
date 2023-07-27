@@ -214,7 +214,7 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.ConvertIdentity(name);
             int requestId = await _requestMainRepository.DeleteAsync(userId, requestMainId);
             await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<bool>.Success(requestId);
+            return ApiResponse<bool>.Success(200);
         }
 
         public async Task<ApiResponse<List<RequestDetailApprovalInfoDto>>> GetDetailApprvalInfoAsync(int requestDetaildId)
