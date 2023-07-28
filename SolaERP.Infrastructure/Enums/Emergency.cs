@@ -8,6 +8,7 @@ namespace SolaERP.Application.Enums
 {
     public enum Emergency
     {
+        All = -1,
         Low = 1,
         Medium = 2,
         High = 3,
