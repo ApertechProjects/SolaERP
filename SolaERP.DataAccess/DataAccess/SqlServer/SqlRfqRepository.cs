@@ -41,7 +41,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 List<RfqDraft> rfqDrafts = new();
                 using var reader = await command.ExecuteReaderAsync();
 
-                while (reader.Read()) rfqDrafts.Add(GetRfqBaseFromReader(reader) as RfqDraft);
+                while (reader.Read()) rfqDrafts.Add(GetRFQDraftFromReader(reader));
                 return rfqDrafts;
             }
         }
@@ -49,32 +49,39 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 
         #region Readers 
-        private RFQBase GetRfqBaseFromReader(IDataReader reader)
+        private void PopulateRfqBaseFromReader(RFQBase rfqBase, IDataReader reader)
         {
-            return new()
-            {
-                RFQMainId = reader.Get<int>("RFQMainId"),
-                RequiredOnSiteDate = reader.Get<DateTime>("RequiredOnSiteDate"),
-                Emergency = reader.Get<string>("Emergency"),
-                RFQDate = reader.Get<DateTime>("RFQDate"),
-                RFQType = reader.Get<string>("RFQType"),
-                RFQNo = reader.Get<int>("RFQNo"),
-                DesiredDeliveryDate = reader.Get<DateTime>("DesiredDeliveryDate"),
-                ProcurementType = reader.Get<string>("ProcurementType"),
-                OtherReasons = reader.Get<string>("OtherReasons"),
-                SentDate = reader.Get<DateTime>("SentDate"),
-                Comment = reader.Get<string>("Comment"),
-                RFQDeadline = reader.Get<DateTime>("RFQDeadline"),
-                Buyer = reader.Get<string>("Buyer"),
-                SingleUnitPrice = reader.Get<bool>("SingleUnitPrice"),
-                PlaceOfDelivery = reader.Get<string>("PlaceOfDelivery"),
-                BusinessCategoryid = reader.Get<int>("BusinessCategoryid")
-            };
+            rfqBase.RFQMainId = reader.Get<int>("RFQMainId");
+            rfqBase.RequiredOnSiteDate = reader.Get<DateTime>("RequiredOnSiteDate");
+            rfqBase.Emergency = reader.Get<string>("Emergency");
+            rfqBase.RFQDate = reader.Get<DateTime>("RFQDate");
+            rfqBase.RFQType = reader.Get<string>("RFQType");
+            rfqBase.RFQNo = reader.Get<string>("RFQNo");
+            rfqBase.DesiredDeliveryDate = reader.Get<DateTime>("DesiredDeliveryDate");
+            rfqBase.ProcurementType = reader.Get<string>("ProcurementType");
+            rfqBase.OtherReasons = reader.Get<string>("OtherReasons");
+            rfqBase.SentDate = reader.Get<DateTime>("SentDate");
+            rfqBase.Comment = reader.Get<string>("Comment");
+            rfqBase.RFQDeadline = reader.Get<DateTime>("RFQDeadline");
+            rfqBase.Buyer = reader.Get<string>("Buyer");
+            rfqBase.SingleUnitPrice = reader.Get<bool>("SingleUnitPrice");
+            rfqBase.PlaceOfDelivery = reader.Get<string>("PlaceOfDelivery");
+            rfqBase.BusinessCategoryId = reader.Get<int>("BusinessCategoryId");
         }
+
+        private RfqDraft GetRFQDraftFromReader(IDataReader reader)
+        {
+            RfqDraft rfqDrafts = new();
+            PopulateRfqBaseFromReader(rfqDrafts, reader);
+
+            return rfqDrafts;
+        }
+
 
         private RfqAll GetRfqAllFromReader(IDataReader reader)
         {
-            var rfqAll = this.GetRfqBaseFromReader(reader) as RfqAll;
+            RfqAll rfqAll = new RfqAll();
+            PopulateRfqBaseFromReader(rfqAll, reader);
             rfqAll.Status = reader.Get<string>("Status");
 
             return rfqAll;
@@ -249,9 +256,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 command.CommandText = @"SET NOCOUNT OFF EXEC SP_RFQDetails_IUD @RFQMainId,@Data";
 
-
                 command.Parameters.AddWithValue(command, "@RFQMainId", mainId);
-                command.Parameters.AddTableValue(command, "@Data", "RFQDetailsType", details.ConvertToDataTable());
+                command.Parameters.AddTableValue(command, "@Data", "dbo.RFQDetailsType", details.ConvertToDataTable());
                 var res = await command.ExecuteNonQueryAsync();
                 return res > 0;
             }
