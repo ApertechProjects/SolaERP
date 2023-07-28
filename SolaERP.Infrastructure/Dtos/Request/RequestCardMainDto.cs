@@ -18,7 +18,6 @@
         public int UserId { get; set; }
         public int Requester { get; set; }
         public int Status { get; set; }
-        //public string SupplierCode { get; set; }
         public string RequestComment { get; set; }
         public string OperatorComment { get; set; }
         public string QualityRequired { get; set; }
@@ -27,5 +26,7 @@
         public string PotentialVendor { get; set; }
         public int Priority { get; set; }
         public List<RequestCardDetailDto> requestCardDetails { get; set; }
+        public List<RequestCardAnalysisDto> requestCardAnalysis { get; set; }
+
     }
 }

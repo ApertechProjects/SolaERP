@@ -1,4 +1,6 @@
-﻿namespace SolaERP.Application.Entities.Request
+﻿using SolaERP.Application.Dtos.Request;
+
+namespace SolaERP.Application.Entities.Request
 {
     public class RequestCardMain : BaseEntity
     {
@@ -18,7 +20,6 @@
         public int Status { get; set; }
         public int Destination { get; set; }
         public string ApproveStatus { get; set; }
-        //public string SupplierCode { get; set; }
         public string RequestComment { get; set; }
         public string OperatorComment { get; set; }
         public string QualityRequired { get; set; }
@@ -27,5 +28,7 @@
         public string PotentialVendor { get; set; }
         public int Priority { get; set; }
         public List<RequestCardDetail> requestCardDetails { get; set; }
+        public List<RequestCardAnalysis> requestCardAnalysis { get; set; }
+
     }
 }

@@ -126,6 +126,7 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.ConvertIdentity(name);
             var requestMain = await _requestMainRepository.GetRequesMainHeaderAsync(requestMainId, userId);
             requestMain.requestCardDetails = await _requestDetailRepository.GetRequestDetailsByMainIdAsync(requestMainId);
+            requestMain.requestCardAnalysis = await _requestDetailRepository.GetAnalysis(requestMainId);
             var requestDto = _mapper.Map<RequestCardMainDto>(requestMain);
             return ApiResponse<RequestCardMainDto>.Success(requestDto, 200);
         }
@@ -315,7 +316,9 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<List<int>>> CategoryList()
         {
             var data = await _requestMainRepository.CategoryList();
-            return ApiResponse<List<int>>.Success(data, 200);
+            if (data.Count > 0)
+                return ApiResponse<List<int>>.Success(data, 200);
+            return ApiResponse<List<int>>.Fail("Data not found", 404);
         }
     }
 }

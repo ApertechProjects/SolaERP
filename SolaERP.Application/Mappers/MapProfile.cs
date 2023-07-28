@@ -104,6 +104,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<RequestMain, RequestAmendmentDto>().ReverseMap();
             CreateMap<RequestAmendment, RequestAmendmentDto>().ReverseMap();
             CreateMap<RequestDetail, RequestDetailDto>().ReverseMap();
+            CreateMap<RequestCardAnalysis, RequestCardAnalysisDto>().ReverseMap();
             CreateMap<RequestTypes, RequestTypesDto>().ReverseMap();
             CreateMap<RequestMainDraftDto, RequestMainDraft>().ReverseMap();
             CreateMap<LogInfo, LogInfoDto>().ReverseMap();

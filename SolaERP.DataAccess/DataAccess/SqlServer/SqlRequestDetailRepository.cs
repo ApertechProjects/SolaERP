@@ -167,5 +167,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
+        public async Task<List<RequestCardAnalysis>> GetAnalysis(int requestMainId)
+        {
+            List<RequestCardAnalysis> result = new List<RequestCardAnalysis>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RequestDetailsAnalysis_Load @RequestMainId";
+                command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (await reader.ReadAsync()) result.Add(reader.GetByEntityStructure<RequestCardAnalysis>());
+                return result;
+            }
+        }
     }
 }
