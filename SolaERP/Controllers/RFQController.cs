@@ -43,5 +43,9 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Save(RfqSaveCommandRequest request)
             => CreateActionResult(await _service.SaveRfqAsync(request, User.Identity.Name));
 
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ChangeRFQStatus(RfqChangeStatusModel model)
+            => CreateActionResult(await _service.ChangeRFQStatusAsync(model, User.Identity.Name));
+
     }
 }
