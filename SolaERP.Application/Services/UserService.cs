@@ -184,58 +184,50 @@ namespace SolaERP.Persistence.Services
             return _userRepository.GetUserNameByTokenAsync(name);
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserWFAAsync(string name, int userStatus, int userType, int page, int limit)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserWFAAsync(string name, int userStatus, int userType)
         {
             int userId = await _userRepository.ConvertIdentity(name);
-            var users = await _userRepository.GetUserWFAAsync(userId, userStatus, userType, page, limit);
+            var users = await _userRepository.GetUserWFAAsync(userId, userStatus, userType);
 
-            var dto = _mapper.Map<List<UserMainDto>>(users.Item2);
+            var dto = _mapper.Map<List<UserMainDto>>(users);
 
             if (dto.Count > 0)
-                return ApiResponse<List<UserMainDto>>.Success(dto, 200, users.Item1);
+                return ApiResponse<List<UserMainDto>>.Success(dto, 200);
             return ApiResponse<List<UserMainDto>>.Fail("User list is empty", 404);
 
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string name, int userStatus, int userType, string text, int page, int limit)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string name, int userStatus, int userType)
         {
             int userId = await _userRepository.ConvertIdentity(name);
-            var users = await _userRepository.GetUserAllAsync(userId, userStatus, userType, page, limit);
-            if (!string.IsNullOrEmpty(text))
-            {
-                users.Item2 = users.Item2.GetDataByFilter(text);
-                page = 1;
-            }
-
-            var dto = _mapper.Map<List<UserMainDto>>(users.Item2);
-
-
+            var users = await _userRepository.GetUserAllAsync(userId, userStatus, userType);
+            var dto = _mapper.Map<List<UserMainDto>>(users);
 
             if (dto.Count > 0)
-                return ApiResponse<List<UserMainDto>>.Success(dto, 200, users.Item1);
+                return ApiResponse<List<UserMainDto>>.Success(dto, 200);
             return ApiResponse<List<UserMainDto>>.Fail("User list is empty", 404);
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string name, int userStatus, int page, int limit)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string name, int userStatus)
         {
             int userId = await _userRepository.ConvertIdentity(name);
-            var users = await _userRepository.GetUserCompanyAsync(userId, userStatus, page, limit);
-            var dto = _mapper.Map<List<UserMainDto>>(users.Item2);
+            var users = await _userRepository.GetUserCompanyAsync(userId, userStatus);
+            var dto = _mapper.Map<List<UserMainDto>>(users);
 
 
             if (dto.Count > 0)
-                return ApiResponse<List<UserMainDto>>.Success(dto, 200, users.Item1);
+                return ApiResponse<List<UserMainDto>>.Success(dto, 200);
             return ApiResponse<List<UserMainDto>>.Fail("User list is empty", 404);
         }
 
-        public async Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string name, int userStatus, int page, int limit)
+        public async Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string name, int userStatus)
         {
             int userId = await _userRepository.ConvertIdentity(name);
-            var users = await _userRepository.GetUserVendorAsync(userId, userStatus, page, limit);
-            var dto = _mapper.Map<List<UserMainDto>>(users.Item2);
+            var users = await _userRepository.GetUserVendorAsync(userId, userStatus);
+            var dto = _mapper.Map<List<UserMainDto>>(users);
 
             if (dto.Count > 0)
-                return ApiResponse<List<UserMainDto>>.Success(dto, 200, users.Item1);
+                return ApiResponse<List<UserMainDto>>.Success(dto, 200);
             return ApiResponse<List<UserMainDto>>.Fail("User list is empty", 404);
         }
 

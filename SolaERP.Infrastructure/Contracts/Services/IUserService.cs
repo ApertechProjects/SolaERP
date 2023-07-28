@@ -20,10 +20,10 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> ResetPasswordAsync(ResetPasswordModel resetPasswordRequestDto);
         Task<ApiResponse<List<ActiveUserDto>>> GetActiveUsersAsync();
         Task<ApiResponse<List<ActiveUserDto>>> GetActiveUsersWithoutCurrentUserAsync(string name);
-        Task<ApiResponse<List<UserMainDto>>> GetUserWFAAsync(string name, int userStatus, int userType, int page, int limit);
-        Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string name, int userStatus, int userType, string text, int page, int limit);
-        Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string name, int userStatus, int page, int limit);
-        Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string name, int userStatus, int page, int limit);
+        Task<ApiResponse<List<UserMainDto>>> GetUserWFAAsync(string name, int userStatus, int userType);
+        Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string name, int userStatus, int userType);
+        Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string name, int userStatust);
+        Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string name, int userStatus);
         Task<ApiResponse<bool>> UserChangeStatusAsync(string name, UserChangeStatusModel model);
         Task<ApiResponse<bool>> UserChangeStatusAsync(string name, List<UserChangeStatusModel> model);
         Task<ApiResponse<int>> SaveUserAsync(UserSaveModel user, CancellationToken cancellationToken);

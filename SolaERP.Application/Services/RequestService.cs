@@ -234,7 +234,7 @@ namespace SolaERP.Persistence.Services
 
             for (int i = 0; i < model.RequestDetailIds.Count; i++)
             {
-                await _requestDetailRepository.RequestDetailChangeStatusAsync(model.RequestDetailIds[i], userId, model.ApproveStatusId, model.Comment, model.Sequence);
+                await _requestDetailRepository.RequestDetailChangeStatusAsync(model.RequestDetailIds[i], userId, model.ApproveStatusId, model.Comment, model.Sequence, model.RejectReasonId);
             }
             await _unitOfWork.SaveChangesAsync();
 
