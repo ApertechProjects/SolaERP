@@ -8,5 +8,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<RequestCardDetail>> GetRequestDetailsByMainIdAsync(int requestMainId);
         Task<List<RequestDetailApprovalInfo>> GetDetailApprovalInfoAsync(int requestDetailId);
         Task<bool> RequestDetailChangeStatusAsync(int requestDetailId, int userId, int approveStatusid, string comment, int sequence);
+        Task<List<RequestCardAnalysis>> GetAnalysis(int requestMainId);
     }
 }
