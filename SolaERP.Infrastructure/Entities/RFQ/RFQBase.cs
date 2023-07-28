@@ -17,6 +17,6 @@
         public string Buyer { get; set; }
         public bool SingleUnitPrice { get; set; }
         public string PlaceOfDelivery { get; set; }
-        public int BusinessCategoryid { get; set; }
+        public int BusinessCategoryId { get; set; }
     }
 }
