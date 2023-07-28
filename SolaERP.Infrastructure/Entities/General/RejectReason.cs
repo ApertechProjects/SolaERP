@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Entities.General
 {
-    public class RejectReason
+    public class RejectReason : BaseEntity
     {
         public int RejectReasonId { get; set; }
         public string ReasonCode { get; set; }

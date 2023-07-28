@@ -12,6 +12,7 @@ using SolaERP.Application.Dtos.BusinessUnit;
 using SolaERP.Application.Dtos.Buyer;
 using SolaERP.Application.Dtos.Currency;
 using SolaERP.Application.Dtos.Email;
+using SolaERP.Application.Dtos.General;
 using SolaERP.Application.Dtos.GridLayout;
 using SolaERP.Application.Dtos.Group;
 using SolaERP.Application.Dtos.Item_Code;
@@ -44,6 +45,7 @@ using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Buyer;
 using SolaERP.Application.Entities.Email;
+using SolaERP.Application.Entities.General;
 using SolaERP.Application.Entities.GridLayout;
 using SolaERP.Application.Entities.Groups;
 using SolaERP.Application.Entities.Item_Code;
@@ -394,6 +396,8 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<RequestForRFQ, RequestRfqDto>().ReverseMap();
             CreateMap<GridLayout, GridLayoutDto>().ReverseMap();
             CreateMap<AnalysisCode, AnalysisCodeDto>().ReverseMap();
+
+            CreateMap<RejectReason, RejectReasonDto>().ReverseMap();
         }
     }
 }

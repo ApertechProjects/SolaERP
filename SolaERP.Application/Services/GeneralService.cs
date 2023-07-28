@@ -23,7 +23,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<RejectReasonDto>>> RejectReasons()
         {
-            var data = _generalRepository.RejectReasons();
+            var data = await _generalRepository.RejectReasons();
             var dto = _mappper.Map<List<RejectReasonDto>>(data);
 
             if (dto.Count > 0)
