@@ -8,6 +8,7 @@ namespace SolaERP.Application.Enums
 {
     public enum ProcurementType
     {
+        All = -1,
         Bidding = 1,
         SingleSource = 2
     }

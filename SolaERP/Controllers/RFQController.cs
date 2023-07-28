@@ -15,10 +15,6 @@ namespace SolaERP.API.Controllers
         public RFQController(IRfqService service) => _service = service;
 
 
-        [HttpGet]
-        public async Task<IActionResult> GetDrafts([FromQuery] RfqFilter filter)
-            => CreateActionResult(await _service.GetDraftsAsync(filter));
-
         [HttpGet("{businessCategoryId}")]
         public async Task<IActionResult> GetRFQVendors(int businessCategoryId)
             => CreateActionResult(await _service.GetRFQVendorsAsync(businessCategoryId));
@@ -31,8 +27,12 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> GetAll([FromQuery] RfqAllFilter filter)
             => CreateActionResult(await _service.GetAllAsync(filter));
 
+        [HttpGet]
+        public async Task<IActionResult> GetDrafts([FromQuery] RfqFilter filter)
+            => CreateActionResult(await _service.GetDraftsAsync(filter));
+
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetRequestFroRFQ([FromQuery] RFQRequestModel model)
+        public async Task<IActionResult> GetRequestForRFQ([FromQuery] RFQRequestModel model)
             => CreateActionResult(await _service.GetRequestsForRFQ(User.Identity.Name, model));
 
         [HttpGet("[action]")]
@@ -42,6 +42,10 @@ namespace SolaERP.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Save(RfqSaveCommandRequest request)
             => CreateActionResult(await _service.SaveRfqAsync(request, User.Identity.Name));
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ChangeRFQStatus(RfqChangeStatusModel model)
+            => CreateActionResult(await _service.ChangeRFQStatusAsync(model, User.Identity.Name));
 
     }
 }

@@ -243,11 +243,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 
 
-        //public Task<bool> UpdateDetailsAsync(RfqDetailsSaveRequestModel model)
-        //    => ModifyRfqDetailAsync(model);
-
-        //public Task<bool> DeleteDetailsAsync(int detailId)
-        //    => ModifyRfqDetailAsync(new() { RFQMainId = detailId });
 
 
         private async Task<bool> ModifyRfqDetailAsync(List<RfqDetail> details, int mainId)
@@ -311,8 +306,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<bool> ChangeRFQStatusAsync(RfqChangeStatusModel model, int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_RFQChangeStatus @RFQMainId,@UserId,@Status";
+
+
+                command.Parameters.AddWithValue(command, "@RFQMainId", model.Id);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                command.Parameters.AddWithValue(command, "@Status", model.Status);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
 
         #endregion
-
     }
 }

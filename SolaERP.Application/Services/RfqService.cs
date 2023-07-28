@@ -79,5 +79,12 @@ namespace SolaERP.Persistence.Services
             var rfqVendors = await _repository.GetVendorsForRfqAync(buCategoryId);
             return ApiResponse<List<RfqVendor>>.Success(rfqVendors, 200);
         }
+
+        public async Task<ApiResponse<bool>> ChangeRFQStatusAsync(RfqChangeStatusModel model, string userIdentity)
+        {
+            var result = await _repository.ChangeRFQStatusAsync(model, Convert.ToInt32(userIdentity));
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(result, 200);
+        }
     }
 }

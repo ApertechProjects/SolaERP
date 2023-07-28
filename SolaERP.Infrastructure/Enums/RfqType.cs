@@ -8,6 +8,7 @@ namespace SolaERP.Application.Enums
 {
     public enum RfqType
     {
+        All = -1,
         Bidding = 1,
         Sourcing = 2,
     }
