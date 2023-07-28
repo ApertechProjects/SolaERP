@@ -7,7 +7,7 @@
         public string Emergency { get; set; }
         public DateTime RFQDate { get; set; }
         public string RFQType { get; set; }
-        public int RFQNo { get; set; }
+        public string RFQNo { get; set; }
         public DateTime DesiredDeliveryDate { get; set; }
         public string ProcurementType { get; set; }
         public string OtherReasons { get; set; }
