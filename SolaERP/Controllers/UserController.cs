@@ -38,20 +38,20 @@ namespace SolaERP.Controllers
           => CreateActionResult(await _userService.GetActiveUsersWithoutCurrentUserAsync(User.Identity.Name));
 
         [HttpGet]
-        public async Task<IActionResult> GetUserWFAAsync(int userStatus, int userType, int page, int limit)
-            => CreateActionResult(await _userService.GetUserWFAAsync(User.Identity.Name, userStatus, userType, page, limit));
+        public async Task<IActionResult> GetUserWFAAsync(int userStatus, int userType)
+            => CreateActionResult(await _userService.GetUserWFAAsync(User.Identity.Name, userStatus, userType));
 
         [HttpGet]
-        public async Task<IActionResult> GetUserAllAsync(int userStatus, int userType, string text, int page, int limit)
-        => CreateActionResult(await _userService.GetUserAllAsync(User.Identity.Name, userStatus, userType, text, page, limit));
+        public async Task<IActionResult> GetUserAllAsync(int userStatus, int userType)
+        => CreateActionResult(await _userService.GetUserAllAsync(User.Identity.Name, userStatus, userType));
 
         [HttpGet]
-        public async Task<IActionResult> GetUserCompanyAsync([FromQuery] int userStatus, int page, int limit)
-            => CreateActionResult(await _userService.GetUserCompanyAsync(User.Identity.Name, userStatus, page, limit));
+        public async Task<IActionResult> GetUserCompanyAsync([FromQuery] int userStatus)
+            => CreateActionResult(await _userService.GetUserCompanyAsync(User.Identity.Name, userStatus));
 
         [HttpGet]
-        public async Task<IActionResult> GetUserVendorAsync([FromQuery] int userStatus, int page, int limit)
-            => CreateActionResult(await _userService.GetUserVendorAsync(User.Identity.Name, userStatus, page, limit));
+        public async Task<IActionResult> GetUserVendorAsync([FromQuery] int userStatus)
+            => CreateActionResult(await _userService.GetUserVendorAsync(User.Identity.Name, userStatus));
 
         [HttpPost]
         public async Task<IActionResult> UserChangeStatusAsync(List<UserChangeStatusModel> model)

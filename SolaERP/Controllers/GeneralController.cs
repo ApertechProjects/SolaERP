@@ -84,6 +84,6 @@ namespace SolaERP.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetStatusList()
-           => CreateActionResult(await _statusService.GetAllAsync());
+           => CreateActionResult(await _statusService.GetAzz zxllAsync());
     }
 }
