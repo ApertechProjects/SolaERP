@@ -395,7 +395,7 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<RequestForRFQ, RequestRfqDto>().ReverseMap();
             CreateMap<GridLayout, GridLayoutDto>().ReverseMap();
-            CreateMap<AnalysisCode, AnalysisCodeDto>().ReverseMap();
+            CreateMap<Application.Entities.AnalysisCode.AnalysisCode, AnalysisCodeDto>().ReverseMap();
 
             CreateMap<RejectReason, RejectReasonDto>().ReverseMap();
         }

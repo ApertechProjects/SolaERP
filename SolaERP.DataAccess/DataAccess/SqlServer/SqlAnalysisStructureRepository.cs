@@ -28,7 +28,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 List<AnalysisStructureWithBu> resultEntity = new List<AnalysisStructureWithBu>();
                 using var reader = await command.ExecuteReaderAsync();
 
-                if (await reader.ReadAsync())
+                while (await reader.ReadAsync())
                     resultEntity.Add(reader.GetByEntityStructure<AnalysisStructureWithBu>());
 
                 return resultEntity;
@@ -55,7 +55,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> SaveAsync(AnalysisStructureDto model,int userId)
+        public async Task<bool> SaveAsync(AnalysisStructureDto model, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

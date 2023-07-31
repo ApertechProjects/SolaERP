@@ -11,7 +11,8 @@ namespace SolaERP.Application.Models
     public class AnalysisCodeModel : BaseEntity
     {
         public int CatId { get; set; }
-        public Analysisis Analysis { get; set; }
+        public List<AnalysisCode> AnalysisCodes { get; set; }
+        //public Analysisis Analysis { get; set; }
     }
 
     public class Analysisis
@@ -27,6 +28,7 @@ namespace SolaERP.Application.Models
         public AnalysisCode9 AnalysisCode9 { get; set; }
         public AnalysisCode10 AnalysisCode10 { get; set; }
     }
+
 
 }
 
