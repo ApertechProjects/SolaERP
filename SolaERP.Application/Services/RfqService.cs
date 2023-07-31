@@ -142,7 +142,6 @@ namespace SolaERP.Persistence.Services
             var inProgressRFQS = await _repository.GetInProgressesAsync(filter);
             var dto = _mapper.Map<List<RFQInProgressDto>>(inProgressRFQS);
             return ApiResponse<List<RFQInProgressDto>>.Success(dto, 200);
-
         }
     }
 }

@@ -4,14 +4,14 @@ namespace SolaERP.Application.Entities.RFQ
 {
     public class RFQInProgress : RFQBase
     {
+
         public int OfferCount { get; set; }
-        public int Sent { get; set; }
-        public int Accepted { get; set; }
-        public int InProgress { get; set; }
-        public int Responded { get; set; }
-        public int Rejected { get; set; }
-        public int NoResponse { get; set; }
+        public bool Sent { get; set; }
+        public bool Accepted { get; set; }
+        public bool InProgress { get; set; }
+        public bool Responded { get; set; }
+        public bool Rejected { get; set; }
+        public bool NoResponse { get; set; }
         public string BusinessCategoryName { get; set; }
-        public DateTime SentDate { get; set; }
     }
 }
