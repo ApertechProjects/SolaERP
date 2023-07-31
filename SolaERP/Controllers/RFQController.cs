@@ -10,7 +10,6 @@ namespace SolaERP.API.Controllers
     [ApiController]
     public class RFQController : CustomBaseController
     {
-
         private readonly IRfqService _service;
         public RFQController(IRfqService service) => _service = service;
 

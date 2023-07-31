@@ -1,4 +1,6 @@
-﻿using SolaERP.Application.Enums;
+﻿using SolaERP.Application.Entities.SupplierEvaluation;
+using SolaERP.Application.Enums;
+using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Entities.RFQ
 {
@@ -21,8 +23,9 @@ namespace SolaERP.Application.Entities.RFQ
         public string PlaceOfDelivery { get; set; }
         public string Comment { get; set; }
         public string OtherReasons { get; set; }
-        public int BusinessCategoryid { get; set; }
-        public List<int> SingleSourceReasonId { get; set; }
+        public int BusinessCategoryId { get; set; }
+        public BusinessCategory BusinessCategory { get; set; }
+        public List<SingleSourceReasonModel> SingleSourceReasons { get; set; }
         public int BiddingType { get; set; }
     }
 }

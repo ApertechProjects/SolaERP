@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Enums
 {
-    public enum RfqType
+    internal class Priority
     {
-        All = -1,
-        Purchasing = 1,
-        Information = 2,
     }
 }
