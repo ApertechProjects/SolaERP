@@ -3,6 +3,7 @@
     public class RFQBase
     {
         public int RFQMainId { get; set; }
+        public int LineNo { get; set; }
         public DateTime RequiredOnSiteDate { get; set; }
         public string Emergency { get; set; }
         public DateTime RFQDate { get; set; }
