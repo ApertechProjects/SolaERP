@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Enums
 {
-    public enum Destination
+    public enum BiddingType
     {
-        Order = 0,
-        Inventory = 1,
-        JobOrder = 2,
-        Project = 3,
+        Automatic = 1,
+        Manual = 2,
     }
 }

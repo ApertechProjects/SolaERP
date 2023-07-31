@@ -1,6 +1,6 @@
 ﻿namespace SolaERP.Application.Constants
 {
-    public class ResultMessageConstants
+    public static class ResultMessageConstants
     {
         public const string OperationSuccefull = "Operation completed successfully";
         public const string OperationUnsucces = "Operation unsuccessful";

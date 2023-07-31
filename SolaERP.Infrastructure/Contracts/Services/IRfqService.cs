@@ -17,5 +17,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<RfqVendor>>> GetRFQVendorsAsync(int buCategoryId);
         Task<ApiResponse<List<RequestRfqDto>>> GetRequestsForRFQ(string userIdentity, RFQRequestModel model);
         Task<ApiResponse<bool>> ChangeRFQStatusAsync(RfqChangeStatusModel model, string userIdentity);
+        Task<ApiResponse<RFQMainDto>> GetRFQAsync(int rfqMainId);
     }
 }

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
@@ -29,6 +28,10 @@ namespace SolaERP.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetDrafts([FromQuery] RfqFilter filter)
             => CreateActionResult(await _service.GetDraftsAsync(filter));
+
+        [HttpGet("[action]/{rfqMainId}")]
+        public async Task<IActionResult> Get(int rfqMainId)
+            => CreateActionResult(await _service.GetRFQAsync(rfqMainId));
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetRequestForRFQ([FromQuery] RFQRequestModel model)

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SolaERP.Application.Constants;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.RFQ;
@@ -85,6 +86,41 @@ namespace SolaERP.Persistence.Services
             var result = await _repository.ChangeRFQStatusAsync(model, Convert.ToInt32(userIdentity));
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(result, 200);
+        }
+
+        public async Task<ApiResponse<RFQMainDto>> GetRFQAsync(int rfqMainId)
+        {
+            var mainRFQ = await _repository.GetRFQMainAsync(rfqMainId);
+            if (mainRFQ is null)
+                return ApiResponse<RFQMainDto>.Fail(ResultMessageConstants.ResourceNotFound, 404);
+
+            var mainDetailsTask = _repository.GetRFQDetailsAsync(rfqMainId);
+            var rfqRequestDetailsTask = _repository.GetRFQLineDeatilsAsync(rfqMainId);
+            var rfqSingleReasonsTask = _repository.GetRFQSingeSourceReasons(rfqMainId);
+
+            await Task.WhenAll(mainDetailsTask, rfqRequestDetailsTask, rfqSingleReasonsTask);
+
+            var mainDetails = mainDetailsTask.Result;
+            var rfqRequestDetails = rfqRequestDetailsTask.Result;
+            var rfqSingleReasons = rfqSingleReasonsTask.Result;
+
+            var mainRFQDto = _mapper.Map<RFQMainDto>(mainRFQ);
+            var mainDetailsDto = _mapper.Map<List<RFQDetailDto>>(mainDetails);
+            var rfqRequestDetailsDto = _mapper.Map<List<RFQRequestDetailDto>>(rfqRequestDetails);
+
+            mainRFQDto.SingleSourceReasons = rfqSingleReasons;
+
+            var requestLineDict = rfqRequestDetailsDto.ToDictionary(requestLine => requestLine.GUID);
+            mainDetailsDto.ForEach(detail =>
+            {
+                if (requestLineDict.TryGetValue(detail.GUID, out var requestLine))
+                {
+                    detail.RequestDetails.Add(requestLine);
+                }
+            });
+
+            mainRFQDto.Details = mainDetailsDto;
+            return ApiResponse<RFQMainDto>.Success(mainRFQDto, 200);
         }
     }
 }

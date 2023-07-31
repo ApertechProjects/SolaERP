@@ -1,5 +1,6 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.RFQ;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
@@ -150,7 +151,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<int> DeleteMainsync(int id, int userId)
             => await ModifyRfqMainAsync(new RfqSaveCommandRequest() { RFQMainId = id, UserId = userId });
 
-
         private async Task<int> ModifyRfqMainAsync(RfqSaveCommandRequest request)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
@@ -213,7 +213,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return newRfqMainId;
             }
         }
-
         public async Task<List<SingleSourceReasonModel>> GetSingleSourceReasonsAsync()
         {
             using (var commmand = _unitOfWork.CreateCommand() as DbCommand)
@@ -236,15 +235,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Other = reader.Get<int>("Other")
             };
         }
-
-        public async Task<bool> AddDetailsAsync(List<RfqDetail> details, int rfqMainId)
+        public async Task<bool> AddDetailsAsync(List<RfqDetailSaveModel> details, int rfqMainId)
             => await ModifyRfqDetailAsync(details, rfqMainId);
 
-
-
-
-
-        private async Task<bool> ModifyRfqDetailAsync(List<RfqDetail> details, int mainId)
+        private async Task<bool> ModifyRfqDetailAsync(List<RfqDetailSaveModel> details, int mainId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -256,9 +250,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return res > 0;
             }
         }
-
-
-
         public async Task<List<RequestForRFQ>> GetRequestsForRfq(RFQRequestModel model)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -278,8 +269,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return requestListForRfq;
             }
         }
-
-        public async Task<bool> SaveRFqRequestDetailsAsync(List<RfqRequestDetail> details)
+        public async Task<bool> SaveRFqRequestDetailsAsync(List<RfqRequestDetailSaveModel> details)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -289,7 +279,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
-
         public async Task<List<RfqVendor>> GetVendorsForRfqAync(int businessCategoryId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -304,7 +293,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return rfqVendors;
             }
         }
-
         public async Task<bool> ChangeRFQStatusAsync(RfqChangeStatusModel model, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -317,6 +305,145 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Status", model.Status);
 
                 return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+
+        public async Task<RFQMain> GetRFQMainAsync(int rfqMainId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RFQRequestHeaderLoad @RFQMainId";
+                command.Parameters.AddWithValue(command, "@RFQMainId", rfqMainId);
+
+                RFQMain rfqMain = null;
+                using var reader = await command.ExecuteReaderAsync();
+
+                if (reader.Read()) rfqMain = GetRFQMainFromReader(reader);
+                return rfqMain;
+            }
+        }
+
+        private RFQMain GetRFQMainFromReader(IDataReader reader)
+        {
+            return new()
+            {
+                Id = reader.Get<int>("RFQMainId"),
+                BusinessUnitId = reader.Get<int>("BusinessUnitId"),
+                RFQType = (RfqType)reader.Get<int>("RFQType"),
+                RFQNo = reader.Get<string>("RFQNo"),
+                Emergency = (Emergency)reader.Get<int>("Emergency"),
+                RFQDate = reader.Get<DateTime>("RFQDate"),
+                RFQDeadline = reader.Get<DateTime>("RFQDeadline"),
+                Buyer = reader.Get<string>("Buyer"),
+                Status = (Status)reader.Get<int>("Status"),
+                RequiredOnSiteDate = reader.Get<DateTime>("RequiredOnSiteDate"),
+                DesiredDeliveryDate = reader.Get<DateTime>("DesiredDeliveryDate"),
+                SentDate = reader.Get<DateTime>("SentDate"),
+                SingleUnitPrice = reader.Get<int>("SingleUnitPrice"),
+                ProcurementType = (ProcurementType)reader.Get<int>("ProcurementType"),
+                PlaceOfDelivery = reader.Get<string>("PlaceOfDelivery"),
+                Comment = reader.Get<string>("Comment"),
+                OtherReasons = reader.Get<string>("OtherReasons"),
+                BusinessCategoryId = reader.Get<int>("BusinessCategoryId"),
+                BiddingType = (BiddingType)reader.Get<int>("BiddingType")
+            };
+        }
+
+
+        public async Task<List<RFQDetail>> GetRFQDetailsAsync(int rfqMainId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RFQDetailsLoad @RFQMainId";
+                command.Parameters.AddWithValue(command, "@RFQMainId", rfqMainId);
+
+                List<RFQDetail> rfqDetails = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read()) rfqDetails.Add(GetRFQDetailFromReader(reader));
+                return rfqDetails;
+            }
+        }
+
+
+
+        private RFQDetail GetRFQDetailFromReader(IDataReader reader)
+        {
+            return new()
+            {
+                Id = reader.Get<int>("RFQDetailId"),
+                RFQMainId = reader.Get<int>("RFQMainId"),
+                LineNo = reader.Get<int>("LineNo"),
+                ItemCode = reader.Get<string>("ItemCode"),
+                ItemName1 = reader.Get<string>("ItemName1"),
+                ItemName2 = reader.Get<string>("ItemName2"),
+                BusinessCategory = new Application.Entities.SupplierEvaluation.BusinessCategory
+                {
+                    Id = reader.Get<int>("BusinessCategoryId"),
+                    Name = reader.Get<string>("BusinessCategoryName")
+                },
+                Condition = (Condition)reader.Get<int>("Condition"),
+                AlternativeItem = reader.Get<bool>("AlternativeItem"),
+                UOM = reader.Get<string>("UOM"),
+                DefaultUOM = reader.Get<string>("DefaultUOM"),
+                Quantity = reader.Get<decimal>("Quantity"),
+                CONV_ID = reader.Get<int>("CONV_ID"),
+                Description = reader.Get<string>("Description"),
+                GUID = reader.Get<Guid>("GUID")
+            };
+        }
+
+
+
+        public async Task<List<RFQRequestDetail>> GetRFQLineDeatilsAsync(int rfqMainId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RFQRequestDetailsLoad @RFQMainId";
+                command.Parameters.AddWithValue(command, "@RFQMainId", rfqMainId);
+
+                List<RFQRequestDetail> rfqRequestDetails = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read()) rfqRequestDetails.Add(GetRFQRequestDetailFromReader(reader));
+                return rfqRequestDetails;
+            }
+        }
+
+        private RFQRequestDetail GetRFQRequestDetailFromReader(IDataReader reader)
+        {
+            return new()
+            {
+                Id = reader.Get<int>("RFQRequestDetailId"),
+                RFQDetailId = reader.Get<int>("RFQDetailId"),
+                RequestDetailId = reader.Get<int>("RequestDetailsId"),
+                RequestNo = reader.Get<string>("RequestNo"),
+                RequestLine = reader.Get<string>("RequestLine"),
+                RFQLine = reader.Get<int>("RFQLine"),
+                ItemCode = reader.Get<string>("ItemCode"),
+                ItemName1 = reader.Get<string>("ItemName1"),
+                ItemName2 = reader.Get<string>("ItemName2"),
+                Quantity = reader.Get<decimal>("Quantity"),
+                UOM = reader.Get<string>("UOM"),
+                DefaultUOM = reader.Get<string>("DefaultUOM"),
+                CONV_ID = reader.Get<int>("CONV_ID"),
+                GUID = reader.Get<Guid>("GUID"),
+            };
+        }
+
+        public async Task<List<SingleSourceReasonModel>> GetRFQSingeSourceReasons(int rfqMainId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RFQSingleSourceReasonsLoad @RFQMainId";
+                command.Parameters.AddWithValue(command, "@RFQMainId", rfqMainId);
+
+                List<SingleSourceReasonModel> singleSourceReasons = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read()) singleSourceReasons.Add(GetReasonsFromReader(reader));
+                return singleSourceReasons;
             }
         }
 
