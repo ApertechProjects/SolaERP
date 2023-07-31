@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Dtos.AnalysisCode
 {
+    public class AnalysisCode
+    {
+        public int AnalysisDimensionId { get; set; }
+        public string AnalysisDimensionCode { get; set; }
+    }
 
     public class AnalysisCode1
     {

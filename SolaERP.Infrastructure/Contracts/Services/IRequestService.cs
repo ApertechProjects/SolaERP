@@ -1,6 +1,7 @@
 ﻿using SolaERP.Application.Contracts.Common;
 using SolaERP.Application.Dtos.Request;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Contracts.Services
@@ -28,6 +29,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> SaveFollowUserAsync(RequestFollowSaveModel saveModel);
         Task<ApiResponse<bool>> DeleteFollowUserAsync(int requestFollowId);
         Task<ApiResponse<int>> GetDefaultApprovalStage(string keyCode, int businessUnitId);
-        Task<ApiResponse<List<int>>> CategoryList();
+        Task<ApiResponse<List<RequestCategory>>> CategoryList();
     }
 }

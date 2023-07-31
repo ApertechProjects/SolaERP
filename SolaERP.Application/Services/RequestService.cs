@@ -313,12 +313,12 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<int>.Success(data, 200);
         }
 
-        public async Task<ApiResponse<List<int>>> CategoryList()
+        public async Task<ApiResponse<List<RequestCategory>>> CategoryList()
         {
             var data = await _requestMainRepository.CategoryList();
             if (data.Count > 0)
-                return ApiResponse<List<int>>.Success(data, 200);
-            return ApiResponse<List<int>>.Fail("Data not found", 404);
+                return ApiResponse<List<RequestCategory>>.Success(data, 200);
+            return ApiResponse<List<RequestCategory>>.Fail("Data not found", 404);
         }
     }
 }
