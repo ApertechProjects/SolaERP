@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.Item_Code;
 using SolaERP.Application.Entities.RFQ;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
@@ -445,6 +446,43 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 while (reader.Read()) singleSourceReasons.Add(GetReasonsFromReader(reader));
                 return singleSourceReasons;
             }
+        }
+
+        public async Task<List<RFQInProgress>> GetInProgressesAsync(RFQFilterBase filter)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_RFQInProgress @BusinessUnitId,@ItemCode,@Emergency,@RFQType,@ProcurementType";
+
+
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", filter.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@ItemCode", filter.ItemCode);
+                command.Parameters.AddWithValue(command, "@Emergency", filter.Emergency);
+                command.Parameters.AddWithValue(command, "@RFQType", filter.RFQType);
+                command.Parameters.AddWithValue(command, "@ProcurementType", filter.ProcurementType);
+
+                List<RFQInProgress> inProgressRFQs = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read()) inProgressRFQs.Add(GetInProgressRFQSFromReader(reader));
+                return inProgressRFQs;
+
+            }
+        }
+
+        private RFQInProgress GetInProgressRFQSFromReader(IDataReader reader)
+        {
+            RFQInProgress inProgressRFQ = new();
+            PopulateRfqBaseFromReader(inProgressRFQ, reader);
+            inProgressRFQ.OfferCount = reader.Get<int>("OfferCount");
+            inProgressRFQ.Sent = reader.Get<bool>("Sent");
+            inProgressRFQ.Accepted = reader.Get<bool>("Accepted");
+            inProgressRFQ.InProgress = reader.Get<bool>("InProgress");
+            inProgressRFQ.Rejected = reader.Get<bool>("Rejected");
+            inProgressRFQ.Responded = reader.Get<bool>("Responded");
+            inProgressRFQ.NoResponse = reader.Get<bool>("NoResponse");
+            inProgressRFQ.BusinessCategoryName = reader.Get<string>("BusinessCategoryName");
+            return inProgressRFQ;
         }
 
         #endregion

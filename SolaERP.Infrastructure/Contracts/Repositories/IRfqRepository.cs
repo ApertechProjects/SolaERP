@@ -10,6 +10,8 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<SingleSourceReasonModel>> GetSingleSourceReasonsAsync();
         Task<List<RfqVendor>> GetVendorsForRfqAync(int businessCategoryId);
 
+        Task<List<RFQInProgress>> GetInProgressesAsync(RFQFilterBase filter);
+
         Task<RFQMain> GetRFQMainAsync(int rfqMainId);
         Task<List<RFQDetail>> GetRFQDetailsAsync(int rfqMainId);
         Task<List<RFQRequestDetail>> GetRFQLineDeatilsAsync(int rfqMainId);
