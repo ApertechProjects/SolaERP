@@ -17,14 +17,20 @@ namespace SolaERP.Persistence.Services
         private readonly IRfqRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IBusinessUnitRepository _bURepository;
         private readonly ISupplierEvaluationRepository _evaluationRepository;
 
-        public RfqService(IUnitOfWork unitOfWork, IRfqRepository repository, IMapper mapper, ISupplierEvaluationRepository evaluationRepository)
+        public RfqService(IUnitOfWork unitOfWork,
+                          IRfqRepository repository,
+                          IMapper mapper,
+                          ISupplierEvaluationRepository evaluationRepository,
+                          IBusinessUnitRepository bURepository)
         {
             _unitOfWork = unitOfWork;
             _repository = repository;
             _mapper = mapper;
             _evaluationRepository = evaluationRepository;
+            _bURepository = bURepository;
         }
 
         public async Task<ApiResponse<int>> SaveRfqAsync(RfqSaveCommandRequest request, string useridentity)
@@ -88,34 +94,42 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(result, 200);
         }
 
-        public async Task<ApiResponse<RFQMainDto>> GetRFQAsync(int rfqMainId)
+        public async Task<ApiResponse<RFQMainDto>> GetRFQAsync(string userIdentity, int rfqMainId)
         {
             var mainRFQ = await _repository.GetRFQMainAsync(rfqMainId);
             if (mainRFQ is null)
                 return ApiResponse<RFQMainDto>.Fail(ResultMessageConstants.ResourceNotFound, 404);
 
+            var businessCategoriesTask = _evaluationRepository.GetBusinessCategoriesAsync();
             var mainDetailsTask = _repository.GetRFQDetailsAsync(rfqMainId);
             var rfqRequestDetailsTask = _repository.GetRFQLineDeatilsAsync(rfqMainId);
             var rfqSingleReasonsTask = _repository.GetRFQSingeSourceReasons(rfqMainId);
+            var businessUnitTask = _bURepository.GetBusinessUnitListByUserId(Convert.ToInt32(userIdentity));
 
-            await Task.WhenAll(mainDetailsTask, rfqRequestDetailsTask, rfqSingleReasonsTask);
+            await Task.WhenAll(mainDetailsTask, rfqRequestDetailsTask, rfqSingleReasonsTask, businessCategoriesTask);
 
             var mainDetails = mainDetailsTask.Result;
             var rfqRequestDetails = rfqRequestDetailsTask.Result;
             var rfqSingleReasons = rfqSingleReasonsTask.Result;
+            var matchedBuCategory = businessCategoriesTask.Result.FirstOrDefault(x => x.Id == mainRFQ.BusinessCategoryId);
+            var matchedBU = businessUnitTask.Result.FirstOrDefault(x => x.BusinessUnitId == mainRFQ.BusinessUnitId);
 
             var mainRFQDto = _mapper.Map<RFQMainDto>(mainRFQ);
             var mainDetailsDto = _mapper.Map<List<RFQDetailDto>>(mainDetails);
             var rfqRequestDetailsDto = _mapper.Map<List<RFQRequestDetailDto>>(rfqRequestDetails);
 
             mainRFQDto.SingleSourceReasons = rfqSingleReasons;
+            mainRFQDto.BusinessCategory = matchedBuCategory;
+            mainRFQDto.BusinessUnit = matchedBU;
 
-            var requestLineDict = rfqRequestDetailsDto.ToDictionary(requestLine => requestLine.GUID);
+            var groupedRequestDetails = rfqRequestDetailsDto.GroupBy(requestLine => requestLine.GUID);
             mainDetailsDto.ForEach(detail =>
             {
-                if (requestLineDict.TryGetValue(detail.GUID, out var requestLine))
+                var guid = detail.GUID;
+                var requestLines = groupedRequestDetails.FirstOrDefault(group => group.Key == guid)?.ToList();
+                if (requestLines != null)
                 {
-                    detail.RequestDetails.Add(requestLine);
+                    detail.RequestDetails.AddRange(requestLines);
                 }
             });
 

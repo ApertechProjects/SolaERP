@@ -31,7 +31,7 @@ namespace SolaERP.API.Controllers
 
         [HttpGet("[action]/{rfqMainId}")]
         public async Task<IActionResult> Get(int rfqMainId)
-            => CreateActionResult(await _service.GetRFQAsync(rfqMainId));
+            => CreateActionResult(await _service.GetRFQAsync(User.Identity.Name, rfqMainId));
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetRequestForRFQ([FromQuery] RFQRequestModel model)
