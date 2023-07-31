@@ -1,15 +1,11 @@
 ﻿using SolaERP.Application.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.Application.Dtos.RFQ
 {
     public class RfqBaseDto
     {
         public int Id { get; set; }
+        public int LineNo { get; set; }
         public DateTime RequiredOnSiteDate { get; set; }
         public Emergency Emergency { get; set; }
         public DateTime RFQDate { get; set; }

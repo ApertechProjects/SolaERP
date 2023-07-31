@@ -1,14 +1,12 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
-using SolaERP.Application.Entities.Auth;
-using SolaERP.Application.Entities.Buyer;
 using SolaERP.Application.Entities.RFQ;
-using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -52,6 +50,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         private void PopulateRfqBaseFromReader(RFQBase rfqBase, IDataReader reader)
         {
             rfqBase.RFQMainId = reader.Get<int>("RFQMainId");
+            rfqBase.LineNo = reader.Get<int>("LineNo");
             rfqBase.RequiredOnSiteDate = reader.Get<DateTime>("RequiredOnSiteDate");
             rfqBase.Emergency = reader.Get<string>("Emergency");
             rfqBase.RFQDate = reader.Get<DateTime>("RFQDate");
