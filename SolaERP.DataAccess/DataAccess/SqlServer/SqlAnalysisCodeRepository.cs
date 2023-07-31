@@ -7,6 +7,7 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
 using System.Data.SqlClient;
+using AnalysisCodes = SolaERP.Application.Entities.AnalysisCode.AnalysisCodes;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -19,7 +20,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> DeleteAnalysisCodeAsync(int analysisCodeId,int userId)
+        public async Task<bool> DeleteAnalysisCodeAsync(int analysisCodeId, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
@@ -66,8 +67,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_AnalysisCodes_Load @analysisCodeId,@userId";
-                command.Parameters.AddWithValue(command, "@analysisCodeId", analysisCodeId);
+                command.CommandText = "EXEC SP_AnalysisCodes_Load @analysisDimensionId,@userId";
+                command.Parameters.AddWithValue(command, "@analysisDimensionId", analysisCodeId);
                 command.Parameters.AddWithValue(command, "@userId", userId);
 
                 using var reader = await command.ExecuteReaderAsync();
@@ -99,7 +100,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<AnalysisCodes>> GetAnalysisCodesByDimensionIdAsync(int dimensionId)
+        public async Task<List<Application.Entities.AnalysisCode.AnalysisCodes>> GetAnalysisCodesByDimensionIdAsync(int dimensionId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

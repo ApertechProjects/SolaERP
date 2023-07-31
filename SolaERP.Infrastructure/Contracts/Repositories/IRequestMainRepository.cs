@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Common;
+using SolaERP.Application.Dtos.Request;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Models;
 
@@ -22,5 +23,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> RequestFollowDeleteAsync(int requestFollowId);
         Task<bool> RequestMainChangeStatusAsync(int userId, int requestMainId, int approveStatus, string comment);
         Task<bool> RequestFollowCheckUserExistAsync(RequestFollowSaveModel saveModel);
+        Task<int> GetDefaultApprovalStage(string keyCode, int businessUnitId);
+        Task<List<int>> CategoryList();
     }
 }

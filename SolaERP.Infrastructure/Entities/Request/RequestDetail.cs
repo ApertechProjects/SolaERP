@@ -33,5 +33,6 @@
         public int? AnalysisCode8Id { get; set; }
         public int? AnalysisCode9Id { get; set; }
         public int? AnalysisCode10Id { get; set; }
+        public int? Catid { get; set; }
     }
 }

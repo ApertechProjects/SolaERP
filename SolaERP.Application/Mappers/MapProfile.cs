@@ -12,6 +12,7 @@ using SolaERP.Application.Dtos.BusinessUnit;
 using SolaERP.Application.Dtos.Buyer;
 using SolaERP.Application.Dtos.Currency;
 using SolaERP.Application.Dtos.Email;
+using SolaERP.Application.Dtos.General;
 using SolaERP.Application.Dtos.GridLayout;
 using SolaERP.Application.Dtos.Group;
 using SolaERP.Application.Dtos.Item_Code;
@@ -22,6 +23,7 @@ using SolaERP.Application.Dtos.LogInfo;
 using SolaERP.Application.Dtos.Menu;
 using SolaERP.Application.Dtos.Procedure;
 using SolaERP.Application.Dtos.Request;
+using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Dtos.Status;
 using SolaERP.Application.Dtos.Supplier;
 using SolaERP.Application.Dtos.SupplierEvaluation;
@@ -43,6 +45,7 @@ using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Buyer;
 using SolaERP.Application.Entities.Email;
+using SolaERP.Application.Entities.General;
 using SolaERP.Application.Entities.GridLayout;
 using SolaERP.Application.Entities.Groups;
 using SolaERP.Application.Entities.Item_Code;
@@ -53,6 +56,7 @@ using SolaERP.Application.Entities.LogInfo;
 using SolaERP.Application.Entities.Menu;
 using SolaERP.Application.Entities.Procedure;
 using SolaERP.Application.Entities.Request;
+using SolaERP.Application.Entities.RFQ;
 using SolaERP.Application.Entities.Status;
 using SolaERP.Application.Entities.Supplier;
 using SolaERP.Application.Entities.SupplierEvaluation;
@@ -61,6 +65,8 @@ using SolaERP.Application.Entities.UOM;
 using SolaERP.Application.Entities.User;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Models;
+using SolaERP.Persistence.Services;
+using AnalysisCodes = SolaERP.Application.Entities.AnalysisCode.AnalysisCodes;
 
 namespace SolaERP.Persistence.Mappers
 {
@@ -68,7 +74,7 @@ namespace SolaERP.Persistence.Mappers
     {
         public MapProfile()
         {
-            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<User, UserDto>().ForMember(dest => dest.UserType, opt => opt.MapFrom(src => src.UserTypeId)).ReverseMap();
             CreateMap<User, UserRegisterModel>().ReverseMap();
             CreateMap<BusinessUnits, BusinessUnitsAllDto>().ReverseMap();
             CreateMap<BusinessUnits, BusinessUnitsDto>().ReverseMap();
@@ -76,18 +82,18 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<Groups, GroupsDto>().ReverseMap();
             CreateMap<GroupUser, GroupUserDto>().ReverseMap();
             CreateMap<MenuWithPrivilagesDto, MenuWithPrivilages>().ReverseMap();
-            CreateMap<ApproveStagesMain, ApproveStagesMainDto>()
+            CreateMap<ApprovalStagesMain, ApprovalStagesMainDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ApproveStageMainId))
                 .ReverseMap();
-            CreateMap<ApproveStagesMain, ApprovalStageDto>()
+            CreateMap<ApprovalStagesMain, ApprovalStageDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ApproveStageMainId))
                 .ReverseMap();
-            CreateMap<ApproveStagesDetail, ApprovalStageDetailDto>()
+            CreateMap<ApprovalStagesDetail, ApprovalStageDetailDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ApproveStageDetailsId))
                 .ReverseMap();
-            CreateMap<ApproveStagesDetail, ApproveStagesDetailDto>().ReverseMap();
+            CreateMap<ApprovalStagesDetail, ApprovalStagesDetailDto>().ReverseMap();
             CreateMap<Procedure, ProcedureDto>().ReverseMap();
-            CreateMap<ApproveStageRole, ApproveStageRoleDto>().ReverseMap();
+            CreateMap<ApprovalStageRole, ApprovalStageRoleDto>().ReverseMap();
             //CreateMap<ApproveStageRole, ApprovalStageRoleDto>().ReverseMap();
             CreateMap<Role, ApproveRoleDto>().ReverseMap();
             CreateMap<ApproveRole, ApproveRoleDto>().ReverseMap();
@@ -100,6 +106,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<RequestMain, RequestAmendmentDto>().ReverseMap();
             CreateMap<RequestAmendment, RequestAmendmentDto>().ReverseMap();
             CreateMap<RequestDetail, RequestDetailDto>().ReverseMap();
+            CreateMap<RequestCardAnalysis, RequestCardAnalysisDto>().ReverseMap();
             CreateMap<RequestTypes, RequestTypesDto>().ReverseMap();
             CreateMap<RequestMainDraftDto, RequestMainDraft>().ReverseMap();
             CreateMap<LogInfo, LogInfoDto>().ReverseMap();
@@ -109,7 +116,6 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<Status, StatusDto>().ReverseMap();
             CreateMap<Buyer, BuyerDto>().ReverseMap();
             CreateMap<ActiveUser, ActiveUserDto>().ReverseMap();
-            CreateMap<AnalysisCode, AnalysisCodeDto>().ReverseMap();
             CreateMap<AnalysisCodes, AnalysisCodesDto>().ReverseMap();
             CreateMap<RequestApprovalInfo, RequestApprovalInfoDto>().ReverseMap();
             CreateMap<RequestDetail, RequestDetailsWithAnalysisCodeDto>().ReverseMap();
@@ -320,7 +326,7 @@ namespace SolaERP.Persistence.Mappers
 
 
             CreateMap<AnalysisStructureWithBu, AnalysisStructureWithBuDto>().ReverseMap();
-            CreateMap<ApproveStageMainInputModel, ApproveStagesMain>().ReverseMap();
+            CreateMap<ApproveStageMainInputModel, ApprovalStagesMain>().ReverseMap();
 
             CreateMap<VendorCard, VendorCardDto>()
                 .ForMember(dest => dest.VendorId, opt => opt.MapFrom(src => src.VendorId))
@@ -377,9 +383,21 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.TaxId, opt => opt.MapFrom(src => src.TaxId))
                 .ForMember(dest => dest.DeliveryTerms, opt => opt.MapFrom(src => src.DeliveryTermId))
                 .ForMember(dest => dest.Tax, opt => opt.MapFrom(src => src.TaxesId))
+                .ForMember(dest => dest._60DaysPayment, opt => opt.MapFrom(src => src.AgreeWithDefaultDays))
                 .ReverseMap();
 
+            CreateMap<RfqDraft, RfqDraftDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RFQMainId))
+                .ForMember(dest => dest.BusinessCategory, opt => opt.Ignore()).ReverseMap();
+
+            CreateMap<RfqAll, RfqAllDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RFQMainId)).ReverseMap();
+
+            CreateMap<RequestForRFQ, RequestRfqDto>().ReverseMap();
             CreateMap<GridLayout, GridLayoutDto>().ReverseMap();
+            CreateMap<AnalysisCode, AnalysisCodeDto>().ReverseMap();
+
+            CreateMap<RejectReason, RejectReasonDto>().ReverseMap();
         }
     }
 }

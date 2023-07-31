@@ -1,11 +1,13 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Application.Contracts.Repositories;
+﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -76,7 +78,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<RequestMainDraft>> GetMainRequestDraftsAsync(RequestMainDraftModel requestMain)
         {
-            string itemCode = string.Join(',', requestMain.ItemCodes);
+            string itemCode = string.Join(',', requestMain.ItemCode);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainDrafts]", new ReplaceParams { ParamName = "APT", Value = requestMain.BusinessUnitCode });
@@ -154,7 +156,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<RequestAmendment>> GetApproveAmendmentRequestsAsync(int userId, RequestApproveAmendmentModel requestParametersDto)
         {
-            string itemCode = string.Join(',', requestParametersDto.ItemCodes);
+            string itemCode = string.Join(',', requestParametersDto.ItemCode);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainApproveAmendment]", new ReplaceParams { ParamName = "APT", Value = requestParametersDto.BusinessUnitCode });
@@ -275,7 +277,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 UserId = reader.Get<int>("UserId"),
                 Requester = reader.Get<int>("Requester"),
                 Status = reader.Get<int>("Status"),
-                //SupplierCode = reader.Get<string>("SupplierCode"),
                 RequestComment = reader.Get<string>("RequestComment"),
                 OperatorComment = reader.Get<string>("OperatorComment"),
                 QualityRequired = reader.Get<string>("QualityRequired"),
@@ -284,7 +285,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Destination = reader.Get<int>("Destination"),
                 ApproveStatus = reader.Get<string>("ApproveStatus"),
                 AccountCode = reader.Get<string>("AccountCode"),
-                AccountName = reader.Get<string>("AccountName")
+                AccountName = reader.Get<string>("AccountName"),
+                Buyer = reader.Get<string>("Buyer"),
+                PotentialVendor = reader.Get<string>("PotentialVendor"),
+                Priority = reader.Get<int>("Priority")
             };
         }
 
@@ -350,10 +354,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                 @EntryDate,@RequestDate,
                                                                 @RequestDeadline,@UserID,
                                                                 @Requester,@Status,
-                                                                @SupplierCode,@RequestComment,
+                                                                @PotentialVendor,@RequestComment,
                                                                 @OperatorComment,
                                                                 @QualityRequired,@Currency,
                                                                 @LogisticTotal,@Buyer,@Destination,
+                                                                @Priority,@ApproveStageMainId,
                                                                 @NewRequestmainId = @NewRequestmainId OUTPUT,
                                                                 @NewRequestNo = @NewRequestNo OUTPUT 
                                                                 select @NewRequestmainId as NewRequestmainId,
@@ -370,7 +375,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@UserID", userId);
                 command.Parameters.AddWithValue(command, "@Requester", model.Requester);
                 command.Parameters.AddWithValue(command, "@Status", model.Status);
-                command.Parameters.AddWithValue(command, "@SupplierCode", model.SupplierCode);
+                command.Parameters.AddWithValue(command, "@PotentialVendor", model.PotentialVendor);
                 command.Parameters.AddWithValue(command, "@RequestComment", model.RequestComment);
                 command.Parameters.AddWithValue(command, "@OperatorComment", model.OperatorComment);
                 command.Parameters.AddWithValue(command, "@QualityRequired", model.QualityRequired);
@@ -400,7 +405,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<RequestMainAll>> GetAllAsync(RequestMainGetModel requestMain)
         {
-            string itemCode = string.Join(',', requestMain.ItemCodes);
+            string itemCode = string.Join(',', requestMain.ItemCode);
             string approveStatus = string.Join(',', requestMain.ApproveStatus);
             string status = string.Join(',', requestMain.Status);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -503,6 +508,35 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 }
 
                 return res;
+            }
+        }
+
+        public async Task<int> GetDefaultApprovalStage(string keyCode, int businessUnitId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = $"exec dbo.SP_RequestApproveStagesDefault @keyCode,@businessUnitId";
+                command.Parameters.AddWithValue(command, "@keyCode", keyCode);
+                command.Parameters.AddWithValue(command, "@businessUnitId", businessUnitId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                int mainId = 0;
+                if (reader.Read())
+                    mainId = reader.Get<int>("ApproveStageMainId");
+                return mainId;
+            }
+        }
+
+        public async Task<List<int>> CategoryList()
+        {
+            List<int> list = new List<int>();
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = $"exec dbo.SP_RequestCatList";
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                    list.Add(reader.Get<int>("CatId"));
+                return list;
             }
         }
     }

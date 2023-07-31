@@ -2,6 +2,7 @@
 using SolaERP.Application.Entities.AnalysisCode;
 using SolaERP.Application.Entities.AnalysisDimension;
 using SolaERP.Application.Models;
+using AnalysisCodes = SolaERP.Application.Entities.AnalysisCode.AnalysisCodes;
 
 namespace SolaERP.Application.Contracts.Repositories
 {

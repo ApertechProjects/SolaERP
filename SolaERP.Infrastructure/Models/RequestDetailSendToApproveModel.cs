@@ -8,6 +8,7 @@ namespace SolaERP.Application.Models
         public int ApproveStatusId { get; set; }
         public string Comment { get; set; }
         public int Sequence { get; set; }
+        public int RejectReasonId { get; set; }
 
         [JsonIgnore]
         public int UserId { get; set; }

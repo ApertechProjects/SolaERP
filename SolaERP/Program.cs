@@ -7,7 +7,6 @@ using RabbitMQ.Client;
 using Serilog;
 using SolaERP.Application.Shared;
 using SolaERP.Application.Validations;
-using SolaERP.Business.Models;
 using SolaERP.Extensions;
 using SolaERP.Middlewares;
 using SolaERP.Persistence.Mappers;
@@ -144,7 +143,6 @@ builder.Services.AddSwaggerGen(c =>
        { jwtSecurityScheme, Array.Empty<string>() }
     });
 });
-builder.Services.AddSingleton<ConfHelper>(new ConfHelper { DevelopmentUrl = builder.Configuration.GetConnectionString("DevelopmentConnectionString") });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSignalR();
 

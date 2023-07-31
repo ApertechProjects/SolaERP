@@ -281,22 +281,18 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             return new() { UserId = reader.Get<int>("Id"), FullName = reader.Get<string>("FullName") };
         }
 
-        public async Task<(int, List<UserMain>)> GetUserWFAAsync(int userId, int userStatus, int userType, int page, int limit)
+        public async Task<List<UserMain>> GetUserWFAAsync(int userId, int userStatus, int userType)
         {
             List<UserMain> users = new List<UserMain>();
             int totalDataCount = 0;
 
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec SP_UsersWFA @UserType, @UserStatus, @UserId, @Limit, @Page, @COUNT OUTPUT";
+                command.CommandText = "exec SP_UsersWFA @UserType, @UserStatus, @UserId";
 
                 command.Parameters.AddWithValue(command, "@UserType", userType is -1 ? "%" : string.Join(',', userType));
                 command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
-                command.Parameters.AddWithValue(command, "@Limit", limit);
-                command.Parameters.AddWithValue(command, "@Page", page);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
-                var totalDataCountParam = new SqlParameter("@COUNT", SqlDbType.Int) { Direction = ParameterDirection.Output };
-                command.Parameters.Add(totalDataCountParam);
 
                 using (var reader = await command.ExecuteReaderAsync())
                 {
@@ -306,23 +302,20 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     }
                 }
 
-                totalDataCount = (int)totalDataCountParam.Value;
             }
-            return (totalDataCount, users);
+            return users;
         }
 
-        public async Task<(int, List<UserMain>)> GetUserAllAsync(int userId, int userStatus, int userType, int page, int limit)
+        public async Task<List<UserMain>> GetUserAllAsync(int userId, int userStatus, int userType)
         {
             List<UserMain> users = new List<UserMain>();
             int totalDataCount = 0;
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec SP_UsersAll @UserType,@UserStatus,@UserId,@Limit,@Page, @count OUTPUT";
+                command.CommandText = "exec SP_UsersAll @UserType,@UserStatus,@UserId";
 
                 command.Parameters.AddWithValue(command, "@UserType", userType is -1 ? "%" : string.Join(',', userType));
                 command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
-                command.Parameters.AddWithValue(command, "@Limit", limit);
-                command.Parameters.AddWithValue(command, "@Page", page);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 var totalDataCountParam = new SqlParameter("@count", SqlDbType.Int) { Direction = ParameterDirection.Output };
@@ -335,26 +328,19 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                         users.Add(reader.GetByEntityStructure<UserMain>());
                     }
                 }
-
-                totalDataCount = (int)totalDataCountParam.Value;
             }
-            return (totalDataCount, users);
+            return users;
         }
 
-        public async Task<(int, List<UserMain>)> GetUserCompanyAsync(int userId, int userStatus, int page, int limit)
+        public async Task<List<UserMain>> GetUserCompanyAsync(int userId, int userStatus)
         {
             List<UserMain> users = new List<UserMain>();
             int totalDataCount = 0;
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec SP_UsersCompany @UserStatus,@UserId,@Limit,@Page, @COUNT OUTPUT";
+                command.CommandText = "exec SP_UsersCompany @UserStatus,@UserId";
                 command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
-                command.Parameters.AddWithValue(command, "@Limit", limit);
-                command.Parameters.AddWithValue(command, "@Page", page);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
-
-                var totalDataCountParam = new SqlParameter("@COUNT", SqlDbType.Int) { Direction = ParameterDirection.Output };
-                command.Parameters.Add(totalDataCountParam);
 
                 using (var reader = await command.ExecuteReaderAsync())
                 {
@@ -364,24 +350,19 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     }
                 }
 
-                totalDataCount = (int)totalDataCountParam.Value;
             }
-            return (totalDataCount, users);
+            return users;
         }
 
-        public async Task<(int, List<UserMain>)> GetUserVendorAsync(int userId, int userStatus, int page, int limit)
+        public async Task<List<UserMain>> GetUserVendorAsync(int userId, int userStatus)
         {
             List<UserMain> users = new List<UserMain>();
             int totalDataCount = 0;
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec SP_UsersVendor @UserStatus,@UserId,@Limit,@Page, @COUNT OUTPUT";
+                command.CommandText = "exec SP_UsersVendor @UserStatus,@UserId";
                 command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
-                command.Parameters.AddWithValue(command, "@Limit", limit);
-                command.Parameters.AddWithValue(command, "@Page", page);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
-                var totalDataCountParam = new SqlParameter("@COUNT", SqlDbType.Int) { Direction = ParameterDirection.Output };
-                command.Parameters.Add(totalDataCountParam);
 
                 using (var reader = await command.ExecuteReaderAsync())
                 {
@@ -391,9 +372,8 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     }
                 }
 
-                totalDataCount = (int)totalDataCountParam.Value;
             }
-            return (totalDataCount, users);
+            return users;
         }
 
         public async Task<bool> UserChangeStatusAsync(int userId, UserChangeStatusModel model)

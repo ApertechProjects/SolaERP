@@ -2,7 +2,8 @@
 {
     public class AnalysisCodeGetModel
     {
-        public int Businessunitid { get; set; }
+        public int BusinessUnitId { get; set; }
         public string ProcedureName { get; set; }
+        public int CatId { get; set; }
     }
 }

@@ -22,10 +22,10 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> ResetUserPasswordAsync(string email, string passwordHash);
         Task<List<ActiveUser>> GetActiveUsersAsync();
         Task<List<ActiveUser>> GetActiveUsersWithoutCurrentUserAsync(int userId);
-        Task<(int, List<UserMain>)> GetUserWFAAsync(int userId, int userStatus, int userType, int page, int limit);
-        Task<(int, List<UserMain>)> GetUserAllAsync(int userId, int userStatus, int userType, int page, int limit);
-        Task<(int, List<UserMain>)> GetUserCompanyAsync(int userId, int userStatus, int page, int limit);
-        Task<(int, List<UserMain>)> GetUserVendorAsync(int userId, int userStatus, int page, int limit);
+        Task<List<UserMain>> GetUserWFAAsync(int userId, int userStatus, int userType);
+        Task<List<UserMain>> GetUserAllAsync(int userId, int userStatus, int userType);
+        Task<List<UserMain>> GetUserCompanyAsync(int userId, int userStatus);
+        Task<List<UserMain>> GetUserVendorAsync(int userId, int userStatus);
         Task<bool> UserChangeStatusAsync(int userId, UserChangeStatusModel model);
         Task<bool> UserChangeStatusAsync(int userId, DataTable data);
         Task<int> SaveUserAsync(User model);

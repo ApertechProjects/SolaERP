@@ -5,8 +5,11 @@ using SolaERP.Application.Dtos.AnalysisCode;
 using SolaERP.Application.Dtos.AnaysisDimension;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Entities.AnalysisCode;
+using SolaERP.Application.Entities.AnalysisDimension;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using System.Collections.Generic;
 
 namespace SolaERP.Persistence.Services
 {
@@ -54,13 +57,89 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Fail("Analysis code can not be deleted", 400);
         }
 
-        public async Task<ApiResponse<List<AnalysisCodeDto>>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest)
+        public async Task<ApiResponse<List<AnalysisListDto>>> GetAnalysisCodeListAsync(int dimensionId, string userName)
         {
-            var analysisCodes = await _analysisCodeRepository.GetAnalysisCodesAsync(getRequest.Businessunitid, getRequest.ProcedureName);
-            var analysis = _mapper.Map<List<AnalysisCodeDto>>(analysisCodes);
+            var userId = await _userRepository.ConvertIdentity(userName);
+            var analysisCodes = await _analysisCodeRepository.GetAnalysisCodesAsync(dimensionId, userId);
+            var analysisListDtos = analysisCodes.Select(x => new AnalysisListDto
+            {
+                AnalysisCodesId = x.AnalysisCodesId,
+                AnalysisCode = x.AnalysisCode,
+                AnalysisName = x.AnalysisName
+            }).ToList();
+            if (analysisListDtos.Count == 0)
+                return ApiResponse<List<AnalysisListDto>>.Fail("Data not found", 404);
+            return ApiResponse<List<AnalysisListDto>>.Success(analysisListDtos);
+        }
 
-            return analysis.Count > 0 ? ApiResponse<List<AnalysisCodeDto>>.Success(analysis, 200) :
-                  ApiResponse<List<AnalysisCodeDto>>.Fail("analysisCodes", "Analysis codes is empty", 404, true);
+        public async Task<ApiResponse<AnalysisCodeModel>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest)
+        {
+            var analysisCodes = await _analysisCodeRepository.GetAnalysisCodesAsync(getRequest.BusinessUnitId, getRequest.ProcedureName);
+            var analysisCodeByCat = analysisCodes.Where(x => x.CatId == getRequest.CatId).FirstOrDefault();
+
+            if(analysisCodeByCat==null)
+                return ApiResponse<AnalysisCodeModel>.Fail("Analysis codes is empty", 404);
+
+            AnalysisCodeModel analysisCodeModel = new AnalysisCodeModel()
+            {
+                CatId = analysisCodeByCat.CatId,
+                Analysis = new Analysisis
+                {
+                    AnalysisCode1 = new AnalysisCode1
+                    {
+                        AnalysisDimensionId1 = analysisCodeByCat.AnalysisDimensionId1,
+                        AnalysisDimensionCode1 = analysisCodeByCat.AnalysisDimensionCode1
+                    },
+                    AnalysisCode2 = new AnalysisCode2
+                    {
+                        AnalysisDimensionId2 = analysisCodeByCat.AnalysisDimensionId2,
+                        AnalysisDimensionCode2 = analysisCodeByCat.AnalysisDimensionCode2
+                    },
+                    AnalysisCode3 = new AnalysisCode3
+                    {
+                        AnalysisDimensionId3 = analysisCodeByCat.AnalysisDimensionId3,
+                        AnalysisDimensionCode3 = analysisCodeByCat.AnalysisDimensionCode3
+                    },
+                    AnalysisCode4 = new AnalysisCode4
+                    {
+                        AnalysisDimensionId4 = analysisCodeByCat.AnalysisDimensionId4,
+                        AnalysisDimensionCode4 = analysisCodeByCat.AnalysisDimensionCode4
+                    },
+                    AnalysisCode5 = new AnalysisCode5
+                    {
+                        AnalysisDimensionId5 = analysisCodeByCat.AnalysisDimensionId5,
+                        AnalysisDimensionCode5 = analysisCodeByCat.AnalysisDimensionCode5
+                    },
+                    AnalysisCode6 = new AnalysisCode6
+                    {
+                        AnalysisDimensionId6 = analysisCodeByCat.AnalysisDimensionId6,
+                        AnalysisDimensionCode6 = analysisCodeByCat.AnalysisDimensionCode6
+                    },
+                    AnalysisCode7 = new AnalysisCode7
+                    {
+                        AnalysisDimensionId7 = analysisCodeByCat.AnalysisDimensionId7,
+                        AnalysisDimensionCode7 = analysisCodeByCat.AnalysisDimensionCode7
+                    },
+                    AnalysisCode8 = new AnalysisCode8
+                    {
+                        AnalysisDimensionId8 = analysisCodeByCat.AnalysisDimensionId8,
+                        AnalysisDimensionCode8 = analysisCodeByCat.AnalysisDimensionCode8
+                    },
+                    AnalysisCode9 = new AnalysisCode9
+                    {
+                        AnalysisDimensionId9 = analysisCodeByCat.AnalysisDimensionId9,
+                        AnalysisDimensionCode9 = analysisCodeByCat.AnalysisDimensionCode9
+                    },
+                    AnalysisCode10 = new AnalysisCode10
+                    {
+                        AnalysisDimensionId10 = analysisCodeByCat.AnalysisDimensionId10,
+                        AnalysisDimensionCode10 = analysisCodeByCat.AnalysisDimensionCode10
+                    },
+                }
+            };
+
+            return  ApiResponse<AnalysisCodeModel>.Success(analysisCodeModel, 200);
+                 
         }
 
         public async Task<ApiResponse<List<AnalysisDto>>> GetAnalysisCodesAsync(int dimensionId, string userName)

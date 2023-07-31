@@ -6,7 +6,7 @@ using SolaERP.Application.Dtos.Shared;
 
 namespace SolaERP.Persistence.Services
 {
-    public class ApproveStageMainService : IApproveStageMainService, ILoggableCrudService<ApproveStagesMainDto>
+    public class ApproveStageMainService : IApproveStageMainService, ILoggableCrudService<ApprovalStagesMainDto>
     {
         private readonly IApproveStageMainRepository _approveStageMainRepository;
         private IMapper _mapper;
@@ -17,29 +17,29 @@ namespace SolaERP.Persistence.Services
             _mapper = mapper;
         }
 
-        public Task AddAsync(ApproveStagesMainDto model)
+        public Task AddAsync(ApprovalStagesMainDto model)
         {
             throw new NotImplementedException();
         }
 
 
-        public Task<ApiResponse<List<ApproveStagesMainDto>>> GetAllAsync()
+        public Task<ApiResponse<List<ApprovalStagesMainDto>>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ApiResponse<ApproveStagesMainDto>> GetApproveStageMainByApprovalStageMainId(int approvalStageMainId)
+        public async Task<ApiResponse<ApprovalStagesMainDto>> GetApproveStageMainByApprovalStageMainId(int approvalStageMainId)
         {
             var approveStageHeader = await _approveStageMainRepository.GetApprovalStageHeaderLoad(approvalStageMainId);
-            var dto = _mapper.Map<ApproveStagesMainDto>(approveStageHeader);
-            return ApiResponse<ApproveStagesMainDto>.Success(dto, 200);
+            var dto = _mapper.Map<ApprovalStagesMainDto>(approveStageHeader);
+            return ApiResponse<ApprovalStagesMainDto>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<List<ApproveStagesMainDto>>> GetByBusinessUnitId(int buId)
+        public async Task<ApiResponse<List<ApprovalStagesMainDto>>> GetByBusinessUnitId(int buId)
         {
             var approveStagesList = await _approveStageMainRepository.GetByBusinessUnitId(buId);
-            var dto = _mapper.Map<List<ApproveStagesMainDto>>(approveStagesList);
-            return ApiResponse<List<ApproveStagesMainDto>>.Success(dto, 200);
+            var dto = _mapper.Map<List<ApprovalStagesMainDto>>(approveStagesList);
+            return ApiResponse<List<ApprovalStagesMainDto>>.Success(dto, 200);
         }
 
         public Task<ApiResponse<bool>> RemoveAsync(int Id)
@@ -47,27 +47,27 @@ namespace SolaERP.Persistence.Services
             throw new NotImplementedException();
         }
 
-        public void Update(ApproveStagesMainDto entity, int userId = 0)
+        public void Update(ApprovalStagesMainDto entity, int userId = 0)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> AddAsync(ApproveStagesMainDto entity, int userId = 0)
+        public Task<bool> AddAsync(ApprovalStagesMainDto entity, int userId = 0)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ApiResponse<bool>> UpdateAsync(ApproveStagesMainDto model)
+        public Task<ApiResponse<bool>> UpdateAsync(ApprovalStagesMainDto model)
         {
             throw new NotImplementedException();
         }
 
-        public Task<int> AddAsync(string authToken, ApproveStagesMainDto entity)
+        public Task<int> AddAsync(string authToken, ApprovalStagesMainDto entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task<int> UpdateAsync(string authToken, ApproveStagesMainDto entity)
+        public Task<int> UpdateAsync(string authToken, ApprovalStagesMainDto entity)
         {
             throw new NotImplementedException();
         }

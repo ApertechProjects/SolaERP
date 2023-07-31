@@ -46,6 +46,5 @@ namespace SolaERP.Application.Dtos.Request
         public int AnalysisCode10Id { get; set; }
         public string StatusName { get; set; }
         public string ApproveStatusName { get; set; }
-        public string Type { get; set; }
     }
 }

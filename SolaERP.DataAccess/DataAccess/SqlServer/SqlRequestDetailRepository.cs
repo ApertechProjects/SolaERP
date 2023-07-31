@@ -50,6 +50,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                     @AnalysisCode8Id, 
                                                                     @AnalysisCode9Id, 
                                                                     @AnalysisCode10Id,
+                                                                    @Catid,
                                                                     @NewRequestDetailsId";
 
                 command.Parameters.AddWithValue(command, "@RequestDetailId", entity.RequestDetailId);
@@ -138,17 +139,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> RequestDetailChangeStatusAsync(int requestDetailId, int userId, int approveStatusId, string comment, int sequence)
+        public async Task<bool> RequestDetailChangeStatusAsync(int requestDetailId, int userId, int approveStatusId, string comment, int sequence, int rejectReasonId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_RequestApprove @RequestDetailId,@UserId,@ApproveStatusId,@Comment,@Sequence";
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_RequestApprove @RequestDetailId,@UserId,@ApproveStatusId,@Comment,@Sequence,@RejectReasonId";
 
                 command.Parameters.AddWithValue(command, "@RequestDetailId", requestDetailId);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@ApproveStatusId", approveStatusId);
                 command.Parameters.AddWithValue(command, "@Comment", comment);
                 command.Parameters.AddWithValue(command, "@Sequence", sequence);
+                command.Parameters.AddWithValue(command, "@RejectReasonId", rejectReasonId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
@@ -166,5 +168,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
+        public async Task<List<RequestCardAnalysis>> GetAnalysis(int requestMainId)
+        {
+            List<RequestCardAnalysis> result = new List<RequestCardAnalysis>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RequestDetailsAnalysis_Load @RequestMainId";
+                command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (await reader.ReadAsync()) result.Add(reader.GetByEntityStructure<RequestCardAnalysis>());
+                return result;
+            }
+        }
     }
 }

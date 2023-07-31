@@ -5,6 +5,7 @@ using SolaERP.Application.Dtos.ApproveStage;
 using SolaERP.Application.Dtos.ApproveStages;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Entities.ApproveStage;
+using SolaERP.Application.Entities.ApproveStages;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 
@@ -35,18 +36,18 @@ namespace SolaERP.Persistence.Services
 
 
 
-        public async Task<ApiResponse<ApproveStagesMainDto>> GetMainByIdAsync(int approvalStageMainId)
+        public async Task<ApiResponse<ApprovalStagesMainDto>> GetMainByIdAsync(int approvalStageMainId)
         {
             var approveStageHeader = await _approveStageMainRepository.GetApprovalStageHeaderLoad(approvalStageMainId);
-            var dto = _mapper.Map<ApproveStagesMainDto>(approveStageHeader);
-            return ApiResponse<ApproveStagesMainDto>.Success(dto, 200);
+            var dto = _mapper.Map<ApprovalStagesMainDto>(approveStageHeader);
+            return ApiResponse<ApprovalStagesMainDto>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<List<ApproveStagesMainDto>>> GetByBusinessUnitId(int buId)
+        public async Task<ApiResponse<List<ApprovalStagesMainDto>>> GetByBusinessUnitId(int buId)
         {
             var approveStagesList = await _approveStageMainRepository.GetByBusinessUnitId(buId);
-            var dto = _mapper.Map<List<ApproveStagesMainDto>>(approveStagesList);
-            return ApiResponse<List<ApproveStagesMainDto>>.Success(dto, 200);
+            var dto = _mapper.Map<List<ApprovalStagesMainDto>>(approveStagesList);
+            return ApiResponse<List<ApprovalStagesMainDto>>.Success(dto, 200);
         }
 
         public async Task<ApiResponse<int>> SaveApproveStageMainAsync(string name, ApprovalStageSaveModel approvalStageSaveVM)
@@ -74,7 +75,7 @@ namespace SolaERP.Persistence.Services
                         else
                         {
                             approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRoles[j].ApproveStageDetailId = detailId;
-                            await _approveStageRoleRepository.AddAsync(_mapper.Map<ApproveStageRole>(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRoles[j]));
+                            await _approveStageRoleRepository.AddAsync(_mapper.Map<ApprovalStageRole>(approvalStageSaveVM.ApproveStagesDetailDtos[i].ApproveStageRoles[j]));
                         }
                     }
                 }
@@ -128,7 +129,7 @@ namespace SolaERP.Persistence.Services
 
             foreach (var item in detailModel)
             {
-                var rolesModel = _mapper.Map<List<ApproveStageRoleDto>>
+                var rolesModel = _mapper.Map<List<ApprovalStageRoleDto>>
                 (await _approveStageRoleRepository.GetByDetailIdAsync(item.Id));
 
                 item.ApproveStageRoles = rolesModel;
@@ -138,6 +139,12 @@ namespace SolaERP.Persistence.Services
                 mainModel.Details = detailModel;
 
             return ApiResponse<ApprovalStageDto>.Success(mainModel, 200);
+        }
+
+        public async Task<ApiResponse<List<ApprovalStages>>> Stages(int businessUnitId, string procedureKey)
+        {
+            var data = await _approveStageMainRepository.Stages(businessUnitId, procedureKey);
+            return ApiResponse<List<ApprovalStages>>.Success(data, 200);
         }
     }
 }
