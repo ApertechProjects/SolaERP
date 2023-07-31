@@ -384,7 +384,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     Name = reader.Get<string>("BusinessCategoryName")
                 },
                 Condition = (Condition)reader.Get<int>("Condition"),
-                AlternativeItem = reader.Get<bool>("AlternativeItem"),
+                AlternativeItem = reader.Get<bool>("AlternativeItems"),
                 UOM = reader.Get<string>("UOM"),
                 DefaultUOM = reader.Get<string>("DefaultUOM"),
                 Quantity = reader.Get<decimal>("Quantity"),
