@@ -527,15 +527,15 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<int>> CategoryList()
+        public async Task<List<RequestCategory>> CategoryList()
         {
-            List<int> list = new List<int>();
+            List<RequestCategory> list = new List<RequestCategory>();
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText = $"exec dbo.SP_RequestCatList";
                 using var reader = await command.ExecuteReaderAsync();
                 while (reader.Read())
-                    list.Add(reader.Get<int>("CatId"));
+                    list.Add(reader.GetByEntityStructure<RequestCategory>());
                 return list;
             }
         }
