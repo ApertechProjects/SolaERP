@@ -136,5 +136,13 @@ namespace SolaERP.Persistence.Services
             mainRFQDto.Details = mainDetailsDto;
             return ApiResponse<RFQMainDto>.Success(mainRFQDto, 200);
         }
+
+        public async Task<ApiResponse<List<RFQInProgressDto>>> GetInProgressAsync(RFQFilterBase filter)
+        {
+            var inProgressRFQS = await _repository.GetInProgressesAsync(filter);
+            var dto = _mapper.Map<List<RFQInProgressDto>>(inProgressRFQS);
+            return ApiResponse<List<RFQInProgressDto>>.Success(dto, 200);
+
+        }
     }
 }

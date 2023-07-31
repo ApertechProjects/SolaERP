@@ -25,6 +25,10 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> GetAll([FromQuery] RfqAllFilter filter)
             => CreateActionResult(await _service.GetAllAsync(filter));
 
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetInProgress(RFQFilterBase filter)
+            => CreateActionResult(await _service.GetInProgressAsync(filter));
+
         [HttpGet]
         public async Task<IActionResult> GetDrafts([FromQuery] RfqFilter filter)
             => CreateActionResult(await _service.GetDraftsAsync(filter));
