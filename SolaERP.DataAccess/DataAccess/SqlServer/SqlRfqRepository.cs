@@ -50,7 +50,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         private void PopulateRfqBaseFromReader(RFQBase rfqBase, IDataReader reader)
         {
             rfqBase.RFQMainId = reader.Get<int>("RFQMainId");
-            rfqBase.LineNo = reader.Get<int>("LineNo");
+            rfqBase.LineNo = reader.Get<long>("LineNo");
             rfqBase.RequiredOnSiteDate = reader.Get<DateTime>("RequiredOnSiteDate");
             rfqBase.Emergency = reader.Get<string>("Emergency");
             rfqBase.RFQDate = reader.Get<DateTime>("RFQDate");
