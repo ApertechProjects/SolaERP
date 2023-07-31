@@ -463,26 +463,26 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 List<RFQInProgress> inProgressRFQs = new();
                 using var reader = await command.ExecuteReaderAsync();
 
-                while (reader.Read()) inProgressRFQs.Add(GetInProgressRFQSFromReader(reader));
+                while (reader.Read()) inProgressRFQs.Add(reader.GetByEntityStructure<RFQInProgress>());
                 return inProgressRFQs;
 
             }
         }
 
-        private RFQInProgress GetInProgressRFQSFromReader(IDataReader reader)
-        {
-            RFQInProgress inProgressRFQ = new();
-            PopulateRfqBaseFromReader(inProgressRFQ, reader);
-            inProgressRFQ.OfferCount = reader.Get<int>("OfferCount");
-            inProgressRFQ.Sent = reader.Get<bool>("Sent");
-            inProgressRFQ.Accepted = reader.Get<bool>("Accepted");
-            inProgressRFQ.InProgress = reader.Get<bool>("InProgress");
-            inProgressRFQ.Rejected = reader.Get<bool>("Rejected");
-            inProgressRFQ.Responded = reader.Get<bool>("Responded");
-            inProgressRFQ.NoResponse = reader.Get<bool>("NoResponse");
-            inProgressRFQ.BusinessCategoryName = reader.Get<string>("BusinessCategoryName");
-            return inProgressRFQ;
-        }
+        //private RFQInProgress GetInProgressRFQSFromReader(IDataReader reader)
+        //{
+        //    RFQInProgress inProgressRFQ = new();
+        //    PopulateRfqBaseFromReader(inProgressRFQ, reader);
+        //    inProgressRFQ.OfferCount = reader.Get<int>("OfferCount");
+        //    inProgressRFQ.Sent = reader.Get<bool>("Sent");
+        //    inProgressRFQ.Accepted = reader.Get<bool>("Accepted");
+        //    inProgressRFQ.InProgress = reader.Get<bool>("InProgress");
+        //    inProgressRFQ.Rejected = reader.Get<bool>("Rejected");
+        //    inProgressRFQ.Responded = reader.Get<bool>("Responded");
+        //    inProgressRFQ.NoResponse = reader.Get<bool>("NoResponse");
+        //    inProgressRFQ.BusinessCategoryName = reader.Get<string>("BusinessCategoryName");
+        //    return inProgressRFQ;
+        //}
 
         #endregion
     }
