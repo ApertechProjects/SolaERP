@@ -262,7 +262,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@VendorTypeId", string.Join(",", request.VendorTypeId));
                 command.Parameters.AddWithValue(command, "@ProductServiceId", string.Join(",", request.ProductServiceId));
                 command.Parameters.AddWithValue(command, "@BusinessCategoryId", string.Join(",", request.BusinessCategoryId));
-                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", string.Join(",", request.BusinessCategoryId));
+                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", string.Join(",", request.PrequalificationCategoryId));
                 command.Parameters.AddWithValue(command, "@status", string.Join(",", request.Status));
                 command.Parameters.AddWithValue(command, "@ApproveStatus", string.Join(",", request.Approval));
 
