@@ -263,10 +263,7 @@ namespace SolaERP.Persistence.Services
             var attachments = await _attachmentRepo.GetAttachmentsAsync(user.Id, null, "PYMDC");
 
 
-
-
             var dto = _mapper.Map<UserLoadDto>(user);
-
             return ApiResponse<UserLoadDto>.Success(dto, 200);
         }
 
