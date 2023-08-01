@@ -10,19 +10,20 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<SingleSourceReasonModel>> GetSingleSourceReasonsAsync();
         Task<List<RfqVendor>> GetVendorsForRfqAync(int businessCategoryId);
 
+        Task<List<RFQInProgress>> GetInProgressesAsync(RFQFilterBase filter);
+
+        Task<RFQMain> GetRFQMainAsync(int rfqMainId);
+        Task<List<RFQDetail>> GetRFQDetailsAsync(int rfqMainId);
+        Task<List<RFQRequestDetail>> GetRFQLineDeatilsAsync(int rfqMainId);
 
         Task<int> AddMainAsync(RfqSaveCommandRequest request);
         Task<int> UpdateMainAsync(RfqSaveCommandRequest request);
         Task<int> DeleteMainsync(int id, int userId);
+        Task<List<SingleSourceReasonModel>> GetRFQSingeSourceReasons(int rfqMainId);
 
-
-        Task<bool> AddDetailsAsync(List<RfqDetail> Details, int mainId);
-        //Task<bool> UpdateDetailsAsync(RfqDetailsSaveRequestModel model);
-        //Task<bool> DeleteDetailsAsync(int detailId);
-
-        Task<bool> SaveRFqRequestDetailsAsync(List<RfqRequestDetail> details);
+        Task<bool> AddDetailsAsync(List<RfqDetailSaveModel> Details, int mainId);
+        Task<bool> SaveRFqRequestDetailsAsync(List<RfqRequestDetailSaveModel> details);
         Task<List<RequestForRFQ>> GetRequestsForRfq(RFQRequestModel model);
-
         Task<bool> ChangeRFQStatusAsync(RfqChangeStatusModel model, int userId);
 
     }

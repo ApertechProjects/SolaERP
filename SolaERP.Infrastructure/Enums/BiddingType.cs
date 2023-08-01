@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Enums
 {
-    public enum RfqType
+    public enum BiddingType
     {
-        All = -1,
-        Purchasing = 1,
-        Information = 2,
+        Automatic = 1,
+        Manual = 2,
     }
 }

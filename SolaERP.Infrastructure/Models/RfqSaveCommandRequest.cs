@@ -29,7 +29,7 @@ namespace SolaERP.Application.Models
         [JsonIgnore]
         public int UserId { get; set; }
 
-        public List<RfqDetail> RfqDetails { get; set; }
+        public List<RfqDetailSaveModel> RfqDetails { get; set; }
 
     }
 }
