@@ -32,7 +32,6 @@ namespace SolaERP.Persistence.Services
         private readonly IUserRepository _userRepository;
         private readonly IVendorRepository _vendorRepository;
         private readonly IAttachmentRepository _attachmentRepository;
-        private readonly IStorage _storage;
         private readonly IOptions<StorageOption> _storageOption;
         private readonly IEmailNotificationService _emailNotificationService;
         private readonly IMailService _mailService;
@@ -45,7 +44,6 @@ namespace SolaERP.Persistence.Services
                                          IUserRepository userRepository,
                                          IVendorRepository vendorRepository,
                                          IAttachmentRepository attachmentRepository,
-                                         IStorage storage,
                                          IOptions<StorageOption> storageOption,
                                          IEmailNotificationService emailNotificationService,
                                          IMailService mailService,
@@ -59,7 +57,6 @@ namespace SolaERP.Persistence.Services
             _vendorRepository = vendorRepository;
 
             _attachmentRepository = attachmentRepository;
-            _storage = storage;
             _storageOption = storageOption;
             _emailNotificationService = emailNotificationService;
             _mailService = mailService;
