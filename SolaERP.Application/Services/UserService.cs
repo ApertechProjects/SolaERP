@@ -260,6 +260,11 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<UserLoadDto>> GetUserInfoAsync(int userId)
         {
             var user = await _userRepository.GetUserInfoAsync(userId);
+            var attachments = await _attachmentRepo.GetAttachmentsAsync(user.Id, null, "PYMDC");
+
+
+
+
             var dto = _mapper.Map<UserLoadDto>(user);
 
             return ApiResponse<UserLoadDto>.Success(dto, 200);
