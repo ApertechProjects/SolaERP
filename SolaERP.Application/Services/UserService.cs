@@ -26,23 +26,24 @@ namespace SolaERP.Persistence.Services
         private readonly IMailService _mailService;
         private readonly IMapper _mapper;
         private readonly ITokenHandler _tokenHandler;
+        private readonly IAttachmentRepository _attachmentRepo;
         private readonly IEmailNotificationService _emailNotificationService;
-        //private readonly IFileProducer _producer;
 
         public UserService(IUserRepository userRepository,
                            IUnitOfWork unitOfWork,
                            IMapper mapper,
                            IMailService mailService,
                            ITokenHandler tokenHandler,
-                           IEmailNotificationService emailNotificationService)
+                           IEmailNotificationService emailNotificationService,
+                           IAttachmentRepository attachmentRepo)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _mailService = mailService;
             _mapper = mapper;
             _tokenHandler = tokenHandler;
-            //_producer = producer;
             _emailNotificationService = emailNotificationService;
+            _attachmentRepo = attachmentRepo;
         }
 
 
@@ -281,15 +282,21 @@ namespace SolaERP.Persistence.Services
 
 
             var result = await _userRepository.SaveUserAsync(userEntry);
+
+            if (user.Signature is not null)
+            {
+                user.Signature.SourceId = result;
+                await _attachmentRepo.SaveAttachmentAsync(user.Signature);
+            }
+
+            if (user.Photo is not null)
+            {
+                user.Photo.SourceId = result;
+                await _attachmentRepo.SaveAttachmentAsync(user.Photo);
+            }
+
+
             await _unitOfWork.SaveChangesAsync();
-
-            //if (user?.Photo?.Length > 0)
-            //    await _producer.ProduceAsync(user?.Photo, Filetype.Profile, user.Email);
-
-            //if (user?.Signature?.Length > 0)
-            //    await _producer.ProduceAsync(user?.Signature, Filetype.Signature, user.Email);
-
-
             return result > 0 ? ApiResponse<int>.Success(result, 200)
                           : ApiResponse<int>.Fail("Data can not be saved", 400);
         }

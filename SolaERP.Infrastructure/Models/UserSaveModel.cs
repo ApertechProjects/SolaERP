@@ -21,7 +21,7 @@ namespace SolaERP.Application.Models
         public string Description { get; set; }
         public string ERPUser { get; set; }
         public bool IsDeleted { get; set; }
-        public IFormFile Photo { get; set; }
-        public IFormFile Signature { get; set; }
+        public AttachmentSaveModel Signature { get; set; }
+        public AttachmentSaveModel Photo { get; set; }
     }
 }
