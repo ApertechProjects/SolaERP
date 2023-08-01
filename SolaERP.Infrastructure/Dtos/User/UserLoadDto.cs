@@ -28,5 +28,7 @@ namespace SolaERP.Application.Dtos.User
         public string ApproveStatus { get; set; }
         public int Sequence { get; set; }
         public bool InActive { get; set; }
+        public Attachment.AttachmentWithFileDto Photo { get; set; }
+        public Attachment.AttachmentWithFileDto Signature { get; set; }
     }
 }

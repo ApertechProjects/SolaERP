@@ -19,36 +19,27 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<bool> SaveAttachmentAsync(AttachmentSaveModel attachment)
         {
-            try
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                using (var command = _unitOfWork.CreateCommand() as SqlCommand)
-                {
 
-                    command.CommandText = "SET NOCOUNT OFF EXEC SP_Attachments_IUD @AttachmentId,@FileName,@FileData,@SourceId,@SourceType,@Reference,@ExtensionType,@AttachmentTypeId,@AttachmentSubTypeId,@UploadDateTime,@Size";
-                    command.Parameters.AddWithValue(command, "@AttachmentId", attachment.AttachmentId);
-                    command.Parameters.AddWithValue(command, "@FileName", attachment.Name);
-                    command.Parameters.AddWithValue(command, "@FileData", attachment.Filebase64);
-                    command.Parameters.AddWithValue(command, "@SourceId", attachment.SourceId);
-                    command.Parameters.AddWithValue(command, "@SourceType", attachment.SourceType);
-                    command.Parameters.AddWithValue(command, "@Reference", null);
-                    command.Parameters.AddWithValue(command, "@ExtensionType", attachment.ExtensionType);
-                    command.Parameters.AddWithValue(command, "@AttachmentTypeId", attachment.AttachmentTypeId);
-                    command.Parameters.AddWithValue(command, "@AttachmentSubTypeId", attachment.AttachmentSubTypeId);
-                    command.Parameters.AddWithValue(command, "@UploadDateTime", DateTime.UtcNow.Date);
-                    command.Parameters.AddWithValue(command, "@Size", attachment.Size);
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_Attachments_IUD @AttachmentId,@FileName,@FileData,@SourceId,@SourceType,@Reference,@ExtensionType,@AttachmentTypeId,@AttachmentSubTypeId,@UploadDateTime,@Size";
+                command.Parameters.AddWithValue(command, "@AttachmentId", attachment.AttachmentId);
+                command.Parameters.AddWithValue(command, "@FileName", attachment.Name);
+                command.Parameters.AddWithValue(command, "@FileData", attachment.Filebase64);
+                command.Parameters.AddWithValue(command, "@SourceId", attachment.SourceId);
+                command.Parameters.AddWithValue(command, "@SourceType", attachment.SourceType);
+                command.Parameters.AddWithValue(command, "@Reference", null);
+                command.Parameters.AddWithValue(command, "@ExtensionType", attachment.ExtensionType);
+                command.Parameters.AddWithValue(command, "@AttachmentTypeId", attachment.AttachmentTypeId);
+                command.Parameters.AddWithValue(command, "@AttachmentSubTypeId", attachment.AttachmentSubTypeId);
+                command.Parameters.AddWithValue(command, "@UploadDateTime", DateTime.UtcNow.Date);
+                command.Parameters.AddWithValue(command, "@Size", attachment.Size);
 
-                    bool result = await command.ExecuteNonQueryAsync() > 0;
+                bool result = await command.ExecuteNonQueryAsync() > 0;
 
-                    return result;
-                }
+                return result;
             }
-            catch (Exception ex)
-            {
-                await Console.Out.WriteLineAsync(attachment.Name);
-                await Console.Out.WriteLineAsync(attachment.SourceId.ToString());
-                await Console.Out.WriteLineAsync(attachment.SourceType);
-                return false;
-            }
+
         }
 
         public async Task<List<Attachment>> GetAttachmentsWithFileDataAsync(int attachmentId)

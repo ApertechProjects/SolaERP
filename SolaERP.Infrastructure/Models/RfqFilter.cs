@@ -4,7 +4,7 @@ namespace SolaERP.Application.Models
 {
     public class RfqFilter : RFQFilterBase
     {
-        public DateTime DateFrom { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month - 3, DateTime.Now.Day);
+        public DateTime DateFrom { get; set; } = DateTime.Now.AddMonths(-3);
         public DateTime DateTo { get; set; } = DateTime.Now;
 
     }
