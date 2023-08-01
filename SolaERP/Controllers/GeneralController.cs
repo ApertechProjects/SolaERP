@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RazorLight.Generation;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Persistence.Services;
 
 namespace SolaERP.Controllers
 {
@@ -17,10 +18,12 @@ namespace SolaERP.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> RejectReasons()
+        public async Task<IActionResult> RejectReasonsAsync()
             => CreateActionResult(await _generalService.RejectReasons());
 
-
+        [HttpGet]
+        public async Task<IActionResult> GetStatusAsync()
+            => CreateActionResult(await _generalService.GetStatus());
 
 
     }

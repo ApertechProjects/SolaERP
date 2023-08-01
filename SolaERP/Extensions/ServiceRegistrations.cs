@@ -61,7 +61,6 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IItemService, ItemService>();
             builder.Services.AddScoped<ILogInformationService, LogInformationService>();
             builder.Services.AddScoped<IAnalysisCodeService, AnalysisCodeService>();
-            builder.Services.AddScoped<IStatusService, StatusService>();
             builder.Services.AddScoped<IBuyerService, BuyerService>();
             builder.Services.AddScoped<ILocationService, LocationService>();
             builder.Services.AddScoped<IAccountCodeService, AccountCodeService>();
@@ -99,7 +98,6 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<ILogInformationRepository, SqlLogInformationRepository>();
             builder.Services.AddScoped<IItemCodeRepository, SqlItemCodeRepository>();
             builder.Services.AddScoped<IAnalysisStructureRepository, SqlAnalysisCodeRepository>();
-            builder.Services.AddScoped<IStatusRepository, SqlStatusRepository>();
             builder.Services.AddScoped<IBuyerRepository, SqlBuyerRepository>();
             builder.Services.AddScoped<ILocationRepository, SqlLocationRepository>();
             builder.Services.AddScoped<IAccountCodeRepository, SqlAccountCodeRepository>();
