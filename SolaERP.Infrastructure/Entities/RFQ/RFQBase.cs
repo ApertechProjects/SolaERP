@@ -1,4 +1,6 @@
-﻿namespace SolaERP.Application.Entities.RFQ
+﻿using SolaERP.Application.Entities.SupplierEvaluation;
+
+namespace SolaERP.Application.Entities.RFQ
 {
     public class RFQBase
     {
@@ -19,5 +21,6 @@
         public bool SingleUnitPrice { get; set; }
         public string PlaceOfDelivery { get; set; }
         public int BusinessCategoryId { get; set; }
+        public BusinessCategory BusinessCategory { get; set; }
     }
 }

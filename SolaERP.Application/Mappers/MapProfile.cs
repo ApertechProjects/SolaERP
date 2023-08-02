@@ -387,8 +387,8 @@ namespace SolaERP.Persistence.Mappers
                 .ReverseMap();
 
             CreateMap<RfqDraft, RfqDraftDto>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RFQMainId))
-                .ForMember(dest => dest.BusinessCategory, opt => opt.Ignore()).ReverseMap();
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RFQMainId)).ReverseMap();
+
 
             CreateMap<RfqAll, RfqAllDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RFQMainId)).ReverseMap();
