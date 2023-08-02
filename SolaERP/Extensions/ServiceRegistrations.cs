@@ -18,7 +18,6 @@ using SolaERP.DataAccess.DataAcces.SqlServer;
 using SolaERP.DataAccess.DataAccess.SqlServer;
 using SolaERP.DataAccess.Factories;
 using SolaERP.Infrastructure.Services;
-using SolaERP.Infrastructure.Services.Storage;
 using SolaERP.Persistence.Services;
 using SolaERP.Persistence.Validations.AnalysisCodeValidation;
 using SolaERP.Persistence.Validations.AnalysisDimensionValidation;
@@ -71,7 +70,6 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<ILayoutService, LayoutService>();
             builder.Services.AddScoped<ILanguageService, LanguageService>();
             builder.Services.AddScoped<IVendorService, VendorService>();
-            builder.Services.AddScoped<IStorage, LocalStorage>();
             builder.Services.AddScoped<IAnalysisDimensionService, AnalysisDimensionService>();
             builder.Services.AddScoped<IAnalysisStructureService, AnalysisStructureService>();
             builder.Services.AddScoped<IEmailNotificationService, EmailNotificationService>();

@@ -50,8 +50,18 @@ namespace SolaERP.Persistence.Services
             int counter = 0;
             for (int i = 0; i < model.Count; i++)
             {
-                if (model[i].AnalysisStructureId < 0)
-                    model[i].AnalysisStructureId = 0;
+                model[i].AnalysisStructureId = model[i].AnalysisStructureId < 0 ? 0 : model[i].AnalysisStructureId;
+                model[i].AnalysisDimensionid1 = model[i].AnalysisDimensionid1 == 0 ? null : model[i].AnalysisDimensionid1;
+                model[i].AnalysisDimensionid2 = model[i].AnalysisDimensionid2 == 0 ? null : model[i].AnalysisDimensionid2;
+                model[i].AnalysisDimensionid3 = model[i].AnalysisDimensionid3 == 0 ? null : model[i].AnalysisDimensionid3;
+                model[i].AnalysisDimensionid4 = model[i].AnalysisDimensionid4 == 0 ? null : model[i].AnalysisDimensionid4;
+                model[i].AnalysisDimensionid5 = model[i].AnalysisDimensionid5 == 0 ? null : model[i].AnalysisDimensionid5;
+                model[i].AnalysisDimensionid6 = model[i].AnalysisDimensionid6 == 0 ? null : model[i].AnalysisDimensionid6;
+                model[i].AnalysisDimensionid7 = model[i].AnalysisDimensionid7 == 0 ? null : model[i].AnalysisDimensionid7;
+                model[i].AnalysisDimensionid8 = model[i].AnalysisDimensionid8 == 0 ? null : model[i].AnalysisDimensionid8;
+                model[i].AnalysisDimensionid9 = model[i].AnalysisDimensionid9 == 0 ? null : model[i].AnalysisDimensionid9;
+                model[i].AnalysisDimensionid10 = model[i].AnalysisDimensionid10 == 0 ? null : model[i].AnalysisDimensionid10;
+
                 structure = await _repository.SaveAsync(model[i], userId);
                 if (structure)
                     counter++;

@@ -309,7 +309,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         public async Task<List<UserMain>> GetUserAllAsync(int userId, int userStatus, int userType)
         {
             List<UserMain> users = new List<UserMain>();
-            int totalDataCount = 0;
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "exec SP_UsersAll @UserType,@UserStatus,@UserId";
