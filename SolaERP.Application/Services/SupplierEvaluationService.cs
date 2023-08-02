@@ -66,7 +66,7 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> AddAsync(string useridentity, SupplierRegisterCommand command)
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
-
+            user.FullName = command.CompanyInformation.FullName;
             user.PhoneNumber = command.CompanyInformation.PhoneNumber;
             user.Description = command.CompanyInformation.Position;
 
