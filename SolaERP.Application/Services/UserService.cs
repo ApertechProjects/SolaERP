@@ -180,11 +180,6 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<UserListDto>>.Success(dto, 200);
         }
 
-        public Task<string> GetUserNameByTokenAsync(string name)
-        {
-            return _userRepository.GetUserNameByTokenAsync(name);
-        }
-
         public async Task<ApiResponse<List<UserMainDto>>> GetUserWFAAsync(string name, int userStatus, int userType)
         {
             int userId = await _userRepository.ConvertIdentity(name);

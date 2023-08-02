@@ -67,6 +67,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             rfqBase.SingleUnitPrice = reader.Get<bool>("SingleUnitPrice");
             rfqBase.PlaceOfDelivery = reader.Get<string>("PlaceOfDelivery");
             rfqBase.BusinessCategoryId = reader.Get<int>("BusinessCategoryId");
+            rfqBase.BusinessCategory = new()
+            {
+                Id = reader.Get<int>("BusinessCategoryId"),
+                Name = reader.Get<string>("BusinessCategoryName")
+            };
         }
 
         private RfqDraft GetRFQDraftFromReader(IDataReader reader)

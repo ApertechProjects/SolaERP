@@ -1,5 +1,7 @@
 ﻿
 
+using SolaERP.Application.Entities.SupplierEvaluation;
+
 namespace SolaERP.Application.Entities.RFQ
 {
     public class RFQInProgress : BaseEntity
@@ -19,10 +21,10 @@ namespace SolaERP.Application.Entities.RFQ
         public int NoResponse { get; set; }
         public DateTime DesiredDeliveryDate { get; set; }
         public string ProcurementType { get; set; }
-        public string BusinessCategoryName { get; set; }
         public string Buyer { get; set; }
         public DateTime RFQDeadline { get; set; }
         public DateTime SentDate { get; set; }
         public string Comment { get; set; }
+        public BusinessCategory BusinessCategory { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace SolaERP.Application.Dtos.RFQ
+﻿using SolaERP.Application.Entities.SupplierEvaluation;
+
+namespace SolaERP.Application.Dtos.RFQ
 {
     public class RFQInProgressDto
     {
@@ -18,7 +20,7 @@
         public string Buyer { get; set; }
         public bool SingleUnitPrice { get; set; }
         public string PlaceOfDelivery { get; set; }
-        public int BusinessCategoryId { get; set; }
+        // public int BusinessCategoryId { get; set; }
 
         public int OfferCount { get; set; }
         public bool Sent { get; set; }
@@ -27,6 +29,6 @@
         public bool Responded { get; set; }
         public bool Rejected { get; set; }
         public bool NoResponse { get; set; }
-        public string BusinessCategoryName { get; set; }
+        public BusinessCategory BusinessCategory { get; set; }
     }
 }
