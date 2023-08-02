@@ -84,8 +84,10 @@ namespace SolaERP.Persistence.Services
             await _repository.DeleteRepresentedProductAsync(vendorId);
             await _repository.DeleteRepresentedCompanyAsync(vendorId);
 
-            await _repository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", command?.CompanyInformation?.RepresentedCompanies) });
-            await _repository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", command?.CompanyInformation?.RepresentedProducts) });
+            if (command?.CompanyInformation?.RepresentedCompanies != null)
+                await _repository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", command?.CompanyInformation?.RepresentedCompanies) });
+            if (command?.CompanyInformation?.RepresentedProducts != null)
+                await _repository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", command?.CompanyInformation?.RepresentedProducts) });
 
             #endregion
 
