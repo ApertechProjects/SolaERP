@@ -56,6 +56,8 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<RfqAllDto>>.Success(dto, 200);
         }
 
+
+
         public async Task<ApiResponse<List<BusinessCategory>>> GetBuCategoriesAsync()
         {
             var data = await _evaluationRepository.GetBusinessCategoriesAsync();
@@ -142,6 +144,14 @@ namespace SolaERP.Persistence.Services
             var inProgressRFQS = await _repository.GetInProgressesAsync(filter);
             var dto = _mapper.Map<List<RFQInProgressDto>>(inProgressRFQS);
             return ApiResponse<List<RFQInProgressDto>>.Success(dto, 200);
+        }
+
+        public async Task<ApiResponse<bool>> DeleteAsync(int rfqMainId, string userIdentity)
+        {
+            var result = await _repository.DeleteMainsync(rfqMainId, Convert.ToInt32(userIdentity));
+            await _unitOfWork.SaveChangesAsync();
+
+            return ApiResponse<bool>.Success(result);
         }
     }
 }

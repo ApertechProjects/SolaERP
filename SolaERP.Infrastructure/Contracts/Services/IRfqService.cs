@@ -14,6 +14,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<BusinessCategory>>> GetBuCategoriesAsync();
         Task<ApiResponse<int>> SaveRfqAsync(RfqSaveCommandRequest request, string userIdentity);
         Task<ApiResponse<List<SingleSourceReasonModel>>> GetSingleSourceReasonsAsync();
+        Task<ApiResponse<bool>> DeleteAsync(int rfqMainId, string userIdentity);
         Task<ApiResponse<List<RfqVendor>>> GetRFQVendorsAsync(int buCategoryId);
         Task<ApiResponse<List<RequestRfqDto>>> GetRequestsForRFQ(string userIdentity, RFQRequestModel model);
         Task<ApiResponse<bool>> ChangeRFQStatusAsync(RfqChangeStatusModel model, string userIdentity);

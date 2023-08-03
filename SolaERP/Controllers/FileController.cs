@@ -11,5 +11,8 @@ namespace SolaERP.API.Controllers
         [HttpGet]
         public IActionResult Authorize()
             => Ok(true);
+
+        //[HttpGet("Date")]
+        //public IActionResult GetDate() => Ok(DateTime.);
     }
 }
