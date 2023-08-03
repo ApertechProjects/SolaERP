@@ -126,7 +126,7 @@ namespace SolaERP.Persistence.Services
                 IGrouping<int, MenuWithPrivilagesDto> item = ttt[i];
                 menuWithPrivileges.Add(new MenuWithPrivilege
                 {
-                    Id = item.Key,
+                    MenuId = item.Key,
                     MenuName = ttt[0].Where(x => x.ParentId == 0).ToList()[i - 1].MenuName,
                     Details = item.Select(x => new MenuWithPrivilegeDetail
                     {

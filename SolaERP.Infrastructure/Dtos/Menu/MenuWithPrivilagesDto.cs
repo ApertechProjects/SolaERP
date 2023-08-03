@@ -18,7 +18,7 @@
 
     public class MenuWithPrivilege
     {
-        public int Id { get; set; }
+        public int MenuId { get; set; }
         public string MenuName { get; set; }
         public List<MenuWithPrivilegeDetail> Details { get; set; }
     }

@@ -307,6 +307,7 @@ namespace SolaERP.Persistence.Services
             #region NDA
 
             command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
+            tasks.AddRange(command.NonDisclosureAgreement?.Select(x => _repository.DeleteNDAAsync(vendorId)));
             if (command?.NonDisclosureAgreement != null && command?.NonDisclosureAgreement?.Count > 0)
                 tasks.AddRange(command?.NonDisclosureAgreement?.Select(x => _repository.AddNDAAsync(_mapper.Map<VendorNDA>(x))));
 
