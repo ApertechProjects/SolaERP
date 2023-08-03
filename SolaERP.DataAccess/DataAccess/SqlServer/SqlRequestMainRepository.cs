@@ -382,7 +382,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Destination", model.Destination);
                 command.Parameters.AddWithValue(command, "@Currency", model.CurrencyCode);
                 command.Parameters.AddWithValue(command, "@Buyer", model.Buyer);
-                command.Parameters.AddWithValue(command, "@LogisticTotal", model.LogisticTotal);
+                command.Parameters.AddWithValue(command, "@LogisticTotal", model.LogisticsTotal);
 
                 command.Parameters.Add("@NewRequestmainId", SqlDbType.Int);
                 command.Parameters["@NewRequestmainId"].Direction = ParameterDirection.Output;

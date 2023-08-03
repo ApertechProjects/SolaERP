@@ -9,6 +9,6 @@ namespace SolaERP.Application.Models
     public class GroupBuyerSaveModel
     {
         public int BusinessUnitId { get; set; }
-        public string BuyerCode { get; set; }
+        public string Buyer { get; set; }
     }
 }
