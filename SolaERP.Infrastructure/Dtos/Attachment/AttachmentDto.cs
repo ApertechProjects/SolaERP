@@ -2,7 +2,19 @@
 {
     public class AttachmentDto
     {
-        public int AttachmentId { get; set; }
+        private int attachmentId = 0;
+        public int AttachmentId
+        {
+            get
+            {
+                return attachmentId;
+            }
+            set
+            {
+                if (value < 0)
+                    attachmentId = value;
+            }
+        }
         public string Name { get; set; }
         public int SourceId { get; set; }
         public int SourceTypeId { get; set; }
