@@ -15,7 +15,7 @@
         public string PotentialVendor { get; set; }
         public string QualityRequired { get; set; }
         public string CurrencyCode { get; set; }
-        public decimal LogisticTotal { get; set; }
+        public decimal LogisticsTotal { get; set; }
         public string Buyer { get; set; }
         public int Destination { get; set; }
         public int Priority { get; set; }
