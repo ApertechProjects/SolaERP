@@ -1,7 +1,6 @@
-﻿
-
-using SolaERP.Application.Attributes;
+﻿using SolaERP.Application.Attributes;
 using SolaERP.Application.Entities.SupplierEvaluation;
+using SolaERP.Application.Enums;
 
 namespace SolaERP.Application.Entities.RFQ
 {
@@ -13,7 +12,7 @@ namespace SolaERP.Application.Entities.RFQ
         public string RFQType { get; set; }
         public string RFQNo { get; set; }
         public DateTime RFQDate { get; set; }
-        public string Emergency { get; set; }
+        public Emergency Emergency { get; set; }
         public int OfferCount { get; set; }
         public int Sent { get; set; }
         public int Accepted { get; set; }
