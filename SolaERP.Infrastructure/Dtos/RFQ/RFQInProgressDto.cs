@@ -4,7 +4,7 @@ namespace SolaERP.Application.Dtos.RFQ
 {
     public class RFQInProgressDto
     {
-        public int RFQMainId { get; set; }
+        public int Id { get; set; }
         public int LineNo { get; set; }
         public DateTime RequiredOnSiteDate { get; set; }
         public string Emergency { get; set; }

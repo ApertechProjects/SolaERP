@@ -1,12 +1,14 @@
 ﻿
 
+using SolaERP.Application.Attributes;
 using SolaERP.Application.Entities.SupplierEvaluation;
 
 namespace SolaERP.Application.Entities.RFQ
 {
     public class RFQInProgress : BaseEntity
     {
-        public int RFQMainId { get; set; }
+        [DbColumn("RFQMainId")]
+        public int Id { get; set; }
         public long LineNo { get; set; }
         public string RFQType { get; set; }
         public string RFQNo { get; set; }
