@@ -160,8 +160,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = @"SET NOCOUNT OFF
-                                        EXEC SP_RFQMain_IUD @RFQMainId,
+                command.CommandText = @" EXEC SP_RFQMain_IUD @RFQMainId,
                                                             @BusinessUnitId,
                                                             @RFQType,
                                                             @RFQNo,
@@ -181,7 +180,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                             @OtherReasons,
                                                             @BusinessCategoryId,
                                                             @UserId,
-                                                            @NewRfqMainId";
+                                                            @NewRFQMainId,
+                                                            @NewRFQNo";
 
 
                 command.Parameters.AddWithValue(command, "@RFQMainId", request.RFQMainId);
@@ -203,12 +203,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@OtherReasons", request?.OtherReasons);
                 command.Parameters.AddWithValue(command, "@BusinessCategoryId", request?.BusinessCategoryId);
                 command.Parameters.AddWithValue(command, "@UserId", request?.UserId);
+                command.Parameters.AddOutPutParameter(command, "@NewRFQMainId", SqlDbType.Int);
+                command.Parameters.AddOutPutParameter(command, "@NewRFQNo", SqlDbType.NVarChar);
                 command.Parameters.AddTableValue(command, "@SingleSourceReasonId", "SingleIdItems", request?.SingleSourceReasonIds?.ConvertListToDataTable());
 
                 using var reader = await command.ExecuteReaderAsync();
                 RfqSaveCommandResponse response = null;
 
-                while (reader.Read()) response = GetRfqSaveResponse(reader);
+                if (reader.Read()) response = GetRfqSaveResponse(reader);
                 return response;
             }
         }
@@ -219,9 +221,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return new()
             {
-                Id = reader.Get<int>("RFQMainId"),
-                RfqNo = reader.Get<string>("RFQNo"),
-                BusinessUnitId = reader.Get<int>("BusinessUnitId")
+                Id = reader.Get<int>("@NewRFQMainId"),
+                RfqNo = reader.Get<string>("@NewRFQNo"),
             };
         }
 

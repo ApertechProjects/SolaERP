@@ -36,6 +36,5 @@ namespace SolaERP.Application.Models
     {
         public int Id { get; set; }
         public string RfqNo { get; set; }
-        public int BusinessUnitId { get; set; }
     }
 }

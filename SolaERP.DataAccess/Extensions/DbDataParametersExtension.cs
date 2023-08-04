@@ -22,24 +22,26 @@ namespace SolaERP.DataAccess.Extensions
         }
 
 
-        public static void AddTableValue(this IDataParameterCollection parameters, IDbCommand command, string parameterName, string typeName, object value)
-        {
-            SqlParameter parameter = command.CreateParameter() as SqlParameter;
-            parameter.ParameterName = parameterName;
-            parameter.SqlDbType = SqlDbType.Structured;
-            parameter.TypeName = typeName;
-            parameter.Value = value;
 
-            parameters.Add(parameter);
-        }
 
-        public static void AddOutPutParameter(this IDataParameterCollection parameters, IDbCommand command, string parameterName)
+        public static void AddOutPutParameter(this IDataParameterCollection parameters, IDbCommand command, string parameterName, SqlDbType dbType = SqlDbType.Int)
         {
-            IDbDataParameter parameter = command.CreateParameter();
-            parameter.ParameterName = parameterName;
-            parameter.Direction = ParameterDirection.Output;
-            parameter.DbType = DbType.Int32;
-            command.Parameters.Add(parameter);
+            if (command is SqlCommand sqlCommand)
+            {
+                SqlParameter parameter = new SqlParameter
+                {
+                    ParameterName = parameterName,
+                    Direction = ParameterDirection.Output,
+                    SqlDbType = dbType,
+                    Size = int.MaxValue
+                };
+
+                parameters.Add(parameter);
+            }
+            else
+            {
+                throw new ArgumentException("Unsupported command type. Only SqlCommand is supported.");
+            }
         }
 
         public static void AddTableValue(this IDataParameterCollection parameters, IDbCommand command, string parameterName, string typeName, DataTable dataTable)
