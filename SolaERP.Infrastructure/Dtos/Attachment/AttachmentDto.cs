@@ -2,17 +2,18 @@
 {
     public class AttachmentDto
     {
-        private int attachmentId = 0;
+        private int _attachmentId;
         public int AttachmentId
         {
             get
             {
-                return attachmentId;
+                if (_attachmentId < 0)
+                    _attachmentId = 0;
+                return _attachmentId;
             }
             set
             {
-                if (value < 0)
-                    attachmentId = value;
+                _attachmentId = value;
             }
         }
         public string Name { get; set; }
