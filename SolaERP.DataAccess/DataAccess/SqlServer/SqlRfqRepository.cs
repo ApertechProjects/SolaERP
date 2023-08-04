@@ -213,6 +213,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+
+
         private RfqSaveCommandResponse GetRfqSaveResponse(IDataReader reader)
         {
             return new()
