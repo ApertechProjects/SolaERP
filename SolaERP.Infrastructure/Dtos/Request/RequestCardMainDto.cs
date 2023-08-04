@@ -25,6 +25,7 @@
         public decimal LogisticsTotal { get; set; }
         public string PotentialVendor { get; set; }
         public int Priority { get; set; }
+        public int ApproveStageMainId { get; set; }
         public List<RequestCardDetailDto> requestCardDetails { get; set; }
         public List<RequestCardAnalysisDto> requestCardAnalysis { get; set; }
 

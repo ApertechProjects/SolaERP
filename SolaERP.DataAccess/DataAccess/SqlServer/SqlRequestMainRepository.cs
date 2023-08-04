@@ -288,7 +288,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 AccountName = reader.Get<string>("AccountName"),
                 Buyer = reader.Get<string>("Buyer"),
                 PotentialVendor = reader.Get<string>("PotentialVendor"),
-                Priority = reader.Get<int>("Priority")
+                Priority = reader.Get<int>("Priority"),
+                ApproveStageMainId = reader.Get<int>("ApproveStageMainId")
             };
         }
 
