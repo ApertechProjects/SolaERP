@@ -123,7 +123,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<int> AddMainAsync(RfqSaveCommandRequest request)
+        public async Task<RfqSaveCommandResponse> AddMainAsync(RfqSaveCommandRequest request)
         {
             return await ModifyRfqMainAsync(new()
             {
@@ -150,18 +150,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             });
         }
 
-        public async Task<int> UpdateMainAsync(RfqSaveCommandRequest request)
+        public async Task<RfqSaveCommandResponse> UpdateMainAsync(RfqSaveCommandRequest request)
             => await ModifyRfqMainAsync(request);
 
-        public async Task<int> DeleteMainsync(int id, int userId)
+        public async Task<RfqSaveCommandResponse> DeleteMainsync(int id, int userId)
             => await ModifyRfqMainAsync(new RfqSaveCommandRequest() { RFQMainId = id, UserId = userId });
 
-        private async Task<int> ModifyRfqMainAsync(RfqSaveCommandRequest request)
+        private async Task<RfqSaveCommandResponse> ModifyRfqMainAsync(RfqSaveCommandRequest request)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText = @"SET NOCOUNT OFF
-                                        DECLARE @NewRFQMainId int
+                                       
                                         EXEC SP_RFQMain_IUD @RFQMainId,
                                                             @BusinessUnitId,
                                                             @RFQType,
@@ -181,43 +181,50 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                             @Comment,
                                                             @OtherReasons,
                                                             @BusinessCategoryId,
-                                                            @UserId,
-                                                            @NewRFQMainId = @NewRFQMainId OUTPUT
-                                                            SELECT @NewRFQMainId as [@NewRFQMainId]";
+                                                            @UserId;";
 
 
                 command.Parameters.AddWithValue(command, "@RFQMainId", request.RFQMainId);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", request.BusinessUnitId);
-                command.Parameters.AddWithValue(command, "@RFQType", request.RFQType);
-                command.Parameters.AddWithValue(command, "@RFQNo", request.RFQNo);
-                command.Parameters.AddWithValue(command, "@Emergency", request.Emergency);
-                command.Parameters.AddWithValue(command, "@RFQDate", request.RFQDate);
-                command.Parameters.AddWithValue(command, "@RFQDeadline", request.RFQDeadline);
-                command.Parameters.AddWithValue(command, "@Buyer", request.Buyer);
-                command.Parameters.AddWithValue(command, "@Status", request.Status);
-                command.Parameters.AddWithValue(command, "@RequiredOnSiteDate", request.RequiredOnSiteDate);
-                command.Parameters.AddWithValue(command, "@DesiredDeliveryDate", request.DesiredDeliveryDate);
-                command.Parameters.AddWithValue(command, "@SentDate", request.SentDate);
-                command.Parameters.AddWithValue(command, "@SingleUnitPrice", request.SingleUnitPrice);
-                command.Parameters.AddWithValue(command, "@ProcurementType", request.ProcurementType);
-                command.Parameters.AddWithValue(command, "@PlaceOfDelivery", request.PlaceOfDelivery);
-                command.Parameters.AddWithValue(command, "@Comment", request.Comment);
-                command.Parameters.AddWithValue(command, "@OtherReasons", request.OtherReasons);
-                command.Parameters.AddWithValue(command, "@BusinessCategoryId", request.BusinessCategoryId);
-                command.Parameters.AddWithValue(command, "@UserId", request.UserId);
-
-                command.Parameters.Add("@SingleSourceReasonId", SqlDbType.Structured).Value = request.SingleSourceReasonIds.ConvertListToDataTable();
-                command.Parameters["@SingleSourceReasonId"].TypeName = "SingleIdItems";
-
+                command.Parameters.AddWithValue(command, "@RFQType", request?.RFQType);
+                command.Parameters.AddWithValue(command, "@RFQNo", request?.RFQNo);
+                command.Parameters.AddWithValue(command, "@Emergency", request?.Emergency);
+                command.Parameters.AddWithValue(command, "@RFQDate", request?.RFQDate);
+                command.Parameters.AddWithValue(command, "@RFQDeadline", request?.RFQDeadline);
+                command.Parameters.AddWithValue(command, "@Buyer", request?.Buyer);
+                command.Parameters.AddWithValue(command, "@Status", request?.Status);
+                command.Parameters.AddWithValue(command, "@RequiredOnSiteDate", request?.RequiredOnSiteDate);
+                command.Parameters.AddWithValue(command, "@DesiredDeliveryDate", request?.DesiredDeliveryDate);
+                command.Parameters.AddWithValue(command, "@SentDate", request?.SentDate);
+                command.Parameters.AddWithValue(command, "@SingleUnitPrice", request?.SingleUnitPrice);
+                command.Parameters.AddWithValue(command, "@ProcurementType", request?.ProcurementType);
+                command.Parameters.AddWithValue(command, "@PlaceOfDelivery", request?.PlaceOfDelivery);
+                command.Parameters.AddWithValue(command, "@Comment", request?.Comment);
+                command.Parameters.AddWithValue(command, "@OtherReasons", request?.OtherReasons);
+                command.Parameters.AddWithValue(command, "@BusinessCategoryId", request?.BusinessCategoryId);
+                command.Parameters.AddWithValue(command, "@UserId", request?.UserId);
+                command.Parameters.AddTableValue(command, "SingleSourceReasonIds", "SingleIdItems", request?.SingleSourceReasonIds?.ConvertListToDataTable());
 
                 using var reader = await command.ExecuteReaderAsync();
-                int newRfqMainId = -1;
+                RfqSaveCommandResponse response = null;
 
-                if (reader.Read()) newRfqMainId = reader.Get<int>("@NewRFQMainId");
+                while (reader.Read()) response = GetRfqSaveResponse(reader);
 
-                return newRfqMainId;
             }
         }
+
+        private RfqSaveCommandResponse GetRfqSaveResponse(IDataReader reader)
+        {
+            return new()
+            {
+                Id = reader.Get<int>("RFQMainId"),
+                RfqNo = reader.Get<string>("RFQNo"),
+                BusinessUnitId = reader.Get<int>("BusinessUnitId")
+            };
+        }
+
+
+
         public async Task<List<SingleSourceReasonModel>> GetSingleSourceReasonsAsync()
         {
             using (var commmand = _unitOfWork.CreateCommand() as DbCommand)

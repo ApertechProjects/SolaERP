@@ -12,7 +12,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<RfqDraftDto>>> GetDraftsAsync(RfqFilter filter);
         Task<ApiResponse<List<RfqAllDto>>> GetAllAsync(RfqAllFilter filter);
         Task<ApiResponse<List<BusinessCategory>>> GetBuCategoriesAsync();
-        Task<ApiResponse<int>> SaveRfqAsync(RfqSaveCommandRequest request, string userIdentity);
+        Task<ApiResponse<RfqSaveCommandResponse>> SaveRfqAsync(RfqSaveCommandRequest request, string userIdentity);
         Task<ApiResponse<List<SingleSourceReasonModel>>> GetSingleSourceReasonsAsync();
         Task<ApiResponse<bool>> DeleteAsync(int rfqMainId, string userIdentity);
         Task<ApiResponse<List<RfqVendor>>> GetRFQVendorsAsync(int buCategoryId);
