@@ -10,6 +10,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<string> GetCompanyName(string email);
         Task<EmailTemplateDataDto> GetEmailTemplateData(Language language, EmailTemplateKey templateKey);
         Task<List<EmailTemplateData>> GetEmailTemplateData(EmailTemplateKey templateKey);
-        Task<bool> SendVerificationEmail(UserRegisterModel dto);
+        //Task<bool> SendVerificationEmail(UserRegisterModel dto);
     }
 }
