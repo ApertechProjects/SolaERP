@@ -161,7 +161,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText = @"SET NOCOUNT OFF
-                                       
                                         EXEC SP_RFQMain_IUD @RFQMainId,
                                                             @BusinessUnitId,
                                                             @RFQType,
@@ -181,7 +180,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                             @Comment,
                                                             @OtherReasons,
                                                             @BusinessCategoryId,
-                                                            @UserId;";
+                                                            @UserId,
+                                                            @NewRfqMainId";
 
 
                 command.Parameters.AddWithValue(command, "@RFQMainId", request.RFQMainId);
@@ -203,7 +203,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@OtherReasons", request?.OtherReasons);
                 command.Parameters.AddWithValue(command, "@BusinessCategoryId", request?.BusinessCategoryId);
                 command.Parameters.AddWithValue(command, "@UserId", request?.UserId);
-                command.Parameters.AddTableValue(command, "SingleSourceReasonIds", "SingleIdItems", request?.SingleSourceReasonIds?.ConvertListToDataTable());
+                command.Parameters.AddTableValue(command, "@SingleSourceReasonId", "SingleIdItems", request?.SingleSourceReasonIds?.ConvertListToDataTable());
 
                 using var reader = await command.ExecuteReaderAsync();
                 RfqSaveCommandResponse response = null;
