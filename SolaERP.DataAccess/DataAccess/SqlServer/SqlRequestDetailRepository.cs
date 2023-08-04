@@ -25,7 +25,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                     @RequestDate, 
                                                                     @RequestDeadline, 
                                                                     @RequestedDate, 
-                                                                    @ItemCodes, 
+                                                                    @ItemCode, 
                                                                     @Quantity, 
                                                                     @UOM, 
                                                                     @Description, 
@@ -39,7 +39,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                     @Amount, 
                                                                     @ConnectedOrderReference, 
                                                                     @ConnectedOrderLineNo, 
-                                                                    @AccountCode, 
+                                                                    @AccountCode,
+                                                                    @Condition,
+                                                                    @Priority,
+                                                                    @ManualUP,
+                                                                    @AlternativeItem,
                                                                     @AnalysisCode1Id, 
                                                                     @AnalysisCode2Id, 
                                                                     @AnalysisCode3Id,  
@@ -59,7 +63,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@RequestDate", entity.RequestDate);
                 command.Parameters.AddWithValue(command, "@RequestDeadline", entity.RequestDeadline);
                 command.Parameters.AddWithValue(command, "@RequestedDate", entity.RequestedDate);
-                command.Parameters.AddWithValue(command, "@ItemCodes", entity.ItemCode.Trim());
+                command.Parameters.AddWithValue(command, "@ItemCode", entity.ItemCode.Trim());
                 command.Parameters.AddWithValue(command, "@Quantity", entity.Quantity);
                 command.Parameters.AddWithValue(command, "@UOM", entity.UOM.Trim());
                 command.Parameters.AddWithValue(command, "@Description", entity.Description.Trim());
@@ -74,6 +78,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@ConnectedOrderReference", entity.ConnectedOrderReference);
                 command.Parameters.AddWithValue(command, "@ConnectedOrderLineNo", entity.ConnectedOrderLineNo);
                 command.Parameters.AddWithValue(command, "@AccountCode", entity.AccountCode.Trim());
+                command.Parameters.AddWithValue(command, "@Condition", entity.Condition);
+                command.Parameters.AddWithValue(command, "@Priority", entity.Priority);
+                command.Parameters.AddWithValue(command, "@ManualUP", entity.ManualUP);
+                command.Parameters.AddWithValue(command, "@AlternativeItem", entity.AlternativeItem);
                 command.Parameters.AddWithValue(command, "@AnalysisCode1Id", entity.AnalysisCode1Id);
                 command.Parameters.AddWithValue(command, "@AnalysisCode2Id", entity.AnalysisCode2Id);
                 command.Parameters.AddWithValue(command, "@AnalysisCode3Id", entity.AnalysisCode3Id);
@@ -84,6 +92,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@AnalysisCode8Id", entity.AnalysisCode8Id);
                 command.Parameters.AddWithValue(command, "@AnalysisCode9Id", entity.AnalysisCode9Id);
                 command.Parameters.AddWithValue(command, "@AnalysisCode10Id", entity.AnalysisCode10Id);
+                command.Parameters.AddWithValue(command, "@Catid", entity.Catid);
                 command.Parameters.AddOutPutParameter(command, "@NewRequestDetailsId");
 
                 return await command.ExecuteNonQueryAsync() > 0;

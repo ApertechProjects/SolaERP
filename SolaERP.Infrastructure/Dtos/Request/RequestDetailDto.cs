@@ -24,11 +24,12 @@ namespace SolaERP.Application.Dtos.Request
         public decimal Amount { get; set; }
         public string ConnectedOrderReference { get; set; }
         public decimal ConnectedOrderLineNo { get; set; }
+        public int Condition { get; set; }
+        public int Priority { get; set; }
         public string AccountCode { get; set; }
         public bool AlternativeItem { get; set; }
         public decimal ManualUP { get; set; }
         public OperationType Type { get; set; }
-        public int CatId { get; set; }
         public int RequestAnalysisId { get; set; }
         public int? AnalysisCode1Id { get; set; }
         public int? AnalysisCode2Id { get; set; }
@@ -40,5 +41,6 @@ namespace SolaERP.Application.Dtos.Request
         public int? AnalysisCode8Id { get; set; }
         public int? AnalysisCode9Id { get; set; }
         public int? AnalysisCode10Id { get; set; }
+        public int CatId { get; set; }
     }
 }

@@ -23,6 +23,10 @@
         public string ConnectedOrderReference { get; set; }
         public decimal ConnectedOrderLineNo { get; set; }
         public string AccountCode { get; set; }
+        public int Condition { get; set; }
+        public int Priority { get; set; }
+        public decimal ManualUP { get; set; }
+        public bool AlternativeItem { get; set; }
         public int? AnalysisCode1Id { get; set; }
         public int? AnalysisCode2Id { get; set; }
         public int? AnalysisCode3Id { get; set; }
