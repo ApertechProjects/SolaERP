@@ -16,9 +16,9 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<RFQDetail>> GetRFQDetailsAsync(int rfqMainId);
         Task<List<RFQRequestDetail>> GetRFQLineDeatilsAsync(int rfqMainId);
 
-        Task<int> AddMainAsync(RfqSaveCommandRequest request);
-        Task<int> UpdateMainAsync(RfqSaveCommandRequest request);
-        Task<int> DeleteMainsync(int id, int userId);
+        Task<RfqSaveCommandResponse> AddMainAsync(RfqSaveCommandRequest request);
+        Task<RfqSaveCommandResponse> UpdateMainAsync(RfqSaveCommandRequest request);
+        Task<RfqSaveCommandResponse> DeleteMainsync(int id, int userId);
         Task<List<SingleSourceReasonModel>> GetRFQSingeSourceReasons(int rfqMainId);
 
         Task<bool> AddDetailsAsync(List<RfqDetailSaveModel> Details, int mainId);

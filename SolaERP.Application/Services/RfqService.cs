@@ -33,19 +33,19 @@ namespace SolaERP.Persistence.Services
             _bURepository = bURepository;
         }
 
-        public async Task<ApiResponse<int>> SaveRfqAsync(RfqSaveCommandRequest request, string useridentity)
+        public async Task<ApiResponse<RfqSaveCommandResponse>> SaveRfqAsync(RfqSaveCommandRequest request, string useridentity)
         {
             request.UserId = Convert.ToInt32(useridentity);
-            int newMainID = await _repository.AddMainAsync(request);
+            var response = await _repository.AddMainAsync(request);
 
-            bool result = await _repository.AddDetailsAsync(request.RfqDetails, newMainID);
+            bool result = await _repository.AddDetailsAsync(request.RfqDetails, response.Id);
             foreach (var requestList in request.RfqDetails)
             {
                 await _repository.SaveRFqRequestDetailsAsync(requestList.LineDetails);
             }
 
             await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<int>.Success(newMainID, 200);
+            return ApiResponse<RfqSaveCommandResponse>.Success(response, 200);
         }
 
         public async Task<ApiResponse<List<RfqAllDto>>> GetAllAsync(RfqAllFilter filter)
@@ -148,10 +148,10 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> DeleteAsync(int rfqMainId, string userIdentity)
         {
-            var result = await _repository.DeleteMainsync(rfqMainId, Convert.ToInt32(userIdentity));
+            var response = await _repository.DeleteMainsync(rfqMainId, Convert.ToInt32(userIdentity));
             await _unitOfWork.SaveChangesAsync();
 
-            return ApiResponse<bool>.Success(result);
+            return response is not null ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Fail(false, 400);
         }
     }
 }
