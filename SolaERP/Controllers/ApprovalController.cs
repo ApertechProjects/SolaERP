@@ -69,8 +69,8 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> DeleteStage(ApproveStageDeleteModel model)
             => CreateActionResult(await _approveStageMainService.DeleteApproveStageAsync(model));
 
-        [HttpGet("{businessUnitId}/{procedureKey}")]
-        public async Task<IActionResult> Stages(int businessUnitId, string procedureKey)
-            => CreateActionResult(await _approveStageMainService.Stages(businessUnitId, procedureKey));
+        [HttpGet]
+        public async Task<IActionResult> Stages([FromQuery]ApprovalStagesGetModel model)
+            => CreateActionResult(await _approveStageMainService.Stages(model.BusinessUnitId, model.ProcedureKey));
     }
 }
