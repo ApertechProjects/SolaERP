@@ -380,10 +380,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@RequestComment", model.RequestComment);
                 command.Parameters.AddWithValue(command, "@OperatorComment", model.OperatorComment);
                 command.Parameters.AddWithValue(command, "@QualityRequired", model.QualityRequired);
-                command.Parameters.AddWithValue(command, "@Destination", model.Destination);
                 command.Parameters.AddWithValue(command, "@Currency", model.CurrencyCode);
-                command.Parameters.AddWithValue(command, "@Buyer", model.Buyer);
                 command.Parameters.AddWithValue(command, "@LogisticTotal", model.LogisticsTotal);
+                command.Parameters.AddWithValue(command, "@Buyer", model.Buyer);
+                command.Parameters.AddWithValue(command, "@Destination", model.Destination);
+                command.Parameters.AddWithValue(command, "@Priority", model.Priority);
+                command.Parameters.AddWithValue(command, "@ApproveStageMainId", model.ApproveStageMainId);
 
                 command.Parameters.Add("@NewRequestmainId", SqlDbType.Int);
                 command.Parameters["@NewRequestmainId"].Direction = ParameterDirection.Output;

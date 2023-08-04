@@ -108,6 +108,7 @@ namespace SolaERP.Controllers
             AccountResponseDto account = new();
             if (response.Data > 0)
             {
+
                 var templateDataForVerification = await _emailNotificationService.GetEmailTemplateData(dto.Language, EmailTemplateKey.VER);
                 var companyName = await _emailNotificationService.GetCompanyName(dto.Email);
 
