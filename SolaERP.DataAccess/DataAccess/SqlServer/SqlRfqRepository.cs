@@ -209,7 +209,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RfqSaveCommandResponse response = null;
 
                 while (reader.Read()) response = GetRfqSaveResponse(reader);
-
+                return response;
             }
         }
 
