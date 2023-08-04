@@ -35,6 +35,7 @@ namespace SolaERP.Application.Dtos.Request
         public string AccountCode { get; set; }
         public bool AlternativeItem { get; set; }
         public decimal ManualUP { get; set; }
+        public int CatId { get; set; }
         public int RequestAnalysisId { get; set; }
         public int AnalysisCode1Id { get; set; }
         public int AnalysisCode2Id { get; set; }
