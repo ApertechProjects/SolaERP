@@ -160,7 +160,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = @" EXEC SP_RFQMain_IUD @RFQMainId,
+                command.CommandText = @"DECLARE @NewRFQMainId INT,@NewRFQNo NVARCHAR(25)
+                                                            EXEC SP_RFQMain_IUD @RFQMainId,
                                                             @BusinessUnitId,
                                                             @RFQType,
                                                             @RFQNo,
@@ -180,8 +181,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                             @OtherReasons,
                                                             @BusinessCategoryId,
                                                             @UserId,
-                                                            @NewRFQMainId,
-                                                            @NewRFQNo";
+                                                            @NewRFQMainId = @NewRFQMainId OUTPUT,
+                                                            @NewRFQNo = @NewRFQNo OUTPUT
+                                                            
+                                                            SELECT	@NewRFQMainId as N'@NewRFQMainId',
+		                                                            @NewRFQNo as N'@NewRFQNo'";
 
 
                 command.Parameters.AddWithValue(command, "@RFQMainId", request.RFQMainId);
@@ -203,8 +207,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@OtherReasons", request?.OtherReasons);
                 command.Parameters.AddWithValue(command, "@BusinessCategoryId", request?.BusinessCategoryId);
                 command.Parameters.AddWithValue(command, "@UserId", request?.UserId);
-                command.Parameters.AddOutPutParameter(command, "@NewRFQMainId", SqlDbType.Int);
-                command.Parameters.AddOutPutParameter(command, "@NewRFQNo", SqlDbType.NVarChar);
                 command.Parameters.AddTableValue(command, "@SingleSourceReasonId", "SingleIdItems", request?.SingleSourceReasonIds?.ConvertListToDataTable());
 
                 using var reader = await command.ExecuteReaderAsync();
