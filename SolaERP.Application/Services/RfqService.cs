@@ -36,10 +36,12 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<RfqSaveCommandResponse>> SaveRfqAsync(RfqSaveCommandRequest request, string useridentity)
         {
             request.UserId = Convert.ToInt32(useridentity);
+            RfqSaveCommandResponse response = null;
 
-            var response = await _repository.AddMainAsync(request);
+            if (request.RFQMainId <= 0) response = await _repository.AddMainAsync(request);
+            else response = await _repository.UpdateMainAsync(request);
+
             bool result = await _repository.AddDetailsAsync(request.RfqDetails, response.Id);
-
             var saveDetailTasks = request.RfqDetails.Select(requestList => _repository.SaveRFqRequestDetailsAsync(requestList.LineDetails));
             await Task.WhenAll(saveDetailTasks);
 
