@@ -181,6 +181,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                             @OtherReasons,
                                                             @BusinessCategoryId,
                                                             @UserId,
+                                                            @BiddingType,
                                                             @NewRFQMainId = @NewRFQMainId OUTPUT,
                                                             @NewRFQNo = @NewRFQNo OUTPUT
                                                             
@@ -207,6 +208,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@OtherReasons", request?.OtherReasons);
                 command.Parameters.AddWithValue(command, "@BusinessCategoryId", request?.BusinessCategoryId);
                 command.Parameters.AddWithValue(command, "@UserId", request?.UserId);
+                command.Parameters.AddWithValue(command, "@BiddingType", request?.BiddingType);
                 command.Parameters.AddTableValue(command, "@SingleSourceReasonId", "SingleIdItems", request?.SingleSourceReasonIds?.ConvertListToDataTable());
 
                 using var reader = await command.ExecuteReaderAsync();

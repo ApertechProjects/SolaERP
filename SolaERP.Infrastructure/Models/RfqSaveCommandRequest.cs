@@ -20,6 +20,7 @@ namespace SolaERP.Application.Models
         public DateTime? SentDate { get; set; }
         public int SingleUnitPrice { get; set; }
         public ProcurementType ProcurementType { get; set; }
+        public BiddingType BiddingType { get; set; }
         public List<int> SingleSourceReasonIds { get; set; }
         public string PlaceOfDelivery { get; set; }
         public string Comment { get; set; }
