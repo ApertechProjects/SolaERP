@@ -4,7 +4,6 @@
     {
         public int RequestDetailId { get; set; }
         public int RequestMainId { get; set; }
-        //public int ApprovalStatus { get; set; }
         public string LineNo { get; set; }
         public DateTime RequestDate { get; set; }
         public DateTime RequestDeadline { get; set; }
@@ -28,6 +27,9 @@
         public string ConnectedOrderReference { get; set; }
         public decimal ConnectedOrderLineNo { get; set; }
         public string AccountCode { get; set; }
+        public bool AlternativeItem { get; set; }
+        public decimal ManualUP { get; set; }
+        public int CatId { get; set; }
         public int RequestAnalysisId { get; set; }
         public int AnalysisCode1Id { get; set; }
         public int AnalysisCode2Id { get; set; }

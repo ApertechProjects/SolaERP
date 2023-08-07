@@ -11,6 +11,10 @@
         Request = 7,
         AnalysisDimension = 8,
         AnalysisCode = 9,
-        AnalysisStructure = 10
+        AnalysisStructure = 10,
+        SaveLayout = 11,
+        ApproveRoles = 13,
+        RFQ = 14,
+        BID = 15,
     }
 }

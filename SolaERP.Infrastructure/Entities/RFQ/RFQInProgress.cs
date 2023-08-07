@@ -1,15 +1,18 @@
-﻿
+﻿using SolaERP.Application.Attributes;
+using SolaERP.Application.Entities.SupplierEvaluation;
+using SolaERP.Application.Enums;
 
 namespace SolaERP.Application.Entities.RFQ
 {
     public class RFQInProgress : BaseEntity
     {
-        public int RFQMainId { get; set; }
+        [DbColumn("RFQMainId")]
+        public int Id { get; set; }
         public long LineNo { get; set; }
         public string RFQType { get; set; }
         public string RFQNo { get; set; }
         public DateTime RFQDate { get; set; }
-        public string Emergency { get; set; }
+        public Emergency Emergency { get; set; }
         public int OfferCount { get; set; }
         public int Sent { get; set; }
         public int Accepted { get; set; }
@@ -19,10 +22,10 @@ namespace SolaERP.Application.Entities.RFQ
         public int NoResponse { get; set; }
         public DateTime DesiredDeliveryDate { get; set; }
         public string ProcurementType { get; set; }
-        public string BusinessCategoryName { get; set; }
         public string Buyer { get; set; }
         public DateTime RFQDeadline { get; set; }
         public DateTime SentDate { get; set; }
         public string Comment { get; set; }
+        public BusinessCategory BusinessCategory { get; set; }
     }
 }

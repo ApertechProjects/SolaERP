@@ -66,11 +66,10 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> AddAsync(string useridentity, SupplierRegisterCommand command)
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
-
+            user.FullName = command.CompanyInformation.FullName;
             user.PhoneNumber = command.CompanyInformation.PhoneNumber;
             user.Description = command.CompanyInformation.Position;
 
-            await _userRepository.SaveUserAsync(user);
 
             Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
             vendor.VendorId = user.VendorId;
@@ -84,8 +83,10 @@ namespace SolaERP.Persistence.Services
             await _repository.DeleteRepresentedProductAsync(vendorId);
             await _repository.DeleteRepresentedCompanyAsync(vendorId);
 
-            await _repository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", command?.CompanyInformation?.RepresentedCompanies) });
-            await _repository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", command?.CompanyInformation?.RepresentedProducts) });
+            if (command?.CompanyInformation?.RepresentedCompanies != null)
+                await _repository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", command?.CompanyInformation?.RepresentedCompanies) });
+            if (command?.CompanyInformation?.RepresentedProducts != null)
+                await _repository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", command?.CompanyInformation?.RepresentedProducts) });
 
             #endregion
 
@@ -305,6 +306,7 @@ namespace SolaERP.Persistence.Services
             #region NDA
 
             command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
+            tasks.AddRange(command.NonDisclosureAgreement?.Select(x => _repository.DeleteNDAAsync(vendorId)));
             if (command?.NonDisclosureAgreement != null && command?.NonDisclosureAgreement?.Count > 0)
                 tasks.AddRange(command?.NonDisclosureAgreement?.Select(x => _repository.AddNDAAsync(_mapper.Map<VendorNDA>(x))));
 
@@ -318,6 +320,9 @@ namespace SolaERP.Persistence.Services
                 tasks.AddRange(command?.CodeOfBuConduct?.Select(x => _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(x))));
 
             #endregion
+
+            user.VendorId = vendorId;
+            await _userRepository.SaveUserAsync(user);
 
 
             await Task.WhenAll(tasks);
