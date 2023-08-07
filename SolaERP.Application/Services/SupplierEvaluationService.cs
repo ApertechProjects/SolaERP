@@ -70,7 +70,6 @@ namespace SolaERP.Persistence.Services
             user.PhoneNumber = command.CompanyInformation.PhoneNumber;
             user.Description = command.CompanyInformation.Position;
 
-            await _userRepository.SaveUserAsync(user);
 
             Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
             vendor.VendorId = user.VendorId;
@@ -321,6 +320,9 @@ namespace SolaERP.Persistence.Services
                 tasks.AddRange(command?.CodeOfBuConduct?.Select(x => _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(x))));
 
             #endregion
+
+            user.VendorId = vendorId;
+            await _userRepository.SaveUserAsync(user);
 
 
             await Task.WhenAll(tasks);
