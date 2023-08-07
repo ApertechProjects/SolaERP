@@ -409,6 +409,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<BidAll, BidAllDto>().ReverseMap();
             CreateMap<BidMain, BidMainDto>().ReverseMap();
             CreateMap<BidMainLoad, BidMainLoadDto>().ReverseMap();
+            CreateMap<BidDetail, BidDetailDto>().ReverseMap();
 
         }
     }

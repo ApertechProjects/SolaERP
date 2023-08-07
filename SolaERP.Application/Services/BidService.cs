@@ -36,6 +36,14 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<BidAllDto>>.Success(dtos, 200);
         }
 
+        public async Task<ApiResponse<BidMainLoadDto>> GetMainLoadAsync(int bidMainId)
+        {
+            var bidMain = await _bidRepository.GetMainLoadAsync(bidMainId);
+            var model = _mapper.Map<BidMainLoadDto>(bidMain);
+            return ApiResponse<List<BidMainLoadDto>>.Success(model, 200);
+
+        }
+
         public async Task<ApiResponse<int>> SaveBidMainAsync(BidMainDto bidMain)
         {
             var entity = _mapper.Map<BidMain>(bidMain);

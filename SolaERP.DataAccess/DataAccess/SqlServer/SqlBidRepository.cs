@@ -100,7 +100,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         }
 
-        public async Task<List<BidMainLoad>> GetMainLoadAsync(int bidMainId)
+        public async Task<BidMainLoad> GetMainLoadAsync(int bidMainId)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = "EXEC SP_BidMain_Load @BidMainId";
@@ -109,9 +109,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             using DbDataReader reader = await command.ExecuteReaderAsync();
             List<BidMainLoad> data = new();
-            while (reader.Read())
-                data.Add(GetBidMainLoadFromReader(reader));
-            return data;
+            if (reader.Read())
+                return GetBidMainLoadFromReader(reader);
+            return null;
         }
 
         private BidAll GetBidFromReader(DbDataReader reader)
