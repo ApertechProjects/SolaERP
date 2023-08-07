@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.User;
+using SolaERP.Application.Entities.Groups;
 using SolaERP.Application.Models;
 using System.IdentityModel.Tokens.Jwt;
 using IFileService = SolaERP.Application.Contracts.Services.IFileService;
@@ -78,11 +79,11 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _userService.GetUsersByGroupIdAsync(groupId));
 
         [HttpPost]
-        public async Task<IActionResult> AddGroupToUserAsync(AddUserToGroupModel addUserToGroupModel)
+        public async Task<IActionResult> AddGroupToUserAsync(GroupUserSave addUserToGroupModel)
             => CreateActionResult(await _userService.AddGroupToUserAsync(addUserToGroupModel.groupIds, addUserToGroupModel.UserId));
 
         [HttpPost]
-        public async Task<IActionResult> DeleteGroupFromUserAsync(AddUserToGroupModel addUserToGroupModel)
+        public async Task<IActionResult> DeleteGroupFromUserAsync(GroupUserSave addUserToGroupModel)
           => CreateActionResult(await _userService.DeleteGroupFromUserAsync(addUserToGroupModel.groupIds, addUserToGroupModel.UserId));
 
         [HttpGet]
