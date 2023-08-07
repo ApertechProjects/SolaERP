@@ -19,7 +19,7 @@ namespace SolaERP.Application.Dtos.RFQ
         public DateTime RequiredOnSiteDate { get; set; }
         public DateTime DesiredDeliveryDate { get; set; }
         public DateTime SentDate { get; set; }
-        public int SingleUnitPrice { get; set; }
+        public bool SingleUnitPrice { get; set; }
         public ProcurementType ProcurementType { get; set; }
         public string PlaceOfDelivery { get; set; }
         public string Comment { get; set; }

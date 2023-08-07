@@ -340,7 +340,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RequiredOnSiteDate = reader.Get<DateTime>("RequiredOnSiteDate"),
                 DesiredDeliveryDate = reader.Get<DateTime>("DesiredDeliveryDate"),
                 SentDate = reader.Get<DateTime>("SentDate"),
-                SingleUnitPrice = reader.Get<int>("SingleUnitPrice"),
+                SingleUnitPrice = reader.Get<bool>("SingleUnitPrice"),
                 ProcurementType = (ProcurementType)reader.Get<int>("ProcurementType"),
                 PlaceOfDelivery = reader.Get<string>("PlaceOfDelivery"),
                 Comment = reader.Get<string>("Comment"),
