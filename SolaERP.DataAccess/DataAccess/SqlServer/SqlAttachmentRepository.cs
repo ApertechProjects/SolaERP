@@ -72,6 +72,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 List<Attachment> attachments = new List<Attachment>();
 
                 while (await reader.ReadAsync()) { attachments.Add(reader.GetByEntityStructure<Attachment>("FileData")); }
+                if (attachments.Count == 0)
+                    return Enumerable.Empty<Attachment>().ToList();
                 return attachments;
             }
         }

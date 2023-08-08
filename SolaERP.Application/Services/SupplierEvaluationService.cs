@@ -376,6 +376,7 @@ namespace SolaERP.Persistence.Services
             foreach (var item in bankAccount)
             {
                 var attachment = _mapper.Map<List<AttachmentDto>>(await _attachmentRepository.GetAttachmentsAsync(item.Id, null, SourceType.VEN_BNK.ToString()));
+                attachment = attachment.Count > 0 ? attachment : Enumerable.Empty<AttachmentDto>().ToList();
                 item.AccountVerificationLetter = attachment;
             }
 
@@ -551,7 +552,7 @@ namespace SolaERP.Persistence.Services
                     {
                         var attachments = _mapper.Map<List<AttachmentDto>>(
                         await _attachmentRepository.GetAttachmentsAsync(vendorId, null, SourceType.VEN_PREQ.ToString(), design.PrequalificationDesignId));
-
+                        attachments = attachments.Count > 0 ? attachments : Enumerable.Empty<AttachmentDto>().ToList();
                         var correspondingValue = prequalificationValues.FirstOrDefault(v => v.PrequalificationDesignId == design.PrequalificationDesignId);
                         var calculationResult = CalculateScoring(correspondingValue, design, gridDatas, attachments?.Count > 0);
 
@@ -704,7 +705,7 @@ namespace SolaERP.Persistence.Services
                 {
                     var correspondingValue = dueDiligenceValues.FirstOrDefault(v => v.DueDiligenceDesignId == d.DesignId);
                     var attachments = d.HasAttachment > 0 ? _mapper.Map<List<AttachmentDto>>(
-                            await _attachmentRepository.GetAttachmentsAsync(vendorId, null, SourceType.VEN_DUE.ToString(), d.DesignId)) : null;
+                            await _attachmentRepository.GetAttachmentsAsync(vendorId, null, SourceType.VEN_DUE.ToString(), d.DesignId)) : Enumerable.Empty<AttachmentDto>().ToList();
 
                     var calculationResult = await CalculateScoring(correspondingValue, d, vendorId, attachments?.Count > 0);
                     var childDto = new DueDiligenceChildDto
