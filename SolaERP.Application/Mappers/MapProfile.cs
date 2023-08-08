@@ -8,6 +8,7 @@ using SolaERP.Application.Dtos.ApproveRole;
 using SolaERP.Application.Dtos.ApproveStage;
 using SolaERP.Application.Dtos.ApproveStages;
 using SolaERP.Application.Dtos.Attachment;
+using SolaERP.Application.Dtos.Bid;
 using SolaERP.Application.Dtos.BusinessUnit;
 using SolaERP.Application.Dtos.Buyer;
 using SolaERP.Application.Dtos.Currency;
@@ -42,6 +43,7 @@ using SolaERP.Application.Entities.ApproveStage;
 using SolaERP.Application.Entities.ApproveStages;
 using SolaERP.Application.Entities.Attachment;
 using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Entities.Bid;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Buyer;
 using SolaERP.Application.Entities.Email;
@@ -403,6 +405,12 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<RFQRequestDetail, RFQRequestDetailDto>().ReverseMap();
             CreateMap<RejectReason, RejectReasonDto>().ReverseMap();
             CreateMap<RFQInProgress, RFQInProgressDto>().ReverseMap();
+
+            CreateMap<BidAll, BidAllDto>().ReverseMap();
+            CreateMap<BidMain, BidMainDto>().ReverseMap();
+            CreateMap<BidMainLoad, BidMainLoadDto>().ReverseMap();
+            CreateMap<BidDetail, BidDetailDto>().ReverseMap();
+
             CreateMap<Application.Entities.RFQ.UOM, Application.Dtos.RFQ.UOMDto>().ReverseMap();
         }
     }
