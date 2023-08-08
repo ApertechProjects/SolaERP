@@ -12,10 +12,11 @@ namespace SolaERP.Controllers
     public class RequestController : CustomBaseController
     {
         private readonly IRequestService _requestService;
-
-        public RequestController(IRequestService requestService)
+        private readonly IFileUploadService _fileUploadService;
+        public RequestController(IRequestService requestService, IFileUploadService fileUploadService)
         {
             _requestService = requestService;
+            _fileUploadService = fileUploadService;
         }
 
         [HttpGet("{businessUnitId}")]
@@ -94,6 +95,12 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> CategoryList()
             => CreateActionResult(await _requestService.CategoryList());
 
+        [HttpPost]
+        public async Task<string> Test([FromForm] UploadFile uploadFile)
+        {
+            await _fileUploadService.UploadFile(uploadFile);
+            return null;
+        }
     }
 }
 
