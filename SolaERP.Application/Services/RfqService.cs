@@ -154,5 +154,13 @@ namespace SolaERP.Persistence.Services
 
             return response is not null ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Fail(false, 400);
         }
+
+        public async Task<ApiResponse<List<UOMDto>>> GetPUOMAsync(int businessUnitId, string itemCodes)
+        {
+            var puomList = await _repository.GetPUOMAsync(businessUnitId, itemCodes);
+            var dto = _mapper.Map<List<UOMDto>>(puomList);
+
+            return ApiResponse<List<UOMDto>>.Success(dto, 200);
+        }
     }
 }

@@ -20,5 +20,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> ChangeRFQStatusAsync(RfqChangeStatusModel model, string userIdentity);
         Task<ApiResponse<RFQMainDto>> GetRFQAsync(string userIdentity, int rfqMainId);
         Task<ApiResponse<List<RFQInProgressDto>>> GetInProgressAsync(RFQFilterBase filter);
+        Task<ApiResponse<List<UOMDto>>> GetPUOMAsync(int businessUnitId, string itemCodes);
     }
 }
