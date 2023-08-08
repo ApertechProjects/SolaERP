@@ -489,7 +489,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<UOM>> GetPUOMAsync(int businessUnitId, string[] itemCodes)
+        public async Task<List<UOM>> GetPUOMAsync(int businessUnitId, string itemCodes)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
