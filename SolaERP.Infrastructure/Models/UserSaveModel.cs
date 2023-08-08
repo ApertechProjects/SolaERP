@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace SolaERP.Application.Models
+﻿namespace SolaERP.Application.Models
 {
     public class UserSaveModel
     {
@@ -21,7 +19,8 @@ namespace SolaERP.Application.Models
         public string Description { get; set; }
         public string ERPUser { get; set; }
         public bool IsDeleted { get; set; }
-        public AttachmentSaveModel Signature { get; set; }
-        public AttachmentSaveModel Photo { get; set; }
+        public UploadFile UploadFile { get; set; }
+        //public AttachmentSaveModel Signature { get; set; }
+        //public AttachmentSaveModel Photo { get; set; }
     }
 }

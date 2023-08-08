@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Group;
@@ -280,17 +279,17 @@ namespace SolaERP.Persistence.Services
 
             var result = await _userRepository.SaveUserAsync(userEntry);
 
-            if (user.Signature is not null)
-            {
-                user.Signature.SourceId = result;
-                await _attachmentRepo.SaveAttachmentAsync(user.Signature);
-            }
+            //if (user.Signature is not null)
+            //{
+            //    user.Signature.SourceId = result;
+            //    await _attachmentRepo.SaveAttachmentAsync(user.Signature);
+            //}
 
-            if (user.Photo is not null)
-            {
-                user.Photo.SourceId = result;
-                await _attachmentRepo.SaveAttachmentAsync(user.Photo);
-            }
+            //if (user.Photo is not null)
+            //{
+            //    user.Photo.SourceId = result;
+            //    await _attachmentRepo.SaveAttachmentAsync(user.Photo);
+            //}
 
 
             await _unitOfWork.SaveChangesAsync();

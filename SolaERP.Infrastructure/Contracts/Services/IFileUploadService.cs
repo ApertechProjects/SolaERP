@@ -1,15 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using SolaERP.Application.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Contracts.Services
 {
     public interface IFileUploadService
     {
-        Task<string> UploadFile(UploadFile uploadFile);
+        Task<bool> UploadFile(UploadFile uploadFile);
     }
 }
