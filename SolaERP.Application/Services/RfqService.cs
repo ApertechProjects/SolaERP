@@ -33,19 +33,20 @@ namespace SolaERP.Persistence.Services
             _bURepository = bURepository;
         }
 
-        public async Task<ApiResponse<int>> SaveRfqAsync(RfqSaveCommandRequest request, string useridentity)
+        public async Task<ApiResponse<RfqSaveCommandResponse>> SaveRfqAsync(RfqSaveCommandRequest request, string useridentity)
         {
             request.UserId = Convert.ToInt32(useridentity);
-            int newMainID = await _repository.AddMainAsync(request);
+            RfqSaveCommandResponse response = null;
 
-            bool result = await _repository.AddDetailsAsync(request.RfqDetails, newMainID);
-            foreach (var requestList in request.RfqDetails)
-            {
-                await _repository.SaveRFqRequestDetailsAsync(requestList.LineDetails);
-            }
+            if (request.RFQMainId <= 0) response = await _repository.AddMainAsync(request);
+            else response = await _repository.UpdateMainAsync(request);
+
+            bool result = await _repository.AddDetailsAsync(request.RfqDetails, response.Id);
+            var saveDetailTasks = request.RfqDetails.Select(requestList => _repository.SaveRFqRequestDetailsAsync(requestList.LineDetails));
+            await Task.WhenAll(saveDetailTasks);
 
             await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<int>.Success(newMainID, 200);
+            return ApiResponse<RfqSaveCommandResponse>.Success(response, 200);
         }
 
         public async Task<ApiResponse<List<RfqAllDto>>> GetAllAsync(RfqAllFilter filter)
@@ -55,6 +56,8 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<List<RfqAllDto>>.Success(dto, 200);
         }
+
+
 
         public async Task<ApiResponse<List<BusinessCategory>>> GetBuCategoriesAsync()
         {
@@ -142,6 +145,14 @@ namespace SolaERP.Persistence.Services
             var inProgressRFQS = await _repository.GetInProgressesAsync(filter);
             var dto = _mapper.Map<List<RFQInProgressDto>>(inProgressRFQS);
             return ApiResponse<List<RFQInProgressDto>>.Success(dto, 200);
+        }
+
+        public async Task<ApiResponse<bool>> DeleteAsync(int rfqMainId, string userIdentity)
+        {
+            var response = await _repository.DeleteMainsync(rfqMainId, Convert.ToInt32(userIdentity));
+            await _unitOfWork.SaveChangesAsync();
+
+            return response is not null ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Fail(false, 400);
         }
     }
 }

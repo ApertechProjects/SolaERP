@@ -114,11 +114,38 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<AdditionalPrivilegeAccessDto>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<List<MenuWithPrivilagesDto>>> GetMenuWithPrivilegeListByGroupIdAsync(int groupId)
+        public async Task<ApiResponse<List<MenuWithPrivilege>>> GetMenuWithPrivilegeListByGroupIdAsync(int groupId)
         {
+            List<MenuWithPrivilege> menuWithPrivileges = new List<MenuWithPrivilege>();
             var menus = await _menuRepository.GetMenuWithPrivilegesAsync(groupId);
             var dto = _mapper.Map<List<MenuWithPrivilagesDto>>(menus);
-            return ApiResponse<List<MenuWithPrivilagesDto>>.Success(dto, 200);
+            var ttt = dto.GroupBy(x => x.ParentId).ToList();
+
+            for (int i = 1; i < ttt.Count; i++)
+            {
+                IGrouping<int, MenuWithPrivilagesDto> item = ttt[i];
+                menuWithPrivileges.Add(new MenuWithPrivilege
+                {
+                    MenuId = item.Key,
+                    MenuName = ttt[0].Where(x => x.ParentId == 0).ToList()[i - 1].MenuName,
+                    Details = item.Select(x => new MenuWithPrivilegeDetail
+                    {
+                        MenuId = x.MenuId,
+                        MenuName = x.MenuName,
+                        Url = x.Url,
+                        Icon = x.Icon,
+                        MenuCode = x.MenuCode,
+                        ReadAccess = x.ReadAccess,
+                        CreateAccess = x.CreateAccess,
+                        EditAccess = x.EditAccess,
+                        DeleteAccess = x.DeleteAccess,
+                        ExportAccess = x.ExportAccess,
+                        ReactIcon = x.ReactIcon,
+                    }).ToList()
+                });
+            }
+
+            return ApiResponse<List<MenuWithPrivilege>>.Success(menuWithPrivileges, 200);
 
         }
     }

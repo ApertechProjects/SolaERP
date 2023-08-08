@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Application.Models
+﻿namespace SolaERP.Application.Entities.Groups
 {
     public class AddUserToGroupModel
     {

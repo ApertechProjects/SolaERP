@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.User;
+using SolaERP.Application.Entities.Groups;
 using SolaERP.Application.Models;
 using System.IdentityModel.Tokens.Jwt;
 using IFileService = SolaERP.Application.Contracts.Services.IFileService;

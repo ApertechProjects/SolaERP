@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Models
 {
-    public class GroupBuyerSaveModel
+    public class ApprovalStagesGetModel
     {
         public int BusinessUnitId { get; set; }
-        public string Buyer { get; set; }
+        public string ProcedureKey { get; set; }
     }
 }

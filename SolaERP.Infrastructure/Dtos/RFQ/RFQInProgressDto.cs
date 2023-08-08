@@ -1,11 +1,14 @@
-﻿namespace SolaERP.Application.Dtos.RFQ
+﻿using SolaERP.Application.Entities.SupplierEvaluation;
+using SolaERP.Application.Enums;
+
+namespace SolaERP.Application.Dtos.RFQ
 {
     public class RFQInProgressDto
     {
-        public int RFQMainId { get; set; }
+        public int Id { get; set; }
         public int LineNo { get; set; }
         public DateTime RequiredOnSiteDate { get; set; }
-        public string Emergency { get; set; }
+        public Emergency Emergency { get; set; }
         public DateTime RFQDate { get; set; }
         public string RFQType { get; set; }
         public string RFQNo { get; set; }
@@ -18,15 +21,15 @@
         public string Buyer { get; set; }
         public bool SingleUnitPrice { get; set; }
         public string PlaceOfDelivery { get; set; }
-        public int BusinessCategoryId { get; set; }
+        // public int BusinessCategoryId { get; set; }
 
         public int OfferCount { get; set; }
-        public bool Sent { get; set; }
-        public bool Accepted { get; set; }
-        public bool InProgress { get; set; }
-        public bool Responded { get; set; }
-        public bool Rejected { get; set; }
-        public bool NoResponse { get; set; }
-        public string BusinessCategoryName { get; set; }
+        public int Sent { get; set; }
+        public int Accepted { get; set; }
+        public int InProgress { get; set; }
+        public int Responded { get; set; }
+        public int Rejected { get; set; }
+        public int NoResponse { get; set; }
+        public BusinessCategory BusinessCategory { get; set; }
     }
 }
