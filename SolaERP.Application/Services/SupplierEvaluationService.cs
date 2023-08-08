@@ -376,6 +376,7 @@ namespace SolaERP.Persistence.Services
             foreach (var item in bankAccount)
             {
                 var attachment = _mapper.Map<List<AttachmentDto>>(await _attachmentRepository.GetAttachmentsAsync(item.Id, null, SourceType.VEN_BNK.ToString()));
+                attachment = attachment.Count > 0 ? attachment : Enumerable.Empty<AttachmentDto>().ToList();
                 item.AccountVerificationLetter = attachment;
             }
 
@@ -551,7 +552,7 @@ namespace SolaERP.Persistence.Services
                     {
                         var attachments = _mapper.Map<List<AttachmentDto>>(
                         await _attachmentRepository.GetAttachmentsAsync(vendorId, null, SourceType.VEN_PREQ.ToString(), design.PrequalificationDesignId));
-
+                        attachments = attachments.Count > 0 ? attachments : Enumerable.Empty<AttachmentDto>().ToList();
                         var correspondingValue = prequalificationValues.FirstOrDefault(v => v.PrequalificationDesignId == design.PrequalificationDesignId);
                         var calculationResult = CalculateScoring(correspondingValue, design, gridDatas, attachments?.Count > 0);
 
