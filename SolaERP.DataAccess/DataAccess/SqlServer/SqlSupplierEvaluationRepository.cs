@@ -689,7 +689,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Column3", gridData.Column3);
                 command.Parameters.AddWithValue(command, "@Column4", gridData.Column4);
                 command.Parameters.AddWithValue(command, "@Column5", gridData.Column5);
-                command.Parameters.AddWithValue(command, "@VendorId", gridData.Column5);
+                command.Parameters.AddWithValue(command, "@VendorId", gridData.VendorId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
