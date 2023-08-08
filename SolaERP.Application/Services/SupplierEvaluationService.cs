@@ -704,7 +704,7 @@ namespace SolaERP.Persistence.Services
                 {
                     var correspondingValue = dueDiligenceValues.FirstOrDefault(v => v.DueDiligenceDesignId == d.DesignId);
                     var attachments = d.HasAttachment > 0 ? _mapper.Map<List<AttachmentDto>>(
-                            await _attachmentRepository.GetAttachmentsAsync(vendorId, null, SourceType.VEN_DUE.ToString(), d.DesignId)) : null;
+                            await _attachmentRepository.GetAttachmentsAsync(vendorId, null, SourceType.VEN_DUE.ToString(), d.DesignId)) : Enumerable.Empty<AttachmentDto>().ToList();
 
                     var calculationResult = await CalculateScoring(correspondingValue, d, vendorId, attachments?.Count > 0);
                     var childDto = new DueDiligenceChildDto
