@@ -12,7 +12,7 @@ namespace SolaERP.Application.Contracts.Services
     public interface IBidService
     {
         Task<ApiResponse<List<BidAllDto>>> GetAllAsync(BidAllFilter filter);
-        Task<ApiResponse<List<BidMainLoadDto>>> GetMainLoadAsync(int bidMainId);
+        Task<ApiResponse<BidMainLoadDto>> GetMainLoadAsync(int bidMainId);
         Task<ApiResponse<int>> SaveBidMainAsync(BidMainDto bidMain);
 
     }

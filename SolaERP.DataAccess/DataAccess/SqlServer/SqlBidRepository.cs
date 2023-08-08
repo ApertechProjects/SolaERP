@@ -72,6 +72,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return await command.ExecuteNonQueryAsync();
         }
 
+        public async Task<bool> SaveBidDetailsAsync(List<BidDetail> details)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+
+            command.CommandText = "SET NOCOUNT OFF EXEC SP_RFQRequestDetails_IUD @Data";
+            command.Parameters.AddTableValue(command, "@Data", "BidDetailsType", details.ConvertToDataTable()); ;
+
+            return await command.ExecuteNonQueryAsync() > 0;
+        }
+
         public async Task<List<BidAll>> GetAllAsync(BidAllFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;

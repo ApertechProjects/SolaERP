@@ -27,5 +27,7 @@ namespace SolaERP.Application.Dtos.Bid
         public int UserId { get; set; }
         public int NewBidMainId { get; set; }
         public string NewBidNo { get; set; }
+
+        public List<BidDetailDto> BidDetails { get; set; }
     }
 }

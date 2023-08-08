@@ -40,14 +40,19 @@ namespace SolaERP.Persistence.Services
         {
             var bidMain = await _bidRepository.GetMainLoadAsync(bidMainId);
             var model = _mapper.Map<BidMainLoadDto>(bidMain);
-            return ApiResponse<List<BidMainLoadDto>>.Success(model, 200);
-
+            return ApiResponse<BidMainLoadDto>.Success(model, 200);
         }
 
         public async Task<ApiResponse<int>> SaveBidMainAsync(BidMainDto bidMain)
         {
             var entity = _mapper.Map<BidMain>(bidMain);
-            return ApiResponse<int>.Success(await _bidRepository.AddMainAsync(entity), 200);
+            var details = _mapper.Map<List<BidDetail>>(bidMain.BidDetails);
+            var id = await _bidRepository.AddMainAsync(entity);
+
+            await _bidRepository.SaveBidDetailsAsync(details);
+
+            return ApiResponse<int>.Success(id, 200);
         }
+
     }
 }
