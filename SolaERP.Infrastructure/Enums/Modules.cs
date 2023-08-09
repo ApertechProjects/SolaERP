@@ -2,12 +2,13 @@
 {
     public enum Modules
     {
-        bidComparison,
-        bid,
-        evaluationForm,
-        orders,
-        request,
-        rfqs,
-        vendors
+        Users,
+        BidComparison,
+        Bid,
+        EvaluationForm,
+        Orders,
+        Request,
+        Rfqs,
+        Vendors
     }
 }

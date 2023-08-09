@@ -59,15 +59,12 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveUserAsync([FromForm] UserSaveModel userSaveModel, CancellationToken cancellationToken)
         {
-            UploadFile uploadFile = new UploadFile
-            {
-                Files = userSaveModel.UploadFile.Files,
-                Module = Modules.orders.ToString(),
-                BearerToken = _tokenHandler.GetAccessToken(HttpContext)
-            };
+            List<IFormFile> formFiles = new List<IFormFile>();
+            formFiles.Add(userSaveModel.Signature.File);
+            formFiles.Add(userSaveModel.Photo.File);
 
-            await _fileService.UploadFile(uploadFile);
-            return CreateActionResult(await _userService.SaveUserAsync(userSaveModel, cancellationToken));
+            await _fileService.UploadFile(formFiles, Modules.Request, _tokenHandler.GetAccessToken(HttpContext));
+            return null;
         }
 
         [HttpPost]

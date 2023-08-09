@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace SolaERP.Application.Models
 {
@@ -7,7 +7,6 @@ namespace SolaERP.Application.Models
     {
         public List<IFormFile> Files { get; set; }
         public string Module { get; set; }
-        [JsonIgnore]
         public string BearerToken { get; set; }
     }
 }

@@ -95,12 +95,12 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> CategoryList()
             => CreateActionResult(await _requestService.CategoryList());
 
-        [HttpPost]
-        public async Task<string> Test([FromForm] UploadFile uploadFile)
-        {
-            await _fileUploadService.UploadFile(uploadFile);
-            return null;
-        }
+        //[HttpPost]
+        //public async Task<string> Test([FromForm] UploadFile uploadFile)
+        //{
+        //    await _fileUploadService.UploadFile(uploadFile);
+        //    return null;
+        //}
     }
 }
 
