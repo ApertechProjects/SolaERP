@@ -38,12 +38,14 @@ namespace SolaERP.Persistence.Services
             }
             if (Files != null)
             {
-                var Data = await UploadFile(Files, Modules.Users, Token);
-                if (!string.IsNullOrEmpty(Data.Item2))
-                    return ApiResponse<List<string>>.Fail(Data.Item2, 400);
-                return ApiResponse<List<string>>.Success(Data.Item1.data.ToList());
+                var NotNullFileCount = Files.Where(x => x?.FileName != null).Count();
+                if (NotNullFileCount != 0)
+                {
+                    var Data = await UploadFile(Files, Modules.Users, Token);
+                    return ApiResponse<List<string>>.Success(Data.Item1.data?.ToList());
+                }
             }
-            return null;
+            return ApiResponse<List<string>>.Fail(null, 400);
         }
 
         public async Task<(UploadFile, string)> UploadFile(List<IFormFile> Files, Modules Module, string BearerToken)
@@ -76,20 +78,18 @@ namespace SolaERP.Persistence.Services
 
                 var response = await client.PostAsync(_configuration["FileOptions:BaseUrl"] + "api/v1/home/upload", content);
                 var res = await response.Content.ReadAsStringAsync();
-                if (!string.IsNullOrEmpty(res))
-                {
-                    try
-                    {
-                        member = JsonSerializer.Deserialize<UploadFile>(res);
-                        errorMessage = null;
-                    }
-                    catch (Exception ex)
-                    {
-                        member = null;
-                        errorMessage = res;
-                    }
 
+                try
+                {
+                    member = JsonSerializer.Deserialize<UploadFile>(res);
+                    errorMessage = null;
                 }
+                catch (Exception ex)
+                {
+                    member = null;
+                    throw new Exception(res);
+                }
+
                 return (member, errorMessage);
             }
         }
