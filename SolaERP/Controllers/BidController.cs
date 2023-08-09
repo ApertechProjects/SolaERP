@@ -16,11 +16,11 @@ namespace SolaERP.API.Controllers
         public BidController(IBidService bidService) => _bidService = bidService;
         
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAll([FromQuery] BidAllFilter filter)
+        public async Task<IActionResult> GetAll([FromQuery] BidAllFilterDto filter)
             => CreateActionResult(await _bidService.GetAllAsync(filter));
 
         [HttpGet("[action]/{bidMaind}")]
-        public async Task<IActionResult> GetAll([FromQuery] int bidMainId)
+        public async Task<IActionResult> GetAll([FromHeader] int bidMainId)
             => CreateActionResult(await _bidService.GetMainLoadAsync(bidMainId));
 
         [HttpPost]

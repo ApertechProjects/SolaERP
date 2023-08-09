@@ -12,6 +12,7 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
@@ -26,10 +27,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         private readonly IUnitOfWork _unitOfWork;
         public SqlBidRepository(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public async Task<int> AddMainAsync(BidMain entity)
+        public async Task<BidIUDResponse> AddMainAsync(BidMain entity)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"EXEC SP_BidMain_IUD @BidMainId,
+            command.CommandText = @"DECLARE @NewBidMainId INT,@NewBidNo NVARCHAR(15)
+
+                                        EXEC SP_BidMain_IUD @BidMainId,
                                         @BusinessUnitId,
                                         @RFQMainId,
                                         @BidNo,
@@ -66,10 +69,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@ApprovalStatus", entity.BidMainId);
             command.Parameters.AddWithValue(command, "@ApproveStageMainId", entity.BidMainId);
             command.Parameters.AddWithValue(command, "@UserId", entity.BidMainId);
-            command.Parameters.AddWithValue(command, "@NewBidMainId", entity.BidMainId);
-            command.Parameters.AddWithValue(command, "@NewBidNo", entity.BidMainId);
 
-            return await command.ExecuteNonQueryAsync();
+            using var reader = command.ExecuteReader();
+            if (reader.Read())
+                return GetBidSaveResponse(reader);
+            return null;
         }
 
         public async Task<bool> SaveBidDetailsAsync(List<BidDetail> details)
@@ -166,6 +170,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RFQMainId = reader.Get<int>("RFQMainId")
             };
         }
-
+        private BidIUDResponse GetBidSaveResponse(IDataReader reader)
+        {
+            return new()
+            {
+                Id = reader.Get<int>("@NewBidMainId"),
+                BidNo = reader.Get<string>("@NewBidNo"),
+            };
+        }
     }
 }

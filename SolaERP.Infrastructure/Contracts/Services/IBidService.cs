@@ -1,5 +1,6 @@
 ﻿using SolaERP.Application.Dtos.Bid;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.Bid;
 using SolaERP.Application.Models;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,9 @@ namespace SolaERP.Application.Contracts.Services
 {
     public interface IBidService
     {
-        Task<ApiResponse<List<BidAllDto>>> GetAllAsync(BidAllFilter filter);
+        Task<ApiResponse<List<BidAllDto>>> GetAllAsync(BidAllFilterDto filter);
         Task<ApiResponse<BidMainLoadDto>> GetMainLoadAsync(int bidMainId);
-        Task<ApiResponse<int>> SaveBidMainAsync(BidMainDto bidMain);
+        Task<ApiResponse<BidIUDResponse>> SaveBidMainAsync(BidMainDto bidMain);
 
     }
 }
