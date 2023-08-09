@@ -409,6 +409,13 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<RFQInProgress, RFQInProgressDto>().ReverseMap();
 
             CreateMap<BidAll, BidAllDto>().ReverseMap();
+            CreateMap<BidAllFilter, BidAllFilterDto>()
+                .ReverseMap()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => string.Join(",", src.Status.Select(x=> (int)x))))
+                .ForMember(dest => dest.ApproveStatus, opt => opt.MapFrom(src => string.Join(",", src.ApproveStatus.Select(x => (int)x))))
+                .ForMember(dest => dest.ItemCode, opt => opt.MapFrom(src => string.Join(",", src.ItemCode)))
+                .ForMember(dest => dest.Emergency, opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x))));
+
             CreateMap<BidMain, BidMainDto>().ReverseMap();
             CreateMap<BidMainLoad, BidMainLoadDto>().ReverseMap();
             CreateMap<BidDetail, BidDetailDto>().ReverseMap();

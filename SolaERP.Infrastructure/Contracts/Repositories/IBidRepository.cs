@@ -13,7 +13,7 @@ namespace SolaERP.Application.Contracts.Repositories
     {
         Task<List<BidAll>> GetAllAsync(BidAllFilter filter);
         Task<BidMainLoad> GetMainLoadAsync(int bidMainId);
-        Task<int> AddMainAsync(BidMain entity);
+        Task<BidIUDResponse> AddMainAsync(BidMain entity);
         Task<bool> SaveBidDetailsAsync(List<BidDetail> details);
 
 

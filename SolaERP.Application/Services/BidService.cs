@@ -28,9 +28,9 @@ namespace SolaERP.Persistence.Services
             _bidRepository = bidRepository;
         }
 
-        public async Task<ApiResponse<List<BidAllDto>>> GetAllAsync(BidAllFilter filter)
+        public async Task<ApiResponse<List<BidAllDto>>> GetAllAsync(BidAllFilterDto filter)
         {
-            var data = await _bidRepository.GetAllAsync(filter);
+            var data = await _bidRepository.GetAllAsync(_mapper.Map<BidAllFilter>(filter));
             var dtos = _mapper.Map<List<BidAllDto>>(data);
 
             return ApiResponse<List<BidAllDto>>.Success(dtos, 200);
@@ -43,15 +43,19 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<BidMainLoadDto>.Success(model, 200);
         }
 
-        public async Task<ApiResponse<int>> SaveBidMainAsync(BidMainDto bidMain)
+        public async Task<ApiResponse<BidIUDResponse>> SaveBidMainAsync(BidMainDto bidMain)
         {
             var entity = _mapper.Map<BidMain>(bidMain);
             var details = _mapper.Map<List<BidDetail>>(bidMain.BidDetails);
-            var id = await _bidRepository.AddMainAsync(entity);
+            var saveResponse = await _bidRepository.AddMainAsync(entity);
+
+            foreach (var detail in details)
+                detail.BidMainId = saveResponse.Id;
 
             await _bidRepository.SaveBidDetailsAsync(details);
 
-            return ApiResponse<int>.Success(id, 200);
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<BidIUDResponse>.Success(saveResponse, 200);
         }
 
     }
