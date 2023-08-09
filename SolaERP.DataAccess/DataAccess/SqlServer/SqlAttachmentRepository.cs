@@ -33,7 +33,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@AttachmentTypeId", attachment.AttachmentTypeId);
                 command.Parameters.AddWithValue(command, "@AttachmentSubTypeId", attachment.AttachmentSubTypeId);
                 command.Parameters.AddWithValue(command, "@UploadDateTime", DateTime.UtcNow.Date);
-                command.Parameters.AddWithValue(command, "@Size", 5);
+                command.Parameters.AddWithValue(command, "@Size", null);
 
                 bool result = await command.ExecuteNonQueryAsync() > 0;
 

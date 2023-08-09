@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Group;
@@ -8,6 +10,7 @@ using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Dtos.UserDto;
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Entities.User;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
@@ -27,14 +30,17 @@ namespace SolaERP.Persistence.Services
         private readonly ITokenHandler _tokenHandler;
         private readonly IAttachmentRepository _attachmentRepo;
         private readonly IEmailNotificationService _emailNotificationService;
-
+        private readonly IFileUploadService _fileUploadService;
+        private readonly IConfiguration _configuration;
         public UserService(IUserRepository userRepository,
                            IUnitOfWork unitOfWork,
                            IMapper mapper,
                            IMailService mailService,
                            ITokenHandler tokenHandler,
                            IEmailNotificationService emailNotificationService,
-                           IAttachmentRepository attachmentRepo)
+                           IAttachmentRepository attachmentRepo,
+                           IFileUploadService fileUploadService,
+                           IConfiguration configuration)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
@@ -43,6 +49,8 @@ namespace SolaERP.Persistence.Services
             _tokenHandler = tokenHandler;
             _emailNotificationService = emailNotificationService;
             _attachmentRepo = attachmentRepo;
+            _fileUploadService = fileUploadService;
+            _configuration = configuration;
         }
 
 
@@ -268,7 +276,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<ERPUserDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<int>> SaveUserAsync(UserSaveModel user, CancellationToken cancellationToken)
+        public async Task<ApiResponse<int>> SaveUserAsync(UserSaveModel user, string token, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var userEntry = _mapper.Map<User>(user);
@@ -276,21 +284,23 @@ namespace SolaERP.Persistence.Services
             if (!string.IsNullOrEmpty(user.Password))
                 userEntry.PasswordHash = SecurityUtil.ComputeSha256Hash(user?.Password);
 
+            UserImage userImage = await _userRepository.UserImageData(user.Id);
+
+            var resultPhoto = await _fileUploadService.FileOperation(new List<IFormFile> { user.Photo }, new List<string> { userImage.UserPhoto }, Modules.Users, token);
+            var errorPhoto = resultPhoto.Errors;
+            if (errorPhoto != null)
+                return ApiResponse<int>.Fail(errorPhoto.ToString(), 400);
+
+            userEntry.UserPhoto = resultPhoto.Data[0];
+
+            var resultSignature = await _fileUploadService.FileOperation(new List<IFormFile> { user.Signature }, new List<string> { userImage.SignaturePhoto }, Modules.Users, token);
+            var errorSignature = resultSignature.Errors;
+            if (errorSignature != null)
+                return ApiResponse<int>.Fail(errorSignature.ToString(), 400);
+
+            userEntry.SignaturePhoto = resultSignature.Data[0];
 
             var result = await _userRepository.SaveUserAsync(userEntry);
-
-            //if (user.Signature is not null)
-            //{
-            //    user.Signature.SourceId = result;
-            //    await _attachmentRepo.SaveAttachmentAsync(user.Signature);
-            //}
-
-            //if (user.Photo is not null)
-            //{
-            //    user.Photo.SourceId = result;
-            //    await _attachmentRepo.SaveAttachmentAsync(user.Photo);
-            //}
-
 
             await _unitOfWork.SaveChangesAsync();
             return result > 0 ? ApiResponse<int>.Success(result, 200)
