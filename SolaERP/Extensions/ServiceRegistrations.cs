@@ -1,32 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Identity;
-using SolaERP.Application;
-using SolaERP.Application.Contracts.Common;
-using SolaERP.Application.Contracts.Repositories;
-using SolaERP.Application.Contracts.Services;
-using SolaERP.Application.Entities.Auth;
-using SolaERP.Application.Identity_Server;
-using SolaERP.Application.Models;
-using SolaERP.Application.UnitOfWork;
-using SolaERP.Application.ValidationRules;
-using SolaERP.Application.Validations.ApproveStageValidation;
-using SolaERP.Application.Validations.AttachmentValidation;
-using SolaERP.Application.Validations.GroupValidation;
-using SolaERP.Application.Validations.RequestValidation;
-using SolaERP.Application.Validations.UserValidation;
-using SolaERP.DataAccess.DataAcces.SqlServer;
-using SolaERP.DataAccess.DataAccess.SqlServer;
-using SolaERP.DataAccess.Factories;
-using SolaERP.Infrastructure.Services;
-using SolaERP.Persistence.Services;
-using SolaERP.Persistence.Validations.AnalysisCodeValidation;
-using SolaERP.Persistence.Validations.AnalysisDimensionValidation;
-using SolaERP.Persistence.Validations.AnalysisStructure;
-using SolaERP.Persistence.Validations.ApproveRoleValidation;
-using SolaERP.Persistence.Validations.Supplier;
-using SolaERP.Persistence.Validations.UserValidation;
-using SolaERP.Persistence.Validations.Vendor;
-using UserValidation = SolaERP.Application.Validations.UserValidation.UserValidation;
+﻿using UserValidation = SolaERP.Application.Validations.UserValidation.UserValidation;
 
 namespace SolaERP.Extensions
 {
@@ -79,6 +51,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IRfqService, RfqService>();
             builder.Services.AddScoped<IGeneralService, GeneralService>();
             builder.Services.AddScoped<IBidService, BidService>();
+            builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 
         }
         private static void UseRepositories(this WebApplicationBuilder builder)

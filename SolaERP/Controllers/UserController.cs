@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
-using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Entities.Groups;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
-using System.IdentityModel.Tokens.Jwt;
-using IFileService = SolaERP.Application.Contracts.Services.IFileService;
 
 namespace SolaERP.Controllers
 {
@@ -15,11 +13,15 @@ namespace SolaERP.Controllers
     public class UserController : CustomBaseController
     {
         private readonly IUserService _userService;
+        private readonly IFileUploadService _fileService;
         private readonly IGroupService _groupService;
-        public UserController(IUserService userService, IGroupService groupService)
+        private readonly ITokenHandler _tokenHandler;
+        public UserController(IUserService userService, IFileUploadService fileService, IGroupService groupService, ITokenHandler tokenHandler)
         {
             _userService = userService;
+            _fileService = fileService;
             _groupService = groupService;
+            _tokenHandler = tokenHandler;
         }
 
         [HttpGet]
@@ -55,8 +57,12 @@ namespace SolaERP.Controllers
           => CreateActionResult(await _userService.UserChangeStatusAsync(User.Identity.Name, model));
 
         [HttpPost]
-        public async Task<IActionResult> SaveUserAsync(UserSaveModel user, CancellationToken cancellationToken)
-            => CreateActionResult(await _userService.SaveUserAsync(user, cancellationToken));
+        public async Task<IActionResult> SaveUserAsync([FromForm] UserSaveModel userSaveModel, CancellationToken cancellationToken)
+        {
+            var token = _tokenHandler.GetAccessToken(HttpContext);
+            var result = await _userService.SaveUserAsync(userSaveModel, token, cancellationToken);
+            return CreateActionResult(result);
+        }
 
         [HttpPost]
         public async Task<IActionResult> ChangeUserPasswordAsync(ChangeUserPasswordModel user)

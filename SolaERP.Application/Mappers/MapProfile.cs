@@ -291,8 +291,8 @@ namespace SolaERP.Persistence.Mappers
                  .ForMember(dest => dest.SourceType, opt => opt.Ignore()) // SourceType does not exist in AttachmentDto
                  .ForMember(dest => dest.ExtensionType, opt => opt.MapFrom(src => src.ExtensionType))
                  .ForMember(dest => dest.AttachmentTypeId, opt => opt.MapFrom(src => src.AttachmentTypeId))
-                 .ForMember(dest => dest.AttachmentSubTypeId, opt => opt.MapFrom(src => src.AttachmentSubTypeId))
-                 .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size)).ReverseMap();
+                 .ForMember(dest => dest.AttachmentSubTypeId, opt => opt.MapFrom(src => src.AttachmentSubTypeId));
+                 //.ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size)).ReverseMap();
 
             CreateMap<AttachmentWithFileDto, AttachmentSaveModel>().ReverseMap();
 
