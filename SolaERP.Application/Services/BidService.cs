@@ -54,6 +54,7 @@ namespace SolaERP.Persistence.Services
 
             await _bidRepository.SaveBidDetailsAsync(details);
 
+            await _unitOfWork.SaveChangesAsync();
             return ApiResponse<BidIUDResponse>.Success(saveResponse, 200);
         }
 

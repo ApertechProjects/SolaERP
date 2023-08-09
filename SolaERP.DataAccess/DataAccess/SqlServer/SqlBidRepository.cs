@@ -49,8 +49,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                         @ApprovalStatus,
                                         @ApproveStageMainId,
                                         @UserId,
-                                        @NewBidMainId,
-                                        @NewBidNo";
+                                        @NewBidMainId = @NewBidMainId OUTPUT,
+		                                @NewBidNo = @NewBidNo OUTPUT
+                                        
+SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
 
             command.Parameters.AddWithValue(command, "@BidMainId", entity.BidMainId);
             command.Parameters.AddWithValue(command, "@BusinessUnitId", entity.BusinessUnitId);
@@ -80,7 +82,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
 
-            command.CommandText = "SET NOCOUNT OFF EXEC SP_RFQRequestDetails_IUD @Data";
+            command.CommandText = "SET NOCOUNT OFF EXEC SP_BidDetails_IUD @Data";
             command.Parameters.AddTableValue(command, "@Data", "BidDetailsType", details.ConvertToDataTable());
 
             return await command.ExecuteNonQueryAsync() > 0;
