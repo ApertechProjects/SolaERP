@@ -618,7 +618,7 @@ namespace SolaERP.Persistence.Services
                 }
                 responseModel.Add(categoryDto);
             }
-            var response = await SetGridDatasAsync(responseModel, vendorId);
+            var response = await SetGridDatasAsync(responseModel, gridDatas, vendorId);
             return ApiResponse<List<PrequalificationWithCategoryDto>>.Success(response, 200);
         }
 
@@ -855,10 +855,10 @@ namespace SolaERP.Persistence.Services
             }
             return dueDesign;
         }
-        private async Task<List<PrequalificationWithCategoryDto>> SetGridDatasAsync(List<PrequalificationWithCategoryDto> preualification, int vendorId)
+
+        private async Task<List<PrequalificationWithCategoryDto>> SetGridDatasAsync(List<PrequalificationWithCategoryDto> preualification, List<PrequalificationGridData> allGridData, int vendorId)
         {
-            var allGridData = await _repository.GetPrequalificationGridAsync(0);
-            allGridData = allGridData.Where(x => x.VendorId == vendorId).ToList();
+            //var allGridData = await _repository.GetPrequalificationGridAsync(vendorId);
             var mappedGridData = _mapper.Map<List<Application.Dtos.SupplierEvaluation.PrequalificationGridData>>(allGridData);
 
 

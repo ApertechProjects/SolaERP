@@ -37,7 +37,7 @@ namespace SolaERP.API.Controllers
 
         [HttpGet("[action]")]
         public async Task<IActionResult> Prequalification([FromQuery] List<int> ids, int? vendorId = null)
-            => CreateActionResult(await _service.GetPrequalificationAsync(User.Identity.Name, ids, Request.Headers.AcceptLanguage));
+            => CreateActionResult(await _service.GetPrequalificationAsync(User.Identity.Name, ids, Request.Headers.AcceptLanguage, vendorId));
 
         [HttpPost]
         [RequestSizeLimit(100_000_000)]
