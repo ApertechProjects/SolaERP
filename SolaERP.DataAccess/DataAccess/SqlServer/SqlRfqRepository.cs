@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.Item_Code;
 using SolaERP.Application.Entities.RFQ;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
@@ -488,21 +489,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        //private RFQInProgress GetInProgressRFQSFromReader(IDataReader reader)
-        //{
-        //    RFQInProgress inProgressRFQ = new();
-        //    PopulateRfqBaseFromReader(inProgressRFQ, reader);
-        //    inProgressRFQ.OfferCount = reader.Get<int>("OfferCount");
-        //    inProgressRFQ.Sent = reader.Get<bool>("Sent");
-        //    inProgressRFQ.Accepted = reader.Get<bool>("Accepted");
-        //    inProgressRFQ.InProgress = reader.Get<bool>("InProgress");
-        //    inProgressRFQ.Rejected = reader.Get<bool>("Rejected");
-        //    inProgressRFQ.Responded = reader.Get<bool>("Responded");
-        //    inProgressRFQ.NoResponse = reader.Get<bool>("NoResponse");
-        //    inProgressRFQ.BusinessCategoryName = reader.Get<string>("BusinessCategoryName");
-        //    return inProgressRFQ;
-        //}
+        public async Task<List<UOM>> GetPUOMAsync(int businessUnitId, string itemCodes)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_UOMConvList @BusinessUnitId,@ItemCode";
 
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+                command.Parameters.AddWithValue(command, "@ItemCode", itemCodes);
+
+                List<UOM> list = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read()) list.Add(reader.GetByEntityStructure<UOM>());
+                return list;
+            }
+        }
         #endregion
     }
 }
