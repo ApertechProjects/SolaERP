@@ -78,6 +78,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IGridLayoutService, GridLayoutService>();
             builder.Services.AddScoped<IRfqService, RfqService>();
             builder.Services.AddScoped<IGeneralService, GeneralService>();
+            builder.Services.AddScoped<IBidService, BidService>();
 
         }
         private static void UseRepositories(this WebApplicationBuilder builder)
@@ -113,6 +114,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IGridLayoutRepository, SqlGridLayoutRepository>();
             builder.Services.AddScoped<IRfqRepository, SqlRfqRepository>();
             builder.Services.AddScoped<IGeneralRepository, SqlGeneralRepository>();
+            builder.Services.AddScoped<IBidRepository, SqlBidRepository>();
         }
         public static void UseValidationExtension(this WebApplicationBuilder builder)
         {
