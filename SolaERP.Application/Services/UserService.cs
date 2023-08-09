@@ -286,19 +286,24 @@ namespace SolaERP.Persistence.Services
 
             UserImage userImage = await _userRepository.UserImageData(user.Id);
 
-            var resultPhoto = await _fileUploadService.FileOperation(new List<IFormFile> { user.Photo }, new List<string> { userImage.UserPhoto }, Modules.Users, token);
-            var errorPhoto = resultPhoto.Errors;
-            if (errorPhoto != null)
-                return ApiResponse<int>.Fail(errorPhoto.ToString(), 400);
+            await _fileUploadService.DeleteFile(Modules.Users, userImage.UserPhoto, token);
+            if (user.Photo != null)
+            {
+                var response = await _fileUploadService.UploadFile(new List<IFormFile> { user.Photo }, Modules.Users, token);
+                if (!string.IsNullOrEmpty(response.Item2))
+                    return ApiResponse<int>.Fail(response.Item2 + ": User Photo", 500);
+                userEntry.UserPhoto = response.Item1.data.FirstOrDefault();
+            }
 
-            userEntry.UserPhoto = resultPhoto.Data[0];
+            await _fileUploadService.DeleteFile(Modules.Users, userImage.SignaturePhoto, token);
+            if (user.Photo != null)
+            {
+                var response = await _fileUploadService.UploadFile(new List<IFormFile> { user.Signature }, Modules.Users, token);
+                if (!string.IsNullOrEmpty(response.Item2))
+                    return ApiResponse<int>.Fail(response.Item2 + ": Signature Photo", 500);
+                userEntry.SignaturePhoto = response.Item1.data.FirstOrDefault();
+            }
 
-            var resultSignature = await _fileUploadService.FileOperation(new List<IFormFile> { user.Signature }, new List<string> { userImage.SignaturePhoto }, Modules.Users, token);
-            var errorSignature = resultSignature.Errors;
-            if (errorSignature != null)
-                return ApiResponse<int>.Fail(errorSignature.ToString(), 400);
-
-            userEntry.SignaturePhoto = resultSignature.Data[0];
 
             var result = await _userRepository.SaveUserAsync(userEntry);
 

@@ -1,14 +1,9 @@
-﻿using AutoMapper.Execution;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using SolaERP.Application.Contracts.Services;
-using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Shared;
-using SolaERP.Application.Entities.Auth;
-using SolaERP.Application.Entities.User;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
-using System.Reflection;
 using System.Text.Json;
 
 namespace SolaERP.Persistence.Services
@@ -63,6 +58,9 @@ namespace SolaERP.Persistence.Services
 
                 foreach (var item in Files)
                 {
+                    if (item is null)
+                        continue;
+
                     string fileName = item.FileName;
 
                     byte[] fileBytes;
