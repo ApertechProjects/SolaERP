@@ -77,7 +77,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using var command = _unitOfWork.CreateCommand() as DbCommand;
 
             command.CommandText = "SET NOCOUNT OFF EXEC SP_RFQRequestDetails_IUD @Data";
-            command.Parameters.AddTableValue(command, "@Data", "BidDetailsType", details.ConvertToDataTable()); ;
+            command.Parameters.AddTableValue(command, "@Data", "BidDetailsType", details.ConvertToDataTable());
 
             return await command.ExecuteNonQueryAsync() > 0;
         }
