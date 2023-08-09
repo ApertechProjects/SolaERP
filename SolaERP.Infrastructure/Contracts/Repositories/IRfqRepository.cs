@@ -26,5 +26,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<RequestForRFQ>> GetRequestsForRfq(RFQRequestModel model);
         Task<bool> ChangeRFQStatusAsync(RfqChangeStatusModel model, int userId);
 
+        Task<List<UOM>> GetPUOMAsync(int businessUnitId, string itemCodes);
+
     }
 }

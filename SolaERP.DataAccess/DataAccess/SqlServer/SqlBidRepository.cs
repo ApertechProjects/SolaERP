@@ -53,22 +53,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                         @NewBidNo";
 
             command.Parameters.AddWithValue(command, "@BidMainId", entity.BidMainId);
-            command.Parameters.AddWithValue(command, "@BusinessUnitId", entity.BidMainId);
-            command.Parameters.AddWithValue(command, "@RFQMainId", entity.BidMainId);
-            command.Parameters.AddWithValue(command, "@BidNo", entity.BidMainId);
-            command.Parameters.AddWithValue(command, "@OperatorComment", entity.BidMainId);
-            command.Parameters.AddWithValue(command, "@VendorCode", entity.BidMainId);
-            command.Parameters.AddWithValue(command, "@CurrencyCode", entity.BidMainId);
-            command.Parameters.AddWithValue(command, "@DiscountType", entity.BidMainId);
-            command.Parameters.AddWithValue(command, "@DiscountValues", entity.BidMainId);
-            command.Parameters.AddWithValue(command, "@DeliveryTerms", entity.BidMainId);
-            command.Parameters.AddWithValue(command, "@DeliveryTime", entity.BidMainId);
-            command.Parameters.AddWithValue(command, "@PaymentTerms", entity.BidMainId);
-            command.Parameters.AddWithValue(command, "@ExpectedCost", entity.BidMainId);
-            command.Parameters.AddWithValue(command, "@Status", entity.BidMainId);
-            command.Parameters.AddWithValue(command, "@ApprovalStatus", entity.BidMainId);
-            command.Parameters.AddWithValue(command, "@ApproveStageMainId", entity.BidMainId);
-            command.Parameters.AddWithValue(command, "@UserId", entity.BidMainId);
+            command.Parameters.AddWithValue(command, "@BusinessUnitId", entity.BusinessUnitId);
+            command.Parameters.AddWithValue(command, "@RFQMainId", entity.RFQMainId);
+            command.Parameters.AddWithValue(command, "@BidNo", entity.BidNo);
+            command.Parameters.AddWithValue(command, "@OperatorComment", entity.OperatorComment);
+            command.Parameters.AddWithValue(command, "@VendorCode", entity.VendorCode);
+            command.Parameters.AddWithValue(command, "@CurrencyCode", entity.CurrencyCode);
+            command.Parameters.AddWithValue(command, "@DiscountType", entity.DiscountType);
+            command.Parameters.AddWithValue(command, "@DiscountValues", entity.DiscountValues);
+            command.Parameters.AddWithValue(command, "@DeliveryTerms", entity.DeliveryTerms);
+            command.Parameters.AddWithValue(command, "@DeliveryTime", entity.DeliveryTime);
+            command.Parameters.AddWithValue(command, "@PaymentTerms", entity.PaymentTerms);
+            command.Parameters.AddWithValue(command, "@ExpectedCost", entity.ExpectedCost);
+            command.Parameters.AddWithValue(command, "@Status", entity.Status);
+            command.Parameters.AddWithValue(command, "@ApprovalStatus", entity.ApprovalStatus);
+            command.Parameters.AddWithValue(command, "@ApproveStageMainId", entity.ApproveStageMainId);
+            command.Parameters.AddWithValue(command, "@UserId", entity.UserId);
 
             using var reader = command.ExecuteReader();
             if (reader.Read())
@@ -81,7 +81,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using var command = _unitOfWork.CreateCommand() as DbCommand;
 
             command.CommandText = "SET NOCOUNT OFF EXEC SP_RFQRequestDetails_IUD @Data";
-            command.Parameters.AddTableValue(command, "@Data", "BidDetailsType", details.ConvertToDataTable()); ;
+            command.Parameters.AddTableValue(command, "@Data", "BidDetailsType", details.ConvertToDataTable());
 
             return await command.ExecuteNonQueryAsync() > 0;
         }
@@ -137,7 +137,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RFQNo = reader.Get<string>("RFQNo"),
                 BidNo = reader.Get<string>("BidNo"),
                 OperatorComment = reader.Get<string>("OperatorComment"),
-                VendorCode  = reader.Get<string>("VendorCode"),
+                VendorCode = reader.Get<string>("VendorCode"),
                 VendorName = reader.Get<string>("VendorName"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 DeliveryTerms = reader.Get<string>("DeliveryTerms"),

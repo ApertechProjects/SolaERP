@@ -69,6 +69,8 @@ using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Models;
 using SolaERP.Persistence.Services;
 using AnalysisCodes = SolaERP.Application.Entities.AnalysisCode.AnalysisCodes;
+using UOM = SolaERP.Application.Entities.UOM.UOM;
+using UOMDto = SolaERP.Application.Dtos.UOM.UOMDto;
 
 namespace SolaERP.Persistence.Mappers
 {
@@ -418,6 +420,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<BidMainLoad, BidMainLoadDto>().ReverseMap();
             CreateMap<BidDetail, BidDetailDto>().ReverseMap();
 
+            CreateMap<Application.Entities.RFQ.UOM, Application.Dtos.RFQ.UOMDto>().ReverseMap();
         }
     }
 }

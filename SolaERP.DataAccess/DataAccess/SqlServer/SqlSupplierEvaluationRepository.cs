@@ -571,12 +571,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<Application.Entities.SupplierEvaluation.PrequalificationGridData>> GetPrequalificationGridAsync(int preDesignId)
+        public async Task<List<Application.Entities.SupplierEvaluation.PrequalificationGridData>> GetPrequalificationGridAsync(int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC dbo.SP_PrequalificationAllGridData_Load --@PreqqualificationDesignId";
-                // command.Parameters.AddWithValue(command, "@PreqqualificationDesignId", preDesignId);
+                command.CommandText = "EXEC dbo.SP_PrequalificationAllGridData_Load @VendorId";
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
 
                 List<Application.Entities.SupplierEvaluation.PrequalificationGridData> result = new();
                 using var reader = await command.ExecuteReaderAsync();

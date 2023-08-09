@@ -26,7 +26,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public string City { get; set; }
         public string Country { get; set; }
         public string WebSite { get; set; }
-        public DateTime RegistrationDate { get; set; }
+        public DateTime RegistrationDate { get; set; } = DateTime.Now;
         public string[] RepresentedCompanies { get; set; }
         public string[] RepresentedProducts { get; set; }
         public int CreditDays { get; set; }
@@ -55,6 +55,6 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public int CreditDays { get; set; }
         public string PaymentTerms { get; set; }
         public int AgreeWithDefaultDays { get; set; }
-        public DateTime CompanyRegistrationDate { get; set; }
+        public DateTime CompanyRegistrationDate { get; set; } = DateTime.Now;
     }
 }
