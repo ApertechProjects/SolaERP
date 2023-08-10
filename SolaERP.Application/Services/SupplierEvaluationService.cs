@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
@@ -19,6 +20,7 @@ using SolaERP.Application.Shared;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Infrastructure.ViewModels;
 using SolaERP.Persistence.Utils;
+using System.Threading.Tasks;
 using PrequalificationGridData = SolaERP.Application.Entities.SupplierEvaluation.PrequalificationGridData;
 
 namespace SolaERP.Persistence.Services
@@ -36,6 +38,7 @@ namespace SolaERP.Persistence.Services
         private readonly IEmailNotificationService _emailNotificationService;
         private readonly IMailService _mailService;
         private readonly IUserService _userService;
+        private readonly IFileUploadService _fileUploadService;
 
         public SupplierEvaluationService(ISupplierEvaluationRepository repository,
                                          IMapper mapper,
@@ -47,7 +50,8 @@ namespace SolaERP.Persistence.Services
                                          IOptions<StorageOption> storageOption,
                                          IEmailNotificationService emailNotificationService,
                                          IMailService mailService,
-                                         IUserService userService)
+                                         IUserService userService,
+                                         IFileUploadService fileUploadService)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
@@ -61,277 +65,289 @@ namespace SolaERP.Persistence.Services
             _emailNotificationService = emailNotificationService;
             _mailService = mailService;
             _userService = userService;
+            _fileUploadService = fileUploadService;
         }
 
-        public async Task<ApiResponse<bool>> AddAsync(string useridentity, SupplierRegisterCommand command)
+        public async Task<ApiResponse<bool>> AddAsync(string useridentity, string token, SupplierRegisterCommand command)
         {
-            User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
-            user.FullName = command.CompanyInformation.FullName;
-            user.PhoneNumber = command.CompanyInformation.PhoneNumber;
-            user.Description = command.CompanyInformation.Position;
-
-
-            Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
-            vendor.VendorId = user.VendorId;
-
-            vendor.RegistrationDate = vendor.RegistrationDate.ConvertDateToValidDate();
-
-            int vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
-
-            #region Represented Company & Represented Products
-
-            await _repository.DeleteRepresentedProductAsync(vendorId);
-            await _repository.DeleteRepresentedCompanyAsync(vendorId);
-
-            if (command?.CompanyInformation?.RepresentedCompanies != null)
-                await _repository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", command?.CompanyInformation?.RepresentedCompanies) });
-            if (command?.CompanyInformation?.RepresentedProducts != null)
-                await _repository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", command?.CompanyInformation?.RepresentedProducts) });
-
-            #endregion
-
-            List<Task<bool>> tasks = new();
-
-            #region BusinessCategory
-            await _repository.DeleteVendorBusinessCategoryAsync(vendorId);
-            for (int i = 0; i < command.CompanyInformation.BusinessCategories.Count; i++)
+            try
             {
-                tasks.Add(_repository.AddVendorBusinessCategoryAsync(new VendorBusinessCategoryData { VendorId = vendorId, BusinessCategoryId = command.CompanyInformation.BusinessCategories[i].Id }));
-            }
-            #endregion
-            //
-            #region ProductServices
-            await _repository.DeleteProductServiceAsync(vendorId);
-            for (int i = 0; i < command.CompanyInformation.BusinessCategories.Count; i++)
-            {
-                tasks.Add(_repository.AddProductServiceAsync(new ProductServiceData { VendorId = vendorId, ProductServiceId = command.CompanyInformation.BusinessCategories[i].Id }));
-            }
-            #endregion
-            //
-            #region PrequalificationCategory
-            await _repository.DeletePrequalificationCategoryAsync(vendorId);
-            for (int i = 0; i < command.CompanyInformation.PrequalificationTypes.Count; i++)
-            {
-                tasks.Add(_repository.AddPrequalificationCategoryAsync(new PrequalificationCategoryData { VendorId = vendorId, PrequalificationCategoryId = command.CompanyInformation.PrequalificationTypes[i].Id }));
-            }
-            #endregion
-            //
-            #region Company Information Logo
-
-            var companyLogo = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.CompanyLogo);
-
-            companyLogo?.ForEach(companyLogo =>
-            {
-                companyLogo.SourceId = vendorId;
-                companyLogo.SourceType = SourceType.VEN_LOGO.ToString();
-            });
+                User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
+                user.FullName = command.CompanyInformation.FullName;
+                user.PhoneNumber = command.CompanyInformation.PhoneNumber;
+                user.Description = command.CompanyInformation.Position;
 
 
-            for (int i = 0; i < companyLogo.Count; i++) //+
-            {
-                if (companyLogo[i].Type == 2 && companyLogo[i].AttachmentId > 0)
-                    await _attachmentRepository.DeleteAttachmentAsync(companyLogo[i].AttachmentId);
-                else if (companyLogo[i].Type != 2)
-                    await _attachmentRepository.SaveAttachmentAsync(companyLogo[i]);
-            }
+                Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
+                vendor.VendorId = user.VendorId;
 
-            #endregion
-            //
-            #region Company Information Attachments
+                vendor.RegistrationDate = vendor.RegistrationDate.ConvertDateToValidDate();
 
-            var attachments = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.Attachments);
-            attachments.ForEach(attachment =>
-            {
-                attachment.SourceId = vendorId;
-                attachment.SourceType = SourceType.VEN_OLET.ToString();
-            });
+                int vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
 
-            for (int i = 0; i < attachments.Count; i++)
-            {
-                if (attachments[i].Type == 2 && attachments[i].AttachmentId > 0)
-                    await _attachmentRepository.DeleteAttachmentAsync(attachments[i].AttachmentId);
-                else if (attachments[i].Type != 2)
-                    await _attachmentRepository.SaveAttachmentAsync(attachments[i]);
-            }
+                #region Represented Company & Represented Products
 
-            #endregion
-            //
-            #region Setting Vendor Ids (COBC,NDA,Bank Accounts)
+                await _repository.DeleteRepresentedProductAsync(vendorId);
+                await _repository.DeleteRepresentedCompanyAsync(vendorId);
 
-            command?.CodeOfBuConduct?.ForEach(x => x.VendorId = vendorId);
-            command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
-            command?.BankAccounts?.ForEach(x => x.VendorId = vendorId);
+                if (command?.CompanyInformation?.RepresentedCompanies != null)
+                    await _repository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", command?.CompanyInformation?.RepresentedCompanies) });
+                if (command?.CompanyInformation?.RepresentedProducts != null)
+                    await _repository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", command?.CompanyInformation?.RepresentedProducts) });
 
-            #endregion
-            //
-            #region Bank Accounts
+                #endregion
 
-            foreach (var x in command.BankAccounts)
-            {
-                if (x.Type == 2 && x.Id > 0)
-                    await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
-                else
+                List<Task<bool>> tasks = new();
+
+                #region BusinessCategory
+                await _repository.DeleteVendorBusinessCategoryAsync(vendorId);
+                for (int i = 0; i < command.CompanyInformation.BusinessCategories.Count; i++)
                 {
-                    var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x));
-                    x.VendorId = vendorId;
-
-                    if (x.AccountVerificationLetter != null)
-                    {
-                        tasks.AddRange(x.AccountVerificationLetter.Select(attachment => //+
-                        {
-                            if (attachment.Type == 2 && attachment.AttachmentId > 0)
-                                return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
-                            else
-                            {
-                                var entity = _mapper.Map<AttachmentSaveModel>(attachment);
-                                entity.SourceId = detaildId;
-                                entity.SourceType = SourceType.VEN_BNK.ToString();
-                                return _attachmentRepository.SaveAttachmentAsync(entity);
-                            }
-                        }));
-                    }
+                    tasks.Add(_repository.AddVendorBusinessCategoryAsync(new VendorBusinessCategoryData { VendorId = vendorId, BusinessCategoryId = command.CompanyInformation.BusinessCategories[i].Id }));
                 }
-            }
-
-            #endregion
-            //
-            #region DueDiligence
-            if (command.DueDiligence is not null)
-            {
-                tasks = tasks.Concat(command?.DueDiligence?.SelectMany(item =>
+                #endregion
+                //
+                #region ProductServices
+                await _repository.DeleteProductServiceAsync(vendorId);
+                for (int i = 0; i < command.CompanyInformation.BusinessCategories.Count; i++)
                 {
-                    var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
-                    dueInputModel.VendorId = vendorId;
-                    dueInputModel.DateTimeValue = dueInputModel.DateTimeValue.ConvertDateToValidDate();
-
-                    var itemTasks = new List<Task<bool>>
-                    {
-                     _repository.UpdateDueAsync(dueInputModel)
-                    };
-
-                    if (item?.HasDataGrid == true)
-                    {
-                        itemTasks.AddRange(item?.GridDatas?.Select(gridData =>
-                        {
-                            if (gridData.Type == 2 && gridData.Id > 0)
-                                return _repository.DeleteDueDesignGrid(gridData.Id);
-
-                            var gridDatas = _mapper.Map<DueDiligenceGridModel>(gridData);
-                            gridDatas.DueDesignId = item.DesignId;
-                            gridDatas.VendorId = vendorId;
-
-                            return _repository.UpdateDueDesignGrid(gridDatas);
-
-                        }) ?? Enumerable.Empty<Task<bool>>());
-                    }
-
-                    if (item?.Attachments is not null)
-                    {
-                        itemTasks.AddRange(item?.Attachments?.Select(attachment =>
-                        {
-                            if (attachment.Type == 2 && attachment.AttachmentId > 0)
-                                return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
-                            else
-                            {
-                                var attachedFile = _mapper.Map<AttachmentSaveModel>(attachment);
-                                attachedFile.SourceId = vendorId;
-                                attachedFile.SourceType = SourceType.VEN_DUE.ToString();
-                                attachedFile.AttachmentTypeId = item.DesignId;
-                                return _attachmentRepository.SaveAttachmentAsync(attachedFile);
-                            }
-                        }));
-
-                    }
-
-                    return itemTasks;
-                })).ToList();
-
-            }
-
-            #endregion
-
-            #region Prequalification
-
-            if (command.Prequalification is not null)
-            {
-                tasks.AddRange(command?.Prequalification?.SelectMany(item =>
+                    tasks.Add(_repository.AddProductServiceAsync(new ProductServiceData { VendorId = vendorId, ProductServiceId = command.CompanyInformation.BusinessCategories[i].Id }));
+                }
+                #endregion
+                //
+                #region PrequalificationCategory
+                await _repository.DeletePrequalificationCategoryAsync(vendorId);
+                for (int i = 0; i < command.CompanyInformation.PrequalificationTypes.Count; i++)
                 {
-                    var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
-                    prequalificationValue.VendorId = vendorId;
-                    prequalificationValue.DateTimeValue = prequalificationValue.DateTimeValue.ConvertDateToValidDate();
+                    tasks.Add(_repository.AddPrequalificationCategoryAsync(new PrequalificationCategoryData { VendorId = vendorId, PrequalificationCategoryId = command.CompanyInformation.PrequalificationTypes[i].Id }));
+                }
+                #endregion
+                //
+                #region Company Information Logo
 
-                    var tasksList = new List<Task<bool>>();
-                    _repository.UpdatePrequalification(prequalificationValue); //+
+                var companyLogo = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.CompanyLogo);
 
-                    if (item?.Attachments is not null)
+                companyLogo?.ForEach(companyLogo =>
+                {
+                    companyLogo.SourceId = vendorId;
+                    companyLogo.SourceType = SourceType.VEN_LOGO.ToString();
+                });
+
+                var companyLogoExistDatas = await _attachmentRepository.GetAttachmentsAsync(vendorId, Convert.ToInt32(SourceType.VEN_LOGO));
+
+
+                //var companyLogoResult = _fileUploadService.FileOperation(new List<Microsoft.AspNetCore.Http.IFormFile> { command.CompanyInformation.CompanyLogo[0].File }, companyLogoExistDatas, Modules.EvaluationForm, token);
+
+                await _attachmentRepository.SaveAttachmentAsync(companyLogo[0]);
+
+                //for (int i = 0; i < companyLogo.Count; i++) //+
+                //{
+                //    if (companyLogo[i].Type == 2 && companyLogo[i].AttachmentId > 0)
+                //        await _attachmentRepository.DeleteAttachmentAsync(companyLogo[i].AttachmentId);
+                //    else if (companyLogo[i].Type != 2)
+                //        await _attachmentRepository.SaveAttachmentAsync(companyLogo[i]);
+                //}
+
+                #endregion
+                //
+                #region Company Information Attachments
+
+                var attachments = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.Attachments);
+                attachments.ForEach(attachment =>
+                {
+                    attachment.SourceId = vendorId;
+                    attachment.SourceType = SourceType.VEN_OLET.ToString();
+                });
+
+                for (int i = 0; i < attachments.Count; i++)
+                {
+                    if (attachments[i].Type == 2 && attachments[i].AttachmentId > 0)
+                        await _attachmentRepository.DeleteAttachmentAsync(attachments[i].AttachmentId);
+                    else if (attachments[i].Type != 2)
+                        await _attachmentRepository.SaveAttachmentAsync(attachments[i]);
+                }
+
+                #endregion
+                //
+                #region Setting Vendor Ids (COBC,NDA,Bank Accounts)
+
+                command?.CodeOfBuConduct?.ForEach(x => x.VendorId = vendorId);
+                command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
+                command?.BankAccounts?.ForEach(x => x.VendorId = vendorId);
+
+                #endregion
+                //
+                #region Bank Accounts
+
+                foreach (var x in command.BankAccounts)
+                {
+                    if (x.Type == 2 && x.Id > 0)
+                        await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
+                    else
                     {
-                        for (int i = 0; i < item?.Attachments.Count; i++)
+                        var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x));
+                        x.VendorId = vendorId;
+
+                        if (x.AccountVerificationLetter != null)
                         {
-                            if (item.Attachments[i].Type == 2 && item.Attachments[i].AttachmentId > 0)
+                            tasks.AddRange(x.AccountVerificationLetter.Select(attachment => //+
                             {
-                                tasksList.Add(_attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId));
-                            }
-                            else
-                            {
-                                var attachedFile = _mapper.Map<AttachmentSaveModel>(item.Attachments[i]);
-
-                                attachedFile.SourceId = vendorId;
-                                attachedFile.AttachmentTypeId = item.DesignId;
-                                attachedFile.SourceType = SourceType.VEN_PREQ.ToString();
-
-                                tasksList.Add(_attachmentRepository.SaveAttachmentAsync(attachedFile));
-                            }
+                                if (attachment.Type == 2 && attachment.AttachmentId > 0)
+                                    return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
+                                else
+                                {
+                                    var entity = _mapper.Map<AttachmentSaveModel>(attachment);
+                                    entity.SourceId = detaildId;
+                                    entity.SourceType = SourceType.VEN_BNK.ToString();
+                                    return _attachmentRepository.SaveAttachmentAsync(entity);
+                                }
+                            }));
                         }
                     }
+                }
 
-                    if (item.HasGrid == true)
+                #endregion
+                //
+                #region DueDiligence
+                if (command.DueDiligence is not null)
+                {
+                    tasks = tasks.Concat(command?.DueDiligence?.SelectMany(item =>
                     {
-                        tasksList.AddRange(item.GridDatas.Select(gridData =>
+                        var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
+                        dueInputModel.VendorId = vendorId;
+                        dueInputModel.DateTimeValue = dueInputModel.DateTimeValue.ConvertDateToValidDate();
+
+                        var itemTasks = new List<Task<bool>>
                         {
-                            var gridDatas = _mapper.Map<PrequalificationGridData>(gridData);
-                            gridDatas.PreqqualificationDesignId = item.DesignId;
-                            gridDatas.VendorId = vendorId;
+                     _repository.UpdateDueAsync(dueInputModel)
+                        };
 
-                            return _repository.UpdatePreGridAsync(gridDatas);
-                        }));
-                    }
+                        if (item?.HasDataGrid == true)
+                        {
+                            itemTasks.AddRange(item?.GridDatas?.Select(gridData =>
+                            {
+                                if (gridData.Type == 2 && gridData.Id > 0)
+                                    return _repository.DeleteDueDesignGrid(gridData.Id);
 
-                    return tasksList;
-                }));
+                                var gridDatas = _mapper.Map<DueDiligenceGridModel>(gridData);
+                                gridDatas.DueDesignId = item.DesignId;
+                                gridDatas.VendorId = vendorId;
 
+                                return _repository.UpdateDueDesignGrid(gridDatas);
+
+                            }) ?? Enumerable.Empty<Task<bool>>());
+                        }
+
+                        if (item?.Attachments is not null)
+                        {
+                            itemTasks.AddRange(item?.Attachments?.Select(attachment =>
+                            {
+                                if (attachment.Type == 2 && attachment.AttachmentId > 0)
+                                    return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
+                                else
+                                {
+                                    var attachedFile = _mapper.Map<AttachmentSaveModel>(attachment);
+                                    attachedFile.SourceId = vendorId;
+                                    attachedFile.SourceType = SourceType.VEN_DUE.ToString();
+                                    attachedFile.AttachmentTypeId = item.DesignId;
+                                    return _attachmentRepository.SaveAttachmentAsync(attachedFile);
+                                }
+                            }));
+
+                        }
+
+                        return itemTasks;
+                    })).ToList();
+
+                }
+
+                #endregion
+
+                #region Prequalification
+
+                if (command.Prequalification is not null)
+                {
+                    tasks.AddRange(command?.Prequalification?.SelectMany(item =>
+                    {
+                        var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
+                        prequalificationValue.VendorId = vendorId;
+                        prequalificationValue.DateTimeValue = prequalificationValue.DateTimeValue.ConvertDateToValidDate();
+
+                        var tasksList = new List<Task<bool>>();
+                        _repository.UpdatePrequalification(prequalificationValue); //+
+
+                        if (item?.Attachments is not null)
+                        {
+                            for (int i = 0; i < item?.Attachments.Count; i++)
+                            {
+                                if (item.Attachments[i].Type == 2 && item.Attachments[i].AttachmentId > 0)
+                                {
+                                    tasksList.Add(_attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId));
+                                }
+                                else
+                                {
+                                    var attachedFile = _mapper.Map<AttachmentSaveModel>(item.Attachments[i]);
+
+                                    attachedFile.SourceId = vendorId;
+                                    attachedFile.AttachmentTypeId = item.DesignId;
+                                    attachedFile.SourceType = SourceType.VEN_PREQ.ToString();
+
+                                    tasksList.Add(_attachmentRepository.SaveAttachmentAsync(attachedFile));
+                                }
+                            }
+                        }
+
+                        if (item.HasGrid == true)
+                        {
+                            tasksList.AddRange(item.GridDatas.Select(gridData =>
+                            {
+                                var gridDatas = _mapper.Map<PrequalificationGridData>(gridData);
+                                gridDatas.PreqqualificationDesignId = item.DesignId;
+                                gridDatas.VendorId = vendorId;
+
+                                return _repository.UpdatePreGridAsync(gridDatas);
+                            }));
+                        }
+
+                        return tasksList;
+                    }));
+
+                }
+
+                #endregion
+                //
+                #region NDA
+
+                command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
+                tasks.AddRange(command.NonDisclosureAgreement?.Select(x => _repository.DeleteNDAAsync(vendorId)));
+                if (command?.NonDisclosureAgreement != null && command?.NonDisclosureAgreement?.Count > 0)
+                    tasks.AddRange(command?.NonDisclosureAgreement?.Select(x => _repository.AddNDAAsync(_mapper.Map<VendorNDA>(x))));
+
+                #endregion
+                //
+                #region COBC
+
+                command?.CodeOfBuConduct?.ForEach(x => x.VendorId = vendorId);
+
+                if (command?.CodeOfBuConduct != null && command?.CodeOfBuConduct?.Count > 0)
+                    tasks.AddRange(command?.CodeOfBuConduct?.Select(x => _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(x))));
+
+                #endregion
+
+                user.VendorId = vendorId;
+                await _userRepository.SaveUserAsync(user);
+
+
+                await Task.WhenAll(tasks);
+                await _unitOfWork.SaveChangesAsync();
+
+                return ApiResponse<bool>.Success(tasks.All(x => x.Result), 200);
             }
-
-            #endregion
-            //
-            #region NDA
-
-            command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
-            tasks.AddRange(command.NonDisclosureAgreement?.Select(x => _repository.DeleteNDAAsync(vendorId)));
-            if (command?.NonDisclosureAgreement != null && command?.NonDisclosureAgreement?.Count > 0)
-                tasks.AddRange(command?.NonDisclosureAgreement?.Select(x => _repository.AddNDAAsync(_mapper.Map<VendorNDA>(x))));
-
-            #endregion
-            //
-            #region COBC
-
-            command?.CodeOfBuConduct?.ForEach(x => x.VendorId = vendorId);
-
-            if (command?.CodeOfBuConduct != null && command?.CodeOfBuConduct?.Count > 0)
-                tasks.AddRange(command?.CodeOfBuConduct?.Select(x => _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(x))));
-
-            #endregion
-
-            user.VendorId = vendorId;
-            await _userRepository.SaveUserAsync(user);
-
-
-            await Task.WhenAll(tasks);
-            await _unitOfWork.SaveChangesAsync();
-
-            return ApiResponse<bool>.Success(tasks.All(x => x.Result), 200);
+            catch (Exception ex)
+            {
+                return ApiResponse<bool>.Fail(ex.Message, 400);
+            }
         }
-
-
 
 
         public async Task<ApiResponse<VM_GET_SupplierEvaluation>> GetAllAsync(SupplierEvaluationGETModel model)
@@ -471,8 +487,8 @@ namespace SolaERP.Persistence.Services
             CompanyInfoDto companyInfo = _mapper.Map<CompanyInfoDto>(companyInfoTask.Result);
             companyInfo.PrequalificationTypes = matchedPrequalificationTypes;
             companyInfo.BusinessCategories = matchedBuCategories;
-            companyInfo.CompanyLogo = _mapper.Map<List<AttachmentDto>>(venLogoAttachmentTask.Result);
-            companyInfo.Attachments = _mapper.Map<List<AttachmentDto>>(venOletAttachmentTask.Result);
+            //companyInfo.CompanyLogo = _mapper.Map<List<AttachmentDto2>>(venLogoAttachmentTask.Result);
+            //companyInfo.Attachments = _mapper.Map<List<AttachmentDto2>>(venOletAttachmentTask.Result);
             companyInfo.City = companyInfo.City ?? "";
             companyInfo.RepresentedProducts = vendorRepresentedProduct?.Result?.RepresentedProductName?.Split(",");
             companyInfo.RepresentedCompanies = vendorRepresentedCompany?.Result?.RepresentedCompanyName?.Split(",");
@@ -622,9 +638,9 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<PrequalificationWithCategoryDto>>.Success(response, 200);
         }
 
-        public async Task<ApiResponse<bool>> SubmitAsync(string userIdentity, SupplierRegisterCommand command)
+        public async Task<ApiResponse<bool>> SubmitAsync(string userIdentity, string token, SupplierRegisterCommand command)
         {
-            var result = await AddAsync(userIdentity, command);
+            var result = await AddAsync(userIdentity, token, command);
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
             var submitResult = await _vendorRepository.ChangeStatusAsync(user.VendorId, 1, user.Id);

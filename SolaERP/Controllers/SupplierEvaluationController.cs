@@ -12,8 +12,12 @@ namespace SolaERP.API.Controllers
     public class SupplierEvaluationController : CustomBaseController
     {
         private readonly ISupplierEvaluationService _service;
-        public SupplierEvaluationController(ISupplierEvaluationService service) => _service = service;
-
+        private readonly ITokenHandler _tokenHandler;
+        public SupplierEvaluationController(ISupplierEvaluationService service, ITokenHandler tokenHandler)
+        {
+            _service = service;
+            _tokenHandler = tokenHandler;
+        }
 
         [HttpGet]
         public async Task<IActionResult> InitReg(int? vendorId = null)
@@ -41,11 +45,17 @@ namespace SolaERP.API.Controllers
 
         [HttpPost]
         [RequestSizeLimit(100_000_000)]
-        public async Task<IActionResult> Post(SupplierRegisterCommand command)
-            => CreateActionResult(await _service.AddAsync(User.Identity.Name, command));
+        public async Task<IActionResult> Post([FromForm] SupplierRegisterCommand command)
+        {
+            var token = _tokenHandler.GetAccessToken(HttpContext);
+            return CreateActionResult(await _service.AddAsync(User.Identity.Name, token, command));
+        }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Submit(SupplierRegisterCommand command)
-            => CreateActionResult(await _service.SubmitAsync(User.Identity.Name, command));
+        {
+            var token = _tokenHandler.GetAccessToken(HttpContext);
+            return CreateActionResult(await _service.SubmitAsync(User.Identity.Name, token, command));
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Dtos.Shared;
+﻿using Microsoft.AspNetCore.Http;
+using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Models;
 
@@ -13,8 +14,8 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<NonDisclosureAgreement>>> GetNDAAsync(string userIdentity, int? vendorId = null);
         Task<ApiResponse<List<CodeOfBuConduct>>> GetCOBCAsync(string userIdentity);
         Task<ApiResponse<List<PrequalificationWithCategoryDto>>> GetPrequalificationAsync(string userIdentity, List<int> categoryIds, string acceptlang, int? vendorId = null);
-        Task<ApiResponse<bool>> AddAsync(string userIdentity, SupplierRegisterCommand command);
-        Task<ApiResponse<bool>> SubmitAsync(string userIdentity, SupplierRegisterCommand command);
+        Task<ApiResponse<bool>> AddAsync(string userIdentity, string Token, SupplierRegisterCommand command);
+        Task<ApiResponse<bool>> SubmitAsync(string userIdentity, string Token, SupplierRegisterCommand command);
 
     }
 }

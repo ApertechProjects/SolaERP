@@ -1,4 +1,7 @@
-﻿using SolaERP.Application.Dtos.SupplierEvaluation;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using SolaERP.Application.Dtos.SupplierEvaluation;
+using SolaERP.Application.Features;
 
 namespace SolaERP.Application.Models
 {
@@ -11,4 +14,5 @@ namespace SolaERP.Application.Models
         public List<DueDiligenceChildDto> DueDiligence { get; set; }
         public List<PrequalificationDto> Prequalification { get; set; }
     }
+
 }

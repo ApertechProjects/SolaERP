@@ -32,16 +32,17 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<string>>> FileOperation(List<IFormFile> Files, List<string> DeletedFiles, Modules Module, string Token)
         {
-            foreach (var item in DeletedFiles)
-            {
-                await DeleteFile(Modules.Users, item, Token);
-            }
             if (Files != null)
             {
                 var NotNullFileCount = Files.Where(x => x?.FileName != null).Count();
                 if (NotNullFileCount != 0)
                 {
                     var Data = await UploadFile(Files, Modules.Users, Token);
+
+                    foreach (var item in DeletedFiles) //if upload operation is correct, then delete old files
+                    {
+                        await DeleteFile(Modules.Users, item, Token);
+                    }
                     return ApiResponse<List<string>>.Success(Data.Item1.data?.ToList());
                 }
             }

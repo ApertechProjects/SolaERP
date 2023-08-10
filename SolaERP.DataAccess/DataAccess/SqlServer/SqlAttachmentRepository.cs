@@ -78,6 +78,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<List<string>> GetAttachmentsAsync(int sourceId, int sourceType)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "select * from [dbo].[FN_GetAttachment] @SourceId, @SourceType";
+                command.Parameters.AddWithValue(command, "@SourceId", sourceId);
+                command.Parameters.AddWithValue(command, "@SourceType", sourceType);
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                List<string> attachments = new List<string>();
+
+                while (await reader.ReadAsync()) { attachments.Add(reader.Get<string>("FileData")); }
+                return attachments;
+            }
+        }
+
         public async Task<bool> DeleteAttachmentAsync(int attachmentId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -88,5 +105,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
+
+     
     }
 }

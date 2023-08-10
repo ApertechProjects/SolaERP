@@ -13,6 +13,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
 
     public class DueDiligenceChildDto
     {
+        private DateTime _dateTimeValue;
         public int DesignId { get; set; }
         public int LineNo { get; set; }
         public string Question { get; set; }
@@ -83,7 +84,19 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         //
         public decimal DecimalValue { get; set; }
         //
-        public DateTime DateTimeValue { get; set; }
+        public DateTime DateTimeValue
+        {
+            get
+            {
+                if (_dateTimeValue.Date == DateTime.MinValue)
+                    _dateTimeValue = DateTime.Now;
+                return _dateTimeValue;
+            }
+            set
+            {
+                _dateTimeValue = value;
+            }
+        }
         //
         public bool AgreementValue { get; set; }
         //
