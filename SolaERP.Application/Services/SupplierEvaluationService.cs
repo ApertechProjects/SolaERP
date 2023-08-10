@@ -140,13 +140,13 @@ namespace SolaERP.Persistence.Services
 
                 await _attachmentRepository.SaveAttachmentAsync(companyLogo[0]);
 
-                //for (int i = 0; i < companyLogo.Count; i++) //+
-                //{
-                //    if (companyLogo[i].Type == 2 && companyLogo[i].AttachmentId > 0)
-                //        await _attachmentRepository.DeleteAttachmentAsync(companyLogo[i].AttachmentId);
-                //    else if (companyLogo[i].Type != 2)
-                //        await _attachmentRepository.SaveAttachmentAsync(companyLogo[i]);
-                //}
+                for (int i = 0; i < companyLogo.Count; i++) //+
+                {
+                    if (companyLogo[i].Type == 2 && companyLogo[i].AttachmentId > 0)
+                        await _attachmentRepository.DeleteAttachmentAsync(companyLogo[i].AttachmentId);
+                    else if (companyLogo[i].Type != 2)
+                        await _attachmentRepository.SaveAttachmentAsync(companyLogo[i]);
+                }
 
                 #endregion
                 //
