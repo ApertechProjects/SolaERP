@@ -30,10 +30,49 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<BidAllDto>>> GetAllAsync(BidAllFilterDto filter)
         {
-            var data = await _bidRepository.GetAllAsync(_mapper.Map<BidAllFilter>(filter));
-            var dtos = _mapper.Map<List<BidAllDto>>(data);
+            var data = new List<BidAllDto>
+            {
+                new BidAllDto
+                {
+                    ApproveStatus = "0",
+                    BidMainId = 1,
+                    BidNo = "0",
+                    CurrencyCode= "AZN",
+                    DeliveryTime= "24 Bours",
+                    DeliveryTerms = "TestDeliveryTerm",
+                    ExpectedCost = 200,
+                    LineNo = 1,
+                    OperatorComment = "TestComment",
+                    PaymentTerms= "TestPaymentTerms",
+                    RFQNo= "1",
+                    Status = "1",
+                    VendorCode = "TestVendorCode",
+                    VendorName = "TestVendorName"
+                },
+                new BidAllDto
+                {
+                    ApproveStatus = "0",
+                    BidMainId = 2,
+                    BidNo = "2",
+                    CurrencyCode= "AZN",
+                    DeliveryTime= "48 Bours",
+                    DeliveryTerms = "TestDeliveryTerm2",
+                    ExpectedCost = 500,
+                    LineNo = 2,
+                    OperatorComment = "TestComment2",
+                    PaymentTerms= "TestPaymentTerms2",
+                    RFQNo= "2",
+                    Status = "2",
+                    VendorCode = "TestVendorCode2",
+                    VendorName = "TestVendorName2"
+                },
+            };
+            return ApiResponse<List<BidAllDto>>.Success(data, 200);
 
-            return ApiResponse<List<BidAllDto>>.Success(dtos, 200);
+            //var data = await _bidRepository.GetAllAsync(_mapper.Map<BidAllFilter>(filter));
+            //var dtos = _mapper.Map<List<BidAllDto>>(data);
+
+            //return ApiResponse<List<BidAllDto>>.Success(dtos, 200);
         }
 
         public async Task<ApiResponse<BidMainLoadDto>> GetMainLoadAsync(int bidMainId)
