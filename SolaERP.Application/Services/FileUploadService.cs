@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using System.Text.Json;
@@ -47,6 +48,13 @@ namespace SolaERP.Persistence.Services
                 }
             }
             return ApiResponse<List<string>>.Fail(null, 400);
+        }
+
+        public string GetFileLink(string FileName, Modules Modules, string Token)
+        {
+            if (!string.IsNullOrEmpty(FileName))
+                return _configuration["FileOptions:BaseUrl"] + $"api/v1/home/module/{Modules.Users}/fileName/{FileName}";
+            else return FileName;
         }
 
         public async Task<(UploadFile, string)> UploadFile(List<IFormFile> Files, Modules Module, string BearerToken)
