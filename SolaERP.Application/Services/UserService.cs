@@ -18,6 +18,7 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.ViewModels;
 using SolaERP.Persistence.Utils;
+using System.Reflection;
 
 namespace SolaERP.Persistence.Services
 {
@@ -149,7 +150,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(true, 200);
         }
 
-        public async Task<ApiResponse<UserDto>> GetUserByNameAsync(string name)
+        public async Task<ApiResponse<UserDto>> GetUserByNameAsync(string name, string token)
         {
             var userId = await _userRepository.ConvertIdentity(name);
             var user = await _userRepository.GetByIdAsync(userId);
@@ -259,9 +260,11 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Fail("Problem detected", 400);
         }
 
-        public async Task<ApiResponse<UserLoadDto>> GetUserInfoAsync(int userId)
+        public async Task<ApiResponse<UserLoadDto>> GetUserInfoAsync(int userId, string token)
         {
             var user = await _userRepository.GetUserInfoAsync(userId);
+            user.SignaturePhoto = _fileUploadService.GetFileLink(user.SignaturePhoto, Modules.Users, token);
+            user.UserPhoto = _fileUploadService.GetFileLink(user.UserPhoto, Modules.Users, token);
             var attachments = await _attachmentRepo.GetAttachmentsAsync(user.Id, null, "PYMDC");
 
 
@@ -289,12 +292,12 @@ namespace SolaERP.Persistence.Services
 
             try
             {
-                var resultPhoto = await _fileUploadService.FileOperation(new List<IFormFile> { user.Photo }, new List<string> { userImage.UserPhoto }, Modules.Users, token);
+                var resultPhoto = await _fileUploadService.FileOperation(new List<IFormFile> { user.UserPhoto }, new List<string> { userImage.UserPhoto }, Modules.Users, token);
 
                 if (resultPhoto.Data != null && resultPhoto.Data.Count > 0)
                     userEntry.UserPhoto = resultPhoto?.Data[0];
 
-                var resultSignature = await _fileUploadService.FileOperation(new List<IFormFile> { user.Signature }, new List<string> { userImage.SignaturePhoto }, Modules.Users, token);
+                var resultSignature = await _fileUploadService.FileOperation(new List<IFormFile> { user.SignaturePhoto }, new List<string> { userImage.SignaturePhoto }, Modules.Users, token);
 
                 if (resultSignature.Data != null && resultSignature.Data.Count > 0)
                     userEntry.SignaturePhoto = resultSignature?.Data[0];

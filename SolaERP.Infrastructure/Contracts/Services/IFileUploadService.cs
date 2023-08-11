@@ -9,6 +9,7 @@ namespace SolaERP.Application.Contracts.Services
     {
         Task<(UploadFile, string)> UploadFile(List<IFormFile> Files, Modules Module, string Token);
         Task<bool> DeleteFile(Modules Module, string FileName, string Token);
+        string GetFileLink(string FileName, Modules Module, string Token);
         Task<ApiResponse<List<string>>> FileOperation(List<IFormFile> Files, List<string> DeletedFiles, Modules Module, string Token);
     }
 }

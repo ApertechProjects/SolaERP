@@ -70,7 +70,10 @@ namespace SolaERP.Controllers
 
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUserInfoAsync(int userId)
-            => CreateActionResult(await _userService.GetUserInfoAsync(userId));
+        {
+            string token = _tokenHandler.GetAccessToken(HttpContext);
+            return CreateActionResult(await _userService.GetUserInfoAsync(userId, token));
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetERPUserAsync()
@@ -94,7 +97,10 @@ namespace SolaERP.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetCurrentUserInfoAsync()
-          => CreateActionResult(await _userService.GetUserByNameAsync(User.Identity.Name));
+        {
+            string token = _tokenHandler.GetAccessToken(HttpContext);
+            return CreateActionResult(await _userService.GetUserByNameAsync(User.Identity.Name, token));
+        }
 
     }
 }
