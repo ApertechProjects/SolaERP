@@ -133,13 +133,6 @@ namespace SolaERP.Persistence.Services
                     companyLogo.SourceType = SourceType.VEN_LOGO.ToString();
                 });
 
-                var companyLogoExistDatas = await _attachmentRepository.GetAttachmentsAsync(vendorId, Convert.ToInt32(SourceType.VEN_LOGO));
-
-
-                //var companyLogoResult = _fileUploadService.FileOperation(new List<Microsoft.AspNetCore.Http.IFormFile> { command.CompanyInformation.CompanyLogo[0].File }, companyLogoExistDatas, Modules.EvaluationForm, token);
-
-                await _attachmentRepository.SaveAttachmentAsync(companyLogo[0]);
-
                 for (int i = 0; i < companyLogo.Count; i++) //+
                 {
                     if (companyLogo[i].Type == 2 && companyLogo[i].AttachmentId > 0)
@@ -487,8 +480,8 @@ namespace SolaERP.Persistence.Services
             CompanyInfoDto companyInfo = _mapper.Map<CompanyInfoDto>(companyInfoTask.Result);
             companyInfo.PrequalificationTypes = matchedPrequalificationTypes;
             companyInfo.BusinessCategories = matchedBuCategories;
-            //companyInfo.CompanyLogo = _mapper.Map<List<AttachmentDto2>>(venLogoAttachmentTask.Result);
-            //companyInfo.Attachments = _mapper.Map<List<AttachmentDto2>>(venOletAttachmentTask.Result);
+            companyInfo.CompanyLogo = _mapper.Map<List<AttachmentDto>>(venLogoAttachmentTask.Result) ?? new List<AttachmentDto>();
+            companyInfo.Attachments = _mapper.Map<List<AttachmentDto>>(venOletAttachmentTask.Result) ?? new List<AttachmentDto>();
             companyInfo.City = companyInfo.City ?? "";
             companyInfo.RepresentedProducts = vendorRepresentedProduct?.Result?.RepresentedProductName?.Split(",");
             companyInfo.RepresentedCompanies = vendorRepresentedCompany?.Result?.RepresentedCompanyName?.Split(",");

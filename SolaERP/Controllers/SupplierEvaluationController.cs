@@ -45,7 +45,7 @@ namespace SolaERP.API.Controllers
 
         [HttpPost]
         [RequestSizeLimit(100_000_000)]
-        public async Task<IActionResult> Post([FromForm] SupplierRegisterCommand command)
+        public async Task<IActionResult> Post(SupplierRegisterCommand command)
         {
             var token = _tokenHandler.GetAccessToken(HttpContext);
             return CreateActionResult(await _service.AddAsync(User.Identity.Name, token, command));
