@@ -287,7 +287,7 @@ namespace SolaERP.Persistence.Services
 
                                     attachedFile.SourceId = vendorId;
                                     attachedFile.AttachmentTypeId = item.DesignId;
-                                    attachedFile.SourceTypeId = Convert.ToInt16(SourceType.VEN_PREQ);
+                                    attachedFile.SourceType = SourceType.VEN_PREQ.ToString();
 
                                     tasksList.Add(_attachmentRepository.SaveAttachmentAsync(attachedFile));
                                 }

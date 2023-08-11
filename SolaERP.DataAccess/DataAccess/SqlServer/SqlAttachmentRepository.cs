@@ -27,7 +27,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@FileName", attachment.Name);
                 command.Parameters.AddWithValue(command, "@FileData", attachment.FileLink);
                 command.Parameters.AddWithValue(command, "@SourceId", attachment.SourceId);
-                command.Parameters.AddWithValue(command, "@SourceType", attachment.SourceTypeId);
+                command.Parameters.AddWithValue(command, "@SourceType", attachment.SourceType);
                 command.Parameters.AddWithValue(command, "@Reference", null);
                 command.Parameters.AddWithValue(command, "@ExtensionType", attachment.ExtensionType);
                 command.Parameters.AddWithValue(command, "@AttachmentTypeId", attachment.AttachmentTypeId);
