@@ -11,12 +11,12 @@ namespace SolaERP.Application.Dtos.Request
         public DateTime RequestDeadline { get; set; }
         public DateTime RequestedDate { get; set; }
         public string ItemCode { get; set; }
+        public decimal AvailableInMainStock { get; set; }
         public decimal Quantity { get; set; }
         public string UOM { get; set; }
         public string Description { get; set; }
         public string Location { get; set; }
         public string Buyer { get; set; }
-        public decimal AvailableQuantity { get; set; }
         public decimal QuantityFromStock { get; set; }
         public decimal OriginalQuantity { get; set; }
         public decimal TotalBudget { get; set; }
@@ -24,9 +24,9 @@ namespace SolaERP.Application.Dtos.Request
         public decimal Amount { get; set; }
         public string ConnectedOrderReference { get; set; }
         public decimal ConnectedOrderLineNo { get; set; }
+        public string AccountCode { get; set; }
         public int Condition { get; set; }
         public int Priority { get; set; }
-        public string AccountCode { get; set; }
         public bool AlternativeItem { get; set; }
         public decimal ManualUP { get; set; }
         public OperationType Type { get; set; }
