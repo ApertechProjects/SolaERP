@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using SolaERP.Application.Constants;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Group;
@@ -281,6 +282,8 @@ namespace SolaERP.Persistence.Services
             cancellationToken.ThrowIfCancellationRequested();
             var userEntry = _mapper.Map<User>(user);
 
+
+
             if (!string.IsNullOrEmpty(user.Password))
                 userEntry.PasswordHash = SecurityUtil.ComputeSha256Hash(user?.Password);
 
@@ -318,8 +321,12 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<bool>.Fail("password", "Password must be equal to Confirm password", 422);
             passwordModel.Password = SecurityUtil.ComputeSha256Hash(passwordModel.Password);
             var pass = await _userRepository.ChangeUserPasswordAsync(passwordModel);
+
+            await _unitOfWork.SaveChangesAsync();
+
             if (pass) return ApiResponse<bool>.Success(200);
-            else return ApiResponse<bool>.Success(400);
+
+            else return ApiResponse<bool>.Fail(ResultMessageConstants.OperationUnsucces, 400);
         }
 
         public async Task<ApiResponse<int>> DeleteUserAsync(DeleteUser deleteUser)
