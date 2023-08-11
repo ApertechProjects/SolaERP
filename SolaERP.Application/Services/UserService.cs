@@ -279,6 +279,7 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<int>> SaveUserAsync(UserSaveModel user, string token, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
+
             var userEntry = _mapper.Map<User>(user);
 
             if (!string.IsNullOrEmpty(user.Password))
