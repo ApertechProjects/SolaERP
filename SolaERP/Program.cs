@@ -37,6 +37,7 @@ builder.Services.AddTransient(sp => new ConnectionFactory()
     Uri = new(builder.Configuration["FileOptions:URI"])
 });
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.Configure<QueueOption>(builder.Configuration.GetSection("FileOptions"));
 builder.Services.Configure<StorageOption>(builder.Configuration.GetSection("StorageServer"));
 
