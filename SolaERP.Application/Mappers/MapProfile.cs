@@ -286,13 +286,21 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<AttachmentDto, AttachmentSaveModel>()
                  .ForMember(dest => dest.AttachmentId, opt => opt.MapFrom(src => src.AttachmentId))
                  .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-                 .ForMember(dest => dest.Filebase64, opt => opt.MapFrom(src => src.FileBase64))
                  .ForMember(dest => dest.SourceId, opt => opt.MapFrom(src => src.SourceId))
-                 .ForMember(dest => dest.SourceType, opt => opt.Ignore()) // SourceType does not exist in AttachmentDto
+                 .ForMember(dest => dest.SourceTypeId, opt => opt.Ignore()) // SourceType does not exist in AttachmentDto
                  .ForMember(dest => dest.ExtensionType, opt => opt.MapFrom(src => src.ExtensionType))
                  .ForMember(dest => dest.AttachmentTypeId, opt => opt.MapFrom(src => src.AttachmentTypeId))
                  .ForMember(dest => dest.AttachmentSubTypeId, opt => opt.MapFrom(src => src.AttachmentSubTypeId));
                  //.ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size)).ReverseMap();
+
+            CreateMap<AttachmentSaveDto, AttachmentSaveModel>()
+                 .ForMember(dest => dest.AttachmentId, opt => opt.MapFrom(src => src.AttachmentId))
+                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                 .ForMember(dest => dest.SourceId, opt => opt.MapFrom(src => src.SourceId))
+                 .ForMember(dest => dest.SourceTypeId, opt => opt.Ignore()) // SourceType does not exist in AttachmentDto
+                 .ForMember(dest => dest.ExtensionType, opt => opt.MapFrom(src => src.ExtensionType))
+                 .ForMember(dest => dest.AttachmentTypeId, opt => opt.MapFrom(src => src.AttachmentTypeId))
+                 .ForMember(dest => dest.AttachmentSubTypeId, opt => opt.MapFrom(src => src.AttachmentSubTypeId));
 
             CreateMap<AttachmentWithFileDto, AttachmentSaveModel>().ReverseMap();
 

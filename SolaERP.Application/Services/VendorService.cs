@@ -252,7 +252,7 @@ namespace SolaERP.Persistence.Services
                 var vendorLogo = _mapper.Map<AttachmentSaveModel>(vendorDto.Logo);
 
                 vendorLogo.SourceId = vendorId;
-                vendorLogo.SourceType = SourceType.VEN_LOGO.ToString();
+                vendorLogo.SourceTypeId = Convert.ToInt16(SourceType.VEN_LOGO);
 
                 await _attachment.SaveAttachmentAsync(vendorLogo);
             }
@@ -277,7 +277,7 @@ namespace SolaERP.Persistence.Services
                                 {
                                     var entity = _mapper.Map<AttachmentSaveModel>(attachment);
                                     entity.SourceId = detaildId;
-                                    entity.SourceType = SourceType.VEN_BNK.ToString();
+                                    entity.SourceTypeId = Convert.ToInt16(SourceType.VEN_BNK);
                                     return _attachment.SaveAttachmentAsync(entity);
                                 }
                             }));
