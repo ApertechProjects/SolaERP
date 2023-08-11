@@ -328,7 +328,7 @@ namespace SolaERP.Persistence.Services
 
             await _unitOfWork.SaveChangesAsync();
 
-            if (pass) return ApiResponse<bool>.Success(200);
+            if (pass) return ApiResponse<bool>.Success(pass, 200);
 
             else return ApiResponse<bool>.Fail(ResultMessageConstants.OperationUnsucces, 400);
         }
