@@ -426,7 +426,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public async Task<bool> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel)
         {
-            string query = " Exec [dbo].[SP_UserPassword_Change] @Id,@PasswordHash";
+            string query = "SET NOCOUNT OFF Exec [dbo].[SP_UserPassword_Change] @Id,@PasswordHash";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.Parameters.AddWithValue(command, "@Id", passwordModel.UserId);
