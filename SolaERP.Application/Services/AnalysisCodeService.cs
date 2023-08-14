@@ -10,6 +10,7 @@ using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using System.Collections.Generic;
+using System.Net;
 
 namespace SolaERP.Persistence.Services
 {
@@ -67,6 +68,7 @@ namespace SolaERP.Persistence.Services
                 AnalysisCode = x.AnalysisCode,
                 AnalysisName = x.AnalysisName
             }).ToList();
+
             if (analysisListDtos.Count == 0)
                 return ApiResponse<List<AnalysisListDto>>.Fail("Data not found", 404);
             return ApiResponse<List<AnalysisListDto>>.Success(analysisListDtos);
@@ -171,6 +173,82 @@ namespace SolaERP.Persistence.Services
             }).ToList();
 
             return ApiResponse<List<AnalysisDto>>.Success(map, 200);
+        }
+
+        public async Task<ApiResponse<List<AnalysisCodesModel>>> GetAnalysisCodesListAsync(AnalysisCodeGetModel getRequest, string userName)
+        {
+            var analysisCodes = await _analysisCodeRepository.GetAnalysisCodesAsync(getRequest.BusinessUnitId, getRequest.ProcedureName);
+            var analysisCodeByCat = analysisCodes.Where(x => x.CatId == getRequest.CatId).FirstOrDefault();
+
+            if (analysisCodeByCat == null)
+                return ApiResponse<List<AnalysisCodesModel>>.Fail("Analysis codes is empty", 404);
+
+            List<AnalysisCodesModel> analysisCodesModels = new List<AnalysisCodesModel>()
+            {
+                new AnalysisCodesModel
+                {
+                    AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId1,
+                    AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode1,
+                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId1,userName).Result.Data
+                },
+                new AnalysisCodesModel
+                {
+                    AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId2,
+                    AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode2,
+                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId2,userName).Result.Data
+                },
+                new AnalysisCodesModel
+                {
+                    AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId3,
+                    AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode3,
+                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId3,userName).Result.Data
+                },
+                new AnalysisCodesModel
+                {
+                    AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId4,
+                    AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode4,
+                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId4,userName).Result.Data
+                },
+                new AnalysisCodesModel
+                {
+                    AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId5,
+                    AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode5,
+                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId5,userName).Result.Data
+                },
+                new AnalysisCodesModel
+                {
+                    AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId6,
+                    AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode6,
+                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId6,userName).Result.Data
+                },
+                new AnalysisCodesModel
+                {
+                    AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId7,
+                    AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode7,
+                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId7,userName).Result.Data
+                },
+                new AnalysisCodesModel
+                {
+                    AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId8,
+                    AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode8,
+                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId8,userName).Result.Data
+                },
+                new AnalysisCodesModel
+                {
+                    AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId9,
+                    AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode9,
+                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId9,userName).Result.Data
+                },
+                new AnalysisCodesModel
+                {
+                    AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId10,
+                    AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode10,
+                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId10,userName).Result.Data
+                },
+            };
+
+            return ApiResponse<List<AnalysisCodesModel>>.Success(analysisCodesModels, 200);
+
         }
 
         public async Task<ApiResponse<List<AnalysisWithBuDto>>> GetByBUIdAsync(int businessUnitId, string userName)
