@@ -161,7 +161,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<Language, LanguageDto>().ReverseMap();
             CreateMap<Translate, TranslateDto>().ReverseMap();
             CreateMap<VendorInfo, VendorInfoDto>().ReverseMap();
-            CreateMap<UserMain, UserMainDto>().ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.UserPhoto)).ReverseMap();
+            CreateMap<UserMain, UserMainDto>().ForMember(dest => dest.UserPhoto, opt => opt.MapFrom(src => src.UserPhoto)).ReverseMap();
             CreateMap<UserLoad, UserLoadDto>().ReverseMap();
             CreateMap<ERPUser, ERPUserDto>().ReverseMap();
             CreateMap<AnalysisDimension, AnalysisDimensionDto>().ReverseMap();
