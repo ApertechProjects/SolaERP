@@ -1,8 +1,14 @@
 ﻿
+using Microsoft.Extensions.Configuration;
+
 namespace SolaERP.Application.Dtos.User
 {
     public class UserLoadDto
     {
+        private readonly IConfiguration _configuration;
+
+        public UserLoadDto(IConfiguration configuration) => _configuration = configuration;
+
         public int Id { get; set; }
         public string FullName { get; set; }
         public bool ChangePassword { get; set; }
