@@ -133,7 +133,8 @@ namespace SolaERP.Persistence.Services
                     companyLogo.SourceType = SourceType.VEN_LOGO.ToString();
                 });
 
-                    var companyLogoExistData = await _attachmentRepository.GetAttachmentsAsync(vendor.VendorId, Convert.ToInt16(SourceType.VEN_LOGO));
+                var companyLogoExistData = await _attachmentRepository.GetAttachmentsAsync(vendor.VendorId, Convert.ToInt16(SourceType.VEN_LOGO));
+
                 for (int i = 0; i < companyLogo.Count; i++) //+
                 {
                     if (companyLogo[i].Type == 2 && companyLogo[i].AttachmentId > 0)
@@ -143,7 +144,14 @@ namespace SolaERP.Persistence.Services
                 }
 
                 if (command.CompanyInformation.CompanyLogo != null && command.CompanyInformation.CompanyLogo.Count > 0)
-                    await _fileUploadService.FileOperation(new List<IFormFile> { command.CompanyInformation.CompanyLogo[0].File }, companyLogoExistData, Modules.EvaluationForm, token);
+                    try
+                    {
+                       var result= await _fileUploadService.FileOperation(new List<IFormFile> { command.CompanyInformation.CompanyLogo[0].File }, companyLogoExistData, Modules.EvaluationForm, token);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ApiResponse<bool>.Fail(ex.Message, 400);
+                    }
 
                 #endregion
                 //
