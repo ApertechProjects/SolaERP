@@ -160,11 +160,12 @@ namespace SolaERP.Persistence.Services
         {
             var userId = await _userRepository.ConvertIdentity(name);
             var user = await _userRepository.GetByIdAsync(userId);
-
+            
             if (user is null)
                 return ApiResponse<UserDto>.Fail("User not found", 404);
 
             var dto = _mapper.Map<UserDto>(user);
+            SetUserPhoto(dto);
             return ApiResponse<UserDto>.Success(dto, 200);
         }
 
@@ -518,6 +519,16 @@ namespace SolaERP.Persistence.Services
         private void SetUserPhoto(UserMainDto userMainDto)
         {
             userMainDto.UserPhoto = FilePathCombineHelper.CombinePath(Modules.Users, userMainDto.UserPhoto);
+        }
+        
+        private void SetUserPhotoMany(List<UserDto> userDtoList)
+        {
+            userDtoList.ForEach(SetUserPhoto);
+        }
+
+        private void SetUserPhoto(UserDto userDto)
+        {
+            userDto.UserPhoto = FilePathCombineHelper.CombinePath(Modules.Users, userDto.UserPhoto);
         }
     }
 }

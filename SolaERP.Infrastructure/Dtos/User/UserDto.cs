@@ -19,5 +19,6 @@ namespace SolaERP.Application.Dtos.UserDto
         [JsonIgnore]
         public Guid UserToken { get; set; }
         public UserRegisterType UserType { get; set; }
+        public string UserPhoto { get; set; }
     }
 }
