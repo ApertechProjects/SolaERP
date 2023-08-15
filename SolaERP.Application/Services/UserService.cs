@@ -290,7 +290,7 @@ namespace SolaERP.Persistence.Services
                 userEntry.PasswordHash = SecurityUtil.ComputeSha256Hash(user?.Password);
 
             UserImage userImage = await _userRepository.UserImageData(user.Id);
-            userImage.UserPhoto = await SetPhotoToModel(user.UserPhoto, user.UserPhotoIsDeleted, userImage.UserPhoto, token);
+            userEntry.UserPhoto = await SetPhotoToModel(user.UserPhoto, user.UserPhotoIsDeleted, userImage.UserPhoto, token);
             try
             {
 
@@ -322,6 +322,8 @@ namespace SolaERP.Persistence.Services
             {
                 try
                 {
+                    await _fileUploadService.DeleteFile(Modules.Users, FileLink, token);
+
                     var resultPhoto = await _fileUploadService.AddFile(new List<IFormFile> { formFile }, new List<string> { FileLink }, Modules.Users, token);
 
                     if (resultPhoto.Data != null && resultPhoto.Data.Count > 0)

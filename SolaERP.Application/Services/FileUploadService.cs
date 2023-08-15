@@ -23,7 +23,7 @@ namespace SolaERP.Persistence.Services
             using (var content = new MultipartFormDataContent())
             {
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Token);
-                var response = await client.DeleteAsync(_configuration["FileOptions:BaseUrl"] + $"/api/v1/home/module/{Module.ToString()}/fileName/{FileName}");
+                var response = await client.DeleteAsync(_configuration["FileOptions:BaseUrl"] + $"api/v1/home/module/{Module.ToString()}/fileName/{FileName}");
                 var res = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                     return true;
@@ -50,11 +50,11 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<string>>.Fail(null, 400);
         }
 
-        public string GetFileLink(string FileName, Modules Modules, string Token)
+        public string GetFileLink(string FileName, Modules module, string Token)
         {
             if (!string.IsNullOrEmpty(FileName))
-                return _configuration["FileOptions:BaseUrl"] + $"api/v1/home/module/{Modules.Users}/fileName/{FileName}";
-            else return FileName;
+                return _configuration["FileOptions:BaseUrl"] + $"api/v1/home/module/{module}/fileName/{FileName}";
+            return null;
         }
 
         public async Task<(UploadFile, string)> UploadFile(List<IFormFile> Files, Modules Module, string BearerToken)
