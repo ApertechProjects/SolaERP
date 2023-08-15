@@ -146,7 +146,7 @@ namespace SolaERP.Persistence.Services
                 if (command.CompanyInformation.CompanyLogo != null && command.CompanyInformation.CompanyLogo.Count > 0)
                     try
                     {
-                       var result= await _fileUploadService.FileOperation(new List<IFormFile> { command.CompanyInformation.CompanyLogo[0].File }, companyLogoExistData, Modules.EvaluationForm, token);
+                       var result= await _fileUploadService.AddFile(new List<IFormFile> { command.CompanyInformation.CompanyLogo[0].File }, companyLogoExistData, Modules.EvaluationForm, token);
                     }
                     catch (Exception ex)
                     {

@@ -23,9 +23,12 @@ namespace SolaERP.Application.Models
         public string ERPUser { get; set; }
         public bool IsDeleted { get; set; }
         public IFormFile SignaturePhoto { get; set; }
+        public bool SignaturePhotoIsDeleted { get; set; }
         public IFormFile UserPhoto { get; set; }
+        public bool UserPhotoIsDeleted { get; set; }
 
 
-       
+
+
     }
 }

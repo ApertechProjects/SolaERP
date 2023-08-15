@@ -17,8 +17,8 @@
         public int Gender { get; set; }
         public string Buyer { get; set; }
         public string Description { get; set; }
-        public string UserPhoto { get; set; }
-        public string SignaturePhoto { get; set; }
+        public string UserPhotoLink { get; set; }
+        public string SignaturePhotoLink { get; set; }
         public string ERPUser { get; set; }
         public int Session { get; set; }
         public bool InActive { get; set; }

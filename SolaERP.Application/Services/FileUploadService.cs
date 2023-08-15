@@ -31,7 +31,7 @@ namespace SolaERP.Persistence.Services
             }
         }
 
-        public async Task<ApiResponse<List<string>>> FileOperation(List<IFormFile> Files, List<string> DeletedFiles, Modules Module, string Token)
+        public async Task<ApiResponse<List<string>>> AddFile(List<IFormFile> Files, List<string> DeletedFiles, Modules Module, string Token)
         {
             if (Files != null)
             {
