@@ -6,6 +6,7 @@
         public string FullName { get; set; }
         public bool ChangePassword { get; set; }
         public int StatusId { get; set; }
+        public int ApproveStatus { get; set; }
         public string Theme { get; set; }
         public DateTime LastActivity { get; set; }
         public string UserName { get; set; }
