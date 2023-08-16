@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Dtos.Auth;
+﻿using Microsoft.AspNetCore.Http;
+using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Models;
 using System.Security.Claims;
 
@@ -9,7 +10,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<Token> GenerateJwtTokenAsync(int minutes, UserRegisterModel dto);
         Task<List<Claim>> GetUserClaimsAsync(UserRegisterModel dto);
         string CreateRefreshToken();
-
+        string GetAccessToken();
 
     }
 }

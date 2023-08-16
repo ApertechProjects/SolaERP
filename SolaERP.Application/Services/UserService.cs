@@ -1,14 +1,18 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using SolaERP.Application.Constants;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Group;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Dtos.UserDto;
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Entities.User;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
@@ -16,6 +20,7 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.ViewModels;
 using SolaERP.Persistence.Utils;
+using System.Reflection;
 
 namespace SolaERP.Persistence.Services
 {
@@ -28,14 +33,18 @@ namespace SolaERP.Persistence.Services
         private readonly ITokenHandler _tokenHandler;
         private readonly IAttachmentRepository _attachmentRepo;
         private readonly IEmailNotificationService _emailNotificationService;
+        private readonly IFileUploadService _fileUploadService;
+        private readonly IConfiguration _configuration;
 
         public UserService(IUserRepository userRepository,
-                           IUnitOfWork unitOfWork,
-                           IMapper mapper,
-                           IMailService mailService,
-                           ITokenHandler tokenHandler,
-                           IEmailNotificationService emailNotificationService,
-                           IAttachmentRepository attachmentRepo)
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            IMailService mailService,
+            ITokenHandler tokenHandler,
+            IEmailNotificationService emailNotificationService,
+            IAttachmentRepository attachmentRepo,
+            IFileUploadService fileUploadService,
+            IConfiguration configuration)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
@@ -44,6 +53,8 @@ namespace SolaERP.Persistence.Services
             _tokenHandler = tokenHandler;
             _emailNotificationService = emailNotificationService;
             _attachmentRepo = attachmentRepo;
+            _fileUploadService = fileUploadService;
+            _configuration = configuration;
         }
 
 
@@ -70,7 +81,9 @@ namespace SolaERP.Persistence.Services
         {
             var users = await _userRepository.GetAllAsync();
             var dto = _mapper.Map<List<UserDto>>(users);
-            return dto.Count == 0 ? ApiResponse<List<UserDto>>.Fail("User list is empty", 404) : ApiResponse<List<UserDto>>.Success(dto, 200);
+            return dto.Count == 0
+                ? ApiResponse<List<UserDto>>.Fail("User list is empty", 404)
+                : ApiResponse<List<UserDto>>.Success(dto, 200);
         }
 
 
@@ -103,9 +116,11 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Fail("password", "Password does not match with ConfirmPassword", 422);
         }
 
-        public async Task<ApiResponse<NoContentDto>> UpdateUserIdentifierAsync(int userId, string refreshToken, DateTime expirationDate, int addOnAccessTokenDate)
+        public async Task<ApiResponse<NoContentDto>> UpdateUserIdentifierAsync(int userId, string refreshToken,
+            DateTime expirationDate, int addOnAccessTokenDate)
         {
-            var isSuccessfull = await _userRepository.UpdateUserTokenAsync(userId, refreshToken, expirationDate, addOnAccessTokenDate);
+            var isSuccessfull =
+                await _userRepository.UpdateUserTokenAsync(userId, refreshToken, expirationDate, addOnAccessTokenDate);
             await _unitOfWork.SaveChangesAsync();
 
             return ApiResponse<NoContentDto>.Success(200);
@@ -142,15 +157,16 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(true, 200);
         }
 
-        public async Task<ApiResponse<UserDto>> GetUserByNameAsync(string name)
+        public async Task<ApiResponse<UserDto>> GetUserByNameAsync(string name, string token)
         {
             var userId = await _userRepository.ConvertIdentity(name);
             var user = await _userRepository.GetByIdAsync(userId);
-
+            
             if (user is null)
                 return ApiResponse<UserDto>.Fail("User not found", 404);
 
             var dto = _mapper.Map<UserDto>(user);
+            SetUserPhoto(dto);
             return ApiResponse<UserDto>.Success(dto, 200);
         }
 
@@ -186,11 +202,11 @@ namespace SolaERP.Persistence.Services
             var users = await _userRepository.GetUserWFAAsync(userId, userStatus, userType);
 
             var dto = _mapper.Map<List<UserMainDto>>(users);
+            SetUserPhotoMany(dto);
 
             if (dto.Count > 0)
                 return ApiResponse<List<UserMainDto>>.Success(dto, 200);
             return ApiResponse<List<UserMainDto>>.Fail("User list is empty", 404);
-
         }
 
         public async Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string name, int userStatus, int userType)
@@ -198,7 +214,7 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.ConvertIdentity(name);
             var users = await _userRepository.GetUserAllAsync(userId, userStatus, userType);
             var dto = _mapper.Map<List<UserMainDto>>(users);
-
+            SetUserPhotoMany(dto);
             if (dto.Count > 0)
                 return ApiResponse<List<UserMainDto>>.Success(dto, 200);
             return ApiResponse<List<UserMainDto>>.Fail("User list is empty", 404);
@@ -209,7 +225,7 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.ConvertIdentity(name);
             var users = await _userRepository.GetUserCompanyAsync(userId, userStatus);
             var dto = _mapper.Map<List<UserMainDto>>(users);
-
+            SetUserPhotoMany(dto);
 
             if (dto.Count > 0)
                 return ApiResponse<List<UserMainDto>>.Success(dto, 200);
@@ -221,6 +237,7 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.ConvertIdentity(name);
             var users = await _userRepository.GetUserVendorAsync(userId, userStatus);
             var dto = _mapper.Map<List<UserMainDto>>(users);
+            SetUserPhotoMany(dto);
 
             if (dto.Count > 0)
                 return ApiResponse<List<UserMainDto>>.Success(dto, 200);
@@ -252,9 +269,11 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Fail("Problem detected", 400);
         }
 
-        public async Task<ApiResponse<UserLoadDto>> GetUserInfoAsync(int userId)
+        public async Task<ApiResponse<UserLoadDto>> GetUserInfoAsync(int userId, string token)
         {
             var user = await _userRepository.GetUserInfoAsync(userId);
+            user.SignaturePhoto = _fileUploadService.GetFileLink(user.SignaturePhoto, Modules.Users, token);
+            user.UserPhoto = _fileUploadService.GetFileLink(user.UserPhoto, Modules.Users, token);
             var attachments = await _attachmentRepo.GetAttachmentsAsync(user.Id, null, "PYMDC");
 
 
@@ -269,36 +288,55 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<ERPUserDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<int>> SaveUserAsync(UserSaveModel user, CancellationToken cancellationToken)
+        public async Task<ApiResponse<int>> SaveUserAsync(UserSaveModel user, string token,
+            CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
+
             var userEntry = _mapper.Map<User>(user);
+
 
             if (!string.IsNullOrEmpty(user.Password))
                 userEntry.PasswordHash = SecurityUtil.ComputeSha256Hash(user?.Password);
 
+            UserImage userImage = await _userRepository.UserImageData(user.Id);
+            userEntry.UserPhoto = await SetPhotoToModel(user.UserPhoto, user.UserPhotoIsDeleted, userImage.UserPhoto, token);
+            userEntry.SignaturePhoto = await SetPhotoToModel(user.SignaturePhoto, user.SignaturePhotoIsDeleted, userImage.SignaturePhoto, token);
 
             var result = await _userRepository.SaveUserAsync(userEntry);
-
-            if (user.Signature is not null)
-            {
-                user.Signature.SourceId = result;
-                await _attachmentRepo.SaveAttachmentAsync(user.Signature);
-            }
-
-            if (user.Photo is not null)
-            {
-                user.Photo.SourceId = result;
-                await _attachmentRepo.SaveAttachmentAsync(user.Photo);
-            }
-
 
             await _unitOfWork.SaveChangesAsync();
             return result > 0 ? ApiResponse<int>.Success(result, 200)
                           : ApiResponse<int>.Fail("Data can not be saved", 400);
         }
 
+        private async Task<string> SetPhotoToModel(IFormFile formFile, bool CheckIsDeleted, string FileLink, string token)
+        {
+            if (CheckIsDeleted)
+            {
+                FileLink = null;
+                await _fileUploadService.DeleteFile(Modules.Users, FileLink, token);
+            }
+            else if (!CheckIsDeleted && formFile != null)
+            {
+                try
+                {
+                    await _fileUploadService.DeleteFile(Modules.Users, FileLink, token);
 
+                    var resultPhoto = await _fileUploadService.AddFile(new List<IFormFile> { formFile }, new List<string> { FileLink }, Modules.Users, token);
+
+                    if (resultPhoto.Data != null && resultPhoto.Data.Count > 0)
+                        FileLink = resultPhoto?.Data[0];
+
+                }
+                catch (Exception ex)
+                {
+                    //return ApiResponse<int>.Fail(ex.Message, 400);
+                    throw;
+                }
+            }
+            return FileLink;
+        }
 
         public async Task<ApiResponse<bool>> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel)
         {
@@ -306,8 +344,12 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<bool>.Fail("password", "Password must be equal to Confirm password", 422);
             passwordModel.Password = SecurityUtil.ComputeSha256Hash(passwordModel.Password);
             var pass = await _userRepository.ChangeUserPasswordAsync(passwordModel);
-            if (pass) return ApiResponse<bool>.Success(200);
-            else return ApiResponse<bool>.Success(400);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            if (pass) return ApiResponse<bool>.Success(pass, 200);
+
+            else return ApiResponse<bool>.Fail(ResultMessageConstants.OperationUnsucces, 400);
         }
 
         public async Task<ApiResponse<int>> DeleteUserAsync(DeleteUser deleteUser)
@@ -315,10 +357,7 @@ namespace SolaERP.Persistence.Services
             int succesfulCounter = 0;
             List<Task<int>> tasks = new List<Task<int>>();
 
-            deleteUser.userIds.ForEach(x =>
-            {
-                tasks.Add(_userRepository.SaveUserAsync(new() { Id = x }));
-            });
+            deleteUser.userIds.ForEach(x => { tasks.Add(_userRepository.SaveUserAsync(new() { Id = x })); });
 
             int[] results = await Task.WhenAll(tasks);
 
@@ -339,9 +378,9 @@ namespace SolaERP.Persistence.Services
             var grupser = await _userRepository.GetUsersByGroupIdAsync(groupId);
             var dto = _mapper.Map<List<UsersByGroupDto>>(grupser);
 
-            return dto.Capacity > 0 ? ApiResponse<List<UsersByGroupDto>>.Success(dto, 200)
-                              : ApiResponse<List<UsersByGroupDto>>.Fail("No users found for the specified group .", 404);
-
+            return dto.Capacity > 0
+                ? ApiResponse<List<UsersByGroupDto>>.Success(dto, 200)
+                : ApiResponse<List<UsersByGroupDto>>.Fail("No users found for the specified group .", 404);
         }
 
         public async Task<bool> UpdateSessionAsync(int userId, int updateCommand)
@@ -390,23 +429,31 @@ namespace SolaERP.Persistence.Services
                     UserData userData = await GetUserDataByVerifyTokenAsync(verifyToken);
                     Language language = userData.Language.GetLanguageEnumValue();
                     var companyName = await _emailNotificationService.GetCompanyName(userData.Email);
+
                     #region RegistratedUser
-                    var templateDataForRegistrationPending = await _emailNotificationService.GetEmailTemplateData(language, EmailTemplateKey.RGA);
+
+                    var templateDataForRegistrationPending =
+                        await _emailNotificationService.GetEmailTemplateData(language, EmailTemplateKey.RGA);
                     VM_RegistrationPending registrationPending = new VM_RegistrationPending()
                     {
                         FullName = userData.FullName,
                         UserName = userData.UserName,
                         Header = templateDataForRegistrationPending.Header,
-                        Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, userData.FullName)),
+                        Body =
+                            new HtmlString(string.Format(templateDataForRegistrationPending.Body, userData.FullName)),
                         Language = language,
                         CompanyName = companyName,
                     };
 
-                    Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject, registrationPending, registrationPending.TemplateName(), registrationPending.ImageName(), new List<string> { userData.Email });
+                    Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject,
+                        registrationPending, registrationPending.TemplateName(), registrationPending.ImageName(),
+                        new List<string> { userData.Email });
                     emails.Add(VerEmail);
 
                     #endregion
+
                     #region AdminUsers
+
                     var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
                     for (int i = 0; i < Enum.GetNames(typeof(Language)).Length; i++)
                     {
@@ -415,23 +462,28 @@ namespace SolaERP.Persistence.Services
                         if (sendUsers.Count > 0)
                         {
                             var templateData = templates[i];
-                            VM_RegistrationIsPendingAdminApprove adminApprove = new VM_RegistrationIsPendingAdminApprove()
-                            {
-                                Body = new HtmlString(templateData.Body),
-                                CompanyName = companyName,
-                                Header = templateData.Header,
-                                UserName = userData.UserName,
-                                CompanyOrVendorName = companyName,
-                                Language = templateData.Language.GetLanguageEnumValue(),
-                            };
-                            Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove, adminApprove.TemplateName, adminApprove.ImageName, sendUsers);
+                            VM_RegistrationIsPendingAdminApprove adminApprove =
+                                new VM_RegistrationIsPendingAdminApprove()
+                                {
+                                    Body = new HtmlString(templateData.Body),
+                                    CompanyName = companyName,
+                                    Header = templateData.Header,
+                                    UserName = userData.UserName,
+                                    CompanyOrVendorName = companyName,
+                                    Language = templateData.Language.GetLanguageEnumValue(),
+                                };
+                            Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove,
+                                adminApprove.TemplateName, adminApprove.ImageName, sendUsers);
                             emails.Add(RegEmail);
                         }
                     }
+
                     await Task.WhenAll(emails);
+
                     #endregion
                 }
             }
+
             if (user)
                 return ApiResponse<bool>.Success(true, 200);
 
@@ -466,6 +518,26 @@ namespace SolaERP.Persistence.Services
         {
             var result = await _userRepository.CheckUserType(verifyToken);
             return result;
+        }
+
+        private void SetUserPhotoMany(List<UserMainDto> userDtoList)
+        {
+            userDtoList.ForEach(SetUserPhoto);
+        }
+
+        private void SetUserPhoto(UserMainDto userMainDto)
+        {
+            userMainDto.UserPhoto = FilePathCombineHelper.CombinePath(Modules.Users, userMainDto.UserPhoto);
+        }
+        
+        private void SetUserPhotoMany(List<UserDto> userDtoList)
+        {
+            userDtoList.ForEach(SetUserPhoto);
+        }
+
+        private void SetUserPhoto(UserDto userDto)
+        {
+            userDto.UserPhoto = FilePathCombineHelper.CombinePath(Modules.Users, userDto.UserPhoto);
         }
     }
 }

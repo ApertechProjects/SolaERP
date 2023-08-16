@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Identity;
-using SolaERP.Application;
 using SolaERP.Application.Contracts.Common;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
@@ -79,6 +78,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IRfqService, RfqService>();
             builder.Services.AddScoped<IGeneralService, GeneralService>();
             builder.Services.AddScoped<IBidService, BidService>();
+            builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 
         }
         private static void UseRepositories(this WebApplicationBuilder builder)
@@ -156,7 +156,7 @@ namespace SolaERP.Extensions
             builder.UseServices();
             builder.UseSqlConnection();
             builder.UseInfrastructureServices();
-            builder.Services.AddMediatR();
+            //builder.Services.AddMediatR();
         }
 
         private static void UseInfrastructureServices(this WebApplicationBuilder builder)

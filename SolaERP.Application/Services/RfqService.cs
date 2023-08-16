@@ -147,12 +147,19 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<RFQInProgressDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<bool>> DeleteAsync(int rfqMainId, string userIdentity)
+        public async Task<ApiResponse<bool>> DeleteAsync(List<int> rfqMainIds, string userIdentity)
         {
-            var response = await _repository.DeleteMainsync(rfqMainId, Convert.ToInt32(userIdentity));
-            await _unitOfWork.SaveChangesAsync();
+            var deleteTasks = rfqMainIds.Select(async rfqMainId =>
+            {
+                var response = await _repository.DeleteMainsync(rfqMainId, Convert.ToInt32(userIdentity));
+                return response != null;
+            }).ToList();
 
-            return response is not null ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Fail(false, 400);
+            await Task.WhenAll(deleteTasks);
+            bool allDeleted = deleteTasks.All(task => task.Result);
+
+            await _unitOfWork.SaveChangesAsync();
+            return allDeleted ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Fail(false, 400);
         }
 
         public async Task<ApiResponse<List<UOMDto>>> GetPUOMAsync(int businessUnitId, string itemCodes)

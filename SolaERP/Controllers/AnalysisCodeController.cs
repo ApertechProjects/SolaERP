@@ -19,9 +19,10 @@ namespace SolaERP.Controllers
             _analysisCodeService = analysisCodeService;
         }
 
+      
         [HttpGet]
         public async Task<IActionResult> AnalysisCodes([FromQuery] AnalysisCodeGetModel getRequest)
-            => CreateActionResult(await _analysisCodeService.GetAnalysisCodesAsync(getRequest));
+           => CreateActionResult(await _analysisCodeService.GetAnalysisCodesListAsync(getRequest,User.Identity.Name));
 
         [HttpGet("{dimensionId}")]
         public async Task<IActionResult> AnalysisCodes(int dimensionId)

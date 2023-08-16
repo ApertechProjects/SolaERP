@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Auth;
@@ -14,10 +15,12 @@ namespace SolaERP.Persistence.Services
     public class JwtTokenHandler : ITokenHandler
     {
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public JwtTokenHandler(IConfiguration configuration)
+        public JwtTokenHandler(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public string CreateRefreshToken()
@@ -57,6 +60,17 @@ namespace SolaERP.Persistence.Services
                 return token;
             });
             return result;
+        }
+
+        public string GetAccessToken()
+        {
+            if (_httpContextAccessor.HttpContext.Request.Headers.TryGetValue("Authorization", out var authHeader) &&
+              authHeader.ToString().StartsWith("Bearer "))
+            {
+                var accessToken = authHeader.ToString().Substring("Bearer ".Length);
+                return accessToken;
+            }
+            return null;
         }
 
         public async Task<List<Claim>> GetUserClaimsAsync(UserRegisterModel user)

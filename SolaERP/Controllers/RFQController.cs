@@ -54,7 +54,7 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _service.ChangeRFQStatusAsync(model, User.Identity.Name));
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(int rfqMainId)
+        public async Task<IActionResult> Delete([FromQuery] List<int> rfqMainId)
             => CreateActionResult(await _service.DeleteAsync(rfqMainId, User.Identity.Name));
 
     }

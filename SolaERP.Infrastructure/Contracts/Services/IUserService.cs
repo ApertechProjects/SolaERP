@@ -26,9 +26,9 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string name, int userStatus);
         Task<ApiResponse<bool>> UserChangeStatusAsync(string name, UserChangeStatusModel model);
         Task<ApiResponse<bool>> UserChangeStatusAsync(string name, List<UserChangeStatusModel> model);
-        Task<ApiResponse<int>> SaveUserAsync(UserSaveModel user, CancellationToken cancellationToken);
+        Task<ApiResponse<int>> SaveUserAsync(UserSaveModel user, string token, CancellationToken cancellationToken);
         Task<ApiResponse<int>> UserRegisterAsync(UserRegisterModel model);
-        Task<ApiResponse<UserLoadDto>> GetUserInfoAsync(int userId);
+        Task<ApiResponse<UserLoadDto>> GetUserInfoAsync(int userId, string token);
         Task<ApiResponse<List<ERPUserDto>>> GetERPUserAsync();
         Task<ApiResponse<bool>> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel);
         Task<ApiResponse<int>> DeleteUserAsync(DeleteUser deleteUser);
@@ -36,7 +36,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<UsersByGroupDto>>> GetUsersByGroupIdAsync(int groupId);
         Task<ApiResponse<bool>> AddGroupToUserAsync(List<int> groupsIds, int userId);
         Task<ApiResponse<bool>> DeleteGroupFromUserAsync(List<int> groupsIds, int userId);
-        Task<ApiResponse<UserDto>> GetUserByNameAsync(string name);
+        Task<ApiResponse<UserDto>> GetUserByNameAsync(string name, string token);
         Task<ApiResponse<bool>> ConfirmEmail(string verifyToken);
         Task<string> CheckUserType(string verifyToken);
         Task<bool> CheckEmailIsVerified(string email);

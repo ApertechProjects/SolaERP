@@ -18,7 +18,7 @@
         public string Location { get; set; }
         public string Buyer { get; set; }
         public string BuyerName { get; set; }
-        public decimal AvailableQuantity { get; set; }
+        public decimal AvailableQuantity { get; set; } //
         public decimal QuantityFromStock { get; set; }
         public decimal OriginalQuantity { get; set; }
         public decimal TotalBudget { get; set; }
@@ -30,6 +30,9 @@
         public bool AlternativeItem { get; set; }
         public decimal ManualUP { get; set; }
         public int CatId { get; set; }
+        public decimal LastUnitPrice { get; set; }
+        public string LastPurchaseDate { get; set; }
+        public int LastVendor { get; set; }
         public int RequestAnalysisId { get; set; }
         public int AnalysisCode1Id { get; set; }
         public int AnalysisCode2Id { get; set; }

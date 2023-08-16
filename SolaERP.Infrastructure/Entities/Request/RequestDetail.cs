@@ -14,7 +14,7 @@
         public string Description { get; set; }
         public string Location { get; set; }
         public string Buyer { get; set; }
-        public decimal AvailableQuantity { get; set; }
+        public decimal AvailableInMainStock { get; set; }
         public decimal QuantityFromStock { get; set; }
         public decimal OriginalQuantity { get; set; }
         public decimal TotalBudget { get; set; }

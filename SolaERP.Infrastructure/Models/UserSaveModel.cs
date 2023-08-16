@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Text.Json.Serialization;
 
 namespace SolaERP.Application.Models
 {
@@ -21,7 +22,12 @@ namespace SolaERP.Application.Models
         public string Description { get; set; }
         public string ERPUser { get; set; }
         public bool IsDeleted { get; set; }
-        public AttachmentSaveModel Signature { get; set; }
-        public AttachmentSaveModel Photo { get; set; }
+        public IFormFile SignaturePhoto { get; set; }
+        public bool SignaturePhotoIsDeleted { get; set; }
+        public IFormFile UserPhoto { get; set; }
+        public bool UserPhotoIsDeleted { get; set; }
+        public bool InActive { get; set; }
+
+
     }
 }

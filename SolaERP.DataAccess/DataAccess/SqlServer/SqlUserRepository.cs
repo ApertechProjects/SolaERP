@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Groups;
@@ -425,7 +426,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public async Task<bool> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel)
         {
-            string query = "Exec [dbo].[SP_UserPassword_Change] @Id,@PasswordHash";
+            string query = "SET NOCOUNT OFF Exec [dbo].[SP_UserPassword_Change] @Id,@PasswordHash";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.Parameters.AddWithValue(command, "@Id", passwordModel.UserId);
@@ -621,6 +622,22 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     res = reader.Get<string>("VerifyToken");
 
                 return res;
+            }
+        }
+
+        public async Task<UserImage> UserImageData(int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "select * from FN_GET_USER_IMAGE_DATA(@userId)";
+                command.Parameters.AddWithValue(command, "@userId", userId);
+                using var reader = await command.ExecuteReaderAsync();
+
+                UserImage user = new UserImage();
+                if (reader.Read())
+                    user = reader.GetByEntityStructure<UserImage>();
+
+                return user;
             }
         }
 
