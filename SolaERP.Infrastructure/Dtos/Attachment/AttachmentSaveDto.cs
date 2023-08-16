@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace SolaERP.Application.Models
+namespace SolaERP.Application.Dtos.Attachment
 {
-    public class AttachmentSaveModel
+    public class AttachmentSaveDto
     {
         private int _attachmentId;
         public int AttachmentId
@@ -21,14 +25,13 @@ namespace SolaERP.Application.Models
         }
         public string Name { get; set; }
         public int SourceId { get; set; }
-        public string SourceType { get; set; }
         public string Reference { get; set; }
         public string ExtensionType { get; set; }
         public int AttachmentTypeId { get; set; }
         public int AttachmentSubTypeId { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public int Size { get; set; }
-        public string FileLink { get; set; }
+        public IFormFile File { get; set; }
         public int Type { get; set; }
     }
 }

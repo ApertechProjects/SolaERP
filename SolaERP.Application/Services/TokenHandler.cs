@@ -15,10 +15,12 @@ namespace SolaERP.Persistence.Services
     public class JwtTokenHandler : ITokenHandler
     {
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public JwtTokenHandler(IConfiguration configuration)
+        public JwtTokenHandler(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public string CreateRefreshToken()
@@ -60,9 +62,9 @@ namespace SolaERP.Persistence.Services
             return result;
         }
 
-        public string GetAccessToken(HttpContext httpContext)
+        public string GetAccessToken()
         {
-            if (httpContext.Request.Headers.TryGetValue("Authorization", out var authHeader) &&
+            if (_httpContextAccessor.HttpContext.Request.Headers.TryGetValue("Authorization", out var authHeader) &&
               authHeader.ToString().StartsWith("Bearer "))
             {
                 var accessToken = authHeader.ToString().Substring("Bearer ".Length);

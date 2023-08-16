@@ -59,7 +59,7 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveUserAsync([FromForm] UserSaveModel userSaveModel, CancellationToken cancellationToken)
         {
-            var token = _tokenHandler.GetAccessToken(HttpContext);
+            var token = _tokenHandler.GetAccessToken();
             var result = await _userService.SaveUserAsync(userSaveModel, token, cancellationToken);
             return CreateActionResult(result);
         }
@@ -70,7 +70,10 @@ namespace SolaERP.Controllers
 
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUserInfoAsync(int userId)
-            => CreateActionResult(await _userService.GetUserInfoAsync(userId));
+        {
+            string token = _tokenHandler.GetAccessToken();
+            return CreateActionResult(await _userService.GetUserInfoAsync(userId, token));
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetERPUserAsync()
@@ -94,7 +97,10 @@ namespace SolaERP.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetCurrentUserInfoAsync()
-          => CreateActionResult(await _userService.GetUserByNameAsync(User.Identity.Name));
+        {
+            string token = _tokenHandler.GetAccessToken();
+            return CreateActionResult(await _userService.GetUserByNameAsync(User.Identity.Name, token));
+        }
 
     }
 }

@@ -133,6 +133,8 @@ namespace SolaERP.Persistence.Services
                     companyLogo.SourceType = SourceType.VEN_LOGO.ToString();
                 });
 
+                var companyLogoExistData = await _attachmentRepository.GetAttachmentsAsync(vendor.VendorId, Convert.ToInt16(SourceType.VEN_LOGO));
+
                 for (int i = 0; i < companyLogo.Count; i++) //+
                 {
                     if (companyLogo[i].Type == 2 && companyLogo[i].AttachmentId > 0)
@@ -140,6 +142,16 @@ namespace SolaERP.Persistence.Services
                     else if (companyLogo[i].Type != 2)
                         await _attachmentRepository.SaveAttachmentAsync(companyLogo[i]);
                 }
+
+                if (command.CompanyInformation.CompanyLogo != null && command.CompanyInformation.CompanyLogo.Count > 0)
+                    try
+                    {
+                       var result= await _fileUploadService.AddFile(new List<IFormFile> { command.CompanyInformation.CompanyLogo[0].File }, companyLogoExistData, Modules.EvaluationForm, token);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ApiResponse<bool>.Fail(ex.Message, 400);
+                    }
 
                 #endregion
                 //
@@ -480,8 +492,8 @@ namespace SolaERP.Persistence.Services
             CompanyInfoDto companyInfo = _mapper.Map<CompanyInfoDto>(companyInfoTask.Result);
             companyInfo.PrequalificationTypes = matchedPrequalificationTypes;
             companyInfo.BusinessCategories = matchedBuCategories;
-            companyInfo.CompanyLogo = _mapper.Map<List<AttachmentDto>>(venLogoAttachmentTask.Result) ?? new List<AttachmentDto>();
-            companyInfo.Attachments = _mapper.Map<List<AttachmentDto>>(venOletAttachmentTask.Result) ?? new List<AttachmentDto>();
+            //companyInfo.CompanyLogo = _mapper.Map<List<AttachmentDto>>(venLogoAttachmentTask.Result) ?? new List<AttachmentDto>();
+            //companyInfo.Attachments = _mapper.Map<List<AttachmentDto>>(venOletAttachmentTask.Result) ?? new List<AttachmentDto>();
             companyInfo.City = companyInfo.City ?? "";
             companyInfo.RepresentedProducts = vendorRepresentedProduct?.Result?.RepresentedProductName?.Split(",");
             companyInfo.RepresentedCompanies = vendorRepresentedCompany?.Result?.RepresentedCompanyName?.Split(",");

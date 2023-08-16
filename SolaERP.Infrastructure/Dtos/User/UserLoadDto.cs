@@ -1,12 +1,16 @@
 ﻿
+using Microsoft.Extensions.Configuration;
+
 namespace SolaERP.Application.Dtos.User
 {
     public class UserLoadDto
     {
+
         public int Id { get; set; }
         public string FullName { get; set; }
         public bool ChangePassword { get; set; }
         public int StatusId { get; set; }
+        public int ApproveStatusId { get; set; }
         public string Theme { get; set; }
         public DateTime LastActivity { get; set; }
         public string UserName { get; set; }
@@ -24,11 +28,7 @@ namespace SolaERP.Application.Dtos.User
         public string VendorCode { get; set; }
         public string VendorName { get; set; }
         public string TaxId { get; set; }
-        public string Status { get; set; }
-        public string ApproveStatus { get; set; }
         public int Sequence { get; set; }
         public bool InActive { get; set; }
-        public Attachment.AttachmentWithFileDto Photo { get; set; }
-        public Attachment.AttachmentWithFileDto Signature { get; set; }
     }
 }

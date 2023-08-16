@@ -7,8 +7,9 @@ namespace SolaERP.Application.Contracts.Services
 {
     public interface IFileUploadService
     {
-        Task<(UploadFile, string)> UploadFile(List<IFormFile> Files, Modules Module, string Token);
-        Task<bool> DeleteFile(Modules Module, string FileName, string Token);
-        Task<ApiResponse<List<string>>> FileOperation(List<IFormFile> Files, List<string> DeletedFiles, Modules Module, string Token);
+        Task<(UploadFile, string)> UploadFile(List<IFormFile> files, Modules module, string token);
+        Task<bool> DeleteFile(Modules module, string fileName, string token);
+        string GetFileLink(string fileName, Modules module, string token);
+        Task<ApiResponse<List<string>>> AddFile(List<IFormFile> files, List<string> deletedFiles, Modules module, string token);
     }
 }

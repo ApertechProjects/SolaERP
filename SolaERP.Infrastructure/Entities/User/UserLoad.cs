@@ -6,6 +6,7 @@
         public string FullName { get; set; }
         public bool ChangePassword { get; set; }
         public int StatusId { get; set; }
+        public int ApproveStatus { get; set; }
         public string Theme { get; set; }
         public DateTime LastActivity { get; set; }
         public string UserName { get; set; }
@@ -17,8 +18,8 @@
         public int Gender { get; set; }
         public string Buyer { get; set; }
         public string Description { get; set; }
-        public string UserPhoto { get; set; }
-        public string SignaturePhoto { get; set; }
+        public string UserPhotoLink { get; set; }
+        public string SignaturePhotoLink { get; set; }
         public string ERPUser { get; set; }
         public int Session { get; set; }
         public bool InActive { get; set; }

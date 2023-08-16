@@ -161,8 +161,10 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<Language, LanguageDto>().ReverseMap();
             CreateMap<Translate, TranslateDto>().ReverseMap();
             CreateMap<VendorInfo, VendorInfoDto>().ReverseMap();
-            CreateMap<UserMain, UserMainDto>().ReverseMap();
-            CreateMap<UserLoad, UserLoadDto>().ReverseMap();
+            CreateMap<UserMain, UserMainDto>().ForMember(dest => dest.UserPhoto, opt => opt.MapFrom(src => src.UserPhoto)).ReverseMap();
+            CreateMap<UserLoad, UserLoadDto>()
+                .ForMember(dest=>dest.ApproveStatusId, expression =>expression.MapFrom(opt=>opt.ApproveStatus) )
+                .ReverseMap();
             CreateMap<ERPUser, ERPUserDto>().ReverseMap();
             CreateMap<AnalysisDimension, AnalysisDimensionDto>().ReverseMap();
             CreateMap<GroupAnalysisCode, GroupAnalysisCodeDto>().ReverseMap();
@@ -286,13 +288,21 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<AttachmentDto, AttachmentSaveModel>()
                  .ForMember(dest => dest.AttachmentId, opt => opt.MapFrom(src => src.AttachmentId))
                  .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-                 .ForMember(dest => dest.Filebase64, opt => opt.MapFrom(src => src.FileBase64))
                  .ForMember(dest => dest.SourceId, opt => opt.MapFrom(src => src.SourceId))
                  .ForMember(dest => dest.SourceType, opt => opt.Ignore()) // SourceType does not exist in AttachmentDto
                  .ForMember(dest => dest.ExtensionType, opt => opt.MapFrom(src => src.ExtensionType))
                  .ForMember(dest => dest.AttachmentTypeId, opt => opt.MapFrom(src => src.AttachmentTypeId))
                  .ForMember(dest => dest.AttachmentSubTypeId, opt => opt.MapFrom(src => src.AttachmentSubTypeId));
-                 //.ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size)).ReverseMap();
+            //.ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size)).ReverseMap();
+
+            CreateMap<AttachmentSaveDto, AttachmentSaveModel>()
+                 .ForMember(dest => dest.AttachmentId, opt => opt.MapFrom(src => src.AttachmentId))
+                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                 .ForMember(dest => dest.SourceId, opt => opt.MapFrom(src => src.SourceId))
+                 .ForMember(dest => dest.SourceType, opt => opt.Ignore()) // SourceType does not exist in AttachmentDto
+                 .ForMember(dest => dest.ExtensionType, opt => opt.MapFrom(src => src.ExtensionType))
+                 .ForMember(dest => dest.AttachmentTypeId, opt => opt.MapFrom(src => src.AttachmentTypeId))
+                 .ForMember(dest => dest.AttachmentSubTypeId, opt => opt.MapFrom(src => src.AttachmentSubTypeId));
 
             CreateMap<AttachmentWithFileDto, AttachmentSaveModel>().ReverseMap();
 
@@ -411,7 +421,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<BidAll, BidAllDto>().ReverseMap();
             CreateMap<BidAllFilter, BidAllFilterDto>()
                 .ReverseMap()
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => string.Join(",", src.Status.Select(x=> (int)x))))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => string.Join(",", src.Status.Select(x => (int)x))))
                 .ForMember(dest => dest.ApproveStatus, opt => opt.MapFrom(src => string.Join(",", src.ApproveStatus.Select(x => (int)x))))
                 .ForMember(dest => dest.ItemCode, opt => opt.MapFrom(src => string.Join(",", src.ItemCode)))
                 .ForMember(dest => dest.Emergency, opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x))));
