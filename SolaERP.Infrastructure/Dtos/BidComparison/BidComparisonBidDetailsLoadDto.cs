@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Entities.BidComparison
 {
-    public class BidComparisonBidDetailsLoad
+    public class BidComparisonBidDetailsLoadDto
     {
         public int BidMainId { get; set; }
         public string BidNo { get; set; }

@@ -11,10 +11,11 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Contracts.Services
 {
-    public interface IBidComparionService
+    public interface IBidComparisonService
     {
         Task<ApiResponse<bool>> SaveBidComparisonAsync(BidComparisonCreateDto bidComparison);
         Task<ApiResponse<bool>> ApproveBidComparisonAsync(BidComparisonApproveDto bidComparisonApprove);
+        Task<ApiResponse<BidComparisonDto>> GetBidComparisonAsync(BidComparisonFilterDto bidComparisonApprove);
 
 
     }

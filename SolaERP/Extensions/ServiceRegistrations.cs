@@ -78,9 +78,10 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IRfqService, RfqService>();
             builder.Services.AddScoped<IGeneralService, GeneralService>();
             builder.Services.AddScoped<IBidService, BidService>();
+            builder.Services.AddScoped<IBidComparisonService, BidComparisonService>();
             builder.Services.AddScoped<IFileUploadService, FileUploadService>();
-
         }
+
         private static void UseRepositories(this WebApplicationBuilder builder)
         {
             builder.Services.AddScoped<IUserRepository, SqlUserRepository>();
@@ -115,7 +116,9 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IRfqRepository, SqlRfqRepository>();
             builder.Services.AddScoped<IGeneralRepository, SqlGeneralRepository>();
             builder.Services.AddScoped<IBidRepository, SqlBidRepository>();
+            builder.Services.AddScoped<IBidComparisonRepository, SqlBidComparisonRepository>();
         }
+
         public static void UseValidationExtension(this WebApplicationBuilder builder)
         {
             builder.Services.AddValidatorsFromAssemblyContaining<UserValidation>();

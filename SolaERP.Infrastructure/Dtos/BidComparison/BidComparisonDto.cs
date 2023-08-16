@@ -1,5 +1,6 @@
 ﻿using SolaERP.Application.Dtos.Request;
 using SolaERP.Application.Dtos.RFQ;
+using SolaERP.Application.Entities.BidComparison;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,9 @@ namespace SolaERP.Application.Dtos.BidComparison
 {
     public class BidComparisonDto
     {
-        public RFQMainDto RfqMain { get; set; }
+        public BidComparisonHeaderLoadDto BidComparisonHeader { get; set; }
+        public List<BidComparisonBidHeaderLoadDto> Bids { get; set; }
+        public List<BidComparisonRFQDetailsLoadDto> RfqDetails { get; set; }
 
-        public List<BidDto> Bids { get; set; }
     }
 }
