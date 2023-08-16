@@ -272,8 +272,8 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<UserLoadDto>> GetUserInfoAsync(int userId, string token)
         {
             var user = await _userRepository.GetUserInfoAsync(userId);
-            user.SignaturePhotoLink = _fileUploadService.GetFileLink(user.SignaturePhotoLink, Modules.Users, token);
-            user.UserPhotoLink = _fileUploadService.GetFileLink(user.UserPhotoLink, Modules.Users, token);
+            user.SignaturePhoto = _fileUploadService.GetFileLink(user.SignaturePhoto, Modules.Users, token);
+            user.UserPhoto = _fileUploadService.GetFileLink(user.UserPhoto, Modules.Users, token);
             var attachments = await _attachmentRepo.GetAttachmentsAsync(user.Id, null, "PYMDC");
 
 
