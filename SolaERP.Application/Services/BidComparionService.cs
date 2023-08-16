@@ -20,12 +20,14 @@ namespace SolaERP.Persistence.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IBidRepository _bidRepository;
+        private readonly ISupplierEvaluationRepository _supplierEvaluationRepository;
 
-        public BidService(IUnitOfWork unitOfWork, IMapper mapper, IBidRepository bidRepository)
+        public BidService(IUnitOfWork unitOfWork, IMapper mapper, IBidRepository bidRepository, ISupplierEvaluationRepository supplierEvaluationRepository)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _bidRepository = bidRepository;
+            _supplierEvaluationRepository = supplierEvaluationRepository;
         }
 
         public async Task<ApiResponse<List<BidAllDto>>> GetAllAsync(BidAllFilterDto filter)
@@ -54,6 +56,23 @@ namespace SolaERP.Persistence.Services
             model.Details = dtos;
 
             return ApiResponse<BidMainLoadDto>.Success(model, 200);
+        }
+
+        public async Task<ApiResponse<BidCardDto>> GetBidCardAsync(int bidMainId)
+        {
+            var card = new BidCardDto();
+            var bidMain = await _bidRepository.GetMainLoadAsync(bidMainId);
+            var model = _mapper.Map<BidMainLoadDto>(bidMain);
+
+            var details = await _bidRepository.GetBidDetailsAsync(new BidDetailsFilter { BidMainId = bidMainId });
+            var dtos = _mapper.Map<List<BidDetailsLoadDto>>(details);
+            model.Details = dtos;
+
+            card.BidMain = model;
+            card.DeliveryTermsList = await _supplierEvaluationRepository.GetDeliveryTermsAsync();
+            card.PaymentTermsList = await _supplierEvaluationRepository.GetPaymentTermsAsync();
+
+            return ApiResponse<BidCardDto>.Success(card, 200);
         }
 
         public async Task<ApiResponse<BidIUDResponse>> SaveBidMainAsync(BidMainDto bidMain)

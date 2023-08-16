@@ -27,6 +27,10 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Get(int bidMainId)
             => CreateActionResult(await _bidService.GetMainLoadAsync(bidMainId));
 
+        [HttpGet("[action]/{bidMainId}")]
+        public async Task<IActionResult> GetCard(int bidMainId)
+            => CreateActionResult(await _bidService.GetBidCardAsync(bidMainId));
+
         [HttpPost]
         public async Task<IActionResult> Save(BidMainDto bidMain)
            => CreateActionResult(await _bidService.SaveBidMainAsync(bidMain));
