@@ -50,8 +50,8 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public List<ProductService> Services { get; set; }
         public List<PrequalificationCategory> PrequalificationTypes { get; set; }
         public List<BusinessCategory> BusinessCategories { get; set; }
-        public List<AttachmentDto> CompanyLogo { get; set; }
-        public List<AttachmentDto> Attachments { get; set; }
+        public List<AttachmentSaveDto> CompanyLogo { get; set; }
+        public List<AttachmentSaveDto> Attachments { get; set; }
     }
 
 

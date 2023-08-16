@@ -17,13 +17,13 @@ namespace SolaERP.Persistence.Services
             _configuration = configuration;
         }
 
-        public async Task<bool> DeleteFile(Modules Module, string FileName, string Token)
+        public async Task<bool> DeleteFile(Modules module, string fileName, string token)
         {
             using (var client = new HttpClient())
             using (var content = new MultipartFormDataContent())
             {
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Token);
-                var response = await client.DeleteAsync(_configuration["FileOptions:BaseUrl"] + $"/api/v1/home/module/{Module.ToString()}/fileName/{FileName}");
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                var response = await client.DeleteAsync(_configuration["FileOptions:BaseUrl"] + $"api/v1/home/module/{module.ToString()}/fileName/{fileName}");
                 var res = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                     return true;
@@ -31,18 +31,18 @@ namespace SolaERP.Persistence.Services
             }
         }
 
-        public async Task<ApiResponse<List<string>>> FileOperation(List<IFormFile> Files, List<string> DeletedFiles, Modules Module, string Token)
+        public async Task<ApiResponse<List<string>>> AddFile(List<IFormFile> files, List<string> deletedFiles, Modules module, string token)
         {
-            if (Files != null)
+            if (files != null)
             {
-                var NotNullFileCount = Files.Where(x => x?.FileName != null).Count();
+                var NotNullFileCount = files.Where(x => x?.FileName != null).Count();
                 if (NotNullFileCount != 0)
                 {
-                    var Data = await UploadFile(Files, Modules.Users, Token);
+                    var Data = await UploadFile(files, module, token);
 
-                    foreach (var item in DeletedFiles) //if upload operation is correct, then delete old files
+                    foreach (var item in deletedFiles) //if upload operation is correct, then delete old files
                     {
-                        await DeleteFile(Modules.Users, item, Token);
+                        await DeleteFile(module, item, token);
                     }
                     return ApiResponse<List<string>>.Success(Data.Item1.data?.ToList());
                 }
@@ -50,24 +50,24 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<string>>.Fail(null, 400);
         }
 
-        public string GetFileLink(string FileName, Modules Modules, string Token)
+        public string GetFileLink(string FileName, Modules module, string Token)
         {
             if (!string.IsNullOrEmpty(FileName))
-                return _configuration["FileOptions:BaseUrl"] + $"api/v1/home/module/{Modules.Users}/fileName/{FileName}";
-            else return FileName;
+                return _configuration["FileOptions:BaseUrl"] + $"api/v1/home/module/{module}/fileName/{FileName}";
+            return null;
         }
 
-        public async Task<(UploadFile, string)> UploadFile(List<IFormFile> Files, Modules Module, string BearerToken)
+        public async Task<(UploadFile, string)> UploadFile(List<IFormFile> files, Modules module, string token)
         {
             UploadFile member = new UploadFile();
             string errorMessage = null;
             using (var client = new HttpClient())
             using (var content = new MultipartFormDataContent())
             {
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", BearerToken);
-                content.Add(new StringContent(Module.ToString()), "module");
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                content.Add(new StringContent(module.ToString()), "module");
 
-                foreach (var item in Files)
+                foreach (var item in files)
                 {
                     if (item is null)
                         continue;

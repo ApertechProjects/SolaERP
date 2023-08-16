@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using SolaERP.Application.Constants;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Group;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.User;
@@ -271,8 +272,8 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<UserLoadDto>> GetUserInfoAsync(int userId, string token)
         {
             var user = await _userRepository.GetUserInfoAsync(userId);
-            user.SignaturePhoto = _fileUploadService.GetFileLink(user.SignaturePhoto, Modules.Users, token);
-            user.UserPhoto = _fileUploadService.GetFileLink(user.UserPhoto, Modules.Users, token);
+            user.SignaturePhotoLink = _fileUploadService.GetFileLink(user.SignaturePhotoLink, Modules.Users, token);
+            user.UserPhotoLink = _fileUploadService.GetFileLink(user.UserPhotoLink, Modules.Users, token);
             var attachments = await _attachmentRepo.GetAttachmentsAsync(user.Id, null, "PYMDC");
 
 
@@ -299,35 +300,43 @@ namespace SolaERP.Persistence.Services
                 userEntry.PasswordHash = SecurityUtil.ComputeSha256Hash(user?.Password);
 
             UserImage userImage = await _userRepository.UserImageData(user.Id);
-
-            try
-            {
-                var resultPhoto = await _fileUploadService.FileOperation(new List<IFormFile> { user.UserPhoto },
-                    new List<string> { userImage.UserPhoto }, Modules.Users, token);
-
-                if (resultPhoto.Data != null && resultPhoto.Data.Count > 0)
-                    userEntry.UserPhoto = resultPhoto?.Data[0];
-
-                var resultSignature = await _fileUploadService.FileOperation(
-                    new List<IFormFile> { user.SignaturePhoto }, new List<string> { userImage.SignaturePhoto },
-                    Modules.Users, token);
-
-                if (resultSignature.Data != null && resultSignature.Data.Count > 0)
-                    userEntry.SignaturePhoto = resultSignature?.Data[0];
-            }
-            catch (Exception ex)
-            {
-                return ApiResponse<int>.Fail(ex.Message, 400);
-            }
+            userEntry.UserPhoto = await SetPhotoToModel(user.UserPhoto, user.UserPhotoIsDeleted, userImage.UserPhoto, token);
+            userEntry.SignaturePhoto = await SetPhotoToModel(user.SignaturePhoto, user.SignaturePhotoIsDeleted, userImage.SignaturePhoto, token);
 
             var result = await _userRepository.SaveUserAsync(userEntry);
 
             await _unitOfWork.SaveChangesAsync();
-            return result > 0
-                ? ApiResponse<int>.Success(result, 200)
-                : ApiResponse<int>.Fail("Data can not be saved", 400);
+            return result > 0 ? ApiResponse<int>.Success(result, 200)
+                          : ApiResponse<int>.Fail("Data can not be saved", 400);
         }
 
+        private async Task<string> SetPhotoToModel(IFormFile formFile, bool CheckIsDeleted, string FileLink, string token)
+        {
+            if (CheckIsDeleted)
+            {
+                FileLink = null;
+                await _fileUploadService.DeleteFile(Modules.Users, FileLink, token);
+            }
+            else if (!CheckIsDeleted && formFile != null)
+            {
+                try
+                {
+                    await _fileUploadService.DeleteFile(Modules.Users, FileLink, token);
+
+                    var resultPhoto = await _fileUploadService.AddFile(new List<IFormFile> { formFile }, new List<string> { FileLink }, Modules.Users, token);
+
+                    if (resultPhoto.Data != null && resultPhoto.Data.Count > 0)
+                        FileLink = resultPhoto?.Data[0];
+
+                }
+                catch (Exception ex)
+                {
+                    //return ApiResponse<int>.Fail(ex.Message, 400);
+                    throw;
+                }
+            }
+            return FileLink;
+        }
 
         public async Task<ApiResponse<bool>> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel)
         {
