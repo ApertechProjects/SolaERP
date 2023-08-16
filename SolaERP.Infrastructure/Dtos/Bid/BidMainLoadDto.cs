@@ -24,5 +24,7 @@ namespace SolaERP.Application.Dtos.Bid
         public int Status { get; set; }
         public int ApprovalStatus { get; set; }
         public int ApproveStageMainId { get; set; }
+
+        public List<BidDetailsLoadDto> Details { get; set; }
     }
 }

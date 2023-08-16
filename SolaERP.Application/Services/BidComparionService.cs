@@ -48,6 +48,11 @@ namespace SolaERP.Persistence.Services
         {
             var bidMain = await _bidRepository.GetMainLoadAsync(bidMainId);
             var model = _mapper.Map<BidMainLoadDto>(bidMain);
+
+            var details  = await _bidRepository.GetBidDetailsAsync(new BidDetailsFilter { BidMainId = bidMainId});
+            var dtos = _mapper.Map<List<BidDetailsLoadDto>>(details);
+            model.Details = dtos;
+
             return ApiResponse<BidMainLoadDto>.Success(model, 200);
         }
 
