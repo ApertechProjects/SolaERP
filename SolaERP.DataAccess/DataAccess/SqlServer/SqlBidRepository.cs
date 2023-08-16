@@ -116,6 +116,48 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
 
         }
 
+        public async Task<List<BidDetailsLoad>> GetBidDetailsAsync(BidDetailsFilter filter)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = "EXEC SP_BidDetailsLoad @BidMainId";
+
+            command.Parameters.AddWithValue(command, "@BidMainId", filter.BidMainId);
+
+            using DbDataReader reader = await command.ExecuteReaderAsync();
+            List<BidDetailsLoad> data = new();
+            while (reader.Read())
+                data.Add(new BidDetailsLoad
+                {
+                    AlternativeItem = reader.Get<bool>("AlternativeItem"),
+                    AlternativeItemCode = reader.Get<string>("AlternativeItemCode"),
+                    AlternativeItemName = reader.Get<string>("AlternativeItemName"),
+                    BidDetailId = reader.Get<int>("BidDetailId"),
+                    BidMainId = reader.Get<int>("BidMainId"),
+                    Condition = reader.Get<int>("Condition"),
+                    ConversionRate = reader.Get<decimal>("ConversionRate"),
+                    ConvertedQTY = reader.Get<decimal>("ConvertedQTY"),
+                    ConvertedUnitPrice = reader.Get<decimal>("ConvertedUnitPrice"),
+                    Description = reader.Get<string>("Description"),
+                    DiscountedAmount = reader.Get<decimal>("DiscountedAmount"),
+                    DiscountType = reader.Get<int>("DiscountType"),
+                    DiscountValue = reader.Get<decimal>("DiscountValue"),
+                    ItemCode = reader.Get<string>("ItemCode"),
+                    LineDescription = reader.Get<string>("LineDescription"),
+                    LineNo = reader.Get<int>("LineNo"),
+                    PUOM = reader.Get<string>("PUOM"),
+                    Quantity = reader.Get<decimal>("Quantity"),
+                    RFQDetailId = reader.Get<int>("RFQDetailId"),
+                    RFQLine = reader.Get<int>("RFQLine"),
+                    RFQQuantity = reader.Get<decimal>("RFQQuantity"),
+                    SingleUnitPrice = reader.Get<decimal>("SingleUnitPrice"),
+                    TotalAmount = reader.Get<decimal>("TotalAmount"),
+                    UnitPrice = reader.Get<decimal>("UnitPrice"),
+                    UOM = reader.Get<string>("UOM")
+                });
+            return data;
+
+        }
+
         public async Task<BidMainLoad> GetMainLoadAsync(int bidMainId)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;

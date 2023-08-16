@@ -19,6 +19,10 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> GetAll([FromQuery] BidAllFilterDto filter)
             => CreateActionResult(await _bidService.GetAllAsync(filter));
 
+        [HttpGet("details/[action]")]
+        public async Task<IActionResult> GetAll([FromQuery] BidDetailsFilterDto filter)
+            => CreateActionResult(await _bidService.GetBidDetailsAsync(filter));
+
         [HttpGet("[action]/{bidMainId}")]
         public async Task<IActionResult> Get(int bidMainId)
             => CreateActionResult(await _bidService.GetMainLoadAsync(bidMainId));

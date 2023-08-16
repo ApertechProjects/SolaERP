@@ -9,6 +9,7 @@ using SolaERP.Application.Dtos.ApproveStage;
 using SolaERP.Application.Dtos.ApproveStages;
 using SolaERP.Application.Dtos.Attachment;
 using SolaERP.Application.Dtos.Bid;
+using SolaERP.Application.Dtos.BidComparison;
 using SolaERP.Application.Dtos.BusinessUnit;
 using SolaERP.Application.Dtos.Buyer;
 using SolaERP.Application.Dtos.Currency;
@@ -44,6 +45,7 @@ using SolaERP.Application.Entities.ApproveStages;
 using SolaERP.Application.Entities.Attachment;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Bid;
+using SolaERP.Application.Entities.BidComparison;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Buyer;
 using SolaERP.Application.Entities.Email;
@@ -409,6 +411,10 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<RFQInProgress, RFQInProgressDto>().ReverseMap();
 
             CreateMap<BidAll, BidAllDto>().ReverseMap();
+
+            CreateMap<BidDetailsFilter, BidDetailsFilterDto>().ReverseMap();
+            CreateMap<BidDetailsLoad, BidDetailsLoadDto>().ReverseMap();
+
             CreateMap<BidAllFilter, BidAllFilterDto>()
                 .ReverseMap()
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => string.Join(",", src.Status.Select(x=> (int)x))))
@@ -421,6 +427,12 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<BidDetail, BidDetailDto>().ReverseMap();
 
             CreateMap<Application.Entities.RFQ.UOM, Application.Dtos.RFQ.UOMDto>().ReverseMap();
+
+            CreateMap<BidComparisonIUD, BidComparisonCreateDto>().ReverseMap();
+            CreateMap<BidComparisonApprove, BidComparisonApproveDto>().ReverseMap();
+            CreateMap<BidComparisonBidApprovalsFilter, BidComparionBidApprovalsFilterDto>().ReverseMap();
+            CreateMap<BidComparisonBidApprovalsLoad, BidComparisonBidApprovalsLoadDto>().ReverseMap();
+
         }
     }
 }

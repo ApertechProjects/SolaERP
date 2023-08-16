@@ -26,4 +26,8 @@
     <PackageReference Include="Microsoft.Identity.Client" Version="4.48.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Dtos\NewFolder\" />
+  </ItemGroup>
+
 </Project>
