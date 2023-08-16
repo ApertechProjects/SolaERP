@@ -291,18 +291,7 @@ namespace SolaERP.Persistence.Services
 
             UserImage userImage = await _userRepository.UserImageData(user.Id);
             userEntry.UserPhoto = await SetPhotoToModel(user.UserPhoto, user.UserPhotoIsDeleted, userImage.UserPhoto, token);
-            try
-            {
-
-                var resultSignature = await _fileUploadService.AddFile(new List<IFormFile> { user.SignaturePhoto }, new List<string> { userImage.SignaturePhoto }, Modules.Users, token);
-
-                if (resultSignature.Data != null && resultSignature.Data.Count > 0)
-                    userEntry.SignaturePhoto = resultSignature?.Data[0];
-            }
-            catch (Exception ex)
-            {
-                return ApiResponse<int>.Fail(ex.Message, 400);
-            }
+            userEntry.SignaturePhoto = await SetPhotoToModel(user.SignaturePhoto, user.SignaturePhotoIsDeleted, userImage.SignaturePhoto, token);
 
             var result = await _userRepository.SaveUserAsync(userEntry);
 
