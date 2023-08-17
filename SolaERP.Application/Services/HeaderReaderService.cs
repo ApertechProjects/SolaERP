@@ -6,6 +6,11 @@ public class HeaderReaderService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
+    public HeaderReaderService(IHttpContextAccessor httpContextAccessor)
+    {
+        _httpContextAccessor = httpContextAccessor;
+    }
+
     public string GetToken()
     {
         return GetHeaderByName("Authorization")[7..];
