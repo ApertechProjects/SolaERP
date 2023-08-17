@@ -12,18 +12,24 @@ namespace SolaERP.Persistence.Services
     public class FileUploadService : IFileUploadService
     {
         private readonly IConfiguration _configuration;
-        public FileUploadService(IConfiguration configuration)
+        private readonly HeaderReaderService _headerReaderService;
+
+        public FileUploadService(IConfiguration configuration, HeaderReaderService headerReaderService)
         {
             _configuration = configuration;
+            _headerReaderService = headerReaderService;
         }
 
-        public async Task<bool> DeleteFile(Modules module, string fileName, string token)
+        public async Task<bool> DeleteFile(Modules module, string fileName)
         {
+            string token = _headerReaderService.GetToken();
             using (var client = new HttpClient())
             using (var content = new MultipartFormDataContent())
             {
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-                var response = await client.DeleteAsync(_configuration["FileOptions:BaseUrl"] + $"api/v1/home/module/{module.ToString()}/fileName/{fileName}");
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                var response = await client.DeleteAsync(_configuration["FileOptions:BaseUrl"] +
+                                                        $"api/v1/home/module/{module.ToString()}/fileName/{fileName}");
                 var res = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                     return true;
@@ -31,40 +37,46 @@ namespace SolaERP.Persistence.Services
             }
         }
 
-        public async Task<ApiResponse<List<string>>> AddFile(List<IFormFile> files, List<string> deletedFiles, Modules module, string token)
+        public async Task<ApiResponse<List<string>>> AddFile(List<IFormFile> files, List<string> deletedFiles,
+            Modules module)
         {
+            string token = _headerReaderService.GetToken();
             if (files != null)
             {
                 var NotNullFileCount = files.Where(x => x?.FileName != null).Count();
                 if (NotNullFileCount != 0)
                 {
-                    var Data = await UploadFile(files, module, token);
+                    var Data = await UploadFile(files, module);
 
                     foreach (var item in deletedFiles) //if upload operation is correct, then delete old files
                     {
-                        await DeleteFile(module, item, token);
+                        await DeleteFile(module, item);
                     }
+
                     return ApiResponse<List<string>>.Success(Data.Item1.data?.ToList());
                 }
             }
+
             return ApiResponse<List<string>>.Fail(null, 400);
         }
 
-        public string GetFileLink(string FileName, Modules module, string Token)
+        public string GetFileLink(string FileName, Modules module)
         {
             if (!string.IsNullOrEmpty(FileName))
                 return _configuration["FileOptions:BaseUrl"] + $"api/v1/home/module/{module}/fileName/{FileName}";
             return null;
         }
 
-        public async Task<(UploadFile, string)> UploadFile(List<IFormFile> files, Modules module, string token)
+        public async Task<(UploadFile, string)> UploadFile(List<IFormFile> files, Modules module)
         {
+            string token = _headerReaderService.GetToken();
             UploadFile member = new UploadFile();
             string errorMessage = null;
             using (var client = new HttpClient())
             using (var content = new MultipartFormDataContent())
             {
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
                 content.Add(new StringContent(module.ToString()), "module");
 
                 foreach (var item in files)
@@ -85,7 +97,8 @@ namespace SolaERP.Persistence.Services
                     content.Add(fileContent, "files", fileName);
                 }
 
-                var response = await client.PostAsync(_configuration["FileOptions:BaseUrl"] + "api/v1/home/upload", content);
+                var response = await client.PostAsync(_configuration["FileOptions:BaseUrl"] + "api/v1/home/upload",
+                    content);
                 var res = await response.Content.ReadAsStringAsync();
 
                 try
@@ -102,10 +115,5 @@ namespace SolaERP.Persistence.Services
                 return (member, errorMessage);
             }
         }
-
-
     }
-
-
 }
-

@@ -161,7 +161,7 @@ namespace SolaERP.Persistence.Services
         {
             var userId = await _userRepository.ConvertIdentity(name);
             var user = await _userRepository.GetByIdAsync(userId);
-            
+
             if (user is null)
                 return ApiResponse<UserDto>.Fail("User not found", 404);
 
@@ -272,8 +272,8 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<UserLoadDto>> GetUserInfoAsync(int userId, string token)
         {
             var user = await _userRepository.GetUserInfoAsync(userId);
-            user.SignaturePhoto = _fileUploadService.GetFileLink(user.SignaturePhoto, Modules.Users, token);
-            user.UserPhoto = _fileUploadService.GetFileLink(user.UserPhoto, Modules.Users, token);
+            user.SignaturePhoto = _fileUploadService.GetFileLink(user.SignaturePhoto, Modules.Users);
+            user.UserPhoto = _fileUploadService.GetFileLink(user.UserPhoto, Modules.Users);
             var attachments = await _attachmentRepo.GetAttachmentsAsync(user.Id, null, "PYMDC");
 
 
@@ -300,34 +300,38 @@ namespace SolaERP.Persistence.Services
                 userEntry.PasswordHash = SecurityUtil.ComputeSha256Hash(user?.Password);
 
             UserImage userImage = await _userRepository.UserImageData(user.Id);
-            userEntry.UserPhoto = await SetPhotoToModel(user.UserPhoto, user.UserPhotoIsDeleted, userImage.UserPhoto, token);
-            userEntry.SignaturePhoto = await SetPhotoToModel(user.SignaturePhoto, user.SignaturePhotoIsDeleted, userImage.SignaturePhoto, token);
+            userEntry.UserPhoto =
+                await SetPhotoToModel(user.UserPhoto, user.UserPhotoIsDeleted, userImage.UserPhoto, token);
+            userEntry.SignaturePhoto = await SetPhotoToModel(user.SignaturePhoto, user.SignaturePhotoIsDeleted,
+                userImage.SignaturePhoto, token);
 
             var result = await _userRepository.SaveUserAsync(userEntry);
 
             await _unitOfWork.SaveChangesAsync();
-            return result > 0 ? ApiResponse<int>.Success(result, 200)
-                          : ApiResponse<int>.Fail("Data can not be saved", 400);
+            return result > 0
+                ? ApiResponse<int>.Success(result, 200)
+                : ApiResponse<int>.Fail("Data can not be saved", 400);
         }
 
-        private async Task<string> SetPhotoToModel(IFormFile formFile, bool CheckIsDeleted, string FileLink, string token)
+        private async Task<string> SetPhotoToModel(IFormFile formFile, bool CheckIsDeleted, string FileLink,
+            string token)
         {
             if (CheckIsDeleted)
             {
                 FileLink = null;
-                await _fileUploadService.DeleteFile(Modules.Users, FileLink, token);
+                await _fileUploadService.DeleteFile(Modules.Users, FileLink);
             }
             else if (!CheckIsDeleted && formFile != null)
             {
                 try
                 {
-                    await _fileUploadService.DeleteFile(Modules.Users, FileLink, token);
+                    await _fileUploadService.DeleteFile(Modules.Users, FileLink);
 
-                    var resultPhoto = await _fileUploadService.AddFile(new List<IFormFile> { formFile }, new List<string> { FileLink }, Modules.Users, token);
+                    var resultPhoto = await _fileUploadService.AddFile(new List<IFormFile> { formFile },
+                        new List<string> { FileLink }, Modules.Users);
 
                     if (resultPhoto.Data != null && resultPhoto.Data.Count > 0)
                         FileLink = resultPhoto?.Data[0];
-
                 }
                 catch (Exception ex)
                 {
@@ -335,6 +339,7 @@ namespace SolaERP.Persistence.Services
                     throw;
                 }
             }
+
             return FileLink;
         }
 
@@ -527,9 +532,9 @@ namespace SolaERP.Persistence.Services
 
         private void SetUserPhoto(UserMainDto userMainDto)
         {
-            userMainDto.UserPhoto = FilePathCombineHelper.CombinePath(Modules.Users, userMainDto.UserPhoto);
+            userMainDto.UserPhoto = _fileUploadService.GetFileLink(userMainDto.UserPhoto, Modules.Users);
         }
-        
+
         private void SetUserPhotoMany(List<UserDto> userDtoList)
         {
             userDtoList.ForEach(SetUserPhoto);
@@ -537,7 +542,7 @@ namespace SolaERP.Persistence.Services
 
         private void SetUserPhoto(UserDto userDto)
         {
-            userDto.UserPhoto = FilePathCombineHelper.CombinePath(Modules.Users, userDto.UserPhoto);
+            userDto.UserPhoto = _fileUploadService.GetFileLink(userDto.UserPhoto, Modules.Users);
         }
     }
 }

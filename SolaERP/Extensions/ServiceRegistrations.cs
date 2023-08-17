@@ -79,6 +79,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IGeneralService, GeneralService>();
             builder.Services.AddScoped<IBidService, BidService>();
             builder.Services.AddScoped<IFileUploadService, FileUploadService>();
+            builder.Services.AddScoped<HeaderReaderService>();
 
         }
         private static void UseRepositories(this WebApplicationBuilder builder)
