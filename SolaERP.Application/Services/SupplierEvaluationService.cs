@@ -492,8 +492,8 @@ namespace SolaERP.Persistence.Services
             CompanyInfoDto companyInfo = _mapper.Map<CompanyInfoDto>(companyInfoTask.Result);
             companyInfo.PrequalificationTypes = matchedPrequalificationTypes;
             companyInfo.BusinessCategories = matchedBuCategories;
-            //companyInfo.CompanyLogo = _mapper.Map<List<AttachmentDto>>(venLogoAttachmentTask.Result) ?? new List<AttachmentDto>();
-            //companyInfo.Attachments = _mapper.Map<List<AttachmentDto>>(venOletAttachmentTask.Result) ?? new List<AttachmentDto>();
+            companyInfo.CompanyLogo = _mapper.Map<List<AttachmentSaveDto>>(venLogoAttachmentTask.Result) ?? new List<AttachmentSaveDto>();
+            companyInfo.Attachments = _mapper.Map<List<AttachmentSaveDto>>(venOletAttachmentTask.Result) ?? new List<AttachmentSaveDto>();
             companyInfo.City = companyInfo.City ?? "";
             companyInfo.RepresentedProducts = vendorRepresentedProduct?.Result?.RepresentedProductName?.Split(",");
             companyInfo.RepresentedCompanies = vendorRepresentedCompany?.Result?.RepresentedCompanyName?.Split(",");
