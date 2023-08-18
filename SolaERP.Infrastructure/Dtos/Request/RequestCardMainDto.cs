@@ -2,6 +2,7 @@
 {
     public class RequestCardMainDto
     {
+        private int _status;
         public int RequestMainId { get; set; }
         public int BusinessUnitId { get; set; }
         public string Buyer { get; set; }
@@ -17,7 +18,19 @@
         public DateTime RequestDeadline { get; set; }
         public int UserId { get; set; }
         public int Requester { get; set; }
-        public int Status { get; set; }
+        public int Status
+        {
+            get
+            {
+                if (RequestMainId == 0)
+                    _status = 1;
+                return _status;
+            }
+            set
+            {
+                _status = value;
+            }
+        }
         public string RequestComment { get; set; }
         public string OperatorComment { get; set; }
         public string QualityRequired { get; set; }
