@@ -63,12 +63,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@RequestDate", entity.RequestDate);
                 command.Parameters.AddWithValue(command, "@RequestDeadline", entity.RequestDeadline);
                 command.Parameters.AddWithValue(command, "@RequestedDate", entity.RequestedDate);
-                command.Parameters.AddWithValue(command, "@ItemCode", entity.ItemCode.Trim());
+                command.Parameters.AddWithValue(command, "@ItemCode", entity.ItemCode);
                 command.Parameters.AddWithValue(command, "@Quantity", entity.Quantity);
                 command.Parameters.AddWithValue(command, "@UOM", entity.UOM);
-                command.Parameters.AddWithValue(command, "@Description", entity.Description.Trim());
-                command.Parameters.AddWithValue(command, "@Location", entity.Location.Trim());
-                command.Parameters.AddWithValue(command, "@Buyer", entity.Buyer.Trim());
+                command.Parameters.AddWithValue(command, "@Description", entity.Description);
+                command.Parameters.AddWithValue(command, "@Location", entity.Location);
+                command.Parameters.AddWithValue(command, "@Buyer", entity.Buyer);
                 command.Parameters.AddWithValue(command, "@AvailableQuantity", entity.AvailableInMainStock);
                 command.Parameters.AddWithValue(command, "@QuantityFromStock", entity.QuantityFromStock);
                 command.Parameters.AddWithValue(command, "@OriginalQuantity", entity.OriginalQuantity);
@@ -77,7 +77,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Amount", entity.Amount);
                 command.Parameters.AddWithValue(command, "@ConnectedOrderReference", entity.ConnectedOrderReference);
                 command.Parameters.AddWithValue(command, "@ConnectedOrderLineNo", entity.ConnectedOrderLineNo);
-                command.Parameters.AddWithValue(command, "@AccountCode", entity.AccountCode.Trim());
+                command.Parameters.AddWithValue(command, "@AccountCode", entity.AccountCode);
                 command.Parameters.AddWithValue(command, "@Condition", entity.Condition);
                 command.Parameters.AddWithValue(command, "@Priority", entity.Priority);
                 command.Parameters.AddWithValue(command, "@ManualUP", entity.ManualUP);
