@@ -49,7 +49,7 @@ builder.Services.Configure<ApiBehaviorOptions>(config => { config.SuppressModelS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
-        corsBuilder => corsBuilder.WithOrigins(builder.Configuration["Cors:Origins"])
+        corsBuilder => corsBuilder.WithOrigins(builder.Configuration["Cors:Origins"], builder.Configuration["Cors:OriginsProd"])
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowAnyOrigin()
