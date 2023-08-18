@@ -13,6 +13,7 @@ namespace SolaERP.API.Controllers
     {
         private readonly ISupplierEvaluationService _service;
         private readonly ITokenHandler _tokenHandler;
+
         public SupplierEvaluationController(ISupplierEvaluationService service, ITokenHandler tokenHandler)
         {
             _service = service;
@@ -37,15 +38,17 @@ namespace SolaERP.API.Controllers
 
         [HttpGet("[action]")]
         public async Task<IActionResult> DueDiligence(int? vendorId = null)
-           => CreateActionResult(await _service.GetDueDiligenceAsync(User.Identity.Name, Request.Headers.AcceptLanguage, vendorId));
+            => CreateActionResult(await _service.GetDueDiligenceAsync(User.Identity.Name,
+                Request.Headers.AcceptLanguage, vendorId));
 
         [HttpGet("[action]")]
         public async Task<IActionResult> Prequalification([FromQuery] List<int> ids, int? vendorId = null)
-            => CreateActionResult(await _service.GetPrequalificationAsync(User.Identity.Name, ids, Request.Headers.AcceptLanguage, vendorId));
+            => CreateActionResult(await _service.GetPrequalificationAsync(User.Identity.Name, ids,
+                Request.Headers.AcceptLanguage, vendorId));
 
         [HttpPost]
         [RequestSizeLimit(100_000_000)]
-        public async Task<IActionResult> Post([FromBody] SupplierRegisterCommand command)
+        public async Task<IActionResult> Post([FromForm] SupplierRegisterCommand command)
         {
             var token = _tokenHandler.GetAccessToken();
             return CreateActionResult(await _service.AddAsync(User.Identity.Name, token, command));
