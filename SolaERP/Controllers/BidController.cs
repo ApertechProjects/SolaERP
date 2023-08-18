@@ -7,8 +7,6 @@ using SolaERP.Controllers;
 
 namespace SolaERP.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class BidController : CustomBaseController
     {
         private readonly IBidService _bidService;

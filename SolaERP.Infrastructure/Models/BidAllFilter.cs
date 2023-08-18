@@ -9,7 +9,6 @@ namespace SolaERP.Application.Models
     public class BidAllFilter
     {
         public int BusinessUnitId { get; set; }
-        public string ItemCode { get; set; }
         public string Emergency { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }

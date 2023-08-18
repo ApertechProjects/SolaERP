@@ -92,16 +92,13 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = @"EXEC SP_BidAll @BusinessUnitId,
-                                        @ItemCode,
                                         @Emergency,
                                         @DateFrom,
                                         @DateTo,
                                         @Status,
                                         @ApproveStatus";
 
-
             command.Parameters.AddWithValue(command, "@BusinessUnitId", filter.BusinessUnitId);
-            command.Parameters.AddWithValue(command, "@ItemCode", filter.ItemCode);
             command.Parameters.AddWithValue(command, "@Emergency", filter.Emergency);
             command.Parameters.AddWithValue(command, "@DateFrom", filter.DateFrom);
             command.Parameters.AddWithValue(command, "@DateTo", filter.DateTo);
@@ -113,7 +110,6 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
             while (reader.Read())
                 data.Add(GetBidFromReader(reader));
             return data;
-
         }
 
         public async Task<List<BidDetailsLoad>> GetBidDetailsAsync(BidDetailsFilter filter)
@@ -155,7 +151,6 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                     UOM = reader.Get<string>("UOM")
                 });
             return data;
-
         }
 
         public async Task<BidMainLoad> GetMainLoadAsync(int bidMainId)

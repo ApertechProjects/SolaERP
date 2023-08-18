@@ -429,7 +429,6 @@ namespace SolaERP.Persistence.Mappers
                 .ReverseMap()
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => string.Join(",", src.Status.Select(x => (int)x))))
                 .ForMember(dest => dest.ApproveStatus, opt => opt.MapFrom(src => string.Join(",", src.ApproveStatus.Select(x => (int)x))))
-                .ForMember(dest => dest.ItemCode, opt => opt.MapFrom(src => string.Join(",", src.ItemCode)))
                 .ForMember(dest => dest.Emergency, opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x))));
 
             CreateMap<BidMain, BidMainDto>().ReverseMap();

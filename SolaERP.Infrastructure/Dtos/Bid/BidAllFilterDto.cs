@@ -5,7 +5,6 @@ namespace SolaERP.Application.Dtos.Bid
     public class BidAllFilterDto
     {
         public int BusinessUnitId { get; set; }
-        public List<string> ItemCode { get; set; }
         public List<Emergency> Emergency { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
