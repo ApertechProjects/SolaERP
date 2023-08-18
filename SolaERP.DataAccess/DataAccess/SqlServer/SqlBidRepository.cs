@@ -7,7 +7,6 @@ using SolaERP.Application.Entities.Item_Code;
 using SolaERP.Application.Entities.RFQ;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Enums;
-using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System;

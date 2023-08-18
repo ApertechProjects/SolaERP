@@ -96,6 +96,56 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return await command.ExecuteNonQueryAsync() > 0;
         }
 
+        public async Task<List<BidComparisonAll>> GetComparisonAll(BidComparisonAllFilter filter)
+        {
+            var data = new List<BidComparisonAll>();
+
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_BidComparisonAll @BusinessUnitid,
+                                        @Emergency,
+                                        @DateFrom,
+                                        @DateTo,
+                                        @Status,
+                                        @ApproveStatus";
+
+
+                command.Parameters.AddWithValue(command, "@BusinessUnitid", filter.BusinessUnitid);
+
+                command.Parameters.AddWithValue(command, "@Emergency", filter.Emergency);
+
+                command.Parameters.AddWithValue(command, "@DateFrom", filter.DateFrom);
+
+                command.Parameters.AddWithValue(command, "@DateTo", filter.DateTo);
+
+                command.Parameters.AddWithValue(command, "@Status", filter.Status);
+
+                command.Parameters.AddWithValue(command, "@ApproveStatus", filter.ApproveStatus);
+
+                var reader = await command.ExecuteReaderAsync();
+
+                while(await reader.ReadAsync())
+                {
+                    data.Add(new BidComparisonAll
+                    {
+                        ApproveStatus = reader.Get<int>("ApproveStatus"),
+                        Buyer = reader.Get<string>("Buyer"),
+                        Comparisondeadline = reader.Get<DateTime>("Comparisondeadline"),
+                        ComparisonNo = reader.Get<string>("ComparisonNo"),
+                        Emergency = reader.Get<int>("Emergency"),
+                        ProcurementType = reader.Get<int>("ProcurementType"),
+                        RFQDeadline = reader.Get<DateTime>("ProcurementType"),
+                        RFQNo = reader.Get<string>("RFQNo"),
+                        RowNum = reader.Get<long>("RowNum"),
+                        SingleSourceReasons = reader.Get<string>("SingleSourceReasons"),
+                        SpecialistComment = reader.Get<string>("SpecialistComment")
+                    });
+                }
+
+            }
+            return data;
+        }
+
         public async Task<List<BidComparisonBidApprovalsLoad>> GetComparisonBidApprovals(BidComparisonBidApprovalsFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;

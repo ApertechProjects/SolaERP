@@ -22,12 +22,12 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _bidService.GetBidDetailsAsync(filter));
 
         [HttpGet("[action]/{bidMainId}")]
-        public async Task<IActionResult> Get(int bidMainId)
+        public async Task<IActionResult> GetCard(int bidMainId)
             => CreateActionResult(await _bidService.GetMainLoadAsync(bidMainId));
 
-        [HttpGet("[action]/{bidMainId}")]
-        public async Task<IActionResult> GetCard(int bidMainId)
-            => CreateActionResult(await _bidService.GetBidCardAsync(bidMainId));
+        //[HttpGet("[action]/{bidMainId}")]
+        //public async Task<IActionResult> GetCardWithLists(int bidMainId)
+        //    => CreateActionResult(await _bidService.GetBidCardAsync(bidMainId));
 
         [HttpPost]
         public async Task<IActionResult> Save(BidMainDto bidMain)
