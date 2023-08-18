@@ -17,6 +17,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<BidMainLoadDto>> GetMainLoadAsync(int bidMainId);
         Task<ApiResponse<BidCardDto>> GetBidCardAsync(int bidMainId);
         Task<ApiResponse<BidIUDResponse>> SaveBidMainAsync(BidMainDto bidMain);
-
+        Task<ApiResponse<bool>> DeleteBidMainAsync(int bidMainId);
     }
 }

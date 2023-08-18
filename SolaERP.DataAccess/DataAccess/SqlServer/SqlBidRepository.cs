@@ -26,7 +26,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         private readonly IUnitOfWork _unitOfWork;
         public SqlBidRepository(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public async Task<BidIUDResponse> AddMainAsync(BidMain entity)
+        public async Task<BidIUDResponse> BidMainIUDAsync(BidMain entity)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = @"DECLARE @NewBidMainId INT,@NewBidNo NVARCHAR(15)
