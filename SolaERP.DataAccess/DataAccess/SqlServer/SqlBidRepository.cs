@@ -205,7 +205,13 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                 BusinessUnitId = reader.Get<int>("BusinessUnitId"),
                 DiscountType = reader.Get<int>("DiscountType"),
                 DiscountValues = reader.Get<decimal>("DiscountValues"),
-                RFQMainId = reader.Get<int>("RFQMainId")
+                RFQMainId = reader.Get<int>("RFQMainId"),
+                ComparisonNo = reader.Get<string>("ComparisonNo"),
+                OrderNo = reader.Get<string>("OrderNo"),
+                DiscualificationReason = reader.Get<string>("DiscualificationReason"),
+                Discualified = reader.Get<bool>("Discualified"),
+                EnteredBy = reader.Get<string>("EnteredBy"),
+                EntryDate = reader.Get<DateTime>("EntryDate")
             };
         }
         private BidIUDResponse GetBidSaveResponse(IDataReader reader)

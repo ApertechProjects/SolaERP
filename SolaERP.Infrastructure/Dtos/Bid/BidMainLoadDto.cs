@@ -12,7 +12,11 @@ namespace SolaERP.Application.Dtos.Bid
         public int BidMainId { get; set; }
         public int BusinessUnitId { get; set; }
         public int RFQMainId { get; set; }
+        public string EnteredBy { get; set; }
+        public DateTime EntryDate { get; set; }
         public string BidNo { get; set; }
+        public string ComparisonNo { get; set; }
+        public string OrderNo { get; set; }
         public string OperatorComment { get; set; }
         public string VendorCode { get; set; }
         public string CurrencyCode { get; set; }
@@ -25,6 +29,8 @@ namespace SolaERP.Application.Dtos.Bid
         public int Status { get; set; }
         public int ApprovalStatus { get; set; }
         public int ApproveStageMainId { get; set; }
+        public bool Discualified { get; set; }
+        public string DiscualificationReason { get; set; }
 
         public RFQMainDto RFQMain { get; set; }
         public List<BidDetailsLoadDto> Details { get; set; }
