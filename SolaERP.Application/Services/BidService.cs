@@ -84,7 +84,7 @@ namespace SolaERP.Persistence.Services
         {
             var entity = _mapper.Map<BidMain>(bidMain);
             var details = _mapper.Map<List<BidDetail>>(bidMain.BidDetails);
-            var saveResponse = await _bidRepository.AddMainAsync(entity);
+            var saveResponse = await _bidRepository.BidMainIUDAsync(entity);
 
             foreach (var detail in details)
                 detail.BidMainId = saveResponse.Id;
@@ -94,6 +94,16 @@ namespace SolaERP.Persistence.Services
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<BidIUDResponse>.Success(saveResponse, 200);
         }
+
+        public async Task<ApiResponse<bool>> DeleteBidMainAsync(int bidMainId)
+        {
+            var saveResponse = await _bidRepository.BidMainIUDAsync(new BidMain { BidMainId = bidMainId });
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return ApiResponse<bool>.Success(true, 200);
+        }
+
 
     }
 }

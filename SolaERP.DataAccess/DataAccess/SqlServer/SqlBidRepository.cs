@@ -26,7 +26,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         private readonly IUnitOfWork _unitOfWork;
         public SqlBidRepository(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public async Task<BidIUDResponse> AddMainAsync(BidMain entity)
+        public async Task<BidIUDResponse> BidMainIUDAsync(BidMain entity)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = @"DECLARE @NewBidMainId INT,@NewBidNo NVARCHAR(15)
@@ -205,7 +205,13 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                 BusinessUnitId = reader.Get<int>("BusinessUnitId"),
                 DiscountType = reader.Get<int>("DiscountType"),
                 DiscountValues = reader.Get<decimal>("DiscountValues"),
-                RFQMainId = reader.Get<int>("RFQMainId")
+                RFQMainId = reader.Get<int>("RFQMainId"),
+                ComparisonNo = reader.Get<string>("ComparisonNo"),
+                OrderNo = reader.Get<string>("OrderNo"),
+                DiscualificationReason = reader.Get<string>("DiscualificationReason"),
+                Discualified = reader.Get<bool>("Discualified"),
+                EnteredBy = reader.Get<string>("EnteredBy"),
+                EntryDate = reader.Get<DateTime>("EntryDate")
             };
         }
         private BidIUDResponse GetBidSaveResponse(IDataReader reader)
