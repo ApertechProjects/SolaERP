@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Dtos.BidComparison
 {
-    public class UserAcceptanceDto
+    public class BidComparisonFilterDto
     {
-        public int BidId { get; set; }
+        public int BidComparisonId { get; set; }
         public int UserId { get; set; }
-        public bool IsAccepted { get; set; }
     }
 }

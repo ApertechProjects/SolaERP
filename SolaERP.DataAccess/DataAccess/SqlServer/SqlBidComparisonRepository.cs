@@ -36,7 +36,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.CommandText = @"EXEC SP_BidComparison_IUD @BidComparisonId,
                                         @RFQMainId,
                                         @ComparisonNo,
-                                        @ApproveSatgeMain,
+                                        @ApproveStageMain,
                                         @ComparisonDate,
                                         @Comparisondeadline,
                                         @SpecialistComment,
@@ -49,7 +49,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             command.Parameters.AddWithValue(command, "@ComparisonNo", entity.ComparisonNo);
 
-            command.Parameters.AddWithValue(command, "@ApproveSatgeMain", entity.ApproveStageMain);
+            command.Parameters.AddWithValue(command, "@ApproveStageMain", entity.ApproveStageMain);
 
             command.Parameters.AddWithValue(command, "@ComparisonDate", entity.ComparisonDate);
 
@@ -96,7 +96,57 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return await command.ExecuteNonQueryAsync() > 0;
         }
 
-        public async Task<List<BidComparisonBidApprovalsLoad>> GetApprovals(BidComparisonBidApprovalsFilter filter)
+        public async Task<List<BidComparisonAll>> GetComparisonAll(BidComparisonAllFilter filter)
+        {
+            var data = new List<BidComparisonAll>();
+
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_BidComparisonAll @BusinessUnitid,
+                                        @Emergency,
+                                        @DateFrom,
+                                        @DateTo,
+                                        @Status,
+                                        @ApproveStatus";
+
+
+                command.Parameters.AddWithValue(command, "@BusinessUnitid", filter.BusinessUnitid);
+
+                command.Parameters.AddWithValue(command, "@Emergency", filter.Emergency);
+
+                command.Parameters.AddWithValue(command, "@DateFrom", filter.DateFrom);
+
+                command.Parameters.AddWithValue(command, "@DateTo", filter.DateTo);
+
+                command.Parameters.AddWithValue(command, "@Status", filter.Status);
+
+                command.Parameters.AddWithValue(command, "@ApproveStatus", filter.ApproveStatus);
+
+                var reader = await command.ExecuteReaderAsync();
+
+                while(await reader.ReadAsync())
+                {
+                    data.Add(new BidComparisonAll
+                    {
+                        ApproveStatus = reader.Get<int>("ApproveStatus"),
+                        Buyer = reader.Get<string>("Buyer"),
+                        Comparisondeadline = reader.Get<DateTime>("Comparisondeadline"),
+                        ComparisonNo = reader.Get<string>("ComparisonNo"),
+                        Emergency = reader.Get<int>("Emergency"),
+                        ProcurementType = reader.Get<int>("ProcurementType"),
+                        RFQDeadline = reader.Get<DateTime>("ProcurementType"),
+                        RFQNo = reader.Get<string>("RFQNo"),
+                        RowNum = reader.Get<long>("RowNum"),
+                        SingleSourceReasons = reader.Get<string>("SingleSourceReasons"),
+                        SpecialistComment = reader.Get<string>("SpecialistComment")
+                    });
+                }
+
+            }
+            return data;
+        }
+
+        public async Task<List<BidComparisonBidApprovalsLoad>> GetComparisonBidApprovals(BidComparisonBidApprovalsFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             var data = new List<BidComparisonBidApprovalsLoad>();
@@ -113,7 +163,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     ApproveStageName = reader.Get<string>("ApproveStageName"),
                     ApproveStatus = reader.Get<int>("ApproveStatus"),
                     BidMainId = reader.Get<int>("BidMainId"),
-                    Sequence = reader.Get<int>("Sequence")
+                    Sequence = reader.Get<int>("Sequence"),
+                    BidDetailId =reader.Get<int>("BidDetailId"),
+                    RFQDetailId = reader.Get<int>("RFQDetailId")
                 });
             }
             return data;
@@ -140,8 +192,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     DiscountValue = reader.Get<decimal>("DiscountValue"),
                     Quantity = reader.Get<decimal>("Quantity"),
                     TotalAmount = reader.Get<decimal>("TotalAmount"),
-                    UnitPrice = reader.Get<decimal>("UnitPrice")
-                });
+                    UnitPrice = reader.Get<decimal>("UnitPrice"),
+                    RFQDetailId = reader.Get<int>("RFQDetailId")
+                });;
             }
             return data;
         }
@@ -190,6 +243,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     BudgetBalance = reader.Get<decimal>("BudgetBalance"),
                     CurrencyCode = reader.Get<string>("CurrencyCode"),
                     DeliveryTerms = reader.Get<string>("DeliveryTerms"),
+                    DeliveryTime = reader.Get<string>("DeliveryTime"),
+                    Discount = reader.Get<decimal>("Discount"),
+                    DiscountedAmount = reader.Get<decimal>("DiscountedAmount"),
+                    DiscualificationReason = reader.Get<string>("DiscualificationReason"),
+                    Discualified = reader.Get<bool>("Discualified"),
+                    ExpectedCost = reader.Get<decimal>("ExpectedCost"),
+                    PaymentTerms = reader.Get<string>("PaymentTerms"),
+                    ReportingAmount = reader.Get<decimal>("ReportingAmount"),
+                    ReportingCurrencyCode = reader.Get<string>("ReportingCurrencyCode"),
+                    Total = reader.Get<decimal>("Total"),
+                    VendorName = reader.Get<string>("VendorName")
                 };
             }
             return null;
@@ -208,7 +272,27 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 return new BidComparisonHeaderLoad
                 {
-
+                    ApproveStageMain = reader.Get<int>("ApproveStageMain"),
+                    ApproveStatus = reader.Get<int>("ApproveStatus"),
+                    BidComparisonId = reader.Get<int>("BidComparisonId"),
+                    BiddingType = reader.Get<int>("BiddingType"),
+                    BusinessUnitId = reader.Get<int>("BusinessUnitId"),
+                    Buyer = reader.Get<string>("Buyer"),
+                    ComparisonDate = reader.Get<DateTime>("ComparisonDate"),
+                    ComparisonDeadline = reader.Get<DateTime>("ComparisonDeadline"),
+                    ComparisonNo = reader.Get<string>("ComparisonNo"),
+                    DesiredDeliveryDate = reader.Get<DateTime>("DesiredDeliveryDate"),
+                    Emergency = reader.Get<int>("Emergency"),
+                    EnteredBy = reader.Get<string>("EnteredBy"),
+                    Entrydate = reader.Get<DateTime>("Entrydate"),
+                    ProcurementType = reader.Get<int>("ProcurementType"),
+                    RequiredOnSiteDate = reader.Get<DateTime>("RequiredOnSiteDate"),
+                    RFQDate = reader.Get<DateTime>("RFQDate"),
+                    RFQDeadline = reader.Get<DateTime>("RFQDeadline"),
+                    RFQMainId = reader.Get<int>("RFQMainId"),
+                    RFQNo = reader.Get<string>("RFQNo"),
+                    SpecialistComment = reader.Get<string>("SpecialistComment"),
+                    Status = reader.Get<int>("Status")
                 };
             }
             return null;

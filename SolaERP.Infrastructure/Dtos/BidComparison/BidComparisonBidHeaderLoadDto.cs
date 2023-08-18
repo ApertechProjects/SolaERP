@@ -26,5 +26,9 @@ namespace SolaERP.Application.Entities.BidComparison
         public decimal ReportingAmount { get; set; }
         public string BaseCurrencyCode { get; set; }
         public string ReportingCurrencyCode { get; set; }
+
+        public List<BidComparisonBidDetailsLoadDto> Details { get; set; }
+        public List<BidComparisonBidApprovalsLoadDto> Approvals { get; set; }
+
     }
 }

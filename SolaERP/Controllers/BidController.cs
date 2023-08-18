@@ -7,8 +7,6 @@ using SolaERP.Controllers;
 
 namespace SolaERP.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class BidController : CustomBaseController
     {
         private readonly IBidService _bidService;
@@ -23,13 +21,13 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Get([FromQuery] BidDetailsFilterDto filter)
             => CreateActionResult(await _bidService.GetBidDetailsAsync(filter));
 
-        [HttpGet("[action]/{bidMainId}")]
-        public async Task<IActionResult> Get(int bidMainId)
+        [HttpGet("{bidMainId}")]
+        public async Task<IActionResult> GetCard(int bidMainId)
             => CreateActionResult(await _bidService.GetMainLoadAsync(bidMainId));
 
-        [HttpGet("[action]/{bidMainId}")]
-        public async Task<IActionResult> GetCard(int bidMainId)
-            => CreateActionResult(await _bidService.GetBidCardAsync(bidMainId));
+        //[HttpGet("[action]/{bidMainId}")]
+        //public async Task<IActionResult> GetCardWithLists(int bidMainId)
+        //    => CreateActionResult(await _bidService.GetBidCardAsync(bidMainId));
 
         [HttpPost]
         public async Task<IActionResult> Save(BidMainDto bidMain)

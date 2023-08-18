@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Application.Models
+namespace SolaERP.Application.Entities.BidComparison
 {
-    public class BidAllFilter
+    public class BidComparisonAllFilter
     {
-        public int BusinessUnitId { get; set; }
-        public string ItemCode { get; set; }
+        public int BusinessUnitid { get; set; }
         public string Emergency { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }

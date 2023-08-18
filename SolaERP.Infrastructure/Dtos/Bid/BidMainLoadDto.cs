@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SolaERP.Application.Dtos.RFQ;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,7 @@ namespace SolaERP.Application.Dtos.Bid
         public int ApprovalStatus { get; set; }
         public int ApproveStageMainId { get; set; }
 
+        public RFQMainDto RFQMain { get; set; }
         public List<BidDetailsLoadDto> Details { get; set; }
     }
 }

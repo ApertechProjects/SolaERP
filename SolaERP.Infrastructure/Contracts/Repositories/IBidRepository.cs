@@ -1,6 +1,5 @@
 ﻿using SolaERP.Application.Entities.Bid;
 using SolaERP.Application.Entities.RFQ;
-using SolaERP.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
