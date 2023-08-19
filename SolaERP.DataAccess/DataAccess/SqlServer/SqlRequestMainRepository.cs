@@ -411,6 +411,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             string itemCode = string.Join(',', requestMain.ItemCode);
             string approveStatus = string.Join(',', requestMain.ApproveStatus);
             string status = string.Join(',', requestMain.Status);
+
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainAll]", new ReplaceParams { ParamName = "APT", Value = requestMain.BusinessUnitCode });
@@ -423,12 +424,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Status", string.IsNullOrEmpty(status) ? "%" : status);
 
                 using var reader = await command.ExecuteReaderAsync();
-
                 List<RequestMainAll> mainRequests = new List<RequestMainAll>();
-                while (reader.Read())
-                {
-                    mainRequests.Add(reader.GetByEntityStructure<RequestMainAll>());
-                }
+
+                while (reader.Read()) mainRequests.Add(reader.GetByEntityStructure<RequestMainAll>());
                 return mainRequests;
             }
         }
