@@ -1,8 +1,8 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Application.Contracts.Repositories;
+﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
@@ -128,8 +128,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 List<RequestCardDetail> resultList = new();
 
                 while (await reader.ReadAsync()) resultList.Add(reader.GetByEntityStructure<RequestCardDetail>());
-                if (resultList.Count == 0)
-                    resultList.Add(new RequestCardDetail { Amount = 0 });
                 return resultList;
             }
         }
