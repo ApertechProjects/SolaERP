@@ -45,7 +45,7 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<List<RequestMainDto>>.Success(mainRequestDto, 200);
 
             return ApiResponse<List<RequestMainDto>>.Success(mainRequestDto, 200);
-            //return ApiResponse<List<RequestMainDto>>.Fail("Bad Request", 404);
+
         }
 
         public async Task<bool> SaveRequestDetailsAsync(RequestDetailDto requestDetailDto)
