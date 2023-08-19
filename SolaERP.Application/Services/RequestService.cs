@@ -315,7 +315,7 @@ namespace SolaERP.Persistence.Services
         private async Task<string[]> GetFollowUserEmailsForRequestAsync(int requestMainId)
         {
             var data = await _requestMainRepository.RequestFollowUserLoadAsync(requestMainId);
-            return data.Select(x => x.Email).ToArray();
+            return data?.Select(x => x.Email)?.ToArray();
         }
 
         public async Task<ApiResponse<int>> GetDefaultApprovalStage(string keyCode, int businessUnitId)
