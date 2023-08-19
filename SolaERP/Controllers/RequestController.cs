@@ -60,8 +60,8 @@ namespace SolaERP.Controllers
         => CreateActionResult(await _requestService.AddOrUpdateAsync(User.Identity.Name, model));
 
         [HttpPost]
-        public async Task<IActionResult> SendToApprove(int requestMainId)
-        => CreateActionResult(await _requestService.SendToApproveAsync(User.Identity.Name, requestMainId));
+        public async Task<IActionResult> SendToApprove([FromQuery] List<int> requestMainIds)
+        => CreateActionResult(await _requestService.SendToApproveAsync(User.Identity.Name, requestMainIds));
 
         [HttpPost]
         public async Task<IActionResult> ChangeMainStatus(RequestChangeStatusModel requestChangeStatusParametersDto)

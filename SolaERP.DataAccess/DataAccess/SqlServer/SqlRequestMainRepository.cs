@@ -101,7 +101,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_RequestSendToApprove @UserId,@Id";
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_RequestSendToApprove @UserId,@Id";
 
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@Id", requestMainId);

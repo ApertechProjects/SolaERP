@@ -107,18 +107,29 @@ namespace SolaERP.Persistence.Services
             return text;
         }
 
-        public async Task<ApiResponse<bool>> SendToApproveAsync(string name, int requestMainId)
+        public async Task<ApiResponse<bool>> SendToApproveAsync(string name, List<int> requestMainIds)
         {
             int userId = await _userRepository.ConvertIdentity(name);
-            User userName = await _userRepository.GetByIdAsync(userId);
-            var result = await _requestMainRepository.SendRequestToApproveAsync(userId, requestMainId);
+            User user = await _userRepository.GetByIdAsync(userId);
+            string messageBody = "Request sent to approve by " + user.FullName;
+
+            var sendToApproveTasks = requestMainIds.Select(async requestId =>
+            {
+                return await _requestMainRepository.SendRequestToApproveAsync(userId, requestId);
+            }).ToList();
+
+            await Task.WhenAll(sendToApproveTasks);
             await _unitOfWork.SaveChangesAsync();
 
-            string messageBody = "Request sended to approve by " + userName.FullName;
+            var followUserEmailTasks = requestMainIds.Select(GetFollowUserEmailsForRequestAsync);
+            var followUserEmails = (await Task.WhenAll(followUserEmailTasks)).SelectMany(emails => emails).ToArray();
 
-            await _mailService.SendSafeMailsAsync(await GetFollowUserEmailsForRequestAsync(requestMainId), "Request Information", messageBody, false);
+            await _mailService.SendSafeMailsAsync(followUserEmails, "Request Information", messageBody, false);
 
-            return ApiResponse<bool>.Success(true, 200);
+            bool allSuccess = sendToApproveTasks.All(task => task.Result);
+            return allSuccess
+                ? ApiResponse<bool>.Success(true, 200)
+                : ApiResponse<bool>.Fail(false, 400);
         }
 
         public async Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId)
