@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Request;
 using SolaERP.Application.Models;
 
 namespace SolaERP.Controllers
@@ -60,8 +61,8 @@ namespace SolaERP.Controllers
         => CreateActionResult(await _requestService.AddOrUpdateAsync(User.Identity.Name, model));
 
         [HttpPost]
-        public async Task<IActionResult> SendToApprove([FromQuery] List<int> requestMainIds)
-        => CreateActionResult(await _requestService.SendToApproveAsync(User.Identity.Name, requestMainIds));
+        public async Task<IActionResult> SendToApprove(RequestSendToApproveDto sendToApprove)
+        => CreateActionResult(await _requestService.SendToApproveAsync(User.Identity.Name, sendToApprove.RequestMainIds));
 
         [HttpPost]
         public async Task<IActionResult> ChangeMainStatus(RequestChangeStatusModel requestChangeStatusParametersDto)
