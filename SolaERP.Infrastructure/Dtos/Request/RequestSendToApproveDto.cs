@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Application.Dtos.Request
+﻿namespace SolaERP.Application.Dtos.Request
 {
-    internal class RequestSendToApproveDto
+    public class RequestSendToApproveDto
     {
+        public List<int> RequestMainIds { get; set; }
     }
 }
