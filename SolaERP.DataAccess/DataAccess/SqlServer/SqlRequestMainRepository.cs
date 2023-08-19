@@ -215,7 +215,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return new()
             {
-                RequestMainId = reader.Get<int>("Id"),
+                RequestMainId = reader.Get<int>("RequestMainId"),
                 Status = reader.Get<int>("Status"),
                 BusinessUnitId = reader.Get<int>("BusinessUnitId"),
                 RequestTypeId = reader.Get<int>("RequestTypeId"),
@@ -237,7 +237,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return new()
             {
                 RowNum = reader.Get<Int64>("RowNum"),
-                RequestMainId = reader.Get<int>("Id"),
+                RequestMainId = reader.Get<int>("RequestMainId"),
                 BusinessUnitCode = reader.Get<string>("BusinessUnitCode"),
                 BusinessUnitName = reader.Get<string>("BusinessUnitName"),
                 ApproveStatus = reader.Get<string>("ApproveStatus"),
@@ -266,7 +266,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return new()
             {
-                RequestMainId = reader.Get<int>("Id"),
+                RequestMainId = reader.Get<int>("RequestMainId"),
                 BusinessUnitId = reader.Get<int>("BusinessUnitId"),
                 BusinessUnitCode = reader.Get<string>("BusinessUnitCode"),
                 RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
@@ -297,7 +297,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return new()
             {
-                RequestMainId = reader.Get<int>("Id"),
+                RequestMainId = reader.Get<int>("RequestMainId"),
                 BusinessUnitId = reader.Get<int>("BusinessUnitId"),
                 BusinessUnitCode = reader.Get<string>("BusinessUnitCode"),
                 BusinessUnitName = reader.Get<string>("BusinessUnitName"),
@@ -324,7 +324,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return new()
             {
-                RequestMainId = reader.Get<int>("Id"),
+                RequestMainId = reader.Get<int>("RequestMainId"),
                 BusinessUnitCode = reader.Get<string>("BusinessUnitCode"),
                 BusinessUnitName = reader.Get<string>("BusinessUnitName"),
                 RowNum = reader.Get<Int64>("RowNum"),
