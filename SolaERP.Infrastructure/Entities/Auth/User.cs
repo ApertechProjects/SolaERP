@@ -49,5 +49,6 @@ namespace SolaERP.Application.Entities.Auth
         public DateTime RefreshTokenEndDate { get; set; }
         public string VerifyToken { get; set; }
         public Enums.Language Language { get; set; }
+        public int? DefaultBusinessUnitId { get; set; }
     }
 }
