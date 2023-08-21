@@ -1,8 +1,8 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Application.Contracts.Repositories;
+﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
@@ -20,7 +20,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = @"Exec SP_RequestDetails_IU  @RequestDetailId,  
-                                                                    @RequestMainId, 
+                                                                    @Id, 
                                                                     @LineNo, 
                                                                     @RequestDate, 
                                                                     @RequestDeadline, 
@@ -58,7 +58,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                     @NewRequestDetailsId";
 
                 command.Parameters.AddWithValue(command, "@RequestDetailId", entity.RequestDetailId);
-                command.Parameters.AddWithValue(command, "@RequestMainId", entity.RequestMainId);
+                command.Parameters.AddWithValue(command, "@Id", entity.RequestMainId);
                 command.Parameters.AddWithValue(command, "@LineNo", entity.LineNo.Trim());
                 command.Parameters.AddWithValue(command, "@RequestDate", entity.RequestDate);
                 command.Parameters.AddWithValue(command, "@RequestDeadline", entity.RequestDeadline);
@@ -121,15 +121,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_RequestDetails_Load @RequestMainId";
-                command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+                command.CommandText = "EXEC SP_RequestDetails_Load @Id";
+                command.Parameters.AddWithValue(command, "@Id", requestMainId);
 
                 using var reader = await command.ExecuteReaderAsync();
                 List<RequestCardDetail> resultList = new();
 
                 while (await reader.ReadAsync()) resultList.Add(reader.GetByEntityStructure<RequestCardDetail>());
-                if (resultList.Count == 0)
-                    resultList.Add(new RequestCardDetail { Amount = 0 });
                 return resultList;
             }
         }
@@ -182,8 +180,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             List<RequestCardAnalysis> result = new List<RequestCardAnalysis>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_RequestDetailsAnalysis_Load @RequestMainId";
-                command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+                command.CommandText = "EXEC SP_RequestDetailsAnalysis_Load @Id";
+                command.Parameters.AddWithValue(command, "@Id", requestMainId);
                 using var reader = await command.ExecuteReaderAsync();
 
                 while (await reader.ReadAsync()) result.Add(reader.GetByEntityStructure<RequestCardAnalysis>());

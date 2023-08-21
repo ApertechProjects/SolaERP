@@ -165,7 +165,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<VendorInfo, VendorInfoDto>().ReverseMap();
             CreateMap<UserMain, UserMainDto>().ForMember(dest => dest.UserPhoto, opt => opt.MapFrom(src => src.UserPhoto)).ReverseMap();
             CreateMap<UserLoad, UserLoadDto>()
-                .ForMember(dest=>dest.ApproveStatusId, expression =>expression.MapFrom(opt=>opt.ApproveStatus) )
+                .ForMember(dest => dest.ApproveStatusId, expression => expression.MapFrom(opt => opt.ApproveStatus))
                 .ReverseMap();
             CreateMap<ERPUser, ERPUserDto>().ReverseMap();
             CreateMap<AnalysisDimension, AnalysisDimensionDto>().ReverseMap();
@@ -409,7 +409,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<RfqAll, RfqAllDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RFQMainId)).ReverseMap();
 
-            CreateMap<RequestForRFQ, RequestRfqDto>().ReverseMap();
+            CreateMap<RequestForRFQ, RequestRfqDto>().ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RequestMainId)).ReverseMap();
             CreateMap<GridLayout, GridLayoutDto>().ReverseMap();
             CreateMap<Application.Entities.AnalysisCode.AnalysisCode, AnalysisCodeDto>().ReverseMap();
 

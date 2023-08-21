@@ -12,9 +12,9 @@ namespace SolaERP.Application.Entities.Request
         public string AccountName { get; set; }
         public int RequestTypeId { get; set; }
         public string RequestNo { get; set; }
-        public DateTime EntryDate { get; set; }
-        public DateTime RequestDate { get; set; }
-        public DateTime RequestDeadline { get; set; }
+        public DateTime EntryDate { get; set; } = DateTime.Now.Date;
+        public DateTime RequestDate { get; set; } = DateTime.Now.Date;
+        public DateTime RequestDeadline { get; set; } = DateTime.Now.Date;
         public int UserId { get; set; }
         public int Requester { get; set; }
         public int Status { get; set; }
