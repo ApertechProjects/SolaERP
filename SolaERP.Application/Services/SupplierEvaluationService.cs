@@ -115,7 +115,8 @@ namespace SolaERP.Persistence.Services
                 {
                     tasks.Add(_repository.AddVendorBusinessCategoryAsync(new VendorBusinessCategoryData
                     {
-                        VendorId = vendorId, BusinessCategoryId = command.CompanyInformation.BusinessCategories[i].Id
+                        VendorId = vendorId,
+                        BusinessCategoryId = command.CompanyInformation.BusinessCategories[i].Id
                     }));
                 }
 
@@ -130,7 +131,8 @@ namespace SolaERP.Persistence.Services
                 {
                     tasks.Add(_repository.AddProductServiceAsync(new ProductServiceData
                     {
-                        VendorId = vendorId, ProductServiceId = command.CompanyInformation.BusinessCategories[i].Id
+                        VendorId = vendorId,
+                        ProductServiceId = command.CompanyInformation.BusinessCategories[i].Id
                     }));
                 }
 
@@ -757,11 +759,7 @@ namespace SolaERP.Persistence.Services
 
             await Task.WhenAll(emails);
 
-
-            //if (result.Data && submitResult)
             return ApiResponse<bool>.Success(true, 200);
-
-            //return ApiResponse<bool>.Fail(false, 400);
         }
 
         private static VM_RegistrationIsPendingAdminApprove GetVM(SupplierRegisterCommand command, User user,
@@ -992,6 +990,16 @@ namespace SolaERP.Persistence.Services
             });
 
             return preualification;
+        }
+
+        public async Task<ApiResponse<bool>> UpdateVendor(string name, string taxId)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            var result = await _repository.UpdateVendor(userId, taxId);
+            await _unitOfWork.SaveChangesAsync();
+            if (result)
+                return ApiResponse<bool>.Success(result);
+            return ApiResponse<bool>.Fail(result, 400);
         }
     }
 }

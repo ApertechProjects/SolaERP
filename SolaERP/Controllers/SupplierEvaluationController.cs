@@ -60,5 +60,9 @@ namespace SolaERP.API.Controllers
             var token = _tokenHandler.GetAccessToken();
             return CreateActionResult(await _service.SubmitAsync(User.Identity.Name, token, command));
         }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> UpdateVendor(string taxId)
+            => CreateActionResult(await _service.UpdateVendor(User.Identity.Name, taxId));
     }
 }

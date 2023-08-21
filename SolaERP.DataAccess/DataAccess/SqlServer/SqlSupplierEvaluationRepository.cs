@@ -947,5 +947,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return resultList;
             }
         }
+
+        public async Task<bool> UpdateVendor(int userId, string taxId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_UpdateVendorByUser @TaxId,
+                                                                            @UserId";
+
+
+
+                command.Parameters.AddWithValue(command, "@TaxId", taxId);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
     }
 }

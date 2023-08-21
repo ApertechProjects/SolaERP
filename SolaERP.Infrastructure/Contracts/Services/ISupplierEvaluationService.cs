@@ -16,6 +16,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<PrequalificationWithCategoryDto>>> GetPrequalificationAsync(string userIdentity, List<int> categoryIds, string acceptlang, int? vendorId = null);
         Task<ApiResponse<bool>> AddAsync(string userIdentity, string Token, SupplierRegisterCommand command);
         Task<ApiResponse<bool>> SubmitAsync(string userIdentity, string Token, SupplierRegisterCommand command);
-
+        Task<ApiResponse<bool>> UpdateVendor(string name, string taxId);
     }
 }
