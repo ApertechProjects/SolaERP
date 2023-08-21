@@ -30,5 +30,7 @@ namespace SolaERP.Application.Dtos.User
         public string TaxId { get; set; }
         public int Sequence { get; set; }
         public bool InActive { get; set; }
+        public int DefaultBusinessUnitId { get; set; }
+
     }
 }
