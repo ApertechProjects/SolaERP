@@ -1,4 +1,6 @@
-﻿using SolaERP.Application.Dtos.SupplierEvaluation;
+﻿using Microsoft.AspNetCore.Http;
+using SolaERP.Application.Dtos.Attachment;
+using SolaERP.Application.Dtos.SupplierEvaluation;
 
 namespace SolaERP.Application.Dtos.Vendors
 {
@@ -60,7 +62,8 @@ namespace SolaERP.Application.Dtos.Vendors
         //public int ApproveStageMainId { get; set; }
         public DateTime CompanyRegistrationDate { get; set; }
         public string TaxOffice { get; set; }
-        public Attachment.AttachmentWithFileDto Logo { get; set; }
+        public AttachmentSaveDto LogoFile { get; set; }
+        public bool CheckLogoIsDeleted { get; set; }
         public List<VendorBankDetailDto> BankAccounts { get; set; }
     }
 }

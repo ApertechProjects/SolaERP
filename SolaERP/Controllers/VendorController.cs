@@ -67,7 +67,7 @@ namespace SolaERP.API.Controllers
                    => CreateActionResult(await _service.ChangeStatusAsync(model, User.Identity.Name));
 
         [HttpPost]
-        public async Task<IActionResult> Save(VendorCardDto vendor)
+        public async Task<IActionResult> Save([FromForm] VendorCardDto vendor)
             => CreateActionResult(await _service.SaveAsync(User.Identity.Name, vendor));
 
         [HttpPost]

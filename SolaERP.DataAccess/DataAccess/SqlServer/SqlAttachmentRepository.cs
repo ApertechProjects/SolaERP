@@ -1,11 +1,14 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.Attachment;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Net.Mail;
 using System.Text;
+using Attachment = SolaERP.Application.Entities.Attachment.Attachment;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -106,6 +109,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-     
+        public async Task<bool> DeleteAttachmentAsync(int sourceId, SourceType sourceType)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_DeleteAttachment @SourceId,@SourceType";
+                command.Parameters.AddWithValue(command, "@SourceId", sourceId);
+                command.Parameters.AddWithValue(command, "@SourceType", sourceType);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
     }
 }
