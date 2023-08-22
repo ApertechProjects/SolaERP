@@ -22,5 +22,10 @@ namespace SolaERP.Application.Entities.Bid
         public decimal ExpectedCost { get; set; }
         public string Status { get; set; }
         public string ApproveStatus { get; set; }
+        public int Emergency { get; set; }
+        public string ComparisonNo { get; set; }
+        public string EnteredBy { get; set; }
+        public string OrderNo { get; set; }
+        public DateTime RFQDeadline { get; set; }
     }
 }

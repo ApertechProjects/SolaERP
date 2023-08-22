@@ -183,7 +183,12 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                 PaymentTerms = reader.Get<string>("PaymentTerms"),
                 ExpectedCost = reader.Get<decimal>("ExpectedCost"),
                 Status = reader.Get<string>("Status"),
-                ApproveStatus = reader.Get<string>("ApproveStatus")
+                ApproveStatus = reader.Get<string>("ApproveStatus"),
+                ComparisonNo = reader.Get<string>("ComparisonNo"),
+                Emergency = reader.Get<int>("Emergency"),
+                EnteredBy = reader.Get<string>("EnteredBy"),
+                OrderNo = reader.Get<string>("OrderNo"),
+                RFQDeadline = reader.Get<DateTime>("RFQDeadline")
             };
         }
         private BidMainLoad GetBidMainLoadFromReader(DbDataReader reader)
