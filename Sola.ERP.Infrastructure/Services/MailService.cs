@@ -19,14 +19,9 @@ namespace SolaERP.Infrastructure.Services
 
         public MailService(IConfiguration configuration, IFluentEmail email, ILogger<MailService> logger)
         {
-            //var rootPath = Path.GetFullPath(@"wwwroot/sources/templates");
             _configuration = configuration;
             _email = email;
             _logger = logger;
-            //_razorEngine = new RazorLightEngineBuilder()
-            //.UseFileSystemProject(rootPath)
-            //.UseMemoryCachingProvider()
-            //.Build();
         }
 
         public async Task<bool> SendEmailMessage(string tamplatePath, string to, string subject)

@@ -183,7 +183,7 @@ namespace SolaERP.Persistence.Services
                     {
                         var result = await _fileUploadService.AddFile(
                             new List<IFormFile> { command.CompanyInformation.CompanyLogo[0].File },
-                            companyLogoExistData, Modules.EvaluationForm);
+                             Modules.EvaluationForm, companyLogoExistData);
                     }
                     catch (Exception ex)
                     {

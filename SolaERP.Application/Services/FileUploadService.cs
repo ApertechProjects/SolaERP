@@ -37,8 +37,8 @@ namespace SolaERP.Persistence.Services
             }
         }
 
-        public async Task<ApiResponse<List<string>>> AddFile(List<IFormFile> files, List<string> deletedFiles,
-            Modules module)
+        public async Task<ApiResponse<List<string>>> AddFile(List<IFormFile> files,
+            Modules module, List<string> deletedFiles = null)
         {
             string token = _headerReaderService.GetToken();
             if (files != null)
