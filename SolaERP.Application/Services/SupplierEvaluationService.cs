@@ -158,9 +158,9 @@ namespace SolaERP.Persistence.Services
 
                 #region Company Information Logo
 
-                var companyLogo = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.CompanyLogo);
+                var companyLogoList = _mapper.Map<List<AttachmentSaveModel>>(command?.CompanyInformation?.CompanyLogo);
 
-                companyLogo?.ForEach(companyLogo =>
+                companyLogoList?.ForEach(companyLogo =>
                 {
                     companyLogo.SourceId = vendorId;
                     companyLogo.SourceType = SourceType.VEN_LOGO.ToString();
@@ -170,25 +170,20 @@ namespace SolaERP.Persistence.Services
                     await _attachmentRepository.GetAttachmentsAsync(vendor.VendorId,
                         Convert.ToInt16(SourceType.VEN_LOGO));
 
-                for (int i = 0; i < companyLogo.Count; i++) //+
+                for (int i = 0; i < companyLogoList.Count; i++)
                 {
-                    if (companyLogo[i].Type == 2 && companyLogo[i].AttachmentId > 0)
-                        await _attachmentRepository.DeleteAttachmentAsync(companyLogo[i].AttachmentId);
-                    else if (companyLogo[i].Type != 2)
-                        await _attachmentRepository.SaveAttachmentAsync(companyLogo[i]);
-                }
+                    if (companyLogoList[i].Type == 2 && companyLogoList[i].AttachmentId > 0)
+                        await _attachmentRepository.DeleteAttachmentAsync(companyLogoList[i].AttachmentId);
 
-                if (command.CompanyInformation.CompanyLogo != null && command.CompanyInformation.CompanyLogo.Count > 0)
-                    try
+                    else if (companyLogoList[i].Type != 2)
                     {
-                        var result = await _fileUploadService.AddFile(
-                            new List<IFormFile> { command.CompanyInformation.CompanyLogo[0].File },
-                             Modules.EvaluationForm, companyLogoExistData);
+                        companyLogoList[i].FileLink = (await _fileUploadService.AddFile(
+                            new List<IFormFile> { command.CompanyInformation.CompanyLogo[i].File },
+                            Modules.EvaluationForm, new List<string> { companyLogoList[i].FileLink })).Data[0];
+
+                        await _attachmentRepository.SaveAttachmentAsync(companyLogoList[i]);
                     }
-                    catch (Exception ex)
-                    {
-                        return ApiResponse<bool>.Fail(ex.Message, 400);
-                    }
+                }
 
                 #endregion
 
@@ -207,8 +202,17 @@ namespace SolaERP.Persistence.Services
                 {
                     if (attachments[i].Type == 2 && attachments[i].AttachmentId > 0)
                         await _attachmentRepository.DeleteAttachmentAsync(attachments[i].AttachmentId);
+
                     else if (attachments[i].Type != 2)
+                    {
+                        attachments[i].FileLink = (await _fileUploadService.AddFile(
+                            new List<IFormFile> { command.CompanyInformation.Attachments[i].File },
+                            Modules.EvaluationForm, new List<string>
+                            {
+                                attachments[i].FileLink
+                            })).Data[0];
                         await _attachmentRepository.SaveAttachmentAsync(attachments[i]);
+                    }
                 }
 
                 #endregion
