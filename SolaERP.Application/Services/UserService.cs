@@ -328,7 +328,7 @@ namespace SolaERP.Persistence.Services
                     await _fileUploadService.DeleteFile(Modules.Users, FileLink);
 
                     var resultPhoto = await _fileUploadService.AddFile(new List<IFormFile> { formFile },
-                        new List<string> { FileLink }, Modules.Users);
+                         Modules.Users, new List<string> { FileLink });
 
                     if (resultPhoto.Data != null && resultPhoto.Data.Count > 0)
                         FileLink = resultPhoto?.Data[0];

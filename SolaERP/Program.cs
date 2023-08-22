@@ -14,6 +14,7 @@ using SolaERP.SignalR.Hubs;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,7 +50,7 @@ builder.Services.Configure<ApiBehaviorOptions>(config => { config.SuppressModelS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
-        corsBuilder => corsBuilder.WithOrigins(builder.Configuration["Cors:Origins"])
+        corsBuilder => corsBuilder.WithOrigins(builder.Configuration["Cors:Origins"], builder.Configuration["Cors:OriginsProd"])
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowAnyOrigin()
@@ -83,6 +84,11 @@ builder.Services.Configure<ConnectionFactory>(option =>
 {
     option.Uri = new Uri(builder.Configuration["FileOptions:URI"]);
     option.DispatchConsumersAsync = true;
+});
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.ValueCountLimit = int.MaxValue;
 });
 
 builder.Host.UseSerilog(logger);

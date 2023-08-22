@@ -13,7 +13,7 @@
         public string ApproveStatus { get; set; }
         public string AccountCode { get; set; }
         public string AccountName { get; set; }
-        public DateTime EntryDate { get; set; }
+        public DateTime EntryDate { get; set; } = DateTime.Now.Date;
         public DateTime RequestDate { get; set; }
         public DateTime RequestDeadline { get; set; }
         public int UserId { get; set; }

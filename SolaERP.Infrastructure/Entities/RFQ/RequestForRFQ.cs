@@ -18,7 +18,7 @@ namespace SolaERP.Application.Entities.RFQ
         public string ItemName2 { get; set; }
         public string RUOM { get; set; }
         public string DefaultUOM { get; set; }
-        public int CONV_ID { get; set; }
+        public decimal CONV_ID { get; set; }
         public string Buyer { get; set; }
     }
 }

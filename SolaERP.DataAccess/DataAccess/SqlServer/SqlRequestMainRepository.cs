@@ -23,8 +23,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = "EXEC SP_RequestMain_IUD @RequestMainId,NULL,NULL,NULL,NULL,NULL,@UserId, @NewRequestmainId = @NewRequestmainId OUTPUT, @NewRequestNo = @NewRequestNo OUTPUT select @NewRequestmainId as NewRequestmainId, @NewRequestNo as NewRequestNo";
-                command.Parameters.AddWithValue(command, "@RequestMainId", Id);
+                command.CommandText = "EXEC SP_RequestMain_IUD @Id,NULL,NULL,NULL,NULL,NULL,@UserId, @NewRequestmainId = @NewRequestmainId OUTPUT, @NewRequestNo = @NewRequestNo OUTPUT select @NewRequestmainId as NewRequestmainId, @NewRequestNo as NewRequestNo";
+                command.Parameters.AddWithValue(command, "@Id", Id);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.Add("@NewRequestMainId", SqlDbType.Int);
                 command.Parameters["@NewRequestMainId"].Direction = ParameterDirection.Output;
@@ -65,9 +65,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_RequestMainApprove @UserId,@RequestMainId,@ApprovalStatus,@Comment";
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_RequestMainApprove @UserId,@Id,@ApprovalStatus,@Comment";
 
-                command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+                command.Parameters.AddWithValue(command, "@Id", requestMainId);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@ApprovalStatus", approveStatus);
                 command.Parameters.AddWithValue(command, "@Comment", comment);
@@ -101,10 +101,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_RequestSendToApprove @UserId,@RequestMainId";
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_RequestSendToApprove @UserId,@Id";
 
                 command.Parameters.AddWithValue(command, "@UserId", userId);
-                command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+                command.Parameters.AddWithValue(command, "@Id", requestMainId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
@@ -114,7 +114,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "Select * from Procurement.RequestMain where RequestMainId = @Id";
+                command.CommandText = "Select * from Procurement.RequestMain where Id = @Id";
 
                 command.Parameters.AddWithValue(command, "@Id", requestMainId);
 
@@ -181,8 +181,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_RequestHeader_Load @RequestMainId,@UserId";
-                command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+                command.CommandText = "EXEC SP_RequestHeader_Load @Id,@UserId";
+                command.Parameters.AddWithValue(command, "@Id", requestMainId);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 RequestCardMain result = null;
@@ -199,8 +199,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_RequestApprovalInfo @RequestMainId,@UserId";
-                command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+                command.CommandText = "EXEC SP_RequestApprovalInfo @Id,@UserId";
+                command.Parameters.AddWithValue(command, "@Id", requestMainId);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 using var reader = await command.ExecuteReaderAsync();
@@ -350,7 +350,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = @"EXEC SP_RequestMain_IUD @RequestMainId,@BusinessUnitId,
+                command.CommandText = @"EXEC SP_RequestMain_IUD @Id,@BusinessUnitId,
                                                                 @RequestTypeId,
                                                                 @EntryDate,@RequestDate,
                                                                 @RequestDeadline,@UserID,
@@ -367,7 +367,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                 @NewRequestNo as NewRequestNo
 ";
 
-                command.Parameters.AddWithValue(command, "@RequestMainId", model.RequestMainId);
+                command.Parameters.AddWithValue(command, "@Id", model.RequestMainId);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@RequestTypeId", model.RequestTypeId);
                 command.Parameters.AddWithValue(command, "@EntryDate", model.EntryDate);
@@ -411,6 +411,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             string itemCode = string.Join(',', requestMain.ItemCode);
             string approveStatus = string.Join(',', requestMain.ApproveStatus);
             string status = string.Join(',', requestMain.Status);
+
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainAll]", new ReplaceParams { ParamName = "APT", Value = requestMain.BusinessUnitCode });
@@ -423,12 +424,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Status", string.IsNullOrEmpty(status) ? "%" : status);
 
                 using var reader = await command.ExecuteReaderAsync();
-
                 List<RequestMainAll> mainRequests = new List<RequestMainAll>();
-                while (reader.Read())
-                {
-                    mainRequests.Add(reader.GetByEntityStructure<RequestMainAll>());
-                }
+
+                while (reader.Read()) mainRequests.Add(reader.GetByEntityStructure<RequestMainAll>());
                 return mainRequests;
             }
         }
@@ -449,9 +447,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_RequestFollow_Load @RequestMainId";
+                command.CommandText = "EXEC SP_RequestFollow_Load @Id";
 
-                command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+                command.Parameters.AddWithValue(command, "@Id", requestMainId);
 
                 using var reader = await command.ExecuteReaderAsync();
 
@@ -469,12 +467,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText = @"SET NOCOUNT OFF EXEC SP_RequestFollow_IUD @RequestFollowId,@UserId,
-                                                                @RequestMainId"
+                                                                @Id"
                 ;
 
                 command.Parameters.AddWithValue(command, "@RequestFollowId", 0);
                 command.Parameters.AddWithValue(command, "@UserId", saveModel.UserId);
-                command.Parameters.AddWithValue(command, "@RequestMainId", saveModel.RequestMainId);
+                command.Parameters.AddWithValue(command, "@Id", saveModel.RequestMainId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
@@ -497,10 +495,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = @"select dbo.SF_RequestFollowCheckExistUser (@UserId,@RequestMainId) AS Result ";
+                command.CommandText = @"select dbo.SF_RequestFollowCheckExistUser (@UserId,@Id) AS Result ";
 
                 command.Parameters.AddWithValue(command, "@UserId", saveModel.UserId);
-                command.Parameters.AddWithValue(command, "@RequestMainId", saveModel.RequestMainId);
+                command.Parameters.AddWithValue(command, "@Id", saveModel.RequestMainId);
 
                 using var reader = await command.ExecuteReaderAsync();
                 bool res = false;
