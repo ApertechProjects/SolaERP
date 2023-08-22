@@ -14,6 +14,7 @@ using SolaERP.SignalR.Hubs;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -83,6 +84,11 @@ builder.Services.Configure<ConnectionFactory>(option =>
 {
     option.Uri = new Uri(builder.Configuration["FileOptions:URI"]);
     option.DispatchConsumersAsync = true;
+});
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.ValueCountLimit = int.MaxValue;
 });
 
 builder.Host.UseSerilog(logger);

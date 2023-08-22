@@ -21,5 +21,8 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<BidComparisonRFQDetailsLoad>> GetComparisonRFQDetails(BidComparisonRFQDetailsFilter filter);
         Task<BidComparisonBidHeaderLoad> GetComparisonBidHeader(BidComparisonBidHeaderFilter filter);
         Task<BidComparisonHeaderLoad> GetComparisonHeader(BidComparisonHeaderFilter filter);
+
+        Task<List<BidComparisonDraftLoad>> GetComparisonDraft(BidComparisonDraftFilter filter);
+
     }
 }
