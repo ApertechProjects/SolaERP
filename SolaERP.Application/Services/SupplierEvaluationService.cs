@@ -37,6 +37,7 @@ namespace SolaERP.Persistence.Services
         private readonly IMailService _mailService;
         private readonly IUserService _userService;
         private readonly IFileUploadService _fileUploadService;
+        private readonly IGeneralRepository _generalRepository;
 
         public SupplierEvaluationService(ISupplierEvaluationRepository repository,
             IMapper mapper,
@@ -48,7 +49,8 @@ namespace SolaERP.Persistence.Services
             IEmailNotificationService emailNotificationService,
             IMailService mailService,
             IUserService userService,
-            IFileUploadService fileUploadService)
+            IFileUploadService fileUploadService,
+            IGeneralRepository generalRepository)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
@@ -62,6 +64,7 @@ namespace SolaERP.Persistence.Services
             _mailService = mailService;
             _userService = userService;
             _fileUploadService = fileUploadService;
+            _generalRepository = generalRepository;
         }
 
         public async Task<ApiResponse<bool>> AddAsync(string useridentity, string token,
@@ -227,41 +230,50 @@ namespace SolaERP.Persistence.Services
 
                 #region Bank Accounts
 
-                // for (var i = 0; i < command.BankAccounts.Count; i++)
-                // {
-                //     var x = command.BankAccounts[i];
-                //     if (x.Type == 2 && x.Id > 0)
-                //         await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
-                //     else
-                //     {
-                //         var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id,
-                //                 _mapper.Map<VendorBankDetail>(x));
-                //         
-                //         x.VendorId = vendorId;
-                //
-                //         if (x.AccountVerificationLetter != null)
-                //         {
-                //             tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
-                //             {
-                //                 var attachmentInDb = _attachmentRepository
-                //                     .GetAttachmentsWithFileDataAsync(attachment.AttachmentId).Result[0];
-                //
-                //                 if (attachment.Type == 2 && attachment.AttachmentId > 0)
-                //                 {
-                //                     _fileUploadService.DeleteFile(Modules.EvaluationForm,
-                //                         attachmentInDb.FileLink).Wait();
-                //                     return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
-                //                 }
-                //                 
-                //                 var entity = _mapper.Map<AttachmentSaveModel>(attachment);
-                //                 entity.SourceId = detaildId;
-                //                 entity.SourceType = SourceType.VEN_BNK.ToString();
-                //                 _fileUploadService.AddFile(null, Modules.EvaluationForm, null).Wait();
-                //                 return _attachmentRepository.SaveAttachmentAsync(entity);
-                //             }));
-                //         }
-                //     }
-                // }
+                for (var i = 0; i < command.BankAccounts.Count; i++)
+                {
+                    var x = command.BankAccounts[i];
+                    if (x.Type == 2 && x.Id > 0)
+                    {
+                        await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
+                    }
+
+                    else
+                    {
+                        var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id,
+                            _mapper.Map<VendorBankDetail>(x));
+
+                        x.VendorId = vendorId;
+
+                        if (x.AccountVerificationLetter != null)
+                        {
+                            tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
+                            {
+                                if (attachment.Type == 2 && attachment.AttachmentId > 0)
+                                {
+                                    var attachmentInDb = _attachmentRepository
+                                        .GetAttachmentsWithFileDataAsync(attachment.AttachmentId).Result[0];
+                                    _fileUploadService.DeleteFile(Modules.EvaluationForm, attachmentInDb.FileLink)
+                                        .Wait();
+                                    return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
+                                }
+
+                                if (attachment.Type != 2 && attachment.AttachmentId <= 0)
+                                {
+                                    var entity = _mapper.Map<AttachmentSaveModel>(attachment);
+                                    entity.SourceId = detaildId;
+                                    entity.SourceType = SourceType.VEN_BNK.ToString();
+                                    entity.FileLink = _fileUploadService.AddFile(
+                                        new List<IFormFile> { attachment.File },
+                                        Modules.EvaluationForm, new List<string>()).Result.Data[0];
+                                    return _attachmentRepository.SaveAttachmentAsync(entity);
+                                }
+
+                                return Task.FromResult(true);
+                            }));
+                        }
+                    }
+                }
 
                 #endregion
 
@@ -297,21 +309,30 @@ namespace SolaERP.Persistence.Services
                             }) ?? Enumerable.Empty<Task<bool>>());
                         }
 
-                        if (item?.Attachments is not null)
+                        if (item.Attachments != null)
                         {
-                            itemTasks.AddRange(item?.Attachments?.Select(attachment =>
+                            itemTasks.AddRange(item.Attachments?.Select(attachment =>
                             {
                                 if (attachment.Type == 2 && attachment.AttachmentId > 0)
+                                {
+                                    _fileUploadService.DeleteFile(Modules.EvaluationForm, attachment.FileLink);
                                     return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
-                                else
+                                }
+
+                                if (attachment.Type != 2 && attachment.AttachmentId <= 0)
                                 {
                                     var attachedFile = _mapper.Map<AttachmentSaveModel>(attachment);
                                     attachedFile.SourceId = vendorId;
                                     attachedFile.SourceType = SourceType.VEN_DUE.ToString();
                                     attachedFile.AttachmentTypeId = item.DesignId;
+                                    attachedFile.FileLink = _fileUploadService
+                                        .AddFile(new List<IFormFile> { attachment.File }, Modules.EvaluationForm,
+                                            new List<string>()).Result.Data[0];
                                     return _attachmentRepository.SaveAttachmentAsync(attachedFile);
                                 }
-                            }));
+
+                                return Task.FromResult(true);
+                            })!);
                         }
 
                         return itemTasks;
@@ -418,7 +439,7 @@ namespace SolaERP.Persistence.Services
         {
             CompanyInformation companyInformation = new()
             {
-                BusinessCategories = await _repository.GetBusinessCategoriesAsync(),
+                BusinessCategories = await _generalRepository.BusinessCategories(),
                 PaymentTerms = await _repository.GetPaymentTermsAsync(),
                 Countries = await _repository.GetCountriesAsync(),
                 PrequalificationTypes = await _repository.GetPrequalificationCategoriesAsync(),
@@ -448,16 +469,21 @@ namespace SolaERP.Persistence.Services
             var user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
             int vendorId = revisedVendorId ?? user.VendorId;
 
-            var currencyTask = _repository.GetCurrenciesAsync();
-            var bankDetailsTask = _repository.GetVendorBankDetailsAsync(vendorId);
+            var currencyTask = await _repository.GetCurrenciesAsync();
+            var bankDetailsTask = await _repository.GetVendorBankDetailsAsync(vendorId);
 
-            await Task.WhenAll(currencyTask, bankDetailsTask);
-            var bankAccount = _mapper.Map<List<VendorBankDetailDto>>(bankDetailsTask.Result);
+            var bankAccount = _mapper.Map<List<VendorBankDetailDto>>(bankDetailsTask);
 
             foreach (var item in bankAccount)
             {
-                var attachment = _mapper.Map<List<AttachmentDto>>(
-                    await _attachmentRepository.GetAttachmentsAsync(item.Id, null, SourceType.VEN_BNK.ToString()));
+                var attachments =
+                    await _attachmentRepository.GetAttachmentsAsync(item.Id, null, SourceType.VEN_BNK.ToString());
+                var attachment = attachments.Select(x =>
+                {
+                    var dto = _mapper.Map<AttachmentDto>(x);
+                    dto.FileLink = _fileUploadService.GetDownloadFileLink(dto.FileLink, Modules.EvaluationForm);
+                    return dto;
+                }).ToList();
                 attachment = attachment.Count > 0 ? attachment : Enumerable.Empty<AttachmentDto>().ToList();
                 item.AccountVerificationLetter = attachment;
             }
@@ -465,7 +491,7 @@ namespace SolaERP.Persistence.Services
 
             VM_GET_VendorBankDetails bankDetails = new()
             {
-                Currencies = currencyTask.Result,
+                Currencies = currencyTask,
                 BankDetails = bankAccount,
             };
 
@@ -515,7 +541,7 @@ namespace SolaERP.Persistence.Services
 
             var vendorPrequalificationTask = await _repository.GetVendorPrequalificationAsync(vendor);
             var prequalificationTypesTask = await _repository.GetPrequalificationCategoriesAsync();
-            var businessCategoriesTask = await _repository.GetBusinessCategoriesAsync();
+            var businessCategoriesTask = await _generalRepository.BusinessCategories();
             var vendorRepresentedProduct = await _repository.GetRepresentedProductAsync(vendor);
             var vendorBusinessCategoriesTask = await _repository.GetVendorBuCategoriesAsync(vendor);
             var companyInfoTask = await _repository.GetCompanyInfoAsync(vendor);
@@ -800,11 +826,24 @@ namespace SolaERP.Persistence.Services
                 {
                     var correspondingValue =
                         dueDiligenceValues.FirstOrDefault(v => v.DueDiligenceDesignId == d.DesignId);
-                    var attachments = d.HasAttachment > 0
-                        ? _mapper.Map<List<AttachmentDto>>(
+                    List<AttachmentDto> attachments;
+                    
+                    if (d.HasAttachment > 0)
+                    {
+                        attachments = _mapper.Map<List<AttachmentDto>>(
                             await _attachmentRepository.GetAttachmentsAsync(vendorId, null,
-                                SourceType.VEN_DUE.ToString(), d.DesignId))
-                        : Enumerable.Empty<AttachmentDto>().ToList();
+                                SourceType.VEN_DUE.ToString(), d.DesignId));
+                        
+                        attachments = attachments.Select(x =>
+                        {
+                            x.FileLink = _fileUploadService.GetDownloadFileLink(x.FileLink, Modules.EvaluationForm);
+                            return x;
+                        }).ToList();
+                    }
+                    else
+                    {
+                        attachments = Enumerable.Empty<AttachmentDto>().ToList();
+                    }
 
                     var calculationResult =
                         await CalculateScoring(correspondingValue, d, vendorId, attachments?.Count > 0);

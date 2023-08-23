@@ -4,7 +4,7 @@ using SolaERP.Application.Contracts.Services;
 
 namespace SolaERP.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     [Authorize]
     public class UOMController : CustomBaseController
@@ -21,7 +21,7 @@ namespace SolaERP.Controllers
         /// <remarks>The GetAllUOMList endpoint returns a list of all the available unit of measure codes in the system. This endpoint can be used to retrieve the list of available UOM codes and their descriptions for use in other parts of the system.</remarks>
         ///<param name="businessUnitCode">The unique identifier of the business unit for which to retrieve currency codes.</param>
         [HttpGet("{businessUnitCode}")]
-        public async Task<IActionResult> GetUOMListBusinessUnitCode(string businessUnitCode)
+        public async Task<IActionResult> UOM(string businessUnitCode)
             => CreateActionResult(await _uomService.GetUOMListBusinessUnitCode(businessUnitCode));
     }
 }

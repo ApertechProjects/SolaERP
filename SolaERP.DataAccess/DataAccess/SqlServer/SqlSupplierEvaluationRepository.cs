@@ -127,23 +127,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
-
-        public async Task<List<BusinessCategory>> GetBusinessCategoriesAsync()
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "SELECT * FROM VW_BusinessCategory";
-
-                List<BusinessCategory> resultList = new();
-                using var reader = await command.ExecuteReaderAsync();
-
-                while (reader.Read())
-                    resultList.Add(reader.GetByEntityStructure<BusinessCategory>());
-
-                return resultList;
-            }
-        }
-
         public async Task<List<Country>> GetCountriesAsync()
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)

@@ -14,6 +14,7 @@ using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Application.ViewModels;
 using SolaERP.DataAccess.Extensions;
+using System.Security.AccessControl;
 
 namespace SolaERP.Persistence.Services
 {
@@ -26,13 +27,15 @@ namespace SolaERP.Persistence.Services
         private readonly ISupplierEvaluationRepository _supplierRepository;
         private readonly IAttachmentRepository _attachment;
         private readonly IFileUploadService _fileUploadService;
+        private readonly IGeneralRepository _generalRepository;
         public VendorService(IVendorRepository vendorRepository,
                              IUserRepository userRepository,
                              IMapper mapper,
                              ISupplierEvaluationRepository supplierRepository,
                              IUnitOfWork unitOfWork,
                              IAttachmentRepository attachment,
-                             IFileUploadService fileUploadService)
+                             IFileUploadService fileUploadService,
+                             IGeneralRepository generalRepository)
         {
             _repository = vendorRepository;
             _userRepository = userRepository;
@@ -41,6 +44,7 @@ namespace SolaERP.Persistence.Services
             _unitOfWork = unitOfWork;
             _attachment = attachment;
             _fileUploadService = fileUploadService;
+            _generalRepository = generalRepository;
         }
 
         public async Task<ApiResponse<bool>> ApproveAsync(string userIdentity, VendorApproveModel model)
@@ -125,7 +129,7 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<VM_GetVendorFilters>> GetFiltersAsync()
         {
             var prequalificationTypesTask = _supplierRepository.GetPrequalificationCategoriesAsync();
-            var businessCategoriesTask = _supplierRepository.GetBusinessCategoriesAsync();
+            var businessCategoriesTask = _generalRepository.BusinessCategories();
             var productServicesTask = _supplierRepository.GetProductServicesAsync();
 
             await Task.WhenAll(prequalificationTypesTask, businessCategoriesTask, productServicesTask);
@@ -161,6 +165,9 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<VM_VendorCard>> GetAsync(int vendorId)
         {
             var header = _mapper.Map<VendorLoadDto>(await _repository.GetHeader(vendorId));
+            var logo = await _attachment.GetAttachmentsAsync(header.VendorId, SourceType.VEN_LOGO);
+            if (logo != null && logo.Count > 0)
+                header.Logo = logo[0];
             header.Logo = _fileUploadService.GetFileLink(header.Logo, Modules.Vendors);
 
             var paymentTerms = _supplierRepository.GetPaymentTermsAsync();
@@ -168,13 +175,13 @@ namespace SolaERP.Persistence.Services
             var currency = _supplierRepository.GetCurrenciesAsync();
             var bankDetails = _supplierRepository.GetVendorBankDetailsAsync(vendorId);
             var vendorBuCategories = _supplierRepository.GetVendorBuCategoriesAsync(vendorId);
-            var buCategories = _supplierRepository.GetBusinessCategoriesAsync();
+            var buCategories = _generalRepository.BusinessCategories();
             var users = _supplierRepository.GetVendorUsers(vendorId);
             var score = _supplierRepository.Scores(vendorId);
             var shipment = _supplierRepository.Shipments();
             var withHoldingTax = _supplierRepository.WithHoldingTaxDatas();
             var tax = _supplierRepository.TaxDatas();
-            var itemCategories = _supplierRepository.GetBusinessCategoriesAsync();
+            var itemCategories = _generalRepository.BusinessCategories();
             var countries = _supplierRepository.GetCountriesAsync();
 
             await Task.WhenAll

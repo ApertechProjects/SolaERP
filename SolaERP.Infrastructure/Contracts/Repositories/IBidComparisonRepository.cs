@@ -23,6 +23,9 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<BidComparisonHeaderLoad> GetComparisonHeader(BidComparisonHeaderFilter filter);
 
         Task<List<BidComparisonDraftLoad>> GetComparisonDraft(BidComparisonDraftFilter filter);
-
+        Task<List<BidComparisonHeldLoad>> GetComparisonHeld(BidComparisonHeldFilter filter);
+        Task<List<BidComparisonMyChartsLoad>> GetComparisonMyCharts(BidComparisonMyChartsFilter filter);
+        Task<List<BidComparisonNotReleasedLoad>> GetComparisonNotReleased(BidComparisonNotReleasedFilter filter);
+        Task<List<BidComparisonRejectedLoad>> GetComparisonRejected(BidComparisonRejectedFilter filter);
     }
 }

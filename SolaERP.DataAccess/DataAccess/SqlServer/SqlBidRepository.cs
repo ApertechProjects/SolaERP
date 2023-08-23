@@ -188,9 +188,15 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                 Emergency = reader.Get<int>("Emergency"),
                 EnteredBy = reader.Get<string>("EnteredBy"),
                 OrderNo = reader.Get<string>("OrderNo"),
-                RFQDeadline = reader.Get<DateTime>("RFQDeadline")
+                RFQDeadline = reader.Get<DateTime>("RFQDeadline"),
+                Discount = reader.Get<decimal>("Discount"),
+                DiscountedPrice = reader.Get<decimal>("DiscountedPrice"),
+                DiscountedPriceBase = reader.Get<decimal>("DiscountedPriceBase"),
+                TotalPrice = reader.Get<decimal>("TotalPrice"),
+                TotalPriceBase = reader.Get<decimal>("TotalPriceBase")
             };
         }
+
         private BidMainLoad GetBidMainLoadFromReader(DbDataReader reader)
         {
             return new BidMainLoad

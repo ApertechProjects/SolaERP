@@ -20,6 +20,7 @@ namespace SolaERP.Application.Dtos.Request
         public decimal AvailableInMainStock { get; set; }
         public decimal Quantity { get; set; }
         public string UOM { get; set; }
+        public string RUOM { get; set; }
         public string Description { get; set; }
         public string Location { get; set; }
         public string Buyer { get; set; }
@@ -33,6 +34,7 @@ namespace SolaERP.Application.Dtos.Request
         public string ConnectedOrderReference { get; set; }
         public decimal ConnectedOrderLineNo { get; set; }
         public string AccountCode { get; set; }
+        public string AccountName { get; set; }
         public bool AlternativeItem { get; set; }
         public decimal ManualUP { get; set; }
         public int CatId { get; set; }
@@ -52,5 +54,12 @@ namespace SolaERP.Application.Dtos.Request
         public int AnalysisCode10Id { get; set; }
         public string StatusName { get; set; }
         public string ApproveStatusName { get; set; }
+        public int Priority { get; set; }
+        public int Condition { get; set; }
+        public decimal AllocatedQuantity { get; set; }
+        public decimal LogisticsTotal { get; set; }
+        public int POLine { get; set; }
+        public int ItemCategory { get; set; }
+        public string RejectReason { get; set; }
     }
 }

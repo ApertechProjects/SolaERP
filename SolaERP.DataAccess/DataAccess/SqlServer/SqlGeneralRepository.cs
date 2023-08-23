@@ -1,6 +1,7 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.General;
 using SolaERP.Application.Entities.Status;
+using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
@@ -19,6 +20,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public SqlGeneralRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+        }
+
+        public async Task<List<BusinessCategory>> BusinessCategories()
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SELECT * FROM VW_BusinessCategory";
+
+                List<BusinessCategory> resultList = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<BusinessCategory>());
+
+                return resultList;
+            }
         }
 
         public async Task<List<Status>> GetStatus()
