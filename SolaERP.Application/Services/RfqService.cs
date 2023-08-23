@@ -19,18 +19,21 @@ namespace SolaERP.Persistence.Services
         private readonly IMapper _mapper;
         private readonly IBusinessUnitRepository _bURepository;
         private readonly ISupplierEvaluationRepository _evaluationRepository;
+        private readonly IGeneralRepository _generalRepository;
 
         public RfqService(IUnitOfWork unitOfWork,
                           IRfqRepository repository,
                           IMapper mapper,
                           ISupplierEvaluationRepository evaluationRepository,
-                          IBusinessUnitRepository bURepository)
+                          IBusinessUnitRepository bURepository,
+                          IGeneralRepository generalRepository)
         {
             _unitOfWork = unitOfWork;
             _repository = repository;
             _mapper = mapper;
             _evaluationRepository = evaluationRepository;
             _bURepository = bURepository;
+            _generalRepository = generalRepository;
         }
 
         public async Task<ApiResponse<RfqSaveCommandResponse>> SaveRfqAsync(RfqSaveCommandRequest request, string useridentity)
@@ -61,7 +64,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<BusinessCategory>>> GetBuCategoriesAsync()
         {
-            var data = await _evaluationRepository.GetBusinessCategoriesAsync();
+            var data = await _generalRepository.BusinessCategories();
             return ApiResponse<List<BusinessCategory>>.Success(data, 200);
         }
 
@@ -103,7 +106,7 @@ namespace SolaERP.Persistence.Services
             if (mainRFQ is null)
                 return ApiResponse<RFQMainDto>.Fail(ResultMessageConstants.ResourceNotFound, 404);
 
-            var businessCategoriesTask = _evaluationRepository.GetBusinessCategoriesAsync();
+            var businessCategoriesTask = _generalRepository.BusinessCategories();
             var mainDetailsTask = _repository.GetRFQDetailsAsync(rfqMainId);
             var rfqRequestDetailsTask = _repository.GetRFQLineDeatilsAsync(rfqMainId);
             var rfqSingleReasonsTask = _repository.GetRFQSingeSourceReasons(rfqMainId);

@@ -1,11 +1,14 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.Attachment;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Net.Mail;
 using System.Text;
+using Attachment = SolaERP.Application.Entities.Attachment.Attachment;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -22,7 +25,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
 
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_Attachments_IUD @AttachmentId,@FileName,@FileData,@SourceId,@SourceType,@Reference,@ExtensionType,@AttachmentTypeId,@AttachmentSubTypeId,@UploadDateTime,@Size";
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_Attachments_IUD @AttachmentId,@FileName,@FileData,@SourceId,@SourceType,@Reference,@ExtensionType,@AttachmentTypeId,@AttachmentSubTypeId,@UploadDateTime,@Size,@FileLink";
                 command.Parameters.AddWithValue(command, "@AttachmentId", attachment.AttachmentId);
                 command.Parameters.AddWithValue(command, "@FileName", attachment.Name);
                 command.Parameters.AddWithValue(command, "@FileData", attachment.FileLink);
@@ -34,6 +37,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@AttachmentSubTypeId", attachment.AttachmentSubTypeId);
                 command.Parameters.AddWithValue(command, "@UploadDateTime", DateTime.UtcNow.Date);
                 command.Parameters.AddWithValue(command, "@Size", attachment.Size);
+                command.Parameters.AddWithValue(command, "@FileLink", attachment.FileLink);
 
                 bool result = await command.ExecuteNonQueryAsync() > 0;
 
@@ -106,6 +110,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-     
+        public async Task<bool> DeleteAttachmentAsync(int sourceId, SourceType sourceType)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_DeleteAttachment @SourceId,@SourceType";
+                command.Parameters.AddWithValue(command, "@SourceId", sourceId);
+                command.Parameters.AddWithValue(command, "@SourceType", sourceType);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
     }
 }

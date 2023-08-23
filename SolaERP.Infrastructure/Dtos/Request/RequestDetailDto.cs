@@ -23,7 +23,7 @@ namespace SolaERP.Application.Dtos.Request
         public decimal RemainingBudget { get; set; }
         public decimal Amount { get; set; }
         public string ConnectedOrderReference { get; set; }
-        public decimal ConnectedOrderLineNo { get; set; }
+        public decimal? ConnectedOrderLineNo { get; set; }
         public string AccountCode { get; set; }
         public int Condition { get; set; }
         public int Priority { get; set; }

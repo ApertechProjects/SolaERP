@@ -22,7 +22,7 @@ namespace SolaERP.Controllers
 
    
         [HttpGet("{businessUnitCode}")]
-        public async Task<IActionResult> GetAccountCodesByBusinessUnitCode(string businessUnitCode)
+        public async Task<IActionResult> GetAccountCodes(string businessUnitCode)
           => CreateActionResult(await _accountCodeService.GetAccountCodesByBusinessUnit(businessUnitCode));
 
     }

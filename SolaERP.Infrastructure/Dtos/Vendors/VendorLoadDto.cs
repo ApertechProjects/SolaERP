@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
-using SolaERP.Application.Dtos.Attachment;
-using SolaERP.Application.Dtos.SupplierEvaluation;
+﻿using SolaERP.Application.Dtos.SupplierEvaluation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SolaERP.Application.Dtos.Vendors
 {
-    public class VendorCardDto
+    public class VendorLoadDto
     {
         public int VendorId { get; set; }
 
@@ -41,8 +44,6 @@ namespace SolaERP.Application.Dtos.Vendors
         public string Phone_Mobile { get; set; }
         public string ContactPerson { get; set; }
 
-
-        //public int VendorType { get; set; }
         public int ShipVia { get; set; }
         public int DeliveryTerms { get; set; }
         public string PaymentTerms { get; set; }
@@ -59,11 +60,9 @@ namespace SolaERP.Application.Dtos.Vendors
         public int BusinessUnitId { get; set; }
         public string BusinessUnitCode { get; set; }
         public string OtherProducts { get; set; }
-        //public int ApproveStageMainId { get; set; }
         public DateTime CompanyRegistrationDate { get; set; }
         public string TaxOffice { get; set; }
-        public AttachmentDto LogoFile { get; set; }
-        public bool CheckLogoIsDeleted { get; set; }
+        public string Logo { get; set; }
         public List<VendorBankDetailDto> BankAccounts { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Attributes;
+﻿using Microsoft.AspNetCore.Http;
+using SolaERP.Application.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,6 +66,7 @@ namespace SolaERP.Application.Entities.Vendors
         public int ApproveStageMainId { get; set; }
         public DateTime CompanyRegistrationDate { get; set; }
         public string TaxOffice { get; set; }
+        public IFormFile LogoFile { get; set; }
 
     }
 }

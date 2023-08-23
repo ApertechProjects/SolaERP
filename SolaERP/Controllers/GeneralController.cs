@@ -25,6 +25,8 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> GetStatusAsync()
             => CreateActionResult(await _generalService.GetStatus());
 
-
+        [HttpGet]
+        public async Task<IActionResult> BusinessCategories()
+            => CreateActionResult(await _generalService.BusinessCategories());
     }
 }

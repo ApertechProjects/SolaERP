@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
-using SolaERP.Application.Dtos.Attachment;
-using SolaERP.Application.Dtos.SupplierEvaluation;
+﻿using SolaERP.Application.Attributes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace SolaERP.Application.Dtos.Vendors
+namespace SolaERP.Application.Entities.Vendors
 {
-    public class VendorCardDto
+    public class VendorLoad:BaseEntity
     {
         public int VendorId { get; set; }
 
@@ -24,46 +27,44 @@ namespace SolaERP.Application.Dtos.Vendors
         public string VendorCode { get; set; }
         public string TaxId { get; set; }
         public string Country { get; set; }
-        public string City { get; set; }
+        public string Location { get; set; } //City
 
 
         public string VendorName { get; set; }
         public string Description { get; set; }
-        public string Address1 { get; set; }
+        public string CompanyAddress { get; set; } //Address
 
+        [DbColumn("Postal/ZIP")]
         public string Postal_ZIP { get; set; }
-
-        public string EmailAddress { get; set; }
+        public string Email { get; set; } //EmailAddress
 
         public string DefaultCurrency { get; set; }
         public string Website { get; set; }
         public string Address2 { get; set; }
-        public string Phone_Mobile { get; set; }
+        public string PhoneNo { get; set; } //Phone_Mobile
         public string ContactPerson { get; set; }
 
 
-        //public int VendorType { get; set; }
-        public int ShipVia { get; set; }
-        public int DeliveryTerms { get; set; }
+        public int VendorType { get; set; }
+        public int ShipmentId { get; set; }
+        public int DeliveryTermId { get; set; }
         public string PaymentTerms { get; set; }
 
 
         public int WithHoldingTaxId { get; set; }
-        public int Tax { get; set; }
+        public int TaxesId { get; set; }
 
 
         public string RepresentedProducts { get; set; }
         public string RepresentedCompanies { get; set; }
         public int CreditDays { get; set; }
-        public bool _60DaysPayment { get; set; }
-        public int BusinessUnitId { get; set; }
-        public string BusinessUnitCode { get; set; }
+        [DbColumn("60DaysPayment")]
+        public int _60DaysPayment { get; set; }
+
         public string OtherProducts { get; set; }
-        //public int ApproveStageMainId { get; set; }
+        public int ApproveStageMainId { get; set; }
         public DateTime CompanyRegistrationDate { get; set; }
         public string TaxOffice { get; set; }
-        public AttachmentDto LogoFile { get; set; }
-        public bool CheckLogoIsDeleted { get; set; }
-        public List<VendorBankDetailDto> BankAccounts { get; set; }
+        public string Logo { get; set; }
     }
 }

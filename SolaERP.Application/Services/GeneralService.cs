@@ -4,6 +4,7 @@ using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.General;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.Status;
+using SolaERP.Application.Entities.SupplierEvaluation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,13 @@ namespace SolaERP.Persistence.Services
         {
             _generalRepository = generalRepository;
             _mapper = mapper;
+        }
+
+        public async Task<ApiResponse<List<BusinessCategory>>> BusinessCategories()
+        {
+            var status = await _generalRepository.BusinessCategories();
+            var dto = _mapper.Map<List<BusinessCategory>>(status);
+            return ApiResponse<List<BusinessCategory>>.Success(dto, 200);
         }
 
         public async Task<ApiResponse<List<StatusDto>>> GetStatus()

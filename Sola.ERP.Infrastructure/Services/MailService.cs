@@ -22,6 +22,7 @@ namespace SolaERP.Infrastructure.Services
             _configuration = configuration;
             _email = email;
             _logger = logger;
+         
         }
 
         public async Task<bool> SendEmailMessage(string tamplatePath, string to, string subject)
