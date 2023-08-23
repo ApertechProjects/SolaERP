@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Bid;
@@ -10,7 +11,7 @@ using SolaERP.Persistence.Services;
 namespace SolaERP.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [Authorize]
     public class BidComparisonController : CustomBaseController
     {
         private readonly IBidComparisonService _bidComparisonService;
@@ -36,5 +37,24 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> SendComparisonToApprove(BidComparisonSendToApproveDto bidComparisonSendToApproveDto)
            => CreateActionResult(await _bidComparisonService.SendComparisonToApproveAsync(bidComparisonSendToApproveDto));
 
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetComparisonDraft(BidComparisonDraftFilterDto filterDto)
+           => CreateActionResult(await _bidComparisonService.GetComparisonDraft(filterDto));
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetComparisonHeld(BidComparisonHeldFilterDto filterDto)
+           => CreateActionResult(await _bidComparisonService.GetComparisonHeld(filterDto));
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetComparisonMyCharts(BidComparisonMyChartsFilterDto filterDto)
+           => CreateActionResult(await _bidComparisonService.GetComparisonMyCharts(filterDto, User.Identity.Name));
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetComparisonNotReleased(BidComparisonNotReleasedFilterDto filterDto)
+           => CreateActionResult(await _bidComparisonService.GetComparisonNotReleased(filterDto));
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetComparisonRejected(BidComparisonRejectedFilterDto filterDto)
+           => CreateActionResult(await _bidComparisonService.GetComparisonRejected(filterDto));
     }
 }
