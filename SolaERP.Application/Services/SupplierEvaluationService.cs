@@ -230,41 +230,50 @@ namespace SolaERP.Persistence.Services
 
                 #region Bank Accounts
 
-                // for (var i = 0; i < command.BankAccounts.Count; i++)
-                // {
-                //     var x = command.BankAccounts[i];
-                //     if (x.Type == 2 && x.Id > 0)
-                //         await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
-                //     else
-                //     {
-                //         var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id,
-                //                 _mapper.Map<VendorBankDetail>(x));
-                //         
-                //         x.VendorId = vendorId;
-                //
-                //         if (x.AccountVerificationLetter != null)
-                //         {
-                //             tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
-                //             {
-                //                 var attachmentInDb = _attachmentRepository
-                //                     .GetAttachmentsWithFileDataAsync(attachment.AttachmentId).Result[0];
-                //
-                //                 if (attachment.Type == 2 && attachment.AttachmentId > 0)
-                //                 {
-                //                     _fileUploadService.DeleteFile(Modules.EvaluationForm,
-                //                         attachmentInDb.FileLink).Wait();
-                //                     return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
-                //                 }
-                //                 
-                //                 var entity = _mapper.Map<AttachmentSaveModel>(attachment);
-                //                 entity.SourceId = detaildId;
-                //                 entity.SourceType = SourceType.VEN_BNK.ToString();
-                //                 _fileUploadService.AddFile(null, Modules.EvaluationForm, null).Wait();
-                //                 return _attachmentRepository.SaveAttachmentAsync(entity);
-                //             }));
-                //         }
-                //     }
-                // }
+                for (var i = 0; i < command.BankAccounts.Count; i++)
+                {
+                    var x = command.BankAccounts[i];
+                    if (x.Type == 2 && x.Id > 0)
+                    {
+                        await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
+                    }
+
+                    else
+                    {
+                        var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id,
+                            _mapper.Map<VendorBankDetail>(x));
+
+                        x.VendorId = vendorId;
+
+                        if (x.AccountVerificationLetter != null)
+                        {
+                            tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
+                            {
+                                var attachmentInDb = _attachmentRepository
+                                    .GetAttachmentsWithFileDataAsync(attachment.AttachmentId).Result[0];
+
+                                if (attachment.Type == 2 && attachment.AttachmentId > 0)
+                                {
+                                    _fileUploadService.DeleteFile(Modules.EvaluationForm,
+                                        attachmentInDb.FileLink).Wait();
+                                    return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
+                                }
+
+                                if (attachment.Type != 2 && attachment.AttachmentId <= 0)
+                                {
+                                    var entity = _mapper.Map<AttachmentSaveModel>(attachment);
+                                    entity.SourceId = detaildId;
+                                    entity.SourceType = SourceType.VEN_BNK.ToString();
+                                    _fileUploadService.AddFile(new List<IFormFile> { attachment.File },
+                                        Modules.EvaluationForm, new List<string>()).Wait();
+                                    return _attachmentRepository.SaveAttachmentAsync(entity);
+                                }
+
+                                return Task.FromResult(true);
+                            }));
+                        }
+                    }
+                }
 
                 #endregion
 
@@ -451,16 +460,21 @@ namespace SolaERP.Persistence.Services
             var user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
             int vendorId = revisedVendorId ?? user.VendorId;
 
-            var currencyTask = _repository.GetCurrenciesAsync();
-            var bankDetailsTask = _repository.GetVendorBankDetailsAsync(vendorId);
+            var currencyTask = await _repository.GetCurrenciesAsync();
+            var bankDetailsTask = await _repository.GetVendorBankDetailsAsync(vendorId);
 
-            await Task.WhenAll(currencyTask, bankDetailsTask);
-            var bankAccount = _mapper.Map<List<VendorBankDetailDto>>(bankDetailsTask.Result);
+            var bankAccount = _mapper.Map<List<VendorBankDetailDto>>(bankDetailsTask);
 
             foreach (var item in bankAccount)
             {
-                var attachment = _mapper.Map<List<AttachmentDto>>(
-                    await _attachmentRepository.GetAttachmentsAsync(item.Id, null, SourceType.VEN_BNK.ToString()));
+                var attachments =
+                    await _attachmentRepository.GetAttachmentsAsync(item.Id, null, SourceType.VEN_BNK.ToString());
+                var attachment = attachments.Select(x =>
+                {
+                    var dto = _mapper.Map<AttachmentDto>(x);
+                    dto.FileLink = _fileUploadService.GetDownloadFileLink(dto.FileLink, Modules.EvaluationForm);
+                    return dto;
+                }).ToList();
                 attachment = attachment.Count > 0 ? attachment : Enumerable.Empty<AttachmentDto>().ToList();
                 item.AccountVerificationLetter = attachment;
             }
@@ -468,7 +482,7 @@ namespace SolaERP.Persistence.Services
 
             VM_GET_VendorBankDetails bankDetails = new()
             {
-                Currencies = currencyTask.Result,
+                Currencies = currencyTask,
                 BankDetails = bankAccount,
             };
 
