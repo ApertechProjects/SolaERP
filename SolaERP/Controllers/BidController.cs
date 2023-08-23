@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Bid;
@@ -8,6 +9,7 @@ using SolaERP.Controllers;
 namespace SolaERP.API.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class BidController : CustomBaseController
     {
         private readonly IBidService _bidService;
@@ -32,11 +34,11 @@ namespace SolaERP.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Save(BidMainDto bidMain)
-           => CreateActionResult(await _bidService.SaveBidMainAsync(bidMain));
+           => CreateActionResult(await _bidService.SaveBidMainAsync(bidMain, User.Identity.Name));
 
         [HttpDelete]
         public async Task<IActionResult> Delete(int bidMainId)
-           => CreateActionResult(await _bidService.DeleteBidMainAsync(bidMainId));
+           => CreateActionResult(await _bidService.DeleteBidMainAsync(bidMainId, User.Identity.Name));
 
     }
 }

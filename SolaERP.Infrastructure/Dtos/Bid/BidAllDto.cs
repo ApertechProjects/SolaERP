@@ -27,5 +27,10 @@ namespace SolaERP.Application.Dtos.Bid
         public string EnteredBy { get; set; }
         public string OrderNo { get; set; }
         public DateTime RFQDeadline { get; set; }
+        public decimal TotalPrice { get; set; }
+        public object TotalPriceBase { get; set; }
+        public decimal Discount { get; set; }
+        public decimal DiscountedPrice { get; set; }
+        public object DiscountedPriceBase { get; set; }
     }
 }
