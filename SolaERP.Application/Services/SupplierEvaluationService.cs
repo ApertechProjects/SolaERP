@@ -253,7 +253,8 @@ namespace SolaERP.Persistence.Services
                                 {
                                     var attachmentInDb = _attachmentRepository
                                         .GetAttachmentsWithFileDataAsync(attachment.AttachmentId).Result[0];
-                                    _fileUploadService.DeleteFile(Modules.EvaluationForm, attachmentInDb.FileLink).Wait();
+                                    _fileUploadService.DeleteFile(Modules.EvaluationForm, attachmentInDb.FileLink)
+                                        .Wait();
                                     return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
                                 }
 
@@ -262,8 +263,9 @@ namespace SolaERP.Persistence.Services
                                     var entity = _mapper.Map<AttachmentSaveModel>(attachment);
                                     entity.SourceId = detaildId;
                                     entity.SourceType = SourceType.VEN_BNK.ToString();
-                                    _fileUploadService.AddFile(new List<IFormFile> { attachment.File },
-                                        Modules.EvaluationForm, new List<string>()).Wait();
+                                    entity.FileLink = _fileUploadService.AddFile(
+                                        new List<IFormFile> { attachment.File },
+                                        Modules.EvaluationForm, new List<string>()).Result.Data[0];
                                     return _attachmentRepository.SaveAttachmentAsync(entity);
                                 }
 
