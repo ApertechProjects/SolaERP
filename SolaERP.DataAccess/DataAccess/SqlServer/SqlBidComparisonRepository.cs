@@ -373,10 +373,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                     @DateFrom,
                                     @DateTo";
 
-            command.Parameters.AddWithValue(command, "@BusinessUnitid",filter.BusinessUnitid);
-            command.Parameters.AddWithValue(command, "@Emergency",filter.Emergency);
+            command.Parameters.AddWithValue(command, "@BusinessUnitid", filter.BusinessUnitid);
+            command.Parameters.AddWithValue(command, "@Emergency", filter.Emergency);
             command.Parameters.AddWithValue(command, "@DateFrom", filter.DateFrom);
-            command.Parameters.AddWithValue(command, "@DateTo",filter.DateTo);
+            command.Parameters.AddWithValue(command, "@DateTo", filter.DateTo);
 
             var data = new List<BidComparisonNotReleasedLoad>();
 
@@ -384,6 +384,30 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             while (await reader.ReadAsync())
             {
                 data.Add((GetBaseComparisonFromReader(reader) as BidComparisonNotReleasedLoad));
+            }
+
+            return data;
+        }
+
+        public async Task<List<BidComparisonRejectedLoad>> GetComparisonRejected(BidComparisonRejectedFilter filter)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"EXEC SP_BidComparisonRejectedLoad @BusinessUnitid,
+                                    @Emergency,
+                                    @DateFrom,
+                                    @DateTo";
+
+            command.Parameters.AddWithValue(command, "@BusinessUnitid", filter.BusinessUnitid);
+            command.Parameters.AddWithValue(command, "@Emergency", filter.Emergency);
+            command.Parameters.AddWithValue(command, "@DateFrom", filter.DateFrom);
+            command.Parameters.AddWithValue(command, "@DateTo", filter.DateTo);
+
+            var data = new List<BidComparisonRejectedLoad>();
+
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                data.Add((GetBaseComparisonFromReader(reader) as BidComparisonRejectedLoad));
             }
 
             return data;

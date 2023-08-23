@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Entities.BidComparison
 {
-    public class BidComparisonMyChartsLoadDto : BaseBidComparisonLoadDto
+    public class BidComparisonRejectedLoadDto : BaseBidComparisonLoadDto
     {
     }
 }
