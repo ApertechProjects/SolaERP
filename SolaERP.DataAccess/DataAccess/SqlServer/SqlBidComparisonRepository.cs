@@ -346,18 +346,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                     @ApproveStatus";
 
 
-    command.Parameters.AddWithValue(command, "@BusinessUnitid",filter.BusinessUnitid);
-
+            command.Parameters.AddWithValue(command, "@BusinessUnitid",filter.BusinessUnitid);
             command.Parameters.AddWithValue(command, "@Emergency", filter.Emergency);
-
             command.Parameters.AddWithValue(command, "@DateFrom", filter.DateFrom);
-
             command.Parameters.AddWithValue(command, "@DateTo", filter.DateTo);
-
             command.Parameters.AddWithValue(command, "@UserId", filter.UserId);
-
             command.Parameters.AddWithValue(command, "@Status", filter.Status);
-
             command.Parameters.AddWithValue(command, "@ApproveStatus", filter.ApproveStatus);
 
             var data = new List<BidComparisonMyChartsLoad>();
@@ -370,6 +364,31 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return data;
         }
+
+        public async Task<List<BidComparisonNotReleasedLoad>> GetComparisonNotReleased(BidComparisonNotReleasedFilter filter)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"EXEC SP_BidComparisonNotReleasedLoad @BusinessUnitid,
+                                    @Emergency,
+                                    @DateFrom,
+                                    @DateTo";
+
+            command.Parameters.AddWithValue(command, "@BusinessUnitid",filter.BusinessUnitid);
+            command.Parameters.AddWithValue(command, "@Emergency",filter.Emergency);
+            command.Parameters.AddWithValue(command, "@DateFrom", filter.DateFrom);
+            command.Parameters.AddWithValue(command, "@DateTo",filter.DateTo);
+
+            var data = new List<BidComparisonNotReleasedLoad>();
+
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                data.Add((GetBaseComparisonFromReader(reader) as BidComparisonNotReleasedLoad));
+            }
+
+            return data;
+        }
+
 
 
         private BaseBidComparisonLoad GetBaseComparisonFromReader(DbDataReader reader)

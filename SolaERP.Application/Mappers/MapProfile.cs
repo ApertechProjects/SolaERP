@@ -462,6 +462,9 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<BidComparisonMyChartsFilter, BidComparisonMyChartsFilterDto>().ReverseMap();
             CreateMap<BidComparisonMyChartsLoad, BidComparisonMyChartsLoadDto>().ReverseMap();
 
+            CreateMap<BidComparisonNotReleasedFilter, BidComparisonNotReleasedFilterDto>().ReverseMap();
+            CreateMap<BidComparisonNotReleasedLoad, BidComparisonNotReleasedLoadDto>().ReverseMap();
+
         }
     }
 }
