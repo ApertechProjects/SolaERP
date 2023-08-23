@@ -312,21 +312,30 @@ namespace SolaERP.Persistence.Services
                             }) ?? Enumerable.Empty<Task<bool>>());
                         }
 
-                        if (item?.Attachments is not null)
+                        if (item.Attachments != null)
                         {
-                            itemTasks.AddRange(item?.Attachments?.Select(attachment =>
+                            itemTasks.AddRange(item.Attachments?.Select(attachment =>
                             {
                                 if (attachment.Type == 2 && attachment.AttachmentId > 0)
+                                {
+                                    _fileUploadService.DeleteFile(Modules.EvaluationForm, attachment.FileLink);
                                     return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
-                                else
+                                }
+
+                                if (attachment.Type != 2 && attachment.AttachmentId <= 0)
                                 {
                                     var attachedFile = _mapper.Map<AttachmentSaveModel>(attachment);
                                     attachedFile.SourceId = vendorId;
                                     attachedFile.SourceType = SourceType.VEN_DUE.ToString();
                                     attachedFile.AttachmentTypeId = item.DesignId;
+                                    attachedFile.FileLink = _fileUploadService
+                                        .AddFile(new List<IFormFile> { attachment.File }, Modules.EvaluationForm,
+                                            new List<string>()).Result.Data[0];
                                     return _attachmentRepository.SaveAttachmentAsync(attachedFile);
                                 }
-                            }));
+
+                                return Task.FromResult(true);
+                            })!);
                         }
 
                         return itemTasks;
