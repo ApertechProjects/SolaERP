@@ -254,17 +254,17 @@ namespace SolaERP.Persistence.Services
             string vendorLogo = await _repository.GetVendorLogo(vendorId);
             vendor.Logo = await _fileUploadService.GetLinkForEntity(vendorDto.LogoFile.File, vendorDto.CheckLogoIsDeleted, vendorLogo);
 
-            if (vendor.Logo is not null)
-            {
-                await _attachment.DeleteAttachmentAsync(vendorId, SourceType.VEN_LOGO);
-                var vendorLogoData = _mapper.Map<AttachmentSaveModel>(vendorDto.LogoFile);
 
+            await _attachment.DeleteAttachmentAsync(vendorId, SourceType.VEN_LOGO);
+            var vendorLogoData = _mapper.Map<AttachmentSaveModel>(vendorDto.LogoFile);
+
+            if (!vendorDto.CheckLogoIsDeleted)
+            {
                 vendorLogoData.SourceId = vendorId;
                 vendorLogoData.SourceType = SourceType.VEN_LOGO.ToString();
-
+                vendorLogoData.FileLink = vendor.Logo;
                 await _attachment.SaveAttachmentAsync(vendorLogoData);
             }
-
             if (vendorDto.BankAccounts is not null)
                 foreach (var x in vendorDto?.BankAccounts)
                 {
