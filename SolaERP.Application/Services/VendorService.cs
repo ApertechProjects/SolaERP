@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Dtos.Venndors;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.SupplierEvaluation;
+using SolaERP.Application.Entities.User;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
@@ -23,13 +25,14 @@ namespace SolaERP.Persistence.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly ISupplierEvaluationRepository _supplierRepository;
         private readonly IAttachmentRepository _attachment;
-
+        private readonly IFileUploadService _fileUploadService;
         public VendorService(IVendorRepository vendorRepository,
                              IUserRepository userRepository,
                              IMapper mapper,
                              ISupplierEvaluationRepository supplierRepository,
                              IUnitOfWork unitOfWork,
-                             IAttachmentRepository attachment)
+                             IAttachmentRepository attachment,
+                             IFileUploadService fileUploadService)
         {
             _repository = vendorRepository;
             _userRepository = userRepository;
@@ -37,6 +40,7 @@ namespace SolaERP.Persistence.Services
             _supplierRepository = supplierRepository;
             _unitOfWork = unitOfWork;
             _attachment = attachment;
+            _fileUploadService = fileUploadService;
         }
 
         public async Task<ApiResponse<bool>> ApproveAsync(string userIdentity, VendorApproveModel model)
@@ -156,7 +160,8 @@ namespace SolaERP.Persistence.Services
         }
         public async Task<ApiResponse<VM_VendorCard>> GetAsync(int vendorId)
         {
-            var header = _mapper.Map<VendorCardDto>(await _repository.GetHeader(vendorId));
+            var header = _mapper.Map<VendorLoadDto>(await _repository.GetHeader(vendorId));
+            header.Logo = _fileUploadService.GetFileLink(header.Logo, Modules.Vendors);
 
             var paymentTerms = _supplierRepository.GetPaymentTermsAsync();
             var deliveryTerms = _supplierRepository.GetDeliveryTermsAsync();
@@ -246,17 +251,20 @@ namespace SolaERP.Persistence.Services
             await _supplierRepository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", vendor?.RepresentedCompanies) });
             await _supplierRepository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", vendor?.RepresentedProducts) });
 
+            string vendorLogo = await _repository.GetVendorLogo(vendorId);
+            vendor.Logo = await _fileUploadService.GetLinkForEntity(vendorDto.LogoFile.File, vendorDto.CheckLogoIsDeleted, vendorLogo);
 
-            if (vendorDto.Logo is not null)
+
+            await _attachment.DeleteAttachmentAsync(vendorId, SourceType.VEN_LOGO);
+            var vendorLogoData = _mapper.Map<AttachmentSaveModel>(vendorDto.LogoFile);
+
+            if (!vendorDto.CheckLogoIsDeleted)
             {
-                var vendorLogo = _mapper.Map<AttachmentSaveModel>(vendorDto.Logo);
-
-                vendorLogo.SourceId = vendorId;
-                vendorLogo.SourceType = SourceType.VEN_LOGO.ToString();
-
-                await _attachment.SaveAttachmentAsync(vendorLogo);
+                vendorLogoData.SourceId = vendorId;
+                vendorLogoData.SourceType = SourceType.VEN_LOGO.ToString();
+                vendorLogoData.FileLink = vendor.Logo;
+                await _attachment.SaveAttachmentAsync(vendorLogoData);
             }
-
             if (vendorDto.BankAccounts is not null)
                 foreach (var x in vendorDto?.BankAccounts)
                 {

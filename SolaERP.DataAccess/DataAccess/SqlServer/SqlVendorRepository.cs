@@ -343,7 +343,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return data;
             }
         }
-        public async Task<VendorCard> GetHeader(int vendorId)
+        public async Task<VendorLoad> GetHeader(int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -351,10 +351,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@VendorId", vendorId);
 
                 using var reader = await command.ExecuteReaderAsync();
-                VendorCard vendorCard = new VendorCard();
+                VendorLoad vendorCard = new VendorLoad();
 
                 if (reader.Read())
-                    vendorCard = reader.GetByEntityStructure<VendorCard>();
+                    vendorCard = reader.GetByEntityStructure<VendorLoad>();
 
                 return vendorCard;
             }
@@ -425,6 +425,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     data.Add(reader.GetByEntityStructure<VendorAll>());
 
                 return data;
+            }
+        }
+
+        public async Task<string> GetVendorLogo(int vendorId)
+        {
+            string result = string.Empty;
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "select * from [dbo].[FN_GetVendorImageData](@VendorId)";
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                    result = reader.Get<string>("FileData");
+
+                return result;
             }
         }
     }

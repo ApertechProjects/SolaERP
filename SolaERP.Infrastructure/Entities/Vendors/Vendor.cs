@@ -38,6 +38,7 @@
         public int? WithHoldingTaxId { get; set; }
         public int? TaxesId { get; set; }
         public bool IsNewVendor() => VendorId <= 0;
+        public string Logo { get; set; }
 
 
     }

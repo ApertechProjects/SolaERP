@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using SolaERP.Application.Attributes;
+﻿using SolaERP.Application.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Entities.Vendors
 {
-    public class VendorCard : BaseEntity
+    public class VendorLoad:BaseEntity
     {
         public int VendorId { get; set; }
 
@@ -66,7 +65,6 @@ namespace SolaERP.Application.Entities.Vendors
         public int ApproveStageMainId { get; set; }
         public DateTime CompanyRegistrationDate { get; set; }
         public string TaxOffice { get; set; }
-        public IFormFile LogoFile { get; set; }
-
+        public string Logo { get; set; }
     }
 }

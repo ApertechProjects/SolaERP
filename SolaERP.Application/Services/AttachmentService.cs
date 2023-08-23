@@ -3,6 +3,7 @@ using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Attachment;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 
@@ -24,6 +25,14 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<string>> DeleteAttachmentAsync(int attachmentId)
         {
             bool result = await _attachmentRepository.DeleteAttachmentAsync(attachmentId);
+            await _unitOfWork.SaveChangesAsync();
+
+            return result ? ApiResponse<string>.Success("Operation is succesfull", 200) : ApiResponse<string>.Fail("Operation failed", 400);
+        }
+
+        public async Task<ApiResponse<string>> DeleteAttachmentAsync(int sourceId, SourceType sourceType)
+        {
+            bool result = await _attachmentRepository.DeleteAttachmentAsync(sourceId, sourceType);
             await _unitOfWork.SaveChangesAsync();
 
             return result ? ApiResponse<string>.Success("Operation is succesfull", 200) : ApiResponse<string>.Fail("Operation failed", 400);
