@@ -18,7 +18,6 @@
         public int Status { get; set; }
         public int ApprovalStatus { get; set; }
         public int ApproveStageMainId { get; set; }
-        public int UserId { get; set; }
         public int NewBidMainId { get; set; }
         public string NewBidNo { get; set; }
 

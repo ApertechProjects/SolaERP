@@ -80,9 +80,11 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<BidCardDto>.Success(card, 200);
         }
 
-        public async Task<ApiResponse<BidIUDResponse>> SaveBidMainAsync(BidMainDto bidMain)
+        public async Task<ApiResponse<BidIUDResponse>> SaveBidMainAsync(BidMainDto bidMain, string userIdentity)
         {
             var entity = _mapper.Map<BidMain>(bidMain);
+            entity.UserId = Convert.ToInt32(userIdentity);
+
             var details = _mapper.Map<List<BidDetail>>(bidMain.BidDetails);
             var saveResponse = await _bidRepository.BidMainIUDAsync(entity);
 
@@ -95,9 +97,10 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<BidIUDResponse>.Success(saveResponse, 200);
         }
 
-        public async Task<ApiResponse<bool>> DeleteBidMainAsync(int bidMainId)
+        public async Task<ApiResponse<bool>> DeleteBidMainAsync(int bidMainId, string userIdentity)
         {
-            var saveResponse = await _bidRepository.BidMainIUDAsync(new BidMain { BidMainId = bidMainId });
+            int userId = Convert.ToInt32(userIdentity);
+            var saveResponse = await _bidRepository.BidMainIUDAsync(new BidMain { BidMainId = bidMainId, UserId = userId });
 
             await _unitOfWork.SaveChangesAsync();
 
