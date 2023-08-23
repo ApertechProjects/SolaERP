@@ -829,11 +829,24 @@ namespace SolaERP.Persistence.Services
                 {
                     var correspondingValue =
                         dueDiligenceValues.FirstOrDefault(v => v.DueDiligenceDesignId == d.DesignId);
-                    var attachments = d.HasAttachment > 0
-                        ? _mapper.Map<List<AttachmentDto>>(
+                    List<AttachmentDto> attachments;
+                    
+                    if (d.HasAttachment > 0)
+                    {
+                        attachments = _mapper.Map<List<AttachmentDto>>(
                             await _attachmentRepository.GetAttachmentsAsync(vendorId, null,
-                                SourceType.VEN_DUE.ToString(), d.DesignId))
-                        : Enumerable.Empty<AttachmentDto>().ToList();
+                                SourceType.VEN_DUE.ToString(), d.DesignId));
+                        
+                        attachments = attachments.Select(x =>
+                        {
+                            x.FileLink = _fileUploadService.GetDownloadFileLink(x.FileLink, Modules.EvaluationForm);
+                            return x;
+                        }).ToList();
+                    }
+                    else
+                    {
+                        attachments = Enumerable.Empty<AttachmentDto>().ToList();
+                    }
 
                     var calculationResult =
                         await CalculateScoring(correspondingValue, d, vendorId, attachments?.Count > 0);
