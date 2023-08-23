@@ -22,7 +22,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
 
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_Attachments_IUD @AttachmentId,@FileName,@FileData,@SourceId,@SourceType,@Reference,@ExtensionType,@AttachmentTypeId,@AttachmentSubTypeId,@UploadDateTime,@Size";
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_Attachments_IUD @AttachmentId,@FileName,@FileData,@SourceId,@SourceType,@Reference,@ExtensionType,@AttachmentTypeId,@AttachmentSubTypeId,@UploadDateTime,@Size,@FileLink";
                 command.Parameters.AddWithValue(command, "@AttachmentId", attachment.AttachmentId);
                 command.Parameters.AddWithValue(command, "@FileName", attachment.Name);
                 command.Parameters.AddWithValue(command, "@FileData", attachment.FileLink);
@@ -34,6 +34,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@AttachmentSubTypeId", attachment.AttachmentSubTypeId);
                 command.Parameters.AddWithValue(command, "@UploadDateTime", DateTime.UtcNow.Date);
                 command.Parameters.AddWithValue(command, "@Size", attachment.Size);
+                command.Parameters.AddWithValue(command, "@FileLink", attachment.FileLink);
 
                 bool result = await command.ExecuteNonQueryAsync() > 0;
 

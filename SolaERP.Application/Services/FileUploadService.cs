@@ -66,6 +66,13 @@ namespace SolaERP.Persistence.Services
                 return _configuration["FileOptions:BaseUrl"] + $"api/v1/home/module/{module}/fileName/{FileName}";
             return null;
         }
+        
+        public string GetDownloadFileLink(string FileName, Modules module)
+        {
+            if (!string.IsNullOrEmpty(FileName))
+                return _configuration["FileOptions:BaseUrl"] + $"api/v1/home/module/{module}/fileName/{FileName}/download";
+            return null;
+        }
 
         public async Task<(UploadFile, string)> UploadFile(List<IFormFile> files, Modules module)
         {

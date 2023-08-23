@@ -1,4 +1,6 @@
-﻿namespace SolaERP.Application.Dtos.Attachment
+﻿using Microsoft.AspNetCore.Http;
+
+namespace SolaERP.Application.Dtos.Attachment
 {
     public class AttachmentDto
     {
@@ -25,7 +27,8 @@
         public int AttachmentSubTypeId { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public int Size { get; set; }
-        public string FileBase64 { get; set; }
+        public IFormFile File { get; set; }
+        public string FileLink { get; set; }
         public int Type { get; set; }
     }
 }
