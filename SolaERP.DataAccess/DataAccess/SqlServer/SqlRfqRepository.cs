@@ -148,6 +148,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 OtherReasons = request.OtherReasons,
                 BusinessCategoryId = request.BusinessCategoryId,
                 UserId = request.UserId,
+                BiddingType = request.BiddingType
             });
         }
 
@@ -277,9 +278,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = @"EXEC SP_RFQCreateRequestList @BusinessUnitId,@Businesscategoryid,@Buyer,@UserId";
 
 
-                command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
-                command.Parameters.AddWithValue(command, "@Businesscategoryid", string.Join(",", model.BusinessCategoryIds));
-                command.Parameters.AddWithValue(command, "@Buyer", model.Buyer);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", model?.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@Businesscategoryid", string.Join(",", model?.BusinessCategoryIds));
+                command.Parameters.AddWithValue(command, "@Buyer", model?.Buyer);
                 command.Parameters.AddWithValue(command, "@UserId", model.UserId);
 
                 using var reader = await command.ExecuteReaderAsync();
@@ -359,7 +360,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Status = (Status)reader.Get<int>("Status"),
                 RequiredOnSiteDate = reader.Get<DateTime>("RequiredOnSiteDate"),
                 DesiredDeliveryDate = reader.Get<DateTime>("DesiredDeliveryDate"),
-                SentDate = reader.Get<DateTime>("SentDate"),
+                SentDate = reader.Get<DateTime?>("SentDate"),
                 SingleUnitPrice = reader.Get<bool>("SingleUnitPrice"),
                 ProcurementType = (ProcurementType)reader.Get<int>("ProcurementType"),
                 PlaceOfDelivery = reader.Get<string>("PlaceOfDelivery"),

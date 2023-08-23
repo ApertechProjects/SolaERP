@@ -33,7 +33,6 @@ namespace SolaERP.Persistence.Services
         private readonly IUserRepository _userRepository;
         private readonly IVendorRepository _vendorRepository;
         private readonly IAttachmentRepository _attachmentRepository;
-        private readonly IOptions<StorageOption> _storageOption;
         private readonly IEmailNotificationService _emailNotificationService;
         private readonly IMailService _mailService;
         private readonly IUserService _userService;
@@ -47,7 +46,6 @@ namespace SolaERP.Persistence.Services
             IUserRepository userRepository,
             IVendorRepository vendorRepository,
             IAttachmentRepository attachmentRepository,
-            IOptions<StorageOption> storageOption,
             IEmailNotificationService emailNotificationService,
             IMailService mailService,
             IUserService userService,
@@ -62,7 +60,6 @@ namespace SolaERP.Persistence.Services
             _vendorRepository = vendorRepository;
 
             _attachmentRepository = attachmentRepository;
-            _storageOption = storageOption;
             _emailNotificationService = emailNotificationService;
             _mailService = mailService;
             _userService = userService;
@@ -312,21 +309,30 @@ namespace SolaERP.Persistence.Services
                             }) ?? Enumerable.Empty<Task<bool>>());
                         }
 
-                        if (item?.Attachments is not null)
+                        if (item.Attachments != null)
                         {
-                            itemTasks.AddRange(item?.Attachments?.Select(attachment =>
+                            itemTasks.AddRange(item.Attachments?.Select(attachment =>
                             {
                                 if (attachment.Type == 2 && attachment.AttachmentId > 0)
+                                {
+                                    _fileUploadService.DeleteFile(Modules.EvaluationForm, attachment.FileLink);
                                     return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
-                                else
+                                }
+
+                                if (attachment.Type != 2 && attachment.AttachmentId <= 0)
                                 {
                                     var attachedFile = _mapper.Map<AttachmentSaveModel>(attachment);
                                     attachedFile.SourceId = vendorId;
                                     attachedFile.SourceType = SourceType.VEN_DUE.ToString();
                                     attachedFile.AttachmentTypeId = item.DesignId;
+                                    attachedFile.FileLink = _fileUploadService
+                                        .AddFile(new List<IFormFile> { attachment.File }, Modules.EvaluationForm,
+                                            new List<string>()).Result.Data[0];
                                     return _attachmentRepository.SaveAttachmentAsync(attachedFile);
                                 }
-                            }));
+
+                                return Task.FromResult(true);
+                            })!);
                         }
 
                         return itemTasks;
@@ -820,11 +826,24 @@ namespace SolaERP.Persistence.Services
                 {
                     var correspondingValue =
                         dueDiligenceValues.FirstOrDefault(v => v.DueDiligenceDesignId == d.DesignId);
-                    var attachments = d.HasAttachment > 0
-                        ? _mapper.Map<List<AttachmentDto>>(
+                    List<AttachmentDto> attachments;
+                    
+                    if (d.HasAttachment > 0)
+                    {
+                        attachments = _mapper.Map<List<AttachmentDto>>(
                             await _attachmentRepository.GetAttachmentsAsync(vendorId, null,
-                                SourceType.VEN_DUE.ToString(), d.DesignId))
-                        : Enumerable.Empty<AttachmentDto>().ToList();
+                                SourceType.VEN_DUE.ToString(), d.DesignId));
+                        
+                        attachments = attachments.Select(x =>
+                        {
+                            x.FileLink = _fileUploadService.GetDownloadFileLink(x.FileLink, Modules.EvaluationForm);
+                            return x;
+                        }).ToList();
+                    }
+                    else
+                    {
+                        attachments = Enumerable.Empty<AttachmentDto>().ToList();
+                    }
 
                     var calculationResult =
                         await CalculateScoring(correspondingValue, d, vendorId, attachments?.Count > 0);

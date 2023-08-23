@@ -18,7 +18,7 @@ namespace SolaERP.Application.Dtos.RFQ
         public Enums.Status Status { get; set; }
         public DateTime RequiredOnSiteDate { get; set; }
         public DateTime DesiredDeliveryDate { get; set; }
-        public DateTime SentDate { get; set; }
+        public DateTime? SentDate { get; set; }
         public bool SingleUnitPrice { get; set; }
         public ProcurementType ProcurementType { get; set; }
         public string PlaceOfDelivery { get; set; }

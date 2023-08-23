@@ -14,6 +14,7 @@ using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Application.ViewModels;
 using SolaERP.DataAccess.Extensions;
+using System.Security.AccessControl;
 
 namespace SolaERP.Persistence.Services
 {
@@ -164,6 +165,9 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<VM_VendorCard>> GetAsync(int vendorId)
         {
             var header = _mapper.Map<VendorLoadDto>(await _repository.GetHeader(vendorId));
+            var logo = await _attachment.GetAttachmentsAsync(header.VendorId, SourceType.VEN_LOGO);
+            if (logo != null && logo.Count > 0)
+                header.Logo = logo[0];
             header.Logo = _fileUploadService.GetFileLink(header.Logo, Modules.Vendors);
 
             var paymentTerms = _supplierRepository.GetPaymentTermsAsync();
