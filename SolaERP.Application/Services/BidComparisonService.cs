@@ -96,5 +96,47 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<BidComparisonDto>.Success(comparison, 200);
         }
+
+        public async Task<ApiResponse<List<BidComparisonDraftLoadDto>>> GetComparisonDraft(BidComparisonDraftFilterDto filterDto)
+        {
+            var filter = _mapper.Map<BidComparisonDraftFilter>(filterDto);
+            var data = await _bidComparisonRepository.GetComparisonDraft(filter);
+            var dtos = _mapper.Map<List<BidComparisonDraftLoadDto>>(data);
+            return ApiResponse<List<BidComparisonDraftLoadDto>>.Success(dtos, 200);
+
+        }
+
+        public async Task<ApiResponse<List<BidComparisonHeldLoadDto>>> GetComparisonHeld(BidComparisonHeldFilterDto filterDto)
+        {
+            var filter = _mapper.Map<BidComparisonHeldFilter>(filterDto);
+            var data = await _bidComparisonRepository.GetComparisonHeld(filter);
+            var dtos = _mapper.Map<List<BidComparisonHeldLoadDto>>(data);
+            return ApiResponse<List<BidComparisonHeldLoadDto>>.Success(dtos, 200);
+        }
+
+        public async Task<ApiResponse<List<BidComparisonMyChartsLoadDto>>> GetComparisonMyCharts(BidComparisonMyChartsFilterDto filterDto, string userIdentity)
+        {
+            var filter = _mapper.Map<BidComparisonMyChartsFilter>(filterDto);
+            filter.UserId = Convert.ToInt32(userIdentity);
+            var data = await _bidComparisonRepository.GetComparisonMyCharts(filter);
+            var dtos = _mapper.Map<List<BidComparisonMyChartsLoadDto>>(data);
+            return ApiResponse<List<BidComparisonMyChartsLoadDto>>.Success(dtos, 200);
+        }
+
+        public async Task<ApiResponse<List<BidComparisonNotReleasedLoadDto>>> GetComparisonNotReleased(BidComparisonNotReleasedFilterDto filterDto)
+        {
+            var filter = _mapper.Map<BidComparisonNotReleasedFilter>(filterDto);
+            var data = await _bidComparisonRepository.GetComparisonNotReleased(filter);
+            var dtos = _mapper.Map<List<BidComparisonNotReleasedLoadDto>>(data);
+            return ApiResponse<List<BidComparisonNotReleasedLoadDto>>.Success(dtos, 200);
+        }
+
+        public async Task<ApiResponse<List<BidComparisonRejectedLoadDto>>> GetComparisonRejected(BidComparisonRejectedFilterDto filterDto)
+        {
+            var filter = _mapper.Map<BidComparisonRejectedFilter>(filterDto);
+            var data = await _bidComparisonRepository.GetComparisonRejected(filter);
+            var dtos = _mapper.Map<List<BidComparisonRejectedLoadDto>>(data);
+            return ApiResponse<List<BidComparisonRejectedLoadDto>>.Success(dtos, 200);
+        }
     }
 }

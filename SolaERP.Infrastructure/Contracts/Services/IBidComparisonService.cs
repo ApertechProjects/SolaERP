@@ -20,6 +20,10 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<BidComparisonAllDto>>> GetBidComparisonAllAsync(BidComparisonAllFilterDto filter);
         Task<ApiResponse<BidComparisonDto>> GetBidComparisonAsync(BidComparisonFilterDto bidComparisonApprove);
 
-
+        Task<ApiResponse<List<BidComparisonDraftLoadDto>>> GetComparisonDraft(BidComparisonDraftFilterDto filterDto);
+        Task<ApiResponse<List<BidComparisonHeldLoadDto>>> GetComparisonHeld(BidComparisonHeldFilterDto filterDto);
+        Task<ApiResponse<List<BidComparisonMyChartsLoadDto>>> GetComparisonMyCharts(BidComparisonMyChartsFilterDto filterDto, string userIdentity);
+        Task<ApiResponse<List<BidComparisonNotReleasedLoadDto>>> GetComparisonNotReleased(BidComparisonNotReleasedFilterDto filterDto);
+        Task<ApiResponse<List<BidComparisonRejectedLoadDto>>> GetComparisonRejected(BidComparisonRejectedFilterDto filterDto);
     }
 }
