@@ -237,32 +237,31 @@ namespace SolaERP.Persistence.Services
                 //         await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
                 //     else
                 //     {
-                //         var detaildId =
-                //             await _vendorRepository.UpdateBankDetailsAsync(user.Id,
+                //         var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id,
                 //                 _mapper.Map<VendorBankDetail>(x));
+                //         
                 //         x.VendorId = vendorId;
                 //
                 //         if (x.AccountVerificationLetter != null)
                 //         {
-                //             // tasks.AddRange(x.AccountVerificationLetter.Select(async attachment =>
-                //             // {
-                //             //     var attachmentInDb = (await _attachmentRepository
-                //             //         .GetAttachmentsWithFileDataAsync(attachment.AttachmentId))[0];
-                //             //
-                //             //     if (attachment.Type == 2 && attachment.AttachmentId > 0)
-                //             //     {
-                //             //         await _fileUploadService.DeleteFile(Modules.EvaluationForm,
-                //             //             attachmentInDb.FileLink);
-                //             //         return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
-                //             //     }
-                //             //
-                //             //
-                //             //     var entity = _mapper.Map<AttachmentSaveModel>(attachment);
-                //             //     entity.SourceId = detaildId;
-                //             //     entity.SourceType = SourceType.VEN_BNK.ToString();
-                //             //     // _fileUploadService.AddFile(null,Modules.EvaluationForm,null);
-                //             //     return _attachmentRepository.SaveAttachmentAsync(entity);
-                //             // }));
+                //             tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
+                //             {
+                //                 var attachmentInDb = _attachmentRepository
+                //                     .GetAttachmentsWithFileDataAsync(attachment.AttachmentId).Result[0];
+                //
+                //                 if (attachment.Type == 2 && attachment.AttachmentId > 0)
+                //                 {
+                //                     _fileUploadService.DeleteFile(Modules.EvaluationForm,
+                //                         attachmentInDb.FileLink).Wait();
+                //                     return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
+                //                 }
+                //                 
+                //                 var entity = _mapper.Map<AttachmentSaveModel>(attachment);
+                //                 entity.SourceId = detaildId;
+                //                 entity.SourceType = SourceType.VEN_BNK.ToString();
+                //                 _fileUploadService.AddFile(null, Modules.EvaluationForm, null).Wait();
+                //                 return _attachmentRepository.SaveAttachmentAsync(entity);
+                //             }));
                 //         }
                 //     }
                 // }
