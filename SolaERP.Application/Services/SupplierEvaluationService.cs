@@ -38,6 +38,7 @@ namespace SolaERP.Persistence.Services
         private readonly IMailService _mailService;
         private readonly IUserService _userService;
         private readonly IFileUploadService _fileUploadService;
+        private readonly IGeneralRepository _generalRepository;
 
         public SupplierEvaluationService(ISupplierEvaluationRepository repository,
             IMapper mapper,
@@ -50,7 +51,8 @@ namespace SolaERP.Persistence.Services
             IEmailNotificationService emailNotificationService,
             IMailService mailService,
             IUserService userService,
-            IFileUploadService fileUploadService)
+            IFileUploadService fileUploadService,
+            IGeneralRepository generalRepository)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
@@ -65,6 +67,7 @@ namespace SolaERP.Persistence.Services
             _mailService = mailService;
             _userService = userService;
             _fileUploadService = fileUploadService;
+            _generalRepository = generalRepository;
         }
 
         public async Task<ApiResponse<bool>> AddAsync(string useridentity, string token,
@@ -421,7 +424,7 @@ namespace SolaERP.Persistence.Services
         {
             CompanyInformation companyInformation = new()
             {
-                BusinessCategories = await _repository.GetBusinessCategoriesAsync(),
+                BusinessCategories = await _generalRepository.BusinessCategories(),
                 PaymentTerms = await _repository.GetPaymentTermsAsync(),
                 Countries = await _repository.GetCountriesAsync(),
                 PrequalificationTypes = await _repository.GetPrequalificationCategoriesAsync(),
@@ -518,7 +521,7 @@ namespace SolaERP.Persistence.Services
 
             var vendorPrequalificationTask = await _repository.GetVendorPrequalificationAsync(vendor);
             var prequalificationTypesTask = await _repository.GetPrequalificationCategoriesAsync();
-            var businessCategoriesTask = await _repository.GetBusinessCategoriesAsync();
+            var businessCategoriesTask = await _generalRepository.BusinessCategories();
             var vendorRepresentedProduct = await _repository.GetRepresentedProductAsync(vendor);
             var vendorBusinessCategoriesTask = await _repository.GetVendorBuCategoriesAsync(vendor);
             var companyInfoTask = await _repository.GetCompanyInfoAsync(vendor);
