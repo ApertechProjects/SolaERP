@@ -148,6 +148,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 OtherReasons = request.OtherReasons,
                 BusinessCategoryId = request.BusinessCategoryId,
                 UserId = request.UserId,
+                BiddingType = request.BiddingType
             });
         }
 
