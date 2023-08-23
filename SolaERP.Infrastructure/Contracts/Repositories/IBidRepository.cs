@@ -15,7 +15,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<BidMainLoad> GetMainLoadAsync(int bidMainId);
         Task<BidIUDResponse> BidMainIUDAsync(BidMain entity);
         Task<bool> SaveBidDetailsAsync(List<BidDetail> details);
-
+        Task<List<BidRFQListLoad>> GetRFQListForBidAsync(BidRFQListFilter filter);
 
     }
 }

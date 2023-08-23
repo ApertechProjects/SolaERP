@@ -107,6 +107,13 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(true, 200);
         }
 
+        public async Task<ApiResponse<List<BidRFQListLoadDto>>> GetRfqListAsync(string userIdentity)
+        {
+            var filter = new BidRFQListFilter { UserId = Convert.ToInt32(userIdentity) };
+            var data = await _bidRepository.GetRFQListForBidAsync(filter);
+            var dtos = _mapper.Map<List<BidRFQListLoadDto>>(data);
 
+            return ApiResponse<List<BidRFQListLoadDto>>.Success(dtos, 200);
+        }
     }
 }

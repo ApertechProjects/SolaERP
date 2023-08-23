@@ -71,8 +71,8 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
             command.Parameters.AddWithValue(command, "@ApproveStageMainId", entity.ApproveStageMainId);
             command.Parameters.AddWithValue(command, "@UserId", entity.UserId);
 
-            using var reader = command.ExecuteReader();
-            if (reader.Read())
+            using var reader = await command.ExecuteReaderAsync();
+            if (await reader.ReadAsync())
                 return GetBidSaveResponse(reader);
             return null;
         }
@@ -232,6 +232,29 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                 Id = reader.Get<int>("@NewBidMainId"),
                 BidNo = reader.Get<string>("@NewBidNo"),
             };
+        }
+
+        public async Task<List<BidRFQListLoad>> GetRFQListForBidAsync(BidRFQListFilter filter)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = "EXEC SP_BidRFQListLoad @UserId";
+
+            command.Parameters.AddWithValue(command, "@UserId", filter.UserId);
+
+            using DbDataReader reader = await command.ExecuteReaderAsync();
+            List<BidRFQListLoad> data = new();
+            while (reader.Read())
+                data.Add(new BidRFQListLoad
+                {
+                    RFQMainId = reader.Get<int>("RFQMainId"),
+                    BidCount = reader.Get<int>("BidCount"),
+                    BusinessCategoryName = reader.Get<string>("BusinessCategoryName"),
+                    Buyer = reader.Get<string>("Buyer"),
+                    Emergency = reader.Get<string>("Emergency"),
+                    RFQDeadline = reader.Get<DateTime>("RFQDeadline"),
+                    RFQNo = reader.Get<string>("RFQNo")
+                }) ;
+            return data;
         }
     }
 }
