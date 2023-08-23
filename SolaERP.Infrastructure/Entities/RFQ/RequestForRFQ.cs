@@ -5,6 +5,7 @@ namespace SolaERP.Application.Entities.RFQ
     public class RequestForRFQ : BaseEntity
     {
         public int RequestMainId { get; set; }
+        public int RequestDetailId { get; set; }   
         public long RowNum { get; set; }
         public string RequestNo { get; set; }
         public string RequestLine { get; set; }
