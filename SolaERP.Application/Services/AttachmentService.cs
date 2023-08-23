@@ -46,7 +46,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<AttachmentDto>>.Success(result, 200);
         }
 
-        public async Task<ApiResponse<List<string>>> GetAttachmentsAsync(int sourceId, int sourceType)
+        public async Task<ApiResponse<List<string>>> GetAttachmentsAsync(int sourceId, SourceType sourceType)
         {
             var entity = await _attachmentRepository.GetAttachmentsAsync(sourceId, sourceType);
 

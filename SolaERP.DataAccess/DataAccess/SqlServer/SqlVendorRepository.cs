@@ -354,7 +354,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 VendorLoad vendorCard = new VendorLoad();
 
                 if (reader.Read())
-                    vendorCard = reader.GetByEntityStructure<VendorLoad>();
+                    vendorCard = reader.GetByEntityStructure<VendorLoad>("Logo");
 
                 return vendorCard;
             }
