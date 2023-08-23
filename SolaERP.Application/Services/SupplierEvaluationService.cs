@@ -249,13 +249,11 @@ namespace SolaERP.Persistence.Services
                         {
                             tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
                             {
-                                var attachmentInDb = _attachmentRepository
-                                    .GetAttachmentsWithFileDataAsync(attachment.AttachmentId).Result[0];
-
                                 if (attachment.Type == 2 && attachment.AttachmentId > 0)
                                 {
-                                    _fileUploadService.DeleteFile(Modules.EvaluationForm,
-                                        attachmentInDb.FileLink).Wait();
+                                    var attachmentInDb = _attachmentRepository
+                                        .GetAttachmentsWithFileDataAsync(attachment.AttachmentId).Result[0];
+                                    _fileUploadService.DeleteFile(Modules.EvaluationForm, attachmentInDb.FileLink).Wait();
                                     return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
                                 }
 
