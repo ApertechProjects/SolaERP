@@ -41,7 +41,7 @@ namespace SolaERP.Persistence.Services
             request.UserId = Convert.ToInt32(useridentity);
             RfqSaveCommandResponse response = null;
 
-            if (request.RFQMainId <= 0) response = await _repository.AddMainAsync(request);
+            if (request.Id <= 0) response = await _repository.AddMainAsync(request);
             else response = await _repository.UpdateMainAsync(request);
 
             bool result = await _repository.AddDetailsAsync(request.Details, response.Id);

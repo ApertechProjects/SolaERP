@@ -128,7 +128,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return await ModifyRfqMainAsync(new()
             {
-                RFQMainId = 0,
+                Id = 0,
                 BusinessUnitId = request.BusinessUnitId,
                 RFQType = request.RFQType,
                 RFQNo = request.RFQNo,
@@ -156,7 +156,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             => await ModifyRfqMainAsync(request);
 
         public async Task<RfqSaveCommandResponse> DeleteMainsync(int id, int userId)
-            => await ModifyRfqMainAsync(new RfqSaveCommandRequest() { RFQMainId = id, UserId = userId });
+            => await ModifyRfqMainAsync(new RfqSaveCommandRequest() { Id = id, UserId = userId });
 
         private async Task<RfqSaveCommandResponse> ModifyRfqMainAsync(RfqSaveCommandRequest request)
         {
@@ -191,7 +191,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 		                                                            @NewRFQNo as N'@NewRFQNo'";
 
 
-                command.Parameters.AddWithValue(command, "@RFQMainId", request.RFQMainId);
+                command.Parameters.AddWithValue(command, "@RFQMainId", request.Id);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", request.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@RFQType", request?.RFQType);
                 command.Parameters.AddWithValue(command, "@RFQNo", request?.RFQNo);
@@ -354,8 +354,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RFQType = (RfqType)reader.Get<int>("RFQType"),
                 RFQNo = reader.Get<string>("RFQNo"),
                 Emergency = (Emergency)reader.Get<int>("Emergency"),
-                RFQDate = reader.Get<DateTime>("RFQDate"),
-                RFQDeadline = reader.Get<DateTime>("RFQDeadline"),
+                RFQDate = reader.Get<DateTime?>("RFQDate"),
+                RFQDeadline = reader.Get<DateTime?>("RFQDeadline"),
                 Buyer = reader.Get<string>("Buyer"),
                 Status = (Status)reader.Get<int>("Status"),
                 RequiredOnSiteDate = reader.Get<DateTime>("RequiredOnSiteDate"),
