@@ -14,5 +14,7 @@ jobs:
     steps:
     - name: Change Directory
       run: cd C:\Users\afiq.mehdizade\Desktop\projects\sola-erp-api
+    - name: DIrectory Files
+      run: dir
     - name: Start Deploy
       run: start start-deploy.cmd
