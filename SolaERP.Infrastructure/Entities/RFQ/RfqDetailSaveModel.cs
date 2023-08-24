@@ -18,7 +18,7 @@ namespace SolaERP.Application.Entities.RFQ
         public bool AlternativeItem { get; set; }
 
         [NotInclude]
-        public List<RfqRequestDetailSaveModel> LineDetails { get; set; }
+        public List<RfqRequestDetailSaveModel> RequestDetails { get; set; }
     }
 
 
