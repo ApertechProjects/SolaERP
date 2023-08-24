@@ -2,9 +2,9 @@ name: .NET
 
 on:
   push:
-    branches: [ "ErpBranch.E" ]
+    branches: [ "dev" ]
   pull_request:
-    branches: [ "ErpBranch.E" ]
+    branches: [ "dev" ]
 
 jobs:
   build:
@@ -12,14 +12,9 @@ jobs:
     runs-on: sola
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: List Directory
-      run: ls
+    - name: Change Directory
+      run: cd C:\Users\afiq.mehdizade\Desktop\projects\sola-erp-api
+    - name: DIrectory Files
+      run: dir
+    - name: Start Deploy
+      run: start start-deploy.cmd

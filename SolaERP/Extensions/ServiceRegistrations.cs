@@ -29,9 +29,7 @@ using UserValidation = SolaERP.Application.Validations.UserValidation.UserValida
 
 namespace SolaERP.Extensions
 {
-    /// <summary>
-    /// This class is container for DataAcces Services 
-    /// </summary>
+
     public static class ServiceRegistrations
     {
         private static void UseSqlConnection(this WebApplicationBuilder builder)

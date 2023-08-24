@@ -44,8 +44,8 @@ namespace SolaERP.Persistence.Services
             if (request.Id <= 0) response = await _repository.AddMainAsync(request);
             else response = await _repository.UpdateMainAsync(request);
 
-            bool result = await _repository.AddDetailsAsync(request.Details, response.Id);
-            var saveDetailTasks = request.Details.Select(requestList => _repository.SaveRFqRequestDetailsAsync(requestList.RequestDetails));
+            bool result = await _repository.AddDetailsAsync(request?.Details, response.Id);
+            var saveDetailTasks = request.Details.Select(requestList => _repository.SaveRFqRequestDetailsAsync(requestList?.RequestDetails));
             await Task.WhenAll(saveDetailTasks);
 
             await _unitOfWork.SaveChangesAsync();

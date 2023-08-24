@@ -173,7 +173,7 @@ namespace SolaERP.Persistence.Services
                         await _fileUploadService.DeleteFile(Modules.EvaluationForm, companyLogoList[i].FileLink);
                     }
 
-                    else if (companyLogoList[i].Type != 2)
+                    else if (companyLogoList[i].Type != 2 && companyLogoList[i].AttachmentId < 0)
                     {
                         companyLogoList[i].FileLink = (await _fileUploadService.AddFile(
                             new List<IFormFile> { command.CompanyInformation.CompanyLogo[i].File },
@@ -230,47 +230,50 @@ namespace SolaERP.Persistence.Services
 
                 #region Bank Accounts
 
-                for (var i = 0; i < command.BankAccounts.Count; i++)
+                if (command.BankAccounts is not null)
                 {
-                    var x = command.BankAccounts[i];
-                    if (x.Type == 2 && x.Id > 0)
+                    for (var i = 0; i < command.BankAccounts.Count; i++)
                     {
-                        await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
-                    }
-
-                    else
-                    {
-                        var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id,
-                            _mapper.Map<VendorBankDetail>(x));
-
-                        x.VendorId = vendorId;
-
-                        if (x.AccountVerificationLetter != null)
+                        var x = command.BankAccounts[i];
+                        if (x.Type == 2 && x.Id > 0)
                         {
-                            tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
+                            await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
+                        }
+
+                        else
+                        {
+                            var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id,
+                                _mapper.Map<VendorBankDetail>(x));
+
+                            x.VendorId = vendorId;
+
+                            if (x.AccountVerificationLetter != null)
                             {
-                                if (attachment.Type == 2 && attachment.AttachmentId > 0)
+                                tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
                                 {
-                                    var attachmentInDb = _attachmentRepository
-                                        .GetAttachmentsWithFileDataAsync(attachment.AttachmentId).Result[0];
-                                    _fileUploadService.DeleteFile(Modules.EvaluationForm, attachmentInDb.FileLink)
-                                        .Wait();
-                                    return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
-                                }
+                                    if (attachment.Type == 2 && attachment.AttachmentId > 0)
+                                    {
+                                        var attachmentInDb = _attachmentRepository
+                                            .GetAttachmentsWithFileDataAsync(attachment.AttachmentId).Result[0];
+                                        _fileUploadService.DeleteFile(Modules.EvaluationForm, attachmentInDb.FileLink)
+                                            .Wait();
+                                        return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
+                                    }
 
-                                if (attachment.Type != 2 && attachment.AttachmentId <= 0)
-                                {
-                                    var entity = _mapper.Map<AttachmentSaveModel>(attachment);
-                                    entity.SourceId = detaildId;
-                                    entity.SourceType = SourceType.VEN_BNK.ToString();
-                                    entity.FileLink = _fileUploadService.AddFile(
-                                        new List<IFormFile> { attachment.File },
-                                        Modules.EvaluationForm, new List<string>()).Result.Data[0];
-                                    return _attachmentRepository.SaveAttachmentAsync(entity);
-                                }
+                                    if (attachment.Type != 2 && attachment.AttachmentId <= 0)
+                                    {
+                                        var entity = _mapper.Map<AttachmentSaveModel>(attachment);
+                                        entity.SourceId = detaildId;
+                                        entity.SourceType = SourceType.VEN_BNK.ToString();
+                                        entity.FileLink = _fileUploadService.AddFile(
+                                            new List<IFormFile> { attachment.File },
+                                            Modules.EvaluationForm, new List<string>()).Result.Data[0];
+                                        return _attachmentRepository.SaveAttachmentAsync(entity);
+                                    }
 
-                                return Task.FromResult(true);
-                            }));
+                                    return Task.FromResult(true);
+                                }));
+                            }
                         }
                     }
                 }
@@ -345,67 +348,76 @@ namespace SolaERP.Persistence.Services
 
                 if (command.Prequalification is not null)
                 {
-                    tasks.AddRange(command?.Prequalification?.SelectMany(item =>
-                    {
-                        var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
-                        prequalificationValue.VendorId = vendorId;
-                        prequalificationValue.DateTimeValue =
-                            prequalificationValue.DateTimeValue.ConvertDateToValidDate();
-
-                        var tasksList = new List<Task<bool>>();
-                        _repository.UpdatePrequalification(prequalificationValue); //+
-
-                        if (item?.Attachments is not null)
-                        {
-                            for (int i = 0; i < item?.Attachments.Count; i++)
-                            {
-                                if (item.Attachments[i].Type == 2 && item.Attachments[i].AttachmentId > 0)
-                                {
-                                    tasksList.Add(
-                                        _attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId));
-                                }
-                                else
-                                {
-                                    var attachedFile = _mapper.Map<AttachmentSaveModel>(item.Attachments[i]);
-
-                                    attachedFile.SourceId = vendorId;
-                                    attachedFile.AttachmentTypeId = item.DesignId;
-                                    attachedFile.SourceType = SourceType.VEN_PREQ.ToString();
-
-                                    tasksList.Add(_attachmentRepository.SaveAttachmentAsync(attachedFile));
-                                }
-                            }
-                        }
-
-                        if (item.HasGrid == true)
-                        {
-                            tasksList.AddRange(item.GridDatas.Select(gridData =>
-                            {
-                                var gridDatas = _mapper.Map<PrequalificationGridData>(gridData);
-                                gridDatas.PreqqualificationDesignId = item.DesignId;
-                                gridDatas.VendorId = vendorId;
-
-                                return _repository.UpdatePreGridAsync(gridDatas);
-                            }));
-                        }
-
-                        return tasksList;
-                    }));
+                    // tasks.AddRange(command?.Prequalification?.SelectMany(item =>
+                    // {
+                    //     var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
+                    //     prequalificationValue.VendorId = vendorId;
+                    //     prequalificationValue.DateTimeValue =
+                    //         prequalificationValue.DateTimeValue.ConvertDateToValidDate();
+                    //
+                    //     var tasksList = new List<Task<bool>>();
+                    //     _repository.UpdatePrequalification(prequalificationValue); //+
+                    //
+                    //     if (item?.Attachments is not null)
+                    //     {
+                    //         for (int i = 0; i < item?.Attachments.Count; i++)
+                    //         {
+                    //             if (item.Attachments[i].Type == 2 && item.Attachments[i].AttachmentId > 0)
+                    //             {
+                    //                 tasksList.Add(
+                    //                     _attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId));
+                    //                 _fileUploadService.DeleteFile(Modules.EvaluationForm, item.Attachments[i].FileLink);
+                    //             }
+                    //
+                    //             if (item.Attachments[i].Type != 2 && item.Attachments[i].AttachmentId > 0)
+                    //             {
+                    //                 var attachedFile = _mapper.Map<AttachmentSaveModel>(item.Attachments[i]);
+                    //
+                    //                 attachedFile.SourceId = vendorId;
+                    //                 attachedFile.AttachmentTypeId = item.DesignId;
+                    //                 attachedFile.SourceType = SourceType.VEN_PREQ.ToString();
+                    //                 attachedFile.FileLink = _fileUploadService.AddFile(
+                    //                     new List<IFormFile>() { item?.Attachments[i].File },
+                    //                     Modules.EvaluationForm,
+                    //                     new List<string>()).Result.Data[0];
+                    //
+                    //                 tasksList.Add(_attachmentRepository.SaveAttachmentAsync(attachedFile));
+                    //             }
+                    //
+                    //             tasksList.Add(Task.FromResult(true));
+                    //         }
+                    //     }
+                    //
+                    //
+                    //     if (item.HasGrid == true)
+                    //     {
+                    //         tasksList.AddRange(item.GridDatas.Select(gridData =>
+                    //         {
+                    //             var gridDatas = _mapper.Map<PrequalificationGridData>(gridData);
+                    //             gridDatas.PreqqualificationDesignId = item.DesignId;
+                    //             gridDatas.VendorId = vendorId;
+                    //
+                    //             return _repository.UpdatePreGridAsync(gridDatas);
+                    //         }));
+                    //     }
+                    //
+                    //     return tasksList;
+                    // }));
                 }
 
                 #endregion
 
                 //
 
-                // #region NDA
-                //
+                #region NDA
+                
                 // command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
                 // tasks.AddRange(command.NonDisclosureAgreement?.Select(x => _repository.DeleteNDAAsync(vendorId)));
                 // if (command?.NonDisclosureAgreement != null && command?.NonDisclosureAgreement?.Count > 0)
                 //     tasks.AddRange(command?.NonDisclosureAgreement?.Select(x =>
                 //         _repository.AddNDAAsync(_mapper.Map<VendorNDA>(x))));
-                //
-                // #endregion
+                
+                #endregion
 
                 //
 
@@ -827,13 +839,13 @@ namespace SolaERP.Persistence.Services
                     var correspondingValue =
                         dueDiligenceValues.FirstOrDefault(v => v.DueDiligenceDesignId == d.DesignId);
                     List<AttachmentDto> attachments;
-                    
+
                     if (d.HasAttachment > 0)
                     {
                         attachments = _mapper.Map<List<AttachmentDto>>(
                             await _attachmentRepository.GetAttachmentsAsync(vendorId, null,
                                 SourceType.VEN_DUE.ToString(), d.DesignId));
-                        
+
                         attachments = attachments.Select(x =>
                         {
                             x.FileLink = _fileUploadService.GetDownloadFileLink(x.FileLink, Modules.EvaluationForm);
