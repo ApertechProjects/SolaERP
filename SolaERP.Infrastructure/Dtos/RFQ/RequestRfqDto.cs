@@ -5,7 +5,7 @@ namespace SolaERP.Application.Dtos.RFQ
     public class RequestRfqDto
     {
         public int Id { get; set; }
-        public int DetailId { get; set; }   
+        public int RequestDetailId { get; set; }   
         public long RowNum { get; set; }
         public string RequestNo { get; set; }
         public string RequestLine { get; set; }
