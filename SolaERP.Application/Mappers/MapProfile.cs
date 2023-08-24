@@ -425,8 +425,7 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RFQMainId)).ReverseMap();
 
             CreateMap<RequestForRFQ, RequestRfqDto>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RequestMainId))
-                .ForMember(dest => dest.DetailId, opt => opt.MapFrom(src => src.RequestDetailId)).ReverseMap();
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RequestMainId)).ReverseMap();
             CreateMap<GridLayout, GridLayoutDto>().ReverseMap();
             CreateMap<Application.Entities.AnalysisCode.AnalysisCode, AnalysisCodeDto>().ReverseMap();
 

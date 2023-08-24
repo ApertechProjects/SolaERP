@@ -11,11 +11,8 @@ namespace SolaERP.API.Controllers
     public class VendorController : CustomBaseController
     {
         private readonly IVendorService _service;
+        public VendorController(IVendorService service) => _service = service;  
 
-        public VendorController(IVendorService service)
-        {
-            _service = service;
-        }
 
 
         [HttpGet]
