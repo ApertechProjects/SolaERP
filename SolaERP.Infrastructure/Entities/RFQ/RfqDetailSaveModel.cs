@@ -12,7 +12,7 @@ namespace SolaERP.Application.Entities.RFQ
         public int BusinessCategoryId { get; set; }
         public string Description { get; set; }
         public string UOM { get; set; }
-        public decimal Quantity { get; set; }
+        public decimal OutStandingQTY { get; set; }
         public Guid GUID { get; set; }
         public int Condition { get; set; }
         public bool AlternativeItem { get; set; }
