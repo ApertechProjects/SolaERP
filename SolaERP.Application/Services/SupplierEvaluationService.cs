@@ -811,7 +811,7 @@ namespace SolaERP.Persistence.Services
             int? revisedVendorId = null)
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
-            int vendorId = revisedVendorId ?? user.Id;
+            int vendorId = revisedVendorId ?? user.VendorId;
 
             List<DueDiligenceDesign> dueDiligence = await _repository.GetDueDiligencesDesignAsync(language);
             List<DueDiligenceValue> dueDiligenceValues = await _repository.GetVendorDuesAsync(vendorId);
