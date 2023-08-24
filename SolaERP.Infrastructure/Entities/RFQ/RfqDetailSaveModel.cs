@@ -16,8 +16,6 @@ namespace SolaERP.Application.Entities.RFQ
         public Guid GUID { get; set; }
         public int Condition { get; set; }
         public bool AlternativeItem { get; set; }
-        public bool IsNew { get; set; }
-
 
         [NotInclude]
         public List<RfqRequestDetailSaveModel> RequestDetails { get; set; }
