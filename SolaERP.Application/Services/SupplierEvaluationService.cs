@@ -230,47 +230,50 @@ namespace SolaERP.Persistence.Services
 
                 #region Bank Accounts
 
-                for (var i = 0; i < command.BankAccounts.Count; i++)
+                if (command.BankAccounts is not null)
                 {
-                    var x = command.BankAccounts[i];
-                    if (x.Type == 2 && x.Id > 0)
+                    for (var i = 0; i < command.BankAccounts.Count; i++)
                     {
-                        await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
-                    }
-
-                    else
-                    {
-                        var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id,
-                            _mapper.Map<VendorBankDetail>(x));
-
-                        x.VendorId = vendorId;
-
-                        if (x.AccountVerificationLetter != null)
+                        var x = command.BankAccounts[i];
+                        if (x.Type == 2 && x.Id > 0)
                         {
-                            tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
+                            await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
+                        }
+
+                        else
+                        {
+                            var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id,
+                                _mapper.Map<VendorBankDetail>(x));
+
+                            x.VendorId = vendorId;
+
+                            if (x.AccountVerificationLetter != null)
                             {
-                                if (attachment.Type == 2 && attachment.AttachmentId > 0)
+                                tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
                                 {
-                                    var attachmentInDb = _attachmentRepository
-                                        .GetAttachmentsWithFileDataAsync(attachment.AttachmentId).Result[0];
-                                    _fileUploadService.DeleteFile(Modules.EvaluationForm, attachmentInDb.FileLink)
-                                        .Wait();
-                                    return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
-                                }
+                                    if (attachment.Type == 2 && attachment.AttachmentId > 0)
+                                    {
+                                        var attachmentInDb = _attachmentRepository
+                                            .GetAttachmentsWithFileDataAsync(attachment.AttachmentId).Result[0];
+                                        _fileUploadService.DeleteFile(Modules.EvaluationForm, attachmentInDb.FileLink)
+                                            .Wait();
+                                        return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
+                                    }
 
-                                if (attachment.Type != 2 && attachment.AttachmentId <= 0)
-                                {
-                                    var entity = _mapper.Map<AttachmentSaveModel>(attachment);
-                                    entity.SourceId = detaildId;
-                                    entity.SourceType = SourceType.VEN_BNK.ToString();
-                                    entity.FileLink = _fileUploadService.AddFile(
-                                        new List<IFormFile> { attachment.File },
-                                        Modules.EvaluationForm, new List<string>()).Result.Data[0];
-                                    return _attachmentRepository.SaveAttachmentAsync(entity);
-                                }
+                                    if (attachment.Type != 2 && attachment.AttachmentId <= 0)
+                                    {
+                                        var entity = _mapper.Map<AttachmentSaveModel>(attachment);
+                                        entity.SourceId = detaildId;
+                                        entity.SourceType = SourceType.VEN_BNK.ToString();
+                                        entity.FileLink = _fileUploadService.AddFile(
+                                            new List<IFormFile> { attachment.File },
+                                            Modules.EvaluationForm, new List<string>()).Result.Data[0];
+                                        return _attachmentRepository.SaveAttachmentAsync(entity);
+                                    }
 
-                                return Task.FromResult(true);
-                            }));
+                                    return Task.FromResult(true);
+                                }));
+                            }
                         }
                     }
                 }
@@ -827,13 +830,13 @@ namespace SolaERP.Persistence.Services
                     var correspondingValue =
                         dueDiligenceValues.FirstOrDefault(v => v.DueDiligenceDesignId == d.DesignId);
                     List<AttachmentDto> attachments;
-                    
+
                     if (d.HasAttachment > 0)
                     {
                         attachments = _mapper.Map<List<AttachmentDto>>(
                             await _attachmentRepository.GetAttachmentsAsync(vendorId, null,
                                 SourceType.VEN_DUE.ToString(), d.DesignId));
-                        
+
                         attachments = attachments.Select(x =>
                         {
                             x.FileLink = _fileUploadService.GetDownloadFileLink(x.FileLink, Modules.EvaluationForm);
