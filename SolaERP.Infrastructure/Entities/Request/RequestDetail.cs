@@ -5,7 +5,7 @@
         public int RequestDetailId { get; set; }
         public int RequestMainId { get; set; }
         public string LineNo { get; set; }
-        public DateTime RequestDate { get; set; }
+        public DateTime? RequestDate { get; set; }
         public DateTime RequestDeadline { get; set; }
         public DateTime RequestedDate { get; set; }
         public string ItemCode { get; set; }

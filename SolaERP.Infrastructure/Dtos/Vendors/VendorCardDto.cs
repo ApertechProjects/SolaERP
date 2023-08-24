@@ -62,7 +62,7 @@ namespace SolaERP.Application.Dtos.Vendors
         //public int ApproveStageMainId { get; set; }
         public DateTime CompanyRegistrationDate { get; set; }
         public string TaxOffice { get; set; }
-        public AttachmentDto LogoFile { get; set; }
+        public IFormFile Logo { get; set; }
         public bool CheckLogoIsDeleted { get; set; }
         public List<VendorBankDetailDto> BankAccounts { get; set; }
     }

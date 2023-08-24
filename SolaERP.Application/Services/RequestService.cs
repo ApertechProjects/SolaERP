@@ -7,6 +7,7 @@ using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.Persistence.Utils;
 
 namespace SolaERP.Persistence.Services
 {
@@ -51,6 +52,7 @@ namespace SolaERP.Persistence.Services
         public async Task<bool> SaveRequestDetailsAsync(RequestDetailDto requestDetailDto)
         {
             var entity = _mapper.Map<RequestDetail>(requestDetailDto);
+            entity.RequestDate = entity.RequestDate.ConvertDateToValidDate();
             var requestDetails = await _requestDetailRepository.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
             return requestDetails;
