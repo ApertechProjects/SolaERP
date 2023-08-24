@@ -266,7 +266,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = @"SET NOCOUNT OFF EXEC SP_RFQDetails_IUD @RFQMainId,@Data";
 
                 command.Parameters.AddWithValue(command, "@RFQMainId", mainId);
-                command.Parameters.AddTableValue(command, "@Data", "dbo.RFQDetailsType", details.ConvertToDataTable());
+                command.Parameters.AddTableValue(command, "@Data", "dbo.RFQDetailsType", details?.ConvertToDataTable());
                 var res = await command.ExecuteNonQueryAsync();
                 return res > 0;
             }
@@ -276,7 +276,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = @"EXEC SP_RFQCreateRequestList @BusinessUnitId,@Businesscategoryid,@Buyer,@UserId";
-
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", model?.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@Businesscategoryid", string.Join(",", model?.BusinessCategoryIds));
@@ -295,7 +294,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_RFQRequestDetails_IUD @Data";
-                command.Parameters.AddTableValue(command, "@Data", "RFQRequestDetailsType", details.ConvertToDataTable());
+                command.Parameters.AddTableValue(command, "@Data", "RFQRequestDetailsType", details?.ConvertToDataTable());
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
