@@ -22,6 +22,7 @@ namespace SolaERP.Application.Dtos.RFQ
         public int CONV_ID { get; set; }
         public Guid GUID { get; set; }
         public string Buyer { get; set; }
-
+        public bool AlternativeItem { get; set; }
+        public decimal RequestQuantity { get; set; }    
     }
 }

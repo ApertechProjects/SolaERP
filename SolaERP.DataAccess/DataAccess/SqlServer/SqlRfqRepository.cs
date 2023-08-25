@@ -451,6 +451,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 GUID = reader.Get<Guid>("GUID"),
                 Condition = (Condition)reader.Get<int>("Condition"),
                 Buyer = reader.Get<string>("Buyer"),
+                AlternativeItem = reader.Get<bool>("AlternativeItem"),
+                RequestQuantity = reader.Get<decimal>("RequestQuantity"),
                 BusinessCategory = new() 
                 {
                     Id = reader.Get<int>("BusinessCategoryId"),
