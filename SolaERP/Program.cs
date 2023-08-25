@@ -91,6 +91,11 @@ builder.Services.Configure<FormOptions>(options =>
     options.ValueCountLimit = int.MaxValue;
 });
 
+builder.Services.AddControllers(x =>
+{
+    x.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+});
+
 builder.Host.UseSerilog(logger);
 
 builder.Services.AddAuthentication(x =>
