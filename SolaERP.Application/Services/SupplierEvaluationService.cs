@@ -631,7 +631,7 @@ namespace SolaERP.Persistence.Services
                 .Select(x => new NonDisclosureAgreement
                 {
                     VendorFullName = user.FullName,
-                    NdaID = nda.FirstOrDefault(y => y.BusinessUnitId == x.BusinessUnitId)?.VendorNDAId,
+                    NdaID = nda.FirstOrDefault(y => y.BusinessUnitId == x.BusinessUnitId)?.VendorNDAId ?? 0,
                     VendorId = vendorId,
                     BusinessUnitId = x.BusinessUnitId,
                     BusinessUnitCode = x.BusinessUnitCode,
