@@ -18,7 +18,11 @@ using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers(options => { options.Filters.Add(new ValidationFilter()); }).AddJsonOptions(options =>
+builder.Services.AddControllers(options =>
+    {
+        options.Filters.Add(new ValidationFilter());
+        options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+    }).AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 })
@@ -89,11 +93,6 @@ builder.Services.Configure<ConnectionFactory>(option =>
 builder.Services.Configure<FormOptions>(options =>
 {
     options.ValueCountLimit = int.MaxValue;
-});
-
-builder.Services.AddControllers(x =>
-{
-    x.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
 });
 
 builder.Host.UseSerilog(logger);

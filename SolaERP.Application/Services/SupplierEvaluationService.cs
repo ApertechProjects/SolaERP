@@ -346,64 +346,64 @@ namespace SolaERP.Persistence.Services
 
                 #region Prequalification
 
-                if (command.Prequalification is not null)
-                {
-                    // tasks.AddRange(command?.Prequalification?.SelectMany(item =>
-                    // {
-                    //     var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
-                    //     prequalificationValue.VendorId = vendorId;
-                    //     prequalificationValue.DateTimeValue =
-                    //         prequalificationValue.DateTimeValue.ConvertDateToValidDate();
-                    //
-                    //     var tasksList = new List<Task<bool>>();
-                    //     _repository.UpdatePrequalification(prequalificationValue); //+
-                    //
-                    //     if (item?.Attachments is not null)
-                    //     {
-                    //         for (int i = 0; i < item?.Attachments.Count; i++)
-                    //         {
-                    //             if (item.Attachments[i].Type == 2 && item.Attachments[i].AttachmentId > 0)
-                    //             {
-                    //                 tasksList.Add(
-                    //                     _attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId));
-                    //                 _fileUploadService.DeleteFile(Modules.EvaluationForm, item.Attachments[i].FileLink);
-                    //             }
-                    //
-                    //             if (item.Attachments[i].Type != 2 && item.Attachments[i].AttachmentId > 0)
-                    //             {
-                    //                 var attachedFile = _mapper.Map<AttachmentSaveModel>(item.Attachments[i]);
-                    //
-                    //                 attachedFile.SourceId = vendorId;
-                    //                 attachedFile.AttachmentTypeId = item.DesignId;
-                    //                 attachedFile.SourceType = SourceType.VEN_PREQ.ToString();
-                    //                 attachedFile.FileLink = _fileUploadService.AddFile(
-                    //                     new List<IFormFile>() { item?.Attachments[i].File },
-                    //                     Modules.EvaluationForm,
-                    //                     new List<string>()).Result.Data[0];
-                    //
-                    //                 tasksList.Add(_attachmentRepository.SaveAttachmentAsync(attachedFile));
-                    //             }
-                    //
-                    //             tasksList.Add(Task.FromResult(true));
-                    //         }
-                    //     }
-                    //
-                    //
-                    //     if (item.HasGrid == true)
-                    //     {
-                    //         tasksList.AddRange(item.GridDatas.Select(gridData =>
-                    //         {
-                    //             var gridDatas = _mapper.Map<PrequalificationGridData>(gridData);
-                    //             gridDatas.PreqqualificationDesignId = item.DesignId;
-                    //             gridDatas.VendorId = vendorId;
-                    //
-                    //             return _repository.UpdatePreGridAsync(gridDatas);
-                    //         }));
-                    //     }
-                    //
-                    //     return tasksList;
-                    // }));
-                }
+                // if (command.Prequalification is not null)
+                // {
+                //     tasks.AddRange(command?.Prequalification?.SelectMany(item =>
+                //     {
+                //         var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
+                //         prequalificationValue.VendorId = vendorId;
+                //         prequalificationValue.DateTimeValue =
+                //             prequalificationValue.DateTimeValue.ConvertDateToValidDate();
+                //     
+                //         var tasksList = new List<Task<bool>>();
+                //         _repository.UpdatePrequalification(prequalificationValue); //+
+                //     
+                //         if (item?.Attachments is not null)
+                //         {
+                //             for (int i = 0; i < item?.Attachments.Count; i++)
+                //             {
+                //                 if (item.Attachments[i].Type == 2 && item.Attachments[i].AttachmentId > 0)
+                //                 {
+                //                     tasksList.Add(
+                //                         _attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId));
+                //                     _fileUploadService.DeleteFile(Modules.EvaluationForm, item.Attachments[i].FileLink);
+                //                 }
+                //     
+                //                 if (item.Attachments[i].Type != 2 && item.Attachments[i].AttachmentId > 0)
+                //                 {
+                //                     var attachedFile = _mapper.Map<AttachmentSaveModel>(item.Attachments[i]);
+                //     
+                //                     attachedFile.SourceId = vendorId;
+                //                     attachedFile.AttachmentTypeId = item.DesignId;
+                //                     attachedFile.SourceType = SourceType.VEN_PREQ.ToString();
+                //                     attachedFile.FileLink = _fileUploadService.AddFile(
+                //                         new List<IFormFile>() { item?.Attachments[i].File },
+                //                         Modules.EvaluationForm,
+                //                         new List<string>()).Result.Data[0];
+                //     
+                //                     tasksList.Add(_attachmentRepository.SaveAttachmentAsync(attachedFile));
+                //                 }
+                //     
+                //                 tasksList.Add(Task.FromResult(true));
+                //             }
+                //         }
+                //     
+                //     
+                //         if (item.HasGrid == true)
+                //         {
+                //             tasksList.AddRange(item.GridDatas.Select(gridData =>
+                //             {
+                //                 var gridDatas = _mapper.Map<PrequalificationGridData>(gridData);
+                //                 gridDatas.PreqqualificationDesignId = item.DesignId;
+                //                 gridDatas.VendorId = vendorId;
+                //
+                //                 return _repository.UpdatePreGridAsync(gridDatas);
+                //             }));
+                //         }
+                //     
+                //         return tasksList;
+                //     }));
+                // }
 
                 #endregion
 
@@ -413,15 +413,15 @@ namespace SolaERP.Persistence.Services
 
                 if (command.NonDisclosureAgreement is not null)
                 {
-                             // command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
-                                    // tasks.AddRange(command.NonDisclosureAgreement?.Select(x => _repository.DeleteNDAAsync(vendorId)));
-                                    // if (command?.NonDisclosureAgreement != null && command?.NonDisclosureAgreement?.Count > 0)
-                                    //     tasks.AddRange(command?.NonDisclosureAgreement?.Select(x =>
-                                    //         _repository.AddNDAAsync(_mapper.Map<VendorNDA>(x))));
+                    command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
+                    tasks.AddRange(command.NonDisclosureAgreement?.Select(x => _repository.DeleteNDAAsync(vendorId)));
+                    if (command?.NonDisclosureAgreement != null && command?.NonDisclosureAgreement?.Count > 0)
+                        tasks.AddRange(command?.NonDisclosureAgreement?.Select(x =>
+                            _repository.AddNDAAsync(_mapper.Map<VendorNDA>(x))));
                 }
 
                 #endregion
-                
+
 
                 #region COBC
 
