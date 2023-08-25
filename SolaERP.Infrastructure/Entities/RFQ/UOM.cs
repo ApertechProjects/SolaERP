@@ -6,6 +6,6 @@ namespace SolaERP.Application.Entities.RFQ
     {
         [DbColumn("UOM")]
         public string UnitOfMeasure { get; set; }
-        public object Conv_Factor { get; set; }
+        public decimal Conv_Factor { get; set; }
     }
 }

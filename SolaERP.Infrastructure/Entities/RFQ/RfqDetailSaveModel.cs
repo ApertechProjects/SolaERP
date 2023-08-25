@@ -56,6 +56,7 @@ namespace SolaERP.Application.Entities.RFQ
 
     public class RFQRequestDetail
     {
+        public long RowNum { get; set; }
         public int Id { get; set; }
         public int RFQDetailId { get; set; }
         public int RequestDetailId { get; set; }
@@ -68,8 +69,12 @@ namespace SolaERP.Application.Entities.RFQ
         public decimal Quantity { get; set; }
         public string UOM { get; set; }
         public string DefaultUOM { get; set; }
+        public Condition Condition { get; set; }
+        public string Buyer { get; set; }
+        public BusinessCategory BusinessCategory { get; set; }
         public int CONV_ID { get; set; }
         public Guid GUID { get; set; }
-
+        public bool AlternativeItem { get; set; }
+        public decimal RequestQuantity { get; set; }    
     }
 }

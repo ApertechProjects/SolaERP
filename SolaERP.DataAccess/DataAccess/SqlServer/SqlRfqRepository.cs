@@ -1,6 +1,7 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.Item_Code;
 using SolaERP.Application.Entities.RFQ;
+using SolaERP.Application.Entities.UOM;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -414,8 +415,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             };
         }
 
-
-
         public async Task<List<RFQRequestDetail>> GetRFQLineDeatilsAsync(int rfqMainId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -435,6 +434,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return new()
             {
+                RowNum = reader.Get<long>("RowNum"),
                 Id = reader.Get<int>("RFQRequestDetailId"),
                 RFQDetailId = reader.Get<int>("RFQDetailId"),
                 RequestDetailId = reader.Get<int>("RequestDetailsId"),
@@ -449,6 +449,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 DefaultUOM = reader.Get<string>("DefaultUOM"),
                 CONV_ID = reader.Get<int>("CONV_ID"),
                 GUID = reader.Get<Guid>("GUID"),
+                Condition = (Condition)reader.Get<int>("Condition"),
+                Buyer = reader.Get<string>("Buyer"),
+                AlternativeItem = reader.Get<bool>("AlternativeItem"),
+                RequestQuantity = reader.Get<decimal>("RequestQuantity"),
+                BusinessCategory = new() 
+                {
+                    Id = reader.Get<int>("BusinessCategoryId"),
+                    Name = reader.Get<string>("BusinessCategoryName")
+                },
+
             };
         }
 
@@ -489,7 +499,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<UOM>> GetPUOMAsync(int businessUnitId, string itemCodes)
+        public async Task<List<Application.Entities.RFQ.UOM>> GetPUOMAsync(int businessUnitId, string itemCodes)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -498,11 +508,29 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
                 command.Parameters.AddWithValue(command, "@ItemCode", itemCodes);
 
-                List<UOM> list = new();
+                List<Application.Entities.RFQ.UOM> list = new();
                 using var reader = await command.ExecuteReaderAsync();
 
-                while (reader.Read()) list.Add(reader.GetByEntityStructure<UOM>());
+                while (reader.Read()) list.Add(reader.GetByEntityStructure<Application.Entities.RFQ.UOM>());
                 return list;
+            }
+        }
+
+        public async Task<Application.Entities.UOM.Conversion> GetConversionAsync(int bussinessUnit, string itemCode)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC SP_UOMConvList  @BusinessUnitId,@ItemCode";
+
+                Application.Entities.UOM.Conversion conversion = null;
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", bussinessUnit);
+                command.Parameters.AddWithValue(command, "@ItemCode", itemCode);
+
+                using var reader = await command.ExecuteReaderAsync();
+                if (reader.Read())
+                    conversion = reader.GetByEntityStructure<Application.Entities.UOM.Conversion>();
+
+                return conversion;
             }
         }
         #endregion

@@ -1,5 +1,6 @@
 ﻿using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.UOM;
 using SolaERP.Application.Entities.RFQ;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Models;
@@ -20,6 +21,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> ChangeRFQStatusAsync(RfqChangeStatusModel model, string userIdentity);
         Task<ApiResponse<RFQMainDto>> GetRFQAsync(string userIdentity, int rfqMainId);
         Task<ApiResponse<List<RFQInProgressDto>>> GetInProgressAsync(RFQFilterBase filter);
-        Task<ApiResponse<List<UOMDto>>> GetPUOMAsync(int businessUnitId, string itemCodes);
+        Task<ApiResponse<List<Dtos.RFQ.UOMDto>>> GetPUOMAsync(int businessUnitId, string itemCodes);
+        //Task<ApiResponse<SolaERP.Application.Dtos.UOM.ConversionDTO>> GetConversionAsync(int businessUnit, string itemCodes);
     }
 }
