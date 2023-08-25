@@ -73,6 +73,10 @@ namespace SolaERP.Persistence.Services
             var header = await _bidComparisonRepository.GetComparisonHeader(headerFilter);
             comparison.BidComparisonHeader = _mapper.Map<BidComparisonHeaderLoadDto>(header);
 
+            var singleSourceFilter = new BidComparisonSingleSourceReasonsFilter { BidComparisonId = filter.BidComparisonId };
+            var singleSourceReasons = _bidComparisonRepository.GetComparisonSingleSourceReasons(singleSourceFilter);
+            comparison.BidComparisonHeader.SingleSourceReasons = _mapper.Map<List<BidComparisonSingleSourceReasonsLoadDto>>(singleSourceReasons);
+
             var bidHeaderFilter = new BidComparisonBidHeaderFilter { BidComparisonId = filter.BidComparisonId, UserId = filter.UserId };
             var bids = await _bidComparisonRepository.GetComparisonBidHeader(bidHeaderFilter);
             comparison.Bids = _mapper.Map<List<BidComparisonBidHeaderLoadDto>>(bids);

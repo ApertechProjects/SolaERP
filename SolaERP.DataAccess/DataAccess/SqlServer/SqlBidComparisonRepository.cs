@@ -279,7 +279,28 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
             return null;
         }
-        
+        public async Task<List<BidComparisonSingleSourceReasonsLoad>> GetComparisonSingleSourceReasons(BidComparisonSingleSourceReasonsFilter filter)
+        {            
+            var data = new List<BidComparisonSingleSourceReasonsLoad>();
+
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = "EXEC SP_BidComparisonSingleSourceReasonsLoad @BidComparisonId";
+
+            command.Parameters.AddWithValue(command, "@BidComparisonId", filter.BidComparisonId);
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                data.Add(new BidComparisonSingleSourceReasonsLoad
+                {
+                    Checked = reader.Get<bool>("Checked"),
+                    Other = reader.Get<int>("Other"),
+                    SingleSourceReason = reader.Get<string>("SingleSourceReason"),
+                    SingleSourcereasonId = reader.Get<int>("SingleSourcereasonId"),
+                });
+            }
+            return data;
+        }
+
         public async Task<List<BidComparisonDraftLoad>> GetComparisonDraft(BidComparisonDraftFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;

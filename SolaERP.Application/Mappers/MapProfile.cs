@@ -507,6 +507,9 @@ namespace SolaERP.Persistence.Mappers
                     opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x)))); 
             CreateMap<BidComparisonRejectedLoad, BidComparisonRejectedLoadDto>().ReverseMap();
 
+            CreateMap<BidComparisonSingleSourceReasonsFilter, BidComparisonSingleSourceReasonsFilterDto>().ReverseMap();
+            CreateMap<BidComparisonSingleSourceReasonsLoad, BidComparisonSingleSourceReasonsLoadDto>().ReverseMap();
+
         }
     }
 }
