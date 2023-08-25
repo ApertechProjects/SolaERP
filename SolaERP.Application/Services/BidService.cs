@@ -97,6 +97,17 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<BidIUDResponse>.Success(saveResponse, 200);
         }
 
+        public async Task<ApiResponse<bool>> BidDisqualifyAsync(BidDisqualifyDto dto, string userIdentity)
+        {
+            var entity = _mapper.Map<BidDisqualify>(dto);
+            entity.UserId = Convert.ToInt32(userIdentity);
+            var saveResponse = await _bidRepository.BidDisqualifyAsync(entity);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return ApiResponse<bool>.Success(saveResponse, 200);
+        }
+
         public async Task<ApiResponse<bool>> DeleteBidMainAsync(int bidMainId, string userIdentity)
         {
             int userId = Convert.ToInt32(userIdentity);

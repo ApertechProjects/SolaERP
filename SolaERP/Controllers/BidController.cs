@@ -44,5 +44,8 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Delete(int bidMainId)
            => CreateActionResult(await _bidService.DeleteBidMainAsync(bidMainId, User.Identity.Name));
 
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Disqualify(BidDisqualifyDto dto)
+          => CreateActionResult(await _bidService.BidDisqualifyAsync(dto, User.Identity.Name));
     }
 }
