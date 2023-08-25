@@ -68,8 +68,10 @@ namespace SolaERP.Application.Entities.RFQ
         public decimal Quantity { get; set; }
         public string UOM { get; set; }
         public string DefaultUOM { get; set; }
+        public int Condition { get; set; }
+        public string Buyer { get; set; }
+        public BusinessCategory BusinessCategory { get; set; }  
         public int CONV_ID { get; set; }
         public Guid GUID { get; set; }
-
     }
 }

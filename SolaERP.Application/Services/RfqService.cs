@@ -4,6 +4,7 @@ using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.UOM;
 using SolaERP.Application.Entities.RFQ;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Models;
@@ -165,12 +166,19 @@ namespace SolaERP.Persistence.Services
             return allDeleted ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Fail(false, 400);
         }
 
-        public async Task<ApiResponse<List<UOMDto>>> GetPUOMAsync(int businessUnitId, string itemCodes)
+        public async Task<ApiResponse<List<Application.Dtos.RFQ.UOMDto>>> GetPUOMAsync(int businessUnitId, string itemCodes)
         {
             var puomList = await _repository.GetPUOMAsync(businessUnitId, itemCodes);
-            var dto = _mapper.Map<List<UOMDto>>(puomList);
+            var dto = _mapper.Map<List<Application.Dtos.RFQ.UOMDto>>(puomList);
 
-            return ApiResponse<List<UOMDto>>.Success(dto, 200);
+            return ApiResponse<List<Application.Dtos.RFQ.UOMDto>>.Success(dto, 200);
         }
+
+
+        //public async Task<ApiResponse<Application.Dtos.UOM.ConversionDTO>> GetConversionAsync(int businessUnit, string itemCodes)
+        //{
+        //    var conversion = await _repository.GetConversionAsync(businessUnit, itemCodes);
+        //    var dto = _mapper.Map<ConversionDTO>(conversion);
+        //}
     }
 }
