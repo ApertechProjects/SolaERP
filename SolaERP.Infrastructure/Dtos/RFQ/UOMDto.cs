@@ -2,7 +2,7 @@
 {
     public class UOMDto
     {
-        public string UnitOfMeasure { get; set; }
+        public string UOM { get; set; }
         public object Conv_Factor { get; set; }
     }
 }

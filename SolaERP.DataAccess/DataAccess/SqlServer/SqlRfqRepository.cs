@@ -434,6 +434,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return new()
             {
+                RowNum = reader.Get<long>("RowNum"),
                 Id = reader.Get<int>("RFQRequestDetailId"),
                 RFQDetailId = reader.Get<int>("RFQDetailId"),
                 RequestDetailId = reader.Get<int>("RequestDetailsId"),
@@ -448,6 +449,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 DefaultUOM = reader.Get<string>("DefaultUOM"),
                 CONV_ID = reader.Get<int>("CONV_ID"),
                 GUID = reader.Get<Guid>("GUID"),
+                Condition = (Condition)reader.Get<int>("Condition"),
+                Buyer = reader.Get<string>("Buyer"),
+                BusinessCategory = new() 
+                {
+                    Id = reader.Get<int>("BusinessCategoryId"),
+                    Name = reader.Get<string>("BusinessCategoryName")
+                },
+
             };
         }
 

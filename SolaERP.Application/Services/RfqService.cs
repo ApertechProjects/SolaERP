@@ -173,12 +173,6 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<List<Application.Dtos.RFQ.UOMDto>>.Success(dto, 200);
         }
-
-
-        //public async Task<ApiResponse<Application.Dtos.UOM.ConversionDTO>> GetConversionAsync(int businessUnit, string itemCodes)
-        //{
-        //    var conversion = await _repository.GetConversionAsync(businessUnit, itemCodes);
-        //    var dto = _mapper.Map<ConversionDTO>(conversion);
-        //}
+      
     }
 }
