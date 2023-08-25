@@ -27,6 +27,7 @@ namespace SolaERP.Application.Dtos.Request
         public string AccountCode { get; set; }
         public int Condition { get; set; }
         public int Priority { get; set; }
+        public int ItemCategory { get; set; }
         public bool AlternativeItem { get; set; }
         public decimal ManualUP { get; set; }
         public OperationType Type { get; set; }

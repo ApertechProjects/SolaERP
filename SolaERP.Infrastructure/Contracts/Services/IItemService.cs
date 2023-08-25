@@ -9,7 +9,7 @@ namespace SolaERP.Application.Contracts.Services
     {
         public Task<ApiResponse<List<ItemCodeDto>>> GetAllAsync(string businessUnitCode);
         Task<ApiResponse<ItemCodeWithImagesDto>> GetItemCodeByItemCodeAsync(string businessUnitCode, string itemCode);
-        Task<ApiResponse<ItemCodeInfoDto>> GetItemCodeInfoByItemCodeAsync(string itemCode);
+        Task<ApiResponse<ItemCodeInfoDto>> GetItemCodeInfoByItemCodeAsync(string itemCode,int businessUnitId);
         public Task<ApiResponse<List<ItemCodeWithImagesDto>>> GetItemCodesWithImagesAsync();
     }
 }

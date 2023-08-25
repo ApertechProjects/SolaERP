@@ -24,6 +24,7 @@
         public decimal ConnectedOrderLineNo { get; set; }
         public string AccountCode { get; set; }
         public int Condition { get; set; }
+        public int ItemCategory { get; set; }
         public int Priority { get; set; }
         public decimal ManualUP { get; set; }
         public bool AlternativeItem { get; set; }

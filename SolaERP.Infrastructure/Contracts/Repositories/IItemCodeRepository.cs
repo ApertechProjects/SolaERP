@@ -7,7 +7,7 @@ namespace SolaERP.Application.Contracts.Repositories
     public interface IItemCodeRepository : IReadableAsync<ItemCode>
     {
         public Task<ItemCodeWithImages> GetItemCodeByItemCodeAsync(string businessUnitCode, string itemCode);
-        public Task<ItemCodeInfo> GetItemCodeInfoByItemCodeAsync(string itemCode);
+        public Task<ItemCodeInfo> GetItemCodeInfoByItemCodeAsync(string itemCode,int businessUnitId);
         public Task<List<ItemCodeWithImages>> GetItemCodesWithImagesAsync();
         public Task<List<ItemCode>> GetAllAsync(string businessUnitCode);
     }

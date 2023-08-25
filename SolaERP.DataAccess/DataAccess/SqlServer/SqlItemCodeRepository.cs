@@ -65,12 +65,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<ItemCodeInfo> GetItemCodeInfoByItemCodeAsync(string itemCode)
+        public async Task<ItemCodeInfo> GetItemCodeInfoByItemCodeAsync(string itemCode, int businessUnitId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec SP_ItemInfo @ItemCode";
+                command.CommandText = "exec SP_ItemInfo @ItemCode,@BusinessUnitId";
                 command.Parameters.AddWithValue(command, "@ItemCode", itemCode);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
                 ItemCodeInfo result = new();
 
                 using var reader = await command.ExecuteReaderAsync();

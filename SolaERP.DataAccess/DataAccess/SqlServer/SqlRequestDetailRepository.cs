@@ -41,6 +41,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                     @ConnectedOrderLineNo, 
                                                                     @AccountCode,
                                                                     @Condition,
+                                                                    @BusinessCategoryId,
                                                                     @Priority,
                                                                     @ManualUP,
                                                                     @AlternativeItem,
@@ -79,6 +80,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@ConnectedOrderLineNo", entity.ConnectedOrderLineNo);
                 command.Parameters.AddWithValue(command, "@AccountCode", entity.AccountCode);
                 command.Parameters.AddWithValue(command, "@Condition", entity.Condition);
+                command.Parameters.AddWithValue(command, "@BusinessCategoryId", entity.ItemCategory);
                 command.Parameters.AddWithValue(command, "@Priority", entity.Priority);
                 command.Parameters.AddWithValue(command, "@ManualUP", entity.ManualUP);
                 command.Parameters.AddWithValue(command, "@AlternativeItem", entity.AlternativeItem);
