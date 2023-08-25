@@ -34,28 +34,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = @"EXEC SP_BidComparison_IUD @BidComparisonId,
-                                        @RFQMainId,
-                                        @ComparisonNo,
-                                        @ApproveStageMain,
-                                        @ComparisonDate,
-                                        @Comparisondeadline,
-                                        @SpecialistComment,
-                                        @UserId";
-
+                                    @RFQMainId,
+                                    @ComparisonNo,
+                                    @ApproveStageMain,
+                                    @ComparisonDate,
+                                    @Comparisondeadline,
+                                    @SpecialistComment,
+                                    @SingleSourceReasonId,
+                                    @UserId";
 
             command.Parameters.AddWithValue(command, "@BidComparisonId", entity.BidComparisonId);
-
             command.Parameters.AddWithValue(command, "@RFQMainId", entity.RFQMainId);
-
             command.Parameters.AddWithValue(command, "@ComparisonNo", entity.ComparisonNo);
-
             command.Parameters.AddWithValue(command, "@ApproveStageMain", entity.ApproveStageMain);
-
             command.Parameters.AddWithValue(command, "@ComparisonDate", entity.ComparisonDate);
-
             command.Parameters.AddWithValue(command, "@Comparisondeadline", entity.ComparisonDeadline);
-
             command.Parameters.AddWithValue(command, "@SpecialistComment", entity.SpecialistComment);
+            command.Parameters.AddTableValue(command, "@SingleSourceReasonId", "SingleIdItems", entity.SingleSourceReasonId.ConvertListToDataTable());
 
             command.Parameters.AddWithValue(command, "@UserId", entity.UserId);
 
