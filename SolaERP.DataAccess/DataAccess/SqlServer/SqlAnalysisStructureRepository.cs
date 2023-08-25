@@ -71,7 +71,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@AnalysisStructureId", model.AnalysisStructureId);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@ProcedureId", model.ProcedureId);
-                command.Parameters.AddWithValue(command, "@CatId", model.ProcedureId);
+                command.Parameters.AddWithValue(command, "@CatId", model.CatId);
                 command.Parameters.AddWithValue(command, "@AnalysisDimensionid1", model.AnalysisDimensionid1);
                 command.Parameters.AddWithValue(command, "@AnalysisDimensionid2", model.AnalysisDimensionid2);
                 command.Parameters.AddWithValue(command, "@AnalysisDimensionid3", model.AnalysisDimensionid3);
