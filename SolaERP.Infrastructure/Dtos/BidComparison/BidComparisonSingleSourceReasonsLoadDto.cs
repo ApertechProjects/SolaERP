@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Dtos.BidComparison
 {
-    public class BidComparisonSingleSourceReasonsLoad
+    public class BidComparisonSingleSourceReasonsLoadDto
     {
         public bool Checked { get; set; }
         public int SingleSourcereasonId { get; set; }
