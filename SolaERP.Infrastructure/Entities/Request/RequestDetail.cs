@@ -5,7 +5,7 @@
         public int RequestDetailId { get; set; }
         public int RequestMainId { get; set; }
         public string LineNo { get; set; }
-        public DateTime RequestDate { get; set; }
+        public DateTime? RequestDate { get; set; }
         public DateTime RequestDeadline { get; set; }
         public DateTime RequestedDate { get; set; }
         public string ItemCode { get; set; }
@@ -24,6 +24,7 @@
         public decimal ConnectedOrderLineNo { get; set; }
         public string AccountCode { get; set; }
         public int Condition { get; set; }
+        public int ItemCategory { get; set; }
         public int Priority { get; set; }
         public decimal ManualUP { get; set; }
         public bool AlternativeItem { get; set; }

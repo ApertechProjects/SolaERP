@@ -6,7 +6,7 @@ namespace SolaERP.Application.Models
 {
     public class RfqSaveCommandRequest
     {
-        public int RFQMainId { get; set; }
+        public int Id { get; set; }
         public int BusinessUnitId { get; set; }
         public RfqType RFQType { get; set; }
         public string RFQNo { get; set; }
@@ -30,7 +30,7 @@ namespace SolaERP.Application.Models
         [JsonIgnore]
         public int UserId { get; set; }
 
-        public List<RfqDetailSaveModel> RfqDetails { get; set; }
+        public List<RfqDetailSaveModel> Details { get; set; }
     }
 
     public class RfqSaveCommandResponse

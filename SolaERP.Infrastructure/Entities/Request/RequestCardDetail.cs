@@ -55,5 +55,6 @@
         public int POLine { get; set; }
         public int ItemCategory { get; set; }
         public string RejectReason { get; set; }
+        public string PurchaseOrder { get; set; }
     }
 }

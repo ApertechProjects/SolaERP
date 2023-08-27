@@ -11,11 +11,8 @@ namespace SolaERP.API.Controllers
     public class VendorController : CustomBaseController
     {
         private readonly IVendorService _service;
+        public VendorController(IVendorService service) => _service = service;
 
-        public VendorController(IVendorService service)
-        {
-            _service = service;
-        }
 
 
         [HttpGet]
@@ -26,8 +23,8 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Get(int vendorId)
             => CreateActionResult(await _service.GetAsync(vendorId));
 
-        [HttpGet("{taxId}")]
-        public async Task<IActionResult> GetByTax(string taxId)
+        [HttpPost]
+        public async Task<IActionResult> GetByTax([FromQuery] string taxId)
           => Ok(await _service.GetByTaxAsync(taxId));
 
         [HttpGet]

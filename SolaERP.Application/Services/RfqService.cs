@@ -4,6 +4,7 @@ using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.UOM;
 using SolaERP.Application.Entities.RFQ;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Models;
@@ -41,11 +42,11 @@ namespace SolaERP.Persistence.Services
             request.UserId = Convert.ToInt32(useridentity);
             RfqSaveCommandResponse response = null;
 
-            if (request.RFQMainId <= 0) response = await _repository.AddMainAsync(request);
+            if (request.Id <= 0) response = await _repository.AddMainAsync(request);
             else response = await _repository.UpdateMainAsync(request);
 
-            bool result = await _repository.AddDetailsAsync(request.RfqDetails, response.Id);
-            var saveDetailTasks = request.RfqDetails.Select(requestList => _repository.SaveRFqRequestDetailsAsync(requestList.LineDetails));
+            bool result = await _repository.AddDetailsAsync(request?.Details, response.Id);
+            var saveDetailTasks = request.Details.Select(requestList => _repository.SaveRFqRequestDetailsAsync(requestList?.RequestDetails));
             await Task.WhenAll(saveDetailTasks);
 
             await _unitOfWork.SaveChangesAsync();
@@ -165,12 +166,13 @@ namespace SolaERP.Persistence.Services
             return allDeleted ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Fail(false, 400);
         }
 
-        public async Task<ApiResponse<List<UOMDto>>> GetPUOMAsync(int businessUnitId, string itemCodes)
+        public async Task<ApiResponse<List<Application.Dtos.RFQ.UOMDto>>> GetPUOMAsync(int businessUnitId, string itemCodes)
         {
             var puomList = await _repository.GetPUOMAsync(businessUnitId, itemCodes);
-            var dto = _mapper.Map<List<UOMDto>>(puomList);
+            var dto = _mapper.Map<List<Application.Dtos.RFQ.UOMDto>>(puomList);
 
-            return ApiResponse<List<UOMDto>>.Success(dto, 200);
+            return ApiResponse<List<Application.Dtos.RFQ.UOMDto>>.Success(dto, 200);
         }
+      
     }
 }

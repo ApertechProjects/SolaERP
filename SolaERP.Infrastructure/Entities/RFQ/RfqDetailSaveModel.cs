@@ -12,13 +12,13 @@ namespace SolaERP.Application.Entities.RFQ
         public int BusinessCategoryId { get; set; }
         public string Description { get; set; }
         public string UOM { get; set; }
-        public decimal Quantity { get; set; }
+        public decimal OutStandingQTY { get; set; }
         public Guid GUID { get; set; }
         public int Condition { get; set; }
         public bool AlternativeItem { get; set; }
 
         [NotInclude]
-        public List<RfqRequestDetailSaveModel> LineDetails { get; set; }
+        public List<RfqRequestDetailSaveModel> RequestDetails { get; set; }
     }
 
 
@@ -56,6 +56,7 @@ namespace SolaERP.Application.Entities.RFQ
 
     public class RFQRequestDetail
     {
+        public long RowNum { get; set; }
         public int Id { get; set; }
         public int RFQDetailId { get; set; }
         public int RequestDetailId { get; set; }
@@ -68,8 +69,12 @@ namespace SolaERP.Application.Entities.RFQ
         public decimal Quantity { get; set; }
         public string UOM { get; set; }
         public string DefaultUOM { get; set; }
+        public Condition Condition { get; set; }
+        public string Buyer { get; set; }
+        public BusinessCategory BusinessCategory { get; set; }
         public int CONV_ID { get; set; }
         public Guid GUID { get; set; }
-
+        public bool AlternativeItem { get; set; }
+        public decimal RequestQuantity { get; set; }    
     }
 }

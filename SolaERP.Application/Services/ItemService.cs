@@ -41,9 +41,9 @@ namespace SolaERP.Persistence.Services
                 ApiResponse<ItemCodeWithImagesDto>.Fail("Bad request from GetItemCodesByItemCode", 404);
         }
 
-        public async Task<ApiResponse<ItemCodeInfoDto>> GetItemCodeInfoByItemCodeAsync(string itemCode)
+        public async Task<ApiResponse<ItemCodeInfoDto>> GetItemCodeInfoByItemCodeAsync(string itemCode, int businessUnitId)
         {
-            var itemCodes = await _itemCodeRepository.GetItemCodeInfoByItemCodeAsync(itemCode);
+            var itemCodes = await _itemCodeRepository.GetItemCodeInfoByItemCodeAsync(itemCode, businessUnitId);
             var itemCodeResult = _mapper.Map<ItemCodeInfoDto>(itemCodes);
 
             return itemCodeResult != null ? ApiResponse<ItemCodeInfoDto>.Success(itemCodeResult, 200) :

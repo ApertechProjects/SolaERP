@@ -63,16 +63,13 @@ namespace SolaERP.Persistence.Services
                 model[i].AnalysisDimensionid10 = model[i].AnalysisDimensionid10 == 0 ? null : model[i].AnalysisDimensionid10;
 
                 structure = await _repository.SaveAsync(model[i], userId);
-                if (structure)
-                    counter++;
+              
             }
 
-            if (counter == model.Count)
-            {
-                await _unitOfWork.SaveChangesAsync();
-                return ApiResponse<bool>.Success(structure, 200);
-            }
-            return ApiResponse<bool>.Fail("Analysis structure can not be saved", 400);
+
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(structure, 200);
+            //return ApiResponse<bool>.Fail("Analysis structure can not be saved", 400);
         }
 
         public async Task<ApiResponse<bool>> DeleteAsync(AnalysisStructureDeleteModel model, string userName)
