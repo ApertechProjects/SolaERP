@@ -11,4 +11,3 @@ namespace SolaERP.Application.Dtos.BidComparison
         public int BidComparisonId { get; set; }
     }
 }
-}

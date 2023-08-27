@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Dtos.BidComparison
 {
-    internal class BidComparisonApprovalInformationFilter
+    public class BidComparisonApprovalInformationFilter
     {
+        public int BidComparisonId { get; set; }
     }
 }
