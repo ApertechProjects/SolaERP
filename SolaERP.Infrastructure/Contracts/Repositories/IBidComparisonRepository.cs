@@ -18,6 +18,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> SendComparisonToApprove(BidComparisonSendToApprove filter);
         Task<List<BidComparisonAll>> GetComparisonAll(BidComparisonAllFilter filter);
         Task<List<BidComparisonBidApprovalsLoad>> GetComparisonBidApprovals(BidComparisonBidApprovalsFilter filter);
+        Task<List<BidComparisonApprovalInformationLoad>> GetComparisonApprovalInformations(BidComparisonApprovalInformationFilter filter);
         Task<List<BidComparisonBidDetailsLoad>> GetComparisonBidDetails(BidComparisonBidDetailsFilter filter);
         Task<List<BidComparisonRFQDetailsLoad>> GetComparisonRFQDetails(BidComparisonRFQDetailsFilter filter);
         Task<BidComparisonBidHeaderLoad> GetComparisonBidHeader(BidComparisonBidHeaderFilter filter);

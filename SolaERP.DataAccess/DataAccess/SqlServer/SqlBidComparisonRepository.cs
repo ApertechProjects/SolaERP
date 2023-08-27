@@ -152,7 +152,31 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
             return data;
         }
-        
+
+        public async Task<List<BidComparisonApprovalInformationLoad>> GetComparisonApprovalInformations(BidComparisonApprovalInformationFilter filter)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            var data = new List<BidComparisonApprovalInformationLoad>();
+            command.CommandText = "EXEC SP_BidComparisonApprovalInformation @BidComparisonId";
+            command.Parameters.AddWithValue(command, "@BidComparisonId", filter.BidComparisonId);
+
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                data.Add(new BidComparisonApprovalInformationLoad
+                {
+                    ApproveDate = reader.Get<DateTime>("ApproveDate"),
+                    ApproveStageDetailsName = reader.Get<string>("ApproveStageDetailsName"),
+                    ApproveStatus = reader.Get<string>("ApproveStatus"),
+                    Comment = reader.Get<string>("Comment"),
+                    FullName = reader.Get<string>("FullName"),
+                    Sequence = reader.Get<int>("Sequence"),
+                    SignaturePhoto = reader.Get<string>("SignaturePhoto")
+                });
+            }
+            return data;
+        }
+
         public async Task<List<BidComparisonBidDetailsLoad>> GetComparisonBidDetails(BidComparisonBidDetailsFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;

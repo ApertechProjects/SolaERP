@@ -477,6 +477,8 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<BidComparisonBidDetailsLoad, BidComparisonBidDetailsLoadDto>().ReverseMap();
             CreateMap<BidComparisonBidHeaderLoad, BidComparisonBidHeaderLoadDto>().ReverseMap();
             CreateMap<BidComparisonRFQDetailsLoad, BidComparisonRFQDetailsLoadDto>().ReverseMap();
+            CreateMap<BidComparisonApprovalInformationFilter, BidComparisonApprovalInformationFilterDto>().ReverseMap();
+            CreateMap<BidComparisonApprovalInformationLoad, BidComparisonApprovalInformationLoadDto>().ReverseMap();
 
             CreateMap<BidComparisonDraftFilter, BidComparisonDraftFilterDto>().ReverseMap().
                 ForMember(dest => dest.Emergency,
