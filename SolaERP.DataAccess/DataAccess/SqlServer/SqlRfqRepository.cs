@@ -257,10 +257,15 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Other = reader.Get<int>("Other")
             };
         }
-        public async Task<bool> AddDetailsAsync(List<RfqDetailSaveModel> details, int rfqMainId)
-            => await ModifyRfqDetailAsync(details, rfqMainId);
 
-        private async Task<bool> ModifyRfqDetailAsync(List<RfqDetailSaveModel> details, int mainId)
+        //public async Task<bool> DeleteDetailAsync(List<RfqDetailSaveModel> details, int rfqMainId)
+        //    => await ModifyRfqDetailAsync(details, rfqMainId);
+
+        public async Task<bool> DetailsIUDAsync(List<RfqDetailSaveModel> details, int rfqMainId)
+           => await ModifyRfqDetailAsync(details, rfqMainId);
+
+
+        private async Task<bool> ModifyRfqDetailAsync(List<RfqDetailSaveModel> details, int? mainId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -272,6 +277,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return res > 0;
             }
         }
+
+
+
         public async Task<List<RequestForRFQ>> GetRequestsForRfq(RFQRequestModel model)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -290,7 +298,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return requestListForRfq;
             }
         }
-        public async Task<bool> SaveRFqRequestDetailsAsync(List<RfqRequestDetailSaveModel> details)
+        public async Task<bool> RFQRequestDetailsIUDAsync(List<RfqRequestDetailSaveModel> details)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -453,7 +461,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Buyer = reader.Get<string>("Buyer"),
                 AlternativeItem = reader.Get<bool>("AlternativeItem"),
                 RequestQuantity = reader.Get<decimal>("RequestQuantity"),
-                BusinessCategory = new() 
+                BusinessCategory = new()
                 {
                     Id = reader.Get<int>("BusinessCategoryId"),
                     Name = reader.Get<string>("BusinessCategoryName")

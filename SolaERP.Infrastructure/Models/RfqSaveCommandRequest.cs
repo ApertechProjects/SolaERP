@@ -31,6 +31,7 @@ namespace SolaERP.Application.Models
         public int UserId { get; set; }
 
         public List<RfqDetailSaveModel> Details { get; set; }
+        public List<int> DeletedDetailIds { get; set; }
     }
 
     public class RfqSaveCommandResponse

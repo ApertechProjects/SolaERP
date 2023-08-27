@@ -18,6 +18,9 @@ namespace SolaERP.Application.Entities.RFQ
         public bool AlternativeItem { get; set; }
 
         [NotInclude]
+        public List<int> DeletedRequestDetailIds { get; set; }
+
+        [NotInclude]
         public List<RfqRequestDetailSaveModel> RequestDetails { get; set; }
     }
 
@@ -29,6 +32,7 @@ namespace SolaERP.Application.Entities.RFQ
         public decimal Quantity { get; set; }
         public string UOM { get; set; }
         public Guid GUID { get; set; }
+
 
     }
 
@@ -75,6 +79,6 @@ namespace SolaERP.Application.Entities.RFQ
         public int CONV_ID { get; set; }
         public Guid GUID { get; set; }
         public bool AlternativeItem { get; set; }
-        public decimal RequestQuantity { get; set; }    
+        public decimal RequestQuantity { get; set; }
     }
 }
