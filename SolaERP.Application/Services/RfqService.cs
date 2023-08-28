@@ -105,6 +105,8 @@ namespace SolaERP.Persistence.Services
         private void CombineWithDeletedDetails(RfqSaveCommandRequest postedModel)
         {
             var deletedRFQDetails = GenerateModelBasedPostedDeletedIds(postedModel?.DeletedDetailIds);
+            if (deletedRFQDetails is null || deletedRFQDetails?.Count == 0) return;
+
             postedModel?.Details?.AddRange(deletedRFQDetails);
         }
 
