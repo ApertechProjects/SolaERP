@@ -357,8 +357,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
-        public async Task<bool> DeleteNDAAsync(int ndaId)
-            => await ModifyNDA(new() { VendorNDAId = ndaId });
+        public async Task<bool> DeleteNDAAsync(int vendorId)
+            => await ModifyNDA(new() { VendorId = vendorId});
 
 
         private async Task<bool> ModifyNDA(VendorNDA nda)
