@@ -173,7 +173,7 @@ namespace SolaERP.Persistence.Services
                         await _fileUploadService.DeleteFile(Modules.EvaluationForm, companyLogoList[i].FileLink);
                     }
 
-                    else if (companyLogoList[i].Type != 2 && companyLogoList[i].AttachmentId < 0)
+                    else if (companyLogoList[i].Type != 2 && companyLogoList[i].AttachmentId <= 0)
                     {
                         companyLogoList[i].FileLink = (await _fileUploadService.AddFile(
                             new List<IFormFile> { command.CompanyInformation.CompanyLogo[i].File },
