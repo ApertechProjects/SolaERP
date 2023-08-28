@@ -14,6 +14,7 @@ namespace SolaERP.Application.Dtos.BidComparison
         public BidComparisonHeaderLoadDto BidComparisonHeader { get; set; }
         public List<BidComparisonBidHeaderLoadDto> Bids { get; set; }
         public List<BidComparisonRFQDetailsLoadDto> RfqDetails { get; set; }
+        public List<BidComparisonApprovalInformationLoadDto> ApprovalInformations { get; set;}
 
     }
 }

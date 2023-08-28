@@ -15,6 +15,7 @@ namespace SolaERP.Application.Entities.BidComparison
         public DateTime ComparisonDate { get; set; }
         public DateTime ComparisonDeadline { get; set; }
         public string SpecialistComment { get; set; }
+        public List<int> SingleSourceReasonId { get; set; }
         public int UserId { get; set; }
     }
 }

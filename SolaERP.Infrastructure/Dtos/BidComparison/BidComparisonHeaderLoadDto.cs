@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SolaERP.Application.Dtos.BidComparison;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,5 +30,7 @@ namespace SolaERP.Application.Entities.BidComparison
         public int Status { get; set; }
         public int ApproveStatus { get; set; }
         public string SpecialistComment { get; set; }
+
+        public List<BidComparisonSingleSourceReasonsLoadDto> SingleSourceReasons { get; set; }
     }
 }

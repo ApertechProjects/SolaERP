@@ -77,6 +77,22 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
             return null;
         }
 
+        public async Task<bool> BidDisqualifyAsync(BidDisqualify entity)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+
+            command.CommandText = @"SET NOCOUNT OFF EXEC SP_BidDisqualify @BidMainId,
+                                    @Discualified,
+                                    @DiscualificationReason,
+                                    @UserId";
+
+            command.Parameters.AddWithValue(command, "@BidMainId", entity.BidMainId);
+            command.Parameters.AddWithValue(command, "@Discualified", entity.Discualified);
+            command.Parameters.AddWithValue(command, "@DiscualificationReason", entity.DiscualificationReason);
+            command.Parameters.AddWithValue(command, "@UserId", entity.UserId);
+
+            return await command.ExecuteNonQueryAsync() > 0;
+        }
         public async Task<bool> SaveBidDetailsAsync(List<BidDetail> details)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;

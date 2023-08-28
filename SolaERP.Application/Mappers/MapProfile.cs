@@ -454,6 +454,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<BidMainLoad, BidMainLoadDto>().ReverseMap();
             CreateMap<BidDetail, BidDetailDto>().ReverseMap();
             CreateMap<BidRFQListLoad, BidRFQListLoadDto>().ReverseMap();
+            CreateMap<BidDisqualify, BidDisqualifyDto>().ReverseMap();
 
             CreateMap<Application.Entities.RFQ.UOM, Application.Dtos.RFQ.UOMDto>()
                 .ForMember(dest => dest.UOM,opt => opt.MapFrom(src => src.UnitOfMeasure)).ReverseMap();
@@ -476,6 +477,8 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<BidComparisonBidDetailsLoad, BidComparisonBidDetailsLoadDto>().ReverseMap();
             CreateMap<BidComparisonBidHeaderLoad, BidComparisonBidHeaderLoadDto>().ReverseMap();
             CreateMap<BidComparisonRFQDetailsLoad, BidComparisonRFQDetailsLoadDto>().ReverseMap();
+            CreateMap<BidComparisonApprovalInformationFilter, BidComparisonApprovalInformationFilterDto>().ReverseMap();
+            CreateMap<BidComparisonApprovalInformationLoad, BidComparisonApprovalInformationLoadDto>().ReverseMap();
 
             CreateMap<BidComparisonDraftFilter, BidComparisonDraftFilterDto>().ReverseMap().
                 ForMember(dest => dest.Emergency,
@@ -506,6 +509,9 @@ namespace SolaERP.Persistence.Mappers
                 ForMember(dest => dest.Emergency,
                     opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x)))); 
             CreateMap<BidComparisonRejectedLoad, BidComparisonRejectedLoadDto>().ReverseMap();
+
+            CreateMap<BidComparisonSingleSourceReasonsFilter, BidComparisonSingleSourceReasonsFilterDto>().ReverseMap();
+            CreateMap<BidComparisonSingleSourceReasonsLoad, BidComparisonSingleSourceReasonsLoadDto>().ReverseMap();
 
         }
     }

@@ -46,12 +46,12 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public decimal ListPoint { get; set; }
         public string TextboxValue { get; set; }
         public string TextareaValue { get; set; }
-        public bool CheckboxValue { get; set; }
-        public bool RadioboxValue { get; set; }
-        public int IntValue { get; set; }
-        public decimal DecimalValue { get; set; }
+        public bool? CheckboxValue { get; set; }
+        public bool? RadioboxValue { get; set; }
+        public int? IntValue { get; set; }
+        public decimal? DecimalValue { get; set; }
 
-        public DateTime DateTimeValue { get; set; }
+        public DateTime? DateTimeValue { get; set; }
         public List<AttachmentDto> Attachments { get; set; }
         public List<PrequalificationGridData> GridDatas { get; set; }
         public decimal Weight { get; set; }
