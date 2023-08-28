@@ -66,7 +66,7 @@ namespace SolaERP.Persistence.Services
                 return _configuration["FileOptions:BaseUrl"] + $"api/v1/home/module/{module}/fileName/{FileName}";
             return null;
         }
-        
+
         public string GetDownloadFileLink(string FileName, Modules module)
         {
             if (!string.IsNullOrEmpty(FileName))
@@ -123,7 +123,7 @@ namespace SolaERP.Persistence.Services
             }
         }
 
-        public async Task<string> GetLinkForEntity(IFormFile formFile, bool CheckIsDeleted, string FileLink)
+        public async Task<string> GetLinkForEntity(IFormFile formFile, Modules modules, bool CheckIsDeleted, string FileLink)
         {
             if (CheckIsDeleted)
             {
@@ -137,7 +137,7 @@ namespace SolaERP.Persistence.Services
                     await DeleteFile(Modules.Users, FileLink);
 
                     var resultPhoto = await AddFile(new List<IFormFile> { formFile },
-                         Modules.Users, new List<string> { FileLink });
+                         modules, new List<string> { FileLink });
 
                     if (resultPhoto.Data != null && resultPhoto.Data.Count > 0)
                         FileLink = resultPhoto?.Data[0];

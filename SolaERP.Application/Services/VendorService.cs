@@ -259,7 +259,7 @@ namespace SolaERP.Persistence.Services
             await _supplierRepository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", vendor?.RepresentedProducts) });
 
             string vendorLogo = await _repository.GetVendorLogo(vendorId);
-            vendor.Logo = await _fileUploadService.GetLinkForEntity(vendorDto.Logo, vendorDto.CheckLogoIsDeleted, vendorLogo);
+            vendor.Logo = await _fileUploadService.GetLinkForEntity(vendorDto.Logo, Modules.Vendors, vendorDto.CheckLogoIsDeleted, vendorLogo);
 
 
             await _attachment.DeleteAttachmentAsync(vendorId, SourceType.VEN_LOGO);

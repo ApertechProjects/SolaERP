@@ -301,8 +301,8 @@ namespace SolaERP.Persistence.Services
 
             UserImage userImage = await _userRepository.UserImageData(user.Id);
             userEntry.UserPhoto =
-                await _fileUploadService.GetLinkForEntity(user.UserPhoto, user.UserPhotoIsDeleted, userImage.UserPhoto);
-            userEntry.SignaturePhoto = await _fileUploadService.GetLinkForEntity(user.SignaturePhoto, user.SignaturePhotoIsDeleted,
+                await _fileUploadService.GetLinkForEntity(user.UserPhoto, Modules.Users, user.UserPhotoIsDeleted, userImage.UserPhoto);
+            userEntry.SignaturePhoto = await _fileUploadService.GetLinkForEntity(user.SignaturePhoto, Modules.Users, user.SignaturePhotoIsDeleted,
                 userImage.SignaturePhoto);
 
             var result = await _userRepository.SaveUserAsync(userEntry);
