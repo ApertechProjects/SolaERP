@@ -51,7 +51,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public int? IntValue { get; set; }
         public decimal? DecimalValue { get; set; }
 
-        public DateTime DateTimeValue { get; set; }
+        public DateTime? DateTimeValue { get; set; }
         public List<AttachmentDto> Attachments { get; set; }
         public List<PrequalificationGridData> GridDatas { get; set; }
         public decimal Weight { get; set; }

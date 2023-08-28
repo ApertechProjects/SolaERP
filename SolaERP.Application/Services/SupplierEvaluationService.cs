@@ -354,6 +354,16 @@ namespace SolaERP.Persistence.Services
                         {
                             item.CheckboxValue = false;
                         }
+                        
+                        if (item.HasRadiobox == false)
+                        {
+                            item.RadioboxValue = false;
+                        }
+
+                        if (item.HasDateTime == false)
+                        {
+                            item.DateTimeValue = null;
+                        }
 
                         var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
                         prequalificationValue.VendorId = vendorId;
@@ -374,7 +384,7 @@ namespace SolaERP.Persistence.Services
                                     _fileUploadService.DeleteFile(Modules.EvaluationForm, item.Attachments[i].FileLink);
                                 }
 
-                                if (item.Attachments[i].Type != 2 && item.Attachments[i].AttachmentId > 0)
+                                if (item.Attachments[i].Type != 2 && item.Attachments[i].AttachmentId <= 0)
                                 {
                                     var attachedFile = _mapper.Map<AttachmentSaveModel>(item.Attachments[i]);
 
@@ -537,7 +547,7 @@ namespace SolaERP.Persistence.Services
                 .Select(x => new CodeOfBuConduct
                 {
                     VendorFullName = user.FullName,
-                    CobcID = cobc.FirstOrDefault(y => y.BusinessUnitId == x.BusinessUnitId)?.VendorCOBCId,
+                    CobcID = cobc.FirstOrDefault(y => y.BusinessUnitId == x.BusinessUnitId)?.VendorCOBCId ?? 0,
                     VendorId = user.VendorId,
                     BusinessUnitId = x.BusinessUnitId,
                     BusinessUnitCode = x.BusinessUnitCode,
