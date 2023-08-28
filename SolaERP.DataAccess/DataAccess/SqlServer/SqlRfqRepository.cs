@@ -308,17 +308,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
-        public async Task<List<RfqVendor>> GetVendorsForRfqAync(int businessCategoryId)
+        public async Task<List<RfqVendorToSend>> GetVendorsForRfqAync(int businessCategoryId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "EXEC SP_RFQVendorsToSend @BusinessCategoryId";
                 command.Parameters.AddWithValue(command, "@BusinessCategoryId", businessCategoryId);
 
-                List<RfqVendor> rfqVendors = new();
+                List<RfqVendorToSend> rfqVendors = new();
                 using var reader = await command.ExecuteReaderAsync();
 
-                while (reader.Read()) rfqVendors.Add(reader.GetByEntityStructure<RfqVendor>());
+                while (reader.Read()) rfqVendors.Add(reader.GetByEntityStructure<RfqVendorToSend>());
                 return rfqVendors;
             }
         }

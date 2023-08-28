@@ -169,10 +169,10 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<List<SingleSourceReasonModel>>> GetSingleSourceReasonsAsync()
             => ApiResponse<List<SingleSourceReasonModel>>.Success(await _repository.GetSingleSourceReasonsAsync(), 200);
 
-        public async Task<ApiResponse<List<RfqVendor>>> GetRFQVendorsAsync(int buCategoryId)
+        public async Task<ApiResponse<List<RfqVendorToSend>>> GetRFQVendorsAsync(int buCategoryId)
         {
             var rfqVendors = await _repository.GetVendorsForRfqAync(buCategoryId);
-            return ApiResponse<List<RfqVendor>>.Success(rfqVendors, 200);
+            return ApiResponse<List<RfqVendorToSend>>.Success(rfqVendors, 200);
         }
 
         public async Task<ApiResponse<bool>> ChangeRFQStatusAsync(RfqChangeStatusModel model, string userIdentity)
