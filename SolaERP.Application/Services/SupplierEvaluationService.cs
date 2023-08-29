@@ -167,7 +167,7 @@ namespace SolaERP.Persistence.Services
 
                 for (int i = 0; i < companyLogoList.Count; i++)
                 {
-                    if (companyLogoList[i].Type == 2 && companyLogoList[i].AttachmentId > 0)
+                    if (companyLogoList[i].Type == 2)
                     {
                         await _attachmentRepository.DeleteAttachmentAsync(companyLogoList[i].AttachmentId);
                         await _fileUploadService.DeleteFile(Modules.EvaluationForm, companyLogoList[i].FileLink);
@@ -198,7 +198,7 @@ namespace SolaERP.Persistence.Services
 
                 for (int i = 0; i < attachments.Count; i++)
                 {
-                    if (attachments[i].Type == 2 && attachments[i].AttachmentId > 0)
+                    if (attachments[i].Type == 2)
                     {
                         await _attachmentRepository.DeleteAttachmentAsync(attachments[i].AttachmentId);
                         await _fileUploadService.DeleteFile(Modules.EvaluationForm, attachments[i].FileLink);
@@ -236,7 +236,7 @@ namespace SolaERP.Persistence.Services
                     {
                         var x = command.BankAccounts[i];
 
-                        if (x.Type == 2 && x.Id > 0)
+                        if (x.Type == 2)
                         {
                             await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
                         }
@@ -257,7 +257,7 @@ namespace SolaERP.Persistence.Services
                             {
                                 tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
                                 {
-                                    if (attachment.Type == 2 && attachment.AttachmentId > 0)
+                                    if (attachment.Type == 2)
                                     {
                                         var attachmentInDb = _attachmentRepository
                                             .GetAttachmentsWithFileDataAsync(attachment.AttachmentId).Result[0];
@@ -307,7 +307,7 @@ namespace SolaERP.Persistence.Services
                         {
                             itemTasks.AddRange(item?.GridDatas?.Select(gridData =>
                             {
-                                if (gridData.Type == 2 && gridData.Id > 0)
+                                if (gridData.Type == 2)
                                     return _repository.DeleteDueDesignGrid(gridData.Id);
 
                                 var gridDatas = _mapper.Map<DueDiligenceGridModel>(gridData);
@@ -322,7 +322,7 @@ namespace SolaERP.Persistence.Services
                         {
                             itemTasks.AddRange(item.Attachments?.Select(attachment =>
                             {
-                                if (attachment.Type == 2 && attachment.AttachmentId > 0)
+                                if (attachment.Type == 2)
                                 {
                                     _fileUploadService.DeleteFile(Modules.EvaluationForm, attachment.FileLink);
                                     return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
@@ -383,7 +383,7 @@ namespace SolaERP.Persistence.Services
                         {
                             for (int i = 0; i < item?.Attachments.Count; i++)
                             {
-                                if (item.Attachments[i].Type == 2 && item.Attachments[i].AttachmentId > 0)
+                                if (item.Attachments[i].Type == 2)
                                 {
                                     tasksList.Add(
                                         _attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId));
