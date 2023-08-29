@@ -1,4 +1,16 @@
-﻿using System.Text.RegularExpressions;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using SolaERP.API.Extensions;
+using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Auth;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Enums;
+using SolaERP.Application.Models;
+using SolaERP.Infrastructure.ViewModels;
+using System.Text.RegularExpressions;
+using System.Web;
 
 namespace SolaERP.Controllers
 {
