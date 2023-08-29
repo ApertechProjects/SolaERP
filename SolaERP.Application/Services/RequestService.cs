@@ -207,22 +207,22 @@ namespace SolaERP.Persistence.Services
                 ).ToList();
 
 
-            //for (int i = 0; i < requestDetails.Count; i++) //deleting
-            //{
-            //    var requestDetailId = requestDetails[i];
-            //    await RemoveDetailAsync(requestDetailId);
-            //}
+            for (int i = 0; i < requestDetails.Count; i++) //deleting
+            {
+                var requestDetailId = requestDetails[i];
+                await RemoveDetailAsync(requestDetailId);
+            }
 
-            //if (resultModel != null)
-            //{
-            //    for (int i = 0; i < model.Details.Count; i++)
-            //    {
-            //        var requestDetailDto = model.Details[i];
-            //        requestDetailDto.RequestMainId = resultModel.RequestMainId;
-            //        await SaveRequestDetailsAsync(requestDetailDto);
-            //    }
-            //    return ApiResponse<RequestSaveResultModel>.Success(resultModel, 200);
-            //}
+            if (resultModel != null)
+            {
+                for (int i = 0; i < model.Details.Count; i++)
+                {
+                    var requestDetailDto = model.Details[i];
+                    requestDetailDto.RequestMainId = resultModel.RequestMainId;
+                    await SaveRequestDetailsAsync(requestDetailDto);
+                }
+                return ApiResponse<RequestSaveResultModel>.Success(resultModel, 200);
+            }
             return ApiResponse<RequestSaveResultModel>.Fail("Not Found", 404);
         }
 
