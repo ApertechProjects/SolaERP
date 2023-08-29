@@ -71,12 +71,12 @@ namespace SolaERP.Persistence.Services
         {
             var combinedRequestDetails = GenerateModelBasedPostedDeletedIds(postedRfqdetails);
 
-            for (int i = 0; i < postedRfqdetails.Count; i++)
+            for (int i = 0; i < postedRfqdetails?.Count; i++)
             {
                 if (postedRfqdetails[i].RequestDetails is null)
                     continue;
 
-                combinedRequestDetails.AddRange(postedRfqdetails[i]?.RequestDetails);
+                combinedRequestDetails?.AddRange(postedRfqdetails[i]?.RequestDetails);
             }
 
             return combinedRequestDetails;
