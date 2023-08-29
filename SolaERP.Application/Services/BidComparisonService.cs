@@ -94,11 +94,11 @@ namespace SolaERP.Persistence.Services
             }
 
             var rfqDetailsFilter = new BidComparisonRFQDetailsFilter { BidComparisonId = filter.BidComparisonId, UserId = filter.UserId };
-            var rfqDetails = _bidComparisonRepository.GetComparisonRFQDetails(rfqDetailsFilter);
+            var rfqDetails = await _bidComparisonRepository.GetComparisonRFQDetails(rfqDetailsFilter);
             comparison.RfqDetails = _mapper.Map<List<BidComparisonRFQDetailsLoadDto>>(rfqDetails);
 
             var approvalInformationFilter = new BidComparisonApprovalInformationFilter { BidComparisonId = filter.BidComparisonId };
-            var approvalInformations = _bidComparisonRepository.GetComparisonApprovalInformations(approvalInformationFilter);
+            var approvalInformations = await _bidComparisonRepository.GetComparisonApprovalInformations(approvalInformationFilter);
             comparison.ApprovalInformations = _mapper.Map<List<BidComparisonApprovalInformationLoadDto>>(approvalInformations);
 
             return ApiResponse<BidComparisonDto>.Success(comparison, 200);
