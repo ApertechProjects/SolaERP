@@ -55,7 +55,7 @@ namespace SolaERP.API.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Submit(SupplierRegisterCommand command)
+        public async Task<IActionResult> Submit([FromForm] SupplierRegisterCommand command)
         {
             var token = _tokenHandler.GetAccessToken();
             return CreateActionResult(await _service.SubmitAsync(User.Identity.Name, token, command));
