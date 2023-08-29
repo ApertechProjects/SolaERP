@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SolaERP.Application.Dtos.BidComparison
@@ -16,6 +17,7 @@ namespace SolaERP.Application.Dtos.BidComparison
         public DateTime ComparisonDeadline { get; set; }
         public string SpecialistComment { get; set; }
         public List<int> SingleSourceReasonId { get; set; }
+        [JsonIgnore]
         public int UserId { get; set; }
     }
 }

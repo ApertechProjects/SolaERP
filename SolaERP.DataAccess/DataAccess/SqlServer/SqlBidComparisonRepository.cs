@@ -343,7 +343,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using var reader = await command.ExecuteReaderAsync();
             while(await reader.ReadAsync())
             {
-                data.Add((GetBaseComparisonFromReader(reader) as BidComparisonDraftLoad));
+                data.Add(GetBaseComparisonFromReader(reader).GetChild<BidComparisonDraftLoad>());
             }
 
             return data;
@@ -368,7 +368,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using var reader = await command.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
-                data.Add((GetBaseComparisonFromReader(reader) as BidComparisonHeldLoad));
+                data.Add(GetBaseComparisonFromReader(reader).GetChild<BidComparisonHeldLoad>());
             }
 
             return data;
@@ -399,7 +399,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using var reader = await command.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
-                data.Add((GetBaseComparisonFromReader(reader) as BidComparisonMyChartsLoad));
+                data.Add(GetBaseComparisonFromReader(reader).GetChild<BidComparisonMyChartsLoad>());
             }
 
             return data;
@@ -423,7 +423,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using var reader = await command.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
-                data.Add((GetBaseComparisonFromReader(reader) as BidComparisonNotReleasedLoad));
+                data.Add(GetBaseComparisonFromReader(reader).GetChild<BidComparisonNotReleasedLoad>());
             }
 
             return data;
@@ -447,7 +447,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using var reader = await command.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
-                data.Add((GetBaseComparisonFromReader(reader) as BidComparisonRejectedLoad));
+                data.Add(GetBaseComparisonFromReader(reader).GetChild<BidComparisonRejectedLoad>());
             }
 
             return data;
@@ -465,7 +465,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 ComparisonNo = reader.Get<string>("ComparisonNo"),
                 Emergency = reader.Get<int>("Emergency"),
                 ProcurementType = reader.Get<int>("ProcurementType"),
-                RFQDeadline = reader.Get<DateTime>("ProcurementType"),
+                RFQDeadline = reader.Get<DateTime>("RFQDeadline"),
                 RFQNo = reader.Get<string>("RFQNo"),
                 RowNum = reader.Get<long>("RowNum"),
                 SingleSourceReasons = reader.Get<string>("SingleSourceReasons"),

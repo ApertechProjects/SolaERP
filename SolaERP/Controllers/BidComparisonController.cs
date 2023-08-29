@@ -19,42 +19,66 @@ namespace SolaERP.API.Controllers
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAll([FromQuery] BidComparisonAllFilterDto filter)
-           => CreateActionResult(await _bidComparisonService.GetBidComparisonAllAsync(filter));
+        {
+           return CreateActionResult(await _bidComparisonService.GetBidComparisonAllAsync(filter));
+        }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetComparison([FromQuery] BidComparisonFilterDto filter)
-           => CreateActionResult(await _bidComparisonService.GetBidComparisonAsync(filter));
+        {
+            filter.UserId = Convert.ToInt32(User.Identity.Name);
+            return CreateActionResult(await _bidComparisonService.GetBidComparisonAsync(filter));
+        }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> AddComparison(BidComparisonCreateDto comparison)
-           => CreateActionResult(await _bidComparisonService.SaveBidComparisonAsync(comparison));
+        {
+            comparison.UserId = Convert.ToInt32(User.Identity.Name);
+            return CreateActionResult(await _bidComparisonService.SaveBidComparisonAsync(comparison));
+
+        }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> ApproveComparison(BidComparisonApproveDto approve)
-           => CreateActionResult(await _bidComparisonService.ApproveBidComparisonAsync(approve));
-        
+        {
+           return CreateActionResult(await _bidComparisonService.ApproveBidComparisonAsync(approve));
+        }
+
         [HttpPost("[action]")]
         public async Task<IActionResult> SendComparisonToApprove(BidComparisonSendToApproveDto bidComparisonSendToApproveDto)
-           => CreateActionResult(await _bidComparisonService.SendComparisonToApproveAsync(bidComparisonSendToApproveDto));
+        {
+            bidComparisonSendToApproveDto.UserId = Convert.ToInt32(User.Identity.Name);
+            return CreateActionResult(await _bidComparisonService.SendComparisonToApproveAsync(bidComparisonSendToApproveDto));
+        }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetComparisonDraft(BidComparisonDraftFilterDto filterDto)
-           => CreateActionResult(await _bidComparisonService.GetComparisonDraft(filterDto));
+        public async Task<IActionResult> GetComparisonDraft([FromQuery] BidComparisonDraftFilterDto filterDto)
+        {
+            return CreateActionResult(await _bidComparisonService.GetComparisonDraft(filterDto));
+        }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetComparisonHeld(BidComparisonHeldFilterDto filterDto)
-           => CreateActionResult(await _bidComparisonService.GetComparisonHeld(filterDto));
+        public async Task<IActionResult> GetComparisonHeld([FromQuery] BidComparisonHeldFilterDto filterDto)
+        {
+            return CreateActionResult(await _bidComparisonService.GetComparisonHeld(filterDto));
+        }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetComparisonMyCharts(BidComparisonMyChartsFilterDto filterDto)
-           => CreateActionResult(await _bidComparisonService.GetComparisonMyCharts(filterDto, User.Identity.Name));
+        public async Task<IActionResult> GetComparisonMyCharts([FromQuery] BidComparisonMyChartsFilterDto filterDto)
+        {
+            return CreateActionResult(await _bidComparisonService.GetComparisonMyCharts(filterDto, User.Identity.Name));
+        }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetComparisonNotReleased(BidComparisonNotReleasedFilterDto filterDto)
-           => CreateActionResult(await _bidComparisonService.GetComparisonNotReleased(filterDto));
+        public async Task<IActionResult> GetComparisonNotReleased([FromQuery] BidComparisonNotReleasedFilterDto filterDto)
+        {
+            return CreateActionResult(await _bidComparisonService.GetComparisonNotReleased(filterDto));
+        }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetComparisonRejected(BidComparisonRejectedFilterDto filterDto)
-           => CreateActionResult(await _bidComparisonService.GetComparisonRejected(filterDto));
+        public async Task<IActionResult> GetComparisonRejected([FromQuery] BidComparisonRejectedFilterDto filterDto)
+        {
+            return CreateActionResult(await _bidComparisonService.GetComparisonRejected(filterDto));
+        }
     }
 }

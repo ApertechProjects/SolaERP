@@ -12,6 +12,5 @@ namespace SolaERP.Application.Dtos.BidComparison
         public int Sequence { get; set; }
         public int ApproveStatus { get; set; }
         public int RFQDeatilid { get; set; }
-        public int UserId { get; set; }
     }
 }
