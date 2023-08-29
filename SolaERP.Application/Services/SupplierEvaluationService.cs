@@ -411,6 +411,11 @@ namespace SolaERP.Persistence.Services
                                 tasksList.AddRange(item.GridDatas.Select(gridData =>
                                 {
                                     var gridDatas = _mapper.Map<PrequalificationGridData>(gridData);
+                                    if (gridData.Type == 2)
+                                    {
+                                        return _repository.DeletePreGridAsync(gridDatas.PreqqualificationGridDataId);
+                                    }
+                                    
                                     gridDatas.PreqqualificationDesignId = item.DesignId;
                                     gridDatas.VendorId = vendorId;
 
@@ -757,7 +762,7 @@ namespace SolaERP.Persistence.Services
                                 design.Column2Alias,
                                 design.Column3Alias,
                                 design.Column4Alias,
-                                design.Column5Alias,
+                                design.Column5Alias
                             }.Where(col => col != null).ToArray(),
                             TextboxPoint = design.HasTextbox,
                             TextareaPoint = design.HasTextarea,
