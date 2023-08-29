@@ -31,7 +31,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                       ,@IntValue,@DecimalValue
                                                                       ,@DateTimeValue,@AgreementValue,@Scoring,@BankListValue";
 
-                    command.Parameters.AddWithValue(command, "@VendorDueDiligenceId", vendorDueDiligence.VendorDueDiligenceId);
+                    command.Parameters.AddWithValue(command, "@VendorDueDiligenceId",
+                        vendorDueDiligence.VendorDueDiligenceId);
                     command.Parameters.AddWithValue(command, "@DueDiligenceDesignId", vendorDueDiligence.DesignId);
                     command.Parameters.AddWithValue(command, "@VendorId", vendorDueDiligence.VendorId);
                     command.Parameters.AddWithValue(command, "@TextboxValue", vendorDueDiligence.TextboxValue);
@@ -48,14 +49,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                     return await command.ExecuteNonQueryAsync() > 0;
                 }
-
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return false;
             }
-
         }
 
 
@@ -87,7 +86,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             => await ModifyDueDiligence(new() { DesignId = dueId });
 
 
-
         public async Task<bool> AddDueDesignGrid(DueDiligenceGridModel gridModel)
         {
             return await ModifyDueGrid(new()
@@ -108,7 +106,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"SET NOCOUNT OFF EXEC SP_DueDiligenceGridData_IUD @DueDiligenceGridDataId,@DueDiligenceDesignId,
+                command.CommandText =
+                    @"SET NOCOUNT OFF EXEC SP_DueDiligenceGridData_IUD @DueDiligenceGridDataId,@DueDiligenceDesignId,
                                                                                          @Column1,@Column2,@Column3,@Column4,@Column5,@VendorId";
 
                 command.Parameters.AddWithValue(command, "@DueDiligenceGridDataId", gridModel.Id);
@@ -310,8 +309,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
-
-
         public async Task<CompanyInfo> GetCompanyInfoAsync(int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -358,7 +355,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 
         public async Task<bool> DeleteNDAAsync(int vendorId)
-            => await ModifyNDA(new() { VendorId = vendorId});
+            => await ModifyNDA(new() { VendorId = vendorId });
 
 
         private async Task<bool> ModifyNDA(VendorNDA nda)
@@ -449,7 +446,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<Application.Entities.SupplierEvaluation.VendorPrequalification>> GetVendorPrequalificationAsync(int vendorId)
+        public async Task<List<Application.Entities.SupplierEvaluation.VendorPrequalification>>
+            GetVendorPrequalificationAsync(int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -460,7 +458,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 while (reader.Read())
-                    result.Add(reader.GetByEntityStructure<Application.Entities.SupplierEvaluation.VendorPrequalification>());
+                    result.Add(reader
+                        .GetByEntityStructure<Application.Entities.SupplierEvaluation.VendorPrequalification>());
 
                 return result;
             }
@@ -481,7 +480,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 return result;
             }
-
         }
 
         public async Task<List<DueDiligenceValue>> GetVendorDuesAsync(int vendorId)
@@ -518,7 +516,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<PrequalificationDesign>> GetPrequalificationDesignsAsync(int categoryId, Language language)
+        public async Task<List<PrequalificationDesign>> GetPrequalificationDesignsAsync(int categoryId,
+            Language language)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -554,7 +553,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<Application.Entities.SupplierEvaluation.PrequalificationGridData>> GetPrequalificationGridAsync(int vendorId)
+        public async Task<List<Application.Entities.SupplierEvaluation.PrequalificationGridData>>
+            GetPrequalificationGridAsync(int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -565,7 +565,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 while (reader.Read())
-                    result.Add(reader.GetByEntityStructure<Application.Entities.SupplierEvaluation.PrequalificationGridData>());
+                    result.Add(reader
+                        .GetByEntityStructure<Application.Entities.SupplierEvaluation.PrequalificationGridData>());
 
                 return result;
             }
@@ -642,7 +643,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             });
         }
 
-        public async Task<bool> UpdatePreGridAsync(Application.Entities.SupplierEvaluation.PrequalificationGridData grid)
+        public async Task<bool> UpdatePreGridAsync(
+            Application.Entities.SupplierEvaluation.PrequalificationGridData grid)
             => await ModifyPreGridAsync(grid);
 
 
@@ -650,11 +652,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             => await ModifyPreGridAsync(new() { PreqqualificationGridDataId = preGridId });
 
 
-        public async Task<bool> ModifyPreGridAsync(Application.Entities.SupplierEvaluation.PrequalificationGridData gridData)
+        public async Task<bool> ModifyPreGridAsync(
+            Application.Entities.SupplierEvaluation.PrequalificationGridData gridData)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"SET NOCOUNT OFF EXEC SP_PrequalificationGridData_IUD @PreqqualificationGridDataId,
+                command.CommandText =
+                    @"SET NOCOUNT OFF EXEC SP_PrequalificationGridData_IUD @PreqqualificationGridDataId,
                                                                              @PreqqualificationDesignId,
                                                                              @Column1,
                                                                              @Column2,
@@ -664,9 +668,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                              @VendorId";
 
 
-
-                command.Parameters.AddWithValue(command, "@PreqqualificationGridDataId", gridData.PreqqualificationGridDataId);
-                command.Parameters.AddWithValue(command, "@PreqqualificationDesignId", gridData.PreqqualificationDesignId);
+                command.Parameters.AddWithValue(command, "@PreqqualificationGridDataId",
+                    gridData.PreqqualificationGridDataId);
+                command.Parameters.AddWithValue(command, "@PreqqualificationDesignId",
+                    gridData.PreqqualificationDesignId);
                 command.Parameters.AddWithValue(command, "@Column1", gridData.Column1);
                 command.Parameters.AddWithValue(command, "@Column2", gridData.Column2);
                 command.Parameters.AddWithValue(command, "@Column3", gridData.Column3);
@@ -679,7 +684,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
         public async Task<bool> AddPrequalificationCategoryAsync(PrequalificationCategoryData data)
-             => await ModifyPrequalificationCategorySaveAsync(data);
+            => await ModifyPrequalificationCategorySaveAsync(data);
 
         public async Task<bool> DeletePrequalificationCategoryAsync(int vendorId)
             => await ModifyPrequalificationCategorySaveAsync(new PrequalificationCategoryData { VendorId = vendorId });
@@ -692,9 +697,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                                   @PrequalificationCategoryId";
 
 
-
                 command.Parameters.AddWithValue(command, "@VendorId", data.VendorId);
-                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", data.PrequalificationCategoryId);
+                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId",
+                    data.PrequalificationCategoryId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
@@ -714,7 +719,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                           @BusinessCategoryId";
 
 
-
                 command.Parameters.AddWithValue(command, "@VendorId", data.VendorId);
                 command.Parameters.AddWithValue(command, "@BusinessCategoryId", data.BusinessCategoryId);
 
@@ -726,7 +730,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             => await ModifyRepresentedCategorySaveAsync(data);
 
         public async Task<bool> DeleteRepresentedCompanyAsync(int vendorId)
-            => await ModifyRepresentedCategorySaveAsync(new Application.Models.VendorRepresentedCompany { VendorId = vendorId });
+            => await ModifyRepresentedCategorySaveAsync(new Application.Models.VendorRepresentedCompany
+                { VendorId = vendorId });
 
         public async Task<bool> ModifyRepresentedCategorySaveAsync(Application.Models.VendorRepresentedCompany data)
         {
@@ -734,7 +739,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorRepresentedCompany_ID @VendorId,
                                                                             @RepresentedCompanyName";
-
 
 
                 command.Parameters.AddWithValue(command, "@VendorId", data.VendorId);
@@ -745,7 +749,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
         public async Task<bool> AddRepresentedProductAsync(RepresentedProductData data)
-             => await ModifyRepresentedProductSaveAsync(data);
+            => await ModifyRepresentedProductSaveAsync(data);
 
         public async Task<bool> DeleteRepresentedProductAsync(int vendorId)
             => await ModifyRepresentedProductSaveAsync(new RepresentedProductData { VendorId = vendorId });
@@ -758,7 +762,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                             @RepresentedProductName";
 
 
-
                 command.Parameters.AddWithValue(command, "@VendorId", data.VendorId);
                 command.Parameters.AddWithValue(command, "@RepresentedProductName", data.RepresentedProductName);
 
@@ -767,10 +770,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
         public async Task<bool> AddProductServiceAsync(ProductServiceData productService)
-          => await ModifyProductServiceAsync(productService);
+            => await ModifyProductServiceAsync(productService);
 
         public async Task<bool> DeleteProductServiceAsync(int id)
-          => await ModifyProductServiceAsync(new ProductServiceData { VendorId = id });
+            => await ModifyProductServiceAsync(new ProductServiceData { VendorId = id });
 
         public async Task<bool> ModifyProductServiceAsync(ProductServiceData data)
         {
@@ -778,7 +781,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorProductServices_ID @VendorId,
                                                                             @ProductServiceId";
-
 
 
                 command.Parameters.AddWithValue(command, "@VendorId", data.VendorId);
@@ -806,7 +808,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                             @PrequalificationCategoryId";
 
 
-
                 command.Parameters.AddWithValue(command, "@VendorId", data.Id);
                 command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", data.Id);
 
@@ -814,7 +815,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<Application.Entities.Vendors.VendorRepresentedProduct> GetRepresentedProductAsync(int vendorId)
+        public async Task<Application.Entities.Vendors.VendorRepresentedProduct> GetRepresentedProductAsync(
+            int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -831,7 +833,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<Application.Entities.Vendors.VendorRepresentedCompany> GetRepresentedCompanyAsync(int vendorId)
+        public async Task<Application.Entities.Vendors.VendorRepresentedCompany> GetRepresentedCompanyAsync(
+            int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -939,11 +942,26 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                             @UserId";
 
 
-
                 command.Parameters.AddWithValue(command, "@TaxId", taxId);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<bool> HasBankDetailByAccountNumberAsync(string acountNumber)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SELECT * FROM Procurement.VendorBankDetails WHERE AccountNumber = @accountNumber";
+                command.Parameters.AddWithValue(command, "@accountNumber", acountNumber);
+                List<VendorBankDetail> resultList = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<VendorBankDetail>());
+
+                return resultList.Count > 0;
             }
         }
     }
