@@ -235,6 +235,7 @@ namespace SolaERP.Persistence.Services
                     for (var i = 0; i < command.BankAccounts.Count; i++)
                     {
                         var x = command.BankAccounts[i];
+
                         if (x.Type == 2 && x.Id > 0)
                         {
                             await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
@@ -244,6 +245,11 @@ namespace SolaERP.Persistence.Services
                         {
                             var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id,
                                 _mapper.Map<VendorBankDetail>(x));
+
+                            if (await _repository.HasBankDetailByAccountNumberAsync(x.AccountNumber))
+                            {
+                                throw new Exception("The Account Number must be unique.");
+                            }
 
                             x.VendorId = vendorId;
 
