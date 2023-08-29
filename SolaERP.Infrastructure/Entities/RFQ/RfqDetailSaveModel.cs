@@ -27,12 +27,12 @@ namespace SolaERP.Application.Entities.RFQ
 
     public class RfqRequestDetailSaveModel
     {
-        public int RFQRequestDetailId { get; set; }
-        public int RequestDetailsId { get; set; }
+        public int Id { get; set; }
+        public int RequestDetailId { get; set; }
         public decimal Quantity { get; set; }
         public string UOM { get; set; }
         public Guid GUID { get; set; }
-        public int BusinessCategoryId { get; set; }
+
 
     }
 
