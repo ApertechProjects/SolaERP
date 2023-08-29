@@ -582,7 +582,7 @@ namespace SolaERP.Persistence.Services
                     FullName = x.FullName,
                     Position = x.Position,
                     IsAgreed = matchingBuUnitsIds.Contains(x.BusinessUnitId),
-                    Type = 0
+                    Type = 2
                 })
                 .ToList();
 
@@ -690,7 +690,7 @@ namespace SolaERP.Persistence.Services
                     FullName = x.FullName,
                     Position = x.Position,
                     IsAgreed = matchingBuUnitsIds.Contains(x.BusinessUnitId),
-                    Type = 0
+                    Type = 2
                 })
                 .ToList();
 
