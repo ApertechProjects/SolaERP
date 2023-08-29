@@ -8,7 +8,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<RfqDraft>> GetDraftsAsync(RfqFilter filter);
         Task<List<RfqAll>> GetAllAsync(RfqAllFilter filter);
         Task<List<SingleSourceReasonModel>> GetSingleSourceReasonsAsync();
-        Task<List<RfqVendor>> GetVendorsForRfqAync(int businessCategoryId);
+        Task<List<RfqVendorToSend>> GetVendorsForRfqAync(int businessCategoryId);
 
         Task<List<RFQInProgress>> GetInProgressesAsync(RFQFilterBase filter);
 

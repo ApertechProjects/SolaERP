@@ -13,8 +13,8 @@ namespace SolaERP.API.Controllers
         public RFQController(IRfqService service) => _service = service;
 
 
-        [HttpGet("{businessCategoryId}")]
-        public async Task<IActionResult> GetRFQVendors(int businessCategoryId)
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetVendorsToSend([FromQuery] int businessCategoryId)
             => CreateActionResult(await _service.GetRFQVendorsAsync(businessCategoryId));
 
         [HttpGet("[action]")]
