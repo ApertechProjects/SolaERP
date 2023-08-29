@@ -9,7 +9,7 @@ namespace SolaERP.Application.Contracts.Services
         Task SendPasswordResetMailAsync(string to, string code);
         Task<bool> SendEmailMessage<T>(string template, T viewModel, string to, string subject);
         Task<bool> SendUsingTemplate<T>(string subject, T viewModel, string templateName, string imageName, List<string> tos);
-        Task<bool> SendRequest(MailModel mailModel);
+        Task SendRequest(MailModel mailModel);
     }
 
 }
