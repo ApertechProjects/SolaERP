@@ -415,7 +415,7 @@ namespace SolaERP.Persistence.Services
                                     {
                                         return _repository.DeletePreGridAsync(gridDatas.PreqqualificationGridDataId);
                                     }
-                                    
+
                                     gridDatas.PreqqualificationDesignId = item.DesignId;
                                     gridDatas.VendorId = vendorId;
 
@@ -582,7 +582,9 @@ namespace SolaERP.Persistence.Services
                     FullName = x.FullName,
                     Position = x.Position,
                     IsAgreed = matchingBuUnitsIds.Contains(x.BusinessUnitId),
-                    Type = 0
+                    Type = cobc.FirstOrDefault(y => y.BusinessUnitId == x.BusinessUnitId)?.VendorCOBCId == null
+                        ? 2
+                        : 0
                 })
                 .ToList();
 
@@ -690,7 +692,9 @@ namespace SolaERP.Persistence.Services
                     FullName = x.FullName,
                     Position = x.Position,
                     IsAgreed = matchingBuUnitsIds.Contains(x.BusinessUnitId),
-                    Type = 0
+                    Type = nda.FirstOrDefault(y => y.BusinessUnitId == x.BusinessUnitId)?.VendorNDAId == null
+                        ? 2
+                        : 0
                 })
                 .ToList();
 
