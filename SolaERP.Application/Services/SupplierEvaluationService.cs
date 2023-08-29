@@ -354,7 +354,7 @@ namespace SolaERP.Persistence.Services
                         {
                             item.CheckboxValue = false;
                         }
-                        
+
                         if (item.HasRadiobox == false)
                         {
                             item.RadioboxValue = false;
@@ -431,13 +431,22 @@ namespace SolaERP.Persistence.Services
 
                 if (command.NonDisclosureAgreement is not null)
                 {
-                    command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
-                    tasks.AddRange(command.NonDisclosureAgreement?
-                        .Select(x => _repository.DeleteNDAAsync(vendorId)));
+                    if (command.NonDisclosureAgreement.Any(x => x.Type == 2))
+                    {
+                        tasks.AddRange(
+                            command.NonDisclosureAgreement.Select(_ => _repository.DeleteNDAAsync(vendorId)));
+                    }
 
-                    if (command?.NonDisclosureAgreement != null && command?.NonDisclosureAgreement?.Count > 0)
-                        tasks.AddRange(command?.NonDisclosureAgreement?
-                            .Select(x => _repository.AddNDAAsync(_mapper.Map<VendorNDA>(x))));
+                    for (int i = 0; i < command.NonDisclosureAgreement.Count; i++)
+                    {
+                        command.NonDisclosureAgreement[i].VendorId = vendorId;
+
+                        if (command.NonDisclosureAgreement[i].Type != 2)
+                        {
+                            tasks.Add(_repository.AddCOBCAsync(
+                                _mapper.Map<VendorCOBC>(command.NonDisclosureAgreement[i])));
+                        }
+                    }
                 }
 
                 #endregion
@@ -447,11 +456,21 @@ namespace SolaERP.Persistence.Services
 
                 if (command.CodeOfBuConduct is not null)
                 {
-                    command?.CodeOfBuConduct?.ForEach(x => x.VendorId = vendorId);
+                    if (command.CodeOfBuConduct.Any(x => x.Type == 2))
+                    {
+                        tasks.AddRange(command.CodeOfBuConduct.Select(_ => _repository.DeleteCOBCAsync(vendorId)));
+                    }
 
-                    if (command?.CodeOfBuConduct != null && command?.CodeOfBuConduct?.Count > 0)
-                        tasks.AddRange(command?.CodeOfBuConduct?.Select(x =>
-                            _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(x))));
+                    for (int i = 0; i < command.CodeOfBuConduct.Count; i++)
+                    {
+                        command.CodeOfBuConduct[i].VendorId = vendorId;
+
+                        if (command.CodeOfBuConduct[i].Type != 2)
+                        {
+                            tasks.Add(_repository.AddCOBCAsync(
+                                _mapper.Map<VendorCOBC>(command.CodeOfBuConduct[i])));
+                        }
+                    }
                 }
 
                 #endregion
@@ -557,7 +576,8 @@ namespace SolaERP.Persistence.Services
                     CountryCode = x.CountryCode,
                     FullName = x.FullName,
                     Position = x.Position,
-                    IsAgreed = matchingBuUnitsIds.Contains(x.BusinessUnitId)
+                    IsAgreed = matchingBuUnitsIds.Contains(x.BusinessUnitId),
+                    Type = 0
                 })
                 .ToList();
 
@@ -664,7 +684,8 @@ namespace SolaERP.Persistence.Services
                     CountryCode = x.CountryCode,
                     FullName = x.FullName,
                     Position = x.Position,
-                    IsAgreed = matchingBuUnitsIds.Contains(x.BusinessUnitId)
+                    IsAgreed = matchingBuUnitsIds.Contains(x.BusinessUnitId),
+                    Type = 0
                 })
                 .ToList();
 
