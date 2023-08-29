@@ -1,6 +1,6 @@
 ﻿namespace SolaERP.Application.Entities.RFQ
 {
-    public class RfqVendor : BaseEntity
+    public class RfqVendorToSend : BaseEntity
     {
         public int VendorId { get; set; }
         public string VendorCode { get; set; }

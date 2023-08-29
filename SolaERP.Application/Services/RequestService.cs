@@ -202,6 +202,16 @@ namespace SolaERP.Persistence.Services
         {
             int userId = await _userRepository.ConvertIdentity(name);
             RequestSaveResultModel resultModel = await _requestMainRepository.AddOrUpdateRequestAsync(userId, _mapper.Map<RequestMainSaveModel>(model));
+            var requestDetails = _requestDetailRepository.GetRequestDetailsByMainIdAsync(model.RequestMainId).Result.Select(x => x.RequestDetailId).ToList()
+                                 .Except(model.Details.Select(x => x.RequestDetailId).ToList()
+                ).ToList();
+
+
+            for (int i = 0; i < requestDetails.Count; i++) //deleting
+            {
+                var requestDetailId = requestDetails[i];
+                await RemoveDetailAsync(requestDetailId);
+            }
 
             if (resultModel != null)
             {
@@ -209,14 +219,7 @@ namespace SolaERP.Persistence.Services
                 {
                     var requestDetailDto = model.Details[i];
                     requestDetailDto.RequestMainId = resultModel.RequestMainId;
-                    if (requestDetailDto.Type == Application.Enums.OperationType.Delete && requestDetailDto.RequestDetailId > 0)
-                    {
-                        await RemoveDetailAsync(requestDetailDto.RequestDetailId);
-                    }
-                    else
-                    {
-                        await SaveRequestDetailsAsync(requestDetailDto);
-                    }
+                    await SaveRequestDetailsAsync(requestDetailDto);
                 }
                 return ApiResponse<RequestSaveResultModel>.Success(resultModel, 200);
             }

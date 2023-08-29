@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SolaERP.API.Extensions;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Shared;
@@ -103,7 +104,7 @@ namespace SolaERP.Controllers
             dto.VerifyToken = newtoken + _tokenHandler.CreateRefreshToken();
             dto.VerifyToken = Regex.Replace(dto.VerifyToken, @"[^a-zA-Z0-9_.~\-]", "");
             dto.VendorId = await _vendorService.GetByTaxIdAsync(dto.TaxId);
-            ApiResponse<int> response = response = await _userService.UserRegisterAsync(dto);
+            ApiResponse<int> response = await _userService.UserRegisterAsync(dto);
 
             AccountResponseDto account = new();
             if (response.Data > 0)
@@ -123,17 +124,25 @@ namespace SolaERP.Controllers
                     Token = HttpUtility.HtmlDecode(dto.VerifyToken),
                 };
 
-                Response.OnCompleted(async () =>
-                {
-                    await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification, emailVerification.TemplateName(), emailVerification.ImageName(), new List<string> { dto.Email });
-                });
 
+                string body = await GetMailBody<VM_EmailVerification>.GetBody(emailVerification, @"EmailVerification.cshtml", @"verification.png");
+                MailModel mailModel = new MailModel()
+                {
+                    Body = body,
+                    Header = templateDataForVerification.Header,
+                    ImageName = "verification.png",
+                    Subject = templateDataForVerification.Subject,
+                    Tos = new List<string> { dto.Email }
+                };
+
+                Thread.Sleep(1000);
+                bool res = await _mailService.SendRequest(mailModel);
 
                 account.UserId = response.Data;
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
             }
 
-            return CreateActionResult(ApiResponse<bool>.Fail(response.Errors, 422));
+            return CreateActionResult(ApiResponse<bool>.Fail("", 422));
         }
 
 

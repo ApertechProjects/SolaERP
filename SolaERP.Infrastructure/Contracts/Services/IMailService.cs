@@ -1,4 +1,6 @@
-﻿namespace SolaERP.Application.Contracts.Services
+﻿using SolaERP.Application.Models;
+
+namespace SolaERP.Application.Contracts.Services
 {
     public interface IMailService
     {
@@ -7,6 +9,7 @@
         Task SendPasswordResetMailAsync(string to, string code);
         Task<bool> SendEmailMessage<T>(string template, T viewModel, string to, string subject);
         Task<bool> SendUsingTemplate<T>(string subject, T viewModel, string templateName, string imageName, List<string> tos);
+        Task<bool> SendRequest(MailModel mailModel);
     }
 
 }

@@ -8,7 +8,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<RfqDraft>> GetDraftsAsync(RfqFilter filter);
         Task<List<RfqAll>> GetAllAsync(RfqAllFilter filter);
         Task<List<SingleSourceReasonModel>> GetSingleSourceReasonsAsync();
-        Task<List<RfqVendor>> GetVendorsForRfqAync(int businessCategoryId);
+        Task<List<RfqVendorToSend>> GetVendorsForRfqAync(int businessCategoryId);
 
         Task<List<RFQInProgress>> GetInProgressesAsync(RFQFilterBase filter);
 
@@ -21,8 +21,8 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<RfqSaveCommandResponse> DeleteMainsync(int id, int userId);
         Task<List<SingleSourceReasonModel>> GetRFQSingeSourceReasons(int rfqMainId);
 
-        Task<bool> AddDetailsAsync(List<RfqDetailSaveModel> Details, int mainId);
-        Task<bool> SaveRFqRequestDetailsAsync(List<RfqRequestDetailSaveModel> details);
+        Task<bool> DetailsIUDAsync(List<RfqDetailSaveModel> Details, int mainId);
+        Task<bool> RFQRequestDetailsIUDAsync(List<RfqRequestDetailSaveModel> details);
         Task<List<RequestForRFQ>> GetRequestsForRfq(RFQRequestModel model);
         Task<bool> ChangeRFQStatusAsync(RfqChangeStatusModel model, int userId);
         Task<Application.Entities.UOM.Conversion> GetConversionAsync(int bussinessUnit, string itemCode);

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MediatR;
 using SolaERP.Application.Constants;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
@@ -9,7 +10,7 @@ using SolaERP.Application.Entities.RFQ;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
-
+using System.Reflection.Metadata.Ecma335;
 
 namespace SolaERP.Persistence.Services
 {
@@ -37,6 +38,7 @@ namespace SolaERP.Persistence.Services
             _generalRepository = generalRepository;
         }
 
+
         public async Task<ApiResponse<RfqSaveCommandResponse>> SaveRfqAsync(RfqSaveCommandRequest request, string useridentity)
         {
             request.UserId = Convert.ToInt32(useridentity);
@@ -45,13 +47,94 @@ namespace SolaERP.Persistence.Services
             if (request.Id <= 0) response = await _repository.AddMainAsync(request);
             else response = await _repository.UpdateMainAsync(request);
 
-            bool result = await _repository.AddDetailsAsync(request?.Details, response.Id);
-            var saveDetailTasks = request.Details.Select(requestList => _repository.SaveRFqRequestDetailsAsync(requestList?.RequestDetails));
-            await Task.WhenAll(saveDetailTasks);
+            CombineWithDeletedDetails(request);
+            var combinedRequestDetails = CombineDeletedRequestsWithAll(request.Details);
+
+
+            if (request.Details is not null && request.Details.Count > 0)
+                await _repository.DetailsIUDAsync(request.Details, response.Id);
+
+            if (combinedRequestDetails is not null && combinedRequestDetails.Count > 0)
+                await _repository.RFQRequestDetailsIUDAsync(combinedRequestDetails);
 
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<RfqSaveCommandResponse>.Success(response, 200);
         }
+
+        private List<RfqDetailSaveModel> GenerateModelBasedPostedDeletedIds(List<int> postedDeletedIds)
+             => postedDeletedIds?.Select(x => new RfqDetailSaveModel
+             {
+                 Id = x
+             }).ToList();
+
+        private List<RfqRequestDetailSaveModel> CombineDeletedRequestsWithAll(List<RfqDetailSaveModel> postedRfqdetails)
+        {
+            var combinedRequestDetails = GenerateModelBasedPostedDeletedIds(postedRfqdetails);
+
+            for (int i = 0; i < postedRfqdetails?.Count; i++)
+            {
+                if (postedRfqdetails[i].RequestDetails is null)
+                    continue;
+
+                combinedRequestDetails?.AddRange(postedRfqdetails[i]?.RequestDetails);
+            }
+
+            return combinedRequestDetails;
+        }
+
+
+        private List<RfqRequestDetailSaveModel> GenerateModelBasedPostedDeletedIds(List<RfqDetailSaveModel> postedRFQDetails)
+        {
+            List<RfqRequestDetailSaveModel> deletedRequestDetails = new();
+
+            for (int i = 0; i < postedRFQDetails.Count; i++)
+            {
+                if (postedRFQDetails[i].DeletedRequestDetailIds is null)
+                    continue;
+
+                deletedRequestDetails.AddRange(postedRFQDetails[i].DeletedRequestDetailIds.Select(deletedRequestId => new RfqRequestDetailSaveModel
+                {
+                    Id = deletedRequestId
+                }));
+            }
+
+            return deletedRequestDetails;
+        }
+
+
+        private void CombineWithDeletedDetails(RfqSaveCommandRequest postedModel)
+        {
+            var deletedRFQDetails = GenerateModelBasedPostedDeletedIds(postedModel?.DeletedDetailIds);
+            if (deletedRFQDetails is null || deletedRFQDetails?.Count == 0) return;
+
+            postedModel?.Details?.AddRange(deletedRFQDetails);
+        }
+
+
+        private async Task<List<RfqDetailSaveModel>> GetNotIncludedRfqDetailsOnlyWithIdsAsync(List<RfqDetailSaveModel> postedRfqDetals, int rfqMainId)
+        {
+            //Returns Ids only for iteracting with repsotiory
+
+            var currentRFQDetailsIds = (await _repository.GetRFQDetailsAsync(rfqMainId)).Select(x => x.Id).ToList();
+
+            var postedRfqDetailIds = postedRfqDetals.Select(x => x.Id).ToList();
+            var notIncludedDetails = currentRFQDetailsIds.Except(postedRfqDetailIds).Select(x => new RfqDetailSaveModel
+            {
+                Id = x
+            }).ToList();
+
+            return notIncludedDetails;
+        }
+
+        //private Task<List<RfqRequestDetailSaveModel>> GetRFQRequestDetailsNotIncludedOnlyWithIds(List<RfqRequestDetailSaveModel> rfqRequestDetails, List<RfqDetailSaveModel> notIncludedDetails, int mainId)
+        //{
+        //    rfqRequestDetails.Except()
+        //}
+
+        //private List<RfqDetailSaveModel> GetModifiedRFQDetailsFromPostedData(List<RfqDetailSaveModel> postedRfqDetails)
+        //   => postedRfqDetails.Where(x => x.ObjectStatus == Application.Enums.ObjectStatus.Modified
+        //                                                || x.ObjectStatus == Application.Enums.ObjectStatus.Added).ToList();
+
 
         public async Task<ApiResponse<List<RfqAllDto>>> GetAllAsync(RfqAllFilter filter)
         {
@@ -88,10 +171,10 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<List<SingleSourceReasonModel>>> GetSingleSourceReasonsAsync()
             => ApiResponse<List<SingleSourceReasonModel>>.Success(await _repository.GetSingleSourceReasonsAsync(), 200);
 
-        public async Task<ApiResponse<List<RfqVendor>>> GetRFQVendorsAsync(int buCategoryId)
+        public async Task<ApiResponse<List<RfqVendorToSend>>> GetRFQVendorsAsync(int buCategoryId)
         {
             var rfqVendors = await _repository.GetVendorsForRfqAync(buCategoryId);
-            return ApiResponse<List<RfqVendor>>.Success(rfqVendors, 200);
+            return ApiResponse<List<RfqVendorToSend>>.Success(rfqVendors, 200);
         }
 
         public async Task<ApiResponse<bool>> ChangeRFQStatusAsync(RfqChangeStatusModel model, string userIdentity)
@@ -173,6 +256,6 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<List<Application.Dtos.RFQ.UOMDto>>.Success(dto, 200);
         }
-      
+
     }
 }

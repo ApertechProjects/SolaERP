@@ -12,7 +12,7 @@ namespace SolaERP.Application.Contracts.Services
         string GetFileLink(string fileName, Modules module);
         string GetDownloadFileLink(string fileName, Modules module);
         Task<ApiResponse<List<string>>> AddFile(List<IFormFile> files, Modules module, List<string> deletedFiles);
-        Task<string> GetLinkForEntity(IFormFile formFile, bool CheckIsDeleted, string FileLink);
+        Task<string> GetLinkForEntity(IFormFile formFile, Modules module, bool CheckIsDeleted, string FileLink);
 
     }
 }

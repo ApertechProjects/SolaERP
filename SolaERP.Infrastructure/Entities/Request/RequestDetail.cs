@@ -10,7 +10,7 @@
         public DateTime RequestedDate { get; set; }
         public string ItemCode { get; set; }
         public decimal Quantity { get; set; }
-        public string UOM { get; set; }
+        public string RUOM { get; set; }
         public string Description { get; set; }
         public string Location { get; set; }
         public string Buyer { get; set; }
