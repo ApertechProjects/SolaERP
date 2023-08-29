@@ -66,7 +66,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@RequestedDate", entity.RequestedDate);
                 command.Parameters.AddWithValue(command, "@ItemCode", entity.ItemCode);
                 command.Parameters.AddWithValue(command, "@Quantity", entity.Quantity);
-                command.Parameters.AddWithValue(command, "@UOM", entity.UOM);
+                command.Parameters.AddWithValue(command, "@UOM", entity.RUOM);
                 command.Parameters.AddWithValue(command, "@Description", entity.Description);
                 command.Parameters.AddWithValue(command, "@Location", entity.Location);
                 command.Parameters.AddWithValue(command, "@Buyer", entity.Buyer);
