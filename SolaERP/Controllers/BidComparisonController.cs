@@ -24,9 +24,13 @@ namespace SolaERP.API.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetComparison([FromQuery] BidComparisonFilterDto filter)
+        public async Task<IActionResult> GetComparison(int bidComparisonId)
         {
-            filter.UserId = Convert.ToInt32(User.Identity.Name);
+            BidComparisonFilterDto filter = new()
+            {
+                UserId = Convert.ToInt32(User.Identity.Name),
+                BidComparisonId = bidComparisonId
+            };
             return CreateActionResult(await _bidComparisonService.GetBidComparisonAsync(filter));
         }
 

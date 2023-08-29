@@ -121,7 +121,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 while(await reader.ReadAsync())
                 {
-                    data.Add(GetBaseComparisonFromReader(reader) as BidComparisonAll);
+                    data.Add(GetBaseComparisonFromReader(reader).GetChild<BidComparisonAll>());
                 }
 
             }
