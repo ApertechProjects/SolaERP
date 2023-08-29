@@ -24,5 +24,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
 
         [JsonIgnore]
         public int VendorId { get; set; }
+
+        public int Type { get; set; }
     }
 }

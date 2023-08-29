@@ -15,6 +15,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public int? CobcID { get; set; }
         public int VendorId { get; set; }
         public bool IsAgreed { get; set; }
+        public int Type { get; set; }
     }
 
 }

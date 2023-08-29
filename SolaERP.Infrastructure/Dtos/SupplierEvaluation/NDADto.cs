@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SolaERP.Application.Dtos.BusinessUnit;
+﻿using SolaERP.Application.Dtos.BusinessUnit;
 
 namespace SolaERP.Application.Dtos.SupplierEvaluation
 {
@@ -16,6 +15,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public int? NdaID { get; set; }
         public int VendorId { get; set; }
         public bool IsAgreed { get; set; }
+        public int Type { get; set; }
     }
 
 }

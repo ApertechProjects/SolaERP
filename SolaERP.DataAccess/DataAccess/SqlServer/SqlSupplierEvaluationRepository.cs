@@ -389,7 +389,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
         public async Task<bool> DeleteCOBCAsync(int id)
-            => await ModifyCOBC(new() { VendorCOBCId = id });
+            => await ModifyCOBC(new() { VendorId = id });
 
 
         private async Task<bool> ModifyCOBC(VendorCOBC cobc)
