@@ -135,8 +135,8 @@ namespace SolaERP.Controllers
                     Tos = new List<string> { dto.Email }
                 };
 
-                Thread.Sleep(1000);
-                bool res = await _mailService.SendRequest(mailModel);
+                //Thread.Sleep(1000);
+                await _mailService.SendRequest(mailModel);
 
                 account.UserId = response.Data;
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
