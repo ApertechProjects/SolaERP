@@ -11,7 +11,7 @@ namespace SolaERP.Application.Dtos.Bid
         public int BidDetailId { get; set; }
         public int BidMainId { get; set; }
         public int RFQDetailId { get; set; }
-        public int LineNO { get; set; }
+        public int LineNo { get; set; }
         public string ItemCode { get; set; }
         public bool AlternativeItem { get; set; }
         public string AlternativeItemCode { get; set; }
@@ -21,7 +21,8 @@ namespace SolaERP.Application.Dtos.Bid
         public string LineDescription { get; set; }
         public int Condition { get; set; }
         public decimal Quantity { get; set; }
-        public decimal DiscountType { get; set; }
+        public int DiscountType { get; set; }
+        public decimal DiscountValue { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal SingleUnitPrice { get; set; }
         public decimal TotalAmount { get; set; }

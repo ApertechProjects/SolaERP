@@ -19,5 +19,23 @@ namespace SolaERP.Application.Entities.BidComparison
         public DateTime Comparisondeadline { get; set; }
         public DateTime RFQDeadline { get; set; }
         public string SpecialistComment { get; set; }
+
+        public T GetChild<T>() where T : BaseBidComparisonLoad, new()
+        {
+            return new T
+            {
+                RFQNo = this.RFQNo,
+                RFQDeadline = this.RFQDeadline,
+                Comparisondeadline = this.Comparisondeadline,
+                ComparisonNo = this.ComparisonNo,
+                ApproveStatus = this.ApproveStatus,
+                Buyer = this.Buyer,
+                Emergency = this.Emergency,
+                ProcurementType = this.ProcurementType,
+                RowNum = this.RowNum,
+                SpecialistComment = this.SpecialistComment,
+                SingleSourceReasons = this.SingleSourceReasons,
+            };
+        }
     }
 }
