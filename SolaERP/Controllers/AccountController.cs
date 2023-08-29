@@ -1,19 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using SolaERP.API.Extensions;
-using SolaERP.Application.Contracts.Services;
-using SolaERP.Application.Dtos.Auth;
-using SolaERP.Application.Dtos.Shared;
-using SolaERP.Application.Entities;
-using SolaERP.Application.Enums;
-using SolaERP.Application.Extensions;
-using SolaERP.Application.Models;
-using SolaERP.Infrastructure.ViewModels;
-using System.Text.RegularExpressions;
-using System.Web;
-using Language = SolaERP.Application.Enums.Language;
+﻿using System.Text.RegularExpressions;
 
 namespace SolaERP.Controllers
 {
@@ -124,11 +109,18 @@ namespace SolaERP.Controllers
                     Token = HttpUtility.HtmlDecode(dto.VerifyToken),
                 };
 
-                Response.OnCompleted(async () =>
-                {
-                    await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification, emailVerification.TemplateName(), emailVerification.ImageName(), new List<string> { dto.Email });
-                });
 
+                string body = await GetMailBody<VM_EmailVerification>.GetBody(emailVerification, @"EmailVerification.cshtml", @"verification.png");
+                MailModel mailModel = new MailModel()
+                {
+                    Body = body,
+                    Header = templateDataForVerification.Header,
+                    EmailType = EmailTemplateKey.VER,
+                    Subject = templateDataForVerification.Subject,
+                    Tos = new List<string> { dto.Email }
+                };
+
+                await _mailService.SendRequest(mailModel);
 
                 account.UserId = response.Data;
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));

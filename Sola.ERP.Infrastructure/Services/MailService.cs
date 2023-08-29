@@ -1,5 +1,4 @@
-﻿using AngleSharp.Io;
-using FluentEmail.Core;
+﻿using FluentEmail.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RazorLight;
@@ -299,26 +298,15 @@ namespace SolaERP.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public async Task<bool> SendRequest(MailModel mailModel)
+        public async Task SendRequest(MailModel mailModel)
         {
             using (var client = new HttpClient())
             {
-                var data = new
-                {
-                    subject = mailModel.Subject,
-                    header = mailModel.Header,
-                    body = mailModel.Body,
-                    tos = mailModel.Tos,
-                    imageName = mailModel.ImageName
-                };
-
-                var json = JsonSerializer.Serialize(data);
+                var json = JsonSerializer.Serialize(mailModel);
                 var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
                 var request = await client.PostAsync("http://116.203.90.202:7777/api/Mail", content);
 
-                var responseString = await request.Content.ReadAsStringAsync();
-                return true;
             }
         }
     }
