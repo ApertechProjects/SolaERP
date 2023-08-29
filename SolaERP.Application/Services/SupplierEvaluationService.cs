@@ -448,8 +448,8 @@ namespace SolaERP.Persistence.Services
 
                         if (command.NonDisclosureAgreement[i].Type != 2)
                         {
-                            tasks.Add(_repository.AddCOBCAsync(
-                                _mapper.Map<VendorCOBC>(command.NonDisclosureAgreement[i])));
+                            tasks.Add(_repository.AddNDAAsync(
+                                _mapper.Map<VendorNDA>(command.NonDisclosureAgreement[i])));
                         }
                     }
                 }
