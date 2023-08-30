@@ -33,7 +33,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<bool> AddComparisonAsync(BidComparisonIUD entity)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"EXEC SP_BidComparison_IUD @BidComparisonId,
+            command.CommandText = @"SET NOCOUNT OFF  EXEC SP_BidComparison_IUD @BidComparisonId,
                                     @RFQMainId,
                                     @ComparisonNo,
                                     @ApproveStageMain,
@@ -157,7 +157,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             var data = new List<BidComparisonApprovalInformationLoad>();
-            command.CommandText = "EXEC SP_BidComparisonApprovalInformation @BidComparisonId";
+            command.CommandText = "EXEC SP_BidComparisonApprovalInformationLoad @BidComparisonId";
             command.Parameters.AddWithValue(command, "@BidComparisonId", filter.BidComparisonId);
 
             using var reader = await command.ExecuteReaderAsync();
@@ -223,24 +223,25 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     Budget = reader.Get<decimal>("Budget"),
                     Description = reader.Get<string>("Description"),
                     RemainingBudget = reader.Get<decimal>("RemainingBudget"),
-                    UOM = reader.Get<string>("UOM")
+                    UOM = reader.Get<string>("UOM"),
                 });
             }
             return data;
         }
 
-        public async Task<BidComparisonBidHeaderLoad> GetComparisonBidHeader(BidComparisonBidHeaderFilter filter)
+        public async Task<List<BidComparisonBidHeaderLoad>> GetComparisonBidHeader(BidComparisonBidHeaderFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
+            var data = new List<BidComparisonBidHeaderLoad>();
             command.CommandText = "EXEC SP_BidComparisonBidHeaderLoad @BidComparisonId, @UserId";
 
             command.Parameters.AddWithValue(command, "@BidComparisonId", filter.BidComparisonId);
             command.Parameters.AddWithValue(command, "@UserId", filter.UserId);
 
             using var reader = await command.ExecuteReaderAsync();
-            if (await reader.ReadAsync())
+            while (await reader.ReadAsync())
             {
-                return new BidComparisonBidHeaderLoad
+                data.Add(new BidComparisonBidHeaderLoad
                 {
                     BidMainId = reader.Get<int>("BidMainId"),
                     BidNo = reader.Get<string>("BidNo"),
@@ -260,9 +261,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     ReportingCurrencyCode = reader.Get<string>("ReportingCurrencyCode"),
                     Total = reader.Get<decimal>("Total"),
                     VendorName = reader.Get<string>("VendorName")
-                };
+                });
             }
-            return null;
+            return data;
         }
 
         public async Task<BidComparisonHeaderLoad> GetComparisonHeader(BidComparisonHeaderFilter filter)

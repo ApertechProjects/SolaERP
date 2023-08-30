@@ -94,7 +94,7 @@ namespace SolaERP.Persistence.Services
 
                 deletedRequestDetails.AddRange(postedRFQDetails[i].DeletedRequestDetailIds.Select(deletedRequestDetailId => new RfqRequestDetailSaveModel
                 {
-                     RFQRequestDetailId = deletedRequestDetailId
+                     Id = deletedRequestDetailId
                 }));
             }
 

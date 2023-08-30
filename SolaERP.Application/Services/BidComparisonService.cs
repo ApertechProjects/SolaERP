@@ -89,8 +89,8 @@ namespace SolaERP.Persistence.Services
 
             foreach (var bid in comparison.Bids)
             {
-                bid.Details = _mapper.Map<List<BidComparisonBidDetailsLoadDto>>(bidDetails.Where(x => x.BidMainId == bid.BidMainId));
-                bid.Approvals = _mapper.Map<List<BidComparisonBidApprovalsLoadDto>>(bidApprovals.Where(x=> x.BidMainId == bid.BidMainId));
+                bid.BidDetails = _mapper.Map<List<BidComparisonBidDetailsLoadDto>>(bidDetails.Where(x => x.BidMainId == bid.BidMainId));
+                bid.BidApprovals = _mapper.Map<List<BidComparisonBidApprovalsLoadDto>>(bidApprovals.Where(x=> x.BidMainId == bid.BidMainId));
             }
 
             var rfqDetailsFilter = new BidComparisonRFQDetailsFilter { BidComparisonId = filter.BidComparisonId, UserId = filter.UserId };
