@@ -7,6 +7,9 @@ public interface IOrderRepository
 {
     Task<List<OrderTypeLoadDto>> GetAllOrderTypesByBusinessIdAsync(int businessUnitId);
     Task<List<OrderAllDto>> GetAllAsync(OrderFilterDto dto, int userId);
-
+    Task<List<OrderAllDto>> GetWFAAsync(OrderWFAFilterDto filterDto, int userId);
     Task<List<OrderAllDto>> GetChangeApprovalAsync(OrderChangeApprovalFilterDto filterDto, int userId);
+    Task<List<OrderAllDto>> GetHeldAsync(OrderHeldFilterDto filterDto, int userId);
+    Task<List<OrderAllDto>> GetRejectedAsync(OrderRejectedFilterDto filterDto, int userId);
+    Task<List<OrderAllDto>> GetDraftAsync(OrderDraftFilterDto filterDto, int userId);
 }

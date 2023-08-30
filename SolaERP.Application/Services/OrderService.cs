@@ -30,12 +30,48 @@ public class OrderService : IOrderService
         );
     }
 
-    public async Task<ApiResponse<List<OrderAllDto>>> GetChangeApprovalAsync(OrderChangeApprovalFilterDto filterDto, 
+    public async Task<ApiResponse<List<OrderAllDto>>> GetWFAAsync(OrderWFAFilterDto filterDto,
+        string identityName)
+    {
+        int userId = Convert.ToInt32(identityName);
+        return ApiResponse<List<OrderAllDto>>.Success(
+            await _orderRepository.GetWFAAsync(filterDto, userId)
+        );
+    }
+
+    public async Task<ApiResponse<List<OrderAllDto>>> GetChangeApprovalAsync(OrderChangeApprovalFilterDto filterDto,
         string identityName)
     {
         int userId = Convert.ToInt32(identityName);
         return ApiResponse<List<OrderAllDto>>.Success(
             await _orderRepository.GetChangeApprovalAsync(filterDto, userId)
+        );
+    }
+
+    public async Task<ApiResponse<List<OrderAllDto>>> GetHeldAsync(OrderHeldFilterDto filterDto,
+        string identityName)
+    {
+        int userId = Convert.ToInt32(identityName);
+        return ApiResponse<List<OrderAllDto>>.Success(
+            await _orderRepository.GetHeldAsync(filterDto, userId)
+        );
+    }
+
+    public async Task<ApiResponse<List<OrderAllDto>>> GetRejectedAsync(OrderRejectedFilterDto filterDto,
+        string identityName)
+    {
+        int userId = Convert.ToInt32(identityName);
+        return ApiResponse<List<OrderAllDto>>.Success(
+            await _orderRepository.GetRejectedAsync(filterDto, userId)
+        );
+    }
+
+    public async Task<ApiResponse<List<OrderAllDto>>> GetDraftAsync(OrderDraftFilterDto filterDto,
+        string identityName)
+    {
+        int userId = Convert.ToInt32(identityName);
+        return ApiResponse<List<OrderAllDto>>.Success(
+            await _orderRepository.GetDraftAsync(filterDto, userId)
         );
     }
 }

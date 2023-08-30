@@ -1,3 +1,4 @@
+using System.Data;
 using System.Data.Common;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Order;
@@ -67,23 +68,36 @@ public class SqlOrderRepository : IOrderRepository
         List<OrderAllDto> data = new();
         while (await reader.ReadAsync())
         {
-            data.Add(new OrderAllDto
-            {
-                OrderType = reader.Get<string>("Ordertype"),
-                ApproveStatus = reader.Get<string>("ApproveStatus"),
-                Comment = reader.Get<string>("Comment"),
-                Currency = reader.Get<string>("Currency"),
-                Sequence = reader.Get<int>("Sequence"),
-                Status = reader.Get<string>("Status"),
-                BidNo = reader.Get<string>("BidNo"),
-                ComparisonNo = reader.Get<string>("ComparisonNo"),
-                EnteredBy = reader.Get<string>("EnteredBy"),
-                EnteredDate = reader.Get<DateTime>("EnteredDate"),
-                OrderNo = reader.Get<string>("OrderNo"),
-                VendorName = reader.Get<string>("VendorName"),
-                ApproveStageDetailsName = reader.Get<string>("ApproveStageDetailsName"),
-                RFQNo = reader.Get<string>("RFQNo")
-            });
+            data.Add(MapFromReader(reader));
+        }
+
+        return data;
+    }
+    
+    public async Task<List<OrderAllDto>> GetWFAAsync(OrderWFAFilterDto dto, int userId)
+    {
+        await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = @"EXEC dbo.SP_OrderWFA @BusinessUnitId, @ItemCode, @OrderTypeId, @UserId";
+
+        string orderTypeIdString = string.Join(",", dto.OrderTypeId.Select(x => x.ToString()).ToList());
+
+        if (dto.ItemCode[0] == "All" || dto.ItemCode.Length == 0)
+        {
+            dto.ItemCode = new[] { "-1" };
+        }
+        
+        string itemCodeString = string.Join(",", dto.ItemCode.Select(x => x.ToString()).ToList());
+
+        command.Parameters.AddWithValue(command, "@BusinessUnitId", dto.BusinessUnitId);
+        command.Parameters.AddWithValue(command, "@ItemCode", itemCodeString);
+        command.Parameters.AddWithValue(command, "@OrderTypeId", orderTypeIdString);
+        command.Parameters.AddWithValue(command, "@UserId", userId);
+
+        await using DbDataReader reader = await command.ExecuteReaderAsync();
+        List<OrderAllDto> data = new();
+        while (await reader.ReadAsync())
+        {
+            data.Add(MapFromReader(reader));
         }
 
         return data;
@@ -112,25 +126,123 @@ public class SqlOrderRepository : IOrderRepository
         List<OrderAllDto> data = new();
         while (await reader.ReadAsync())
         {
-            data.Add(new OrderAllDto
-            {
-                OrderType = reader.Get<string>("Ordertype"),
-                ApproveStatus = reader.Get<string>("ApproveStatus"),
-                Comment = reader.Get<string>("Comment"),
-                Currency = reader.Get<string>("Currency"),
-                Sequence = reader.Get<int>("Sequence"),
-                Status = reader.Get<string>("Status"),
-                BidNo = reader.Get<string>("BidNo"),
-                ComparisonNo = reader.Get<string>("ComparisonNo"),
-                EnteredBy = reader.Get<string>("EnteredBy"),
-                EnteredDate = reader.Get<DateTime>("EnteredDate"),
-                OrderNo = reader.Get<string>("OrderNo"),
-                VendorName = reader.Get<string>("VendorName"),
-                ApproveStageDetailsName = reader.Get<string>("ApproveStageDetailsName"),
-                RFQNo = reader.Get<string>("RFQNo")
-            });
+            data.Add(MapFromReader(reader));
         }
 
         return data;
+    }
+    
+    public async Task<List<OrderAllDto>> GetHeldAsync(OrderHeldFilterDto dto, int userId)
+    {
+        await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = @"EXEC dbo.SP_OrderHeld @BusinessUnitId, @ItemCode, @OrderTypeId, @UserId, @DateFrom, @DateTo";
+
+        string orderTypeIdString = string.Join(",", dto.OrderTypeId.Select(x => x.ToString()).ToList());
+
+        if (dto.ItemCode[0] == "All" || dto.ItemCode.Length == 0)
+        {
+            dto.ItemCode = new[] { "-1" };
+        }
+        
+        string itemCodeString = string.Join(",", dto.ItemCode.Select(x => x.ToString()).ToList());
+
+        command.Parameters.AddWithValue(command, "@BusinessUnitId", dto.BusinessUnitId);
+        command.Parameters.AddWithValue(command, "@ItemCode", itemCodeString);
+        command.Parameters.AddWithValue(command, "@OrderTypeId", orderTypeIdString);
+        command.Parameters.AddWithValue(command, "@UserId", userId);
+        command.Parameters.AddWithValue(command, "@DateFrom", dto.DateFrom);
+        command.Parameters.AddWithValue(command, "@DateTo", dto.DateTo);
+
+        await using DbDataReader reader = await command.ExecuteReaderAsync();
+        List<OrderAllDto> data = new();
+        while (await reader.ReadAsync())
+        {
+            data.Add(MapFromReader(reader));
+        }
+
+        return data;
+    }
+    
+    public async Task<List<OrderAllDto>> GetRejectedAsync(OrderRejectedFilterDto dto, int userId)
+    {
+        await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = @"EXEC dbo.SP_OrderRejected @BusinessUnitId, @ItemCode, @OrderTypeId, @UserId, @DateFrom, @DateTo";
+
+        string orderTypeIdString = string.Join(",", dto.OrderTypeId.Select(x => x.ToString()).ToList());
+
+        if (dto.ItemCode[0] == "All" || dto.ItemCode.Length == 0)
+        {
+            dto.ItemCode = new[] { "-1" };
+        }
+        
+        string itemCodeString = string.Join(",", dto.ItemCode.Select(x => x.ToString()).ToList());
+
+        command.Parameters.AddWithValue(command, "@BusinessUnitId", dto.BusinessUnitId);
+        command.Parameters.AddWithValue(command, "@ItemCode", itemCodeString);
+        command.Parameters.AddWithValue(command, "@OrderTypeId", orderTypeIdString);
+        command.Parameters.AddWithValue(command, "@UserId", userId);
+        command.Parameters.AddWithValue(command, "@DateFrom", dto.DateFrom);
+        command.Parameters.AddWithValue(command, "@DateTo", dto.DateTo);
+
+        await using DbDataReader reader = await command.ExecuteReaderAsync();
+        List<OrderAllDto> data = new();
+        while (await reader.ReadAsync())
+        {
+            data.Add(MapFromReader(reader));
+        }
+
+        return data;
+    }
+    
+    public async Task<List<OrderAllDto>> GetDraftAsync(OrderDraftFilterDto dto, int userId)
+    {
+        await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = @"EXEC dbo.SP_OrderDraft @BusinessUnitId, @ItemCode, @OrderTypeId, @UserId, @DateFrom, @DateTo";
+
+        string orderTypeIdString = string.Join(",", dto.OrderTypeId.Select(x => x.ToString()).ToList());
+
+        if (dto.ItemCode[0] == "All" || dto.ItemCode.Length == 0)
+        {
+            dto.ItemCode = new[] { "-1" };
+        }
+        
+        string itemCodeString = string.Join(",", dto.ItemCode.Select(x => x.ToString()).ToList());
+
+        command.Parameters.AddWithValue(command, "@BusinessUnitId", dto.BusinessUnitId);
+        command.Parameters.AddWithValue(command, "@ItemCode", itemCodeString);
+        command.Parameters.AddWithValue(command, "@OrderTypeId", orderTypeIdString);
+        command.Parameters.AddWithValue(command, "@UserId", userId);
+        command.Parameters.AddWithValue(command, "@DateFrom", dto.DateFrom);
+        command.Parameters.AddWithValue(command, "@DateTo", dto.DateTo);
+
+        await using DbDataReader reader = await command.ExecuteReaderAsync();
+        List<OrderAllDto> data = new();
+        while (await reader.ReadAsync())
+        {
+            data.Add(MapFromReader(reader));
+        }
+
+        return data;
+    }
+
+    private static OrderAllDto MapFromReader(IDataReader reader)
+    {
+        return new OrderAllDto
+        {
+            OrderType = reader.Get<string>("Ordertype"),
+            ApproveStatus = reader.Get<string>("ApproveStatus"),
+            Comment = reader.Get<string>("Comment"),
+            Currency = reader.Get<string>("Currency"),
+            Sequence = reader.Get<int>("Sequence"),
+            Status = reader.Get<string>("Status"),
+            BidNo = reader.Get<string>("BidNo"),
+            ComparisonNo = reader.Get<string>("ComparisonNo"),
+            EnteredBy = reader.Get<string>("EnteredBy"),
+            EnteredDate = reader.Get<DateTime>("EnteredDate"),
+            OrderNo = reader.Get<string>("OrderNo"),
+            VendorName = reader.Get<string>("VendorName"),
+            ApproveStageDetailsName = reader.Get<string>("ApproveStageDetailsName"),
+            RFQNo = reader.Get<string>("RFQNo")
+        };
     }
 }
