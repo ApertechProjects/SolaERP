@@ -133,11 +133,11 @@ namespace SolaERP.Controllers
                     Tos = new List<string> { dto.Email }
                 };
 
-                Stopwatch stopwatch = Stopwatch.StartNew();
+                Stopwatch stopwatch= Stopwatch.StartNew();
                 await _mailService.SendRequest(mailModel);
                 stopwatch.Stop();
                 TimeSpan timeSpan = stopwatch.Elapsed;
-                File.WriteAllText(@"C:\Newfolder\Log.txt", timeSpan);
+                System.IO.File.WriteAllText(@"C:\Newfolder\Log.txt", timeSpan.ToString());
                 account.UserId = response.Data;
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
             }
