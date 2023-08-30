@@ -50,6 +50,6 @@ public class OrderController : CustomBaseController
         => CreateActionResult(await _orderService.AddAsync(orderMainDto, User.Identity.Name));
 
     [HttpDelete("{orderMainId}")]
-    public async Task<IActionResult> Add(int orderMainId)
+    public async Task<IActionResult> Delete(int orderMainId)
         => CreateActionResult(await _orderService.DeleteAsync(orderMainId, User.Identity.Name));
 }
