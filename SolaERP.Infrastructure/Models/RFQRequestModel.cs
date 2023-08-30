@@ -6,7 +6,7 @@ namespace SolaERP.Application.Models
     {
         public int BusinessUnitId { get; set; }
         public List<int> BusinessCategoryIds { get; set; }
-        public string Buyer { get; set; }
+        public string[] Buyer { get; set; }
 
         [JsonIgnore]
         public int UserId { get; set; }
