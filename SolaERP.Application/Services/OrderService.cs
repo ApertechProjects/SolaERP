@@ -91,4 +91,16 @@ public class OrderService : IOrderService
         await _unitOfWork.SaveChangesAsync();
         return ApiResponse<OrderIUDResponse>.Success(mainDto);
     }
+
+    public async Task<ApiResponse<OrderIUDResponse>> DeleteAsync(int orderMainId, string identityName)
+    {
+        int userId = Convert.ToInt32(identityName);
+        var mainDto = await _orderRepository.SaveOrderMainAsync(new OrderMainDto()
+        {
+            OrderMainId = orderMainId,
+            UserId = userId
+        }, userId);
+        await _unitOfWork.SaveChangesAsync();
+        return ApiResponse<OrderIUDResponse>.Success(mainDto);
+    }
 }

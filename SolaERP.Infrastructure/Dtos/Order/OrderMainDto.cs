@@ -22,6 +22,7 @@ public class OrderMainDto
     public DateTime? DesiredDeliveryDate { get; set; }
     public int? BidMainId { get; set; }
     public int? RFQMainId { get; set; }
+    public int UserId { get; set; }
     public int NewOrderMainId { get; set; }
     public string NewOrderNo { get; set; }
 
