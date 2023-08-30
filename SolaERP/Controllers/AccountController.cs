@@ -9,6 +9,7 @@ using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Infrastructure.ViewModels;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Web;
 
@@ -132,8 +133,11 @@ namespace SolaERP.Controllers
                     Tos = new List<string> { dto.Email }
                 };
 
+                Stopwatch stopwatch = Stopwatch.StartNew();
                 await _mailService.SendRequest(mailModel);
-
+                stopwatch.Stop();
+                TimeSpan timeSpan = stopwatch.Elapsed;
+                File.WriteAllText(@"C:\Newfolder\Log.txt", timeSpan);
                 account.UserId = response.Data;
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
             }
