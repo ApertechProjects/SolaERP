@@ -6,7 +6,7 @@ using SolaERP.Controllers;
 
 namespace SolaERP.API.Controllers;
 
-[Microsoft.AspNetCore.Components.Route("api/[controller]")]
+[Route("api/[controller]")]
 [Authorize]
 public class OrderController : CustomBaseController
 {
@@ -45,7 +45,7 @@ public class OrderController : CustomBaseController
     public async Task<IActionResult> GetDraft([FromBody] OrderDraftFilterDto filter)
         => CreateActionResult(await _orderService.GetDraftAsync(filter, User.Identity.Name));
 
-    [HttpPost]
+    [HttpPost("[action]")]
     public async Task<IActionResult> Add([FromBody] OrderMainDto orderMainDto)
         => CreateActionResult(await _orderService.AddAsync(orderMainDto, User.Identity.Name));
 
