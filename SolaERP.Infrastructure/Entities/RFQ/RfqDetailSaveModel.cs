@@ -32,7 +32,7 @@ namespace SolaERP.Application.Entities.RFQ
         public decimal Quantity { get; set; }
         public string UOM { get; set; }
         public Guid GUID { get; set; }
-
+        public int BusinessCategoryId { get; set; }
 
     }
 
