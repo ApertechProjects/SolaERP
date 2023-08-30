@@ -22,11 +22,20 @@ public class OrderService : IOrderService
         );
     }
 
-    public async Task<ApiResponse<List<OrderAllDto>>> GetAllAsync(OrderFilterDto orderFilterDto, string identityName)
+    public async Task<ApiResponse<List<OrderAllDto>>> GetAllAsync(OrderFilterDto filterDto, string identityName)
     {
         int userId = Convert.ToInt32(identityName);
         return ApiResponse<List<OrderAllDto>>.Success(
-            await _orderRepository.GetAllAsync(orderFilterDto, userId)
+            await _orderRepository.GetAllAsync(filterDto, userId)
+        );
+    }
+
+    public async Task<ApiResponse<List<OrderAllDto>>> GetChangeApprovalAsync(OrderChangeApprovalFilterDto filterDto, 
+        string identityName)
+    {
+        int userId = Convert.ToInt32(identityName);
+        return ApiResponse<List<OrderAllDto>>.Success(
+            await _orderRepository.GetChangeApprovalAsync(filterDto, userId)
         );
     }
 }

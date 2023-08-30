@@ -88,4 +88,49 @@ public class SqlOrderRepository : IOrderRepository
 
         return data;
     }
+
+    public async Task<List<OrderAllDto>> GetChangeApprovalAsync(OrderChangeApprovalFilterDto dto, int userId)
+    {
+        await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = @"EXEC dbo.SP_OrderChangeApprovals @BusinessUnitId, @ItemCode, @OrderTypeId, @UserId";
+
+        string orderTypeIdString = string.Join(",", dto.OrderTypeId.Select(x => x.ToString()).ToList());
+
+        if (dto.ItemCode[0] == "All" || dto.ItemCode.Length == 0)
+        {
+            dto.ItemCode = new[] { "-1" };
+        }
+        
+        string itemCodeString = string.Join(",", dto.ItemCode.Select(x => x.ToString()).ToList());
+
+        command.Parameters.AddWithValue(command, "@BusinessUnitId", dto.BusinessUnitId);
+        command.Parameters.AddWithValue(command, "@ItemCode", itemCodeString);
+        command.Parameters.AddWithValue(command, "@OrderTypeId", orderTypeIdString);
+        command.Parameters.AddWithValue(command, "@UserId", userId);
+
+        await using DbDataReader reader = await command.ExecuteReaderAsync();
+        List<OrderAllDto> data = new();
+        while (await reader.ReadAsync())
+        {
+            data.Add(new OrderAllDto
+            {
+                OrderType = reader.Get<string>("Ordertype"),
+                ApproveStatus = reader.Get<string>("ApproveStatus"),
+                Comment = reader.Get<string>("Comment"),
+                Currency = reader.Get<string>("Currency"),
+                Sequence = reader.Get<int>("Sequence"),
+                Status = reader.Get<string>("Status"),
+                BidNo = reader.Get<string>("BidNo"),
+                ComparisonNo = reader.Get<string>("ComparisonNo"),
+                EnteredBy = reader.Get<string>("EnteredBy"),
+                EnteredDate = reader.Get<DateTime>("EnteredDate"),
+                OrderNo = reader.Get<string>("OrderNo"),
+                VendorName = reader.Get<string>("VendorName"),
+                ApproveStageDetailsName = reader.Get<string>("ApproveStageDetailsName"),
+                RFQNo = reader.Get<string>("RFQNo")
+            });
+        }
+
+        return data;
+    }
 }

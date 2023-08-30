@@ -8,4 +8,5 @@ public interface IOrderService
 {
     Task<ApiResponse<List<OrderTypeLoadDto>>> GetTypesAsync(int businessUnitId);
     Task<ApiResponse<List<OrderAllDto>>> GetAllAsync(OrderFilterDto orderFilterDto, string identityName);
+    Task<ApiResponse<List<OrderAllDto>>> GetChangeApprovalAsync(OrderChangeApprovalFilterDto filterDto, string identityName);
 }
