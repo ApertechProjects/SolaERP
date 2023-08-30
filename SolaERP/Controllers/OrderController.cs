@@ -44,4 +44,8 @@ public class OrderController : CustomBaseController
     [HttpPost("[action]")]
     public async Task<IActionResult> GetDraft([FromBody] OrderDraftFilterDto filter)
         => CreateActionResult(await _orderService.GetDraftAsync(filter, User.Identity.Name));
+    
+    [HttpPost]
+    public async Task<IActionResult> Add([FromBody] OrderMainDto orderMainDto)
+        => CreateActionResult(await _orderService.AddAsync(orderMainDto, User.Identity.Name));
 }

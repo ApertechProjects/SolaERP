@@ -3,16 +3,19 @@ using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Order;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Entities.Order;
+using SolaERP.Application.UnitOfWork;
 
 namespace SolaERP.Persistence.Services;
 
 public class OrderService : IOrderService
 {
     private readonly IOrderRepository _orderRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public OrderService(IOrderRepository orderRepository)
+    public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork)
     {
         _orderRepository = orderRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<ApiResponse<List<OrderTypeLoadDto>>> GetTypesAsync(int businessUnitId)
@@ -73,5 +76,19 @@ public class OrderService : IOrderService
         return ApiResponse<List<OrderAllDto>>.Success(
             await _orderRepository.GetDraftAsync(filterDto, userId)
         );
+    }
+
+    public async Task<ApiResponse<OrderIUDResponse>> AddAsync(OrderMainDto orderMainDto, string identityName)
+    {
+        int userId = Convert.ToInt32(identityName);
+        var mainDto = await _orderRepository.SaveOrderMainAsync(orderMainDto, userId);
+
+        foreach (var detail in orderMainDto.OrderDetails)
+            detail.OrderMainId = mainDto.OrderMainId;
+        
+        await _orderRepository.SaveOrderDetailsAsync(orderMainDto.OrderDetails);
+        
+        await _unitOfWork.SaveChangesAsync();
+        return ApiResponse<OrderIUDResponse>.Success(mainDto);
     }
 }
