@@ -272,7 +272,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = @"SET NOCOUNT OFF EXEC SP_RFQDetails_IUD @RFQMainId,@Data";
 
                 command.Parameters.AddWithValue(command, "@RFQMainId", mainId);
-                command.Parameters.AddTableValue(command, "@Data", "dbo.RFQDetailsType2", details?.ConvertToDataTable());
+                command.Parameters.AddTableValue(command, "@Data", "dbo.RFQDetailsType", details?.ConvertToDataTable());
                 var res = await command.ExecuteNonQueryAsync();
                 return res > 0;
             }
