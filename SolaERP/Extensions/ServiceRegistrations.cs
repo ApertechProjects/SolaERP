@@ -79,6 +79,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IBidComparisonService, BidComparisonService>();
             builder.Services.AddScoped<IFileUploadService, FileUploadService>();
             builder.Services.AddScoped<HeaderReaderService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
 
         }
 
@@ -117,6 +118,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IGeneralRepository, SqlGeneralRepository>();
             builder.Services.AddScoped<IBidRepository, SqlBidRepository>();
             builder.Services.AddScoped<IBidComparisonRepository, SqlBidComparisonRepository>();
+            builder.Services.AddScoped<IOrderRepository, SqlOrderRepository>();
         }
 
         public static void UseValidationExtension(this WebApplicationBuilder builder)
