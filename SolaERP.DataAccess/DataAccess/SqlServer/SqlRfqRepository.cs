@@ -288,7 +288,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", model?.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@Businesscategoryid", string.Join(",", model?.BusinessCategoryIds));
-                command.Parameters.AddWithValue(command, "@Buyer", model?.Buyer);
+                command.Parameters.AddWithValue(command, "@Buyer", string.Join(",",model?.Buyer));
                 command.Parameters.AddWithValue(command, "@UserId", model.UserId);
 
                 using var reader = await command.ExecuteReaderAsync();
