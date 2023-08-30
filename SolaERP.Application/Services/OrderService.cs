@@ -24,9 +24,9 @@ public class OrderService : IOrderService
 
     public async Task<ApiResponse<List<OrderAllDto>>> GetAllAsync(OrderFilterDto orderFilterDto, string identityName)
     {
-        orderFilterDto.UserId = Convert.ToInt32(identityName);
+        int userId = Convert.ToInt32(identityName);
         return ApiResponse<List<OrderAllDto>>.Success(
-            await _orderRepository.GetAllAsync(orderFilterDto)
+            await _orderRepository.GetAllAsync(orderFilterDto, userId)
         );
     }
 }

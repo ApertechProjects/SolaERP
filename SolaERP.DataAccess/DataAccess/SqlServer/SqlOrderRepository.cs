@@ -36,7 +36,7 @@ public class SqlOrderRepository : IOrderRepository
         return data;
     }
 
-    public async Task<List<OrderAllDto>> GetAllAsync(OrderFilterDto dto)
+    public async Task<List<OrderAllDto>> GetAllAsync(OrderFilterDto dto, int userId)
     {
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
         command.CommandText = @"EXEC dbo.SP_OrderAll @BusinessUnitId, @ItemCode, @OrderTypeId, 
@@ -44,18 +44,20 @@ public class SqlOrderRepository : IOrderRepository
 
 
         string orderTypeIdString = string.Join(",", dto.OrderTypeId.Select(x => x.ToString()).ToList());
-        string approveStatusString = string.Join(",", dto.OrderTypeId.Select(x => x.ToString()).ToList());
-        string statusString = string.Join(",", dto.OrderTypeId.Select(x => x.ToString()).ToList());
-
+        string approveStatusString = string.Join(",", dto.ApproveStatus.Select(x => x.ToString()).ToList());
+        string statusString = string.Join(",", dto.Status.Select(x => x.ToString()).ToList());
+        
         if (dto.ItemCode[0] == "All" || dto.ItemCode.Length == 0)
         {
             dto.ItemCode = new[] { "-1" };
         }
+        
+        string itemCodeString = string.Join(",", dto.ItemCode.Select(x => x.ToString()).ToList());
 
         command.Parameters.AddWithValue(command, "@BusinessUnitId", dto.BusinessUnitId);
-        command.Parameters.AddWithValue(command, "@ItemCode", dto.ItemCode);
+        command.Parameters.AddWithValue(command, "@ItemCode", itemCodeString);
         command.Parameters.AddWithValue(command, "@OrderTypeId", orderTypeIdString);
-        command.Parameters.AddWithValue(command, "@UserId", dto.UserId);
+        command.Parameters.AddWithValue(command, "@UserId", userId);
         command.Parameters.AddWithValue(command, "@Status", statusString);
         command.Parameters.AddWithValue(command, "@ApproveStatus", approveStatusString);
         command.Parameters.AddWithValue(command, "@DateFrom", dto.DateFrom);
