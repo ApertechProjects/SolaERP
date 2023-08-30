@@ -14,7 +14,7 @@ namespace SolaERP.Application.Entities.RFQ
         public string UOM { get; set; }
         public decimal OutStandingQTY { get; set; }
         public Guid GUID { get; set; }
-        public Condition Condition { get; set; }
+        public int Condition { get; set; }
         public bool AlternativeItem { get; set; }
 
         [NotInclude]
