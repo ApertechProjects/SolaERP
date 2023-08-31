@@ -21,7 +21,9 @@ namespace SolaERP.Application.Models
         public string ItemCode { get; set; }
         //public List<Emergency> Emergency { get; set; }
         public string Emergency { get; set; }
-        public RfqType RFQType { get; set; } = RfqType.All;
+
+        public string RFQType { get; set; }     
+        //public RfqType RFQType { get; set; } = RfqType.All;
         public string ProcurementType { get; set; }
         //public List<ProcurementType> ProcurementType { get; set; }
     }
