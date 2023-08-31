@@ -7,7 +7,7 @@ namespace SolaERP.Application.Contracts.Services
 {
     public interface IItemService
     {
-        public Task<ApiResponse<List<ItemCodeDto>>> GetAllAsync(string businessUnitCode);
+        public Task<ApiResponse<List<ItemCodeDto>>> GetAllAsync(int businessUnitId);
         Task<ApiResponse<ItemCodeWithImagesDto>> GetItemCodeByItemCodeAsync(string businessUnitCode, string itemCode);
         Task<ApiResponse<ItemCodeInfoDto>> GetItemCodeInfoByItemCodeAsync(string itemCode,int businessUnitId);
         public Task<ApiResponse<List<ItemCodeWithImagesDto>>> GetItemCodesWithImagesAsync();

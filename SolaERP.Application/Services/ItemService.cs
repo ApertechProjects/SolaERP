@@ -24,9 +24,9 @@ namespace SolaERP.Persistence.Services
         }
 
 
-        public async Task<ApiResponse<List<ItemCodeDto>>> GetAllAsync(string businessUnitCode)
+        public async Task<ApiResponse<List<ItemCodeDto>>> GetAllAsync(int businessUnitId)
         {
-            var entity = await _itemCodeRepository.GetAllAsync(businessUnitCode);
+            var entity = await _itemCodeRepository.GetAllAsync(businessUnitId);
             var dto = _mapper.Map<List<ItemCodeDto>>(entity);
 
             return ApiResponse<List<ItemCodeDto>>.Success(dto, 200);
