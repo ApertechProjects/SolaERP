@@ -17,7 +17,7 @@ public class OrderController : CustomBaseController
         _orderService = orderService;
     }
 
-    [HttpGet("{businessUnitId}")]
+    [HttpGet("[action]/{businessUnitId}")]
     public async Task<IActionResult> Type(int businessUnitId)
         => CreateActionResult(await _orderService.GetTypesAsync(businessUnitId));
 
