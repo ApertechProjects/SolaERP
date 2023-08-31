@@ -93,16 +93,20 @@ public class OrderService : IOrderService
         return ApiResponse<OrderIUDResponse>.Success(mainDto);
     }
 
-    public async Task<ApiResponse<OrderIUDResponse>> DeleteAsync(int orderMainId, string identityName)
+    public async Task<ApiResponse<bool>> DeleteAsync(List<int> orderMainIdList, string identityName)
     {
         int userId = Convert.ToInt32(identityName);
-        var mainDto = await _orderRepository.SaveOrderMainAsync(new OrderMainDto()
+        foreach (var orderMainId in orderMainIdList)
         {
-            OrderMainId = orderMainId,
-            UserId = userId
-        }, userId);
+               await _orderRepository.SaveOrderMainAsync(new OrderMainDto()
+                    {
+                        OrderMainId = orderMainId,
+                        UserId = userId
+                    }, userId);
+        }
+     
         await _unitOfWork.SaveChangesAsync();
-        return ApiResponse<OrderIUDResponse>.Success(mainDto);
+        return ApiResponse<bool>.Success(true);
     }
 
     public async Task<ApiResponse<bool>> ChangeOrderMainStatusAsync(ChangeOrderMainStatusDto statusDto,
