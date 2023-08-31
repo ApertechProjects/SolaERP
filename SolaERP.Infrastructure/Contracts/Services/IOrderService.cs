@@ -22,4 +22,6 @@ public interface IOrderService
     Task<ApiResponse<bool>> ChangeOrderMainStatusAsync(ChangeOrderMainStatusDto statusDto, string identityName);
     Task<ApiResponse<bool>> SendToApproveAsync(List<int> orderMainIdList, string identityName);
     Task<ApiResponse<List<OrderHeadLoaderDto>>> GetHeaderLoadAsync(int orderMainId);
+    Task<ApiResponse<List<OrderCreateRequestListDto>>> GetOrderCreateListForRequestAsync(OrderCreateListRequest dto);
+    Task<ApiResponse<List<OrderCreateBidListDto>>> GetOrderCreateListForBidsAsync(OrderCreateListRequest dto);
 }

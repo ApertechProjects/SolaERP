@@ -353,6 +353,136 @@ public class SqlOrderRepository : IOrderRepository
         return data;
     }
 
+    public async Task<List<OrderCreateRequestListDto>> GetOrderCreateListForRequestAsync(OrderCreateListRequest dto)
+    {
+        await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = @"EXEC dbo.SP_OrderCreateList  
+                                @BusinessUnitId,
+                                @DateFrom,
+                                @DateTo,
+                                @Source";
+
+
+        command.Parameters.AddWithValue(command, "@BusinessUnitId", dto.BusinessUnitId);
+        command.Parameters.AddWithValue(command, "@DateFrom", dto.DateFrom);
+        command.Parameters.AddWithValue(command, "@DateTo", dto.DateTo);
+        command.Parameters.AddWithValue(command, "@Source", 0);
+
+        await using DbDataReader reader = await command.ExecuteReaderAsync();
+        List<OrderCreateRequestListDto> data = new();
+        while (await reader.ReadAsync())
+        {
+            data.Add(MapFromReaderForOrderCreateRequestListDto(reader));
+        }
+
+        return data;
+    }
+
+
+    public async Task<List<OrderCreateBidListDto>> GetOrderCreateListForBidsAsync(OrderCreateListRequest dto)
+    {
+        await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = @"EXEC dbo.SP_OrderCreateList  
+                                @BusinessUnitId,
+                                @DateFrom,
+                                @DateTo,
+                                @Source";
+
+
+        command.Parameters.AddWithValue(command, "@BusinessUnitId", dto.BusinessUnitId);
+        command.Parameters.AddWithValue(command, "@DateFrom", dto.DateFrom);
+        command.Parameters.AddWithValue(command, "@DateTo", dto.DateTo);
+        command.Parameters.AddWithValue(command, "@Source", 1);
+
+        await using DbDataReader reader = await command.ExecuteReaderAsync();
+        List<OrderCreateBidListDto> data = new();
+        while (await reader.ReadAsync())
+        {
+            data.Add(MapFromReaderForOrderCreateBidsListDto(reader));
+        }
+
+        return data;
+    }
+
+    private static OrderCreateRequestListDto MapFromReaderForOrderCreateRequestListDto(IDataReader reader)
+    {
+        return new OrderCreateRequestListDto
+        {
+            ItemCode = reader.Get<string>("ItemCode"),
+            Buyer = reader.Get<string>("Buyer"),
+            Amount = reader.Get<decimal>("Amount"),
+            Condition = reader.Get<int>("Condition"),
+            Description = reader.Get<string>("Description"),
+            Location = reader.Get<string>("Location"),
+            Priority = reader.Get<int>("Priority"),
+            AccountCode = reader.Get<string>("AccountCode"),
+            AlternativeItem = reader.Get<bool>("AlternativeItem"),
+            AvailableQuantity = reader.Get<decimal>("AvailableQuantity"),
+            ItemName = reader.Get<string>("ItemName"),
+            ItemName2 = reader.Get<string>("ItemName2"),
+            LineNo = reader.Get<string>("LineNo"),
+            OrderQuantity = reader.Get<decimal>("OrderQuantity"),
+            OriginalQuantity = reader.Get<decimal>("OriginalQuantity"),
+            RemainingBudget = reader.Get<decimal>("RemainingBudget"),
+            RemainingQuantity = reader.Get<decimal>("RemainingQuantity"),
+            RequestDate = reader.Get<DateTime>("RequestDate"),
+            RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
+            RequestedDate = reader.Get<DateTime>("RequestedDate"),
+            RequestNo = reader.Get<string>("RequestNo"),
+            RequestQuantity = reader.Get<decimal>("RequestQuantity"),
+            TotalBudget = reader.Get<decimal>("TotalBudget"),
+            BusinessCategoryId = reader.Get<int>("BusinessCategoryId"),
+            ManualUP = reader.Get<decimal>("ManualUP"),
+            QuantityFromStock = reader.Get<decimal>("QuantityFromStock"),
+            RequestDetailId = reader.Get<int>("RequestDetailId"),
+            RequestMainId = reader.Get<int>("RequestMainId"),
+            UOM = reader.Get<string>("UOM"),
+            DefaultUOM = reader.Get<string>("DefaultUOM"),
+            RFQQuantity = reader.Get<decimal>("RFQQuantity")
+        };
+    }
+
+    public OrderCreateBidListDto MapFromReaderForOrderCreateBidsListDto(DbDataReader reader)
+    {
+        return new OrderCreateBidListDto
+        {
+            ItemCode = reader.Get<string>("ItemCode"),
+            Condition = reader.Get<int>("Condition"),
+            AlternativeItem = reader.Get<bool>("AlternativeItem"),
+            ItemName = reader.Get<string>("ItemName"),
+            ItemName2 = reader.Get<string>("ItemName2"),
+            LineNo = reader.Get<int>("LineNo"),
+            RequestNo = reader.Get<string>("RequestNo"),
+            RequestDetailId = reader.Get<int>("RequestDetailId"),
+            RequestMainId = reader.Get<int>("RequestMainId"),
+            DefaultUOM = reader.Get<string>("DefaultUOM"),
+            DiscountType = reader.Get<int>("DefaultUOM"),
+            ComparisonNo = reader.Get<string>("DefaultUOM"),
+            Status = reader.Get<int>("DefaultUOM"),
+            DiscountValue = reader.Get<int>("DefaultUOM"),
+            ApproveStatus = reader.Get<int>("DefaultUOM"),
+            BidNo = reader.Get<string>("DefaultUOM"),
+            Quantity = reader.Get<int>("DefaultUOM"),
+            ConversionRate = reader.Get<int>("DefaultUOM"),
+            DiscountedAmount = reader.Get<int>("DefaultUOM"),
+            LineDescription = reader.Get<string>("DefaultUOM"),
+            BidMainId = reader.Get<int>("DefaultUOM"),
+            RequestLine = reader.Get<int>("DefaultUOM"),
+            TotalAmount = reader.Get<int>("DefaultUOM"),
+            UnitPrice = reader.Get<int>("DefaultUOM"),
+            AlternativeItemCode = reader.Get<string>("DefaultUOM"),
+            AlternativeItemName = reader.Get<string>("DefaultUOM"),
+            BidComparisonId = reader.Get<int>("DefaultUOM"),
+            BidDetailId = reader.Get<int>("DefaultUOM"),
+            ConvertedUnitPrice = reader.Get<int>("DefaultUOM"),
+            SingleUnitPrice = reader.Get<int>("DefaultUOM"),
+            ConvertedQTY = reader.Get<int>("DefaultUOM"),
+            PUOM = reader.Get<string>("DefaultUOM"),
+            RequestUOM = reader.Get<string>("DefaultUOM"),
+            RFQDetailId = reader.Get<int>("DefaultUOM")
+        };
+    }
+
     private static OrderHeadLoaderDto MapFromReaderForOrderHeaderLoaderDto(IDataReader reader)
     {
         return new OrderHeadLoaderDto
