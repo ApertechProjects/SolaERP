@@ -144,7 +144,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@BankCode", bankDetail.BankCode);
                 command.Parameters.AddWithValue(command, "@Currency", bankDetail.Currency);
                 command.Parameters.AddWithValue(command, "@BankTaxId", bankDetail.BankTaxId);
-                command.Parameters.AddWithValue(command, "@CoresspondentAccount", bankDetail.CoresspondentAccount);
+                command.Parameters.AddWithValue(command, "@CoresspondentAccount", bankDetail.CorresspondentAccount);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 using var reader = await command.ExecuteReaderAsync();
@@ -171,7 +171,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Address = bankDetail.Address,
                 AccountNumber = bankDetail.AccountNumber,
                 SWIFT = bankDetail.SWIFT,
-                CoresspondentAccount = bankDetail.CoresspondentAccount,
+                CorresspondentAccount = bankDetail.CorresspondentAccount,
                 Beneficiary = bankDetail.Beneficiary,
                 Currency = bankDetail.Currency,
             });

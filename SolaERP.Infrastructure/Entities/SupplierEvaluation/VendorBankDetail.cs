@@ -17,6 +17,7 @@ namespace SolaERP.Application.Entities.SupplierEvaluation
         public string BankCode { get; set; }
         public string Currency { get; set; }
         public string BankTaxId { get; set; }
-        public string CoresspondentAccount { get; set; }
+        [DbColumn("CoresspondentAccount")]
+        public string CorresspondentAccount { get; set; }
     }
 }
