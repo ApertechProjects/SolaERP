@@ -288,7 +288,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", model?.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@Businesscategoryid", string.Join(",", model?.BusinessCategoryIds));
-                command.Parameters.AddWithValue(command, "@Buyer", string.Join(",",model?.Buyer));
+                command.Parameters.AddWithValue(command, "@Buyer", string.Join(",", model?.Buyer));
                 command.Parameters.AddWithValue(command, "@UserId", model.UserId);
 
                 using var reader = await command.ExecuteReaderAsync();
@@ -303,7 +303,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_RFQRequestDetails_IUD @Data";
-                command.Parameters.AddTableValue(command, "@Data", "RFQRequestDetailsType", details?.ConvertToDataTable());
+                command.Parameters.AddTableValue(command, "@Data", "RFQRequestDetailsType2", details?.ConvertToDataTable());
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }

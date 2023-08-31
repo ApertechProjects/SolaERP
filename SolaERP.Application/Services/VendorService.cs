@@ -91,6 +91,12 @@ namespace SolaERP.Persistence.Services
             else
                 return ApiResponse<bool>.Success("some datas can not be deleted");
         }
+
+        public async Task<ApiResponse<bool>> HasVendorName(string vendorName)
+        {
+            return ApiResponse<bool>.Success(await _repository.HasVendorName(vendorName));
+        }
+
         public async Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity, VendorAllCommandRequest request)
         {
             List<VendorAll> allVendors = await _repository.GetAll(Convert.ToInt32(userIdentity), request);

@@ -74,6 +74,10 @@ namespace SolaERP.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(VendorDeleteModel model)
             => CreateActionResult(await _service.DeleteAsync(User.Identity.Name, model));
+        
+        [HttpPost]
+        public async Task<IActionResult> HasVendorName([FromBody] string vendorName)
+            => CreateActionResult(await _service.HasVendorName(vendorName));
 
     }
 }

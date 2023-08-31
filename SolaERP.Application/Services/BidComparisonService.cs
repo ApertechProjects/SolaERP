@@ -74,7 +74,7 @@ namespace SolaERP.Persistence.Services
             comparison.BidComparisonHeader = _mapper.Map<BidComparisonHeaderLoadDto>(header);
 
             var singleSourceFilter = new BidComparisonSingleSourceReasonsFilter { BidComparisonId = filter.BidComparisonId };
-            var singleSourceReasons = _bidComparisonRepository.GetComparisonSingleSourceReasons(singleSourceFilter);
+            var singleSourceReasons = await _bidComparisonRepository.GetComparisonSingleSourceReasons(singleSourceFilter);
             comparison.BidComparisonHeader.SingleSourceReasons = _mapper.Map<List<BidComparisonSingleSourceReasonsLoadDto>>(singleSourceReasons);
 
             var bidHeaderFilter = new BidComparisonBidHeaderFilter { BidComparisonId = filter.BidComparisonId, UserId = filter.UserId };
@@ -89,16 +89,16 @@ namespace SolaERP.Persistence.Services
 
             foreach (var bid in comparison.Bids)
             {
-                bid.Details = _mapper.Map<List<BidComparisonBidDetailsLoadDto>>(bidDetails.Where(x => x.BidMainId == bid.BidMainId));
-                bid.Approvals = _mapper.Map<List<BidComparisonBidApprovalsLoadDto>>(bidApprovals.Where(x=> x.BidMainId == bid.BidMainId));
+                bid.BidDetails = _mapper.Map<List<BidComparisonBidDetailsLoadDto>>(bidDetails.Where(x => x.BidMainId == bid.BidMainId));
+                bid.BidApprovals = _mapper.Map<List<BidComparisonBidApprovalsLoadDto>>(bidApprovals.Where(x=> x.BidMainId == bid.BidMainId));
             }
 
             var rfqDetailsFilter = new BidComparisonRFQDetailsFilter { BidComparisonId = filter.BidComparisonId, UserId = filter.UserId };
-            var rfqDetails = _bidComparisonRepository.GetComparisonRFQDetails(rfqDetailsFilter);
+            var rfqDetails = await _bidComparisonRepository.GetComparisonRFQDetails(rfqDetailsFilter);
             comparison.RfqDetails = _mapper.Map<List<BidComparisonRFQDetailsLoadDto>>(rfqDetails);
 
             var approvalInformationFilter = new BidComparisonApprovalInformationFilter { BidComparisonId = filter.BidComparisonId };
-            var approvalInformations = _bidComparisonRepository.GetComparisonApprovalInformations(approvalInformationFilter);
+            var approvalInformations = await _bidComparisonRepository.GetComparisonApprovalInformations(approvalInformationFilter);
             comparison.ApprovalInformations = _mapper.Map<List<BidComparisonApprovalInformationLoadDto>>(approvalInformations);
 
             return ApiResponse<BidComparisonDto>.Success(comparison, 200);
