@@ -442,7 +442,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return new()
             {
-                RowNum = reader.Get<long>("RowNum"),
+                //RowNum = reader.Get<long>("RowNum"),
                 Id = reader.Get<int>("RFQRequestDetailId"),
                 RFQDetailId = reader.Get<int>("RFQDetailId"),
                 RequestDetailId = reader.Get<int>("RequestDetailsId"),
