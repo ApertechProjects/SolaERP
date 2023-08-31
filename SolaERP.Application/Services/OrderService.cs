@@ -2,6 +2,7 @@ using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Order;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.Order;
 using SolaERP.Application.UnitOfWork;
 
@@ -85,9 +86,9 @@ public class OrderService : IOrderService
 
         foreach (var detail in orderMainDto.OrderDetails)
             detail.OrderMainId = mainDto.OrderMainId;
-        
+
         await _orderRepository.SaveOrderDetailsAsync(orderMainDto.OrderDetails);
-        
+
         await _unitOfWork.SaveChangesAsync();
         return ApiResponse<OrderIUDResponse>.Success(mainDto);
     }
@@ -102,5 +103,18 @@ public class OrderService : IOrderService
         }, userId);
         await _unitOfWork.SaveChangesAsync();
         return ApiResponse<OrderIUDResponse>.Success(mainDto);
+    }
+
+    public async Task<ApiResponse<bool>> ChangeOrderMainStatusAsync(ChangeOrderMainStatusDto statusDto,
+        string identityName)
+    {
+        int userId = Convert.ToInt32(identityName);
+        foreach (var selectedOrder in statusDto.SelectedList)
+        {
+            await _orderRepository.ChangeOrderMainStatusAsync(statusDto, userId, selectedOrder.OrderMainId,
+                selectedOrder.Sequence);
+        }
+
+        return ApiResponse<bool>.Success(true);
     }
 }

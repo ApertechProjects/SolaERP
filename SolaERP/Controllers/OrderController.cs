@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Order;
+using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Controllers;
 
 namespace SolaERP.API.Controllers;
@@ -46,10 +47,15 @@ public class OrderController : CustomBaseController
         => CreateActionResult(await _orderService.GetDraftAsync(filter, User.Identity.Name));
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> Add([FromBody] OrderMainDto orderMainDto)
+    public async Task<IActionResult> Save([FromBody] OrderMainDto orderMainDto)
         => CreateActionResult(await _orderService.AddAsync(orderMainDto, User.Identity.Name));
+    
+    [HttpPost("[action]")]
+    public async Task<IActionResult> ChangeOrderMainStatus([FromBody] ChangeOrderMainStatusDto statusDto)
+        => CreateActionResult(await _orderService.ChangeOrderMainStatusAsync(statusDto, User.Identity.Name));
 
     [HttpDelete("{orderMainId}")]
     public async Task<IActionResult> Delete(int orderMainId)
         => CreateActionResult(await _orderService.DeleteAsync(orderMainId, User.Identity.Name));
+
 }

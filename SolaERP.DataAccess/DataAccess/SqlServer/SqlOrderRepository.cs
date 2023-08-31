@@ -2,6 +2,7 @@ using System.Data;
 using System.Data.Common;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Order;
+using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.Order;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
@@ -294,6 +295,28 @@ public class SqlOrderRepository : IOrderRepository
         command.CommandText = @"SET NOCOUNT OFF EXEC dbo.SP_OrderDetails_IUD @OrderMainId, @Data";
         command.Parameters.AddWithValue(command, "@OrderMainId", orderDetails[0].OrderMainId);
         command.Parameters.AddTableValue(command, "@Data", "dbo.OrderDetailsType2", orderDetails?.ConvertToDataTable());
+
+        return await command.ExecuteNonQueryAsync() > 0;
+    }
+
+    public async Task<bool> ChangeOrderMainStatusAsync(ChangeOrderMainStatusDto statusDto, int userId, int orderMainId,
+        int sequence)
+    {
+        await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = @"SET NOCOUNT OFF dbo.SP_OrderMainApprove 
+            @OrderMainId,
+            @UserId,
+            @ApproveStatusId,
+            @Comment,
+            @Sequence,
+            @RejectReasonId";
+
+        command.Parameters.AddWithValue(command, "@OrderMainId", orderMainId);
+        command.Parameters.AddWithValue(command, "@UserId", userId);
+        command.Parameters.AddWithValue(command, "@ApproveStatusId", statusDto.ApproveStatusId);
+        command.Parameters.AddWithValue(command, "@Comment", statusDto.Comment);
+        command.Parameters.AddWithValue(command, "@Sequence", sequence);
+        command.Parameters.AddWithValue(command, "@RejectReasonId", statusDto.RejectReasonId);
 
         return await command.ExecuteNonQueryAsync() > 0;
     }
