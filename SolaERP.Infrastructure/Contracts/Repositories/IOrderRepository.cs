@@ -1,4 +1,5 @@
 using SolaERP.Application.Dtos.Order;
+using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.Order;
 
 namespace SolaERP.Application.Contracts.Repositories;
@@ -14,4 +15,6 @@ public interface IOrderRepository
     Task<List<OrderAllDto>> GetDraftAsync(OrderDraftFilterDto filterDto, int userId);
     Task<OrderIUDResponse> SaveOrderMainAsync(OrderMainDto orderMainDto, int userId);
     Task<bool> SaveOrderDetailsAsync(List<OrderDetailDto> orderDetails);
+
+    Task<bool> ChangeOrderMainStatusAsync(ChangeOrderMainStatusDto statusDto, int userId, int orderMainId, int sequence);
 }
