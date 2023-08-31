@@ -143,6 +143,7 @@ namespace SolaERP.Controllers
             //    Subject = templateDataForVerification.Subject,
             //    Tos = new List<string> { dto.Email }
             //};
+            //await _mailService.SendRequest(mailModel);
 
         }
 
