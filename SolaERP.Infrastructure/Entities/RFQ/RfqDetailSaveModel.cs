@@ -16,6 +16,7 @@ namespace SolaERP.Application.Entities.RFQ
         public Guid GUID { get; set; }
         public int Condition { get; set; }
         public bool AlternativeItem { get; set; }
+        public decimal ConversionRate { get; set; }     
 
         [NotInclude]
         public List<int> DeletedRequestDetailIds { get; set; }
