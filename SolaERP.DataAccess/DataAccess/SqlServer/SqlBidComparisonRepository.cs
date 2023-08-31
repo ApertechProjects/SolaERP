@@ -221,6 +221,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 {
                     LineNo = reader.Get<int>("LineNo"),
                     Budget = reader.Get<decimal>("Budget"),
+                    Quantity = reader.Get<decimal>("Quantity"),
                     Description = reader.Get<string>("Description"),
                     RemainingBudget = reader.Get<decimal>("RemainingBudget"),
                     UOM = reader.Get<string>("UOM"),

@@ -10,6 +10,7 @@ namespace SolaERP.Application.Entities.BidComparison
     {
         public int LineNo { get; set; }
         public string Description { get; set; }
+        public decimal Quantity { get; set; }
         public string UOM { get; set; }
         public decimal Budget { get; set; }
         public decimal RemainingBudget { get; set; }    
