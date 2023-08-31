@@ -455,7 +455,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Quantity = reader.Get<decimal>("Quantity"),
                 UOM = reader.Get<string>("UOM"),
                 DefaultUOM = reader.Get<string>("DefaultUOM"),
-                CONV_ID = reader.Get<int>("CONV_ID"),
+                CONV_ID = reader.Get<decimal>("CONV_ID"),
                 GUID = reader.Get<Guid>("GUID"),
                 Condition = (Condition)reader.Get<int>("Condition"),
                 Buyer = reader.Get<string>("Buyer"),

@@ -77,7 +77,7 @@ namespace SolaERP.Application.Entities.RFQ
         public Condition Condition { get; set; }
         public string Buyer { get; set; }
         public BusinessCategory BusinessCategory { get; set; }
-        public int CONV_ID { get; set; }
+        public decimal CONV_ID { get; set; }
         public Guid GUID { get; set; }
         public bool AlternativeItem { get; set; }
         public decimal RequestQuantity { get; set; }
