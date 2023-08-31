@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
@@ -7,6 +8,7 @@ namespace SolaERP.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class RFQController : CustomBaseController
     {
         private readonly IRfqService _service;
