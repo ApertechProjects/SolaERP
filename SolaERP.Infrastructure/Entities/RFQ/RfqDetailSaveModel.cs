@@ -51,7 +51,7 @@ namespace SolaERP.Application.Entities.RFQ
         public string UOM { get; set; }
         public string DefaultUOM { get; set; }
         public decimal Quantity { get; set; }
-        public int CONV_ID { get; set; }
+        public decimal CONV_ID { get; set; }
         public string Description { get; set; }
         public Guid GUID { get; set; }
         public List<RFQRequestDetail> RequestDetails { get; set; }
