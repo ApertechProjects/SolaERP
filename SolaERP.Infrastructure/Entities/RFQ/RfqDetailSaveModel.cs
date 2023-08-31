@@ -61,7 +61,7 @@ namespace SolaERP.Application.Entities.RFQ
 
     public class RFQRequestDetail
     {
-        public long RowNum { get; set; }
+        //public long RowNum { get; set; }
         public int Id { get; set; }
         public int RFQDetailId { get; set; }
         public int RequestDetailId { get; set; }
