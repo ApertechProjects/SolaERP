@@ -32,7 +32,7 @@ namespace SolaERP.Persistence.Validations.Supplier
             RuleFor(x => x.AccountNumber).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.Address).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.Bank).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
-            RuleFor(x => x.CorresspondentAccount).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.CorrespondentAccount).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.Currency).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
         }
     }
