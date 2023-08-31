@@ -69,7 +69,7 @@ public class SqlOrderRepository : IOrderRepository
         List<OrderAllDto> data = new();
         while (await reader.ReadAsync())
         {
-            data.Add(MapFromReader(reader));
+            data.Add(MapFromReaderForOrderAllDto(reader));
         }
 
         return data;
@@ -98,7 +98,7 @@ public class SqlOrderRepository : IOrderRepository
         List<OrderAllDto> data = new();
         while (await reader.ReadAsync())
         {
-            data.Add(MapFromReader(reader));
+            data.Add(MapFromReaderForOrderAllDto(reader));
         }
 
         return data;
@@ -127,7 +127,7 @@ public class SqlOrderRepository : IOrderRepository
         List<OrderAllDto> data = new();
         while (await reader.ReadAsync())
         {
-            data.Add(MapFromReader(reader));
+            data.Add(MapFromReaderForOrderAllDto(reader));
         }
 
         return data;
@@ -159,7 +159,7 @@ public class SqlOrderRepository : IOrderRepository
         List<OrderAllDto> data = new();
         while (await reader.ReadAsync())
         {
-            data.Add(MapFromReader(reader));
+            data.Add(MapFromReaderForOrderAllDto(reader));
         }
 
         return data;
@@ -191,7 +191,7 @@ public class SqlOrderRepository : IOrderRepository
         List<OrderAllDto> data = new();
         while (await reader.ReadAsync())
         {
-            data.Add(MapFromReader(reader));
+            data.Add(MapFromReaderForOrderAllDto(reader));
         }
 
         return data;
@@ -223,7 +223,7 @@ public class SqlOrderRepository : IOrderRepository
         List<OrderAllDto> data = new();
         while (await reader.ReadAsync())
         {
-            data.Add(MapFromReader(reader));
+            data.Add(MapFromReaderForOrderAllDto(reader));
         }
 
         return data;
@@ -335,6 +335,73 @@ public class SqlOrderRepository : IOrderRepository
         return await command.ExecuteNonQueryAsync() > 0;
     }
 
+    public async Task<List<OrderHeadLoaderDto>> GetHeaderLoadAsync(int orderMainId)
+    {
+        await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = @"EXEC dbo.SP_OrderHeaderLoad @OrderMainId";
+
+
+        command.Parameters.AddWithValue(command, "@OrderMainId", orderMainId);
+
+        await using DbDataReader reader = await command.ExecuteReaderAsync();
+        List<OrderHeadLoaderDto> data = new();
+        while (await reader.ReadAsync())
+        {
+            data.Add(MapFromReaderForOrderHeaderLoaderDto(reader));
+        }
+
+        return data;
+    }
+
+    private static OrderHeadLoaderDto MapFromReaderForOrderHeaderLoaderDto(IDataReader reader)
+    {
+        return new OrderHeadLoaderDto
+        {
+            OrderMainId = reader.Get<int>("OrderMainId"),
+            OrderTypeId = reader.Get<int>("OrderTypeId"),
+            OrderNo = reader.Get<string>("OrderNo"),
+            OrderDate = reader.Get<DateTime>("OrderDate"),
+            Emergency = reader.Get<int>("Emergency"),
+            EntryDate = reader.Get<DateTime>("EntryDate"),
+            EnteredBy = reader.Get<string>("EnteredBy"),
+            ReasonCode = reader.Get<string>("ReasonCode"),
+            ReasonName = reader.Get<string>("ReasonName"),
+            Buyer = reader.Get<string>("Buyer"),
+            Comment = reader.Get<string>("Comment"),
+            ApproveStageMainId = reader.Get<int>("ApproveStageMainId"),
+            VendorCode = reader.Get<string>("VendorCode"),
+            VendorName = reader.Get<string>("VendorName"),
+            CompanyAddress = reader.Get<string>("CompanyAddress"),
+            ContactPerson = reader.Get<string>("ContactPerson"),
+            Email = reader.Get<string>("Email"),
+            Country = reader.Get<string>("Country"),
+            PhoneNo = reader.Get<string>("PhoneNo"),
+            TaxId = reader.Get<string>("TaxId"),
+            TaxCode = reader.Get<string>("TaxCode"),
+            Currency = reader.Get<string>("Currency"),
+            DiscountType = reader.Get<int>("DiscountType"),
+            DiscountValue = reader.Get<decimal>("DiscountValue"),
+            DeliveryTermId = reader.Get<int>("DeliveryTermId"),
+            DeliveryTime = reader.Get<string>("DeliveryTime"),
+            PaymentTermId = reader.Get<int>("PaymentTermId"),
+            ExpectedCost = reader.Get<decimal>("ExpectedCost"),
+            DeliveryDate = reader.Get<DateTime>("DeliveryDate"),
+            DesiredDeliveryDate = reader.Get<DateTime>("DesiredDeliveryDate"),
+            RFQMainId = reader.Get<int>("RFQMainId"),
+            RFQNo = reader.Get<string>("RFQNo"),
+            RFQDeadline = reader.Get<DateTime>("RFQDeadline"),
+            RFQDate = reader.Get<DateTime>("RFQDate"),
+            RequiredOnSiteDate = reader.Get<DateTime>("RequiredOnSiteDate"),
+            ComparisonNo = reader.Get<int>("ComparisonNo"),
+            Comparisondeadline = reader.Get<DateTime>("Comparisondeadline"),
+            ComparisonDate = reader.Get<DateTime>("ComparisonDate"),
+            BidMainId = reader.Get<int>("BidMainId"),
+            Status = reader.Get<int>("Status"),
+            ApproveStatus = reader.Get<int>("ApproveStatus"),
+            BusinessUnitId = reader.Get<int>("BusinessUnitId")
+        };
+    }
+
     private static OrderIUDResponse GetOrderSaveResponse(IDataReader reader)
     {
         return new OrderIUDResponse
@@ -344,7 +411,7 @@ public class SqlOrderRepository : IOrderRepository
         };
     }
 
-    private static OrderAllDto MapFromReader(IDataReader reader)
+    private static OrderAllDto MapFromReaderForOrderAllDto(IDataReader reader)
     {
         return new OrderAllDto
         {

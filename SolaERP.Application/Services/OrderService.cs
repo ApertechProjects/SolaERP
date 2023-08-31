@@ -131,4 +131,11 @@ public class OrderService : IOrderService
         await _unitOfWork.SaveChangesAsync();
         return ApiResponse<bool>.Success(true);
     }
+
+    public async Task<ApiResponse<List<OrderHeadLoaderDto>>> GetHeaderLoadAsync(int orderMainId)
+    {
+        return ApiResponse<List<OrderHeadLoaderDto>>.Success(
+            await _orderRepository.GetHeaderLoadAsync(orderMainId)
+        );   
+    }
 }

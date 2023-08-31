@@ -1,6 +1,6 @@
 namespace SolaERP.Application.Entities.Order;
 
-public class OrderAllDto 
+public class OrderAllDto : BaseEntity
 {
     public int OrderMainId { get; set; }
     public string OrderNo { get; set; }

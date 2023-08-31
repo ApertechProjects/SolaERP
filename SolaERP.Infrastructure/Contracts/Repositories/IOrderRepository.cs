@@ -18,4 +18,5 @@ public interface IOrderRepository
 
     Task<bool> ChangeOrderMainStatusAsync(ChangeOrderMainStatusDto statusDto, int userId, int orderMainId, int sequence);
     Task<bool> SendToApproveAsync(List<int> orderMainIdList, int userId);
+    Task<List<OrderHeadLoaderDto>> GetHeaderLoadAsync(int orderMainId);
 }

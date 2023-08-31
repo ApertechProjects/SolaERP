@@ -57,9 +57,13 @@ public class OrderController : CustomBaseController
     [HttpPost("[action]")]
     public async Task<IActionResult> Delete([FromBody] List<int> orderMainIdList)
         => CreateActionResult(await _orderService.DeleteAsync(orderMainIdList, User.Identity.Name));
-    
+
     [HttpPost("[action]")]
     public async Task<IActionResult> SendToApprove([FromBody] List<int> orderMainIdList)
         => CreateActionResult(await _orderService.SendToApproveAsync(orderMainIdList, User.Identity.Name));
 
+    [HttpGet("[action]/{orderMainId}")]
+    public async Task<IActionResult> GetHeaderLoad(int orderMainId)
+        => CreateActionResult(await _orderService.GetHeaderLoadAsync(orderMainId));
+    
 }
