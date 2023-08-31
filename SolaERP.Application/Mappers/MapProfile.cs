@@ -432,7 +432,7 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<Application.Entities.AnalysisCode.AnalysisCode, AnalysisCodeDto>().ReverseMap();
             CreateMap<RFQMain, RFQMainDto>().ReverseMap();
-            CreateMap<RFQDetail, RFQDetailDto>().ForMember(dest => dest.Conversion , opt => opt.MapFrom(src => src.CONV_ID)).ReverseMap();
+            CreateMap<RFQDetail, RFQDetailDto>().ForMember(dest => dest.Conversion, opt => opt.MapFrom(src => src.CONV_ID)).ReverseMap();
             CreateMap<RFQRequestDetail, RFQRequestDetailDto>().ReverseMap();
             CreateMap<RejectReason, RejectReasonDto>().ReverseMap();
             CreateMap<RFQInProgress, RFQInProgressDto>().ReverseMap();
@@ -458,7 +458,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<BidDisqualify, BidDisqualifyDto>().ReverseMap();
 
             CreateMap<Application.Entities.RFQ.UOM, Application.Dtos.RFQ.UOMDto>()
-                .ForMember(dest => dest.UOM,opt => opt.MapFrom(src => src.UnitOfMeasure)).ReverseMap();
+                .ForMember(dest => dest.UOM, opt => opt.MapFrom(src => src.UnitOfMeasure)).ReverseMap();
 
             CreateMap<BidComparisonAllFilter, BidComparisonAllFilterDto>()
                 .ReverseMap()
@@ -504,16 +504,17 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<BidComparisonNotReleasedFilter, BidComparisonNotReleasedFilterDto>().ReverseMap().
                 ForMember(dest => dest.Emergency,
-                    opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x)))); 
+                    opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x))));
             CreateMap<BidComparisonNotReleasedLoad, BidComparisonNotReleasedLoadDto>().ReverseMap();
-            
+
             CreateMap<BidComparisonRejectedFilter, BidComparisonRejectedFilterDto>().ReverseMap().
                 ForMember(dest => dest.Emergency,
-                    opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x)))); 
+                    opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x))));
             CreateMap<BidComparisonRejectedLoad, BidComparisonRejectedLoadDto>().ReverseMap();
 
             CreateMap<BidComparisonSingleSourceReasonsFilter, BidComparisonSingleSourceReasonsFilterDto>().ReverseMap();
             CreateMap<BidComparisonSingleSourceReasonsLoad, BidComparisonSingleSourceReasonsLoadDto>().ReverseMap();
+            CreateMap<RFQVendorIUDDto, RFQVendorIUD>().ReverseMap();
 
         }
     }
