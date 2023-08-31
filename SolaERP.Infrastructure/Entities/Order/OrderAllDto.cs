@@ -2,6 +2,7 @@ namespace SolaERP.Application.Entities.Order;
 
 public class OrderAllDto 
 {
+    public int OrderMainId { get; set; }
     public string OrderNo { get; set; }
     public string OrderType { get; set; }
     public string VendorName { get; set; }
