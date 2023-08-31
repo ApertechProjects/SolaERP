@@ -443,5 +443,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return result;
             }
         }
+
+        public async Task<bool> HasVendorName(string vendorName)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = "SELECT * FROM Procurement.Vendors WHERE VendorName = @VendorName";
+            command.Parameters.AddWithValue(command, "@VendorName", vendorName);
+
+            return (await command.ExecuteReaderAsync()).HasRows;
+        }
     }
 }
