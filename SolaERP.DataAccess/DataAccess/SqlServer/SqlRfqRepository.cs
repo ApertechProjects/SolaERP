@@ -272,7 +272,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = @"SET NOCOUNT OFF EXEC SP_RFQDetails_IUD @RFQMainId,@Data";
 
                 command.Parameters.AddWithValue(command, "@RFQMainId", mainId);
-                command.Parameters.AddTableValue(command, "@Data", "dbo.RFQDetailsType", details?.ConvertToDataTable());
+                command.Parameters.AddTableValue(command, "@Data", "dbo.RFQDetailsType2", details?.ConvertToDataTable());
                 var res = await command.ExecuteNonQueryAsync();
                 return res > 0;
             }
@@ -288,7 +288,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", model?.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@Businesscategoryid", string.Join(",", model?.BusinessCategoryIds));
-                command.Parameters.AddWithValue(command, "@Buyer", model?.Buyer);
+                command.Parameters.AddWithValue(command, "@Buyer", string.Join(",", model?.Buyer));
                 command.Parameters.AddWithValue(command, "@UserId", model.UserId);
 
                 using var reader = await command.ExecuteReaderAsync();
@@ -303,7 +303,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_RFQRequestDetails_IUD @Data";
-                command.Parameters.AddTableValue(command, "@Data", "RFQRequestDetailsType", details?.ConvertToDataTable());
+                command.Parameters.AddTableValue(command, "@Data", "RFQRequestDetailsType2", details?.ConvertToDataTable());
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
@@ -417,7 +417,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 UOM = reader.Get<string>("UOM"),
                 DefaultUOM = reader.Get<string>("DefaultUOM"),
                 Quantity = reader.Get<decimal>("Quantity"),
-                CONV_ID = reader.Get<int>("CONV_ID"),
+                CONV_ID = reader.Get<decimal>("CONV_ID"),
                 Description = reader.Get<string>("Description"),
                 GUID = reader.Get<Guid>("GUID")
             };
@@ -442,7 +442,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return new()
             {
-                RowNum = reader.Get<long>("RowNum"),
+                //RowNum = reader.Get<long>("RowNum"),
                 Id = reader.Get<int>("RFQRequestDetailId"),
                 RFQDetailId = reader.Get<int>("RFQDetailId"),
                 RequestDetailId = reader.Get<int>("RequestDetailsId"),
@@ -455,7 +455,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Quantity = reader.Get<decimal>("Quantity"),
                 UOM = reader.Get<string>("UOM"),
                 DefaultUOM = reader.Get<string>("DefaultUOM"),
-                CONV_ID = reader.Get<int>("CONV_ID"),
+                CONV_ID = reader.Get<decimal>("CONV_ID"),
                 GUID = reader.Get<Guid>("GUID"),
                 Condition = (Condition)reader.Get<int>("Condition"),
                 Buyer = reader.Get<string>("Buyer"),

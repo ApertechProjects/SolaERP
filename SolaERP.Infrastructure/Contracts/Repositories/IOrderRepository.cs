@@ -1,0 +1,22 @@
+using SolaERP.Application.Dtos.Order;
+using SolaERP.Application.Dtos.Vendors;
+using SolaERP.Application.Entities.Order;
+
+namespace SolaERP.Application.Contracts.Repositories;
+
+public interface IOrderRepository
+{
+    Task<List<OrderTypeLoadDto>> GetAllOrderTypesByBusinessIdAsync(int businessUnitId);
+    Task<List<OrderAllDto>> GetAllAsync(OrderFilterDto dto, int userId);
+    Task<List<OrderAllDto>> GetWFAAsync(OrderWFAFilterDto filterDto, int userId);
+    Task<List<OrderAllDto>> GetChangeApprovalAsync(OrderChangeApprovalFilterDto filterDto, int userId);
+    Task<List<OrderAllDto>> GetHeldAsync(OrderHeldFilterDto filterDto, int userId);
+    Task<List<OrderAllDto>> GetRejectedAsync(OrderRejectedFilterDto filterDto, int userId);
+    Task<List<OrderAllDto>> GetDraftAsync(OrderDraftFilterDto filterDto, int userId);
+    Task<OrderIUDResponse> SaveOrderMainAsync(OrderMainDto orderMainDto, int userId);
+    Task<bool> SaveOrderDetailsAsync(List<OrderDetailDto> orderDetails);
+
+    Task<bool> ChangeOrderMainStatusAsync(ChangeOrderMainStatusDto statusDto, int userId, int orderMainId, int sequence);
+    Task<bool> SendToApproveAsync(List<int> orderMainIdList, int userId);
+    Task<List<OrderHeadLoaderDto>> GetHeaderLoadAsync(int orderMainId);
+}

@@ -65,7 +65,6 @@ var logger = new LoggerConfiguration()
     .WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"), "logs")
     .Enrich.FromLogContext()
     .MinimumLevel.Error()
-    .WriteTo.Seq(builder.Configuration["Log:Seq"])
     .CreateLogger();
 
 

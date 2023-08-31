@@ -18,26 +18,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             this._unitOfWork = unitOfWork;
         }
 
-        public async Task<List<ItemCode>> GetAllAsync()
+
+        public async Task<List<ItemCode>> GetAllAsync(int businessUnitId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SELECT * FROM VW_UNI_ItemList";
-                List<ItemCode> result = new();
-
-                using var reader = await command.ExecuteReaderAsync();
-                while (await reader.ReadAsync())
-                    result.Add(GetItemCodeFromReader(reader));
-
-                return result;
-            }
-        }
-
-        public async Task<List<ItemCode>> GetAllAsync(string businessUnit)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = ReplaceQuery("[dbo].[VW_UNI_ItemList]", new ReplaceParams { ParamName = "APT", Value = businessUnit });
+                command.CommandText = "exec SP_ItemList @BusinessUnitId";
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
                 List<ItemCode> result = new();
 
                 using var reader = await command.ExecuteReaderAsync();

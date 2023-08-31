@@ -91,6 +91,12 @@ namespace SolaERP.Persistence.Services
             else
                 return ApiResponse<bool>.Success("some datas can not be deleted");
         }
+
+        public async Task<ApiResponse<bool>> HasVendorName(string vendorName)
+        {
+            return ApiResponse<bool>.Success(await _repository.HasVendorName(vendorName));
+        }
+
         public async Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity, VendorAllCommandRequest request)
         {
             List<VendorAll> allVendors = await _repository.GetAll(Convert.ToInt32(userIdentity), request);
@@ -165,6 +171,8 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<VM_VendorCard>> GetAsync(int vendorId)
         {
             var header = _mapper.Map<VendorLoadDto>(await _repository.GetHeader(vendorId));
+            if (vendorId == 0)
+                header.CompanyRegistrationDate = null;
             var logo = await _attachment.GetAttachmentsAsync(header.VendorId, SourceType.VEN_LOGO);
             if (logo != null && logo.Count > 0)
                 header.Logo = logo[0];

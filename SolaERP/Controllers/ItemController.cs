@@ -15,9 +15,9 @@ namespace SolaERP.Controllers
             this._itemService = itemService;
         }
 
-        [HttpGet("{businessUnitCode}")]
-        public async Task<IActionResult> GetItemCodesAsync(string businessUnitCode)
-            => CreateActionResult(await _itemService.GetAllAsync(businessUnitCode));
+        [HttpGet("{businessUnitId}")]
+        public async Task<IActionResult> GetItemCodesAsync(int businessUnitId)
+            => CreateActionResult(await _itemService.GetAllAsync(businessUnitId));
 
         [HttpGet("{businessUnitCode}/{itemCode}")]
         public async Task<IActionResult> GetItemCodesByItemCodeAsync(string businessUnitCode, string itemCode)

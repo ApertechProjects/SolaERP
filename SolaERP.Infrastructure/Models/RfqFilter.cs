@@ -11,15 +11,20 @@ namespace SolaERP.Application.Models
 
     public class RfqAllFilter : RfqFilter
     {
-        public Status Status { get; set; } = Status.All;
+        //public List<Status> Status { get; set; }
+        public string Status { get; set; }
     }
 
     public class RFQFilterBase
     {
         public int BusinessUnitId { get; set; } = 2;
         public string ItemCode { get; set; }
-        public Emergency Emergency { get; set; } = Emergency.All;
-        public RfqType RFQType { get; set; } = RfqType.All;
-        public ProcurementType ProcurementType { get; set; } = ProcurementType.All;
+        //public List<Emergency> Emergency { get; set; }
+        public string Emergency { get; set; }
+
+        public string RFQType { get; set; }     
+        //public RfqType RFQType { get; set; } = RfqType.All;
+        public string ProcurementType { get; set; }
+        //public List<ProcurementType> ProcurementType { get; set; }
     }
 }

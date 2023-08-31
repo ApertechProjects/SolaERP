@@ -18,7 +18,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public string BankCode { get; set; }
         public string Currency { get; set; }
         public string BankTaxId { get; set; }
-        public string CoresspondentAccount { get; set; }
+        public string CorrespondentAccount { get; set; }
         public List<AttachmentDto> AccountVerificationLetter { get; set; }
         public int Type { get; set; }
     }

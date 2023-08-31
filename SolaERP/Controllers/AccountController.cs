@@ -6,14 +6,12 @@ using SolaERP.API.Extensions;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Shared;
-using SolaERP.Application.Entities;
 using SolaERP.Application.Enums;
-using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
 using SolaERP.Infrastructure.ViewModels;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Web;
-using Language = SolaERP.Application.Enums.Language;
 
 namespace SolaERP.Controllers
 {
@@ -104,7 +102,7 @@ namespace SolaERP.Controllers
             dto.VerifyToken = newtoken + _tokenHandler.CreateRefreshToken();
             dto.VerifyToken = Regex.Replace(dto.VerifyToken, @"[^a-zA-Z0-9_.~\-]", "");
             dto.VendorId = await _vendorService.GetByTaxIdAsync(dto.TaxId);
-            ApiResponse<int> response = await _userService.UserRegisterAsync(dto);
+            ApiResponse<int> response = response = await _userService.UserRegisterAsync(dto);
 
             AccountResponseDto account = new();
             if (response.Data > 0)
@@ -124,25 +122,45 @@ namespace SolaERP.Controllers
                     Token = HttpUtility.HtmlDecode(dto.VerifyToken),
                 };
 
-
                 string body = await GetMailBody<VM_EmailVerification>.GetBody(emailVerification, @"EmailVerification.cshtml", @"verification.png");
                 MailModel mailModel = new MailModel()
                 {
                     Body = body,
                     Header = templateDataForVerification.Header,
-                    ImageName = "verification.png",
+                    EmailType = EmailTemplateKey.VER,
                     Subject = templateDataForVerification.Subject,
                     Tos = new List<string> { dto.Email }
                 };
 
-                Thread.Sleep(1000);
-                bool res = await _mailService.SendRequest(mailModel);
+                //Stopwatch stopwatch = Stopwatch.StartNew();
+                //await _mailService.SendRequest(mailModel);
+                //stopwatch.Stop();
+                //TimeSpan timeSpan = stopwatch.Elapsed;
+                //System.IO.File.WriteAllText(@"C:\Log.txt",timeSpan.ToString());
+
+                Response.OnCompleted(async () =>
+                {
+                    await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification, emailVerification.TemplateName(), emailVerification.ImageName(), new List<string> { dto.Email });
+                });
 
                 account.UserId = response.Data;
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
             }
 
-            return CreateActionResult(ApiResponse<bool>.Fail("", 422));
+            return CreateActionResult(ApiResponse<bool>.Fail(response.Errors, 422));
+
+
+            //string body = await GetMailBody<VM_EmailVerification>.GetBody(emailVerification, @"EmailVerification.cshtml", @"verification.png");
+            //MailModel mailModel = new MailModel()
+            //{
+            //    Body = body,
+            //    Header = templateDataForVerification.Header,
+            //    EmailType = EmailTemplateKey.VER,
+            //    Subject = templateDataForVerification.Subject,
+            //    Tos = new List<string> { dto.Email }
+            //};
+            //await _mailService.SendRequest(mailModel);
+
         }
 
 

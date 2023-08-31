@@ -18,7 +18,7 @@ namespace SolaERP.Application.Dtos.RFQ
         public string UOM { get; set; }
         public string DefaultUOM { get; set; }
         public decimal Quantity { get; set; }
-        public int Conversion { get; set; }
+        public decimal Conversion { get; set; }
         public string Description { get; set; }
         public Guid GUID { get; set; }
         public List<RFQRequestDetailDto> RequestDetails { get; set; }

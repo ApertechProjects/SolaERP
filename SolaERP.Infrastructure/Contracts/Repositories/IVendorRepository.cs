@@ -27,5 +27,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> ApproveAsync(VendorApproveModel model);
         Task<bool> SendToApprove(VendorSendToApproveRequest request);
         Task<string> GetVendorLogo(int vendorId);
+        Task<bool> HasVendorName(string vendorName);
     }
 }

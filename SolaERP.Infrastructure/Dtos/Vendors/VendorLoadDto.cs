@@ -60,7 +60,7 @@ namespace SolaERP.Application.Dtos.Vendors
         public int BusinessUnitId { get; set; }
         public string BusinessUnitCode { get; set; }
         public string OtherProducts { get; set; }
-        public DateTime CompanyRegistrationDate { get; set; }
+        public DateTime? CompanyRegistrationDate { get; set; }
         public string TaxOffice { get; set; }
         public string Logo { get; set; }
         public List<VendorBankDetailDto> BankAccounts { get; set; }
