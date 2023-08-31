@@ -58,4 +58,8 @@ public class OrderController : CustomBaseController
     public async Task<IActionResult> Delete([FromBody] List<int> orderMainIdList)
         => CreateActionResult(await _orderService.DeleteAsync(orderMainIdList, User.Identity.Name));
     
+    [HttpPost("[action]")]
+    public async Task<IActionResult> SendToApprove([FromBody] List<int> orderMainIdList)
+        => CreateActionResult(await _orderService.SendToApproveAsync(orderMainIdList, User.Identity.Name));
+
 }

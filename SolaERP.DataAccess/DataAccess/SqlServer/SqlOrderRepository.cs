@@ -294,7 +294,7 @@ public class SqlOrderRepository : IOrderRepository
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
         command.CommandText = @"SET NOCOUNT OFF EXEC dbo.SP_OrderDetails_IUD @OrderMainId, @Data";
         command.Parameters.AddWithValue(command, "@OrderMainId", orderDetails[0].OrderMainId);
-        command.Parameters.AddTableValue(command, "@Data", "dbo.OrderDetailsType2", orderDetails?.ConvertToDataTable());
+        command.Parameters.AddTableValue(command, "@Data", "dbo.OrderDetailsType2", orderDetails.ConvertToDataTable());
 
         return await command.ExecuteNonQueryAsync() > 0;
     }
@@ -317,6 +317,20 @@ public class SqlOrderRepository : IOrderRepository
         command.Parameters.AddWithValue(command, "@Comment", statusDto.Comment);
         command.Parameters.AddWithValue(command, "@Sequence", sequence);
         command.Parameters.AddWithValue(command, "@RejectReasonId", statusDto.RejectReasonId);
+
+        return await command.ExecuteNonQueryAsync() > 0;
+    }
+
+    public async Task<bool> SendToApproveAsync(List<int> orderMainIdList, int userId)
+    {
+        await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = @"SET NOCOUNT OFF dbo.SP_OrderSendToApprove
+                                @UserId, @OrderMainId";
+
+        var orderMainIdListAsString = string.Join(",", orderMainIdList.Select(x => x.ToString()).ToList());
+
+        command.Parameters.AddWithValue(command, "@UserId", userId);
+        command.Parameters.AddWithValue(command, "@OrderMainId", orderMainIdListAsString);
 
         return await command.ExecuteNonQueryAsync() > 0;
     }

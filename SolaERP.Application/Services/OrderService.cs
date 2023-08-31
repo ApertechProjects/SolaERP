@@ -98,13 +98,13 @@ public class OrderService : IOrderService
         int userId = Convert.ToInt32(identityName);
         foreach (var orderMainId in orderMainIdList)
         {
-               await _orderRepository.SaveOrderMainAsync(new OrderMainDto()
-                    {
-                        OrderMainId = orderMainId,
-                        UserId = userId
-                    }, userId);
+            await _orderRepository.SaveOrderMainAsync(new OrderMainDto()
+            {
+                OrderMainId = orderMainId,
+                UserId = userId
+            }, userId);
         }
-     
+
         await _unitOfWork.SaveChangesAsync();
         return ApiResponse<bool>.Success(true);
     }
@@ -119,6 +119,16 @@ public class OrderService : IOrderService
                 selectedOrder.Sequence);
         }
 
+        await _unitOfWork.SaveChangesAsync();
+
+        return ApiResponse<bool>.Success(true);
+    }
+
+    public async Task<ApiResponse<bool>> SendToApproveAsync(List<int> orderMainIdList, string identityName)
+    {
+        int userId = Convert.ToInt32(identityName);
+        await _orderRepository.SendToApproveAsync(orderMainIdList, userId);
+        await _unitOfWork.SaveChangesAsync();
         return ApiResponse<bool>.Success(true);
     }
 }

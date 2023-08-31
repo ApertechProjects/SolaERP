@@ -17,4 +17,5 @@ public interface IOrderRepository
     Task<bool> SaveOrderDetailsAsync(List<OrderDetailDto> orderDetails);
 
     Task<bool> ChangeOrderMainStatusAsync(ChangeOrderMainStatusDto statusDto, int userId, int orderMainId, int sequence);
+    Task<bool> SendToApproveAsync(List<int> orderMainIdList, int userId);
 }
