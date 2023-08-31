@@ -310,7 +310,7 @@ namespace SolaERP.Infrastructure.Services
                 var json = JsonSerializer.Serialize(mailModel);
                 var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
-                var request = await client.PostAsync(_configuration["Mail:RabbitMQUrlTest"] + "api/Mail", content);
+                var request = await client.PostAsync(_configuration["Mail:RabbitMQUrl"] + "api/Mail", content);
 
             }
         }

@@ -122,10 +122,26 @@ namespace SolaERP.Controllers
                     Token = HttpUtility.HtmlDecode(dto.VerifyToken),
                 };
 
-                Response.OnCompleted(async () =>
+                string body = await GetMailBody<VM_EmailVerification>.GetBody(emailVerification, @"EmailVerification.cshtml", @"verification.png");
+                MailModel mailModel = new MailModel()
                 {
-                    await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification, emailVerification.TemplateName(), emailVerification.ImageName(), new List<string> { dto.Email });
-                });
+                    Body = body,
+                    Header = templateDataForVerification.Header,
+                    EmailType = EmailTemplateKey.VER,
+                    Subject = templateDataForVerification.Subject,
+                    Tos = new List<string> { dto.Email }
+                };
+
+                Stopwatch stopwatch = Stopwatch.StartNew();
+                await _mailService.SendRequest(mailModel);
+                stopwatch.Stop();
+                TimeSpan timeSpan = stopwatch.Elapsed;
+                System.IO.File.WriteAllText(@"C:\Log.txt",timeSpan.ToString());
+
+                //Response.OnCompleted(async () =>
+                //{
+                //    await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification, emailVerification.TemplateName(), emailVerification.ImageName(), new List<string> { dto.Email });
+                //});
 
                 account.UserId = response.Data;
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
