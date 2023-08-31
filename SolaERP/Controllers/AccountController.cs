@@ -127,11 +127,6 @@ namespace SolaERP.Controllers
                     await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification, emailVerification.TemplateName(), emailVerification.ImageName(), new List<string> { dto.Email });
                 });
 
-                Stopwatch stopwatch= Stopwatch.StartNew();
-                await _mailService.SendRequest(mailModel);
-                stopwatch.Stop();
-                TimeSpan timeSpan = stopwatch.Elapsed;
-                //System.IO.File.WriteAllText(@"C:\Newfolder\Log.txt", timeSpan.ToString());
                 account.UserId = response.Data;
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
             }
