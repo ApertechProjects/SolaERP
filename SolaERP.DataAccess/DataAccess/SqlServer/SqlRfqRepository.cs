@@ -552,7 +552,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 
                 command.Parameters.AddWithValue(command, "@RFQMainId",vendorIUD.Id);
-                command.Parameters.AddWithValue(command, "@VendorCode",vendorIUD.VendorCodes.ConvertListToDataTable());
+                command.Parameters.AddTableValue(command, "@VendorCode", "SingleNvarcharItems", vendorIUD.VendorCodes.ConvertListToDataTable());
                 command.Parameters.AddWithValue(command, "@UserId",userId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
