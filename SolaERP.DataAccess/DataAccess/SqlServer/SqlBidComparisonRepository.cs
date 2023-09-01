@@ -327,6 +327,32 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return data;
         }
 
+        public async Task<List<BidComparisonWFALoad>> GetComparisonWFA(BidComparisonWFAFilter filter)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"EXEC SP_BidComparisonWFALoad @BusinessUnitid,
+                                        @Emergency,
+                                        @DateFrom,
+                                        @DateTo,
+                                        @UserId";
+
+            command.Parameters.AddWithValue(command, "@BusinessUnitid", filter.BusinessUnitid);
+            command.Parameters.AddWithValue(command, "@Emergency", filter.Emergency);
+            command.Parameters.AddWithValue(command, "@DateFrom", filter.DateFrom);
+            command.Parameters.AddWithValue(command, "@DateTo", filter.DateTo);
+            command.Parameters.AddWithValue(command, "@UserId", filter.UserId);
+
+            var data = new List<BidComparisonWFALoad>();
+
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                data.Add(GetBaseComparisonFromReader(reader).GetChild<BidComparisonWFALoad>());
+            }
+
+            return data;
+        }
+
         public async Task<List<BidComparisonDraftLoad>> GetComparisonDraft(BidComparisonDraftFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;

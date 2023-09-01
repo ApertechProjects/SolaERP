@@ -66,6 +66,12 @@ namespace SolaERP.API.Controllers
         }
 
         [HttpGet("[action]")]
+        public async Task<IActionResult> GetComparisonWFA([FromQuery] BidComparisonWFAFilterDto filterDto)
+        {
+            return CreateActionResult(await _bidComparisonService.GetComparisonWFA(filterDto));
+        }
+
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetComparisonDraft([FromQuery] BidComparisonDraftFilterDto filterDto)
         {
             return CreateActionResult(await _bidComparisonService.GetComparisonDraft(filterDto));

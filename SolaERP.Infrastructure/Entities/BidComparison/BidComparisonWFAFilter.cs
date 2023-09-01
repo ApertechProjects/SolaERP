@@ -1,5 +1,4 @@
-﻿using SolaERP.Application.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Entities.BidComparison
 {
-    public class BidComparisonMyChartsFilterDto
+    public class BidComparisonWFAFilter
     {
         public int BusinessUnitid { get; set; }
-        public List<Emergency> Emergency { get; set; }
+        public string Emergency { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
-        public List<Enums.Status> Status { get; set; }
-        public List<Enums.ApprovalStatus> ApproveStatus { get; set; }
+        public int UserId { get; set; }
     }
 }

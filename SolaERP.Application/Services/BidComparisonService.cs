@@ -113,6 +113,15 @@ namespace SolaERP.Persistence.Services
 
         }
 
+        public async Task<ApiResponse<List<BidComparisonWFALoadDto>>> GetComparisonWFA(BidComparisonWFAFilterDto filterDto)
+        {
+            var filter = _mapper.Map<BidComparisonWFAFilter>(filterDto);
+            var data = await _bidComparisonRepository.GetComparisonWFA(filter);
+            var dtos = _mapper.Map<List<BidComparisonWFALoadDto>>(data);
+            return ApiResponse<List<BidComparisonWFALoadDto>>.Success(dtos, 200);
+
+        }
+
         public async Task<ApiResponse<List<BidComparisonHeldLoadDto>>> GetComparisonHeld(BidComparisonHeldFilterDto filterDto)
         {
             var filter = _mapper.Map<BidComparisonHeldFilter>(filterDto);

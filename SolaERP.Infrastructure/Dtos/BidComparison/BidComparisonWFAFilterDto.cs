@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Entities.BidComparison
 {
-    public class BidComparisonMyChartsFilterDto
+    public class BidComparisonWFAFilterDto
     {
         public int BusinessUnitid { get; set; }
         public List<Emergency> Emergency { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
-        public List<Enums.Status> Status { get; set; }
-        public List<Enums.ApprovalStatus> ApproveStatus { get; set; }
+        public int UserId { get; set; }
     }
 }
