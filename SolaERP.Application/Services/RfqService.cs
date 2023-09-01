@@ -260,10 +260,9 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> RFQVendorIUDAsync(RFQVendorIUDDto dto, string userIdentity)
         {
             var data = _mapper.Map<RFQVendorIUD>(dto);
-
             var result = await _repository.RFQVendorIUDAsync(data, Convert.ToInt32(userIdentity));
+            
             await _unitOfWork.SaveChangesAsync();   
-
             return result ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Fail(false, 400);
         }
     }

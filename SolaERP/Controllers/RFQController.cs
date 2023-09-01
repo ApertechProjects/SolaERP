@@ -57,7 +57,7 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _service.SaveRfqAsync(request, User.Identity.Name));
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> SaveRFQVendors(List<RFQVendorIUDDto> dto)
+        public async Task<IActionResult> SaveRFQVendors(RFQVendorIUDDto dto)
             => CreateActionResult(await _service.RFQVendorIUDAsync(dto, User.Identity.Name));
 
         [HttpPost("[action]")]
