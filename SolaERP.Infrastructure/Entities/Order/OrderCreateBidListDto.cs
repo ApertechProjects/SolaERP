@@ -1,0 +1,39 @@
+namespace SolaERP.Application.Entities.Order;
+
+public class OrderCreateBidListDto
+{
+    public int BidMainId { get; set; }
+    public string BidNo { get; set; }
+    public int BidComparisonId { get; set; }
+    public string ComparisonNo { get; set; }
+    public int BidDetailId { get; set; }
+    public int RFQDetailId { get; set; }
+    public int LineNo { get; set; }
+    public int RequestDetailId { get; set; }
+    public int RequestMainId { get; set; }
+    public string RequestNo { get; set; }
+    public int RequestLine { get; set; }
+    public string RequestUOM { get; set; }
+    public string ItemCode { get; set; }
+    public string ItemName { get; set; }
+    public string ItemName2 { get; set; }
+    public string DefaultUOM { get; set; }
+    public bool AlternativeItem { get; set; }
+    public string AlternativeItemCode { get; set; }
+    public string AlternativeItemName { get; set; }
+    public string PUOM { get; set; }
+    public decimal ConversionRate { get; set; }
+    public string LineDescription { get; set; }
+    public int Condition { get; set; }
+    public decimal Quantity { get; set; }
+    public int DiscountType { get; set; }
+    public decimal DiscountValue { get; set; }
+    public decimal UnitPrice { get; set; }
+    public decimal SingleUnitPrice { get; set; }
+    public decimal TotalAmount { get; set; }
+    public decimal DiscountedAmount { get; set; }
+    public decimal ConvertedQTY { get; set; }
+    public decimal ConvertedUnitPrice { get; set; }
+    public int Status { get; set; }
+    public int ApproveStatus { get; set; }
+}

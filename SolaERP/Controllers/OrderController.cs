@@ -65,5 +65,12 @@ public class OrderController : CustomBaseController
     [HttpGet("[action]/{orderMainId}")]
     public async Task<IActionResult> GetHeaderLoad(int orderMainId)
         => CreateActionResult(await _orderService.GetHeaderLoadAsync(orderMainId));
-    
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> GetOrderCreateListForRequest([FromBody] OrderCreateListRequest dto)
+        => CreateActionResult(await _orderService.GetOrderCreateListForRequestAsync(dto));
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> GetOrderCreateListForBids([FromBody] OrderCreateListRequest dto)
+        => CreateActionResult(await _orderService.GetOrderCreateListForBidsAsync(dto));
 }

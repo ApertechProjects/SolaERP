@@ -1,6 +1,8 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Item_Code;
 using SolaERP.Application.Entities.RFQ;
+using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.UOM;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
@@ -539,6 +541,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     conversion = reader.GetByEntityStructure<Application.Entities.UOM.Conversion>();
 
                 return conversion;
+            }
+        }
+
+        public async Task<bool> RFQVendorIUDAsync(RFQVendorIUD vendorIUD, int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_RFQVendorResponse_IUD @RFQMainId,@VendorCode,@UserId";
+
+
+                command.Parameters.AddWithValue(command, "@RFQMainId",vendorIUD.Id);
+                command.Parameters.AddTableValue(command, "@VendorCode", "SingleNvarcharItems", vendorIUD.VendorCodes.ConvertListToDataTable());
+                command.Parameters.AddWithValue(command, "@UserId",userId);
+
+                return await command.ExecuteNonQueryAsync() > 0;
             }
         }
         #endregion

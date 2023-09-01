@@ -27,6 +27,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> ChangeRFQStatusAsync(RfqChangeStatusModel model, int userId);
         Task<Application.Entities.UOM.Conversion> GetConversionAsync(int bussinessUnit, string itemCode);
         Task<List<Application.Entities.RFQ.UOM>> GetPUOMAsync(int businessUnitId, string itemCodes);
+        Task<bool> RFQVendorIUDAsync(RFQVendorIUD vendorIUD, int userId);
 
     }
 }

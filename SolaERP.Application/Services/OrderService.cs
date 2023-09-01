@@ -136,6 +136,22 @@ public class OrderService : IOrderService
     {
         return ApiResponse<List<OrderHeadLoaderDto>>.Success(
             await _orderRepository.GetHeaderLoadAsync(orderMainId)
-        );   
+        );
+    }
+
+    public async Task<ApiResponse<List<OrderCreateRequestListDto>>> GetOrderCreateListForRequestAsync(
+        OrderCreateListRequest dto)
+    {
+        return ApiResponse<List<OrderCreateRequestListDto>>.Success(
+            await _orderRepository.GetOrderCreateListForRequestAsync(dto)
+        );
+    }
+
+    public async Task<ApiResponse<List<OrderCreateBidListDto>>> GetOrderCreateListForBidsAsync(
+        OrderCreateListRequest dto)
+    {
+        return ApiResponse<List<OrderCreateBidListDto>>.Success(
+            await _orderRepository.GetOrderCreateListForBidsAsync(dto)
+        );
     }
 }

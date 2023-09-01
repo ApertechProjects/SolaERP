@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
 
@@ -7,6 +9,7 @@ namespace SolaERP.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class RFQController : CustomBaseController
     {
         private readonly IRfqService _service;
@@ -54,12 +57,17 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _service.SaveRfqAsync(request, User.Identity.Name));
 
         [HttpPost("[action]")]
+        public async Task<IActionResult> SaveRFQVendors(RFQVendorIUDDto dto)
+            => CreateActionResult(await _service.RFQVendorIUDAsync(dto, User.Identity.Name));
+
+        [HttpPost("[action]")]
         public async Task<IActionResult> ChangeRFQStatus(RfqChangeStatusModel model)
             => CreateActionResult(await _service.ChangeRFQStatusAsync(model, User.Identity.Name));
 
         [HttpDelete]
         public async Task<IActionResult> Delete([FromQuery] List<int> rfqMainId)
             => CreateActionResult(await _service.DeleteAsync(rfqMainId, User.Identity.Name));
+
 
     }
 }
