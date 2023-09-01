@@ -257,19 +257,14 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<Application.Dtos.RFQ.UOMDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<bool>> RFQVendorIUDAsync(List<RFQVendorIUDDto> dto, string userIdentity)
+        public async Task<ApiResponse<bool>> RFQVendorIUDAsync(RFQVendorIUDDto dto, string userIdentity)
         {
-            var data = _mapper.Map<List<RFQVendorIUD>>(dto);
+            var data = _mapper.Map<RFQVendorIUD>(dto);
 
-            var taskresult = data.Select(async vendor =>
-              {
-                  var result = await _repository.RFQVendorIUDAsync(vendor, Convert.ToInt32(userIdentity));
-                  return result;
+            var result = await _repository.RFQVendorIUDAsync(data, Convert.ToInt32(userIdentity));
+            await _unitOfWork.SaveChangesAsync();   
 
-              }).ToList();
-
-            return taskresult.All(x => x.Result == true) ?
-                ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Fail(false, 400);
+            return result ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Fail(false, 400);
         }
     }
 }
