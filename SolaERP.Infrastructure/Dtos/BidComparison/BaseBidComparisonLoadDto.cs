@@ -9,10 +9,10 @@ namespace SolaERP.Application.Dtos.BidComparison
     public class BaseBidComparisonLoadDto
     {
         public long RowNum { get; set; }
-        public int ApproveStatus { get; set; }
-        public int Emergency { get; set; }
+        public string ApproveStatus { get; set; }
+        public string Emergency { get; set; }
         public string SingleSourceReasons { get; set; }
-        public int ProcurementType { get; set; }
+        public string ProcurementType { get; set; }
         public string ComparisonNo { get; set; }
         public string RFQNo { get; set; }
         public string Buyer { get; set; }

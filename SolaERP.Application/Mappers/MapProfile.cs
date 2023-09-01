@@ -473,10 +473,18 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<BidComparisonIUD, BidComparisonCreateDto>().ReverseMap();
             CreateMap<BidComparisonApprove, BidComparisonApproveDto>().ReverseMap();
             CreateMap<BidComparisonSendToApprove, BidComparisonSendToApproveDto>().ReverseMap();
+
             CreateMap<BidComparisonBidApprovalsFilter, BidComparionBidApprovalsFilterDto>().ReverseMap();
-            CreateMap<BidComparisonBidApprovalsLoad, BidComparisonBidApprovalsLoadDto>().ReverseMap();
+            CreateMap<BidComparisonBidApprovalsLoad, BidComparisonBidApprovalsLoadDto>().
+                ForMember(dest => dest.ApproveStatus, opt => opt.MapFrom(src => ((Application.Enums.ApprovalStatus)src.ApproveStatus).ToString())).
+                ReverseMap();
+
             CreateMap<BidComparisonBidDetailsLoad, BidComparisonBidDetailsLoadDto>().ReverseMap();
-            CreateMap<BidComparisonHeaderLoad, BidComparisonHeaderLoadDto>().ReverseMap();
+            CreateMap<BidComparisonHeaderLoad, BidComparisonHeaderLoadDto>().
+                ForMember(dest => dest.ProcurementType, opt => opt.MapFrom(src => ((Application.Enums.ProcurementType)src.ProcurementType).ToString())).
+                ForMember(dest => dest.Emergency, opt => opt.MapFrom(src => ((Application.Enums.Emergency)src.Emergency).ToString())).
+                ReverseMap();
+
             CreateMap<BidComparisonBidHeaderLoad, BidComparisonBidHeaderLoadDto>().ReverseMap();
             CreateMap<BidComparisonRFQDetailsLoad, BidComparisonRFQDetailsLoadDto>().ReverseMap();
             CreateMap<BidComparisonApprovalInformationFilter, BidComparisonApprovalInformationFilterDto>().ReverseMap();
@@ -485,13 +493,21 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<BidComparisonDraftFilter, BidComparisonDraftFilterDto>().ReverseMap().
                 ForMember(dest => dest.Emergency,
                     opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x))));
-            CreateMap<BidComparisonDraftLoad, BidComparisonDraftLoadDto>().ReverseMap();
+            CreateMap<BidComparisonDraftLoad, BidComparisonDraftLoadDto>().
+                ForMember(dest=>dest.ApproveStatus, opt=> opt.MapFrom(src=> ((Application.Enums.ApprovalStatus)src.ApproveStatus).ToString())).
+                ForMember(dest=>dest.Emergency, opt=> opt.MapFrom(src=> ((Application.Enums.Emergency)src.Emergency).ToString())).
+                ForMember(dest=>dest.ProcurementType, opt=> opt.MapFrom(src=> ((Application.Enums.ProcurementType)src.Emergency).ToString())).
+                ReverseMap();
 
 
             CreateMap<BidComparisonHeldFilter, BidComparisonHeldFilterDto>().ReverseMap().
                  ForMember(dest => dest.Emergency,
                     opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x))));
-            CreateMap<BidComparisonHeldLoad, BidComparisonHeldLoadDto>().ReverseMap();
+            CreateMap<BidComparisonHeldLoad, BidComparisonHeldLoadDto>().
+                ForMember(dest => dest.ApproveStatus, opt => opt.MapFrom(src => ((Application.Enums.ApprovalStatus)src.ApproveStatus).ToString())).
+                ForMember(dest => dest.Emergency, opt => opt.MapFrom(src => ((Application.Enums.Emergency)src.Emergency).ToString())).
+                ForMember(dest => dest.ProcurementType, opt => opt.MapFrom(src => ((Application.Enums.ProcurementType)src.Emergency).ToString())).
+                ReverseMap();
 
             CreateMap<BidComparisonMyChartsFilter, BidComparisonMyChartsFilterDto>().ReverseMap().
                  ForMember(dest => dest.Emergency,
@@ -500,22 +516,38 @@ namespace SolaERP.Persistence.Mappers
                     opt => opt.MapFrom(src => string.Join(",", src.Status.Select(x => (int)x)))).
                  ForMember(dest => dest.ApproveStatus,
                     opt => opt.MapFrom(src => string.Join(",", src.ApproveStatus.Select(x => (int)x))));
-            CreateMap<BidComparisonMyChartsLoad, BidComparisonMyChartsLoadDto>().ReverseMap();
+            CreateMap<BidComparisonMyChartsLoad, BidComparisonMyChartsLoadDto>().
+                ForMember(dest => dest.ApproveStatus, opt => opt.MapFrom(src => ((Application.Enums.ApprovalStatus)src.ApproveStatus).ToString())).
+                ForMember(dest => dest.Emergency, opt => opt.MapFrom(src => ((Application.Enums.Emergency)src.Emergency).ToString())).
+                ForMember(dest => dest.ProcurementType, opt => opt.MapFrom(src => ((Application.Enums.ProcurementType)src.Emergency).ToString())).
+                ReverseMap();
 
             CreateMap<BidComparisonNotReleasedFilter, BidComparisonNotReleasedFilterDto>().ReverseMap().
                 ForMember(dest => dest.Emergency,
                     opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x)))); 
-            CreateMap<BidComparisonNotReleasedLoad, BidComparisonNotReleasedLoadDto>().ReverseMap();
+            CreateMap<BidComparisonNotReleasedLoad, BidComparisonNotReleasedLoadDto>().
+                ForMember(dest => dest.ApproveStatus, opt => opt.MapFrom(src => ((Application.Enums.ApprovalStatus)src.ApproveStatus).ToString())).
+                ForMember(dest => dest.Emergency, opt => opt.MapFrom(src => ((Application.Enums.Emergency)src.Emergency).ToString())).
+                ForMember(dest => dest.ProcurementType, opt => opt.MapFrom(src => ((Application.Enums.ProcurementType)src.Emergency).ToString())).
+                ReverseMap();
             
             CreateMap<BidComparisonRejectedFilter, BidComparisonRejectedFilterDto>().ReverseMap().
                 ForMember(dest => dest.Emergency,
                     opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x)))); 
-            CreateMap<BidComparisonRejectedLoad, BidComparisonRejectedLoadDto>().ReverseMap();
+            CreateMap<BidComparisonRejectedLoad, BidComparisonRejectedLoadDto>().
+                ForMember(dest => dest.ApproveStatus, opt => opt.MapFrom(src => ((Application.Enums.ApprovalStatus)src.ApproveStatus).ToString())).
+                ForMember(dest => dest.Emergency, opt => opt.MapFrom(src => ((Application.Enums.Emergency)src.Emergency).ToString())).
+                ForMember(dest => dest.ProcurementType, opt => opt.MapFrom(src => ((Application.Enums.ProcurementType)src.Emergency).ToString())).
+                ReverseMap();
 
             CreateMap<BidComparisonWFAFilter, BidComparisonWFAFilterDto>().ReverseMap().
                 ForMember(dest => dest.Emergency,
                     opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x))));
-            CreateMap<BidComparisonWFALoad, BidComparisonWFALoadDto>().ReverseMap();
+            CreateMap<BidComparisonWFALoad, BidComparisonWFALoadDto>().
+                ForMember(dest => dest.ApproveStatus, opt => opt.MapFrom(src => ((Application.Enums.ApprovalStatus)src.ApproveStatus).ToString())).
+                ForMember(dest => dest.Emergency, opt => opt.MapFrom(src => ((Application.Enums.Emergency)src.Emergency).ToString())).
+                ForMember(dest => dest.ProcurementType, opt => opt.MapFrom(src => ((Application.Enums.ProcurementType)src.Emergency).ToString())).
+                ReverseMap();
 
             CreateMap<BidComparisonSingleSourceReasonsFilter, BidComparisonSingleSourceReasonsFilterDto>().ReverseMap();
             CreateMap<BidComparisonSingleSourceReasonsLoad, BidComparisonSingleSourceReasonsLoadDto>().ReverseMap();

@@ -14,10 +14,10 @@ namespace SolaERP.Application.Entities.BidComparison
         public int BusinessUnitId { get; set; }
         public string RFQNo { get; set; }
         public int BiddingType { get; set; }
-        public int ProcurementType { get; set; }
+        public string ProcurementType { get; set; }
         public DateTime RFQDate { get; set; }
         public DateTime RFQDeadline { get; set; }
-        public int Emergency { get; set; }
+        public string Emergency { get; set; }
         public string EnteredBy { get; set; }
         public DateTime Entrydate { get; set; }
         public string ComparisonNo { get; set; }
