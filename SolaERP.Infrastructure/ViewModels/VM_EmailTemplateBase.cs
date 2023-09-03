@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Html;
-using Microsoft.Extensions.Configuration;
 using Language = SolaERP.Application.Enums.Language;
 
 namespace SolaERP.Infrastructure.ViewModels
