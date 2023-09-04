@@ -16,7 +16,7 @@ namespace SolaERP.Application.Extensions
             {
                 "az" => Enums.Language.az,
                 "en" => Enums.Language.en,
-                "ru" => Enums.Language.ru
+                //"ru" => Enums.Language.ru
             };
         }
     }

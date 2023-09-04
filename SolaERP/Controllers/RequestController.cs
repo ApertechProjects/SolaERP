@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
-using SolaERP.Application.Contracts.Repositories;
+using SolaERP.API.Extensions;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Request;
+using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
+using SolaERP.Application.ViewModels;
 
 namespace SolaERP.Controllers
 {
@@ -14,10 +18,16 @@ namespace SolaERP.Controllers
     {
         private readonly IRequestService _requestService;
         private readonly IFileUploadService _fileUploadService;
-        public RequestController(IRequestService requestService, IFileUploadService fileUploadService)
+        private readonly IEmailNotificationService _emailNotificationService;
+        private readonly IUserService _userService;
+        private IMailService _mailService;
+        public RequestController(IRequestService requestService, IFileUploadService fileUploadService, IEmailNotificationService emailNotificationService, IUserService userService, IMailService mailService)
         {
             _requestService = requestService;
             _fileUploadService = fileUploadService;
+            _emailNotificationService = emailNotificationService;
+            _userService = userService;
+            _mailService = mailService;
         }
 
         [HttpGet("{businessUnitId}")]
@@ -65,8 +75,22 @@ namespace SolaERP.Controllers
         => CreateActionResult(await _requestService.SendToApproveAsync(User.Identity.Name, sendToApprove.RequestMainIds));
 
         [HttpPost]
-        public async Task<IActionResult> ChangeMainStatus(RequestChangeStatusModel requestChangeStatusParametersDto)
-            => CreateActionResult(await _requestService.ChangeMainStatusAsync(User.Identity.Name, requestChangeStatusParametersDto));
+        public async Task<IActionResult> ChangeMainStatus(RequestChangeStatusModel data)
+        {
+            var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQP);
+
+            for (int i = 0; i < data.RequestDatas.Count; i++)
+            {
+                var res = await _requestService.ChangeMainStatusAsync(User.Identity.Name, data.RequestDatas[i].RequestMainId, data.ApproveStatus, data.Comment);
+
+                if (res)
+                {
+                    await _mailService.SendMailForRequest(Response, data.RequestDatas, templates);
+                }
+            }
+
+            return CreateActionResult(ApiResponse<bool>.Success(200));
+        }
 
         [HttpPost]
         public async Task<IActionResult> ChangeDetailStatus(RequestDetailApproveModel model)

@@ -19,7 +19,8 @@ namespace SolaERP.Persistence.Services
         private IRequestDetailRepository _requestDetailRepository;
         private IUserRepository _userRepository;
         private IMailService _mailService;
-        public RequestService(IUnitOfWork unitOfWork, IMapper mapper, IRequestMainRepository requestMainRepository, IRequestDetailRepository requestDetailRepository, IUserRepository userRepository, IMailService mailService)
+        private readonly IEmailNotificationService _emailNotificationService;
+        public RequestService(IUnitOfWork unitOfWork, IMapper mapper, IRequestMainRepository requestMainRepository, IRequestDetailRepository requestDetailRepository, IUserRepository userRepository, IMailService mailService, IEmailNotificationService emailNotificationService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -27,6 +28,7 @@ namespace SolaERP.Persistence.Services
             _requestDetailRepository = requestDetailRepository;
             _userRepository = userRepository;
             _mailService = mailService;
+            _emailNotificationService = emailNotificationService;
         }
 
         public async Task<bool> RemoveDetailAsync(int requestDetailId)
@@ -67,47 +69,21 @@ namespace SolaERP.Persistence.Services
                 ApiResponse<List<RequestTypesDto>>.Fail("Request types not found", 404);
         }
 
-        public async Task<ApiResponse<bool>> ChangeMainStatusAsync(string name, RequestChangeStatusModel changeStatusParametersDtos)
+        public async Task<bool> ChangeMainStatusAsync(string name, int requestMainId, int approveStatus, string comment)
         {
             var userId = await _userRepository.ConvertIdentity(name);
-            if (changeStatusParametersDtos.RequestMainIds == null && changeStatusParametersDtos.RequestMainIds.Count == 0)
-                return ApiResponse<bool>.Fail("Request must be selected", 200);
 
             List<string> failedMailList = new List<string>();
             var user = await _userRepository.GetByIdAsync(userId);
-            for (int i = 0; i < changeStatusParametersDtos.RequestMainIds.Count; i++)
-            {
-                var result = await _requestMainRepository.RequestMainChangeStatusAsync(userId, changeStatusParametersDtos.RequestMainIds[i], changeStatusParametersDtos.ApproveStatus, changeStatusParametersDtos.Comment);
 
-                if (result)
-                {
-                    string messageBody = $"Request {GetMailText(changeStatusParametersDtos.ApproveStatus)} by " + user.UserName;
-                    await _mailService.SendSafeMailsAsync(await GetFollowUserEmailsForRequestAsync(changeStatusParametersDtos.RequestMainIds[i]), "Request Information", messageBody, false);
-                }
+            var result = await _requestMainRepository.RequestMainChangeStatusAsync(userId, requestMainId, approveStatus, comment);
 
-            }
+
             await _unitOfWork.SaveChangesAsync();
 
-            return ApiResponse<bool>.Success(true, 200);
+            return result;
         }
 
-        string GetMailText(int approveStatus)
-        {
-            string text = "";
-            switch (approveStatus)
-            {
-                case 2:
-                    text = "approved";
-                    break;
-                case 3:
-                    text = "rejected";
-                    break;
-                default:
-                    text = "";
-                    break;
-            }
-            return text;
-        }
 
         public async Task<ApiResponse<bool>> SendToApproveAsync(string name, List<int> requestMainIds)
         {
