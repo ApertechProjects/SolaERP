@@ -122,17 +122,10 @@ namespace SolaERP.Controllers
                 };
 
 
-                string body = await GetMailBody<VM_EmailVerification>.GetBody(emailVerification, @"EmailVerification.cshtml", @"verification.png");
-                MailModel mailModel = new MailModel()
+                Response.OnCompleted(async () =>
                 {
-                    Body = body,
-                    Header = templateDataForVerification.Header,
-                    EmailType = EmailTemplateKey.VER,
-                    Subject = templateDataForVerification.Subject,
-                    Tos = new List<string> { dto.Email }
-                };
-
-                await _mailService.SendRequestToMailService(mailModel);
+                    await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification, emailVerification.TemplateName(), emailVerification.ImageName(), new List<string> { dto.Email });
+                });
 
                 account.UserId = response.Data;
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
