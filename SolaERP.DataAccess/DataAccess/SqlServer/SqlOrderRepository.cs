@@ -442,7 +442,7 @@ public class SqlOrderRepository : IOrderRepository
         };
     }
 
-    public OrderCreateBidListDto MapFromReaderForOrderCreateBidsListDto(DbDataReader reader)
+    private static OrderCreateBidListDto MapFromReaderForOrderCreateBidsListDto(DbDataReader reader)
     {
         return new OrderCreateBidListDto
         {
