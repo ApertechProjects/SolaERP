@@ -24,5 +24,5 @@ public interface IOrderService
     Task<ApiResponse<List<OrderHeadLoaderDto>>> GetHeaderLoadAsync(int orderMainId);
     Task<ApiResponse<List<OrderCreateRequestListDto>>> GetOrderCreateListForRequestAsync(OrderCreateListRequest dto);
     Task<ApiResponse<List<OrderCreateBidListDto>>> GetOrderCreateListForBidsAsync(OrderCreateListRequest dto);
-    Task<ApiResponse<OrderMainGetDto>> GetOrderCardAsync(int orderMainId);
+    Task<ApiResponse<OrderMainGetDto>> GetOrderCardAsync();
 }

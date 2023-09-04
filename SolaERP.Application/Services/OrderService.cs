@@ -160,11 +160,10 @@ public class OrderService : IOrderService
         );
     }
 
-    public async Task<ApiResponse<OrderMainGetDto>> GetOrderCardAsync(int orderMainId)
+    public async Task<ApiResponse<OrderMainGetDto>> GetOrderCardAsync()
     {
         return ApiResponse<OrderMainGetDto>.Success(new OrderMainGetDto
         {
-            // Header = (await GetHeaderLoadAsync(orderMainId)).Data?[0] ?? new OrderHeadLoaderDto(),
             Countries = await _supplierRepository.GetCountriesAsync(),
             Currencies = await _supplierRepository.GetCurrenciesAsync(),
             DeliveryTerms = await _supplierRepository.GetDeliveryTermsAsync(),
