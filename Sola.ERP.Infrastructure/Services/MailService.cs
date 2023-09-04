@@ -1,9 +1,14 @@
 ﻿using FluentEmail.Core;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RazorLight;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Entities.Email;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
+using SolaERP.Application.ViewModels;
 using System.Net;
 using System.Net.Mail;
 using System.Text.Json;
@@ -226,12 +231,16 @@ namespace SolaERP.Infrastructure.Services
             string renderedHtml = await engine.CompileRenderAsync(templateName, viewModel);
             var processedBody = PreMailer.Net.PreMailer.MoveCssInline(renderedHtml, true).Html;
 
-            // Attach the image file
-            var imageAttachment = new Attachment(Path.Combine(imageRootPath, imageName));
-            imageAttachment.ContentId = "image1";
+            Attachment? imageAttachment = null;
+            if (!string.IsNullOrEmpty(imageName))
+            {
+                imageAttachment = new Attachment(Path.Combine(imageRootPath, imageName));
+                // Attach the image file
+                imageAttachment.ContentId = "image1";
 
-            // Include the image reference in the HTML body
-            processedBody = processedBody.Replace("cid:image1", $"cid:{imageAttachment.ContentId}");
+                // Include the image reference in the HTML body
+                processedBody = processedBody.Replace("cid:image1", $"cid:{imageAttachment.ContentId}");
+            }
             using (SmtpClient smtpClient = new SmtpClient())
             {
                 var basicCredential = new NetworkCredential(_configuration["Mail:UserName"], _configuration["Mail:Password"]);
@@ -253,7 +262,7 @@ namespace SolaERP.Infrastructure.Services
                             message.IsBodyHtml = true;
 
                             // Add the image attachment to the message
-                            if (message.Attachments.Count == 0)
+                            if (message.Attachments.Count == 0 && !string.IsNullOrEmpty(imageName))
                                 message.Attachments.Add(imageAttachment);
 
                             // Set the processed HTML body as the email body
@@ -298,7 +307,7 @@ namespace SolaERP.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public async Task SendRequest(MailModel mailModel)
+        public async Task SendRequestToMailService(MailModel mailModel)
         {
             using (var client = new HttpClient())
             {
@@ -307,6 +316,38 @@ namespace SolaERP.Infrastructure.Services
 
                 var request = await client.PostAsync("http://116.203.90.202:7777/api/Mail", content);
 
+            }
+        }
+
+        public async Task SendMailForRequest(HttpResponse response, List<RequestData> requestDatas, List<EmailTemplateData> templates)
+        {
+            foreach (var lang in Enum.GetValues<Language>())
+            {
+                for (int i = 0; i < requestDatas.Count; i++)
+                {
+                    RequestData item = requestDatas[i];
+                    //var sendUsersMails = new List<string>();
+                    //if (sendUsersMails.Count > 0)
+                    //{
+                    var temp = templates.First(x => x.Language == lang.ToString());
+                    VM_RequestPending requestPending = new VM_RequestPending
+                    {
+                        Body = new HtmlString(temp.Body),
+                        Sequence = 1,
+                        FullName = "hulya",
+                        Header = temp.Header,
+                        Subject = string.Format(temp.Subject, requestDatas[i].RequestNo, 1),
+                        RequestNo = requestDatas[i].RequestNo,
+                        Language = lang,
+                        CompanyName = "Apertech"
+                    };
+
+                    response.OnCompleted(async () =>
+                    {
+                        await SendUsingTemplate(requestPending.Subject, requestPending, requestPending.TemplateName(), null, new List<string> { "hulya.garibli@apertech.net" });
+                    });
+
+                }
             }
         }
     }

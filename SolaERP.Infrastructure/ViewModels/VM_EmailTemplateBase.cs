@@ -18,7 +18,7 @@ namespace SolaERP.Infrastructure.ViewModels
             {
                 Language.az => $@"© {ActualYear} Sola ERP bütün hüquqlar qorunur.",
                 Language.en => $@"© {ActualYear} Sola ERP GetAll rights reserved.",
-                Language.ru => $@"© {ActualYear}  Sola ERP Все права защищены."
+                //Language.ru => $@"© {ActualYear}  Sola ERP Все права защищены."
             };
         }
 
@@ -28,7 +28,7 @@ namespace SolaERP.Infrastructure.ViewModels
             {
                 Language.az => "Bu avtomatik yaradılan e-poçtdur - lütfən cavab verməyin.",
                 Language.en => "This is an automatically generated email - please do not reply",
-                Language.ru => "Это автоматически сгенерированное письмо - пожалуйста, не отвечайте"
+                //Language.ru => "Это автоматически сгенерированное письмо - пожалуйста, не отвечайте"
             };
         }
 

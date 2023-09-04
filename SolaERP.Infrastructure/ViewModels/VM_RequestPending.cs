@@ -25,6 +25,24 @@ namespace SolaERP.Application.ViewModels
             return "RequestPending.cshtml";
         }
 
+        public HtmlString? GenerateHeader()
+        {
+            return Language switch
+            {
+                Language.az => new HtmlString(string.Format(Header?.ToString(), RequestNo, Sequence)),
+                Language.en => new HtmlString(string.Format(Header?.ToString(), RequestNo, Sequence)),
+            };
+        }
+
+        public HtmlString? GenerateSubject()
+        {
+            return Language switch
+            {
+                Language.az => new HtmlString(string.Format(Subject?.ToString(), RequestNo, Sequence)),
+                Language.en => new HtmlString(string.Format(Subject?.ToString(), RequestNo, Sequence)),
+            };
+        }
+
         public HtmlString? GenerateBody()
         {
             return Language switch
@@ -33,5 +51,7 @@ namespace SolaERP.Application.ViewModels
                 Language.en => new HtmlString(string.Format(Body?.ToString(), "hulya", RequestNo, @$"<b><a href={_configuration["Mail:ServerUrlUI"]}>Client Portal</a></b>")),
             };
         }
+
+
     }
 }
