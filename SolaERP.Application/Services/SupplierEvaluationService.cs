@@ -469,7 +469,7 @@ namespace SolaERP.Persistence.Services
                 {
                     if (command.CodeOfBuConduct.Any(x => x.Type == 2))
                     {
-                        tasks.AddRange(command.CodeOfBuConduct.Select(_ => _repository.DeleteCOBCAsync(vendorId)));
+                        tasks.AddRange(command.CodeOfBuConduct.Select(x => _repository.DeleteCOBCAsync(x.CobcID)));
                     }
 
                     for (int i = 0; i < command.CodeOfBuConduct.Count; i++)
