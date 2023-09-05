@@ -436,9 +436,13 @@ public class SqlOrderRepository : IOrderRepository
             QuantityFromStock = reader.Get<decimal>("QuantityFromStock"),
             RequestDetailId = reader.Get<int>("RequestDetailId"),
             RequestMainId = reader.Get<int>("RequestMainId"),
-            UOM = reader.Get<string>("UOM"),
             DefaultUOM = reader.Get<string>("DefaultUOM"),
-            RFQQuantity = reader.Get<decimal>("RFQQuantity")
+            RFQQuantity = reader.Get<decimal>("RFQQuantity"),
+            Ordertype = reader.Get<string>("Ordertype"),
+            RequestComment = reader.Get<string>("RequestComment"),
+            RequestType = reader.Get<string>("RequestType"),
+            TypeKey = reader.Get<string>("TypeKey"),
+            RUOM = reader.Get<string>("RUOM")
         };
     }
 
