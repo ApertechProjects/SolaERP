@@ -25,6 +25,7 @@
         public string QualityRequired { get; set; }
         public string CurrencyCode { get; set; }
         public decimal LogisticsTotal { get; set; }
+        public int Sequence { get; set; }
         public List<RequestDetailDto> RequestDetailDtos { get; set; }
     }
 }

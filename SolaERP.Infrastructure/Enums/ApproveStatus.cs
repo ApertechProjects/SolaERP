@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Enums
 {
-    internal class ApproveStatus
+    public enum ApproveStatus
     {
+        Approved = 1,
+        Rejected,
+        Hold
     }
 }
