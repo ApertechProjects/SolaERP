@@ -232,33 +232,34 @@ public class SqlOrderRepository : IOrderRepository
     public async Task<OrderIUDResponse> SaveOrderMainAsync(OrderMainDto orderMainDto, int userId)
     {
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
-        command.CommandText = @"DECLARE @NewBidMainId INT,@NewBidNo NVARCHAR(15)
+        command.CommandText = @"DECLARE @NewOrderMainId INT, @NewOrderNo NVARCHAR(15)
     
-                                SP_OrderMain_IUD @OrderMainId INT = NULL,
-                                @BusinessUnitId INT = NULL,
-                                @OrderTypeId INT = NULL,
-                                @OrderDate DATE = NULL,
-                                @Emergency INT = NULL,
-                                @Buyer NVARCHAR(15) = NULL,
-                                @ApproveStageMainId INT = NULL,
-                                @Comment NVARCHAR(2000) = NULL,
-                                @VendorCode NVARCHAR(15) = NULL,
-                                @Currency NVARCHAR(5) = NULL,
-                                @DiscountType INT = NULL,
-                                @DiscountValue DECIMAL(18, 3) = NULL,
-                                @DeliveryTermId INT = NULL,
-                                @DeliveryTime NVARCHAR(500) = NULL,
-                                @PaymentTermId INT = NULL,
-                                @ExpectedCost DECIMAL(18, 3) = NULL,
-                                @DeliveryDate DATE = NULL,
-                                @DesiredDeliverydate DATE = NULL,
-                                @BidMainId INT = NULL,
-                                @RFQMainId INT = NULL,
-                                @UserId INT,
-                                @NewOrderMainId INT OUTPUT,
-                                @NewOrderNo NVARCHAR(15) OUTPUT
-    
-                                SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
+                                EXEC SP_OrderMain_IUD @OrderMainId,
+                                @BusinessUnitId,
+                                @OrderTypeId,
+                                @OrderDate,
+                                @Emergency,
+                                @Buyer,
+                                @ApproveStageMainId,
+                                @Comment,
+                                @VendorCode,
+                                @Currency,
+                                @DiscountType,
+                                @DiscountValue,
+                                @DeliveryTermId,
+                                @DeliveryTime,
+                                @PaymentTermId,
+                                @ExpectedCost,
+                                @DeliveryDate,
+                                @DesiredDeliverydate,
+                                @BidMainId,
+                                @RFQMainId,
+                                @UserId,
+                                @OrderPrint,
+                                @NewOrderMainId = @NewOrderMainId OUTPUT,
+		                        @NewOrderNo = @NewOrderNo OUTPUT
+                                        
+                                SELECT	@NewOrderMainId as N'@NewOrderMainId',@NewOrderNo as N'@NewOrderNo'";
 
         command.Parameters.AddWithValue(command, "@OrderMainId", orderMainDto.OrderMainId);
         command.Parameters.AddWithValue(command, "@BusinessUnitId", orderMainDto.BusinessUnitId);
@@ -281,6 +282,7 @@ public class SqlOrderRepository : IOrderRepository
         command.Parameters.AddWithValue(command, "@BidMainId", orderMainDto.BidMainId);
         command.Parameters.AddWithValue(command, "@RFQMainId", orderMainDto.RFQMainId);
         command.Parameters.AddWithValue(command, "@UserId", userId);
+        command.Parameters.AddWithValue(command, "@OrderPrint", orderMainDto.OrderPrint);
 
         await using var reader = await command.ExecuteReaderAsync();
         if (await reader.ReadAsync())
@@ -420,7 +422,7 @@ public class SqlOrderRepository : IOrderRepository
             AvailableQuantity = reader.Get<decimal>("AvailableQuantity"),
             ItemName1 = reader.Get<string>("ItemName"),
             ItemName2 = reader.Get<string>("ItemName2"),
-            LineNo = reader.Get<string>("LineNo"),
+            RequestLineNo = reader.Get<string>("RequestLineNo"),
             OrderQuantity = reader.Get<decimal>("OrderQuantity"),
             OriginalQuantity = reader.Get<decimal>("OriginalQuantity"),
             RemainingBudget = reader.Get<decimal>("RemainingBudget"),

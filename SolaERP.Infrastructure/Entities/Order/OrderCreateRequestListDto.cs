@@ -5,7 +5,7 @@ public class OrderCreateRequestListDto
     public int RequestDetailId { get; set; }
     public int RequestMainId { get; set; }
     public string RequestNo { get; set; }
-    public string LineNo { get; set; }
+    public string RequestLineNo { get; set; }
     public DateTime RequestDate { get; set; }
     public DateTime RequestDeadline { get; set; }
     public DateTime RequestedDate { get; set; }

@@ -25,6 +25,7 @@ public class OrderMainDto
     public int UserId { get; set; }
     public int NewOrderMainId { get; set; }
     public string NewOrderNo { get; set; }
+    public bool OrderPrint { get; set; }
 
     public List<OrderDetailDto> OrderDetails { get; set; }
 }
