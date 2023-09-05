@@ -85,7 +85,7 @@ namespace SolaERP.Controllers
 
                 if (res)
                 {
-                    await _mailService.SendMailForRequest(Response, data.RequestDatas, templates);
+                    await _mailService.SendMailForRequest(Response, data.RequestDatas, templates, (ApproveStatus)data.ApproveStatus);
                 }
             }
 

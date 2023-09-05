@@ -319,7 +319,7 @@ namespace SolaERP.Infrastructure.Services
             }
         }
 
-        public async Task SendMailForRequest(HttpResponse response, List<RequestData> requestDatas, List<EmailTemplateData> templates)
+        public async Task SendMailForRequest(HttpResponse response, List<RequestData> requestDatas, List<EmailTemplateData> templates, ApproveStatus status)
         {
             foreach (var lang in Enum.GetValues<Language>())
             {

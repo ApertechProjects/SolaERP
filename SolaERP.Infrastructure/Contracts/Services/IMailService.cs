@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using SolaERP.Application.Entities.Email;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Contracts.Services
@@ -13,7 +14,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<bool> SendUsingTemplate<T>(string subject, T viewModel, string templateName, string imageName, List<string> tos);
         Task SendRequestToMailService(MailModel mailModel);
 
-        Task SendMailForRequest(HttpResponse response, List<RequestData> requestDatas, List<EmailTemplateData> templates);
+        Task SendMailForRequest(HttpResponse response, List<RequestData> requestDatas, List<EmailTemplateData> templates, ApproveStatus status);
     }
 
 }
