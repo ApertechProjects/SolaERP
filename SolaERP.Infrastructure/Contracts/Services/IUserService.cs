@@ -3,9 +3,9 @@ using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Dtos.UserDto;
 using SolaERP.Application.Entities;
-using SolaERP.Application.Entities.User;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
+using UserList = SolaERP.Application.Dtos.User.UserList;
 
 namespace SolaERP.Application.Contracts.Services
 {
@@ -42,7 +42,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<bool> CheckEmailIsVerified(string email);
         Task<UserData> GetUserDataByVerifyTokenAsync(string verifyToken);
         Task<List<string>> GetAdminUserMailsAsync(int sequence, Language language);
-
         Task<bool> CheckUserVerifyByVendor(string email);
+        Task<List<UserList>> Users(int requestDetailId, int sequence, ApproveStatus status);
     }
 }

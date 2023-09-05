@@ -4,7 +4,7 @@ namespace SolaERP.Application.Models
 {
     public class RequestDetailApproveModel
     {
-        public int RequestDetailId { get; set; }
+        public List<int> RequestDetailIds { get; set; }
         public int ApproveStatusId { get; set; }
         public string Comment { get; set; }
         public int Sequence { get; set; }

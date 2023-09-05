@@ -45,7 +45,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> CheckUserVerifyByVendor(string email);
         Task<string> CheckUserType(string verifyToken);
         Task<UserImage> UserImageData(int userId);
-        Task<List<Entities.User.UserList>> Users(int requestDetailId, int sequence, ApproveStatus status);
+        Task<List<UserList>> Users(int requestDetailId, int sequence, ApproveStatus status);
     }
 
     public enum Filetype { Profile = 1, Signature = 2 }

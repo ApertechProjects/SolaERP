@@ -81,7 +81,7 @@ namespace SolaERP.Controllers
                 var res = await _requestService.ChangeMainStatusAsync(User.Identity.Name, data.RequestDatas[i].RequestMainId, data.ApproveStatus, data.Comment);
 
                 //if (res)
-                //    await _mailService.SendMailForRequest(Response, data.RequestDatas, templates);
+                //await _mailService.SendMailForRequest(Response, data.RequestDatas, templates);
             }
 
             return CreateActionResult(ApiResponse<bool>.Success(200));
@@ -91,7 +91,18 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> ChangeDetailStatus(RequestDetailApproveModel model)
         {
             var res = await _requestService.ChangeDetailStatusAsync(User.Identity.Name, model);
-            var user
+            var users = await _userService.Users(model.RequestDetailIds[0], model.Sequence, (ApproveStatus)model.ApproveStatusId);
+
+            var userREQP = users.Where(x => x.TemplateKey == EmailTemplateKey.REQP.ToString()).ToList();
+            if (userREQP.Count > 0)
+            {
+                var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQP);
+                await _mailService.SendMailForRequest(Response, templates, userREQP, EmailTemplateKey.REQP, model.Sequence, model.BusinessUnitName);
+
+            }
+            var userREQA = users.Where(x => x.TemplateKey == EmailTemplateKey.REQA.ToString()).ToList();
+            var userREQR = users.Where(x => x.TemplateKey == EmailTemplateKey.REQR.ToString()).ToList();
+
             return CreateActionResult(ApiResponse<bool>.Success(res));
         }
 

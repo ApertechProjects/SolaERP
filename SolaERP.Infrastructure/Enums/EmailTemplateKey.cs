@@ -5,6 +5,8 @@
         VER,  //verification Email
         RGA, //Registration Pending For Approval for single user
         RP,  //Registration Pending for group
-        REQP //Registration is pending
+        REQP, //Registration is pending
+        REQA, //Registration is approved
+        REQR //Registration is rejected
     }
 }

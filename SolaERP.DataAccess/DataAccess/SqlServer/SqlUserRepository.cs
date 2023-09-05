@@ -1,5 +1,4 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
-using SolaERP.Application.Dtos.Email;
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Groups;
@@ -12,6 +11,7 @@ using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using UserList = SolaERP.Application.Entities.User.UserList;
 
 namespace SolaERP.DataAccess.DataAcces.SqlServer
 {

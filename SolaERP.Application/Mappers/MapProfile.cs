@@ -30,7 +30,6 @@ using SolaERP.Application.Dtos.Status;
 using SolaERP.Application.Dtos.Supplier;
 using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Dtos.Translate;
-using SolaERP.Application.Dtos.UOM;
 using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Dtos.UserDto;
 using SolaERP.Application.Dtos.Vendors;
@@ -65,11 +64,9 @@ using SolaERP.Application.Entities.Status;
 using SolaERP.Application.Entities.Supplier;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Translate;
-using SolaERP.Application.Entities.UOM;
 using SolaERP.Application.Entities.User;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Models;
-using SolaERP.Persistence.Services;
 using AnalysisCodes = SolaERP.Application.Entities.AnalysisCode.AnalysisCodes;
 using UOM = SolaERP.Application.Entities.UOM.UOM;
 using UOMDto = SolaERP.Application.Dtos.UOM.UOMDto;
@@ -431,7 +428,7 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<Application.Entities.AnalysisCode.AnalysisCode, AnalysisCodeDto>().ReverseMap();
             CreateMap<RFQMain, RFQMainDto>().ReverseMap();
-            CreateMap<RFQDetail, RFQDetailDto>().ForMember(dest => dest.Conversion , opt => opt.MapFrom(src => src.CONV_ID)).ReverseMap();
+            CreateMap<RFQDetail, RFQDetailDto>().ForMember(dest => dest.Conversion, opt => opt.MapFrom(src => src.CONV_ID)).ReverseMap();
             CreateMap<RFQRequestDetail, RFQRequestDetailDto>().ReverseMap();
             CreateMap<RejectReason, RejectReasonDto>().ReverseMap();
             CreateMap<RFQInProgress, RFQInProgressDto>().ReverseMap();
@@ -457,7 +454,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<BidDisqualify, BidDisqualifyDto>().ReverseMap();
 
             CreateMap<Application.Entities.RFQ.UOM, Application.Dtos.RFQ.UOMDto>()
-                .ForMember(dest => dest.UOM,opt => opt.MapFrom(src => src.UnitOfMeasure)).ReverseMap();
+                .ForMember(dest => dest.UOM, opt => opt.MapFrom(src => src.UnitOfMeasure)).ReverseMap();
 
             CreateMap<BidComparisonAllFilter, BidComparisonAllFilterDto>()
                 .ReverseMap()
@@ -502,16 +499,18 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<BidComparisonNotReleasedFilter, BidComparisonNotReleasedFilterDto>().ReverseMap().
                 ForMember(dest => dest.Emergency,
-                    opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x)))); 
+                    opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x))));
             CreateMap<BidComparisonNotReleasedLoad, BidComparisonNotReleasedLoadDto>().ReverseMap();
-            
+
             CreateMap<BidComparisonRejectedFilter, BidComparisonRejectedFilterDto>().ReverseMap().
                 ForMember(dest => dest.Emergency,
-                    opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x)))); 
+                    opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x))));
             CreateMap<BidComparisonRejectedLoad, BidComparisonRejectedLoadDto>().ReverseMap();
 
             CreateMap<BidComparisonSingleSourceReasonsFilter, BidComparisonSingleSourceReasonsFilterDto>().ReverseMap();
             CreateMap<BidComparisonSingleSourceReasonsLoad, BidComparisonSingleSourceReasonsLoadDto>().ReverseMap();
+
+            CreateMap<Application.Entities.User.UserList, Application.Dtos.User.UserList>().ReverseMap();
 
         }
     }

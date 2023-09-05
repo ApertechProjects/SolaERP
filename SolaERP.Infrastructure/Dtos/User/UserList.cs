@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Application.Dtos.Email
+﻿namespace SolaERP.Application.Dtos.User
 {
     public class UserList
     {
