@@ -1,6 +1,4 @@
-﻿
-using SolaERP.Application.Dtos.Vendors;
-using SolaERP.Application.Entities.SupplierEvaluation;
+﻿using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Models;
 
@@ -27,6 +25,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> ApproveAsync(VendorApproveModel model);
         Task<bool> SendToApprove(VendorSendToApproveRequest request);
         Task<string> GetVendorLogo(int vendorId);
-        Task<bool> HasVendorName(string vendorName);
+        Task<bool> HasVendorName(string vendorName, int userId);
+        Task<string> GetVendorNameByUserId(int userId);
     }
 }

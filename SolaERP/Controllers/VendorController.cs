@@ -77,7 +77,7 @@ namespace SolaERP.API.Controllers
         
         [HttpPost]
         public async Task<IActionResult> HasVendorName([FromBody] VendorNameDto vendorNameDto)
-            => CreateActionResult(await _service.HasVendorName(vendorNameDto.VendorName));
+            => CreateActionResult(await _service.HasVendorName(vendorNameDto.VendorName, User.Identity.Name));
 
     }
 }
