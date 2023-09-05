@@ -356,6 +356,16 @@ namespace SolaERP.Persistence.Services
                 {
                     tasks.AddRange(command?.Prequalification?.SelectMany(item =>
                     {
+                        
+                        if (item.DesignId == 19)
+                        {
+                            Console.WriteLine("");
+                            Console.WriteLine("");
+                            Console.WriteLine("");
+                            Console.WriteLine("");
+                            Console.WriteLine("");
+                        }
+                        
                         if (item.HasCheckbox == false)
                         {
                             item.CheckboxValue = false;
@@ -371,12 +381,12 @@ namespace SolaERP.Persistence.Services
                             item.DateTimeValue = null;
                         }
 
-                        if (item.TextareaValue == "null")
+                        if (item.TextareaValue == "null" || string.IsNullOrEmpty(item.TextareaValue))
                         {
                             item.TextareaValue = "";
                         }
 
-                        if (item.TextboxValue == "null")
+                        if (item.TextboxValue == "null" || string.IsNullOrEmpty(item.TextboxValue))
                         {
                             item.TextboxValue = "";
                         }
@@ -748,6 +758,16 @@ namespace SolaERP.Persistence.Services
                 {
                     var prequalificationTasks = titleGroup.Select(async design =>
                     {
+                        
+                        if (design.PrequalificationDesignId == 19)
+                        {
+                            Console.WriteLine("");
+                            Console.WriteLine("");
+                            Console.WriteLine("");
+                            Console.WriteLine("");
+                            Console.WriteLine("");
+                        }
+                        
                         var attachments = _mapper.Map<List<AttachmentDto>>(
                             await _attachmentRepository.GetAttachmentsAsync(vendorId, null,
                                 SourceType.VEN_PREQ.ToString(), design.PrequalificationDesignId));
@@ -757,6 +777,9 @@ namespace SolaERP.Persistence.Services
                         var calculationResult =
                             CalculateScoring(correspondingValue, design, gridDatas, attachments?.Count > 0);
 
+                        
+                        
+                        
                         return new PrequalificationDto
                         {
                             DesignId = design.PrequalificationDesignId,
