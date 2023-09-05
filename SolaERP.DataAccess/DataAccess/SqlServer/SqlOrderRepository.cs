@@ -296,7 +296,8 @@ public class SqlOrderRepository : IOrderRepository
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
         command.CommandText = @"SET NOCOUNT OFF EXEC dbo.SP_OrderDetails_IUD @OrderMainId, @Data";
         command.Parameters.AddWithValue(command, "@OrderMainId", orderDetails[0].OrderMainId);
-        command.Parameters.AddTableValue(command, "@Data", "dbo.OrderDetailsType2", orderDetails.ConvertToDataTable());
+        var a = orderDetails.ConvertToDataTable();
+        command.Parameters.AddTableValue(command, "@Data", "OrderDetailsType2", a);
 
         return await command.ExecuteNonQueryAsync() > 0;
     }

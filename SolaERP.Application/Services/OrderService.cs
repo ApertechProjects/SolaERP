@@ -89,10 +89,13 @@ public class OrderService : IOrderService
         int userId = Convert.ToInt32(identityName);
         var mainDto = await _orderRepository.SaveOrderMainAsync(orderMainDto, userId);
 
-        foreach (var detail in orderMainDto.OrderDetails)
-            detail.OrderMainId = mainDto.OrderMainId;
+        if (orderMainDto.OrderDetails.Count > 0)
+        {
+            foreach (var detail in orderMainDto.OrderDetails)
+                detail.OrderMainId = mainDto.OrderMainId;
 
-        await _orderRepository.SaveOrderDetailsAsync(orderMainDto.OrderDetails);
+            await _orderRepository.SaveOrderDetailsAsync(orderMainDto.OrderDetails);
+        }
 
         await _unitOfWork.SaveChangesAsync();
         return ApiResponse<OrderIUDResponse>.Success(mainDto);
