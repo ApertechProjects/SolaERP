@@ -244,15 +244,15 @@ namespace SolaERP.Persistence.Services
                         else
                         {
                             x.VendorId = vendorId;
-                            
+
                             // if (await _repository.HasBankDetailByAccountNumberAsync(x.AccountNumber))
                             // {
                             //     throw new Exception("The Account Number must be unique.");
                             // }
-                            
+
                             var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id,
                                 _mapper.Map<VendorBankDetail>(x));
-                            
+
                             if (x.AccountVerificationLetter != null)
                             {
                                 tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
@@ -369,6 +369,16 @@ namespace SolaERP.Persistence.Services
                         if (item.HasDateTime == false)
                         {
                             item.DateTimeValue = null;
+                        }
+
+                        if (item.TextareaValue == "null")
+                        {
+                            item.TextareaValue = "";
+                        }
+
+                        if (item.TextboxValue == "null")
+                        {
+                            item.TextboxValue = "";
                         }
 
                         var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
