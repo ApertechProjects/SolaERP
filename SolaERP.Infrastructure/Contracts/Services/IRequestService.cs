@@ -23,7 +23,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<RequestSaveResultModel>> AddOrUpdateAsync(string name, RequestSaveModel model);
         Task<ApiResponse<bool>> DeleteAsync(string name, int requestMainId);
         Task<ApiResponse<List<RequestDetailApprovalInfoDto>>> GetDetailApprvalInfoAsync(int requestDetaildId);
-        Task<ApiResponse<NoContentDto>> ChangeDetailStatusAsync(string name, RequestDetailApproveModel model);
+        Task<bool> ChangeDetailStatusAsync(string name, RequestDetailApproveModel model);
         Task<ApiResponse<bool>> UpdateBuyerAsync(List<RequestSetBuyer> requestSetBuyer);
         Task<ApiResponse<List<RequestFollowDto>>> GetFollowUsersAsync(int requestMainId);
         Task<ApiResponse<bool>> SaveFollowUserAsync(RequestFollowSaveModel saveModel);

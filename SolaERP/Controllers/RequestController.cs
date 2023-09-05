@@ -92,7 +92,9 @@ namespace SolaERP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> ChangeDetailStatus(RequestDetailApproveModel model)
-            => CreateActionResult(await _requestService.ChangeDetailStatusAsync(User.Identity.Name, model));
+        {
+            var res = await _requestService.ChangeDetailStatusAsync(User.Identity.Name, model);
+        }
 
         [HttpPost]
         public async Task<IActionResult> UpdateBuyer(List<RequestSetBuyer> requestSetBuyer)

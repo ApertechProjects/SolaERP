@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.Extensions.Configuration;
+using SolaERP.Application.Enums;
 using SolaERP.Infrastructure.ViewModels;
 using Language = SolaERP.Application.Enums.Language;
 
@@ -20,9 +21,16 @@ namespace SolaERP.Application.ViewModels
         public int Sequence { get; set; }
         public string FullName { get; set; }
         public string Subject { get; set; }
+        public EmailTemplateKey TemplateKey { get; set; }
         public string TemplateName()
         {
-            return "RequestPending.cshtml";
+            switch (TemplateKey)
+            {
+                case EmailTemplateKey.REQP:
+                    return "RequestPending.cshtml";
+                default:
+                    return "";
+            }
         }
 
         public HtmlString? GenerateHeader()
@@ -47,8 +55,8 @@ namespace SolaERP.Application.ViewModels
         {
             return Language switch
             {
-                Language.az => new HtmlString(string.Format(Body?.ToString(), "hulya", RequestNo, @$"<b><a href={_configuration["Mail:ServerUrlUI"]}>Müştəri Portalına</a></b>")),
-                Language.en => new HtmlString(string.Format(Body?.ToString(), "hulya", RequestNo, @$"<b><a href={_configuration["Mail:ServerUrlUI"]}>Client Portal</a></b>")),
+                Language.az => new HtmlString(string.Format(Body?.ToString(), FullName, RequestNo, @$"<b><a href={_configuration["Mail:ServerUrlUI"]}>Müştəri Portalına</a></b>")),
+                Language.en => new HtmlString(string.Format(Body?.ToString(), FullName, RequestNo, @$"<b><a href={_configuration["Mail:ServerUrlUI"]}>Client Portal</a></b>")),
             };
         }
 
