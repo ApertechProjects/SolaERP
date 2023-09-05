@@ -338,7 +338,7 @@ namespace SolaERP.Infrastructure.Services
                     VM_RequestPending requestPending = new VM_RequestPending
                     {
                         Body = new HtmlString(temp.Body),
-                        Sequence = 1,
+                        Sequence = requestDatas[i].Sequence,
                         FullName = "hulya",
                         Header = temp.Header,
                         Subject = string.Format(temp.Subject, requestDatas[i].RequestNo, 1),

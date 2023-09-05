@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using SolaERP.Application.Entities.Email;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Contracts.Services

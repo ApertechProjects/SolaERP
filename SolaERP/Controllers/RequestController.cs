@@ -83,10 +83,8 @@ namespace SolaERP.Controllers
             {
                 var res = await _requestService.ChangeMainStatusAsync(User.Identity.Name, data.RequestDatas[i].RequestMainId, data.ApproveStatus, data.Comment);
 
-                if (res)
-                {
-                    await _mailService.SendMailForRequest(Response, data.RequestDatas, templates);
-                }
+                //if (res)
+                //    await _mailService.SendMailForRequest(Response, data.RequestDatas, templates);
             }
 
             return CreateActionResult(ApiResponse<bool>.Success(200));
