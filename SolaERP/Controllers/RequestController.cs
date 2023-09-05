@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
-using SolaERP.API.Extensions;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Request;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
-using SolaERP.Application.ViewModels;
 
 namespace SolaERP.Controllers
 {
@@ -94,6 +91,7 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> ChangeDetailStatus(RequestDetailApproveModel model)
         {
             var res = await _requestService.ChangeDetailStatusAsync(User.Identity.Name, model);
+            var user
             return CreateActionResult(ApiResponse<bool>.Success(res));
         }
 

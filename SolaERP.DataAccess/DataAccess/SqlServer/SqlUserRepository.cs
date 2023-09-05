@@ -1,9 +1,8 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
-using SolaERP.Application.Dtos.User;
+using SolaERP.Application.Dtos.Email;
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Groups;
-using SolaERP.Application.Entities.Language;
 using SolaERP.Application.Entities.User;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
@@ -71,7 +70,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 if (reader.Read())
-                    user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate", "VerifyToken", "Language","DefaultBusinessUnitId");
+                    user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate", "VerifyToken", "Language", "DefaultBusinessUnitId");
 
                 return user;
             }
@@ -641,6 +640,28 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
                 return user;
             }
+        }
+
+        public async Task<List<UserList>> Users(int requestDetailId, int sequence, ApproveStatus status)
+        {
+            List<UserList> users = new List<UserList>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec SP_RequestMails @RequestDetailId,@ApproveStatusId,@Sequence";
+                command.Parameters.AddWithValue(command, "@RequestDetailId", requestDetailId);
+                command.Parameters.AddWithValue(command, "@Sequence", sequence);
+                command.Parameters.AddWithValue(command, "@ApproveStatusId", status);
+
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    while (reader.Read())
+                    {
+                        users.Add(reader.GetByEntityStructure<UserList>());
+                    }
+                }
+
+            }
+            return users;
         }
 
         #endregion

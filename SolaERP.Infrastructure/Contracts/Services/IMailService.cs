@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using SolaERP.Application.Dtos.Email;
 using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
@@ -15,6 +16,7 @@ namespace SolaERP.Application.Contracts.Services
         Task SendRequestToMailService(MailModel mailModel);
 
         Task SendMailForRequest(HttpResponse response, List<RequestData> requestDatas, List<EmailTemplateData> templates);
+        Task<List<UserList>> Users(int requestDetailId, int sequence, ApproveStatus status);
     }
 
 }
