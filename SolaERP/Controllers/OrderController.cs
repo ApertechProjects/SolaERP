@@ -73,4 +73,7 @@ public class OrderController : CustomBaseController
     [HttpPost("[action]")]
     public async Task<IActionResult> GetOrderCreateListForBids([FromBody] OrderCreateListRequest dto)
         => CreateActionResult(await _orderService.GetOrderCreateListForBidsAsync(dto));
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetOrderCard() => CreateActionResult(await _orderService.GetOrderCardAsync());
 }

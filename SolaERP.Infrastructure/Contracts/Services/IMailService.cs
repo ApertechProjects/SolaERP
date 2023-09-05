@@ -1,4 +1,6 @@
-﻿using SolaERP.Application.Models;
+﻿using Microsoft.AspNetCore.Http;
+using SolaERP.Application.Entities.Email;
+using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Contracts.Services
 {
@@ -9,7 +11,9 @@ namespace SolaERP.Application.Contracts.Services
         Task SendPasswordResetMailAsync(string to, string code);
         Task<bool> SendEmailMessage<T>(string template, T viewModel, string to, string subject);
         Task<bool> SendUsingTemplate<T>(string subject, T viewModel, string templateName, string imageName, List<string> tos);
-        Task SendRequest(MailModel mailModel);
+        Task SendRequestToMailService(MailModel mailModel);
+
+        Task SendMailForRequest(HttpResponse response, List<RequestData> requestDatas, List<EmailTemplateData> templates);
     }
 
 }

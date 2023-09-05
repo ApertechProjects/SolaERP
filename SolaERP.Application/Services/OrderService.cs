@@ -12,11 +12,16 @@ public class OrderService : IOrderService
 {
     private readonly IOrderRepository _orderRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ISupplierEvaluationRepository _supplierRepository;
+    private readonly IGeneralService _generalService;
 
-    public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork)
+    public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork,
+        ISupplierEvaluationRepository supplierRepository, IGeneralService generalService)
     {
         _orderRepository = orderRepository;
         _unitOfWork = unitOfWork;
+        _supplierRepository = supplierRepository;
+        _generalService = generalService;
     }
 
     public async Task<ApiResponse<List<OrderTypeLoadDto>>> GetTypesAsync(int businessUnitId)
@@ -153,5 +158,17 @@ public class OrderService : IOrderService
         return ApiResponse<List<OrderCreateBidListDto>>.Success(
             await _orderRepository.GetOrderCreateListForBidsAsync(dto)
         );
+    }
+
+    public async Task<ApiResponse<OrderMainGetDto>> GetOrderCardAsync()
+    {
+        return ApiResponse<OrderMainGetDto>.Success(new OrderMainGetDto
+        {
+            Countries = await _supplierRepository.GetCountriesAsync(),
+            Currencies = await _supplierRepository.GetCurrenciesAsync(),
+            DeliveryTerms = await _supplierRepository.GetDeliveryTermsAsync(),
+            PaymentTerms = await _supplierRepository.GetPaymentTermsAsync(),
+            RejectReasons = (await _generalService.RejectReasons()).Data
+        });
     }
 }

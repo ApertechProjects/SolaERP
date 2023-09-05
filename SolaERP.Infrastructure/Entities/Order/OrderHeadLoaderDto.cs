@@ -44,4 +44,7 @@ public class OrderHeadLoaderDto : BaseEntity
     public int Status { get; set; }
     public int ApproveStatus { get; set; }
     public int BusinessUnitId { get; set; }
+    public int GRNStatus { get; set; }
+    public int InvoiceStatus { get; set; }
+    public bool OrderPrint { get; set; }
 }

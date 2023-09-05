@@ -244,15 +244,15 @@ namespace SolaERP.Persistence.Services
                         else
                         {
                             x.VendorId = vendorId;
-                            
+
                             // if (await _repository.HasBankDetailByAccountNumberAsync(x.AccountNumber))
                             // {
                             //     throw new Exception("The Account Number must be unique.");
                             // }
-                            
+
                             var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id,
                                 _mapper.Map<VendorBankDetail>(x));
-                            
+
                             if (x.AccountVerificationLetter != null)
                             {
                                 tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
@@ -356,6 +356,16 @@ namespace SolaERP.Persistence.Services
                 {
                     tasks.AddRange(command?.Prequalification?.SelectMany(item =>
                     {
+                        
+                        if (item.DesignId == 19)
+                        {
+                            Console.WriteLine("");
+                            Console.WriteLine("");
+                            Console.WriteLine("");
+                            Console.WriteLine("");
+                            Console.WriteLine("");
+                        }
+                        
                         if (item.HasCheckbox == false)
                         {
                             item.CheckboxValue = false;
@@ -369,6 +379,16 @@ namespace SolaERP.Persistence.Services
                         if (item.HasDateTime == false)
                         {
                             item.DateTimeValue = null;
+                        }
+
+                        if (item.TextareaValue == "null" || string.IsNullOrEmpty(item.TextareaValue))
+                        {
+                            item.TextareaValue = "";
+                        }
+
+                        if (item.TextboxValue == "null" || string.IsNullOrEmpty(item.TextboxValue))
+                        {
+                            item.TextboxValue = "";
                         }
 
                         var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
@@ -469,7 +489,7 @@ namespace SolaERP.Persistence.Services
                 {
                     if (command.CodeOfBuConduct.Any(x => x.Type == 2))
                     {
-                        tasks.AddRange(command.CodeOfBuConduct.Select(_ => _repository.DeleteCOBCAsync(vendorId)));
+                        tasks.AddRange(command.CodeOfBuConduct.Select(x => _repository.DeleteCOBCAsync(x.CobcID)));
                     }
 
                     for (int i = 0; i < command.CodeOfBuConduct.Count; i++)
@@ -738,6 +758,16 @@ namespace SolaERP.Persistence.Services
                 {
                     var prequalificationTasks = titleGroup.Select(async design =>
                     {
+                        
+                        if (design.PrequalificationDesignId == 19)
+                        {
+                            Console.WriteLine("");
+                            Console.WriteLine("");
+                            Console.WriteLine("");
+                            Console.WriteLine("");
+                            Console.WriteLine("");
+                        }
+                        
                         var attachments = _mapper.Map<List<AttachmentDto>>(
                             await _attachmentRepository.GetAttachmentsAsync(vendorId, null,
                                 SourceType.VEN_PREQ.ToString(), design.PrequalificationDesignId));
@@ -747,6 +777,9 @@ namespace SolaERP.Persistence.Services
                         var calculationResult =
                             CalculateScoring(correspondingValue, design, gridDatas, attachments?.Count > 0);
 
+                        
+                        
+                        
                         return new PrequalificationDto
                         {
                             DesignId = design.PrequalificationDesignId,

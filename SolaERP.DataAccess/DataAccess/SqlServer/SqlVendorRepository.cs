@@ -20,11 +20,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
     public class SqlVendorRepository : IVendorRepository
     {
         private readonly IUnitOfWork _unitOfWork;
+
         public SqlVendorRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
-
 
 
         private async Task<int> ModifyVendorAsync(int userId, Vendor vendor)
@@ -111,6 +111,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return newVendorId;
             }
         }
+
         private async Task<int> ModifyBankDetailsAsync(int userId, VendorBankDetail bankDetail)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -178,9 +179,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
         public async Task<int> DeleteBankDetailsAsync(int userId, int id)
-             => await ModifyBankDetailsAsync(userId, new() { Id = id });
+            => await ModifyBankDetailsAsync(userId, new() { Id = id });
+
         public async Task<int> UpdateBankDetailsAsync(int userId, VendorBankDetail bankDetail)
-             => await ModifyBankDetailsAsync(userId, bankDetail);
+            => await ModifyBankDetailsAsync(userId, bankDetail);
 
 
         public async Task<int> AddAsync(int userId, Vendor vendor)
@@ -210,6 +212,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
+
         public async Task<VendorInfo> GetByTaxAsync(string taxId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -224,6 +227,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return vendorInfo;
             }
         }
+
         public async Task<List<VendorWFA>> GetWFAAsync(int userId, VendorFilter filter)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -233,12 +237,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                       @BusinessCategoryId,@ProductServiceId,@VendorTypeId";
 
 
-
                 command.Parameters.AddWithValue(command, "@userId", userId);
                 command.Parameters.AddWithValue(command, "@VendorTypeId", string.Join(",", filter.VendorTypeId));
-                command.Parameters.AddWithValue(command, "@ProductServiceId", string.Join(",", filter.ProductServiceId));
-                command.Parameters.AddWithValue(command, "@BusinessCategoryId", string.Join(",", filter.BusinessCategoryId));
-                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", string.Join(",", filter.BusinessCategoryId));
+                command.Parameters.AddWithValue(command, "@ProductServiceId",
+                    string.Join(",", filter.ProductServiceId));
+                command.Parameters.AddWithValue(command, "@BusinessCategoryId",
+                    string.Join(",", filter.BusinessCategoryId));
+                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId",
+                    string.Join(",", filter.BusinessCategoryId));
 
                 using var reader = await command.ExecuteReaderAsync();
                 List<VendorWFA> data = new List<VendorWFA>();
@@ -249,6 +255,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return data;
             }
         }
+
         public async Task<List<VendorAll>> GetAll(int userId, VendorAllCommandRequest request)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -260,9 +267,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@userId", userId);
                 command.Parameters.AddWithValue(command, "@VendorTypeId", string.Join(",", request.VendorTypeId));
-                command.Parameters.AddWithValue(command, "@ProductServiceId", string.Join(",", request.ProductServiceId));
-                command.Parameters.AddWithValue(command, "@BusinessCategoryId", string.Join(",", request.BusinessCategoryId));
-                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", string.Join(",", request.PrequalificationCategoryId));
+                command.Parameters.AddWithValue(command, "@ProductServiceId",
+                    string.Join(",", request.ProductServiceId));
+                command.Parameters.AddWithValue(command, "@BusinessCategoryId",
+                    string.Join(",", request.BusinessCategoryId));
+                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId",
+                    string.Join(",", request.PrequalificationCategoryId));
                 command.Parameters.AddWithValue(command, "@status", string.Join(",", request.Status));
                 command.Parameters.AddWithValue(command, "@ApproveStatus", string.Join(",", request.Approval));
 
@@ -275,6 +285,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return data;
             }
         }
+
         public async Task<List<VendorInfo>> Vendors(int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -291,6 +302,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return data;
             }
         }
+
         public async Task<List<VendorWFA>> GetHeldAsync(int userId, VendorFilter filter)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -304,9 +316,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@VendorTypeId", string.Join(",", filter.VendorTypeId));
-                command.Parameters.AddWithValue(command, "@ProductServiceId", string.Join(",", filter.ProductServiceId));
-                command.Parameters.AddWithValue(command, "@BusinessCategoryId", string.Join(",", filter.BusinessCategoryId));
-                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", string.Join(",", filter.BusinessCategoryId));
+                command.Parameters.AddWithValue(command, "@ProductServiceId",
+                    string.Join(",", filter.ProductServiceId));
+                command.Parameters.AddWithValue(command, "@BusinessCategoryId",
+                    string.Join(",", filter.BusinessCategoryId));
+                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId",
+                    string.Join(",", filter.BusinessCategoryId));
 
                 List<VendorWFA> data = new List<VendorWFA>();
                 using var reader = await command.ExecuteReaderAsync();
@@ -317,6 +332,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return data;
             }
         }
+
         public async Task<List<VendorAll>> GetDraftAsync(int userId, VendorFilter filter)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -330,9 +346,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@userId", userId);
                 command.Parameters.AddWithValue(command, "@VendorTypeId", string.Join(",", filter.VendorTypeId));
-                command.Parameters.AddWithValue(command, "@ProductServiceId", string.Join(",", filter.ProductServiceId));
-                command.Parameters.AddWithValue(command, "@BusinessCategoryId", string.Join(",", filter.BusinessCategoryId));
-                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", string.Join(",", filter.BusinessCategoryId));
+                command.Parameters.AddWithValue(command, "@ProductServiceId",
+                    string.Join(",", filter.ProductServiceId));
+                command.Parameters.AddWithValue(command, "@BusinessCategoryId",
+                    string.Join(",", filter.BusinessCategoryId));
+                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId",
+                    string.Join(",", filter.BusinessCategoryId));
 
                 using var reader = await command.ExecuteReaderAsync();
                 List<VendorAll> data = new List<VendorAll>();
@@ -343,6 +362,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return data;
             }
         }
+
         public async Task<VendorLoad> GetHeader(int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -359,11 +379,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return vendorCard;
             }
         }
+
         public async Task<bool> ApproveAsync(VendorApproveModel model)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorsApprove @VendorId,@UserId,@ApproveStatusId,@Comment,@Sequence";
+                command.CommandText =
+                    @"SET NOCOUNT OFF EXEC SP_VendorsApprove @VendorId,@UserId,@ApproveStatusId,@Comment,@Sequence";
 
 
                 command.Parameters.AddWithValue(command, "@VendorId", model.VendorId);
@@ -375,6 +397,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return data;
             }
         }
+
         public async Task<bool> SendToApprove(VendorSendToApproveRequest request)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -386,6 +409,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
+
         public async Task<List<VendorWFA>> GetRejectedAsync(int userId, VendorFilter filter)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -398,9 +422,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@userId", userId);
                 command.Parameters.AddWithValue(command, "@VendorTypeId", string.Join(",", filter.VendorTypeId));
-                command.Parameters.AddWithValue(command, "@ProductServiceId", string.Join(",", filter.ProductServiceId));
-                command.Parameters.AddWithValue(command, "@BusinessCategoryId", string.Join(",", filter.BusinessCategoryId));
-                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId", string.Join(",", filter.BusinessCategoryId));
+                command.Parameters.AddWithValue(command, "@ProductServiceId",
+                    string.Join(",", filter.ProductServiceId));
+                command.Parameters.AddWithValue(command, "@BusinessCategoryId",
+                    string.Join(",", filter.BusinessCategoryId));
+                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId",
+                    string.Join(",", filter.BusinessCategoryId));
 
                 using var reader = await command.ExecuteReaderAsync();
                 List<VendorWFA> data = new List<VendorWFA>();
@@ -409,9 +436,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     data.Add(reader.GetByEntityStructure<VendorWFA>());
 
                 return data;
-
             }
         }
+
         public async Task<List<VendorAll>> GetApprovedAsync(int userId)
         {
             List<VendorAll> data = new();
@@ -444,13 +471,35 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> HasVendorName(string vendorName)
+        public async Task<bool> HasVendorName(string vendorName, int userId)
         {
+            var currentUserVendorName = await GetVendorNameByUserId(userId);
+            if (currentUserVendorName == vendorName)
+            {
+                return false;
+            }
+            
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = "SELECT * FROM Procurement.Vendors WHERE VendorName = @VendorName";
             command.Parameters.AddWithValue(command, "@VendorName", vendorName);
 
             return (await command.ExecuteReaderAsync()).HasRows;
+        }
+
+        public async Task<string> GetVendorNameByUserId(int userId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = "select VendorName from Procurement.Vendors inner join Config.AppUser " +
+                                  "on AppUser.VendorId = Vendors.VendorId " +
+                                  "where AppUser.Id = @UserId";
+
+            command.Parameters.AddWithValue(command, "@UserId", userId);
+
+            await using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+                return reader.Get<string>("VendorName");
+
+            return null;
         }
     }
 }

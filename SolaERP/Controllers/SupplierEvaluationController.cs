@@ -41,8 +41,9 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _service.GetDueDiligenceAsync(User.Identity.Name,
                 Request.Headers.AcceptLanguage, vendorId));
 
-        [HttpGet("[action]")]
-        public async Task<IActionResult> Prequalification([FromQuery] List<int> ids, int? vendorId = null)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Prequalification([FromQuery] List<int> ids,
+            [FromQuery] int? vendorId = null)
             => CreateActionResult(await _service.GetPrequalificationAsync(User.Identity.Name, ids,
                 Request.Headers.AcceptLanguage, vendorId));
 

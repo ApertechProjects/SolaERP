@@ -4,6 +4,7 @@
     {
         VER,  //verification Email
         RGA, //Registration Pending For Approval for single user
-        RP  //Registration Pending for group
+        RP,  //Registration Pending for group
+        REQP //Registration is pending
     }
 }

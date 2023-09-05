@@ -436,13 +436,17 @@ public class SqlOrderRepository : IOrderRepository
             QuantityFromStock = reader.Get<decimal>("QuantityFromStock"),
             RequestDetailId = reader.Get<int>("RequestDetailId"),
             RequestMainId = reader.Get<int>("RequestMainId"),
-            UOM = reader.Get<string>("UOM"),
             DefaultUOM = reader.Get<string>("DefaultUOM"),
-            RFQQuantity = reader.Get<decimal>("RFQQuantity")
+            RFQQuantity = reader.Get<decimal>("RFQQuantity"),
+            Ordertype = reader.Get<string>("Ordertype"),
+            RequestComment = reader.Get<string>("RequestComment"),
+            RequestType = reader.Get<string>("RequestType"),
+            TypeKey = reader.Get<string>("TypeKey"),
+            RUOM = reader.Get<string>("RUOM")
         };
     }
 
-    public OrderCreateBidListDto MapFromReaderForOrderCreateBidsListDto(DbDataReader reader)
+    private static OrderCreateBidListDto MapFromReaderForOrderCreateBidsListDto(DbDataReader reader)
     {
         return new OrderCreateBidListDto
         {
@@ -450,36 +454,36 @@ public class SqlOrderRepository : IOrderRepository
             Condition = reader.Get<int>("Condition"),
             AlternativeItem = reader.Get<bool>("AlternativeItem"),
             ItemName = reader.Get<string>("ItemName"),
-            ItemName2 = reader.Get<string>("ItemName2"),
+            ItemName2 = reader.Get<string>("Itemname2"), 
             LineNo = reader.Get<int>("LineNo"),
             RequestNo = reader.Get<string>("RequestNo"),
             RequestDetailId = reader.Get<int>("RequestDetailId"),
             RequestMainId = reader.Get<int>("RequestMainId"),
             DefaultUOM = reader.Get<string>("DefaultUOM"),
-            DiscountType = reader.Get<int>("DefaultUOM"),
-            ComparisonNo = reader.Get<string>("DefaultUOM"),
-            Status = reader.Get<int>("DefaultUOM"),
-            DiscountValue = reader.Get<int>("DefaultUOM"),
-            ApproveStatus = reader.Get<int>("DefaultUOM"),
-            BidNo = reader.Get<string>("DefaultUOM"),
-            Quantity = reader.Get<int>("DefaultUOM"),
-            ConversionRate = reader.Get<int>("DefaultUOM"),
-            DiscountedAmount = reader.Get<int>("DefaultUOM"),
-            LineDescription = reader.Get<string>("DefaultUOM"),
-            BidMainId = reader.Get<int>("DefaultUOM"),
-            RequestLine = reader.Get<int>("DefaultUOM"),
-            TotalAmount = reader.Get<int>("DefaultUOM"),
-            UnitPrice = reader.Get<int>("DefaultUOM"),
-            AlternativeItemCode = reader.Get<string>("DefaultUOM"),
-            AlternativeItemName = reader.Get<string>("DefaultUOM"),
-            BidComparisonId = reader.Get<int>("DefaultUOM"),
-            BidDetailId = reader.Get<int>("DefaultUOM"),
-            ConvertedUnitPrice = reader.Get<int>("DefaultUOM"),
-            SingleUnitPrice = reader.Get<int>("DefaultUOM"),
-            ConvertedQTY = reader.Get<int>("DefaultUOM"),
-            PUOM = reader.Get<string>("DefaultUOM"),
-            RequestUOM = reader.Get<string>("DefaultUOM"),
-            RFQDetailId = reader.Get<int>("DefaultUOM")
+            DiscountType = reader.Get<int>("DiscountType"), 
+            ComparisonNo = reader.Get<string>("ComparisonNo"),
+            Status = reader.Get<int>("Status"),
+            DiscountValue = reader.Get<int>("DiscountValue"),
+            ApproveStatus = reader.Get<int>("ApproveStatus"),
+            BidNo = reader.Get<string>("BidNo"),
+            Quantity = reader.Get<decimal>("Quantity"), 
+            ConversionRate = reader.Get<decimal>("ConversionRate"), 
+            DiscountedAmount = reader.Get<decimal>("DiscountedAmount"), 
+            LineDescription = reader.Get<string>("LineDescription"),
+            BidMainId = reader.Get<int>("BidMainId"),
+            RequestLine = reader.Get<int>("RequestLine"),
+            TotalAmount = reader.Get<decimal>("TotalAmount"), 
+            UnitPrice = reader.Get<decimal>("UnitPrice"), 
+            AlternativeItemCode = reader.Get<string>("AlternativeItemCode"),
+            AlternativeItemName = reader.Get<string>("AlternativeItemName"),
+            BidComparisonId = reader.Get<int>("BidComparisonId"),
+            BidDetailId = reader.Get<int>("BidDetailId"),
+            ConvertedUnitPrice = reader.Get<decimal>("ConvertedUnitPrice"), 
+            SingleUnitPrice = reader.Get<decimal>("SingleUnitPrice"), 
+            ConvertedQTY = reader.Get<decimal>("ConvertedQTY"), 
+            PUOM = reader.Get<string>("PUOM"),
+            RequestUOM = reader.Get<string>("RequestUOM"),
+            RFQDetailId = reader.Get<int>("RFQDetailId")
         };
     }
 
@@ -528,7 +532,10 @@ public class SqlOrderRepository : IOrderRepository
             BidMainId = reader.Get<int>("BidMainId"),
             Status = reader.Get<int>("Status"),
             ApproveStatus = reader.Get<int>("ApproveStatus"),
-            BusinessUnitId = reader.Get<int>("BusinessUnitId")
+            BusinessUnitId = reader.Get<int>("BusinessUnitId"),
+            InvoiceStatus = reader.Get<int>("BusinessUnitId"),
+            GRNStatus = reader.Get<int>("GRNStatus"),
+            OrderPrint = reader.Get<bool>("OrderPrint")
         };
     }
 
