@@ -1,5 +1,6 @@
 using SolaERP.Application.Dtos.General;
 using SolaERP.Application.Entities.SupplierEvaluation;
+using SolaERP.Application.Entities.Vendors;
 
 namespace SolaERP.Application.Dtos.Order;
 
@@ -10,4 +11,5 @@ public class OrderMainGetDto
     public List<Entities.SupplierEvaluation.Currency> Currencies { get; set; }
     public List<RejectReasonDto> RejectReasons { get; set; }
     public List<Country> Countries { get; set; }
+    public List<TaxData> TaxDatas { get; set; }
 }

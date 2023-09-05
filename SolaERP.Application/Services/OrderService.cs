@@ -169,7 +169,8 @@ public class OrderService : IOrderService
             Currencies = await _supplierRepository.GetCurrenciesAsync(),
             DeliveryTerms = await _supplierRepository.GetDeliveryTermsAsync(),
             PaymentTerms = await _supplierRepository.GetPaymentTermsAsync(),
-            RejectReasons = (await _generalService.RejectReasons()).Data
+            RejectReasons = (await _generalService.RejectReasons()).Data,
+            TaxDatas = await _supplierRepository.TaxDatas()
         });
     }
 }
