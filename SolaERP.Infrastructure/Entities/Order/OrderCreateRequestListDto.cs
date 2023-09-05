@@ -10,7 +10,7 @@ public class OrderCreateRequestListDto
     public DateTime RequestDeadline { get; set; }
     public DateTime RequestedDate { get; set; }
     public string ItemCode { get; set; }
-    public string ItemName { get; set; }
+    public string ItemName1 { get; set; }
     public string ItemName2 { get; set; }
     public string DefaultUOM { get; set; }
     public decimal RequestQuantity { get; set; }

@@ -418,7 +418,7 @@ public class SqlOrderRepository : IOrderRepository
             AccountCode = reader.Get<string>("AccountCode"),
             AlternativeItem = reader.Get<bool>("AlternativeItem"),
             AvailableQuantity = reader.Get<decimal>("AvailableQuantity"),
-            ItemName = reader.Get<string>("ItemName"),
+            ItemName1 = reader.Get<string>("ItemName"),
             ItemName2 = reader.Get<string>("ItemName2"),
             LineNo = reader.Get<string>("LineNo"),
             OrderQuantity = reader.Get<decimal>("OrderQuantity"),
