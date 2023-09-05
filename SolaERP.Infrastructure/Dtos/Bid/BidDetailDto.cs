@@ -15,7 +15,7 @@ namespace SolaERP.Application.Dtos.Bid
         public string ItemCode { get; set; }
         public bool AlternativeItem { get; set; }
         public string AlternativeItemCode { get; set; }
-        public bool AlternativeItemName { get; set; }
+        public string AlternativeItemName { get; set; }
         public string PUOM { get; set; }
         public decimal ConversionRate { get; set; }
         public string LineDescription { get; set; }

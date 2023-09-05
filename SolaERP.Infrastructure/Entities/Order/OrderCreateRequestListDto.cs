@@ -10,14 +10,14 @@ public class OrderCreateRequestListDto
     public DateTime RequestDeadline { get; set; }
     public DateTime RequestedDate { get; set; }
     public string ItemCode { get; set; }
-    public string ItemName { get; set; }
+    public string ItemName1 { get; set; }
     public string ItemName2 { get; set; }
     public string DefaultUOM { get; set; }
     public decimal RequestQuantity { get; set; }
     public decimal RFQQuantity { get; set; }
     public decimal OrderQuantity { get; set; }
     public decimal RemainingQuantity { get; set; }
-    public string UOM { get; set; }
+    public string RUOM { get; set; }
     public string Description { get; set; }
     public string Location { get; set; }
     public string Buyer { get; set; }
@@ -33,4 +33,8 @@ public class OrderCreateRequestListDto
     public decimal ManualUP { get; set; }
     public bool AlternativeItem { get; set; }
     public int BusinessCategoryId { get; set; }
+    public string RequestType { get; set; }
+    public string Ordertype { get; set; }
+    public string TypeKey { get; set; }
+    public string RequestComment { get; set; }
 }
