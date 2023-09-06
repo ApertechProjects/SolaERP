@@ -40,7 +40,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> DeleteNDAAsync(int ndaId);
 
         Task<bool> AddCOBCAsync(VendorCOBC cobc);
-        Task<bool> DeleteCOBCAsync(int vendorCOBCId);
+        Task<bool> DeleteCOBCAsync(int vendorId);
 
         Task<bool> AddDueDesignGrid(DueDiligenceGridModel gridModel);
         Task<bool> UpdateDueDesignGrid(DueDiligenceGridModel gridModel);

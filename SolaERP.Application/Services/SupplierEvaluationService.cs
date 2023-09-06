@@ -461,12 +461,9 @@ namespace SolaERP.Persistence.Services
 
                 if (command.NonDisclosureAgreement is not null)
                 {
-                    if (command.NonDisclosureAgreement.Any(x => x.Type == 2))
-                    {
-                        tasks.AddRange(
-                            command.NonDisclosureAgreement.Select(_ => _repository.DeleteNDAAsync(vendorId)));
-                    }
-
+                    tasks.AddRange(
+                        command.NonDisclosureAgreement.Select(_ => _repository.DeleteNDAAsync(vendorId)));
+                    
                     for (int i = 0; i < command.NonDisclosureAgreement.Count; i++)
                     {
                         command.NonDisclosureAgreement[i].VendorId = vendorId;
@@ -486,11 +483,8 @@ namespace SolaERP.Persistence.Services
 
                 if (command.CodeOfBuConduct is not null)
                 {
-                    if (command.CodeOfBuConduct.Any(x => x.Type == 2))
-                    {
-                        tasks.AddRange(command.CodeOfBuConduct.Select(x => _repository.DeleteCOBCAsync(x.CobcID)));
-                    }
-
+                    tasks.AddRange(command.CodeOfBuConduct.Select(x => _repository.DeleteCOBCAsync(x.CobcID)));
+                    
                     for (int i = 0; i < command.CodeOfBuConduct.Count; i++)
                     {
                         command.CodeOfBuConduct[i].VendorId = vendorId;
