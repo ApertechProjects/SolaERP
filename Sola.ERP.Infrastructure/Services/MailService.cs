@@ -5,8 +5,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RazorLight;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Enums;
+using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
 using SolaERP.Application.ViewModels;
 using System.Net;
@@ -324,36 +326,36 @@ namespace SolaERP.Infrastructure.Services
             }
         }
 
-        public async Task SendMailForRequest(HttpResponse response, List<RequestData> requestDatas, List<EmailTemplateData> templates)
+        public async Task SendMailForRequest(HttpResponse response, List<EmailTemplateData> templates, List<UserList> users, EmailTemplateKey key, int sequence, string businessUnitName, string rejectReason = "")
         {
-            foreach (var lang in Enum.GetValues<Language>())
+            for (int i = 0; i < users.Count; i++)
             {
-                for (int i = 0; i < requestDatas.Count; i++)
+                var temp = templates.First(x => x.Language == users[i].Language.ToString());
+                string userName = users[i].FullName;
+                VM_RequestPending requestPending = new VM_RequestPending
                 {
-                    RequestData item = requestDatas[i];
-                    //var sendUsersMails = new List<string>();
-                    //if (sendUsersMails.Count > 0)
-                    //{
-                    var temp = templates.First(x => x.Language == lang.ToString());
-                    VM_RequestPending requestPending = new VM_RequestPending
-                    {
-                        Body = new HtmlString(temp.Body),
-                        Sequence = requestDatas[i].Sequence,
-                        FullName = "hulya",
-                        Header = temp.Header,
-                        Subject = string.Format(temp.Subject, requestDatas[i].RequestNo, 1),
-                        RequestNo = requestDatas[i].RequestNo,
-                        Language = lang,
-                        CompanyName = "Apertech"
-                    };
+                    Body = new HtmlString(temp.Body),
+                    Sequence = sequence,
+                    FullName = userName,
+                    Header = temp.Header,
+                    Subject = string.Format(temp.Subject, users[i].RequestNo, sequence),
+                    RequestNo = users[i].RequestNo,
+                    Language = users[i].Language.GetLanguageEnumValue(),
+                    CompanyName = businessUnitName,
+                    TemplateKey = key,
+                    ReasonDescription= rejectReason
+                };
+                string to = users[i].Email;
+                response.OnCompleted(async () =>
+                {
+                    await SendUsingTemplate(requestPending.Subject, requestPending, requestPending.TemplateName(), null, new List<string> { to });
+                });
+            };
 
-                    response.OnCompleted(async () =>
-                    {
-                        await SendUsingTemplate(requestPending.Subject, requestPending, requestPending.TemplateName(), null, new List<string> { "hulya.garibli@apertech.net" });
-                    });
-
-                }
-            }
         }
+
     }
+
+
 }
+

@@ -218,19 +218,14 @@ namespace SolaERP.Persistence.Services
             return result != null ? ApiResponse<List<RequestDetailApprovalInfoDto>>.Success(result, 200) : ApiResponse<List<RequestDetailApprovalInfoDto>>.Success(new(), 200);
         }
 
-        public async Task<ApiResponse<NoContentDto>> ChangeDetailStatusAsync(string name, RequestDetailApproveModel model)
+        public async Task<bool> ChangeDetailStatusAsync(string name, int requestDetailId, int approveStatusId, string comment, int sequence, int rejectReasonId)
         {
             int userId = await _userRepository.ConvertIdentity(name);
-            if (model.RequestDetailIds == null && model.RequestDetailIds.Count == 0)
-                return ApiResponse<NoContentDto>.Fail("Request must be selected", 200);
+            var res = await _requestDetailRepository.RequestDetailChangeStatusAsync(requestDetailId, userId, approveStatusId, comment, sequence, rejectReasonId);
+            if (res)
+                await _unitOfWork.SaveChangesAsync();
 
-            for (int i = 0; i < model.RequestDetailIds.Count; i++)
-            {
-                await _requestDetailRepository.RequestDetailChangeStatusAsync(model.RequestDetailIds[i], userId, model.ApproveStatusId, model.Comment, model.Sequence, model.RejectReasonId);
-            }
-            await _unitOfWork.SaveChangesAsync();
-
-            return ApiResponse<NoContentDto>.Success(200);
+            return true;
         }
 
 

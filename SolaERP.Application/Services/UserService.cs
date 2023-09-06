@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using SolaERP.Application.Constants;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
-using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Group;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.User;
@@ -20,7 +18,6 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using SolaERP.Infrastructure.ViewModels;
 using SolaERP.Persistence.Utils;
-using System.Reflection;
 
 namespace SolaERP.Persistence.Services
 {
@@ -514,6 +511,13 @@ namespace SolaERP.Persistence.Services
         private void SetUserPhoto(UserDto userDto)
         {
             userDto.UserPhoto = _fileUploadService.GetFileLink(userDto.UserPhoto, Modules.Users);
+        }
+
+        public async Task<List<Application.Dtos.User.UserList>> Users(int requestDetailId, int sequence, ApproveStatus status)
+        {
+            var users = await _userRepository.Users(requestDetailId, sequence, status);
+            var dto = _mapper.Map<List<Application.Dtos.User.UserList>>(users);
+            return dto;
         }
     }
 }

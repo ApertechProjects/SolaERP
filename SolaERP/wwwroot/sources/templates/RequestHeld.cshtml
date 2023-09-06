@@ -1,5 +1,5 @@
 ﻿@using System.Web
-@model SolaERP.Infrastructure.ViewModels.VM_EmailVerification
+@model SolaERP.Application.ViewModels.VM_RequestPending
 @{
     Layout = null;
 }
@@ -30,7 +30,6 @@
 
         a {
             text-decoration: none;
-
         }
 
         @@ media only screen and (min-device-width: 320px) and (max-device-width: 374px) {
@@ -127,10 +126,6 @@
             color: rgba(0, 0, 0, .4);
         }
 
-        a {
-            color: white;
-        }
-
         /*LOGO*/
 
         .logo h1 {
@@ -138,7 +133,7 @@
         }
 
         .logo h1 {
-            color: #32abdb;
+            color: #EDDF38;
             font-size: 24px;
             font-weight: 700;
             font-family: 'Lato', sans-serif;
@@ -169,9 +164,10 @@
 
                 .hero .text h2 span {
                     font-weight: 600;
-                    color: #189ED3;
+                    color: saddlebrown;
                 }
 
+      
         @@ media screen and (max-width: 500px) {
         }
     </style>
@@ -186,17 +182,10 @@
                     <table cellpadding="0" cellspacing="0" width="100%">
                         <tr>
                             <td class="logo" style="text-align: center;">
-                                <h1>@Model.Header</h1>
+                                <h1>@Model.GenerateHeader()</h1>
                             </td>
                         </tr>
                     </table>
-                </td>
-            </tr>
-            <tr>
-                <td valign="middle" class="hero bg_white">
-                    <div style="text-align: center;">
-                        <img src='cid:image1' alt="" width="200" height="200" style="max-width: 200px; margin: auto; display: block;" />
-                    </div>
                 </td>
             </tr>
             <tr>
@@ -209,21 +198,9 @@
                                         @Model.GenerateAutomatedEmailText()
                                     </h4>
                                     <h4 style="text-align: center">
-                                        @Model.Body
+                                        @Model.GenerateBody()
                                     </h4>
-                                    <div width="300px" style="text-align: center; padding: 10px 20px; border-radius: 4px;">
-                                        <table width="300px" style="text-align: center">
-                                            <tr>
-                                                <td align="center" bgcolor="#008CBA" style="padding: 10px 20px; border-radius: 4px;">
-
-                                                    <a href=@Model.GetEmailVerifiedLink()>Click here to submit the account</a>
-
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-
-                                    <p style="color:black;">@Model.GenerateCompanyNameTeamText()</p>
+                                    <p>@Model.GenerateCompanyNameTeamText()</p>
                                     <p style="font-weight: bold;">@Model.GenerateDevelopedInformationText()</p>
                                 </div>
                             </td>

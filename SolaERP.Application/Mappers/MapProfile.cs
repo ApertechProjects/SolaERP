@@ -30,7 +30,6 @@ using SolaERP.Application.Dtos.Status;
 using SolaERP.Application.Dtos.Supplier;
 using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Dtos.Translate;
-using SolaERP.Application.Dtos.UOM;
 using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Dtos.UserDto;
 using SolaERP.Application.Dtos.Vendors;
@@ -65,11 +64,9 @@ using SolaERP.Application.Entities.Status;
 using SolaERP.Application.Entities.Supplier;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Translate;
-using SolaERP.Application.Entities.UOM;
 using SolaERP.Application.Entities.User;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Models;
-using SolaERP.Persistence.Services;
 using AnalysisCodes = SolaERP.Application.Entities.AnalysisCode.AnalysisCodes;
 using UOM = SolaERP.Application.Entities.UOM.UOM;
 using UOMDto = SolaERP.Application.Dtos.UOM.UOMDto;
@@ -552,6 +549,8 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<BidComparisonSingleSourceReasonsFilter, BidComparisonSingleSourceReasonsFilterDto>().ReverseMap();
             CreateMap<BidComparisonSingleSourceReasonsLoad, BidComparisonSingleSourceReasonsLoadDto>().ReverseMap();
             CreateMap<RFQVendorIUDDto, RFQVendorIUD>().ReverseMap();
+
+            CreateMap<Application.Entities.User.UserList, Application.Dtos.User.UserList>().ReverseMap();
 
         }
     }
