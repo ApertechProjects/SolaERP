@@ -34,6 +34,7 @@ public class OrderCreateRequestListDto
     public bool AlternativeItem { get; set; }
     public int BusinessCategoryId { get; set; }
     public string RequestType { get; set; }
+    public int RequestTypeId { get; set; }
     public string Ordertype { get; set; }
     public string TypeKey { get; set; }
     public string RequestComment { get; set; }

@@ -444,6 +444,7 @@ public class SqlOrderRepository : IOrderRepository
             Ordertype = reader.Get<string>("Ordertype"),
             RequestComment = reader.Get<string>("RequestComment"),
             RequestType = reader.Get<string>("RequestType"),
+            RequestTypeId = reader.Get<int>("RequestTypeId"),
             TypeKey = reader.Get<string>("TypeKey"),
             RUOM = reader.Get<string>("RUOM")
         };
