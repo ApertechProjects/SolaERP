@@ -321,31 +321,36 @@ namespace SolaERP.Infrastructure.Services
             }
         }
 
-        public async Task SendMailForRequest(HttpResponse response, List<EmailTemplateData> templates, List<UserList> users, EmailTemplateKey key, int sequence, string businessUnitName)
+        public async Task SendMailForRequest(HttpResponse response, List<EmailTemplateData> templates, List<UserList> users, EmailTemplateKey key, int sequence, string businessUnitName, string rejectReason = "")
         {
             for (int i = 0; i < users.Count; i++)
             {
                 var temp = templates.First(x => x.Language == users[i].Language.ToString());
+                string userName = users[i].FullName;
                 VM_RequestPending requestPending = new VM_RequestPending
                 {
                     Body = new HtmlString(temp.Body),
                     Sequence = sequence,
-                    FullName = users[i].FullName,
+                    FullName = userName,
                     Header = temp.Header,
                     Subject = string.Format(temp.Subject, users[i].RequestNo, sequence),
                     RequestNo = users[i].RequestNo,
                     Language = users[i].Language.GetLanguageEnumValue(),
-                    CompanyName = businessUnitName
+                    CompanyName = businessUnitName,
+                    TemplateKey = key,
+                    ReasonDescription= rejectReason
                 };
-
+                string to = users[i].Email;
                 response.OnCompleted(async () =>
                 {
-                    await SendUsingTemplate(requestPending.Subject, requestPending, requestPending.TemplateName(), null, new List<string> { "hulya.garibli@apertech.net" });
+                    await SendUsingTemplate(requestPending.Subject, requestPending, requestPending.TemplateName(), null, new List<string> { to });
                 });
+            };
 
-            }
         }
 
-
     }
+
+
 }
+
