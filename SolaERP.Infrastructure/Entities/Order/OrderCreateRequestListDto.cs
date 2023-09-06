@@ -33,10 +33,11 @@ public class OrderCreateRequestListDto
     public decimal ManualUP { get; set; }
     public bool AlternativeItem { get; set; }
     public int BusinessCategoryId { get; set; }
-    public int BusinessCategoryName{ get; set; }
+    public string BusinessCategoryName{ get; set; }
     public string RequestType { get; set; }
     public int RequestTypeId { get; set; }
     public string Ordertype { get; set; }
+    public int OrderTypeId { get; set; }
     public string TypeKey { get; set; }
     public string RequestComment { get; set; }
     public int AnalysisCode1Id { get; set; }

@@ -442,6 +442,7 @@ public class SqlOrderRepository : IOrderRepository
             DefaultUOM = reader.Get<string>("DefaultUOM"),
             RFQQuantity = reader.Get<decimal>("RFQQuantity"),
             Ordertype = reader.Get<string>("Ordertype"),
+            OrderTypeId = reader.Get<int>("OrderTypeId"),
             RequestComment = reader.Get<string>("RequestComment"),
             RequestType = reader.Get<string>("RequestType"),
             RequestTypeId = reader.Get<int>("RequestTypeId"),

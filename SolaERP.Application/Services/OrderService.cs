@@ -150,9 +150,13 @@ public class OrderService : IOrderService
     public async Task<ApiResponse<List<OrderCreateRequestListDto>>> GetOrderCreateListForRequestAsync(
         OrderCreateListRequest dto)
     {
-        return ApiResponse<List<OrderCreateRequestListDto>>.Success(
-            await _orderRepository.GetOrderCreateListForRequestAsync(dto)
-        );
+        var businessCategories = (await _generalService.BusinessCategories()).Data;
+        var result = await _orderRepository.GetOrderCreateListForRequestAsync(dto);
+        result.ForEach(x =>
+        {
+            x.BusinessCategoryName = businessCategories.SingleOrDefault(y => y.Id == x.BusinessCategoryId)?.Name;
+        });
+        return ApiResponse<List<OrderCreateRequestListDto>>.Success(result);
     }
 
     public async Task<ApiResponse<List<OrderCreateBidListDto>>> GetOrderCreateListForBidsAsync(
