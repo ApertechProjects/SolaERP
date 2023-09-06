@@ -170,14 +170,14 @@ namespace SolaERP.Persistence.Services
                     if (companyLogoList[i].Type == 2)
                     {
                         await _attachmentRepository.DeleteAttachmentAsync(companyLogoList[i].AttachmentId);
-                        await _fileUploadService.DeleteFile(Modules.EvaluationForm, companyLogoList[i].FileLink);
+                        await _fileUploadService.DeleteFile(Modules.Vendors, companyLogoList[i].FileLink);
                     }
 
                     else if (companyLogoList[i].Type != 2 && companyLogoList[i].AttachmentId <= 0)
                     {
                         companyLogoList[i].FileLink = (await _fileUploadService.AddFile(
                             new List<IFormFile> { command.CompanyInformation.CompanyLogo[i].File },
-                            Modules.EvaluationForm, new List<string>())).Data[0];
+                            Modules.Vendors, new List<string>())).Data[0];
 
                         await _attachmentRepository.SaveAttachmentAsync(companyLogoList[i]);
                     }
@@ -662,7 +662,7 @@ namespace SolaERP.Persistence.Services
             companyInfo.CompanyLogo = venLogoAttachmentTask.Select(x =>
             {
                 var dto = _mapper.Map<AttachmentDto>(x);
-                dto.FileLink = _fileUploadService.GetDownloadFileLink(dto.FileLink, Modules.EvaluationForm);
+                dto.FileLink = _fileUploadService.GetDownloadFileLink(dto.FileLink, Modules.Vendors);
                 return dto;
             }).ToList();
 
