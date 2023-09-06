@@ -89,10 +89,13 @@ public class OrderService : IOrderService
         int userId = Convert.ToInt32(identityName);
         var mainDto = await _orderRepository.SaveOrderMainAsync(orderMainDto, userId);
 
-        foreach (var detail in orderMainDto.OrderDetails)
-            detail.OrderMainId = mainDto.OrderMainId;
+        if (orderMainDto.OrderDetails.Count > 0)
+        {
+            foreach (var detail in orderMainDto.OrderDetails)
+                detail.OrderMainId = mainDto.OrderMainId;
 
-        await _orderRepository.SaveOrderDetailsAsync(orderMainDto.OrderDetails);
+            await _orderRepository.SaveOrderDetailsAsync(orderMainDto.OrderDetails);
+        }
 
         await _unitOfWork.SaveChangesAsync();
         return ApiResponse<OrderIUDResponse>.Success(mainDto);
@@ -147,9 +150,13 @@ public class OrderService : IOrderService
     public async Task<ApiResponse<List<OrderCreateRequestListDto>>> GetOrderCreateListForRequestAsync(
         OrderCreateListRequest dto)
     {
-        return ApiResponse<List<OrderCreateRequestListDto>>.Success(
-            await _orderRepository.GetOrderCreateListForRequestAsync(dto)
-        );
+        var businessCategories = (await _generalService.BusinessCategories()).Data;
+        var result = await _orderRepository.GetOrderCreateListForRequestAsync(dto);
+        result.ForEach(x =>
+        {
+            x.BusinessCategoryName = businessCategories.SingleOrDefault(y => y.Id == x.BusinessCategoryId)?.Name;
+        });
+        return ApiResponse<List<OrderCreateRequestListDto>>.Success(result);
     }
 
     public async Task<ApiResponse<List<OrderCreateBidListDto>>> GetOrderCreateListForBidsAsync(
@@ -168,7 +175,8 @@ public class OrderService : IOrderService
             Currencies = await _supplierRepository.GetCurrenciesAsync(),
             DeliveryTerms = await _supplierRepository.GetDeliveryTermsAsync(),
             PaymentTerms = await _supplierRepository.GetPaymentTermsAsync(),
-            RejectReasons = (await _generalService.RejectReasons()).Data
+            RejectReasons = (await _generalService.RejectReasons()).Data,
+            TaxDatas = await _supplierRepository.TaxDatas()
         });
     }
 }

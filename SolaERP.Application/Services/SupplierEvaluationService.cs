@@ -170,14 +170,14 @@ namespace SolaERP.Persistence.Services
                     if (companyLogoList[i].Type == 2)
                     {
                         await _attachmentRepository.DeleteAttachmentAsync(companyLogoList[i].AttachmentId);
-                        await _fileUploadService.DeleteFile(Modules.EvaluationForm, companyLogoList[i].FileLink);
+                        await _fileUploadService.DeleteFile(Modules.Vendors, companyLogoList[i].FileLink);
                     }
 
                     else if (companyLogoList[i].Type != 2 && companyLogoList[i].AttachmentId <= 0)
                     {
                         companyLogoList[i].FileLink = (await _fileUploadService.AddFile(
                             new List<IFormFile> { command.CompanyInformation.CompanyLogo[i].File },
-                            Modules.EvaluationForm, new List<string>())).Data[0];
+                            Modules.Vendors, new List<string>())).Data[0];
 
                         await _attachmentRepository.SaveAttachmentAsync(companyLogoList[i]);
                     }
@@ -356,7 +356,6 @@ namespace SolaERP.Persistence.Services
                 {
                     tasks.AddRange(command?.Prequalification?.SelectMany(item =>
                     {
-                        
                         if (item.DesignId == 19)
                         {
                             Console.WriteLine("");
@@ -365,7 +364,7 @@ namespace SolaERP.Persistence.Services
                             Console.WriteLine("");
                             Console.WriteLine("");
                         }
-                        
+
                         if (item.HasCheckbox == false)
                         {
                             item.CheckboxValue = false;
@@ -462,20 +461,17 @@ namespace SolaERP.Persistence.Services
 
                 if (command.NonDisclosureAgreement is not null)
                 {
-                    if (command.NonDisclosureAgreement.Any(x => x.Type == 2))
-                    {
-                        tasks.AddRange(
-                            command.NonDisclosureAgreement.Select(_ => _repository.DeleteNDAAsync(vendorId)));
-                    }
-
+                    tasks.AddRange(
+                        command.NonDisclosureAgreement.Select(_ => _repository.DeleteNDAAsync(vendorId)));
+                    
                     for (int i = 0; i < command.NonDisclosureAgreement.Count; i++)
                     {
                         command.NonDisclosureAgreement[i].VendorId = vendorId;
 
                         if (command.NonDisclosureAgreement[i].Type != 2)
                         {
-                            tasks.Add(_repository.AddNDAAsync(
-                                _mapper.Map<VendorNDA>(command.NonDisclosureAgreement[i])));
+                            var mappedNDA = _mapper.Map<VendorNDA>(command.NonDisclosureAgreement[i]);
+                            tasks.Add(_repository.AddNDAAsync(mappedNDA));
                         }
                     }
                 }
@@ -487,11 +483,8 @@ namespace SolaERP.Persistence.Services
 
                 if (command.CodeOfBuConduct is not null)
                 {
-                    if (command.CodeOfBuConduct.Any(x => x.Type == 2))
-                    {
-                        tasks.AddRange(command.CodeOfBuConduct.Select(x => _repository.DeleteCOBCAsync(x.CobcID)));
-                    }
-
+                    tasks.AddRange(command.CodeOfBuConduct.Select(x => _repository.DeleteCOBCAsync(x.CobcID)));
+                    
                     for (int i = 0; i < command.CodeOfBuConduct.Count; i++)
                     {
                         command.CodeOfBuConduct[i].VendorId = vendorId;
@@ -662,7 +655,7 @@ namespace SolaERP.Persistence.Services
             companyInfo.CompanyLogo = venLogoAttachmentTask.Select(x =>
             {
                 var dto = _mapper.Map<AttachmentDto>(x);
-                dto.FileLink = _fileUploadService.GetDownloadFileLink(dto.FileLink, Modules.EvaluationForm);
+                dto.FileLink = _fileUploadService.GetDownloadFileLink(dto.FileLink, Modules.Vendors);
                 return dto;
             }).ToList();
 
@@ -758,16 +751,6 @@ namespace SolaERP.Persistence.Services
                 {
                     var prequalificationTasks = titleGroup.Select(async design =>
                     {
-                        
-                        if (design.PrequalificationDesignId == 19)
-                        {
-                            Console.WriteLine("");
-                            Console.WriteLine("");
-                            Console.WriteLine("");
-                            Console.WriteLine("");
-                            Console.WriteLine("");
-                        }
-                        
                         var attachments = _mapper.Map<List<AttachmentDto>>(
                             await _attachmentRepository.GetAttachmentsAsync(vendorId, null,
                                 SourceType.VEN_PREQ.ToString(), design.PrequalificationDesignId));
@@ -777,9 +760,7 @@ namespace SolaERP.Persistence.Services
                         var calculationResult =
                             CalculateScoring(correspondingValue, design, gridDatas, attachments?.Count > 0);
 
-                        
-                        
-                        
+
                         return new PrequalificationDto
                         {
                             DesignId = design.PrequalificationDesignId,
@@ -1003,7 +984,9 @@ namespace SolaERP.Persistence.Services
                         Weight = d.Weight,
                         BankListValue = correspondingValue?.BankListValue,
                         AllPoint = calculationResult.AllPoint,
-                        Scoring = calculationResult.Scoring,
+                        Scoring = d.HasBankList > 0 && !string.IsNullOrEmpty(correspondingValue?.TextboxValue)
+                            ? 100
+                            : calculationResult.Scoring,
                         Outcome = calculationResult.Outcome,
                         Disabled = d.Disabled
                     };

@@ -232,33 +232,34 @@ public class SqlOrderRepository : IOrderRepository
     public async Task<OrderIUDResponse> SaveOrderMainAsync(OrderMainDto orderMainDto, int userId)
     {
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
-        command.CommandText = @"DECLARE @NewBidMainId INT,@NewBidNo NVARCHAR(15)
+        command.CommandText = @"DECLARE @NewOrderMainId INT, @NewOrderNo NVARCHAR(15)
     
-                                SP_OrderMain_IUD @OrderMainId INT = NULL,
-                                @BusinessUnitId INT = NULL,
-                                @OrderTypeId INT = NULL,
-                                @OrderDate DATE = NULL,
-                                @Emergency INT = NULL,
-                                @Buyer NVARCHAR(15) = NULL,
-                                @ApproveStageMainId INT = NULL,
-                                @Comment NVARCHAR(2000) = NULL,
-                                @VendorCode NVARCHAR(15) = NULL,
-                                @Currency NVARCHAR(5) = NULL,
-                                @DiscountType INT = NULL,
-                                @DiscountValue DECIMAL(18, 3) = NULL,
-                                @DeliveryTermId INT = NULL,
-                                @DeliveryTime NVARCHAR(500) = NULL,
-                                @PaymentTermId INT = NULL,
-                                @ExpectedCost DECIMAL(18, 3) = NULL,
-                                @DeliveryDate DATE = NULL,
-                                @DesiredDeliverydate DATE = NULL,
-                                @BidMainId INT = NULL,
-                                @RFQMainId INT = NULL,
-                                @UserId INT,
-                                @NewOrderMainId INT OUTPUT,
-                                @NewOrderNo NVARCHAR(15) OUTPUT
-    
-                                SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
+                                EXEC SP_OrderMain_IUD @OrderMainId,
+                                @BusinessUnitId,
+                                @OrderTypeId,
+                                @OrderDate,
+                                @Emergency,
+                                @Buyer,
+                                @ApproveStageMainId,
+                                @Comment,
+                                @VendorCode,
+                                @Currency,
+                                @DiscountType,
+                                @DiscountValue,
+                                @DeliveryTermId,
+                                @DeliveryTime,
+                                @PaymentTermId,
+                                @ExpectedCost,
+                                @DeliveryDate,
+                                @DesiredDeliverydate,
+                                @BidMainId,
+                                @RFQMainId,
+                                @UserId,
+                                @OrderPrint,
+                                @NewOrderMainId = @NewOrderMainId OUTPUT,
+		                        @NewOrderNo = @NewOrderNo OUTPUT
+                                        
+                                SELECT	@NewOrderMainId as N'@NewOrderMainId',@NewOrderNo as N'@NewOrderNo'";
 
         command.Parameters.AddWithValue(command, "@OrderMainId", orderMainDto.OrderMainId);
         command.Parameters.AddWithValue(command, "@BusinessUnitId", orderMainDto.BusinessUnitId);
@@ -281,6 +282,7 @@ public class SqlOrderRepository : IOrderRepository
         command.Parameters.AddWithValue(command, "@BidMainId", orderMainDto.BidMainId);
         command.Parameters.AddWithValue(command, "@RFQMainId", orderMainDto.RFQMainId);
         command.Parameters.AddWithValue(command, "@UserId", userId);
+        command.Parameters.AddWithValue(command, "@OrderPrint", orderMainDto.OrderPrint);
 
         await using var reader = await command.ExecuteReaderAsync();
         if (await reader.ReadAsync())
@@ -294,7 +296,8 @@ public class SqlOrderRepository : IOrderRepository
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
         command.CommandText = @"SET NOCOUNT OFF EXEC dbo.SP_OrderDetails_IUD @OrderMainId, @Data";
         command.Parameters.AddWithValue(command, "@OrderMainId", orderDetails[0].OrderMainId);
-        command.Parameters.AddTableValue(command, "@Data", "dbo.OrderDetailsType2", orderDetails.ConvertToDataTable());
+        var a = orderDetails.ConvertToDataTable();
+        command.Parameters.AddTableValue(command, "@Data", "OrderDetailsType2", a);
 
         return await command.ExecuteNonQueryAsync() > 0;
     }
@@ -420,7 +423,7 @@ public class SqlOrderRepository : IOrderRepository
             AvailableQuantity = reader.Get<decimal>("AvailableQuantity"),
             ItemName1 = reader.Get<string>("ItemName"),
             ItemName2 = reader.Get<string>("ItemName2"),
-            LineNo = reader.Get<string>("LineNo"),
+            RequestLineNo = reader.Get<string>("RequestLineNo"),
             OrderQuantity = reader.Get<decimal>("OrderQuantity"),
             OriginalQuantity = reader.Get<decimal>("OriginalQuantity"),
             RemainingBudget = reader.Get<decimal>("RemainingBudget"),
@@ -439,10 +442,23 @@ public class SqlOrderRepository : IOrderRepository
             DefaultUOM = reader.Get<string>("DefaultUOM"),
             RFQQuantity = reader.Get<decimal>("RFQQuantity"),
             Ordertype = reader.Get<string>("Ordertype"),
+            OrderTypeId = reader.Get<int>("OrderTypeId"),
             RequestComment = reader.Get<string>("RequestComment"),
             RequestType = reader.Get<string>("RequestType"),
+            RequestTypeId = reader.Get<int>("RequestTypeId"),
             TypeKey = reader.Get<string>("TypeKey"),
-            RUOM = reader.Get<string>("RUOM")
+            RUOM = reader.Get<string>("RUOM"),
+            AnalysisCode1Id = reader.Get<int>("AnalysisCode1Id"),
+            AnalysisCode2Id = reader.Get<int>("AnalysisCode2Id"),
+            AnalysisCode3Id = reader.Get<int>("AnalysisCode3Id"),
+            AnalysisCode4Id = reader.Get<int>("AnalysisCode4Id"),
+            AnalysisCode5Id = reader.Get<int>("AnalysisCode5Id"),
+            AnalysisCode6Id = reader.Get<int>("AnalysisCode6Id"),
+            AnalysisCode7Id = reader.Get<int>("AnalysisCode7Id"),
+            AnalysisCode8Id = reader.Get<int>("AnalysisCode8Id"),
+            AnalysisCode9Id = reader.Get<int>("AnalysisCode9Id"),
+            AnalysisCode10Id = reader.Get<int>("AnalysisCode10Id"),
+            CatId = reader.Get<int>("CatId")
         };
     }
 
@@ -454,33 +470,33 @@ public class SqlOrderRepository : IOrderRepository
             Condition = reader.Get<int>("Condition"),
             AlternativeItem = reader.Get<bool>("AlternativeItem"),
             ItemName = reader.Get<string>("ItemName"),
-            ItemName2 = reader.Get<string>("Itemname2"), 
+            ItemName2 = reader.Get<string>("Itemname2"),
             LineNo = reader.Get<int>("LineNo"),
             RequestNo = reader.Get<string>("RequestNo"),
             RequestDetailId = reader.Get<int>("RequestDetailId"),
             RequestMainId = reader.Get<int>("RequestMainId"),
             DefaultUOM = reader.Get<string>("DefaultUOM"),
-            DiscountType = reader.Get<int>("DiscountType"), 
+            DiscountType = reader.Get<int>("DiscountType"),
             ComparisonNo = reader.Get<string>("ComparisonNo"),
             Status = reader.Get<int>("Status"),
             DiscountValue = reader.Get<int>("DiscountValue"),
             ApproveStatus = reader.Get<int>("ApproveStatus"),
             BidNo = reader.Get<string>("BidNo"),
-            Quantity = reader.Get<decimal>("Quantity"), 
-            ConversionRate = reader.Get<decimal>("ConversionRate"), 
-            DiscountedAmount = reader.Get<decimal>("DiscountedAmount"), 
+            Quantity = reader.Get<decimal>("Quantity"),
+            ConversionRate = reader.Get<decimal>("ConversionRate"),
+            DiscountedAmount = reader.Get<decimal>("DiscountedAmount"),
             LineDescription = reader.Get<string>("LineDescription"),
             BidMainId = reader.Get<int>("BidMainId"),
             RequestLine = reader.Get<int>("RequestLine"),
-            TotalAmount = reader.Get<decimal>("TotalAmount"), 
-            UnitPrice = reader.Get<decimal>("UnitPrice"), 
+            TotalAmount = reader.Get<decimal>("TotalAmount"),
+            UnitPrice = reader.Get<decimal>("UnitPrice"),
             AlternativeItemCode = reader.Get<string>("AlternativeItemCode"),
             AlternativeItemName = reader.Get<string>("AlternativeItemName"),
             BidComparisonId = reader.Get<int>("BidComparisonId"),
             BidDetailId = reader.Get<int>("BidDetailId"),
-            ConvertedUnitPrice = reader.Get<decimal>("ConvertedUnitPrice"), 
-            SingleUnitPrice = reader.Get<decimal>("SingleUnitPrice"), 
-            ConvertedQTY = reader.Get<decimal>("ConvertedQTY"), 
+            ConvertedUnitPrice = reader.Get<decimal>("ConvertedUnitPrice"),
+            SingleUnitPrice = reader.Get<decimal>("SingleUnitPrice"),
+            ConvertedQTY = reader.Get<decimal>("ConvertedQTY"),
             PUOM = reader.Get<string>("PUOM"),
             RequestUOM = reader.Get<string>("RequestUOM"),
             RFQDetailId = reader.Get<int>("RFQDetailId")

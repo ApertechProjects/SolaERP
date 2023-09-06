@@ -5,7 +5,7 @@ public class OrderCreateRequestListDto
     public int RequestDetailId { get; set; }
     public int RequestMainId { get; set; }
     public string RequestNo { get; set; }
-    public string LineNo { get; set; }
+    public string RequestLineNo { get; set; }
     public DateTime RequestDate { get; set; }
     public DateTime RequestDeadline { get; set; }
     public DateTime RequestedDate { get; set; }
@@ -33,8 +33,22 @@ public class OrderCreateRequestListDto
     public decimal ManualUP { get; set; }
     public bool AlternativeItem { get; set; }
     public int BusinessCategoryId { get; set; }
+    public string BusinessCategoryName{ get; set; }
     public string RequestType { get; set; }
+    public int RequestTypeId { get; set; }
     public string Ordertype { get; set; }
+    public int OrderTypeId { get; set; }
     public string TypeKey { get; set; }
     public string RequestComment { get; set; }
+    public int AnalysisCode1Id { get; set; }
+    public int AnalysisCode2Id { get; set; }
+    public int AnalysisCode3Id { get; set; }
+    public int AnalysisCode4Id { get; set; }
+    public int AnalysisCode5Id { get; set; }
+    public int AnalysisCode6Id { get; set; }
+    public int AnalysisCode7Id { get; set; }
+    public int AnalysisCode8Id { get; set; }
+    public int AnalysisCode9Id { get; set; }
+    public int AnalysisCode10Id { get; set; }
+    public int CatId { get; set; }
 }
