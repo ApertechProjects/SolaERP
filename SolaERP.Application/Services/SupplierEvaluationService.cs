@@ -990,7 +990,7 @@ namespace SolaERP.Persistence.Services
                         Weight = d.Weight,
                         BankListValue = correspondingValue?.BankListValue,
                         AllPoint = calculationResult.AllPoint,
-                        Scoring = d.HasBankList > 0 && !string.IsNullOrEmpty(correspondingValue.TextboxValue)
+                        Scoring = d.HasBankList > 0 && !string.IsNullOrEmpty(correspondingValue?.TextboxValue)
                             ? 100
                             : calculationResult.Scoring,
                         Outcome = calculationResult.Outcome,
