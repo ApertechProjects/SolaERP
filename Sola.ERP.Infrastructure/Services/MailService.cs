@@ -1,4 +1,5 @@
-﻿using FluentEmail.Core;
+﻿using AngleSharp.Io;
+using FluentEmail.Core;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +12,7 @@ using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
 using SolaERP.Application.ViewModels;
+using SolaERP.Persistence.Services;
 using System.Net;
 using System.Net.Mail;
 using System.Text.Json;
@@ -24,14 +26,15 @@ namespace SolaERP.Infrastructure.Services
         private const string TemplatePath = @"SolaERP.API/wwwroot/sources/templates/RegistrationPending.cshtml";
         private IFluentEmail _email;
         private readonly ILogger<MailService> _logger;
+        private readonly IEmailNotificationService _emailNotificationService;
         private readonly RazorLightEngine _razorEngine;
 
-        public MailService(IConfiguration configuration, IFluentEmail email, ILogger<MailService> logger)
+        public MailService(IConfiguration configuration, IFluentEmail email, ILogger<MailService> logger, IEmailNotificationService emailNotificationService)
         {
             _configuration = configuration;
             _email = email;
             _logger = logger;
-
+            _emailNotificationService = emailNotificationService;
         }
 
         public async Task<bool> SendEmailMessage(string tamplatePath, string to, string subject)
@@ -354,6 +357,34 @@ namespace SolaERP.Infrastructure.Services
 
         }
 
+        public async Task SendRequestMailsForChangeStatus(HttpResponse response, List<UserList> users, RequestDetailApproveModel model)
+        {
+            var userREQP = users.Where(x => x.TemplateKey == EmailTemplateKey.REQP.ToString()).ToList();
+            if (userREQP.Count > 0)
+            {
+                var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQP);
+                await SendMailForRequest(response, templates, userREQP, EmailTemplateKey.REQP, model.Sequence, model.BusinessUnitName);
+            }
+            var userREQA = users.Where(x => x.TemplateKey == EmailTemplateKey.REQA.ToString()).ToList();
+            if (userREQA.Count > 0)
+            {
+                var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQA);
+                await SendMailForRequest(response, templates, userREQA, EmailTemplateKey.REQA, model.Sequence, model.BusinessUnitName);
+
+            }
+            var userREQR = users.Where(x => x.TemplateKey == EmailTemplateKey.REQR.ToString()).ToList();
+            if (userREQR.Count > 0)
+            {
+                var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQR);
+                await SendMailForRequest(response, templates, userREQR, EmailTemplateKey.REQR, model.Sequence, model.BusinessUnitName, model.RejectReason);
+            }
+            var userREQH = users.Where(x => x.TemplateKey == EmailTemplateKey.REQH.ToString()).ToList();
+            if (userREQH.Count > 0)
+            {
+                var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQH);
+                await SendMailForRequest(response, templates, userREQH, EmailTemplateKey.REQH, model.Sequence, model.BusinessUnitName);
+            }
+        }
     }
 
 
