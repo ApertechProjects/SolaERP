@@ -16,7 +16,7 @@ public interface IOrderService
 
     Task<ApiResponse<List<OrderAllDto>>> GetHeldAsync(OrderHeldFilterDto filterDto, string identityName);
     Task<ApiResponse<List<OrderAllDto>>> GetRejectedAsync(OrderRejectedFilterDto filterDto, string identityName);
-    Task<ApiResponse<List<OrderAllDto>>> GetDraftAsync(OrderDraftFilterDto filterDto, string identityName);
+    Task<ApiResponse<List<OrderFilteredDto>>> GetDraftAsync(OrderDraftFilterDto filterDto, string identityName);
     Task<ApiResponse<OrderIUDResponse>> AddAsync(OrderMainDto orderMainDto, string identityName);
     Task<ApiResponse<bool>> DeleteAsync(List<int> orderMainIdList, string identityName);
     Task<ApiResponse<bool>> ChangeOrderMainStatusAsync(ChangeOrderMainStatusDto statusDto, string identityName);
