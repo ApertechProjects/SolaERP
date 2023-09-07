@@ -33,7 +33,7 @@ public class OrderCreateRequestListDto
     public decimal ManualUP { get; set; }
     public bool AlternativeItem { get; set; }
     public int BusinessCategoryId { get; set; }
-    public string BusinessCategoryName{ get; set; }
+    public string BusinessCategoryName { get; set; }
     public string RequestType { get; set; }
     public int RequestTypeId { get; set; }
     public string Ordertype { get; set; }
@@ -51,4 +51,5 @@ public class OrderCreateRequestListDto
     public int AnalysisCode9Id { get; set; }
     public int AnalysisCode10Id { get; set; }
     public int CatId { get; set; }
+    public int LineNo { get; set; }
 }
