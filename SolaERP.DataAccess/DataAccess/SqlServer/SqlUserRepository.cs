@@ -2,6 +2,7 @@
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Groups;
+using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Entities.User;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
@@ -642,13 +643,35 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<List<UserList>> Users(int requestDetailId, int sequence, ApproveStatus status)
+        public async Task<List<UserList>> UsersRequestDetails(int requestDetailId, int sequence, ApproveStatus status)
         {
             List<UserList> users = new List<UserList>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "exec SP_RequestMails @RequestDetailId,@ApproveStatusId,@Sequence";
                 command.Parameters.AddWithValue(command, "@RequestDetailId", requestDetailId);
+                command.Parameters.AddWithValue(command, "@Sequence", sequence);
+                command.Parameters.AddWithValue(command, "@ApproveStatusId", status);
+
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    while (reader.Read())
+                    {
+                        users.Add(reader.GetByEntityStructure<UserList>());
+                    }
+                }
+
+            }
+            return users;
+        }
+
+        public async Task<List<UserList>> UsersRequestMain(int requestMainId, int sequence, ApproveStatus status)
+        {
+            List<UserList> users = new List<UserList>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec SP_RequestMainMails @RequestMainId,@ApproveStatusId,@Sequence";
+                command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
                 command.Parameters.AddWithValue(command, "@Sequence", sequence);
                 command.Parameters.AddWithValue(command, "@ApproveStatusId", status);
 

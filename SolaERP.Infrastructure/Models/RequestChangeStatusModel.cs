@@ -5,6 +5,9 @@
         public List<RequestData> RequestDatas { get; set; }
         public int ApproveStatus { get; set; }
         public string Comment { get; set; }
+        public string BusinessUnitName { get; set; }
+        public int RejectReasonId { get; set; }
+        public string RejectReason { get; set; }
     }
 
     public class RequestData

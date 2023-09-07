@@ -463,7 +463,7 @@ namespace SolaERP.Persistence.Services
                 {
                     tasks.AddRange(
                         command.NonDisclosureAgreement.Select(_ => _repository.DeleteNDAAsync(vendorId)));
-                    
+
                     for (int i = 0; i < command.NonDisclosureAgreement.Count; i++)
                     {
                         command.NonDisclosureAgreement[i].VendorId = vendorId;
@@ -484,7 +484,7 @@ namespace SolaERP.Persistence.Services
                 if (command.CodeOfBuConduct is not null)
                 {
                     tasks.AddRange(command.CodeOfBuConduct.Select(x => _repository.DeleteCOBCAsync(x.CobcID)));
-                    
+
                     for (int i = 0; i < command.CodeOfBuConduct.Count; i++)
                     {
                         command.CodeOfBuConduct[i].VendorId = vendorId;
@@ -805,7 +805,7 @@ namespace SolaERP.Persistence.Services
                             RadioboxValue = Convert.ToBoolean(correspondingValue?.RadioboxValue),
                             IntValue = Convert.ToInt32(correspondingValue?.IntValue),
                             DecimalValue = Convert.ToDecimal(correspondingValue?.DecimalValue),
-                            DateTimeValue = Convert.ToDateTime(correspondingValue?.DateTimeValue),
+                            DateTimeValue = correspondingValue?.DateTimeValue == DateTime.MinValue ? null : correspondingValue?.DateTimeValue,
                             Attachments = attachments,
                             Weight = design.Weight,
                             Outcome = calculationResult.Outcome,

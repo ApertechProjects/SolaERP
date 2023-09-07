@@ -69,14 +69,14 @@ namespace SolaERP.Persistence.Services
                 ApiResponse<List<RequestTypesDto>>.Fail("Request types not found", 404);
         }
 
-        public async Task<bool> ChangeMainStatusAsync(string name, int requestMainId, int approveStatus, string comment)
+        public async Task<bool> ChangeMainStatusAsync(string name, int requestMainId, int approveStatus, string comment,int rejectReasonId)
         {
             var userId = await _userRepository.ConvertIdentity(name);
 
             List<string> failedMailList = new List<string>();
             var user = await _userRepository.GetByIdAsync(userId);
 
-            var result = await _requestMainRepository.RequestMainChangeStatusAsync(userId, requestMainId, approveStatus, comment);
+            var result = await _requestMainRepository.RequestMainChangeStatusAsync(userId, requestMainId, approveStatus, comment,rejectReasonId);
 
 
             await _unitOfWork.SaveChangesAsync();

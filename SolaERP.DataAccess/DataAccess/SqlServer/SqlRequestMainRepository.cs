@@ -61,16 +61,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         }
 
-        public async Task<bool> RequestMainChangeStatusAsync(int userId, int requestMainId, int approveStatus, string comment)
+        public async Task<bool> RequestMainChangeStatusAsync(int userId, int requestMainId, int approveStatus, string comment, int rejectReasonId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_RequestMainApprove @UserId,@Id,@ApprovalStatus,@Comment";
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_RequestMainApprove @UserId,@Id,@ApprovalStatus,@Comment,@RejectReasonId";
 
                 command.Parameters.AddWithValue(command, "@Id", requestMainId);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@ApprovalStatus", approveStatus);
                 command.Parameters.AddWithValue(command, "@Comment", comment);
+                command.Parameters.AddWithValue(command, "@RejectReasonId", rejectReasonId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
@@ -176,7 +177,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-
         public async Task<RequestCardMain> GetRequesMainHeaderAsync(int requestMainId, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -229,8 +229,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 QualityRequired = reader.Get<string>("QualityRequired"),
             };
         }
-
-
 
         private RequestMain GetWaitingForApprovalFromReader(IDataReader reader)
         {

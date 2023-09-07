@@ -10,6 +10,7 @@ using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Dtos.UserDto;
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Entities.User;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
@@ -515,14 +516,16 @@ namespace SolaERP.Persistence.Services
 
         public async Task<List<Application.Dtos.User.UserList>> UsersRequestDetails(int requestDetailId, int sequence, ApproveStatus status)
         {
-            var users = await _userRepository.Users(requestDetailId, sequence, status);
+            var users = await _userRepository.UsersRequestDetails(requestDetailId, sequence, status);
             var dto = _mapper.Map<List<Application.Dtos.User.UserList>>(users);
             return dto;
         }
 
-        public Task<List<Application.Dtos.User.UserList>> UsersForRequestMain(int requestMainId, int sequence, ApproveStatus status)
+        public async Task<List<Application.Dtos.User.UserList>> UsersForRequestMain(int requestMainId, int sequence, ApproveStatus status)
         {
-            throw new NotImplementedException();
+            var users = await _userRepository.UsersRequestMain(requestMainId, sequence, status);
+            var dto = _mapper.Map<List<Application.Dtos.User.UserList>>(users);
+            return dto;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<RequestFollow>> RequestFollowUserLoadAsync(int requestMainId);
         Task<bool> RequestFollowSaveAsync(RequestFollowSaveModel saveModel);
         Task<bool> RequestFollowDeleteAsync(int requestFollowId);
-        Task<bool> RequestMainChangeStatusAsync(int userId, int requestMainId, int approveStatus, string comment);
+        Task<bool> RequestMainChangeStatusAsync(int userId, int requestMainId, int approveStatus, string comment, int rejectReasonId);
         Task<bool> RequestFollowCheckUserExistAsync(RequestFollowSaveModel saveModel);
         Task<int> GetDefaultApprovalStage(string keyCode, int businessUnitId);
         Task<List<RequestCategory>> CategoryList();

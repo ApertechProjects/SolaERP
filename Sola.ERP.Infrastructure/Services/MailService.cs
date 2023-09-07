@@ -346,7 +346,7 @@ namespace SolaERP.Infrastructure.Services
                     Language = users[i].Language.GetLanguageEnumValue(),
                     CompanyName = businessUnitName,
                     TemplateKey = key,
-                    ReasonDescription= rejectReason
+                    ReasonDescription = rejectReason
                 };
                 string to = users[i].Email;
                 response.OnCompleted(async () =>
@@ -357,32 +357,32 @@ namespace SolaERP.Infrastructure.Services
 
         }
 
-        public async Task SendRequestMailsForChangeStatus(HttpResponse response, List<UserList> users, RequestDetailApproveModel model)
+        public async Task SendRequestMailsForChangeStatus(HttpResponse response, List<UserList> users, int sequence, string businessUnitName, string rejectReason)
         {
             var userREQP = users.Where(x => x.TemplateKey == EmailTemplateKey.REQP.ToString()).ToList();
             if (userREQP.Count > 0)
             {
                 var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQP);
-                await SendMailForRequest(response, templates, userREQP, EmailTemplateKey.REQP, model.Sequence, model.BusinessUnitName);
+                await SendMailForRequest(response, templates, userREQP, EmailTemplateKey.REQP, sequence, businessUnitName);
             }
             var userREQA = users.Where(x => x.TemplateKey == EmailTemplateKey.REQA.ToString()).ToList();
             if (userREQA.Count > 0)
             {
                 var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQA);
-                await SendMailForRequest(response, templates, userREQA, EmailTemplateKey.REQA, model.Sequence, model.BusinessUnitName);
+                await SendMailForRequest(response, templates, userREQA, EmailTemplateKey.REQA, sequence, businessUnitName);
 
             }
             var userREQR = users.Where(x => x.TemplateKey == EmailTemplateKey.REQR.ToString()).ToList();
             if (userREQR.Count > 0)
             {
                 var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQR);
-                await SendMailForRequest(response, templates, userREQR, EmailTemplateKey.REQR, model.Sequence, model.BusinessUnitName, model.RejectReason);
+                await SendMailForRequest(response, templates, userREQR, EmailTemplateKey.REQR, sequence, businessUnitName, rejectReason);
             }
             var userREQH = users.Where(x => x.TemplateKey == EmailTemplateKey.REQH.ToString()).ToList();
             if (userREQH.Count > 0)
             {
                 var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQH);
-                await SendMailForRequest(response, templates, userREQH, EmailTemplateKey.REQH, model.Sequence, model.BusinessUnitName);
+                await SendMailForRequest(response, templates, userREQH, EmailTemplateKey.REQH, sequence, businessUnitName);
             }
         }
     }

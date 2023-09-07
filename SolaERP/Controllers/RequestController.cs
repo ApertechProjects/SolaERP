@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Request;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 
@@ -78,13 +79,13 @@ namespace SolaERP.Controllers
 
             for (int i = 0; i < data.RequestDatas.Count; i++)
             {
-                var res = await _requestService.ChangeMainStatusAsync(User.Identity.Name, data.RequestDatas[i].RequestMainId, data.ApproveStatus, data.Comment);
+                var res = await _requestService.ChangeMainStatusAsync(User.Identity.Name, data.RequestDatas[i].RequestMainId, data.ApproveStatus, data.Comment, data.RejectReasonId);
 
                 if (res)
                 {
-
+                    var users = await _userService.UsersForRequestMain(data.RequestDatas[i].RequestMainId, data.RequestDatas[i].Sequence, (ApproveStatus)data.ApproveStatus);
+                    await _mailService.SendRequestMailsForChangeStatus(Response, users, data.RequestDatas[i].Sequence, data.BusinessUnitName, data.RejectReason);
                 }
-                //await _mailService.SendMailForRequest(Response, data.RequestDatas, templates);
             }
 
             return CreateActionResult(ApiResponse<bool>.Success(200));
@@ -99,32 +100,7 @@ namespace SolaERP.Controllers
                 if (res)
                 {
                     var users = await _userService.UsersRequestDetails(model.RequestDetailIds[0], model.Sequence, (ApproveStatus)model.ApproveStatusId);
-
-                    var userREQP = users.Where(x => x.TemplateKey == EmailTemplateKey.REQP.ToString()).ToList();
-                    if (userREQP.Count > 0)
-                    {
-                        var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQP);
-                        await _mailService.SendMailForRequest(Response, templates, userREQP, EmailTemplateKey.REQP, model.Sequence, model.BusinessUnitName);
-                    }
-                    var userREQA = users.Where(x => x.TemplateKey == EmailTemplateKey.REQA.ToString()).ToList();
-                    if (userREQA.Count > 0)
-                    {
-                        var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQA);
-                        await _mailService.SendMailForRequest(Response, templates, userREQA, EmailTemplateKey.REQA, model.Sequence, model.BusinessUnitName);
-
-                    }
-                    var userREQR = users.Where(x => x.TemplateKey == EmailTemplateKey.REQR.ToString()).ToList();
-                    if (userREQR.Count > 0)
-                    {
-                        var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQR);
-                        await _mailService.SendMailForRequest(Response, templates, userREQR, EmailTemplateKey.REQR, model.Sequence, model.BusinessUnitName, model.RejectReason);
-                    }
-                    var userREQH = users.Where(x => x.TemplateKey == EmailTemplateKey.REQH.ToString()).ToList();
-                    if (userREQH.Count > 0)
-                    {
-                        var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQH);
-                        await _mailService.SendMailForRequest(Response, templates, userREQH, EmailTemplateKey.REQH, model.Sequence, model.BusinessUnitName);
-                    }
+                    await _mailService.SendRequestMailsForChangeStatus(Response, users, model.Sequence, model.BusinessUnitName, model.RejectReason);
                 }
             }
 
