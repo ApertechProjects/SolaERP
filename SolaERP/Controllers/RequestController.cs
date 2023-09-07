@@ -80,7 +80,10 @@ namespace SolaERP.Controllers
             {
                 var res = await _requestService.ChangeMainStatusAsync(User.Identity.Name, data.RequestDatas[i].RequestMainId, data.ApproveStatus, data.Comment);
 
-                //if (res)
+                if (res)
+                {
+
+                }
                 //await _mailService.SendMailForRequest(Response, data.RequestDatas, templates);
             }
 
@@ -93,38 +96,41 @@ namespace SolaERP.Controllers
             for (int i = 0; i < model.RequestDetailIds.Count; i++)
             {
                 var res = await _requestService.ChangeDetailStatusAsync(User.Identity.Name, model.RequestDetailIds[i], model.ApproveStatusId, model.Comment, model.Sequence, model.RejectReasonId);
+                if (res)
+                {
+                    var users = await _userService.UsersRequestDetails(model.RequestDetailIds[0], model.Sequence, (ApproveStatus)model.ApproveStatusId);
 
-                var users = await _userService.Users(model.RequestDetailIds[0], model.Sequence, (ApproveStatus)model.ApproveStatusId);
+                    var userREQP = users.Where(x => x.TemplateKey == EmailTemplateKey.REQP.ToString()).ToList();
+                    if (userREQP.Count > 0)
+                    {
+                        var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQP);
+                        await _mailService.SendMailForRequest(Response, templates, userREQP, EmailTemplateKey.REQP, model.Sequence, model.BusinessUnitName);
+                    }
+                    var userREQA = users.Where(x => x.TemplateKey == EmailTemplateKey.REQA.ToString()).ToList();
+                    if (userREQA.Count > 0)
+                    {
+                        var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQA);
+                        await _mailService.SendMailForRequest(Response, templates, userREQA, EmailTemplateKey.REQA, model.Sequence, model.BusinessUnitName);
 
-                var userREQP = users.Where(x => x.TemplateKey == EmailTemplateKey.REQP.ToString()).ToList();
-                if (userREQP.Count > 0)
-                {
-                    var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQP);
-                    await _mailService.SendMailForRequest(Response, templates, userREQP, EmailTemplateKey.REQP, model.Sequence, model.BusinessUnitName);
-                }
-                var userREQA = users.Where(x => x.TemplateKey == EmailTemplateKey.REQA.ToString()).ToList();
-                if (userREQA.Count > 0)
-                {
-                    var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQA);
-                    await _mailService.SendMailForRequest(Response, templates, userREQA, EmailTemplateKey.REQA, model.Sequence, model.BusinessUnitName);
-
-                }
-                var userREQR = users.Where(x => x.TemplateKey == EmailTemplateKey.REQR.ToString()).ToList();
-                if (userREQR.Count > 0)
-                {
-                    var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQR);
-                    await _mailService.SendMailForRequest(Response, templates, userREQR, EmailTemplateKey.REQR, model.Sequence, model.BusinessUnitName, model.RejectReason);
-                }
-                var userREQH = users.Where(x => x.TemplateKey == EmailTemplateKey.REQH.ToString()).ToList();
-                if (userREQH.Count > 0)
-                {
-                    var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQH);
-                    await _mailService.SendMailForRequest(Response, templates, userREQH, EmailTemplateKey.REQH, model.Sequence, model.BusinessUnitName);
+                    }
+                    var userREQR = users.Where(x => x.TemplateKey == EmailTemplateKey.REQR.ToString()).ToList();
+                    if (userREQR.Count > 0)
+                    {
+                        var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQR);
+                        await _mailService.SendMailForRequest(Response, templates, userREQR, EmailTemplateKey.REQR, model.Sequence, model.BusinessUnitName, model.RejectReason);
+                    }
+                    var userREQH = users.Where(x => x.TemplateKey == EmailTemplateKey.REQH.ToString()).ToList();
+                    if (userREQH.Count > 0)
+                    {
+                        var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQH);
+                        await _mailService.SendMailForRequest(Response, templates, userREQH, EmailTemplateKey.REQH, model.Sequence, model.BusinessUnitName);
+                    }
                 }
             }
 
             return CreateActionResult(ApiResponse<bool>.Success(200));
         }
+
 
         [HttpPost]
         public async Task<IActionResult> UpdateBuyer(List<RequestSetBuyer> requestSetBuyer)

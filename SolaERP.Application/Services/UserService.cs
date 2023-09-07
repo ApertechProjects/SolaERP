@@ -513,11 +513,16 @@ namespace SolaERP.Persistence.Services
             userDto.UserPhoto = _fileUploadService.GetFileLink(userDto.UserPhoto, Modules.Users);
         }
 
-        public async Task<List<Application.Dtos.User.UserList>> Users(int requestDetailId, int sequence, ApproveStatus status)
+        public async Task<List<Application.Dtos.User.UserList>> UsersRequestDetails(int requestDetailId, int sequence, ApproveStatus status)
         {
             var users = await _userRepository.Users(requestDetailId, sequence, status);
             var dto = _mapper.Map<List<Application.Dtos.User.UserList>>(users);
             return dto;
+        }
+
+        public Task<List<Application.Dtos.User.UserList>> UsersForRequestMain(int requestMainId, int sequence, ApproveStatus status)
+        {
+            throw new NotImplementedException();
         }
     }
 }
