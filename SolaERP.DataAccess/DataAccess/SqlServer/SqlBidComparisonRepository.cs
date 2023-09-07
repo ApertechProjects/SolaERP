@@ -487,6 +487,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             return new BaseBidComparisonLoad
             {
+                BidComparisonId = reader.Get<int>("BidComparisonId"),
                 ApproveStatus = reader.Get<int>("ApproveStatus"),
                 Buyer = reader.Get<string>("Buyer"),
                 Comparisondeadline = reader.Get<DateTime>("Comparisondeadline"),
@@ -497,7 +498,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RFQNo = reader.Get<string>("RFQNo"),
                 RowNum = reader.Get<long>("RowNum"),
                 SingleSourceReasons = reader.Get<string>("SingleSourceReasons"),
-                SpecialistComment = reader.Get<string>("SpecialistComment")
+                SpecialistComment = reader.Get<string>("SpecialistComment"),
+                CreatedBy = reader.Get<string>("CreatedBy"),
             };
         }
     }

@@ -152,10 +152,12 @@ public class OrderService : IOrderService
     {
         var businessCategories = (await _generalService.BusinessCategories()).Data;
         var result = await _orderRepository.GetOrderCreateListForRequestAsync(dto);
-        result.ForEach(x =>
+        for (int i = 0; i < result.Count; i++)
         {
-            x.BusinessCategoryName = businessCategories.SingleOrDefault(y => y.Id == x.BusinessCategoryId)?.Name;
-        });
+            result[i].BusinessCategoryName = businessCategories.SingleOrDefault(y => y.Id ==  result[i].BusinessCategoryId)?.Name;
+            result[i].LineNo = i + 1;
+        }
+        
         return ApiResponse<List<OrderCreateRequestListDto>>.Success(result);
     }
 
