@@ -7,6 +7,7 @@ namespace SolaERP.Application.Entities.Request
         public int RequestMainId { get; set; }
         public int BusinessUnitId { get; set; }
         public string BusinessUnitCode { get; set; }
+        public string BusinessUnitName { get; set; }
         public string Buyer { get; set; }
         public string AccountCode { get; set; }
         public string AccountName { get; set; }
