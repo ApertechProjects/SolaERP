@@ -312,7 +312,7 @@ namespace SolaERP.Persistence.Services
                         {
                             item.DateTimeValue = null;
                         }
-                        
+
                         if (item.HasDateTime == false)
                         {
                             item.DateTimeValue = null;
@@ -386,7 +386,6 @@ namespace SolaERP.Persistence.Services
                 {
                     tasks.AddRange(command?.Prequalification?.SelectMany(item =>
                     {
-                        
                         if (item.HasCheckbox == false)
                         {
                             item.CheckboxValue = false;
@@ -485,7 +484,7 @@ namespace SolaERP.Persistence.Services
                 {
                     if (command.NonDisclosureAgreement.Count > 0)
                     {
-                        tasks.Add(_repository.DeleteNDAAsync(vendorId));
+                        await _repository.DeleteNDAAsync(vendorId);
                     }
 
                     for (int i = 0; i < command.NonDisclosureAgreement.Count; i++)
@@ -495,7 +494,7 @@ namespace SolaERP.Persistence.Services
                         if (command.NonDisclosureAgreement[i].Type != 2)
                         {
                             var mappedNDA = _mapper.Map<VendorNDA>(command.NonDisclosureAgreement[i]);
-                            tasks.Add(_repository.AddNDAAsync(mappedNDA));
+                            await _repository.AddNDAAsync(mappedNDA);
                         }
                     }
                 }
@@ -507,16 +506,18 @@ namespace SolaERP.Persistence.Services
 
                 if (command.CodeOfBuConduct is not null)
                 {
-                    tasks.AddRange(command.CodeOfBuConduct.Select(x => _repository.DeleteCOBCAsync(x.CobcID)));
-                    
+                    if (command.CodeOfBuConduct.Count > 0)
+                    {
+                        await _repository.DeleteCOBCAsync(vendorId);
+                    }
+
                     for (int i = 0; i < command.CodeOfBuConduct.Count; i++)
                     {
                         command.CodeOfBuConduct[i].VendorId = vendorId;
 
                         if (command.CodeOfBuConduct[i].Type != 2)
                         {
-                            tasks.Add(_repository.AddCOBCAsync(
-                                _mapper.Map<VendorCOBC>(command.CodeOfBuConduct[i])));
+                            await _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(command.CodeOfBuConduct[i]));
                         }
                     }
                 }
@@ -829,7 +830,9 @@ namespace SolaERP.Persistence.Services
                             RadioboxValue = Convert.ToBoolean(correspondingValue?.RadioboxValue),
                             IntValue = Convert.ToInt32(correspondingValue?.IntValue),
                             DecimalValue = Convert.ToDecimal(correspondingValue?.DecimalValue),
-                            DateTimeValue = correspondingValue?.DateTimeValue == DateTime.MinValue ? null : correspondingValue?.DateTimeValue,
+                            DateTimeValue = correspondingValue?.DateTimeValue == DateTime.MinValue
+                                ? null
+                                : correspondingValue?.DateTimeValue,
                             Attachments = attachments,
                             Weight = design.Weight,
                             Outcome = calculationResult.Outcome,
