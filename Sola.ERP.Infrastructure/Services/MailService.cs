@@ -351,7 +351,7 @@ namespace SolaERP.Infrastructure.Services
                 string to = users[i].Email;
                 response.OnCompleted(async () =>
                 {
-                    await SendUsingTemplate(requestPending.Subject, requestPending, requestPending.TemplateName(), null, new List<string> { to });
+                    await SendUsingTemplate(requestPending.Subject, requestPending, requestPending.TemplateName(), null, new List<string> { "hulya.garibli@apertech.net" });
                 });
             };
 
