@@ -296,7 +296,15 @@ namespace SolaERP.Persistence.Services
                     {
                         var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
                         dueInputModel.VendorId = vendorId;
-                        dueInputModel.DateTimeValue = dueInputModel.DateTimeValue.ConvertDateToValidDate();
+
+                        if (!string.IsNullOrEmpty(item.DateTimeValue) && item.DateTimeValue != "null")
+                        {
+                            dueInputModel.DateTimeValue = Convert.ToDateTime(item.DateTimeValue);
+                        }
+                        else
+                        {
+                            dueInputModel.DateTimeValue = null;
+                        }
 
                         if (item.HasCheckBox == false)
                         {
@@ -306,11 +314,6 @@ namespace SolaERP.Persistence.Services
                         if (item.HasRadioBox == false)
                         {
                             item.RadioboxValue = false;
-                        }
-
-                        if (item.HasDateTime == false)
-                        {
-                            item.DateTimeValue = null;
                         }
 
                         if (item.HasDateTime == false)
@@ -412,6 +415,15 @@ namespace SolaERP.Persistence.Services
                         }
 
                         var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
+                        if (!string.IsNullOrEmpty(item.DateTimeValue) && item.DateTimeValue != "null")
+                        {
+                            prequalificationValue.DateTimeValue = Convert.ToDateTime(item.DateTimeValue);
+                        }
+                        else
+                        {
+                            prequalificationValue.DateTimeValue = null;
+                        }
+
                         prequalificationValue.VendorId = vendorId;
                         prequalificationValue.DateTimeValue =
                             prequalificationValue.DateTimeValue.ConvertDateToValidDate();

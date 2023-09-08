@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SolaERP.Application.Dtos.SupplierEvaluation;
-using SolaERP.Application.Features;
+﻿using SolaERP.Application.Dtos.SupplierEvaluation;
 
 namespace SolaERP.Application.Models
 {
@@ -11,8 +8,8 @@ namespace SolaERP.Application.Models
         public List<NonDisclosureAgreement> NonDisclosureAgreement { get; set; }
         public List<CodeOfBuConduct> CodeOfBuConduct { get; set; }
         public List<VendorBankDetailDto> BankAccounts { get; set; }
-        public List<DueDiligenceChildDto> DueDiligence { get; set; }
-        public List<PrequalificationDto> Prequalification { get; set; }
+        public List<DueDiligenceChildSaveDto> DueDiligence { get; set; }
+        public List<PrequalificationSaveDto> Prequalification { get; set; }
     }
 
 }

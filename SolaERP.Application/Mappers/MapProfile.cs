@@ -281,6 +281,26 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.DateTimeValue, opt => opt.MapFrom(src => src.DateTimeValue))
                 .ReverseMap();
 
+            CreateMap<DueDiligenceChildSaveDto, VendorDueDiligenceModel>()
+                .ForMember(dest => dest.DesignId, opt => opt.MapFrom(src => src.DesignId))
+                .ForMember(dest => dest.IntValue, opt => opt.MapFrom(src => src.IntValue))
+                .ForMember(dest => dest.TextboxValue, opt => opt.MapFrom(src => src.TextboxValue))
+                .ForMember(dest => dest.TextareaValue, opt => opt.MapFrom(src => src.TextareaValue))
+                .ForMember(dest => dest.CheckboxValue, opt => opt.MapFrom(src => src.CheckboxValue))
+                .ForMember(dest => dest.RadioboxValue, opt => opt.MapFrom(src => src.RadioboxValue))
+                .ForMember(dest => dest.DecimalValue, opt => opt.MapFrom(src => src.DecimalValue))
+                .ForMember(dest => dest.DateTimeValue, opt => opt.Ignore());
+
+            CreateMap<VendorDueDiligenceModel, DueDiligenceChildSaveDto>()
+                .ForMember(dest => dest.DesignId, opt => opt.MapFrom(src => src.DesignId))
+                .ForMember(dest => dest.IntValue, opt => opt.MapFrom(src => src.IntValue))
+                .ForMember(dest => dest.TextboxValue, opt => opt.MapFrom(src => src.TextboxValue))
+                .ForMember(dest => dest.TextareaValue, opt => opt.MapFrom(src => src.TextareaValue))
+                .ForMember(dest => dest.CheckboxValue, opt => opt.MapFrom(src => src.CheckboxValue))
+                .ForMember(dest => dest.RadioboxValue, opt => opt.MapFrom(src => src.RadioboxValue))
+                .ForMember(dest => dest.DecimalValue, opt => opt.MapFrom(src => src.DecimalValue))
+                .ForMember(dest => dest.DateTimeValue, opt => opt.Ignore());
+
 
             CreateMap<VendorPrequalificationValues, PrequalificationDto>()
                 .ForMember(dest => dest.DesignId, opt => opt.MapFrom(src => src.PrequalificationDesignId))
@@ -292,6 +312,21 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.DecimalValue, opt => opt.MapFrom(src => src.DecimalValue))
                 .ForMember(dest => dest.DateTimeValue, opt => opt.MapFrom(src => src.DateTimeValue)).ReverseMap();
 
+            CreateMap<VendorPrequalificationValues, PrequalificationSaveDto>()
+                .ForMember(dest => dest.DesignId, opt => opt.MapFrom(src => src.PrequalificationDesignId))
+                .ForMember(dest => dest.IntValue, opt => opt.MapFrom(src => src.IntValue))
+                .ForMember(dest => dest.TextboxValue, opt => opt.MapFrom(src => src.TextboxValue))
+                .ForMember(dest => dest.TextareaValue, opt => opt.MapFrom(src => src.TextareaValue))
+                .ForMember(dest => dest.CheckboxValue, opt => opt.MapFrom(src => src.CheckboxValue))
+                .ForMember(dest => dest.RadioboxValue, opt => opt.MapFrom(src => src.RadioboxValue))
+                .ForMember(dest => dest.DecimalValue, opt => opt.MapFrom(src => src.DecimalValue))
+                .ForMember(dest => dest.DateTimeValue, opt => opt.Ignore());
+
+            CreateMap<PrequalificationSaveDto, VendorPrequalificationValues>()
+                .ForMember(dest => dest.PrequalificationDesignId, opt => opt.MapFrom(src => src.DesignId))
+                .ForMember(dest => dest.DateTimeValue, opt => opt.Ignore());
+
+            
             CreateMap<AttachmentDto, AttachmentSaveModel>()
                 .ForMember(dest => dest.AttachmentId, opt => opt.MapFrom(src => src.AttachmentId))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
@@ -472,7 +507,9 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<BidComparisonSendToApprove, BidComparisonSendToApproveDto>().ReverseMap();
 
             CreateMap<BidComparisonBidApprovalsFilter, BidComparionBidApprovalsFilterDto>().ReverseMap();
-            CreateMap<BidComparisonBidApprovalsLoad, BidComparisonBidApprovalsLoadDto>().ReverseMap();
+            CreateMap<BidComparisonBidApprovalsLoad, BidComparisonBidApprovalsLoadDto>().
+                ForMember(dest => dest.ApproveStatus, opt => opt.MapFrom(src => ((Application.Enums.ApprovalStatus)src.ApproveStatus).ToString())).
+                ReverseMap();
 
             CreateMap<BidComparisonBidDetailsLoad, BidComparisonBidDetailsLoadDto>().ReverseMap();
             CreateMap<BidComparisonHeaderLoad, BidComparisonHeaderLoadDto>().
