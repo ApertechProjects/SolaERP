@@ -8,6 +8,7 @@ namespace SolaERP.Application.Contracts.Repositories
     public interface IRequestMainRepository : IDeleteableAsync, IReturnableRepoMethodAsync<RequestMainSaveModel>
     {
         Task<List<RequestMainAll>> GetAllAsync(RequestMainGetModel requestMain);
+        Task<List<RequestHeld>> GetHeldAsync(RequestWFAGetModel requestMain);
         Task<RequestMain> GetRequestByRequestMainIdAsync(int requestMainId);
         Task<List<RequestTypes>> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId);
         Task<List<RequestMain>> GetWaitingForApprovalsAsync(int userId, RequestWFAGetModel requestWFA);

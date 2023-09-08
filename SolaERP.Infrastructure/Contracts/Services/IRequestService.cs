@@ -9,6 +9,7 @@ namespace SolaERP.Application.Contracts.Services
     public interface IRequestService : IDeleteableAsync
     {
         Task<ApiResponse<List<RequestMainDto>>> GetAllAsync(RequestMainGetModel requestMainGet);
+        Task<ApiResponse<List<RequestHeldDto>>> GetHeldAsync(RequestWFAGetModel requestMainGet);
         Task<ApiResponse<List<RequestWFADto>>> GetWFAAsync(string name, RequestWFAGetModel requestWFAGetParametersDto);
         Task<bool> RemoveDetailAsync(int requestDetailId);
         Task<ApiResponse<List<RequestTypesDto>>> GetTypesAsync(int businessUnitId);

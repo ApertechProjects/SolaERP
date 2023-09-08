@@ -57,6 +57,10 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _requestService.GetAllAsync(requestMainParameters));
 
         [HttpPost]
+        public async Task<IActionResult> Held(RequestWFAGetModel requestMainParameters)
+         => CreateActionResult(await _requestService.GetHeldAsync(requestMainParameters));
+
+        [HttpPost]
         public async Task<IActionResult> ChangeApproval(RequestApproveAmendmentModel requestParametersDto)
             => CreateActionResult(await _requestService.GetChangeApprovalAsync(User.Identity.Name, requestParametersDto));
 
@@ -106,7 +110,6 @@ namespace SolaERP.Controllers
 
             return CreateActionResult(ApiResponse<bool>.Success(200));
         }
-
 
         [HttpPost]
         public async Task<IActionResult> UpdateBuyer(List<RequestSetBuyer> requestSetBuyer)

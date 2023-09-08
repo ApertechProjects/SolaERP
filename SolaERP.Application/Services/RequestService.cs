@@ -8,6 +8,7 @@ using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
+using System.Xml.Linq;
 
 namespace SolaERP.Persistence.Services
 {
@@ -306,6 +307,18 @@ namespace SolaERP.Persistence.Services
             if (data.Count > 0)
                 return ApiResponse<List<RequestCategory>>.Success(data, 200);
             return ApiResponse<List<RequestCategory>>.Fail("Data not found", 404);
+        }
+
+        public async Task<ApiResponse<List<RequestHeldDto>>> GetHeldAsync(RequestWFAGetModel requestMainGet)
+        {
+            var mainreq = await _requestMainRepository.GetHeldAsync(requestMainGet);
+
+            var mainRequestDto = _mapper.Map<List<RequestHeldDto>>(mainreq);
+
+            if (mainRequestDto != null && mainRequestDto.Count > 0)
+                return ApiResponse<List<RequestHeldDto>>.Success(mainRequestDto, 200);
+
+            return ApiResponse<List<RequestHeldDto>>.Success(mainRequestDto, 200);
         }
     }
 }

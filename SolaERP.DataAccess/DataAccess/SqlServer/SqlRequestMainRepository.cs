@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Models;
@@ -257,6 +258,29 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 QualityRequired = reader.Get<string>("QualityRequired"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 LogisticsTotal = reader.Get<decimal>("LogisticsTotal"),
+            };
+        }
+
+
+        private RequestHeld GetHeldFromReader(IDataReader reader)
+        {
+            return new()
+            {
+                RowNum = reader.Get<Int64>("RowNum"),
+                RequestMainId = reader.Get<int>("RequestMainId"),
+                BusinessUnitCode = reader.Get<string>("BusinessUnitCode"),
+                BusinessUnitName = reader.Get<string>("BusinessUnitName"),
+                BuyerCode = reader.Get<string>("BuyerCode"),
+                BuyerName = reader.Get<string>("BuyerName"),
+                RequestType = reader.Get<string>("RequestType"),
+                RequestNo = reader.Get<string>("RequestNo"),
+                EntryDate = reader.Get<DateTime>("EntryDate"),
+                RequestDate = reader.Get<DateTime>("RequestDate"),
+                RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
+                Requester = reader.Get<int>("Requester"),
+                RequestComment = reader.Get<string>("RequestComment"),
+                OperatorComment = reader.Get<string>("OperatorComment"),
+                QualityRequired = reader.Get<string>("QualityRequired"),
             };
         }
 
@@ -537,6 +561,30 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 while (reader.Read())
                     list.Add(reader.GetByEntityStructure<RequestCategory>());
                 return list;
+            }
+        }
+
+        public async Task<List<RequestHeld>> GetHeldAsync(RequestWFAGetModel requestMain)
+        {
+            string itemCode = string.Join(',', requestMain.ItemCode);
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainHeld]", new ReplaceParams { ParamName = "APT", Value = requestMain.BusinessUnitCode });
+
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", requestMain.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@DateFrom", requestMain.DateFrom);
+                command.Parameters.AddWithValue(command, "@DateTo", requestMain.DateTo);
+                command.Parameters.AddWithValue(command, "@ItemCode", string.IsNullOrEmpty(itemCode) ? "%" : itemCode);
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                List<RequestHeld> mainRequests = new List<RequestHeld>();
+                while (reader.Read())
+                {
+                    mainRequests.Add(GetHeldFromReader(reader));
+                }
+
+                return mainRequests;
             }
         }
     }
