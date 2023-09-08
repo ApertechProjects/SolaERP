@@ -472,9 +472,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<BidComparisonSendToApprove, BidComparisonSendToApproveDto>().ReverseMap();
 
             CreateMap<BidComparisonBidApprovalsFilter, BidComparionBidApprovalsFilterDto>().ReverseMap();
-            CreateMap<BidComparisonBidApprovalsLoad, BidComparisonBidApprovalsLoadDto>().
-                ForMember(dest => dest.ApproveStatus, opt => opt.MapFrom(src => ((Application.Enums.ApprovalStatus)src.ApproveStatus).ToString())).
-                ReverseMap();
+            CreateMap<BidComparisonBidApprovalsLoad, BidComparisonBidApprovalsLoadDto>().ReverseMap();
 
             CreateMap<BidComparisonBidDetailsLoad, BidComparisonBidDetailsLoadDto>().ReverseMap();
             CreateMap<BidComparisonHeaderLoad, BidComparisonHeaderLoadDto>().
