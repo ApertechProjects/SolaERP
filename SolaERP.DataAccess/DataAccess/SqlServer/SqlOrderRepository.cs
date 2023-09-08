@@ -327,7 +327,7 @@ public class SqlOrderRepository : IOrderRepository
     public async Task<bool> SendToApproveAsync(List<int> orderMainIdList, int userId)
     {
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
-        command.CommandText = @"SET NOCOUNT OFF dbo.SP_OrderSendToApprove
+        command.CommandText = @"SET NOCOUNT OFF EXEC dbo.SP_OrderSendToApprove
                                 @UserId, @OrderMainId";
 
         var orderMainIdListAsString = string.Join(",", orderMainIdList.Select(x => x.ToString()).ToList());
@@ -533,7 +533,7 @@ public class SqlOrderRepository : IOrderRepository
             DiscountValue = reader.Get<decimal>("DiscountValue"),
             DeliveryTermId = reader.Get<int>("DeliveryTermId"),
             DeliveryTime = reader.Get<string>("DeliveryTime"),
-            PaymentTermId = reader.Get<int>("PaymentTermId"),
+            PaymentTermId = reader.Get<string>("PaymentTermId"),
             ExpectedCost = reader.Get<decimal>("ExpectedCost"),
             DeliveryDate = reader.Get<DateTime>("DeliveryDate"),
             DesiredDeliveryDate = reader.Get<DateTime>("DesiredDeliveryDate"),
