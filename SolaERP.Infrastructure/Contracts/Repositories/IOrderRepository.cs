@@ -12,7 +12,7 @@ public interface IOrderRepository
     Task<List<OrderAllDto>> GetChangeApprovalAsync(OrderChangeApprovalFilterDto filterDto, int userId);
     Task<List<OrderAllDto>> GetHeldAsync(OrderHeldFilterDto filterDto, int userId);
     Task<List<OrderAllDto>> GetRejectedAsync(OrderRejectedFilterDto filterDto, int userId);
-    Task<List<OrderAllDto>> GetDraftAsync(OrderDraftFilterDto filterDto, int userId);
+    Task<List<OrderFilteredDto>> GetDraftAsync(OrderDraftFilterDto filterDto, int userId);
     Task<OrderIUDResponse> SaveOrderMainAsync(OrderMainDto orderMainDto, int userId);
     Task<bool> SaveOrderDetailsAsync(List<OrderDetailDto> orderDetails);
 

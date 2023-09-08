@@ -75,11 +75,11 @@ public class OrderService : IOrderService
         );
     }
 
-    public async Task<ApiResponse<List<OrderAllDto>>> GetDraftAsync(OrderDraftFilterDto filterDto,
+    public async Task<ApiResponse<List<OrderFilteredDto>>> GetDraftAsync(OrderDraftFilterDto filterDto,
         string identityName)
     {
         int userId = Convert.ToInt32(identityName);
-        return ApiResponse<List<OrderAllDto>>.Success(
+        return ApiResponse<List<OrderFilteredDto>>.Success(
             await _orderRepository.GetDraftAsync(filterDto, userId)
         );
     }

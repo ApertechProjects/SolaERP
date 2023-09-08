@@ -197,7 +197,7 @@ public class SqlOrderRepository : IOrderRepository
         return data;
     }
 
-    public async Task<List<OrderAllDto>> GetDraftAsync(OrderDraftFilterDto dto, int userId)
+    public async Task<List<OrderFilteredDto>> GetDraftAsync(OrderDraftFilterDto dto, int userId)
     {
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
         command.CommandText =
@@ -220,10 +220,10 @@ public class SqlOrderRepository : IOrderRepository
         command.Parameters.AddWithValue(command, "@DateTo", dto.DateTo);
 
         await using DbDataReader reader = await command.ExecuteReaderAsync();
-        List<OrderAllDto> data = new();
+        List<OrderFilteredDto> data = new();
         while (await reader.ReadAsync())
         {
-            data.Add(MapFromReaderForOrderAllDto(reader));
+            data.Add(MapFromReaderForOrderFilteredDto(reader));
         }
 
         return data;
@@ -581,6 +581,27 @@ public class SqlOrderRepository : IOrderRepository
             OrderNo = reader.Get<string>("OrderNo"),
             VendorName = reader.Get<string>("VendorName"),
             ApproveStageDetailsName = reader.Get<string>("ApproveStageDetailsName"),
+            RFQNo = reader.Get<string>("RFQNo")
+        };
+    }
+    
+    private static OrderFilteredDto MapFromReaderForOrderFilteredDto(IDataReader reader)
+    {
+        return new OrderFilteredDto
+        {
+            OrderMainId = reader.Get<int>("OrderMainId"),
+            VendorId = reader.Get<int>("VendorId"),
+            OrderType = reader.Get<string>("OrderType"),
+            ApproveStatus = reader.Get<string>("ApproveStatus"),
+            Comment = reader.Get<string>("Comment"),
+            Currency = reader.Get<string>("Currency"),
+            Status = reader.Get<string>("Status"),
+            BidNo = reader.Get<string>("BidNo"),
+            ComparisonNo = reader.Get<string>("ComparisonNo"),
+            EnteredBy = reader.Get<string>("EnteredBy"),
+            EnteredDate = reader.Get<DateTime>("EnteredDate"),
+            OrderNo = reader.Get<string>("OrderNo"),
+            VendorName = reader.Get<string>("VendorName"),
             RFQNo = reader.Get<string>("RFQNo")
         };
     }
