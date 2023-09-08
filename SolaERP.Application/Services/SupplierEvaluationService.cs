@@ -298,6 +298,36 @@ namespace SolaERP.Persistence.Services
                         dueInputModel.VendorId = vendorId;
                         dueInputModel.DateTimeValue = dueInputModel.DateTimeValue.ConvertDateToValidDate();
 
+                        if (item.HasCheckBox == false)
+                        {
+                            item.CheckboxValue = false;
+                        }
+
+                        if (item.HasRadioBox == false)
+                        {
+                            item.RadioboxValue = false;
+                        }
+
+                        if (item.HasDateTime == false)
+                        {
+                            item.DateTimeValue = null;
+                        }
+                        
+                        if (item.HasDateTime == false)
+                        {
+                            item.DateTimeValue = null;
+                        }
+
+                        if (item.TextareaValue == "null" || string.IsNullOrEmpty(item.TextareaValue))
+                        {
+                            item.TextareaValue = "";
+                        }
+
+                        if (item.TextboxValue == "null" || string.IsNullOrEmpty(item.TextboxValue))
+                        {
+                            item.TextboxValue = "";
+                        }
+
                         var itemTasks = new List<Task<bool>>
                         {
                             _repository.UpdateDueAsync(dueInputModel)
@@ -356,15 +386,7 @@ namespace SolaERP.Persistence.Services
                 {
                     tasks.AddRange(command?.Prequalification?.SelectMany(item =>
                     {
-                        if (item.DesignId == 19)
-                        {
-                            Console.WriteLine("");
-                            Console.WriteLine("");
-                            Console.WriteLine("");
-                            Console.WriteLine("");
-                            Console.WriteLine("");
-                        }
-
+                        
                         if (item.HasCheckbox == false)
                         {
                             item.CheckboxValue = false;
