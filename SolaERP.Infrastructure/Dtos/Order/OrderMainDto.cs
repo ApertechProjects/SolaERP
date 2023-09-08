@@ -16,7 +16,7 @@ public class OrderMainDto
     public decimal? DiscountValue { get; set; }
     public int? DeliveryTermId { get; set; }
     public string DeliveryTime { get; set; }
-    public int? PaymentTermId { get; set; }
+    public string? PaymentTermId { get; set; }
     public decimal? ExpectedCost { get; set; }
     public DateTime? DeliveryDate { get; set; }
     public DateTime? DesiredDeliveryDate { get; set; }
