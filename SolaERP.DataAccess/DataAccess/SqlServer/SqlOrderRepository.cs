@@ -338,7 +338,7 @@ public class SqlOrderRepository : IOrderRepository
         return await command.ExecuteNonQueryAsync() > 0;
     }
 
-    public async Task<List<OrderHeadLoaderDto>> GetHeaderLoadAsync(int orderMainId)
+    public async Task<OrderHeadLoaderDto> GetHeaderLoadAsync(int orderMainId)
     {
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
         command.CommandText = @"EXEC dbo.SP_OrderHeaderLoad @OrderMainId";
@@ -353,7 +353,7 @@ public class SqlOrderRepository : IOrderRepository
             data.Add(MapFromReaderForOrderHeaderLoaderDto(reader));
         }
 
-        return data;
+        return data[0];
     }
 
     public async Task<List<OrderCreateRequestListDto>> GetOrderCreateListForRequestAsync(OrderCreateListRequest dto)

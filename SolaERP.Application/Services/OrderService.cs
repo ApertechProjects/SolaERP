@@ -140,9 +140,9 @@ public class OrderService : IOrderService
         return ApiResponse<bool>.Success(true);
     }
 
-    public async Task<ApiResponse<List<OrderHeadLoaderDto>>> GetHeaderLoadAsync(int orderMainId)
+    public async Task<ApiResponse<OrderHeadLoaderDto>> GetHeaderLoadAsync(int orderMainId)
     {
-        return ApiResponse<List<OrderHeadLoaderDto>>.Success(
+        return ApiResponse<OrderHeadLoaderDto>.Success(
             await _orderRepository.GetHeaderLoadAsync(orderMainId)
         );
     }
