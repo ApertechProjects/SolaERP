@@ -501,5 +501,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return null;
         }
+
+        public async Task<List<VendorRFQListDto>> GetVendorRFQList(string vendorCode, int userId)
+        {
+            return null;
+        }
     }
 }

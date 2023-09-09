@@ -98,6 +98,12 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(await _repository.HasVendorName(vendorName, userId));
         }
 
+        public async Task<ApiResponse<VendorRFQListDto>> GetVendorRFQList(string name, string userIdentity)
+        {
+            var userId = Convert.ToInt32(userIdentity);
+            return null;
+        }
+
         public async Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity, VendorAllCommandRequest request)
         {
             List<VendorAll> allVendors = await _repository.GetAll(Convert.ToInt32(userIdentity), request);
