@@ -296,18 +296,6 @@ namespace SolaERP.Persistence.Services
                     {
                         tasks = tasks.Concat(designSaveDto.Childs.SelectMany(item =>
                         {
-                            var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
-                            dueInputModel.VendorId = vendorId;
-
-                            if (!string.IsNullOrEmpty(item.DateTimeValue) && item.DateTimeValue != "null")
-                            {
-                                dueInputModel.DateTimeValue = Convert.ToDateTime(item.DateTimeValue);
-                            }
-                            else
-                            {
-                                dueInputModel.DateTimeValue = null;
-                            }
-
                             if (item.HasCheckBox == false)
                             {
                                 item.CheckboxValue = false;
@@ -331,6 +319,25 @@ namespace SolaERP.Persistence.Services
                             if (item.TextboxValue == "null" || string.IsNullOrEmpty(item.TextboxValue))
                             {
                                 item.TextboxValue = "";
+                            }
+                            
+                            var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
+                            dueInputModel.VendorId = vendorId;
+
+                            if (!string.IsNullOrEmpty(item.DateTimeValue) && item.DateTimeValue != "null")
+                            {
+                                try
+                                {
+                                    dueInputModel.DateTimeValue = Convert.ToDateTime(item.DateTimeValue);
+                                }
+                                catch (Exception e)
+                                {
+                                    dueInputModel.DateTimeValue = null;
+                                }
+                            }
+                            else
+                            {
+                                dueInputModel.DateTimeValue = null;
                             }
 
                             var itemTasks = new List<Task<bool>>
@@ -420,7 +427,14 @@ namespace SolaERP.Persistence.Services
                         var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
                         if (!string.IsNullOrEmpty(item.DateTimeValue) && item.DateTimeValue != "null")
                         {
-                            prequalificationValue.DateTimeValue = Convert.ToDateTime(item.DateTimeValue);
+                            try
+                            {
+                                prequalificationValue.DateTimeValue = Convert.ToDateTime(item.DateTimeValue);
+                            }
+                            catch (Exception e)
+                            {
+                                prequalificationValue.DateTimeValue = null;
+                            }
                         }
                         else
                         {
