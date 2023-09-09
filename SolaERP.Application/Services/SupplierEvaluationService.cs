@@ -402,7 +402,7 @@ namespace SolaERP.Persistence.Services
                             item.RadioboxValue = false;
                         }
 
-                        if (item.HasDateTime == false)
+                        if (item.HasDateTime == false && string.IsNullOrEmpty(item.DateTimeValue))
                         {
                             item.DateTimeValue = null;
                         }
@@ -428,8 +428,6 @@ namespace SolaERP.Persistence.Services
                         }
 
                         prequalificationValue.VendorId = vendorId;
-                        prequalificationValue.DateTimeValue =
-                            prequalificationValue.DateTimeValue.ConvertDateToValidDate();
 
                         var tasksList = new List<Task<bool>>();
                         _repository.UpdatePrequalification(prequalificationValue); //+
