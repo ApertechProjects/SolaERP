@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
-using SolaERP.Application.Dtos.Bid;
 using SolaERP.Application.Dtos.BidComparison;
 using SolaERP.Application.Entities.BidComparison;
 using SolaERP.Controllers;
-using SolaERP.Persistence.Services;
 
 namespace SolaERP.API.Controllers
 {

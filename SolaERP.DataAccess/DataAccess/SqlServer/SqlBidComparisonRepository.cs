@@ -488,6 +488,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return new BaseBidComparisonLoad
             {
                 BidComparisonId = reader.Get<int>("BidComparisonId"),
+                RFQMainId = reader.Get<int>("RFQMainId"),
                 ApproveStatus = reader.Get<int>("ApproveStatus"),
                 Buyer = reader.Get<string>("Buyer"),
                 Comparisondeadline = reader.Get<DateTime>("Comparisondeadline"),

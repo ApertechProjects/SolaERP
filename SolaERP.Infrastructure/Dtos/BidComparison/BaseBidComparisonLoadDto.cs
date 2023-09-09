@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Application.Dtos.BidComparison
+﻿namespace SolaERP.Application.Dtos.BidComparison
 {
     public class BaseBidComparisonLoadDto
     {
         public int? BidComparisonId { get; set; }
+        public int RFQMainId { get; set; }
         public long RowNum { get; set; }
         public int ApproveStatus { get; set; }
         public int Emergency { get; set; }
