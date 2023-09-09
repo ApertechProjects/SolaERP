@@ -292,93 +292,96 @@ namespace SolaERP.Persistence.Services
 
                 if (command.DueDiligence is not null)
                 {
-                    tasks = tasks.Concat(command?.DueDiligence?.SelectMany(item =>
+                    foreach (var designSaveDto in command.DueDiligence)
                     {
-                        var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
-                        dueInputModel.VendorId = vendorId;
+                        tasks = tasks.Concat(designSaveDto.Childs.SelectMany(item =>
+                        {
+                            var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
+                            dueInputModel.VendorId = vendorId;
 
-                        if (!string.IsNullOrEmpty(item.DateTimeValue) && item.DateTimeValue != "null")
-                        {
-                            dueInputModel.DateTimeValue = Convert.ToDateTime(item.DateTimeValue);
-                        }
-                        else
-                        {
-                            dueInputModel.DateTimeValue = null;
-                        }
-
-                        if (item.HasCheckBox == false)
-                        {
-                            item.CheckboxValue = false;
-                        }
-
-                        if (item.HasRadioBox == false)
-                        {
-                            item.RadioboxValue = false;
-                        }
-
-                        if (item.HasDateTime == false)
-                        {
-                            item.DateTimeValue = null;
-                        }
-
-                        if (item.TextareaValue == "null" || string.IsNullOrEmpty(item.TextareaValue))
-                        {
-                            item.TextareaValue = "";
-                        }
-
-                        if (item.TextboxValue == "null" || string.IsNullOrEmpty(item.TextboxValue))
-                        {
-                            item.TextboxValue = "";
-                        }
-
-                        var itemTasks = new List<Task<bool>>
-                        {
-                            _repository.UpdateDueAsync(dueInputModel)
-                        };
-
-                        if (item?.HasDataGrid == true)
-                        {
-                            itemTasks.AddRange(item?.GridDatas?.Select(gridData =>
+                            if (!string.IsNullOrEmpty(item.DateTimeValue) && item.DateTimeValue != "null")
                             {
-                                if (gridData.Type == 2)
-                                    return _repository.DeleteDueDesignGrid(gridData.Id);
-
-                                var gridDatas = _mapper.Map<DueDiligenceGridModel>(gridData);
-                                gridDatas.DueDesignId = item.DesignId;
-                                gridDatas.VendorId = vendorId;
-
-                                return _repository.UpdateDueDesignGrid(gridDatas);
-                            }) ?? Enumerable.Empty<Task<bool>>());
-                        }
-
-                        if (item.Attachments != null)
-                        {
-                            itemTasks.AddRange(item.Attachments?.Select(attachment =>
+                                dueInputModel.DateTimeValue = Convert.ToDateTime(item.DateTimeValue);
+                            }
+                            else
                             {
-                                if (attachment.Type == 2)
+                                dueInputModel.DateTimeValue = null;
+                            }
+
+                            if (item.HasCheckBox == false)
+                            {
+                                item.CheckboxValue = false;
+                            }
+
+                            if (item.HasRadioBox == false)
+                            {
+                                item.RadioboxValue = false;
+                            }
+
+                            if (item.HasDateTime == false)
+                            {
+                                item.DateTimeValue = null;
+                            }
+
+                            if (item.TextareaValue == "null" || string.IsNullOrEmpty(item.TextareaValue))
+                            {
+                                item.TextareaValue = "";
+                            }
+
+                            if (item.TextboxValue == "null" || string.IsNullOrEmpty(item.TextboxValue))
+                            {
+                                item.TextboxValue = "";
+                            }
+
+                            var itemTasks = new List<Task<bool>>
+                            {
+                                _repository.UpdateDueAsync(dueInputModel)
+                            };
+
+                            if (item?.HasDataGrid == true)
+                            {
+                                itemTasks.AddRange(item?.GridDatas?.Select(gridData =>
                                 {
-                                    _fileUploadService.DeleteFile(Modules.EvaluationForm, attachment.FileLink);
-                                    return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
-                                }
+                                    if (gridData.Type == 2)
+                                        return _repository.DeleteDueDesignGrid(gridData.Id);
 
-                                if (attachment.Type != 2 && attachment.AttachmentId <= 0)
+                                    var gridDatas = _mapper.Map<DueDiligenceGridModel>(gridData);
+                                    gridDatas.DueDesignId = item.DesignId;
+                                    gridDatas.VendorId = vendorId;
+
+                                    return _repository.UpdateDueDesignGrid(gridDatas);
+                                }) ?? Enumerable.Empty<Task<bool>>());
+                            }
+
+                            if (item.Attachments != null)
+                            {
+                                itemTasks.AddRange(item.Attachments?.Select(attachment =>
                                 {
-                                    var attachedFile = _mapper.Map<AttachmentSaveModel>(attachment);
-                                    attachedFile.SourceId = vendorId;
-                                    attachedFile.SourceType = SourceType.VEN_DUE.ToString();
-                                    attachedFile.AttachmentTypeId = item.DesignId;
-                                    attachedFile.FileLink = _fileUploadService
-                                        .AddFile(new List<IFormFile> { attachment.File }, Modules.EvaluationForm,
-                                            new List<string>()).Result.Data[0];
-                                    return _attachmentRepository.SaveAttachmentAsync(attachedFile);
-                                }
+                                    if (attachment.Type == 2)
+                                    {
+                                        _fileUploadService.DeleteFile(Modules.EvaluationForm, attachment.FileLink);
+                                        return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
+                                    }
 
-                                return Task.FromResult(true);
-                            })!);
-                        }
+                                    if (attachment.Type != 2 && attachment.AttachmentId <= 0)
+                                    {
+                                        var attachedFile = _mapper.Map<AttachmentSaveModel>(attachment);
+                                        attachedFile.SourceId = vendorId;
+                                        attachedFile.SourceType = SourceType.VEN_DUE.ToString();
+                                        attachedFile.AttachmentTypeId = item.DesignId;
+                                        attachedFile.FileLink = _fileUploadService
+                                            .AddFile(new List<IFormFile> { attachment.File }, Modules.EvaluationForm,
+                                                new List<string>()).Result.Data[0];
+                                        return _attachmentRepository.SaveAttachmentAsync(attachedFile);
+                                    }
 
-                        return itemTasks;
-                    })).ToList();
+                                    return Task.FromResult(true);
+                                })!);
+                            }
+
+                            return itemTasks;
+                        })).ToList();
+                    }
                 }
 
                 #endregion

@@ -146,6 +146,12 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public int Type { get; set; }
         public bool Disabled { get; set; }
     }
+    
+    public class DueDiligenceDesignSaveDto
+    {
+        public string Title { get; set; }
+        public List<DueDiligenceChildSaveDto> Childs { get; set; }
+    }
 
     public class DueDiligenceChildSaveDto
     {
