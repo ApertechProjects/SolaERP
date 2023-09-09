@@ -79,7 +79,7 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _service.HasVendorName(vendorNameDto.VendorName, User.Identity.Name));
 
         [HttpGet("[action]/{vendorCode}")]
-        public async Task<IActionResult> HasVendorName(string vendorCode)
+        public async Task<IActionResult> GetVendorRFQList(string vendorCode)
             => CreateActionResult(await _service.GetVendorRFQList(vendorCode, User.Identity.Name));
     }
 }
