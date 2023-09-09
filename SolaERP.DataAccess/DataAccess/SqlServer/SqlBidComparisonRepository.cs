@@ -132,9 +132,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             var data = new List<BidComparisonBidApprovalsLoad>();
-            command.CommandText = "EXEC SP_BidComparisonBidApprovalsLoad @BidComparisonId, @UserId";
+            command.CommandText = "EXEC SP_BidComparisonBidApprovalsLoad @RFQMainId, @UserId";
 
-            command.Parameters.AddWithValue(command, "@BidComparisonId", filter.BidComparisonId);
+            command.Parameters.AddWithValue(command, "@RFQMainId", filter.RFQMainId);
             command.Parameters.AddWithValue(command, "@UserId", filter.UserId);
 
             using var reader = await command.ExecuteReaderAsync();
@@ -157,8 +157,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             var data = new List<BidComparisonApprovalInformationLoad>();
-            command.CommandText = "EXEC SP_BidComparisonApprovalInformationLoad @BidComparisonId";
-            command.Parameters.AddWithValue(command, "@BidComparisonId", filter.BidComparisonId);
+            command.CommandText = "EXEC SP_BidComparisonApprovalInformationLoad @RFQMainId";
+            command.Parameters.AddWithValue(command, "@RFQMainId", filter.RFQMainId);
 
             using var reader = await command.ExecuteReaderAsync();
             while (await reader.ReadAsync())
@@ -181,9 +181,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             var data = new List<BidComparisonBidDetailsLoad>();
-            command.CommandText = "EXEC SP_BidComparisonBidDetailsLoad @BidComparisonId, @UserId";
+            command.CommandText = "EXEC SP_BidComparisonBidDetailsLoad @RFQMainId, @UserId";
 
-            command.Parameters.AddWithValue(command, "@BidComparisonId", filter.BidComparisonId);
+            command.Parameters.AddWithValue(command, "@RFQMainId", filter.RFQMainId);
             command.Parameters.AddWithValue(command, "@UserId", filter.UserId);
 
             using var reader = await command.ExecuteReaderAsync();
@@ -209,9 +209,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             var data = new List<BidComparisonRFQDetailsLoad>();
-            command.CommandText = "EXEC SP_BidComparisonRFQDeatilsLoad @BidComparisonId, @UserId";
+            command.CommandText = "EXEC SP_BidComparisonRFQDeatilsLoad @RFQMainId, @UserId";
 
-            command.Parameters.AddWithValue(command, "@BidComparisonId", filter.BidComparisonId);
+            command.Parameters.AddWithValue(command, "@RFQMainId", filter.RFQMainId);
             command.Parameters.AddWithValue(command, "@UserId", filter.UserId);
 
             using var reader = await command.ExecuteReaderAsync();
@@ -234,9 +234,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             var data = new List<BidComparisonBidHeaderLoad>();
-            command.CommandText = "EXEC SP_BidComparisonBidHeaderLoad @BidComparisonId, @UserId";
+            command.CommandText = "EXEC SP_BidComparisonBidHeaderLoad @RFQMainId, @UserId";
 
-            command.Parameters.AddWithValue(command, "@BidComparisonId", filter.BidComparisonId);
+            command.Parameters.AddWithValue(command, "@RFQMainId", filter.RFQMainId);
             command.Parameters.AddWithValue(command, "@UserId", filter.UserId);
 
             using var reader = await command.ExecuteReaderAsync();
@@ -270,9 +270,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<BidComparisonHeaderLoad> GetComparisonHeader(BidComparisonHeaderFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = "EXEC SP_BidComparisonHeaderLoad @BidComparisonId, @UserId";
+            command.CommandText = "EXEC SP_BidComparisonHeaderLoad @RFQMainId, @UserId";
 
-            command.Parameters.AddWithValue(command, "@BidComparisonId", filter.BidComparisonId);
+            command.Parameters.AddWithValue(command, "@RFQMainId", filter.RFQMainId);
             command.Parameters.AddWithValue(command, "@UserId", filter.UserId);
 
             using var reader = await command.ExecuteReaderAsync();
@@ -310,9 +310,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             var data = new List<BidComparisonSingleSourceReasonsLoad>();
 
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = "EXEC SP_BidComparisonSingleSourceReasonsLoad @BidComparisonId";
+            command.CommandText = "EXEC SP_BidComparisonSingleSourceReasonsLoad @RFQMainId";
 
-            command.Parameters.AddWithValue(command, "@BidComparisonId", filter.BidComparisonId);
+            command.Parameters.AddWithValue(command, "@RFQMainId", filter.RFQMainId);
             using var reader = await command.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {

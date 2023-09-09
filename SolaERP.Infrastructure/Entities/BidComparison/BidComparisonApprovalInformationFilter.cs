@@ -8,6 +8,6 @@ namespace SolaERP.Application.Dtos.BidComparison
 {
     public class BidComparisonApprovalInformationFilter
     {
-        public int BidComparisonId { get; set; }
+        public int RFQMainId { get; set; }
     }
 }
