@@ -28,14 +28,15 @@ namespace SolaERP.Persistence.Services
         private readonly IAttachmentRepository _attachment;
         private readonly IFileUploadService _fileUploadService;
         private readonly IGeneralRepository _generalRepository;
+
         public VendorService(IVendorRepository vendorRepository,
-                             IUserRepository userRepository,
-                             IMapper mapper,
-                             ISupplierEvaluationRepository supplierRepository,
-                             IUnitOfWork unitOfWork,
-                             IAttachmentRepository attachment,
-                             IFileUploadService fileUploadService,
-                             IGeneralRepository generalRepository)
+            IUserRepository userRepository,
+            IMapper mapper,
+            ISupplierEvaluationRepository supplierRepository,
+            IUnitOfWork unitOfWork,
+            IAttachmentRepository attachment,
+            IFileUploadService fileUploadService,
+            IGeneralRepository generalRepository)
         {
             _repository = vendorRepository;
             _userRepository = userRepository;
@@ -56,6 +57,7 @@ namespace SolaERP.Persistence.Services
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(result, 200);
         }
+
         public async Task<ApiResponse<bool>> ChangeStatusAsync(VendorStatusModel taxModel, string userIdentity)
         {
             var userId = await _userRepository.ConvertIdentity(userIdentity);
@@ -74,6 +76,7 @@ namespace SolaERP.Persistence.Services
             else
                 return ApiResponse<bool>.Fail("Problem detected", 400);
         }
+
         public async Task<ApiResponse<bool>> DeleteAsync(string userIdentity, VendorDeleteModel model)
         {
             int counter = 0;
@@ -98,13 +101,40 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(await _repository.HasVendorName(vendorName, userId));
         }
 
-        public async Task<ApiResponse<VendorRFQListDto>> GetVendorRFQList(string name, string userIdentity)
+        public async Task<ApiResponse<List<VendorRFQListResponseDto>>> GetVendorRFQList(string vendorCode,
+            string userIdentity)
         {
             var userId = Convert.ToInt32(userIdentity);
-            return null;
+            var result = await _repository.GetVendorRFQList(vendorCode, userId);
+            var list = new List<VendorRFQListResponseDto>();
+
+            foreach (var item in result)
+            {
+                list.Add(new VendorRFQListResponseDto
+                {
+                    RFQMainId = item.RFQMainId,
+                    CreatedDate = item.CreatedDate,
+                    EnteredBy = item.EnteredBy,
+                    LineNo = item.LineNo,
+                    ParticipationStatus = item.ParticipationStatus,
+                    RespondedDate = item.RespondedDate,
+                    SentDate = item.SentDate,
+                    DesiredDeliveryDate = item.DesiredDeliveryDate,
+                    RFQDate = item.RFQDate,
+                    RFQDeadline = item.RFQDeadline,
+                    RFQNo = item.RFQNo,
+                    RFQType = item.RFQType == 1 ? "Purchasing" : "Information",
+                    BusinessCategoryId = GetBusinessCategoryById(item.BusinessCategoryId),
+                    Emergency = GetEmergencyById(item.Emergency),
+                    RFQStatus = GetRFQStatusById(item.RFQStatus)
+                });
+            }
+
+            return ApiResponse<List<VendorRFQListResponseDto>>.Success(list);
         }
 
-        public async Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity, VendorAllCommandRequest request)
+        public async Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity,
+            VendorAllCommandRequest request)
         {
             List<VendorAll> allVendors = await _repository.GetAll(Convert.ToInt32(userIdentity), request);
             allVendors = allVendors.GetDataByFilter(request.Text);
@@ -114,6 +144,7 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
             return ApiResponse<List<VendorAllDto>>.Fail("Data not found", 404);
         }
+
         public async Task<ApiResponse<List<VendorAllDto>>> GetApprovedAsync(string userIdentity, string text)
         {
             var approvedByCurrentUser = await _repository.GetApprovedAsync(Convert.ToInt32(userIdentity));
@@ -124,13 +155,16 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
             return ApiResponse<List<VendorAllDto>>.Fail("Data not found", 404);
         }
+
         public async Task<VendorInfo> GetByTaxAsync(string taxId)
             => await _repository.GetByTaxAsync(taxId);
+
         public async Task<int> GetByTaxIdAsync(string taxId)
         {
             VendorInfo entity = await _repository.GetByTaxAsync(taxId);
             return entity.VendorId;
         }
+
         public async Task<ApiResponse<List<VendorAll>>> GetDraftAsync(string userIdentity, VendorFilter filter)
         {
             var data = await _repository.GetDraftAsync(Convert.ToInt32(userIdentity), filter);
@@ -139,6 +173,7 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<List<VendorAll>>.Success(data, 200);
             return ApiResponse<List<VendorAll>>.Fail("Data not found", 404);
         }
+
         public async Task<ApiResponse<VM_GetVendorFilters>> GetFiltersAsync()
         {
             var prequalificationTypesTask = _supplierRepository.GetPrequalificationCategoriesAsync();
@@ -155,6 +190,7 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<VM_GetVendorFilters>.Success(viewModel, 200);
         }
+
         public async Task<ApiResponse<List<VendorWFADto>>> GetHeldAsync(string userIdentity, VendorFilter filter)
         {
             List<VendorWFA> vendorWFAs = await _repository.GetHeldAsync(Convert.ToInt32(userIdentity), filter);
@@ -165,6 +201,7 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
             return ApiResponse<List<VendorWFADto>>.Fail("Data not found", 404);
         }
+
         public async Task<ApiResponse<List<VendorWFADto>>> GetRejectedAsync(string userIdentity, VendorFilter filter)
         {
             var rejectedByCurrentUser = await _repository.GetRejectedAsync(Convert.ToInt32(userIdentity), filter);
@@ -175,6 +212,7 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<List<VendorWFADto>>.Fail("Data not found", 404);
         }
+
         public async Task<ApiResponse<VM_VendorCard>> GetAsync(int vendorId)
         {
             var header = _mapper.Map<VendorLoadDto>(await _repository.GetHeader(vendorId));
@@ -200,20 +238,19 @@ namespace SolaERP.Persistence.Services
             var countries = _supplierRepository.GetCountriesAsync();
 
             await Task.WhenAll
-                  (
-                    paymentTerms,
-                    deliveryTerms,
-                    bankDetails,
-                    users,
-                    shipment,
-                    withHoldingTax,
-                    tax,
-                    users,
-                    currency,
-                    buCategories,
-                    countries
-                  );
-
+            (
+                paymentTerms,
+                deliveryTerms,
+                bankDetails,
+                users,
+                shipment,
+                withHoldingTax,
+                tax,
+                users,
+                currency,
+                buCategories,
+                countries
+            );
 
 
             var matchedBuCategories = buCategories.Result
@@ -239,6 +276,7 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<VM_VendorCard>.Success(vendorModel);
         }
+
         public async Task<ApiResponse<List<VendorWFADto>>> GetWFAAsync(string userIdentity, VendorFilter filter)
         {
             List<VendorWFA> vendorWFAs = await _repository.GetWFAAsync(Convert.ToInt32(userIdentity), filter);
@@ -252,7 +290,6 @@ namespace SolaERP.Persistence.Services
             if (vendorWFAs.Count > 0)
                 return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
             return ApiResponse<List<VendorWFADto>>.Fail("Data not found", 404);
-
         }
 
         public async Task<ApiResponse<bool>> SaveAsync(string userIdentity, VendorCardDto vendorDto)
@@ -264,17 +301,21 @@ namespace SolaERP.Persistence.Services
             int userId = Convert.ToInt32(userIdentity);
             int vendorId = 0;
 
-            vendorId = vendor.IsNewVendor() ? await _repository.AddAsync(userId, vendor) :
-                                              await _repository.UpdateAsync(userId, vendor);
+            vendorId = vendor.IsNewVendor()
+                ? await _repository.AddAsync(userId, vendor)
+                : await _repository.UpdateAsync(userId, vendor);
 
             await _supplierRepository.DeleteRepresentedProductAsync(vendorId);
             await _supplierRepository.DeleteRepresentedCompanyAsync(vendorId);
 
-            await _supplierRepository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany { VendorId = vendorId, RepresentedCompanyName = string.Join(",", vendor?.RepresentedCompanies) });
-            await _supplierRepository.AddRepresentedProductAsync(new RepresentedProductData { VendorId = vendorId, RepresentedProductName = string.Join(",", vendor?.RepresentedProducts) });
+            await _supplierRepository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany
+                { VendorId = vendorId, RepresentedCompanyName = string.Join(",", vendor?.RepresentedCompanies) });
+            await _supplierRepository.AddRepresentedProductAsync(new RepresentedProductData
+                { VendorId = vendorId, RepresentedProductName = string.Join(",", vendor?.RepresentedProducts) });
 
             string vendorLogo = await _repository.GetVendorLogo(vendorId);
-            vendor.Logo = await _fileUploadService.GetLinkForEntity(vendorDto.Logo, Modules.Vendors, vendorDto.CheckLogoIsDeleted, vendorLogo);
+            vendor.Logo = await _fileUploadService.GetLinkForEntity(vendorDto.Logo, Modules.Vendors,
+                vendorDto.CheckLogoIsDeleted, vendorLogo);
 
 
             await _attachment.DeleteAttachmentAsync(vendorId, SourceType.VEN_LOGO);
@@ -287,6 +328,7 @@ namespace SolaERP.Persistence.Services
                 attachmentSaveModel.FileLink = vendor.Logo;
                 await _attachment.SaveAttachmentAsync(attachmentSaveModel);
             }
+
             if (vendorDto.BankAccounts is not null)
                 foreach (var x in vendorDto?.BankAccounts)
                 {
@@ -294,7 +336,8 @@ namespace SolaERP.Persistence.Services
                         await _repository.DeleteBankDetailsAsync(user.Id, x.Id);
                     else
                     {
-                        var detaildId = await _repository.UpdateBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x));
+                        var detaildId =
+                            await _repository.UpdateBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x));
                         x.VendorId = vendorId;
 
                         if (x.AccountVerificationLetter != null)
@@ -314,11 +357,11 @@ namespace SolaERP.Persistence.Services
                         }
                     }
                 }
+
             await Task.WhenAll(tasks);
 
             await _unitOfWork.SaveChangesAsync();
-            return vendorId > 0 ? ApiResponse<bool>.Success(true, 200) :
-                                  ApiResponse<bool>.Success(false, 400);
+            return vendorId > 0 ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Success(false, 400);
         }
 
         public async Task<ApiResponse<bool>> SendToApproveAsync(VendorSendToApproveRequest request)
@@ -326,8 +369,9 @@ namespace SolaERP.Persistence.Services
             bool isSuccessFull = await _repository.SendToApprove(request);
             await _unitOfWork.SaveChangesAsync();
 
-            return isSuccessFull ? ApiResponse<bool>.Success(isSuccessFull, 200) :
-                ApiResponse<bool>.Success(isSuccessFull, 200);
+            return isSuccessFull
+                ? ApiResponse<bool>.Success(isSuccessFull, 200)
+                : ApiResponse<bool>.Success(isSuccessFull, 200);
         }
 
         public async Task<ApiResponse<List<VendorInfoDto>>> Vendors(string userIdentity)
@@ -336,6 +380,46 @@ namespace SolaERP.Persistence.Services
             var data = await _repository.Vendors(userId);
             var dto = _mapper.Map<List<VendorInfoDto>>(data);
             return ApiResponse<List<VendorInfoDto>>.Success(dto, 200);
+        }
+
+        private static string GetBusinessCategoryById(int id)
+        {
+            var businessCategories = new List<ItemIdValueDto>
+            {
+                new() { Id = 1, Value = "IT, Telecom and Utilities" },
+                new() { Id = 2, Value = "Transportation and Logistics" },
+                new() { Id = 3, Value = "HSE and Well-being, Catering, Safety, PPE" },
+                new() { Id = 4, Value = "Production (Drilling, Workover, Geology, Geophysics, Special Software)" },
+                new() { Id = 5, Value = "MRO (Maintenance, Repair, Inspection and Construction)" },
+                new() { Id = 6, Value = "General (Stationary, Consulting, Courier, Audit)" }
+            };
+
+            return businessCategories.SingleOrDefault(x => x.Id == id).Value;
+        }
+        
+        private static string GetEmergencyById(int id)
+        {
+            var emergencies = new List<ItemIdValueDto>
+            {
+                new() { Id = 1, Value = "Low" },
+                new() { Id = 2, Value = "Medium" },
+                new() { Id = 3, Value = "High" }
+            };
+
+            return emergencies.SingleOrDefault(x => x.Id == id).Value;
+        }
+        
+        private static string GetRFQStatusById(int id)
+        {
+            var statuses = new List<ItemIdValueDto>
+            {
+                new() { Id = 0, Value = "Draft" },
+                new() { Id = 1, Value = "Open" },
+                new  () { Id = 2, Value = "Closed" },
+                new  () { Id = 3, Value = "Canceled" }
+            };
+
+            return statuses.SingleOrDefault(x => x.Id == id).Value;
         }
     }
 }

@@ -504,7 +504,36 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<VendorRFQListDto>> GetVendorRFQList(string vendorCode, int userId)
         {
-            return null;
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = "EXEC dbo.SP_VendorRFQList @VendorCode, @UserId";
+            command.Parameters.AddWithValue(command, "@vendorCode", vendorCode);
+            command.Parameters.AddWithValue(command, "@UserId", userId);
+
+            await using var reader = await command.ExecuteReaderAsync();
+            var list = new List<VendorRFQListDto>();
+            while (await reader.ReadAsync())
+            {
+                list.Add(new VendorRFQListDto
+                {
+                    RFQMainId = reader.Get<int>("RFQMainId"),
+                    LineNo = reader.Get<long>("LineNo"),
+                    ParticipationStatus = reader.Get<string>("ParticipationStatus"),
+                    Emergency = reader.Get<int>("Emergency"),
+                    RFQStatus = reader.Get<int>("RFQStatus"),
+                    RFQNo = reader.Get<string>("RFQNo"),
+                    BusinessCategoryId = reader.Get<int>("BusinessCategoryId"),
+                    RFQType = reader.Get<int>("RFQType"),
+                    DesiredDeliveryDate = reader.Get<DateTime>("DesiredDeliveryDate"),
+                    RFQDate = reader.Get<DateTime>("RFQDate"),
+                    RFQDeadline = reader.Get<DateTime>("RFQDeadline"),
+                    RespondedDate = reader.Get<DateTime>("RespondedDate"),
+                    EnteredBy = reader.Get<string>("EnteredBy"),
+                    SentDate = reader.Get<DateTime>("SentDate"),
+                    CreatedDate = reader.Get<DateTime>("CreatedDate")
+                });
+            }
+
+            return list;
         }
     }
 }

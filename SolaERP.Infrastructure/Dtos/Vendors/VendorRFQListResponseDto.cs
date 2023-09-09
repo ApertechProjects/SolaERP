@@ -1,15 +1,15 @@
 namespace SolaERP.Application.Dtos.Vendors;
 
-public class VendorRFQListDto
+public class VendorRFQListResponseDto
 {
     public int RFQMainId { get; set; }
     public long LineNo { get; set; }
     public string ParticipationStatus { get; set; }
-    public int Emergency { get; set; }
-    public int RFQStatus { get; set; }
+    public string Emergency { get; set; }
+    public string RFQStatus { get; set; }
     public string RFQNo { get; set; }
-    public int BusinessCategoryId { get; set; }
-    public int RFQType { get; set; }
+    public string BusinessCategoryId { get; set; }
+    public string RFQType { get; set; }
     public DateTime DesiredDeliveryDate { get; set; }
     public DateTime RFQDate { get; set; }
     public DateTime RFQDeadline { get; set; }
