@@ -26,5 +26,5 @@ public interface IOrderService
     Task<ApiResponse<List<OrderCreateRequestListDto>>> GetOrderCreateListForRequestAsync(OrderCreateListRequest dto);
     Task<ApiResponse<List<OrderCreateBidListDto>>> GetOrderCreateListForBidsAsync(OrderCreateListRequest dto);
     Task<ApiResponse<OrderMainGetDto>> GetOrderCardAsync();
-    Task<ApiResponse<List<WithHoldingTaxData>>> WithHoldingTaxDatas();
+    Task<ApiResponse<WithHoldingTaxData>> WithHoldingTaxDatas(int vendorId);
 }

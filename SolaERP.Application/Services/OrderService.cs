@@ -15,14 +15,17 @@ public class OrderService : IOrderService
     private readonly IUnitOfWork _unitOfWork;
     private readonly ISupplierEvaluationRepository _supplierRepository;
     private readonly IGeneralService _generalService;
+    private readonly IVendorRepository _vendorRepository;
 
     public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork,
-        ISupplierEvaluationRepository supplierRepository, IGeneralService generalService)
+        ISupplierEvaluationRepository supplierRepository, IGeneralService generalService,
+        IVendorRepository vendorRepository)
     {
         _orderRepository = orderRepository;
         _unitOfWork = unitOfWork;
         _supplierRepository = supplierRepository;
         _generalService = generalService;
+        _vendorRepository = vendorRepository;
     }
 
     public async Task<ApiResponse<List<OrderTypeLoadDto>>> GetTypesAsync(int businessUnitId)
@@ -184,10 +187,13 @@ public class OrderService : IOrderService
         });
     }
 
-    public async Task<ApiResponse<List<WithHoldingTaxData>>> WithHoldingTaxDatas()
+    public async Task<ApiResponse<WithHoldingTaxData>> WithHoldingTaxDatas(int vendorId)
     {
-        return ApiResponse<List<WithHoldingTaxData>>.Success(
-            await _supplierRepository.WithHoldingTaxDatas()
+        var vendor = await _vendorRepository.GetHeader(vendorId);
+        var holdingTaxDatas = await _supplierRepository.WithHoldingTaxDatas();
+
+        return ApiResponse<WithHoldingTaxData>.Success(
+            holdingTaxDatas.SingleOrDefault(x => x.WithHoldingTaxId == vendor.WithHoldingTaxId)
         );
     }
 }

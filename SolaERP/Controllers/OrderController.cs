@@ -77,8 +77,8 @@ public class OrderController : CustomBaseController
     [HttpGet("[action]")]
     public async Task<IActionResult> GetOrderCard() => CreateActionResult(await _orderService.GetOrderCardAsync());
 
-    [HttpGet("[action]")]
-    public async Task<IActionResult> GetWithHoldingTaxData() =>
-        CreateActionResult( await  _orderService.WithHoldingTaxDatas());
-    
+    [HttpGet("[action]/{vendorId}")]
+    public async Task<IActionResult> GetWithHoldingTaxData(int vendorId) =>
+        CreateActionResult( await  _orderService.WithHoldingTaxDatas(vendorId));
+
 }
