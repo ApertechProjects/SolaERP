@@ -4,6 +4,7 @@ using SolaERP.Application.Dtos.Order;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.Order;
+using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.UnitOfWork;
 
 namespace SolaERP.Persistence.Services;
@@ -154,10 +155,11 @@ public class OrderService : IOrderService
         var result = await _orderRepository.GetOrderCreateListForRequestAsync(dto);
         for (int i = 0; i < result.Count; i++)
         {
-            result[i].BusinessCategoryName = businessCategories.SingleOrDefault(y => y.Id ==  result[i].BusinessCategoryId)?.Name;
+            result[i].BusinessCategoryName =
+                businessCategories.SingleOrDefault(y => y.Id == result[i].BusinessCategoryId)?.Name;
             result[i].LineNo = i + 1;
         }
-        
+
         return ApiResponse<List<OrderCreateRequestListDto>>.Success(result);
     }
 
@@ -180,5 +182,12 @@ public class OrderService : IOrderService
             RejectReasons = (await _generalService.RejectReasons()).Data,
             TaxDatas = await _supplierRepository.TaxDatas()
         });
+    }
+
+    public async Task<ApiResponse<List<WithHoldingTaxData>>> WithHoldingTaxDatas()
+    {
+        return ApiResponse<List<WithHoldingTaxData>>.Success(
+            await _supplierRepository.WithHoldingTaxDatas()
+        );
     }
 }

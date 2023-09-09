@@ -2,6 +2,7 @@ using SolaERP.Application.Dtos.Order;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.Order;
+using SolaERP.Application.Entities.Vendors;
 
 namespace SolaERP.Application.Contracts.Services;
 
@@ -25,4 +26,5 @@ public interface IOrderService
     Task<ApiResponse<List<OrderCreateRequestListDto>>> GetOrderCreateListForRequestAsync(OrderCreateListRequest dto);
     Task<ApiResponse<List<OrderCreateBidListDto>>> GetOrderCreateListForBidsAsync(OrderCreateListRequest dto);
     Task<ApiResponse<OrderMainGetDto>> GetOrderCardAsync();
+    Task<ApiResponse<List<WithHoldingTaxData>>> WithHoldingTaxDatas();
 }
