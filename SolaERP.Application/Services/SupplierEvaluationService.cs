@@ -804,6 +804,7 @@ namespace SolaERP.Persistence.Services
 
                         return new PrequalificationDto
                         {
+                            VendorPrequalificationId = correspondingValue?.VendorPrequalificationId ?? 0,
                             DesignId = design.PrequalificationDesignId,
                             LineNo = design.LineNo,
                             Discipline = design.Discipline,
@@ -979,6 +980,7 @@ namespace SolaERP.Persistence.Services
                         await CalculateScoring(correspondingValue, d, vendorId, attachments?.Count > 0);
                     var childDto = new DueDiligenceChildDto
                     {
+                        VendorDueDiligenceId = correspondingValue?.VendorDueDiligenceId ?? 0,
                         DesignId = d.DesignId,
                         LineNo = d.LineNo,
                         Question = d.Question,

@@ -12,6 +12,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
 
     public class DueDiligenceChildDto
     {
+        public int VendorDueDiligenceId { get; set; }
         private DateTime? _dateTimeValue;
         public int DesignId { get; set; }
         public int LineNo { get; set; }
@@ -146,7 +147,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public int Type { get; set; }
         public bool Disabled { get; set; }
     }
-    
+
     public class DueDiligenceDesignSaveDto
     {
         public string Title { get; set; }
@@ -155,6 +156,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
 
     public class DueDiligenceChildSaveDto
     {
+        public int VendorDueDiligenceId { get; set; }
         public int DesignId { get; set; }
         public int LineNo { get; set; }
 
