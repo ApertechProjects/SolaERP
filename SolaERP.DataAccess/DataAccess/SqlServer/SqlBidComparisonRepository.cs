@@ -26,7 +26,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
     public class SqlBidComparisonRepository : IBidComparisonRepository
     {
-
         private readonly IUnitOfWork _unitOfWork;
         public SqlBidComparisonRepository(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
@@ -50,7 +49,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@ComparisonDate", entity.ComparisonDate);
             command.Parameters.AddWithValue(command, "@Comparisondeadline", entity.ComparisonDeadline);
             command.Parameters.AddWithValue(command, "@SpecialistComment", entity.SpecialistComment);
-            command.Parameters.AddTableValue(command, "@SingleSourceReasonId", "SingleIdItems", entity.SingleSourceReasonId.ConvertListToDataTable());
+            command.Parameters.AddTableValue(command, "@SingleSourceReasonId", "SingleIdItems",
+                entity.SingleSourceReasonId.ConvertListToDataTable());
 
             command.Parameters.AddWithValue(command, "@UserId", entity.UserId);
 
@@ -119,16 +119,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 var reader = await command.ExecuteReaderAsync();
 
-                while(await reader.ReadAsync())
+                while (await reader.ReadAsync())
                 {
                     data.Add(GetBaseComparisonFromReader(reader).GetChild<BidComparisonAll>());
                 }
-
             }
+
             return data;
         }
 
-        public async Task<List<BidComparisonBidApprovalsLoad>> GetComparisonBidApprovals(BidComparisonBidApprovalsFilter filter)
+        public async Task<List<BidComparisonBidApprovalsLoad>> GetComparisonBidApprovals(
+            BidComparisonBidApprovalsFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             var data = new List<BidComparisonBidApprovalsLoad>();
@@ -146,14 +147,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     ApproveStatus = reader.Get<int>("ApproveStatus"),
                     BidMainId = reader.Get<int>("BidMainId"),
                     Sequence = reader.Get<int>("Sequence"),
-                    BidDetailId =reader.Get<int>("BidDetailId"),
+                    BidDetailId = reader.Get<int>("BidDetailId"),
                     RFQDetailId = reader.Get<int>("RFQDetailId")
                 });
             }
+
             return data;
         }
 
-        public async Task<List<BidComparisonApprovalInformationLoad>> GetComparisonApprovalInformations(BidComparisonApprovalInformationFilter filter)
+        public async Task<List<BidComparisonApprovalInformationLoad>> GetComparisonApprovalInformations(
+            BidComparisonApprovalInformationFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             var data = new List<BidComparisonApprovalInformationLoad>();
@@ -174,10 +177,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     SignaturePhoto = reader.Get<string>("SignaturePhoto")
                 });
             }
+
             return data;
         }
 
-        public async Task<List<BidComparisonBidDetailsLoad>> GetComparisonBidDetails(BidComparisonBidDetailsFilter filter)
+        public async Task<List<BidComparisonBidDetailsLoad>> GetComparisonBidDetails(
+            BidComparisonBidDetailsFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             var data = new List<BidComparisonBidDetailsLoad>();
@@ -200,12 +205,15 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     TotalAmount = reader.Get<decimal>("TotalAmount"),
                     UnitPrice = reader.Get<decimal>("UnitPrice"),
                     RFQDetailId = reader.Get<int>("RFQDetailId")
-                });;
+                });
+                ;
             }
+
             return data;
         }
 
-        public async Task<List<BidComparisonRFQDetailsLoad>> GetComparisonRFQDetails(BidComparisonRFQDetailsFilter filter)
+        public async Task<List<BidComparisonRFQDetailsLoad>> GetComparisonRFQDetails(
+            BidComparisonRFQDetailsFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             var data = new List<BidComparisonRFQDetailsLoad>();
@@ -227,6 +235,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     UOM = reader.Get<string>("UOM"),
                 });
             }
+
             return data;
         }
 
@@ -264,6 +273,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     VendorName = reader.Get<string>("VendorName")
                 });
             }
+
             return data;
         }
 
@@ -303,10 +313,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     Status = reader.Get<int>("Status")
                 };
             }
+
             return null;
         }
-        public async Task<List<BidComparisonSingleSourceReasonsLoad>> GetComparisonSingleSourceReasons(BidComparisonSingleSourceReasonsFilter filter)
-        {            
+
+        public async Task<List<BidComparisonSingleSourceReasonsLoad>> GetComparisonSingleSourceReasons(
+            BidComparisonSingleSourceReasonsFilter filter)
+        {
             var data = new List<BidComparisonSingleSourceReasonsLoad>();
 
             using var command = _unitOfWork.CreateCommand() as DbCommand;
@@ -324,6 +337,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     SingleSourcereasonId = reader.Get<int>("SingleSourcereasonId"),
                 });
             }
+
             return data;
         }
 
@@ -369,14 +383,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             var data = new List<BidComparisonDraftLoad>();
 
             using var reader = await command.ExecuteReaderAsync();
-            while(await reader.ReadAsync())
+            while (await reader.ReadAsync())
             {
                 data.Add(GetBaseComparisonFromReader(reader).GetChild<BidComparisonDraftLoad>());
             }
 
             return data;
         }
-        
+
         public async Task<List<BidComparisonHeldLoad>> GetComparisonHeld(BidComparisonHeldFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
@@ -414,7 +428,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                     @ApproveStatus";
 
 
-            command.Parameters.AddWithValue(command, "@BusinessUnitid",filter.BusinessUnitid);
+            command.Parameters.AddWithValue(command, "@BusinessUnitid", filter.BusinessUnitid);
             command.Parameters.AddWithValue(command, "@Emergency", filter.Emergency);
             command.Parameters.AddWithValue(command, "@DateFrom", filter.DateFrom);
             command.Parameters.AddWithValue(command, "@DateTo", filter.DateTo);
@@ -433,7 +447,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return data;
         }
 
-        public async Task<List<BidComparisonNotReleasedLoad>> GetComparisonNotReleased(BidComparisonNotReleasedFilter filter)
+        public async Task<List<BidComparisonNotReleasedLoad>> GetComparisonNotReleased(
+            BidComparisonNotReleasedFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = @"EXEC SP_BidComparisonNotReleasedLoad @BusinessUnitid,
@@ -482,7 +497,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
-
         private BaseBidComparisonLoad GetBaseComparisonFromReader(DbDataReader reader)
         {
             return new BaseBidComparisonLoad
@@ -501,6 +515,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 SingleSourceReasons = reader.Get<string>("SingleSourceReasons"),
                 SpecialistComment = reader.Get<string>("SpecialistComment"),
                 CreatedBy = reader.Get<string>("CreatedBy"),
+                ComparisonDate = reader.Get<DateTime>("ComparisonDate")
             };
         }
     }

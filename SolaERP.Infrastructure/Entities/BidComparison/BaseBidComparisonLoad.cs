@@ -16,6 +16,7 @@
         public DateTime RFQDeadline { get; set; }
         public string SpecialistComment { get; set; }
         public string CreatedBy { get; set; }
+        public DateTime ComparisonDate { get; set; }
 
         public T GetChild<T>() where T : BaseBidComparisonLoad, new()
         {
@@ -34,7 +35,8 @@
                 RowNum = this.RowNum,
                 SpecialistComment = this.SpecialistComment,
                 SingleSourceReasons = this.SingleSourceReasons,
-                CreatedBy = this.CreatedBy
+                CreatedBy = this.CreatedBy,
+                ComparisonDate = this.ComparisonDate
             };
         }
     }

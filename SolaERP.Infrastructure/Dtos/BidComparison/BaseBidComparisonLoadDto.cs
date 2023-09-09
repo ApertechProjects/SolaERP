@@ -16,5 +16,6 @@
         public DateTime RFQDeadline { get; set; }
         public string SpecialistComment { get; set; }
         public string CreatedBy { get; set; }
+        public DateTime ComparisonDate { get; set; }
     }
 }
