@@ -1,20 +1,17 @@
 ﻿using AutoMapper;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
-using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Dtos.Venndors;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.SupplierEvaluation;
-using SolaERP.Application.Entities.User;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Application.ViewModels;
 using SolaERP.DataAccess.Extensions;
-using System.Security.AccessControl;
 
 namespace SolaERP.Persistence.Services
 {
@@ -131,6 +128,13 @@ namespace SolaERP.Persistence.Services
             }
 
             return ApiResponse<List<VendorRFQListResponseDto>>.Success(list);
+        }
+
+        public async Task<ApiResponse<bool>> RFQVendorResponseChangeStatus(int rfqMainId, int status, string vendorCode)
+        {
+            return ApiResponse<bool>.Success(
+                await _repository.RFQVendorResponseChangeStatus(rfqMainId, status, vendorCode)
+            );
         }
 
         public async Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity,
@@ -396,7 +400,7 @@ namespace SolaERP.Persistence.Services
 
             return businessCategories.SingleOrDefault(x => x.Id == id).Value;
         }
-        
+
         private static string GetEmergencyById(int id)
         {
             var emergencies = new List<ItemIdValueDto>
@@ -408,15 +412,15 @@ namespace SolaERP.Persistence.Services
 
             return emergencies.SingleOrDefault(x => x.Id == id).Value;
         }
-        
+
         private static string GetRFQStatusById(int id)
         {
             var statuses = new List<ItemIdValueDto>
             {
                 new() { Id = 0, Value = "Draft" },
                 new() { Id = 1, Value = "Open" },
-                new  () { Id = 2, Value = "Closed" },
-                new  () { Id = 3, Value = "Canceled" }
+                new() { Id = 2, Value = "Closed" },
+                new() { Id = 3, Value = "Canceled" }
             };
 
             return statuses.SingleOrDefault(x => x.Id == id).Value;

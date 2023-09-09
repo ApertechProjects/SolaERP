@@ -1,19 +1,11 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Vendors;
-using SolaERP.Application.Entities.ApproveStages;
-using SolaERP.Application.Entities.Auth;
-using SolaERP.Application.Entities.Email;
-using SolaERP.Application.Entities.PrequalificationCategory;
-using SolaERP.Application.Entities.Status;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
-using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
-using System;
 using System.Data.Common;
-using System.Xml.Linq;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -534,6 +526,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
 
             return list;
+        }
+
+        public async Task<bool> RFQVendorResponseChangeStatus(int rfqMainId, int status, string vendorCode)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"EXEC dbo.SP_RFQVendorResponseChangeStatus 
+                                    @RFQMainid, @Status, @VendorCode";
+            command.Parameters.AddWithValue(command, "@RFQMainid", rfqMainId);
+            command.Parameters.AddWithValue(command, "@Status", status);
+            command.Parameters.AddWithValue(command, "@VendorCode", vendorCode);
+            
+            return await command.ExecuteNonQueryAsync() > 0;
         }
     }
 }

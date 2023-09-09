@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Models;
@@ -78,8 +79,15 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> HasVendorName([FromBody] VendorNameDto vendorNameDto)
             => CreateActionResult(await _service.HasVendorName(vendorNameDto.VendorName, User.Identity.Name));
 
-        [HttpGet("[action]/{vendorCode}")]
-        public async Task<IActionResult> GetVendorRFQList(string vendorCode)
+        [HttpGet("{vendorCode}")]
+        public async Task<IActionResult> GetVendorRFQList([FromRoute] string vendorCode)
             => CreateActionResult(await _service.GetVendorRFQList(vendorCode, User.Identity.Name));
+
+        [HttpGet]
+        public async Task<IActionResult> RFQVendorResponseChangeStatus(
+            [BindRequired] int rfqMainId,
+            [BindRequired] int status,
+            [BindRequired] string vendorCode)
+            => CreateActionResult(await _service.RFQVendorResponseChangeStatus(rfqMainId, status, vendorCode));
     }
 }
