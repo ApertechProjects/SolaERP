@@ -21,4 +21,5 @@ public interface IOrderRepository
     Task<OrderHeadLoaderDto> GetHeaderLoadAsync(int orderMainId);
     Task<List<OrderCreateRequestListDto>> GetOrderCreateListForRequestAsync(OrderCreateListRequest dto);
     Task<List<OrderCreateBidListDto>> GetOrderCreateListForBidsAsync(OrderCreateListRequest dto);
+    Task<List<OrderDetailLoadDto>> GetAllDetailsAsync(int orderMainId);
 }
