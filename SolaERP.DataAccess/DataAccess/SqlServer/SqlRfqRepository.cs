@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Item_Code;
 using SolaERP.Application.Entities.RFQ;
@@ -338,7 +339,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
+        public async Task<List<RFQSingleSourceReasonsLoad>> GetSingleSourceReasons(int rfqMainId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RFQSingleSourceReasonsLoad @RFQMainId";
 
+                command.Parameters.AddWithValue(command, "@RFQMainId", rfqMainId);
+                List<RFQSingleSourceReasonsLoad> data = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read()) data.Add(reader.GetByEntityStructure<RFQSingleSourceReasonsLoad>());
+                return data;
+            }
+        }
 
         public async Task<RFQMain> GetRFQMainAsync(int rfqMainId)
         {

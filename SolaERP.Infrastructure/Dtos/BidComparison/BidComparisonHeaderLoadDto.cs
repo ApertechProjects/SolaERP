@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Dtos.BidComparison;
+using SolaERP.Application.Dtos.RFQ;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,5 +33,6 @@ namespace SolaERP.Application.Entities.BidComparison
         public string SpecialistComment { get; set; }
 
         public List<BidComparisonSingleSourceReasonsLoadDto> SingleSourceReasons { get; set; }
+        public List<RFQSingleSourceReasonsLoadDto> RFQSingleSourceReasons { get; set; }
     }
 }

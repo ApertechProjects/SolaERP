@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Entities.RFQ;
+﻿using SolaERP.Application.Dtos.RFQ;
+using SolaERP.Application.Entities.RFQ;
 using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Contracts.Repositories
@@ -9,6 +10,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<RfqAll>> GetAllAsync(RfqAllFilter filter);
         Task<List<SingleSourceReasonModel>> GetSingleSourceReasonsAsync();
         Task<List<RfqVendorToSend>> GetVendorsForRfqAync(int businessCategoryId);
+        Task<List<RFQSingleSourceReasonsLoad>> GetSingleSourceReasons(int rfqMainId);
 
         Task<List<RFQInProgress>> GetInProgressesAsync(RFQFilterBase filter);
 
