@@ -810,9 +810,6 @@ namespace SolaERP.Persistence.Services
                             await _attachmentRepository.GetAttachmentsAsync(vendorId, null,
                                 SourceType.VEN_PREQ.ToString(), design.PrequalificationDesignId));
                         attachments = attachments.Count > 0 ? attachments : Enumerable.Empty<AttachmentDto>().ToList();
-                        if (design.PrequalificationDesignId == 23)
-                        {
-                        }
 
                         var correspondingValue = prequalificationValues.FirstOrDefault(v =>
                             v.PrequalificationDesignId == design.PrequalificationDesignId);
@@ -1066,10 +1063,6 @@ namespace SolaERP.Persistence.Services
         private (decimal Scoring, decimal AllPoint, decimal Outcome) CalculateScoring(ValueEntity inputValue,
             PrequalificationDesign d, List<PrequalificationGridData> allDesignGrid, bool hasAttachment)
         {
-            if (d.PrequalificationDesignId == 23)
-            {
-            }
-
             List<PrequalificationGridData> correspondingDesignGrid = null;
 
             if (d.HasGrid > 0)
