@@ -394,7 +394,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<List<BidComparisonHeldLoad>> GetComparisonHeld(BidComparisonHeldFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"EXEC SP_BidComparisonDraftLoad @BusinessUnitid,
+            command.CommandText = @"EXEC SP_BidComparisonHeldLoad @BusinessUnitid,
                                         @Emergency,
                                         @DateFrom,
                                         @DateTo";
