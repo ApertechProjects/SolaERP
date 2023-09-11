@@ -320,7 +320,7 @@ namespace SolaERP.Persistence.Services
                             {
                                 item.TextboxValue = "";
                             }
-                            
+
                             var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
                             dueInputModel.VendorId = vendorId;
 
@@ -810,6 +810,10 @@ namespace SolaERP.Persistence.Services
                             await _attachmentRepository.GetAttachmentsAsync(vendorId, null,
                                 SourceType.VEN_PREQ.ToString(), design.PrequalificationDesignId));
                         attachments = attachments.Count > 0 ? attachments : Enumerable.Empty<AttachmentDto>().ToList();
+                        if (design.PrequalificationDesignId == 23)
+                        {
+                        }
+
                         var correspondingValue = prequalificationValues.FirstOrDefault(v =>
                             v.PrequalificationDesignId == design.PrequalificationDesignId);
                         var calculationResult =
@@ -1062,6 +1066,10 @@ namespace SolaERP.Persistence.Services
         private (decimal Scoring, decimal AllPoint, decimal Outcome) CalculateScoring(ValueEntity inputValue,
             PrequalificationDesign d, List<PrequalificationGridData> allDesignGrid, bool hasAttachment)
         {
+            if (d.PrequalificationDesignId == 23)
+            {
+            }
+
             List<PrequalificationGridData> correspondingDesignGrid = null;
 
             if (d.HasGrid > 0)
@@ -1073,7 +1081,9 @@ namespace SolaERP.Persistence.Services
                                  (inputValue?.CheckboxValue == true ? d.HasCheckbox : 0) +
                                  (inputValue?.RadioboxValue == true ? d.HasRadiobox : 0) +
                                  (inputValue?.IntValue > 0 ? d.HasInt : 0) +
-                                 (inputValue?.DecimalValue > 0 ? d.HasDecimal : 0) +
+                                 (inputValue?.DecimalValue > 0 || !string.IsNullOrWhiteSpace(inputValue?.TextboxValue)
+                                     ? d.HasDecimal
+                                     : 0) +
                                  (inputValue?.DateTimeValue != null ? d.HasDateTime : 0) +
                                  (hasAttachment ? d.HasAttachment : 0) +
                                  (correspondingDesignGrid?.Count > 0 ? d.HasGrid : 0);
