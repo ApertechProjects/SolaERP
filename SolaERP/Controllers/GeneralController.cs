@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using RazorLight.Generation;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Persistence.Services;
@@ -12,6 +13,7 @@ namespace SolaERP.Controllers
     public class GeneralController : CustomBaseController
     {
         private readonly IGeneralService _generalService;
+
         public GeneralController(IGeneralService generalService)
         {
             _generalService = generalService;
@@ -28,5 +30,13 @@ namespace SolaERP.Controllers
         [HttpGet]
         public async Task<IActionResult> BusinessCategories()
             => CreateActionResult(await _generalService.BusinessCategories());
+
+        [HttpGet]
+        public async Task<IActionResult> GetBaseAndReportCurrencyRate(
+            [BindRequired] DateTime date,
+            [BindRequired] string currency,
+            [BindRequired] int businessUnitId) =>
+            CreateActionResult(await _generalService.GetBaseAndReportCurrencyRateAsync(date, currency, businessUnitId));
     }
+    
 }
