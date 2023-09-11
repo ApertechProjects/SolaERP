@@ -296,8 +296,7 @@ public class SqlOrderRepository : IOrderRepository
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
         command.CommandText = @"SET NOCOUNT OFF EXEC dbo.SP_OrderDetails_IUD @OrderMainId, @Data";
         command.Parameters.AddWithValue(command, "@OrderMainId", orderDetails[0].OrderMainId);
-        var a = orderDetails.ConvertToDataTable();
-        command.Parameters.AddTableValue(command, "@Data", "OrderDetailsType2", a);
+        command.Parameters.AddTableValue(command, "@Data", "OrderDetailsType", orderDetails.ConvertToDataTable());
 
         return await command.ExecuteNonQueryAsync() > 0;
     }
@@ -460,13 +459,13 @@ public class SqlOrderRepository : IOrderRepository
             LastPriceManually = reader.Get<decimal>("LastPriceManually"),
             OriginalItemCode = reader.Get<string>("OriginalItemCode"),
             UnitPrice = reader.Get<decimal>("UnitPrice"),
-            Total = reader.Get<decimal>("Total"),
+            TotalAmount = reader.Get<decimal>("Total"),
             BaseRate = reader.Get<decimal>("BaseRate"),
             BaseMultplyDivide = reader.Get<int>("BaseMultplyDivide"),
             ReportingRate = reader.Get<decimal>("ReportingRate"),
             ReportingMultplyDivide = reader.Get<int>("ReportingMultplyDivide"),
             ReportingTotal = reader.Get<decimal>("ReportingTotal"),
-            Discount = reader.Get<int>("Discount"),
+            DiscountType = reader.Get<int>("Discount"),
             DiscountValue = reader.Get<decimal>("DiscountValue"),
             DiscountedAmount = reader.Get<decimal>("DiscountedAmount"),
             GrossAmount = reader.Get<decimal>("GrossAmount"),

@@ -34,14 +34,14 @@ public class OrderDetailLoadDto
     public decimal LastPriceManually { get; set; }
     public string OriginalItemCode { get; set; }
     public decimal UnitPrice { get; set; }
-    public decimal Total { get; set; }
+    public decimal TotalAmount { get; set; }
     public decimal BaseRate { get; set; }
     public int BaseMultplyDivide { get; set; }
     public decimal ReportingRate { get; set; }
     public int ReportingMultplyDivide { get; set; }
     public decimal BaseTotal { get; set; }
     public decimal ReportingTotal { get; set; }
-    public int Discount { get; set; }
+    public int DiscountType { get; set; }
     public decimal DiscountValue { get; set; }
     public decimal DiscountedAmount { get; set; }
     public decimal GrossAmount { get; set; }
