@@ -69,22 +69,22 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<BidComparisonDto>> GetBidComparisonAsync(BidComparisonFilterDto filter)
         {
             var comparison = new BidComparisonDto();
-            var headerFilter = new BidComparisonHeaderFilter { BidComparisonId = filter.BidComparisonId, UserId = filter.UserId };
+            var headerFilter = new BidComparisonHeaderFilter { RFQMainId = filter.RFQMainId, UserId = filter.UserId };
             var header = await _bidComparisonRepository.GetComparisonHeader(headerFilter);
             comparison.BidComparisonHeader = _mapper.Map<BidComparisonHeaderLoadDto>(header);
 
-            var singleSourceFilter = new BidComparisonSingleSourceReasonsFilter { BidComparisonId = filter.BidComparisonId };
+            var singleSourceFilter = new BidComparisonSingleSourceReasonsFilter { RFQMainId = filter.RFQMainId };
             var singleSourceReasons = await _bidComparisonRepository.GetComparisonSingleSourceReasons(singleSourceFilter);
             comparison.BidComparisonHeader.SingleSourceReasons = _mapper.Map<List<BidComparisonSingleSourceReasonsLoadDto>>(singleSourceReasons);
 
-            var bidHeaderFilter = new BidComparisonBidHeaderFilter { BidComparisonId = filter.BidComparisonId, UserId = filter.UserId };
+            var bidHeaderFilter = new BidComparisonBidHeaderFilter { RFQMainId = filter.RFQMainId, UserId = filter.UserId };
             var bids = await _bidComparisonRepository.GetComparisonBidHeader(bidHeaderFilter);
             comparison.Bids = _mapper.Map<List<BidComparisonBidHeaderLoadDto>>(bids);
 
-            var bidDetailsFilter = new BidComparisonBidDetailsFilter { BidComparisonId = filter.BidComparisonId, UserId = filter.UserId };
+            var bidDetailsFilter = new BidComparisonBidDetailsFilter { RFQMainId = filter.RFQMainId, UserId = filter.UserId };
             var bidDetails = await _bidComparisonRepository.GetComparisonBidDetails(bidDetailsFilter);
 
-            var bidApprovalsFilter = new BidComparisonBidApprovalsFilter { BidComparisonId = filter.BidComparisonId, UserId = filter.UserId };
+            var bidApprovalsFilter = new BidComparisonBidApprovalsFilter { RFQMainId = filter.RFQMainId, UserId = filter.UserId };
             var bidApprovals = await _bidComparisonRepository.GetComparisonBidApprovals(bidApprovalsFilter);
 
             foreach (var bid in comparison.Bids)
@@ -93,11 +93,11 @@ namespace SolaERP.Persistence.Services
                 bid.BidApprovals = _mapper.Map<List<BidComparisonBidApprovalsLoadDto>>(bidApprovals.Where(x=> x.BidMainId == bid.BidMainId));
             }
 
-            var rfqDetailsFilter = new BidComparisonRFQDetailsFilter { BidComparisonId = filter.BidComparisonId, UserId = filter.UserId };
+            var rfqDetailsFilter = new BidComparisonRFQDetailsFilter { RFQMainId = filter.RFQMainId, UserId = filter.UserId };
             var rfqDetails = await _bidComparisonRepository.GetComparisonRFQDetails(rfqDetailsFilter);
             comparison.RfqDetails = _mapper.Map<List<BidComparisonRFQDetailsLoadDto>>(rfqDetails);
 
-            var approvalInformationFilter = new BidComparisonApprovalInformationFilter { BidComparisonId = filter.BidComparisonId };
+            var approvalInformationFilter = new BidComparisonApprovalInformationFilter { RFQMainId = filter.RFQMainId };
             var approvalInformations = await _bidComparisonRepository.GetComparisonApprovalInformations(approvalInformationFilter);
             comparison.ApprovalInformations = _mapper.Map<List<BidComparisonApprovalInformationLoadDto>>(approvalInformations);
 

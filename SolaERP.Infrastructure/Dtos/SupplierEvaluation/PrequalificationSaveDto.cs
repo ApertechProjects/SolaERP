@@ -4,6 +4,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation;
 
 public class PrequalificationSaveDto
 {
+    public int VendorPrequalificationId { get; set; }
     public int DesignId { get; set; }
     public int LineNo { get; set; }
     public string Discipline { get; set; }

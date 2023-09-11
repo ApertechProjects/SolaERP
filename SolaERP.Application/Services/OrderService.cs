@@ -4,6 +4,7 @@ using SolaERP.Application.Dtos.Order;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.Order;
+using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.UnitOfWork;
 
 namespace SolaERP.Persistence.Services;
@@ -14,14 +15,17 @@ public class OrderService : IOrderService
     private readonly IUnitOfWork _unitOfWork;
     private readonly ISupplierEvaluationRepository _supplierRepository;
     private readonly IGeneralService _generalService;
+    private readonly IVendorRepository _vendorRepository;
 
     public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork,
-        ISupplierEvaluationRepository supplierRepository, IGeneralService generalService)
+        ISupplierEvaluationRepository supplierRepository, IGeneralService generalService,
+        IVendorRepository vendorRepository)
     {
         _orderRepository = orderRepository;
         _unitOfWork = unitOfWork;
         _supplierRepository = supplierRepository;
         _generalService = generalService;
+        _vendorRepository = vendorRepository;
     }
 
     public async Task<ApiResponse<List<OrderTypeLoadDto>>> GetTypesAsync(int businessUnitId)
@@ -140,11 +144,11 @@ public class OrderService : IOrderService
         return ApiResponse<bool>.Success(true);
     }
 
-    public async Task<ApiResponse<List<OrderHeadLoaderDto>>> GetHeaderLoadAsync(int orderMainId)
+    public async Task<ApiResponse<OrderHeadLoaderDto>> GetHeaderLoadAsync(int orderMainId)
     {
-        return ApiResponse<List<OrderHeadLoaderDto>>.Success(
-            await _orderRepository.GetHeaderLoadAsync(orderMainId)
-        );
+        var orderHeader = await _orderRepository.GetHeaderLoadAsync(orderMainId);
+        orderHeader.OrderDetails = await _orderRepository.GetAllDetailsAsync(orderMainId);
+        return ApiResponse<OrderHeadLoaderDto>.Success(orderHeader);
     }
 
     public async Task<ApiResponse<List<OrderCreateRequestListDto>>> GetOrderCreateListForRequestAsync(
@@ -154,10 +158,11 @@ public class OrderService : IOrderService
         var result = await _orderRepository.GetOrderCreateListForRequestAsync(dto);
         for (int i = 0; i < result.Count; i++)
         {
-            result[i].BusinessCategoryName = businessCategories.SingleOrDefault(y => y.Id ==  result[i].BusinessCategoryId)?.Name;
+            result[i].BusinessCategoryName =
+                businessCategories.SingleOrDefault(y => y.Id == result[i].BusinessCategoryId)?.Name;
             result[i].LineNo = i + 1;
         }
-        
+
         return ApiResponse<List<OrderCreateRequestListDto>>.Success(result);
     }
 
@@ -180,5 +185,15 @@ public class OrderService : IOrderService
             RejectReasons = (await _generalService.RejectReasons()).Data,
             TaxDatas = await _supplierRepository.TaxDatas()
         });
+    }
+
+    public async Task<ApiResponse<WithHoldingTaxData>> WithHoldingTaxDatas(int vendorId)
+    {
+        var vendor = await _vendorRepository.GetHeader(vendorId);
+        var holdingTaxDatas = await _supplierRepository.WithHoldingTaxDatas();
+
+        return ApiResponse<WithHoldingTaxData>.Success(
+            holdingTaxDatas.SingleOrDefault(x => x.WithHoldingTaxId == vendor.WithHoldingTaxId)
+        );
     }
 }

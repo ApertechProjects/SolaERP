@@ -292,93 +292,103 @@ namespace SolaERP.Persistence.Services
 
                 if (command.DueDiligence is not null)
                 {
-                    tasks = tasks.Concat(command?.DueDiligence?.SelectMany(item =>
+                    foreach (var designSaveDto in command.DueDiligence)
                     {
-                        var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
-                        dueInputModel.VendorId = vendorId;
-
-                        if (!string.IsNullOrEmpty(item.DateTimeValue) && item.DateTimeValue != "null")
+                        tasks = tasks.Concat(designSaveDto.Childs.SelectMany(item =>
                         {
-                            dueInputModel.DateTimeValue = Convert.ToDateTime(item.DateTimeValue);
-                        }
-                        else
-                        {
-                            dueInputModel.DateTimeValue = null;
-                        }
-
-                        if (item.HasCheckBox == false)
-                        {
-                            item.CheckboxValue = false;
-                        }
-
-                        if (item.HasRadioBox == false)
-                        {
-                            item.RadioboxValue = false;
-                        }
-
-                        if (item.HasDateTime == false)
-                        {
-                            item.DateTimeValue = null;
-                        }
-
-                        if (item.TextareaValue == "null" || string.IsNullOrEmpty(item.TextareaValue))
-                        {
-                            item.TextareaValue = "";
-                        }
-
-                        if (item.TextboxValue == "null" || string.IsNullOrEmpty(item.TextboxValue))
-                        {
-                            item.TextboxValue = "";
-                        }
-
-                        var itemTasks = new List<Task<bool>>
-                        {
-                            _repository.UpdateDueAsync(dueInputModel)
-                        };
-
-                        if (item?.HasDataGrid == true)
-                        {
-                            itemTasks.AddRange(item?.GridDatas?.Select(gridData =>
+                            if (item.HasCheckBox == false)
                             {
-                                if (gridData.Type == 2)
-                                    return _repository.DeleteDueDesignGrid(gridData.Id);
+                                item.CheckboxValue = false;
+                            }
 
-                                var gridDatas = _mapper.Map<DueDiligenceGridModel>(gridData);
-                                gridDatas.DueDesignId = item.DesignId;
-                                gridDatas.VendorId = vendorId;
-
-                                return _repository.UpdateDueDesignGrid(gridDatas);
-                            }) ?? Enumerable.Empty<Task<bool>>());
-                        }
-
-                        if (item.Attachments != null)
-                        {
-                            itemTasks.AddRange(item.Attachments?.Select(attachment =>
+                            if (item.HasRadioBox == false)
                             {
-                                if (attachment.Type == 2)
+                                item.RadioboxValue = false;
+                            }
+
+                            if (item.HasDateTime == false)
+                            {
+                                item.DateTimeValue = null;
+                            }
+
+                            if (item.TextareaValue == "null" || string.IsNullOrEmpty(item.TextareaValue))
+                            {
+                                item.TextareaValue = "";
+                            }
+
+                            if (item.TextboxValue == "null" || string.IsNullOrEmpty(item.TextboxValue))
+                            {
+                                item.TextboxValue = "";
+                            }
+                            
+                            var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
+                            dueInputModel.VendorId = vendorId;
+
+                            if (!string.IsNullOrEmpty(item.DateTimeValue) && item.DateTimeValue != "null")
+                            {
+                                try
                                 {
-                                    _fileUploadService.DeleteFile(Modules.EvaluationForm, attachment.FileLink);
-                                    return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
+                                    dueInputModel.DateTimeValue = Convert.ToDateTime(item.DateTimeValue);
                                 }
-
-                                if (attachment.Type != 2 && attachment.AttachmentId <= 0)
+                                catch (Exception e)
                                 {
-                                    var attachedFile = _mapper.Map<AttachmentSaveModel>(attachment);
-                                    attachedFile.SourceId = vendorId;
-                                    attachedFile.SourceType = SourceType.VEN_DUE.ToString();
-                                    attachedFile.AttachmentTypeId = item.DesignId;
-                                    attachedFile.FileLink = _fileUploadService
-                                        .AddFile(new List<IFormFile> { attachment.File }, Modules.EvaluationForm,
-                                            new List<string>()).Result.Data[0];
-                                    return _attachmentRepository.SaveAttachmentAsync(attachedFile);
+                                    dueInputModel.DateTimeValue = null;
                                 }
+                            }
+                            else
+                            {
+                                dueInputModel.DateTimeValue = null;
+                            }
 
-                                return Task.FromResult(true);
-                            })!);
-                        }
+                            var itemTasks = new List<Task<bool>>
+                            {
+                                _repository.UpdateDueAsync(dueInputModel)
+                            };
 
-                        return itemTasks;
-                    })).ToList();
+                            if (item?.HasDataGrid == true)
+                            {
+                                itemTasks.AddRange(item?.GridDatas?.Select(gridData =>
+                                {
+                                    if (gridData.Type == 2)
+                                        return _repository.DeleteDueDesignGrid(gridData.Id);
+
+                                    var gridDatas = _mapper.Map<DueDiligenceGridModel>(gridData);
+                                    gridDatas.DueDesignId = item.DesignId;
+                                    gridDatas.VendorId = vendorId;
+
+                                    return _repository.UpdateDueDesignGrid(gridDatas);
+                                }) ?? Enumerable.Empty<Task<bool>>());
+                            }
+
+                            if (item.Attachments != null)
+                            {
+                                itemTasks.AddRange(item.Attachments?.Select(attachment =>
+                                {
+                                    if (attachment.Type == 2)
+                                    {
+                                        _fileUploadService.DeleteFile(Modules.EvaluationForm, attachment.FileLink);
+                                        return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
+                                    }
+
+                                    if (attachment.Type != 2 && attachment.AttachmentId <= 0)
+                                    {
+                                        var attachedFile = _mapper.Map<AttachmentSaveModel>(attachment);
+                                        attachedFile.SourceId = vendorId;
+                                        attachedFile.SourceType = SourceType.VEN_DUE.ToString();
+                                        attachedFile.AttachmentTypeId = item.DesignId;
+                                        attachedFile.FileLink = _fileUploadService
+                                            .AddFile(new List<IFormFile> { attachment.File }, Modules.EvaluationForm,
+                                                new List<string>()).Result.Data[0];
+                                        return _attachmentRepository.SaveAttachmentAsync(attachedFile);
+                                    }
+
+                                    return Task.FromResult(true);
+                                })!);
+                            }
+
+                            return itemTasks;
+                        })).ToList();
+                    }
                 }
 
                 #endregion
@@ -399,7 +409,7 @@ namespace SolaERP.Persistence.Services
                             item.RadioboxValue = false;
                         }
 
-                        if (item.HasDateTime == false)
+                        if (item.HasDateTime == false && string.IsNullOrEmpty(item.DateTimeValue))
                         {
                             item.DateTimeValue = null;
                         }
@@ -417,7 +427,14 @@ namespace SolaERP.Persistence.Services
                         var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
                         if (!string.IsNullOrEmpty(item.DateTimeValue) && item.DateTimeValue != "null")
                         {
-                            prequalificationValue.DateTimeValue = Convert.ToDateTime(item.DateTimeValue);
+                            try
+                            {
+                                prequalificationValue.DateTimeValue = Convert.ToDateTime(item.DateTimeValue);
+                            }
+                            catch (Exception e)
+                            {
+                                prequalificationValue.DateTimeValue = null;
+                            }
                         }
                         else
                         {
@@ -425,8 +442,6 @@ namespace SolaERP.Persistence.Services
                         }
 
                         prequalificationValue.VendorId = vendorId;
-                        prequalificationValue.DateTimeValue =
-                            prequalificationValue.DateTimeValue.ConvertDateToValidDate();
 
                         var tasksList = new List<Task<bool>>();
                         _repository.UpdatePrequalification(prequalificationValue); //+
@@ -803,6 +818,7 @@ namespace SolaERP.Persistence.Services
 
                         return new PrequalificationDto
                         {
+                            VendorPrequalificationId = correspondingValue?.VendorPrequalificationId ?? 0,
                             DesignId = design.PrequalificationDesignId,
                             LineNo = design.LineNo,
                             Discipline = design.Discipline,
@@ -978,6 +994,7 @@ namespace SolaERP.Persistence.Services
                         await CalculateScoring(correspondingValue, d, vendorId, attachments?.Count > 0);
                     var childDto = new DueDiligenceChildDto
                     {
+                        VendorDueDiligenceId = correspondingValue?.VendorDueDiligenceId ?? 0,
                         DesignId = d.DesignId,
                         LineNo = d.LineNo,
                         Question = d.Question,

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Models;
@@ -14,7 +15,6 @@ namespace SolaERP.API.Controllers
         public VendorController(IVendorService service) => _service = service;
 
 
-
         [HttpGet]
         public async Task<IActionResult> Filters()
             => CreateActionResult(await _service.GetFiltersAsync());
@@ -25,11 +25,11 @@ namespace SolaERP.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> GetByTax([FromQuery] string taxId)
-          => Ok(await _service.GetByTaxAsync(taxId));
+            => Ok(await _service.GetByTaxAsync(taxId));
 
         [HttpGet]
         public async Task<IActionResult> Vendors()
-           => CreateActionResult(await _service.Vendors(User.Identity.Name));
+            => CreateActionResult(await _service.Vendors(User.Identity.Name));
 
         [HttpPost]
         public async Task<IActionResult> GetAll(VendorAllCommandRequest request)
@@ -45,15 +45,15 @@ namespace SolaERP.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> GetHeld(VendorFilter filter)
-         => CreateActionResult(await _service.GetHeldAsync(User.Identity.Name, filter));
+            => CreateActionResult(await _service.GetHeldAsync(User.Identity.Name, filter));
 
         [HttpPost]
         public async Task<IActionResult> GetApproved(VendorFilter filter)
-         => CreateActionResult(await _service.GetApprovedAsync(User.Identity.Name, filter.Text));
+            => CreateActionResult(await _service.GetApprovedAsync(User.Identity.Name, filter.Text));
 
         [HttpPost]
         public async Task<IActionResult> GetRejected(VendorFilter filter)
-         => CreateActionResult(await _service.GetRejectedAsync(User.Identity.Name, filter));
+            => CreateActionResult(await _service.GetRejectedAsync(User.Identity.Name, filter));
 
         [HttpPost]
         public async Task<IActionResult> SendToApprove(VendorSendToApproveRequest request)
@@ -61,7 +61,7 @@ namespace SolaERP.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> ChangeStatus(VendorStatusModel model)
-                   => CreateActionResult(await _service.ChangeStatusAsync(model, User.Identity.Name));
+            => CreateActionResult(await _service.ChangeStatusAsync(model, User.Identity.Name));
 
         [HttpPost]
         public async Task<IActionResult> Save([FromForm] VendorCardDto vendor)
@@ -74,10 +74,20 @@ namespace SolaERP.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(VendorDeleteModel model)
             => CreateActionResult(await _service.DeleteAsync(User.Identity.Name, model));
-        
+
         [HttpPost]
         public async Task<IActionResult> HasVendorName([FromBody] VendorNameDto vendorNameDto)
             => CreateActionResult(await _service.HasVendorName(vendorNameDto.VendorName, User.Identity.Name));
 
+        [HttpGet("{vendorCode}")]
+        public async Task<IActionResult> GetVendorRFQList([FromRoute] string vendorCode)
+            => CreateActionResult(await _service.GetVendorRFQList(vendorCode, User.Identity.Name));
+
+        [HttpGet]
+        public async Task<IActionResult> RFQVendorResponseChangeStatus(
+            [BindRequired] int rfqMainId,
+            [BindRequired] int status,
+            [BindRequired] string vendorCode)
+            => CreateActionResult(await _service.RFQVendorResponseChangeStatus(rfqMainId, status, vendorCode));
     }
 }

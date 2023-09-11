@@ -113,7 +113,6 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<RequestCardAnalysis, RequestCardAnalysisDto>().ReverseMap();
             CreateMap<RequestTypes, RequestTypesDto>().ReverseMap();
             CreateMap<RequestMainDraftDto, RequestMainDraft>().ReverseMap();
-            CreateMap<RequestHeld, RequestHeldDto>().ReverseMap();
             CreateMap<LogInfo, LogInfoDto>().ReverseMap();
             CreateMap<ItemCode, ItemCodeDto>().ReverseMap();
             CreateMap<ItemCodeInfo, ItemCodeInfoDto>().ReverseMap();
@@ -508,10 +507,8 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<BidComparisonSendToApprove, BidComparisonSendToApproveDto>().ReverseMap();
 
             CreateMap<BidComparisonBidApprovalsFilter, BidComparionBidApprovalsFilterDto>().ReverseMap();
-            CreateMap<BidComparisonBidApprovalsLoad, BidComparisonBidApprovalsLoadDto>().
-                ForMember(dest => dest.ApproveStatus, opt => opt.MapFrom(src => ((Application.Enums.ApprovalStatus)src.ApproveStatus).ToString())).
-                ReverseMap();
-
+            CreateMap<BidComparisonBidApprovalsLoad, BidComparisonBidApprovalsLoadDto>().ReverseMap();
+            
             CreateMap<BidComparisonBidDetailsLoad, BidComparisonBidDetailsLoadDto>().ReverseMap();
             CreateMap<BidComparisonHeaderLoad, BidComparisonHeaderLoadDto>().
                 ForMember(dest => dest.ProcurementType, opt => opt.MapFrom(src => ((Application.Enums.ProcurementType)src.ProcurementType).ToString())).

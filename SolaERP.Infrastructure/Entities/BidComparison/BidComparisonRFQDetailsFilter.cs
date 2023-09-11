@@ -8,7 +8,7 @@ namespace SolaERP.Application.Entities.BidComparison
 {
     public class BidComparisonRFQDetailsFilter
     {
-        public int BidComparisonId { get; set; }
+        public int RFQMainId { get; set; }
         public int UserId { get; set; }
     }
 }

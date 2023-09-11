@@ -26,5 +26,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<VendorAllDto>>> GetApprovedAsync(string userIdentity, string text);
         Task<ApiResponse<bool>> DeleteAsync(string userIdentity, VendorDeleteModel model);
         Task<ApiResponse<bool>> HasVendorName(string vendorName, string userIdentity);
+        Task<ApiResponse<List<VendorRFQListResponseDto>>> GetVendorRFQList(string vendorCode, string userIdentity);
+        Task<ApiResponse<bool>> RFQVendorResponseChangeStatus(int rfqMainId, int status, string vendorCode);
     }
 }

@@ -1,19 +1,11 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Vendors;
-using SolaERP.Application.Entities.ApproveStages;
-using SolaERP.Application.Entities.Auth;
-using SolaERP.Application.Entities.Email;
-using SolaERP.Application.Entities.PrequalificationCategory;
-using SolaERP.Application.Entities.Status;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
-using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
-using System;
 using System.Data.Common;
-using System.Xml.Linq;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -500,6 +492,52 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return reader.Get<string>("VendorName");
 
             return null;
+        }
+
+        public async Task<List<VendorRFQListDto>> GetVendorRFQList(string vendorCode, int userId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = "EXEC dbo.SP_VendorRFQList @VendorCode, @UserId";
+            command.Parameters.AddWithValue(command, "@vendorCode", vendorCode);
+            command.Parameters.AddWithValue(command, "@UserId", userId);
+
+            await using var reader = await command.ExecuteReaderAsync();
+            var list = new List<VendorRFQListDto>();
+            while (await reader.ReadAsync())
+            {
+                list.Add(new VendorRFQListDto
+                {
+                    RFQMainId = reader.Get<int>("RFQMainId"),
+                    LineNo = reader.Get<long>("LineNo"),
+                    ParticipationStatus = reader.Get<string>("ParticipationStatus"),
+                    Emergency = reader.Get<int>("Emergency"),
+                    RFQStatus = reader.Get<int>("RFQStatus"),
+                    RFQNo = reader.Get<string>("RFQNo"),
+                    BusinessCategoryId = reader.Get<int>("BusinessCategoryId"),
+                    RFQType = reader.Get<int>("RFQType"),
+                    DesiredDeliveryDate = reader.Get<DateTime>("DesiredDeliveryDate"),
+                    RFQDate = reader.Get<DateTime>("RFQDate"),
+                    RFQDeadline = reader.Get<DateTime>("RFQDeadline"),
+                    RespondedDate = reader.Get<DateTime>("RespondedDate"),
+                    EnteredBy = reader.Get<string>("EnteredBy"),
+                    SentDate = reader.Get<DateTime>("SentDate"),
+                    CreatedDate = reader.Get<DateTime>("CreatedDate")
+                });
+            }
+
+            return list;
+        }
+
+        public async Task<bool> RFQVendorResponseChangeStatus(int rfqMainId, int status, string vendorCode)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"EXEC dbo.SP_RFQVendorResponseChangeStatus 
+                                    @RFQMainid, @Status, @VendorCode";
+            command.Parameters.AddWithValue(command, "@RFQMainid", rfqMainId);
+            command.Parameters.AddWithValue(command, "@Status", status);
+            command.Parameters.AddWithValue(command, "@VendorCode", vendorCode);
+            
+            return await command.ExecuteNonQueryAsync() > 0;
         }
     }
 }
