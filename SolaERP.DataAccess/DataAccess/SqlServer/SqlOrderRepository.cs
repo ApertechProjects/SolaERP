@@ -480,7 +480,22 @@ public class SqlOrderRepository : IOrderRepository
             RFQQTY = reader.Get<decimal>("RFQQTY"),
             ComparisonNo = reader.Get<string>("ComparisonNo"),
             BidQuantity = reader.Get<decimal>("BidQuantity"),
-            BaseTotal = reader.Get<decimal>("BaseTotal")
+            BaseTotal = reader.Get<decimal>("BaseTotal"),
+            TaxCode = reader.Get<string>("TaxCode"),
+            RUOM = reader.Get<string>("RUOM"),
+            RequestQuantity = reader.Get<decimal>("RequestQuantity"),
+            OrderAnalysisId = reader.Get<int>("OrderAnalysisId"),
+            CatId = reader.Get<int>("CatId"),
+            AnalysisCode1Id = reader.Get<int>("AnalysisCode1Id"),
+            AnalysisCode2Id = reader.Get<int>("AnalysisCode2Id"),
+            AnalysisCode3Id = reader.Get<int>("AnalysisCode3Id"),
+            AnalysisCode4Id = reader.Get<int>("AnalysisCode4Id"),
+            AnalysisCode5Id = reader.Get<int>("AnalysisCode5Id"),
+            AnalysisCode6Id = reader.Get<int>("AnalysisCode6Id"),
+            AnalysisCode7Id = reader.Get<int>("AnalysisCode7Id"),
+            AnalysisCode8Id = reader.Get<int>("AnalysisCode8Id"),
+            AnalysisCode9Id = reader.Get<int>("AnalysisCode9Id"),
+            AnalysisCode10Id = reader.Get<int>("AnalysisCode10Id")
         };
     }
 
@@ -647,7 +662,7 @@ public class SqlOrderRepository : IOrderRepository
         {
             OrderMainId = reader.Get<int>("OrderMainId"),
             OrderType = reader.Get<string>("Ordertype"),
-            LineNo = reader.Get<int>("LineNo"),
+            LineNo = reader.Get<long>("LineNo"),
             VendorCode = reader.Get<string>("VendorCode"),
             ApproveStatus = reader.Get<string>("ApproveStatus"),
             Comment = reader.Get<string>("Comment"),

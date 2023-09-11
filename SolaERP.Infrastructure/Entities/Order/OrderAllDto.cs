@@ -5,7 +5,7 @@ public class OrderAllDto : BaseEntity
     public int OrderMainId { get; set; }
     public string OrderNo { get; set; }
 
-    public int LineNo { get; set; }
+    public long LineNo { get; set; }
 
     public string VendorCode { get; set; }
     public string OrderType { get; set; }
