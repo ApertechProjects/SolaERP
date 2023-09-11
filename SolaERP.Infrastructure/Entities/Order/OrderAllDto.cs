@@ -4,6 +4,10 @@ public class OrderAllDto : BaseEntity
 {
     public int OrderMainId { get; set; }
     public string OrderNo { get; set; }
+
+    public long LineNo { get; set; }
+
+    public string VendorCode { get; set; }
     public string OrderType { get; set; }
     public string VendorName { get; set; }
     public string Currency { get; set; }

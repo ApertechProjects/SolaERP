@@ -13,6 +13,7 @@ public class OrderDetailLoadDto
     public string ItemName1 { get; set; }
     public string ItemName2 { get; set; }
     public string UOM { get; set; }
+    public string RUOM { get; set; }
     public string PUOM { get; set; }
     public int BusinessCategoryId { get; set; }
     public string BusinessCategoryCode { get; set; }
@@ -46,14 +47,28 @@ public class OrderDetailLoadDto
     public decimal DiscountedAmount { get; set; }
     public decimal GrossAmount { get; set; }
     public int TaxId { get; set; }
+    public string TaxCode { get; set; }
     public decimal TaxAmount { get; set; }
     public int Status { get; set; }
     public int ApproveStatus { get; set; }
     public DateTime RequestDate { get; set; }
     public DateTime RequestDeadline { get; set; }
     public string Buyer { get; set; }
+    public decimal RequestQuantity { get; set; }
     public string RFQNo { get; set; }
     public decimal RFQQTY { get; set; }
     public string ComparisonNo { get; set; }
     public decimal BidQuantity { get; set; }
+    public int OrderAnalysisId { get; set; }
+    public int CatId { get; set; }
+    public int AnalysisCode1Id { get; set; }
+    public int AnalysisCode2Id { get; set; }
+    public int AnalysisCode3Id { get; set; }
+    public int AnalysisCode4Id { get; set; }
+    public int AnalysisCode5Id { get; set; }
+    public int AnalysisCode6Id { get; set; }
+    public int AnalysisCode7Id { get; set; }
+    public int AnalysisCode8Id { get; set; }
+    public int AnalysisCode9Id { get; set; }
+    public int AnalysisCode10Id { get; set; }
 }
