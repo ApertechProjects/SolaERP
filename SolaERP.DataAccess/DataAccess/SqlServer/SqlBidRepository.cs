@@ -187,6 +187,7 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
             return new BidAll
             {
                 BidMainId = reader.Get<int>("BidMainId"),
+                Buyer = reader.Get<string>("Buyer"),
                 LineNo = reader.Get<long>("LineNo"),
                 RFQNo = reader.Get<string>("RFQNo"),
                 BidNo = reader.Get<string>("BidNo"),
