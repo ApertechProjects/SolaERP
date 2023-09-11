@@ -647,6 +647,8 @@ public class SqlOrderRepository : IOrderRepository
         {
             OrderMainId = reader.Get<int>("OrderMainId"),
             OrderType = reader.Get<string>("Ordertype"),
+            LineNo = reader.Get<int>("LineNo"),
+            VendorCode = reader.Get<string>("VendorCode"),
             ApproveStatus = reader.Get<string>("ApproveStatus"),
             Comment = reader.Get<string>("Comment"),
             Currency = reader.Get<string>("Currency"),
