@@ -53,7 +53,7 @@
         public decimal AllocatedQuantity { get; set; }
         public decimal LogisticsTotal { get; set; }
         public int POLine { get; set; }
-        public int ItemCategory { get; set; }
+        public int? ItemCategory { get; set; }
         public string RejectReason { get; set; }
         public string PurchaseOrder { get; set; }
         public int Sequence { get; set; }
