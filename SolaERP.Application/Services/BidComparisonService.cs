@@ -23,12 +23,16 @@ namespace SolaERP.Persistence.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IBidComparisonRepository _bidComparisonRepository;
+        private readonly IRfqRepository _rfqRepository;
 
-        public BidComparisonService(IUnitOfWork unitOfWork, IMapper mapper, IBidComparisonRepository bidComparisonRepository)
+        public BidComparisonService(IUnitOfWork unitOfWork, IMapper mapper, 
+            IBidComparisonRepository bidComparisonRepository,
+            IRfqRepository rfqRepository)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _bidComparisonRepository = bidComparisonRepository;
+            _rfqRepository = rfqRepository;
         }
 
         public async Task<ApiResponse<bool>> SaveBidComparisonAsync(BidComparisonCreateDto bidComparison)
@@ -76,6 +80,9 @@ namespace SolaERP.Persistence.Services
             var singleSourceFilter = new BidComparisonSingleSourceReasonsFilter { RFQMainId = filter.RFQMainId };
             var singleSourceReasons = await _bidComparisonRepository.GetComparisonSingleSourceReasons(singleSourceFilter);
             comparison.BidComparisonHeader.SingleSourceReasons = _mapper.Map<List<BidComparisonSingleSourceReasonsLoadDto>>(singleSourceReasons);
+
+            var rfqSingleSourceReasons = await _rfqRepository.GetSingleSourceReasons(comparison.BidComparisonHeader.RFQMainId);
+            comparison.BidComparisonHeader.RFQSingleSourceReasons = _mapper.Map<List<RFQSingleSourceReasonsLoadDto>>(rfqSingleSourceReasons);
 
             var bidHeaderFilter = new BidComparisonBidHeaderFilter { RFQMainId = filter.RFQMainId, UserId = filter.UserId };
             var bids = await _bidComparisonRepository.GetComparisonBidHeader(bidHeaderFilter);
