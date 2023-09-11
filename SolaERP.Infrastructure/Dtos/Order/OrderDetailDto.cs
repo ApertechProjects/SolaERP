@@ -26,8 +26,8 @@ public class OrderDetailDto
     public decimal? LastPriceManually { get; set; }
     public string OriginalItemCode { get; set; }
     public decimal UnitPrice { get; set; }
-    public decimal Total { get; set; }
-    public int Discount { get; set; }
+    public decimal TotalAmount { get; set; }
+    public int DiscountType { get; set; }
     public decimal DiscountValue { get; set; }
     public decimal DiscountedAmount { get; set; }
     public decimal GrossAmount { get; set; }
