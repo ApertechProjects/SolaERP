@@ -73,7 +73,7 @@ namespace SolaERP.Controllers
                 await _userService.UpdateUserIdentifierAsync(user.Id, token.RefreshToken, token.Expiration, 5);
 
                 var result = await _userService.CheckUserVerifyByVendor(dto.Email);
-                if (!result)
+                if (result)
                     return CreateActionResult(ApiResponse<AccountResponseDto>.Success(
                    new AccountResponseDto { Token = token, IsEvaluation = true }, 200));
 
