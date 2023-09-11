@@ -450,6 +450,7 @@ public class SqlOrderRepository : IOrderRepository
             Location = reader.Get<string>("Location"),
             AlternativeItem = reader.Get<bool>("AlternativeItem"),
             AccountCode = reader.Get<string>("AccountCode"),
+            AccountName = reader.Get<string>("AccountName"),
             Condition = reader.Get<int>("Condition"),
             TotalBudget = reader.Get<decimal>("TotalBudget"),
             RemainingBudget = reader.Get<decimal>("RemainingBudget"),
@@ -477,7 +478,10 @@ public class SqlOrderRepository : IOrderRepository
             RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
             Buyer = reader.Get<string>("Buyer"),
             RFQNo = reader.Get<string>("RFQNo"),
-            RFQQTY = reader.Get<decimal>("RFQQTY")
+            RFQQTY = reader.Get<decimal>("RFQQTY"),
+            ComparisonNo = reader.Get<string>("ComparisonNo"),
+            BidQuantity = reader.Get<decimal>("BidQuantity"),
+            BaseTotal = reader.Get<decimal>("BaseTotal")
         };
     }
 

@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Application.Dtos.Bid
+﻿namespace SolaERP.Application.Dtos.Bid
 {
     public class BidAllDto
     {
         public int BidMainId { get; set; }
+        public string Buyer { get; set; }
         public long LineNo { get; set; }
         public string RFQNo { get; set; }
         public string BidNo { get; set; }

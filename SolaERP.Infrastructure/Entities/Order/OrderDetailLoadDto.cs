@@ -24,6 +24,7 @@ public class OrderDetailLoadDto
     public string Location { get; set; }
     public bool AlternativeItem { get; set; }
     public string AccountCode { get; set; }
+    public string AccountName { get; set; }
     public int Condition { get; set; }
     public decimal TotalBudget { get; set; }
     public decimal RemainingBudget { get; set; }
@@ -51,7 +52,8 @@ public class OrderDetailLoadDto
     public DateTime RequestDate { get; set; }
     public DateTime RequestDeadline { get; set; }
     public string Buyer { get; set; }
-    public int RequestLine { get; set; }
     public string RFQNo { get; set; }
     public decimal RFQQTY { get; set; }
+    public string ComparisonNo { get; set; }
+    public decimal BidQuantity { get; set; }
 }
