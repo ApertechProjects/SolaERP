@@ -470,7 +470,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 return false;
             }
-            
+
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = "SELECT * FROM Procurement.Vendors WHERE VendorName = @VendorName";
             command.Parameters.AddWithValue(command, "@VendorName", vendorName);
@@ -507,6 +507,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 list.Add(new VendorRFQListDto
                 {
+                    BidMainId = reader.Get<int>("BidMainId"),
                     RFQMainId = reader.Get<int>("RFQMainId"),
                     LineNo = reader.Get<long>("LineNo"),
                     ParticipationStatus = reader.Get<string>("ParticipationStatus"),
@@ -531,11 +532,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<bool> RFQVendorResponseChangeStatus(int rfqMainId, int status, string vendorCode)
         {
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"SET NOCOUNT OFF EXEC SP_RFQVendorResponseChangeStatus @RFQMainid, @Status, @VendorCode";
+            command.CommandText =
+                @"SET NOCOUNT OFF EXEC SP_RFQVendorResponseChangeStatus @RFQMainid, @Status, @VendorCode";
             command.Parameters.AddWithValue(command, "@RFQMainid", rfqMainId);
             command.Parameters.AddWithValue(command, "@Status", status);
             command.Parameters.AddWithValue(command, "@VendorCode", vendorCode);
-            
+
             await _unitOfWork.SaveChangesAsync();
             return await command.ExecuteNonQueryAsync() > 0;
         }

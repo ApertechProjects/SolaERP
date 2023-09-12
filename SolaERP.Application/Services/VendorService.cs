@@ -109,6 +109,7 @@ namespace SolaERP.Persistence.Services
             {
                 list.Add(new VendorRFQListResponseDto
                 {
+                    BidMainId = item.BidMainId,
                     RFQMainId = item.RFQMainId,
                     CreatedDate = item.CreatedDate,
                     EnteredBy = item.EnteredBy,
@@ -301,7 +302,8 @@ namespace SolaERP.Persistence.Services
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
             List<Task<bool>> tasks = new();
             Vendor vendor = _mapper.Map<Vendor>(vendorDto);
-            vendor.BlackListDescription = string.IsNullOrEmpty(vendor.BlackListDescription) || vendor.BlackListDescription == "null"
+            vendor.BlackListDescription = string.IsNullOrEmpty(vendor.BlackListDescription) ||
+                                          vendor.BlackListDescription == "null"
                 ? ""
                 : vendor.BlackListDescription;
 
