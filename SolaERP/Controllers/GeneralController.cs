@@ -1,15 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using RazorLight.Generation;
 using SolaERP.Application.Contracts.Services;
-using SolaERP.Persistence.Services;
 
 namespace SolaERP.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
+    // [Authorize]
     public class GeneralController : CustomBaseController
     {
         private readonly IGeneralService _generalService;

@@ -45,6 +45,11 @@ namespace SolaERP.API.Controllers
             approve.UserId = Convert.ToInt32(User.Identity.Name);
             return CreateActionResult(await _bidComparisonService.ApproveBidComparisonAsync(approve));
         }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ChangeComparisonStatuses(List<BidComparisonApproveDto> approves)
+        {
+            return CreateActionResult(await _bidComparisonService.ApproveBidComparisonsAsync(approves, User.Identity.Name));
+        }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> SendComparisonToApprove(BidComparisonSendToApproveDto bidComparisonSendToApproveDto)

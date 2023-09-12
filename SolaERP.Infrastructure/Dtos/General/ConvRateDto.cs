@@ -7,5 +7,5 @@ public class ConvRateDto
     public string CurrCodeFrom { get; set; }
     public string CurrCodeTo { get; set; }
     public decimal ConvRate { get; set; }
-    public int MultiplyDivide { get; set; }
+    public short MultiplyDivide { get; set; }
 }

@@ -1,11 +1,7 @@
 ﻿using SolaERP.Application.Entities.General;
 using SolaERP.Application.Entities.Status;
 using SolaERP.Application.Entities.SupplierEvaluation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SolaERP.Application.Dtos.General;
 
 namespace SolaERP.Application.Contracts.Repositories
 {
@@ -14,6 +10,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<BusinessCategory>> BusinessCategories();
         Task<List<Status>> GetStatus();
         Task<List<RejectReason>> RejectReasons();
+        Task<List<ConvRateDto>> GetConvRateList(int businessUnitId);
 
     }
 }
