@@ -5,23 +5,21 @@ using SolaERP.Application.Dtos.General;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.Status;
 using SolaERP.Application.Entities.SupplierEvaluation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.Persistence.Services
 {
     public class GeneralService : IGeneralService
     {
         private readonly IGeneralRepository _generalRepository;
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
+        private readonly IBusinessUnitRepository _businessUnitRepository;
 
-        public GeneralService(IGeneralRepository generalRepository, IMapper mapper)
+        public GeneralService(IGeneralRepository generalRepository, IMapper mapper,
+            IBusinessUnitRepository businessUnitRepository)
         {
             _generalRepository = generalRepository;
             _mapper = mapper;
+            _businessUnitRepository = businessUnitRepository;
         }
 
         public async Task<ApiResponse<List<BusinessCategory>>> BusinessCategories()
@@ -51,8 +49,33 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<BaseAndReportCurrencyRate>> GetBaseAndReportCurrencyRateAsync(DateTime date,
             string currency, int businessUnitId)
         {
-            return ApiResponse<BaseAndReportCurrencyRate>.Success(
-                new BaseAndReportCurrencyRate() { BaseRate = 1.7m, ReportRate = 2.3m });
+            var convDtoList = await _generalRepository.GetConvRateList(businessUnitId);
+            var businessUnit = (await _businessUnitRepository.GetAllAsync())
+                .SingleOrDefault(x => x.BusinessUnitId == businessUnitId);
+
+            var singleResultBase = convDtoList.SingleOrDefault(x =>
+                x.EffFromDateTime <= date
+                && x.EffToDateTime >= date
+                && x.CurrCodeFrom == businessUnit.BaseCurrencyCode
+                && x.CurrCodeTo == currency
+            );
+
+            var singleResultReport = convDtoList.SingleOrDefault(x =>
+                x.EffFromDateTime <= date.Date
+                && x.EffToDateTime >= date.Date
+                && x.CurrCodeFrom == "AZN "
+                && x.CurrCodeTo == currency + " "
+            );
+
+            var result = new BaseAndReportCurrencyRate
+            {
+                BaseRate = 1.7m,
+                ReportRate = 2.3m,
+                BaseMultiplyOrDivide = 1,
+                ReportMultiplyOrDivide = 0
+            };
+
+            return ApiResponse<BaseAndReportCurrencyRate>.Success(result);
         }
     }
 }
