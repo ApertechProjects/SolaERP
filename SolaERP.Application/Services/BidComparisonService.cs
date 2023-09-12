@@ -82,7 +82,7 @@ namespace SolaERP.Persistence.Services
             header.ComparisonDate = header.ComparisonDate.ConvertDateToValidDate();
             header.RFQDeadline = header.RFQDeadline.ConvertDateToValidDate();
             header.Entrydate = header.Entrydate.ConvertDateToValidDate();
-            header.ComparisonDeadline = header.ComparisonDeadline.ConvertDateToValidDate();
+            header.Comparisondeadline = header.Comparisondeadline.ConvertDateToValidDate();
 
             comparison.BidComparisonHeader = _mapper.Map<BidComparisonHeaderLoadDto>(header);
 
