@@ -301,6 +301,9 @@ namespace SolaERP.Persistence.Services
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
             List<Task<bool>> tasks = new();
             Vendor vendor = _mapper.Map<Vendor>(vendorDto);
+            vendor.BlackListDescription = string.IsNullOrEmpty(vendor.BlackListDescription) || vendor.BlackListDescription == "null"
+                ? ""
+                : vendor.BlackListDescription;
 
             int userId = Convert.ToInt32(userIdentity);
             int vendorId = 0;
