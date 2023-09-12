@@ -13,6 +13,7 @@ namespace SolaERP.Application.Dtos.RFQ
         public string RFQNo { get; set; }
         public Emergency Emergency { get; set; }
         public DateTime? RFQDate { get; set; }
+        public string EnteredBy { get; set; }
         public DateTime? RFQDeadline { get; set; }
         public string Buyer { get; set; }
         public Enums.Status Status { get; set; }

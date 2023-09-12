@@ -76,7 +76,10 @@ namespace SolaERP.Persistence.Services
                 user.FullName = command.CompanyInformation.FullName;
                 user.PhoneNumber = command.CompanyInformation.PhoneNumber;
                 user.Description = command.CompanyInformation.Position;
-
+                var countries = await _repository.GetCountriesAsync();
+                command.CompanyInformation.Country = countries
+                    .SingleOrDefault(x => x.CountryName == command.CompanyInformation.Country.ToUpper())?
+                    .CountryCode;
 
                 Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
                 vendor.VendorId = user.VendorId;

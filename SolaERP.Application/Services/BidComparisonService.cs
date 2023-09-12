@@ -9,6 +9,7 @@ using SolaERP.Application.Entities.Bid;
 using SolaERP.Application.Entities.BidComparison;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.Persistence.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,6 +89,14 @@ namespace SolaERP.Persistence.Services
             var comparison = new BidComparisonDto();
             var headerFilter = new BidComparisonHeaderFilter { RFQMainId = filter.RFQMainId, UserId = filter.UserId };
             var header = await _bidComparisonRepository.GetComparisonHeader(headerFilter);
+            header.RequiredOnSiteDate = header.RequiredOnSiteDate.ConvertDateToValidDate();
+            header.RFQDate = header.RFQDate.ConvertDateToValidDate();
+            header.DesiredDeliveryDate = header.DesiredDeliveryDate.ConvertDateToValidDate();
+            header.ComparisonDate = header.ComparisonDate.ConvertDateToValidDate();
+            header.RFQDeadline = header.RFQDeadline.ConvertDateToValidDate();
+            header.Entrydate = header.Entrydate.ConvertDateToValidDate();
+            header.Comparisondeadline = header.Comparisondeadline.ConvertDateToValidDate();
+
             comparison.BidComparisonHeader = _mapper.Map<BidComparisonHeaderLoadDto>(header);
 
             var singleSourceFilter = new BidComparisonSingleSourceReasonsFilter { RFQMainId = filter.RFQMainId };
@@ -110,7 +119,7 @@ namespace SolaERP.Persistence.Services
             foreach (var bid in comparison.Bids)
             {
                 bid.BidDetails = _mapper.Map<List<BidComparisonBidDetailsLoadDto>>(bidDetails.Where(x => x.BidMainId == bid.BidMainId));
-                bid.BidApprovals = _mapper.Map<List<BidComparisonBidApprovalsLoadDto>>(bidApprovals.Where(x=> x.BidMainId == bid.BidMainId));
+                bid.BidApprovals = _mapper.Map<List<BidComparisonBidApprovalsLoadDto>>(bidApprovals.Where(x => x.BidMainId == bid.BidMainId));
             }
 
             var rfqDetailsFilter = new BidComparisonRFQDetailsFilter { RFQMainId = filter.RFQMainId, UserId = filter.UserId };
@@ -119,7 +128,14 @@ namespace SolaERP.Persistence.Services
 
             var approvalInformationFilter = new BidComparisonApprovalInformationFilter { RFQMainId = filter.RFQMainId };
             var approvalInformations = await _bidComparisonRepository.GetComparisonApprovalInformations(approvalInformationFilter);
+            //foreach (var item in approvalInformations)
+            //{
+            //    item.ApproveDate = item.ApproveDate.ConvertDateToValidDate();
+            //}
+
             comparison.ApprovalInformations = _mapper.Map<List<BidComparisonApprovalInformationLoadDto>>(approvalInformations);
+            foreach (var item in comparison.ApprovalInformations)
+                item.ApproveDate = item.ApproveDate.ConvertDateToValidDate();
 
             return ApiResponse<BidComparisonDto>.Success(comparison, 200);
         }

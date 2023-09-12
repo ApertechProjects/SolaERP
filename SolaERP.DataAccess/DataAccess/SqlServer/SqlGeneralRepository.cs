@@ -11,12 +11,14 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SolaERP.Application.Dtos.General;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
     public class SqlGeneralRepository : IGeneralRepository
     {
         private readonly IUnitOfWork _unitOfWork;
+
         public SqlGeneralRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -51,6 +53,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 {
                     status.Add(reader.GetByEntityStructure<Status>());
                 }
+
                 return status;
             }
         }
@@ -67,8 +70,33 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 {
                     rejectReasons.Add(reader.GetByEntityStructure<RejectReason>());
                 }
+
                 return rejectReasons;
             }
+        }
+
+        public async Task<List<ConvRateDto>> GetConvRateList(int businessUnitId)
+        {
+            List<ConvRateDto> resultList = new();
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = "EXEC dbo.SP_ConvRate @BusinessUnitId";
+            command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+            await using var reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                resultList.Add(new ConvRateDto
+                {
+                    EffFromDateTime = reader.Get<DateTime>("EFF_FROM_DATETIME"),
+                    EffToDateTime = reader.Get<DateTime>("EFF_TO_DATETIME"),
+                    CurrCodeFrom = reader.Get<string>("CURR_CODE_FROM"),
+                    CurrCodeTo = reader.Get<string>("CURR_CODE_TO"),
+                    ConvRate = reader.Get<decimal>("CONV_RATE"),
+                    MultiplyDivide = reader.Get<short>("MULTIPLY_DIVIDE")
+                });
+            }
+
+            return resultList;
         }
     }
 }

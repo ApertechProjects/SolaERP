@@ -14,16 +14,16 @@ namespace SolaERP.Application.Entities.BidComparison
         public string RFQNo { get; set; }
         public int BiddingType { get; set; }
         public int ProcurementType { get; set; }
-        public DateTime RFQDate { get; set; }
-        public DateTime RFQDeadline { get; set; }
+        public DateTime? RFQDate { get; set; }
+        public DateTime? RFQDeadline { get; set; }
         public int Emergency { get; set; }
         public string EnteredBy { get; set; }
         public DateTime? Entrydate { get; set; }
         public string ComparisonNo { get; set; }
-        public DateTime ComparisonDate { get; set; }
+        public DateTime? ComparisonDate { get; set; }
         public DateTime? Comparisondeadline { get; set; }
-        public DateTime RequiredOnSiteDate { get; set; }
-        public DateTime DesiredDeliveryDate { get; set; }
+        public DateTime? RequiredOnSiteDate { get; set; }
+        public DateTime? DesiredDeliveryDate { get; set; }
         public string Buyer { get; set; }
         public int ApproveStageMain { get; set; }
         public int Status { get; set; }

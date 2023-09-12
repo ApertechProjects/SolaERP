@@ -390,6 +390,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 PlaceOfDelivery = reader.Get<string>("PlaceOfDelivery"),
                 Comment = reader.Get<string>("Comment"),
                 OtherReasons = reader.Get<string>("OtherReasons"),
+                EnteredBy = reader.Get<string>("EnteredBy"),
                 BusinessCategoryId = reader.Get<int>("BusinessCategoryId"),
                 BiddingType = (BiddingType)reader.Get<int>("BiddingType")
             };
@@ -565,9 +566,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = @"SET NOCOUNT OFF EXEC SP_RFQVendorResponse_IUD @RFQMainId,@VendorCode,@UserId";
 
 
-                command.Parameters.AddWithValue(command, "@RFQMainId",vendorIUD.Id);
+                command.Parameters.AddWithValue(command, "@RFQMainId", vendorIUD.Id);
                 command.Parameters.AddTableValue(command, "@VendorCode", "SingleNvarcharItems", vendorIUD.VendorCodes.ConvertListToDataTable());
-                command.Parameters.AddWithValue(command, "@UserId",userId);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
