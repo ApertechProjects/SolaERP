@@ -233,6 +233,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     Description = reader.Get<string>("Description"),
                     RemainingBudget = reader.Get<decimal>("RemainingBudget"),
                     UOM = reader.Get<string>("UOM"),
+                    RFQDetailId = reader.Get<int>("RFQDetailId")
                 });
             }
 
@@ -302,7 +303,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     DesiredDeliveryDate = reader.Get<DateTime>("DesiredDeliveryDate"),
                     Emergency = reader.Get<int>("Emergency"),
                     EnteredBy = reader.Get<string>("EnteredBy"),
-                    Entrydate = reader.Get<DateTime?>("Entrydate"),
+                    Entrydate = reader.Get<DateTime>("Entrydate"),
                     ProcurementType = reader.Get<int>("ProcurementType"),
                     RequiredOnSiteDate = reader.Get<DateTime>("RequiredOnSiteDate"),
                     RFQDate = reader.Get<DateTime>("RFQDate"),

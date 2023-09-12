@@ -483,7 +483,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     Id = reader.Get<int>("BusinessCategoryId"),
                     Name = reader.Get<string>("BusinessCategoryName")
                 },
-
             };
         }
 

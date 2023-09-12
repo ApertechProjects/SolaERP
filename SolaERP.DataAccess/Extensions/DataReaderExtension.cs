@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Attributes;
+﻿using Newtonsoft.Json.Linq;
+using SolaERP.Application.Attributes;
 using SolaERP.Application.Entities;
 using System.Data;
 using System.Data.SqlClient;
@@ -9,32 +10,23 @@ namespace SolaERP.DataAccess.Extensions
 {
     public static class DataReaderExtension
     {
-        public static T Get<T>(this IDataReader reader, string columnName)
+
+        public static T? Get<T>(this IDataReader reader, string columnName)
         {
-            string date = null;
             T returnType = default(T);
             var value = reader[columnName];
 
             if (value != DBNull.Value && value != null)
                 returnType = (T)value;
-
-            //else
-            //    return date;
-
+            //else if (typeof(T) == typeof(DateTime))
+            //{
+            //    string value1 = string.IsNullOrEmpty(reader[columnName]?.ToString()) ? null : reader[columnName].ToString();
+            //    returnType = (T)Convert.ChangeType(value1, typeof(DateTime));
+            //}
             return returnType;
         }
 
 
-
-        /// <summary>
-        ///This code implements a method that reads data from an IDataReader and returns an object of type T, where T is a subclass of BaseEntity.
-        ///The method uses reflection to access the properties of the T type, and it checks each property to see if it has the DbIgnoreAttribute attribute.
-        ///If it does, the property is skipped. If the property is a subclass of BaseEntity, the method invokes itself recursively to get the values for the properties of the sub-entity. 
-        ///Finally, the values from the IDataReader are set to the properties of the returned object.
-        ///</summary>
-        /// <typeparam name="T">The type of the entity object to return.</typeparam>
-        /// <param name="reader">The IDataReader to convert.</param>
-        /// <returns>An entity object of type T.</returns>
         public static T GetByEntityStructure<T>(this IDataReader reader, params string[] ignoredProperties) where T : BaseEntity, new()
         {
             var obj = new T();
