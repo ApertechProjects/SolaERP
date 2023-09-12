@@ -54,6 +54,19 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(saveResponse, 200);
         }
 
+        public async Task<ApiResponse<bool>> ApproveBidComparisonsAsync(List<BidComparisonApproveDto> bidComparisonApproves, string userIdentity)
+        {
+            foreach(var bidComparisonApprove in bidComparisonApproves)
+            {
+                var entity = _mapper.Map<BidComparisonApprove>(bidComparisonApprove);
+                entity.UserId = Convert.ToInt32(userIdentity);
+                await _bidComparisonRepository.ApproveComparisonAsync(entity);
+            }
+            await _unitOfWork.SaveChangesAsync();
+
+            return ApiResponse<bool>.Success(true, 200);
+        }
+
         public async Task<ApiResponse<bool>> SendComparisonToApproveAsync(BidComparisonSendToApproveDto bidComparisonSendToApprove)
         {
             var entity = _mapper.Map<BidComparisonSendToApprove>(bidComparisonSendToApprove);

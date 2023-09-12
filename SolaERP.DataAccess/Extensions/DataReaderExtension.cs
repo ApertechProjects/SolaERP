@@ -11,23 +11,20 @@ namespace SolaERP.DataAccess.Extensions
     {
         public static T Get<T>(this IDataReader reader, string columnName)
         {
-            object date = null;
+            string date = null;
             T returnType = default(T);
             var value = reader[columnName];
 
             if (value != DBNull.Value && value != null)
                 returnType = (T)value;
 
-            //if (typeof(DateTime) == typeof(T))
-            //    if (value == DBNull.Value)
-            //    {
-            //        return (T)date;
-            //    }
+            //else
+            //    return date;
 
             return returnType;
         }
 
-       
+
 
         /// <summary>
         ///This code implements a method that reads data from an IDataReader and returns an object of type T, where T is a subclass of BaseEntity.
