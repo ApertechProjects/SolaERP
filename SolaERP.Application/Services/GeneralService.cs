@@ -56,23 +56,31 @@ namespace SolaERP.Persistence.Services
             var singleResultBase = convDtoList.SingleOrDefault(x =>
                 x.EffFromDateTime <= date
                 && x.EffToDateTime >= date
-                && x.CurrCodeFrom == businessUnit.BaseCurrencyCode
-                && x.CurrCodeTo == currency
+                && x.CurrCodeFrom == currency + "  "
+                && x.CurrCodeTo == businessUnit.BaseCurrencyCode + "  "
             );
 
             var singleResultReport = convDtoList.SingleOrDefault(x =>
-                x.EffFromDateTime <= date.Date
-                && x.EffToDateTime >= date.Date
-                && x.CurrCodeFrom == "AZN "
-                && x.CurrCodeTo == currency + " "
+                x.EffFromDateTime <= date
+                && x.EffToDateTime >= date
+                && x.CurrCodeFrom == businessUnit.BaseCurrencyCode + "  "
+                && x.CurrCodeTo == businessUnit.ReportingCurrencyCode + "  "
             );
+
+            if (singleResultBase is null || singleResultReport is null)
+            {
+                var dateStringFormatted = date.ToString("dd/MM/yyyy");
+                 string message =
+                     $"There is no currency rate at date {dateStringFormatted}, please contact the finance department.";
+                return ApiResponse<BaseAndReportCurrencyRate>.Fail(message, 444);
+            }
 
             var result = new BaseAndReportCurrencyRate
             {
-                BaseRate = 1.7m,
-                ReportRate = 2.3m,
-                BaseMultiplyOrDivide = 1,
-                ReportMultiplyOrDivide = 0
+                BaseRate = singleResultBase.ConvRate,
+                ReportRate = singleResultReport.ConvRate,
+                BaseMultiplyOrDivide = singleResultBase.MultiplyDivide,
+                ReportMultiplyOrDivide = singleResultReport.MultiplyDivide
             };
 
             return ApiResponse<BaseAndReportCurrencyRate>.Success(result);
