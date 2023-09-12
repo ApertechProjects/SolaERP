@@ -296,8 +296,7 @@ public class SqlOrderRepository : IOrderRepository
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
         command.CommandText = @"SET NOCOUNT OFF EXEC dbo.SP_OrderDetails_IUD @OrderMainId, @Data";
         command.Parameters.AddWithValue(command, "@OrderMainId", orderDetails[0].OrderMainId);
-        var a = orderDetails.ConvertToDataTable();
-        command.Parameters.AddTableValue(command, "@Data", "OrderDetailsType2", a);
+        command.Parameters.AddTableValue(command, "@Data", "OrderDetailsType", orderDetails.ConvertToDataTable());
 
         return await command.ExecuteNonQueryAsync() > 0;
     }
@@ -450,6 +449,7 @@ public class SqlOrderRepository : IOrderRepository
             Location = reader.Get<string>("Location"),
             AlternativeItem = reader.Get<bool>("AlternativeItem"),
             AccountCode = reader.Get<string>("AccountCode"),
+            AccountName = reader.Get<string>("AccountName"),
             Condition = reader.Get<int>("Condition"),
             TotalBudget = reader.Get<decimal>("TotalBudget"),
             RemainingBudget = reader.Get<decimal>("RemainingBudget"),
@@ -459,13 +459,13 @@ public class SqlOrderRepository : IOrderRepository
             LastPriceManually = reader.Get<decimal>("LastPriceManually"),
             OriginalItemCode = reader.Get<string>("OriginalItemCode"),
             UnitPrice = reader.Get<decimal>("UnitPrice"),
-            Total = reader.Get<decimal>("Total"),
+            TotalAmount = reader.Get<decimal>("Total"),
             BaseRate = reader.Get<decimal>("BaseRate"),
             BaseMultplyDivide = reader.Get<int>("BaseMultplyDivide"),
             ReportingRate = reader.Get<decimal>("ReportingRate"),
             ReportingMultplyDivide = reader.Get<int>("ReportingMultplyDivide"),
             ReportingTotal = reader.Get<decimal>("ReportingTotal"),
-            Discount = reader.Get<int>("Discount"),
+            DiscountType = reader.Get<int>("Discount"),
             DiscountValue = reader.Get<decimal>("DiscountValue"),
             DiscountedAmount = reader.Get<decimal>("DiscountedAmount"),
             GrossAmount = reader.Get<decimal>("GrossAmount"),
@@ -477,7 +477,25 @@ public class SqlOrderRepository : IOrderRepository
             RequestDeadline = reader.Get<DateTime>("RequestDeadline"),
             Buyer = reader.Get<string>("Buyer"),
             RFQNo = reader.Get<string>("RFQNo"),
-            RFQQTY = reader.Get<decimal>("RFQQTY")
+            RFQQTY = reader.Get<decimal>("RFQQTY"),
+            ComparisonNo = reader.Get<string>("ComparisonNo"),
+            BidQuantity = reader.Get<decimal>("BidQuantity"),
+            BaseTotal = reader.Get<decimal>("BaseTotal"),
+            TaxCode = reader.Get<string>("TaxCode"),
+            RUOM = reader.Get<string>("RUOM"),
+            RequestQuantity = reader.Get<decimal>("RequestQuantity"),
+            OrderAnalysisId = reader.Get<int>("OrderAnalysisId"),
+            CatId = reader.Get<int>("CatId"),
+            AnalysisCode1Id = reader.Get<int>("AnalysisCode1Id"),
+            AnalysisCode2Id = reader.Get<int>("AnalysisCode2Id"),
+            AnalysisCode3Id = reader.Get<int>("AnalysisCode3Id"),
+            AnalysisCode4Id = reader.Get<int>("AnalysisCode4Id"),
+            AnalysisCode5Id = reader.Get<int>("AnalysisCode5Id"),
+            AnalysisCode6Id = reader.Get<int>("AnalysisCode6Id"),
+            AnalysisCode7Id = reader.Get<int>("AnalysisCode7Id"),
+            AnalysisCode8Id = reader.Get<int>("AnalysisCode8Id"),
+            AnalysisCode9Id = reader.Get<int>("AnalysisCode9Id"),
+            AnalysisCode10Id = reader.Get<int>("AnalysisCode10Id")
         };
     }
 
@@ -644,6 +662,8 @@ public class SqlOrderRepository : IOrderRepository
         {
             OrderMainId = reader.Get<int>("OrderMainId"),
             OrderType = reader.Get<string>("Ordertype"),
+            LineNo = reader.Get<long>("LineNo"),
+            VendorCode = reader.Get<string>("VendorCode"),
             ApproveStatus = reader.Get<string>("ApproveStatus"),
             Comment = reader.Get<string>("Comment"),
             Currency = reader.Get<string>("Currency"),

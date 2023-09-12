@@ -297,12 +297,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     BusinessUnitId = reader.Get<int>("BusinessUnitId"),
                     Buyer = reader.Get<string>("Buyer"),
                     ComparisonDate = reader.Get<DateTime>("ComparisonDate"),
-                    ComparisonDeadline = reader.Get<DateTime>("ComparisonDeadline"),
+                    Comparisondeadline = reader.Get<DateTime>("Comparisondeadline"),
                     ComparisonNo = reader.Get<string>("ComparisonNo"),
                     DesiredDeliveryDate = reader.Get<DateTime>("DesiredDeliveryDate"),
                     Emergency = reader.Get<int>("Emergency"),
                     EnteredBy = reader.Get<string>("EnteredBy"),
-                    Entrydate = reader.Get<DateTime>("Entrydate"),
+                    Entrydate = reader.Get<DateTime?>("Entrydate"),
                     ProcurementType = reader.Get<int>("ProcurementType"),
                     RequiredOnSiteDate = reader.Get<DateTime>("RequiredOnSiteDate"),
                     RFQDate = reader.Get<DateTime>("RFQDate"),
@@ -394,7 +394,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<List<BidComparisonHeldLoad>> GetComparisonHeld(BidComparisonHeldFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"EXEC SP_BidComparisonDraftLoad @BusinessUnitid,
+            command.CommandText = @"EXEC SP_BidComparisonHeldLoad @BusinessUnitid,
                                         @Emergency,
                                         @DateFrom,
                                         @DateTo";

@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Item_Code;
 using SolaERP.Application.Entities.RFQ;
@@ -338,7 +339,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
+        public async Task<List<RFQSingleSourceReasonsLoad>> GetSingleSourceReasons(int rfqMainId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_RFQSingleSourceReasonsLoad @RFQMainId";
 
+                command.Parameters.AddWithValue(command, "@RFQMainId", rfqMainId);
+                List<RFQSingleSourceReasonsLoad> data = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read()) data.Add(reader.GetByEntityStructure<RFQSingleSourceReasonsLoad>());
+                return data;
+            }
+        }
 
         public async Task<RFQMain> GetRFQMainAsync(int rfqMainId)
         {
@@ -376,6 +390,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 PlaceOfDelivery = reader.Get<string>("PlaceOfDelivery"),
                 Comment = reader.Get<string>("Comment"),
                 OtherReasons = reader.Get<string>("OtherReasons"),
+                EnteredBy = reader.Get<string>("EnteredBy"),
                 BusinessCategoryId = reader.Get<int>("BusinessCategoryId"),
                 BiddingType = (BiddingType)reader.Get<int>("BiddingType")
             };
@@ -551,9 +566,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = @"SET NOCOUNT OFF EXEC SP_RFQVendorResponse_IUD @RFQMainId,@VendorCode,@UserId";
 
 
-                command.Parameters.AddWithValue(command, "@RFQMainId",vendorIUD.Id);
+                command.Parameters.AddWithValue(command, "@RFQMainId", vendorIUD.Id);
                 command.Parameters.AddTableValue(command, "@VendorCode", "SingleNvarcharItems", vendorIUD.VendorCodes.ConvertListToDataTable());
-                command.Parameters.AddWithValue(command, "@UserId",userId);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }

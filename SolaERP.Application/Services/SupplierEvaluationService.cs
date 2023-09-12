@@ -76,7 +76,10 @@ namespace SolaERP.Persistence.Services
                 user.FullName = command.CompanyInformation.FullName;
                 user.PhoneNumber = command.CompanyInformation.PhoneNumber;
                 user.Description = command.CompanyInformation.Position;
-
+                var countries = await _repository.GetCountriesAsync();
+                command.CompanyInformation.Country = countries
+                    .SingleOrDefault(x => x.CountryName == command.CompanyInformation.Country.ToUpper())?
+                    .CountryCode;
 
                 Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
                 vendor.VendorId = user.VendorId;
@@ -320,7 +323,7 @@ namespace SolaERP.Persistence.Services
                             {
                                 item.TextboxValue = "";
                             }
-                            
+
                             var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
                             dueInputModel.VendorId = vendorId;
 
@@ -810,6 +813,13 @@ namespace SolaERP.Persistence.Services
                             await _attachmentRepository.GetAttachmentsAsync(vendorId, null,
                                 SourceType.VEN_PREQ.ToString(), design.PrequalificationDesignId));
                         attachments = attachments.Count > 0 ? attachments : Enumerable.Empty<AttachmentDto>().ToList();
+                        
+                        attachments = attachments.Select(x =>
+                        {
+                            x.FileLink = _fileUploadService.GetDownloadFileLink(x.FileLink, Modules.EvaluationForm);
+                            return x;
+                        }).ToList();
+
                         var correspondingValue = prequalificationValues.FirstOrDefault(v =>
                             v.PrequalificationDesignId == design.PrequalificationDesignId);
                         var calculationResult =
@@ -1073,7 +1083,9 @@ namespace SolaERP.Persistence.Services
                                  (inputValue?.CheckboxValue == true ? d.HasCheckbox : 0) +
                                  (inputValue?.RadioboxValue == true ? d.HasRadiobox : 0) +
                                  (inputValue?.IntValue > 0 ? d.HasInt : 0) +
-                                 (inputValue?.DecimalValue > 0 ? d.HasDecimal : 0) +
+                                 (inputValue?.DecimalValue > 0 || !string.IsNullOrWhiteSpace(inputValue?.TextboxValue)
+                                     ? d.HasDecimal
+                                     : 0) +
                                  (inputValue?.DateTimeValue != null ? d.HasDateTime : 0) +
                                  (hasAttachment ? d.HasAttachment : 0) +
                                  (correspondingDesignGrid?.Count > 0 ? d.HasGrid : 0);

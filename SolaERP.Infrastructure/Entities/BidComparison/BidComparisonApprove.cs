@@ -13,5 +13,7 @@ namespace SolaERP.Application.Entities.BidComparison
         public int ApproveStatus { get; set; }
         public int RFQDeatilid { get; set; }
         public int UserId { get; set; }
+        public string Comment { get; set; }
+        public int RejectReasonId { get; set; }
     }
 }

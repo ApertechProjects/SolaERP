@@ -16,10 +16,11 @@ namespace SolaERP.Application.Entities.RFQ
         public DateTime? RFQDate { get; set; }
         public DateTime? RFQDeadline { get; set; }
         public string Buyer { get; set; }
+        public string EnteredBy { get; set; }
         public Enums.Status Status { get; set; }
         public DateTime? RequiredOnSiteDate { get; set; }
         public DateTime? DesiredDeliveryDate { get; set; }
-        public DateTime? SentDate { get; set; } 
+        public DateTime? SentDate { get; set; }
         public bool SingleUnitPrice { get; set; }
         public ProcurementType ProcurementType { get; set; }
         public string PlaceOfDelivery { get; set; }

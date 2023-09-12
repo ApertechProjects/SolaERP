@@ -17,6 +17,7 @@ namespace SolaERP.Persistence.Services
     {
         private readonly IGeneralRepository _generalRepository;
         private IMapper _mapper;
+
         public GeneralService(IGeneralRepository generalRepository, IMapper mapper)
         {
             _generalRepository = generalRepository;
@@ -45,6 +46,13 @@ namespace SolaERP.Persistence.Services
             if (dto.Count > 0)
                 return ApiResponse<List<RejectReasonDto>>.Success(dto, 200);
             return ApiResponse<List<RejectReasonDto>>.Fail("Data not found", 404);
+        }
+
+        public async Task<ApiResponse<BaseAndReportCurrencyRate>> GetBaseAndReportCurrencyRateAsync(DateTime date,
+            string currency, int businessUnitId)
+        {
+            return ApiResponse<BaseAndReportCurrencyRate>.Success(
+                new BaseAndReportCurrencyRate() { BaseRate = 1.7m, ReportRate = 2.3m });
         }
     }
 }

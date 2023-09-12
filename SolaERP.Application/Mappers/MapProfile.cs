@@ -468,6 +468,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<RFQRequestDetail, RFQRequestDetailDto>().ReverseMap();
             CreateMap<RejectReason, RejectReasonDto>().ReverseMap();
             CreateMap<RFQInProgress, RFQInProgressDto>().ReverseMap();
+            CreateMap<RFQSingleSourceReasonsLoad, RFQSingleSourceReasonsLoadDto>().ReverseMap();
 
             CreateMap<BidAll, BidAllDto>().ReverseMap();
 

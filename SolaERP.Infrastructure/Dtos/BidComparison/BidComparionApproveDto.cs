@@ -11,10 +11,11 @@ namespace SolaERP.Application.Dtos.BidComparison
     {
         public int BidMainId { get; set; }
         public int Sequence { get; set; }
-        [JsonIgnore]
         public int ApproveStatus { get; set; }
         public int RFQDeatilid { get; set; }
         [JsonIgnore]
         public int UserId { get; set; }
+        public string Comment { get; set; }
+        public int RejectReasonId { get; set; }
     }
 }

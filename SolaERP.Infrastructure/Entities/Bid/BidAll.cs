@@ -9,6 +9,7 @@ namespace SolaERP.Application.Entities.Bid
     public class BidAll
     {
         public int BidMainId { get; set; }
+        public string Buyer { get; set; }
         public long LineNo { get; set; }
         public string RFQNo { get; set; }
         public string BidNo { get; set; }

@@ -15,5 +15,9 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<BusinessCategory>>> BusinessCategories();
         Task<ApiResponse<List<StatusDto>>> GetStatus();
         Task<ApiResponse<List<RejectReasonDto>>> RejectReasons();
+        Task<ApiResponse<BaseAndReportCurrencyRate>> GetBaseAndReportCurrencyRateAsync(
+            DateTime date,
+            string currency, 
+            int businessUnitId);
     }
 }
