@@ -16,5 +16,7 @@
         ApproveRoles = 13,
         RFQ = 14,
         BID = 15,
+        BidComparison = 16,
+        Orders = 17
     }
 }
