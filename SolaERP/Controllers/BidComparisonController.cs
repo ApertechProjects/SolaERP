@@ -61,6 +61,7 @@ namespace SolaERP.API.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> GetComparisonWFA([FromQuery] BidComparisonWFAFilterDto filterDto)
         {
+            filterDto.UserId = Convert.ToInt32(User.Identity.Name);
             return CreateActionResult(await _bidComparisonService.GetComparisonWFA(filterDto));
         }
 

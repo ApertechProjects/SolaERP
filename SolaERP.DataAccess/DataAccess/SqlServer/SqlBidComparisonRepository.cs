@@ -368,7 +368,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using var reader = await command.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
-                data.Add(GetBaseComparisonFromReader(reader).GetChild<BidComparisonWFALoad>());
+                var child = GetBaseComparisonFromReader(reader).GetChild<BidComparisonWFALoad>();
+                child.Sequence = reader.Get<int>("Sequence");
+                data.Add(child);
             }
 
             return data;

@@ -9,5 +9,6 @@ namespace SolaERP.Application.Entities.BidComparison
 {
     public class BidComparisonWFALoadDto : BaseBidComparisonLoadDto
     {
+        public int Sequence { get; set; }
     }
 }
