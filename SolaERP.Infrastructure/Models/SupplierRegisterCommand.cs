@@ -10,6 +10,7 @@ namespace SolaERP.Application.Models
         public List<VendorBankDetailDto> BankAccounts { get; set; }
         public List<DueDiligenceDesignSaveDto> DueDiligence { get; set; }
         public List<PrequalificationSaveDto> Prequalification { get; set; }
+        public int? VendorId { get; set; }
     }
 
 }

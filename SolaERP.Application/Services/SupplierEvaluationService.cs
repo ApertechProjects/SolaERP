@@ -76,17 +76,21 @@ namespace SolaERP.Persistence.Services
                 user.FullName = command.CompanyInformation.FullName;
                 user.PhoneNumber = command.CompanyInformation.PhoneNumber;
                 user.Description = command.CompanyInformation.Position;
-                var countries = await _repository.GetCountriesAsync();
-                command.CompanyInformation.Country = countries
-                    .SingleOrDefault(x => x.CountryName == command.CompanyInformation.Country.ToUpper())?
-                    .CountryCode;
 
                 Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
-                vendor.VendorId = user.VendorId;
-
+                
+                int vendorId;
+                if (command.VendorId is 0 or null)
+                {
+                    vendor.VendorId = user.VendorId;
+                    vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
+                }
+                else
+                {
+                    vendorId = (int)command.VendorId;
+                }
+                
                 vendor.RegistrationDate = vendor.RegistrationDate.ConvertDateToValidDate();
-
-                int vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
 
                 #region Represented Company & Represented Products
 
@@ -813,7 +817,7 @@ namespace SolaERP.Persistence.Services
                             await _attachmentRepository.GetAttachmentsAsync(vendorId, null,
                                 SourceType.VEN_PREQ.ToString(), design.PrequalificationDesignId));
                         attachments = attachments.Count > 0 ? attachments : Enumerable.Empty<AttachmentDto>().ToList();
-                        
+
                         attachments = attachments.Select(x =>
                         {
                             x.FileLink = _fileUploadService.GetDownloadFileLink(x.FileLink, Modules.EvaluationForm);
