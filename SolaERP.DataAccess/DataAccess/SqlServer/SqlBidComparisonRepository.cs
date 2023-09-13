@@ -64,7 +64,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                         @Sequence,
                                         @ApproveStatus,
                                         @RFQDeatilid,
-                                        @UserId";
+                                        @UserId,
+                                        @Comment,
+                                        @RejectReasonId";
 
 
             command.Parameters.AddWithValue(command, "@BidMainId", entity.BidMainId);
@@ -76,6 +78,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@RFQDeatilid", entity.RFQDeatilid);
 
             command.Parameters.AddWithValue(command, "@UserId", entity.UserId);
+
+            command.Parameters.AddWithValue(command, "@Comment", entity.Comment);
+
+            command.Parameters.AddWithValue(command, "@RejectReasonId", entity.RejectReasonId);
 
             return await command.ExecuteNonQueryAsync() > 0;
         }
