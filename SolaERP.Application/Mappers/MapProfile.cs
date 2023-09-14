@@ -326,7 +326,7 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.PrequalificationDesignId, opt => opt.MapFrom(src => src.DesignId))
                 .ForMember(dest => dest.DateTimeValue, opt => opt.Ignore());
 
-            
+
             CreateMap<AttachmentDto, AttachmentSaveModel>()
                 .ForMember(dest => dest.AttachmentId, opt => opt.MapFrom(src => src.AttachmentId))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
@@ -509,7 +509,7 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<BidComparisonBidApprovalsFilter, BidComparionBidApprovalsFilterDto>().ReverseMap();
             CreateMap<BidComparisonBidApprovalsLoad, BidComparisonBidApprovalsLoadDto>().ReverseMap();
-            
+
             CreateMap<BidComparisonBidDetailsLoad, BidComparisonBidDetailsLoadDto>().ReverseMap();
             CreateMap<BidComparisonHeaderLoad, BidComparisonHeaderLoadDto>().
                 ForMember(dest => dest.ProcurementType, opt => opt.MapFrom(src => ((Application.Enums.ProcurementType)src.ProcurementType).ToString())).
@@ -543,12 +543,12 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<BidComparisonNotReleasedFilter, BidComparisonNotReleasedFilterDto>().ReverseMap().
                 ForMember(dest => dest.Emergency,
-                    opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x)))); 
+                    opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x))));
             CreateMap<BidComparisonNotReleasedLoad, BidComparisonNotReleasedLoadDto>().ReverseMap();
-            
+
             CreateMap<BidComparisonRejectedFilter, BidComparisonRejectedFilterDto>().ReverseMap().
                 ForMember(dest => dest.Emergency,
-                    opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x)))); 
+                    opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x))));
             CreateMap<BidComparisonRejectedLoad, BidComparisonRejectedLoadDto>().ReverseMap();
 
             CreateMap<BidComparisonWFAFilter, BidComparisonWFAFilterDto>().ReverseMap().
@@ -561,6 +561,9 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<RFQVendorIUDDto, RFQVendorIUD>().ReverseMap();
 
             CreateMap<Application.Entities.User.UserList, Application.Dtos.User.UserList>().ReverseMap();
+
+
+            CreateMap<RequestHeld, RequestHeldDto>().ReverseMap();
 
         }
     }
