@@ -46,6 +46,5 @@ namespace SolaERP.API.Controllers
 
         //    //return Ok(await _supplierEvaluationService.GetStatusList());
         //}
-
     }
 }
