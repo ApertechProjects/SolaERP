@@ -14,6 +14,7 @@
         public string BuyerCode { get; set; }
         public string BuyerName { get; set; }
         public int Requester { get; set; }
+        public int Priority { get; set; }
         public string RequestComment { get; set; }
         public string OperatorComment { get; set; }
         public string QualityRequired { get; set; }

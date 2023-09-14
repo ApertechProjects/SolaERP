@@ -7,6 +7,7 @@
         public string StatusName { get; set; }
         public string BusinessUnitCode { get; set; }
         public string BusinessUnitName { get; set; }
+        public int Priority { get; set; }
         public string BuyerCode { get; set; }
         public string BuyerName { get; set; }
         public Int64 RowNum { get; set; }

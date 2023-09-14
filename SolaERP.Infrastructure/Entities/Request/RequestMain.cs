@@ -15,6 +15,7 @@
         public DateTime RequestDeadline { get; set; }
         public int UserId { get; set; }
         public int Requester { get; set; }
+        public int Priority { get; set; }
         public int Status { get; set; }
         public string StatusName { get; set; }
         public string ApproveStatus { get; set; }

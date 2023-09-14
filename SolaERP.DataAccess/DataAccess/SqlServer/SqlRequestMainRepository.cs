@@ -228,6 +228,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RequestComment = reader.Get<string>("RequestComment"),
                 OperatorComment = reader.Get<string>("OperatorComment"),
                 QualityRequired = reader.Get<string>("QualityRequired"),
+                Priority = reader.Get<int>("Priority")
             };
         }
 
@@ -258,6 +259,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 QualityRequired = reader.Get<string>("QualityRequired"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 LogisticsTotal = reader.Get<decimal>("LogisticsTotal"),
+                Priority = reader.Get<int>("Priority")
             };
         }
 
@@ -281,6 +283,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RequestComment = reader.Get<string>("RequestComment"),
                 OperatorComment = reader.Get<string>("OperatorComment"),
                 QualityRequired = reader.Get<string>("QualityRequired"),
+                Priority = reader.Get<int>("Priority")
             };
         }
 
@@ -339,6 +342,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 QualityRequired = reader.Get<string>("QualityRequired"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 LogisticsTotal = reader.Get<decimal>("LogisticsTotal"),
+                Priority = reader.Get<int>("Priority")
 
             };
         }
@@ -365,7 +369,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 ApproveStatus = reader.Get<string>("ApproveStatus"),
                 ApproveStatusName = reader.Get<string>("ApproveStatusName"),
                 Status = reader.Get<int>("Status"),
-                StatusName = reader.Get<string>("StatusName")
+                StatusName = reader.Get<string>("StatusName"),
+                Priority = reader.Get<int>("Priority")
             };
         }
 

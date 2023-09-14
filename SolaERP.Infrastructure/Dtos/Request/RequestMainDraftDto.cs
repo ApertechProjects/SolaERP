@@ -12,6 +12,7 @@
         public int RowNum { get; set; }
         public string RequestType { get; set; }
         public string RequestNo { get; set; }
+        public int Priority { get; set; }
         public DateTime EntryDate { get; set; }
         public DateTime RequestDate { get; set; }
         public DateTime RequestDeadline { get; set; }
