@@ -17,7 +17,7 @@ public class OrderCreateBidListDto
     public string ItemCode { get; set; }
     public string ItemName { get; set; }
     public string ItemName2 { get; set; }
-    public string DefaultUOM { get; set; }
+    public string UOM { get; set; }
     public bool AlternativeItem { get; set; }
     public string AlternativeItemCode { get; set; }
     public string AlternativeItemName { get; set; }
