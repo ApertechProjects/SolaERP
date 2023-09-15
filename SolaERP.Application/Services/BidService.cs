@@ -22,8 +22,8 @@ namespace SolaERP.Persistence.Services
         private readonly ISupplierEvaluationRepository _supplierEvaluationRepository;
         private readonly IRfqRepository _rfqRepository;
 
-        public BidService(IUnitOfWork unitOfWork, IMapper mapper, 
-            IBidRepository bidRepository, 
+        public BidService(IUnitOfWork unitOfWork, IMapper mapper,
+            IBidRepository bidRepository,
             ISupplierEvaluationRepository supplierEvaluationRepository,
             IRfqRepository rfqRepository)
         {
@@ -55,7 +55,7 @@ namespace SolaERP.Persistence.Services
             var bidMain = await _bidRepository.GetMainLoadAsync(bidMainId);
             var model = _mapper.Map<BidMainLoadDto>(bidMain);
 
-            var details  = await _bidRepository.GetBidDetailsAsync(new BidDetailsFilter { BidMainId = bidMainId});
+            var details = await _bidRepository.GetBidDetailsAsync(new BidDetailsFilter { BidMainId = bidMainId });
             var dtos = _mapper.Map<List<BidDetailsLoadDto>>(details);
             model.Details = dtos;
             model.RFQMain = _mapper.Map<RFQMainDto>(await _rfqRepository.GetRFQMainAsync(model.RFQMainId));
@@ -111,7 +111,8 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> DeleteBidMainAsync(int bidMainId, string userIdentity)
         {
             int userId = Convert.ToInt32(userIdentity);
-            var saveResponse = await _bidRepository.BidMainIUDAsync(new BidMain { BidMainId = bidMainId, UserId = userId });
+            var saveResponse =
+                await _bidRepository.BidMainIUDAsync(new BidMain { BidMainId = bidMainId, UserId = userId });
 
             await _unitOfWork.SaveChangesAsync();
 
@@ -125,6 +126,18 @@ namespace SolaERP.Persistence.Services
             var dtos = _mapper.Map<List<BidRFQListLoadDto>>(data);
 
             return ApiResponse<List<BidRFQListLoadDto>>.Success(dtos, 200);
+        }
+
+        public async Task<ApiResponse<bool>> OrderCreateFromApproveBidsAsync(List<int> bidMainIdList,
+            string userIdentity)
+        {
+            int userId = Convert.ToInt32(userIdentity);
+            foreach (var bidMainId in bidMainIdList)
+            {
+                await _bidRepository.OrderCreateFromApproveBidAsync(bidMainId, userId);
+            }
+
+            return ApiResponse<bool>.Success(true);
         }
     }
 }

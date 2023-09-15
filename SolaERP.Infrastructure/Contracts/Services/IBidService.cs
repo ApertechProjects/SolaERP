@@ -1,12 +1,6 @@
 ﻿using SolaERP.Application.Dtos.Bid;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Entities.Bid;
-using SolaERP.Application.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.Application.Contracts.Services
 {
@@ -20,6 +14,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> DeleteBidMainAsync(int bidMainId, string userIdentity);
         Task<ApiResponse<bool>> BidDisqualifyAsync(BidDisqualifyDto dto, string userIdentity);
         Task<ApiResponse<List<BidRFQListLoadDto>>> GetRfqListAsync(string userIdentity);
-
+        Task<ApiResponse<bool>> OrderCreateFromApproveBidsAsync(List<int> bidMainIdList, string userIdentity);
     }
 }

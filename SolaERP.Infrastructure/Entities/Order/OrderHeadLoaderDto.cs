@@ -37,7 +37,7 @@ public class OrderHeadLoaderDto : BaseEntity
     public DateTime RFQDeadline { get; set; }
     public DateTime RFQDate { get; set; }
     public DateTime RequiredOnSiteDate { get; set; }
-    public int ComparisonNo { get; set; }
+    public string ComparisonNo { get; set; }
     public DateTime Comparisondeadline { get; set; }
     public DateTime ComparisonDate { get; set; }
     public int BidMainId { get; set; }

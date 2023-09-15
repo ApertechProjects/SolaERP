@@ -635,7 +635,7 @@ public class SqlOrderRepository : IOrderRepository
             RFQDeadline = reader.Get<DateTime>("RFQDeadline"),
             RFQDate = reader.Get<DateTime>("RFQDate"),
             RequiredOnSiteDate = reader.Get<DateTime>("RequiredOnSiteDate"),
-            ComparisonNo = reader.Get<int>("ComparisonNo"),
+            ComparisonNo = reader.Get<string>("ComparisonNo"),
             Comparisondeadline = reader.Get<DateTime>("Comparisondeadline"),
             ComparisonDate = reader.Get<DateTime>("ComparisonDate"),
             BidMainId = reader.Get<int>("BidMainId"),

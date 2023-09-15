@@ -1,10 +1,4 @@
 ﻿using SolaERP.Application.Entities.Bid;
-using SolaERP.Application.Entities.RFQ;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.Application.Contracts.Repositories
 {
@@ -17,6 +11,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> BidDisqualifyAsync(BidDisqualify entity);
         Task<bool> SaveBidDetailsAsync(List<BidDetail> details);
         Task<List<BidRFQListLoad>> GetRFQListForBidAsync(BidRFQListFilter filter);
-
+        Task OrderCreateFromApproveBidAsync(int bidMainId, int userId);
     }
 }
