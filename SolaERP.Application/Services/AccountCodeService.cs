@@ -9,12 +9,10 @@ namespace SolaERP.Persistence.Services
     public class AccountCodeService : IAccountCodeService
     {
         private readonly IAccountCodeRepository _accountCodeRepository;
-        private readonly IBusinessUnitRepository _businessUnitRepository;
         private IMapper _mapper;
-        public AccountCodeService(IAccountCodeRepository accountCodeRepository, IMapper mapper, IBusinessUnitRepository businessUnitRepository)
+        public AccountCodeService(IAccountCodeRepository accountCodeRepository, IMapper mapper)
         {
             _mapper = mapper;
-            _businessUnitRepository = businessUnitRepository;
             _accountCodeRepository = accountCodeRepository;
         }
 
@@ -28,11 +26,8 @@ namespace SolaERP.Persistence.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ApiResponse<List<AccountCodeDto>>> GetAccountCodesByBusinessUnit(string businessUnitCode)
+        public async Task<ApiResponse<List<AccountCodeDto>>> GetAccountCodesByBusinessUnit(int businessUnitId)
         {
-            var businessUnitList =await  _businessUnitRepository.GetAllAsync();
-            var businessUnitId = businessUnitList
-                .SingleOrDefault(x => x.BusinessUnitCode == businessUnitCode).BusinessUnitId;
             var accountCodes = await _accountCodeRepository.GetAccountCodesByBusinessUnit(businessUnitId);
             var dto = _mapper.Map<List<AccountCodeDto>>(accountCodes);
             return ApiResponse<List<AccountCodeDto>>.Success(dto, 200);
