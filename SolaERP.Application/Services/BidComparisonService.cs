@@ -1,20 +1,12 @@
 ﻿using AutoMapper;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
-using SolaERP.Application.Dtos.Bid;
 using SolaERP.Application.Dtos.BidComparison;
 using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Dtos.Shared;
-using SolaERP.Application.Entities.Bid;
 using SolaERP.Application.Entities.BidComparison;
-using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SolaERP.Application.Enums;
 
 namespace SolaERP.Persistence.Services
@@ -217,6 +209,13 @@ namespace SolaERP.Persistence.Services
             var data = await _bidComparisonRepository.GetComparisonRejected(filter);
             var dtos = _mapper.Map<List<BidComparisonRejectedLoadDto>>(data);
             return ApiResponse<List<BidComparisonRejectedLoadDto>>.Success(dtos, 200);
+        }
+
+        public async Task<ApiResponse<bool>> HoldBidComparison(HoldBidComparisonRequest request)
+        {
+            return ApiResponse<bool>.Success(
+                await _bidComparisonRepository.HoldBidComparison(request)
+            );
         }
     }
 }
