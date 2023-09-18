@@ -680,8 +680,9 @@ namespace SolaERP.Persistence.Services
         }
 
         public async Task<ApiResponse<List<DueDiligenceDesignDto>>> GetDueDiligenceAsync(string userIdentity,
-            string acceptLanguage, int? revisedVendorId = null)
-            => ApiResponse<List<DueDiligenceDesignDto>>.Success(await GetDueDesignsAsync(userIdentity, Language.en));
+            string acceptLanguage, int? vendorId = null)
+            => ApiResponse<List<DueDiligenceDesignDto>>.Success(await GetDueDesignsAsync(userIdentity, Language.en,
+                vendorId));
 
 
         public async Task<ApiResponse<VM_GET_InitalRegistration>> GetInitRegistrationAsync(string userIdentity,
@@ -1056,7 +1057,7 @@ namespace SolaERP.Persistence.Services
                             d.Column2Alias,
                             d.Column3Alias,
                             d.Column4Alias,
-                            d.Column5Alias,
+                            d.Column5Alias
                         }.Where(col => col != null).ToArray(), //: null,
                         TextBoxPoint = d.HasTextBox, //> 0 ? d.HasTextBox : null,
                         TextAreaPoint = d.HasTexArea, //> 0 ? d.HasTexArea : null,
