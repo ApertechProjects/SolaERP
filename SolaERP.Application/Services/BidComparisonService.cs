@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SolaERP.Application.Enums;
 
 namespace SolaERP.Persistence.Services
 {
@@ -25,15 +26,18 @@ namespace SolaERP.Persistence.Services
         private readonly IMapper _mapper;
         private readonly IBidComparisonRepository _bidComparisonRepository;
         private readonly IRfqRepository _rfqRepository;
+        private readonly FileUploadService _fileUploadService;
 
         public BidComparisonService(IUnitOfWork unitOfWork, IMapper mapper, 
             IBidComparisonRepository bidComparisonRepository,
-            IRfqRepository rfqRepository)
+            IRfqRepository rfqRepository, 
+            IFileService fileService, FileUploadService fileUploadService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _bidComparisonRepository = bidComparisonRepository;
             _rfqRepository = rfqRepository;
+            _fileUploadService = fileUploadService;
         }
 
         public async Task<ApiResponse<bool>> SaveBidComparisonAsync(BidComparisonCreateDto bidComparison)
@@ -128,11 +132,12 @@ namespace SolaERP.Persistence.Services
 
             var approvalInformationFilter = new BidComparisonApprovalInformationFilter { RFQMainId = filter.RFQMainId };
             var approvalInformations = await _bidComparisonRepository.GetComparisonApprovalInformations(approvalInformationFilter);
-            //foreach (var item in approvalInformations)
-            //{
-            //    item.ApproveDate = item.ApproveDate.ConvertDateToValidDate();
-            //}
+            foreach (var item in approvalInformations)
+            {
+                item.SignaturePhoto = _fileUploadService.GetFileLink(item.SignaturePhoto,Modules.Users);
+            }
 
+            
             comparison.ApprovalInformations = _mapper.Map<List<BidComparisonApprovalInformationLoadDto>>(approvalInformations);
             foreach (var item in comparison.ApprovalInformations)
                 item.ApproveDate = item.ApproveDate.ConvertDateToValidDate();
