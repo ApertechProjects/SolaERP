@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Dtos.SupplierEvaluation;
+using SolaERP.Application.Entities.SupplierEvaluation;
 
 namespace SolaERP.Application.Models
 {
@@ -9,7 +10,7 @@ namespace SolaERP.Application.Models
         public List<CodeOfBuConduct> CodeOfBuConduct { get; set; }
         public List<VendorBankDetailDto> BankAccounts { get; set; }
         public List<DueDiligenceDesignSaveDto> DueDiligence { get; set; }
-        public List<PrequalificationSaveDto> Prequalification { get; set; }
+        public List<PrequalificationDesignListDto> Prequalification { get; set; }
         public int? VendorId { get; set; }
     }
 
