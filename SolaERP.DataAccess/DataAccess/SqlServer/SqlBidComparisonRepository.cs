@@ -180,7 +180,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     Comment = reader.Get<string>("Comment"),
                     FullName = reader.Get<string>("FullName"),
                     Sequence = reader.Get<int>("Sequence"),
-                    SignaturePhoto = reader.Get<string>("SignaturePhoto")
+                    SignaturePhoto = reader.Get<string>("SignaturePhoto"),
+                    UserPhoto = reader.Get<string>("UserPhoto")
                 });
             }
 

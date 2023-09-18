@@ -152,6 +152,7 @@ namespace SolaERP.Persistence.Services
             foreach (var item in approvalInformations)
             {
                 item.SignaturePhoto = _fileUploadService.GetFileLink(item.SignaturePhoto, Modules.Users);
+                item.UserPhoto = _fileUploadService.GetFileLink(item.UserPhoto, Modules.Users);
             }
 
 
