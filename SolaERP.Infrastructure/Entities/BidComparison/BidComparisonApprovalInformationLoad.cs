@@ -15,5 +15,6 @@ namespace SolaERP.Application.Dtos.BidComparison
         public string SignaturePhoto { get; set; }
         public DateTime? ApproveDate { get; set; }
         public string Comment { get; set; }
+        public string UserPhoto { get; set; }
     }
 }
