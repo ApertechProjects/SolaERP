@@ -26,12 +26,12 @@ namespace SolaERP.Persistence.Services
         private readonly IMapper _mapper;
         private readonly IBidComparisonRepository _bidComparisonRepository;
         private readonly IRfqRepository _rfqRepository;
-        private readonly FileUploadService _fileUploadService;
+        private readonly IFileUploadService _fileUploadService;
 
-        public BidComparisonService(IUnitOfWork unitOfWork, IMapper mapper, 
+        public BidComparisonService(IUnitOfWork unitOfWork, IMapper mapper,
             IBidComparisonRepository bidComparisonRepository,
-            IRfqRepository rfqRepository, 
-            IFileService fileService, FileUploadService fileUploadService)
+            IRfqRepository rfqRepository,
+            IFileUploadService fileUploadService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -58,20 +58,23 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(saveResponse, 200);
         }
 
-        public async Task<ApiResponse<bool>> ApproveBidComparisonsAsync(List<BidComparisonApproveDto> bidComparisonApproves, string userIdentity)
+        public async Task<ApiResponse<bool>> ApproveBidComparisonsAsync(
+            List<BidComparisonApproveDto> bidComparisonApproves, string userIdentity)
         {
-            foreach(var bidComparisonApprove in bidComparisonApproves)
+            foreach (var bidComparisonApprove in bidComparisonApproves)
             {
                 var entity = _mapper.Map<BidComparisonApprove>(bidComparisonApprove);
                 entity.UserId = Convert.ToInt32(userIdentity);
                 await _bidComparisonRepository.ApproveComparisonAsync(entity);
             }
+
             await _unitOfWork.SaveChangesAsync();
 
             return ApiResponse<bool>.Success(true, 200);
         }
 
-        public async Task<ApiResponse<bool>> SendComparisonToApproveAsync(BidComparisonSendToApproveDto bidComparisonSendToApprove)
+        public async Task<ApiResponse<bool>> SendComparisonToApproveAsync(
+            BidComparisonSendToApproveDto bidComparisonSendToApprove)
         {
             var entity = _mapper.Map<BidComparisonSendToApprove>(bidComparisonSendToApprove);
             var saveResponse = await _bidComparisonRepository.SendComparisonToApprove(entity);
@@ -80,7 +83,8 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(saveResponse, 200);
         }
 
-        public async Task<ApiResponse<List<BidComparisonAllDto>>> GetBidComparisonAllAsync(BidComparisonAllFilterDto filter)
+        public async Task<ApiResponse<List<BidComparisonAllDto>>> GetBidComparisonAllAsync(
+            BidComparisonAllFilterDto filter)
         {
             var data = await _bidComparisonRepository.GetComparisonAll(_mapper.Map<BidComparisonAllFilter>(filter));
             var dtos = _mapper.Map<List<BidComparisonAllDto>>(data);
@@ -104,66 +108,81 @@ namespace SolaERP.Persistence.Services
             comparison.BidComparisonHeader = _mapper.Map<BidComparisonHeaderLoadDto>(header);
 
             var singleSourceFilter = new BidComparisonSingleSourceReasonsFilter { RFQMainId = filter.RFQMainId };
-            var singleSourceReasons = await _bidComparisonRepository.GetComparisonSingleSourceReasons(singleSourceFilter);
-            comparison.BidComparisonHeader.SingleSourceReasons = _mapper.Map<List<BidComparisonSingleSourceReasonsLoadDto>>(singleSourceReasons);
+            var singleSourceReasons =
+                await _bidComparisonRepository.GetComparisonSingleSourceReasons(singleSourceFilter);
+            comparison.BidComparisonHeader.SingleSourceReasons =
+                _mapper.Map<List<BidComparisonSingleSourceReasonsLoadDto>>(singleSourceReasons);
 
-            var rfqSingleSourceReasons = await _rfqRepository.GetSingleSourceReasons(comparison.BidComparisonHeader.RFQMainId);
-            comparison.BidComparisonHeader.RFQSingleSourceReasons = _mapper.Map<List<RFQSingleSourceReasonsLoadDto>>(rfqSingleSourceReasons);
+            var rfqSingleSourceReasons =
+                await _rfqRepository.GetSingleSourceReasons(comparison.BidComparisonHeader.RFQMainId);
+            comparison.BidComparisonHeader.RFQSingleSourceReasons =
+                _mapper.Map<List<RFQSingleSourceReasonsLoadDto>>(rfqSingleSourceReasons);
 
-            var bidHeaderFilter = new BidComparisonBidHeaderFilter { RFQMainId = filter.RFQMainId, UserId = filter.UserId };
+            var bidHeaderFilter = new BidComparisonBidHeaderFilter
+                { RFQMainId = filter.RFQMainId, UserId = filter.UserId };
             var bids = await _bidComparisonRepository.GetComparisonBidHeader(bidHeaderFilter);
             comparison.Bids = _mapper.Map<List<BidComparisonBidHeaderLoadDto>>(bids);
 
-            var bidDetailsFilter = new BidComparisonBidDetailsFilter { RFQMainId = filter.RFQMainId, UserId = filter.UserId };
+            var bidDetailsFilter = new BidComparisonBidDetailsFilter
+                { RFQMainId = filter.RFQMainId, UserId = filter.UserId };
             var bidDetails = await _bidComparisonRepository.GetComparisonBidDetails(bidDetailsFilter);
 
-            var bidApprovalsFilter = new BidComparisonBidApprovalsFilter { RFQMainId = filter.RFQMainId, UserId = filter.UserId };
+            var bidApprovalsFilter = new BidComparisonBidApprovalsFilter
+                { RFQMainId = filter.RFQMainId, UserId = filter.UserId };
             var bidApprovals = await _bidComparisonRepository.GetComparisonBidApprovals(bidApprovalsFilter);
 
             foreach (var bid in comparison.Bids)
             {
-                bid.BidDetails = _mapper.Map<List<BidComparisonBidDetailsLoadDto>>(bidDetails.Where(x => x.BidMainId == bid.BidMainId));
-                bid.BidApprovals = _mapper.Map<List<BidComparisonBidApprovalsLoadDto>>(bidApprovals.Where(x => x.BidMainId == bid.BidMainId));
+                bid.BidDetails =
+                    _mapper.Map<List<BidComparisonBidDetailsLoadDto>>(
+                        bidDetails.Where(x => x.BidMainId == bid.BidMainId));
+                bid.BidApprovals =
+                    _mapper.Map<List<BidComparisonBidApprovalsLoadDto>>(bidApprovals.Where(x =>
+                        x.BidMainId == bid.BidMainId));
             }
 
-            var rfqDetailsFilter = new BidComparisonRFQDetailsFilter { RFQMainId = filter.RFQMainId, UserId = filter.UserId };
+            var rfqDetailsFilter = new BidComparisonRFQDetailsFilter
+                { RFQMainId = filter.RFQMainId, UserId = filter.UserId };
             var rfqDetails = await _bidComparisonRepository.GetComparisonRFQDetails(rfqDetailsFilter);
             comparison.RfqDetails = _mapper.Map<List<BidComparisonRFQDetailsLoadDto>>(rfqDetails);
 
             var approvalInformationFilter = new BidComparisonApprovalInformationFilter { RFQMainId = filter.RFQMainId };
-            var approvalInformations = await _bidComparisonRepository.GetComparisonApprovalInformations(approvalInformationFilter);
+            var approvalInformations =
+                await _bidComparisonRepository.GetComparisonApprovalInformations(approvalInformationFilter);
             foreach (var item in approvalInformations)
             {
-                item.SignaturePhoto = _fileUploadService.GetFileLink(item.SignaturePhoto,Modules.Users);
+                item.SignaturePhoto = _fileUploadService.GetFileLink(item.SignaturePhoto, Modules.Users);
             }
 
-            
-            comparison.ApprovalInformations = _mapper.Map<List<BidComparisonApprovalInformationLoadDto>>(approvalInformations);
+
+            comparison.ApprovalInformations =
+                _mapper.Map<List<BidComparisonApprovalInformationLoadDto>>(approvalInformations);
             foreach (var item in comparison.ApprovalInformations)
                 item.ApproveDate = item.ApproveDate.ConvertDateToValidDate();
 
             return ApiResponse<BidComparisonDto>.Success(comparison, 200);
         }
 
-        public async Task<ApiResponse<List<BidComparisonDraftLoadDto>>> GetComparisonDraft(BidComparisonDraftFilterDto filterDto)
+        public async Task<ApiResponse<List<BidComparisonDraftLoadDto>>> GetComparisonDraft(
+            BidComparisonDraftFilterDto filterDto)
         {
             var filter = _mapper.Map<BidComparisonDraftFilter>(filterDto);
             var data = await _bidComparisonRepository.GetComparisonDraft(filter);
             var dtos = _mapper.Map<List<BidComparisonDraftLoadDto>>(data);
             return ApiResponse<List<BidComparisonDraftLoadDto>>.Success(dtos, 200);
-
         }
 
-        public async Task<ApiResponse<List<BidComparisonWFALoadDto>>> GetComparisonWFA(BidComparisonWFAFilterDto filterDto)
+        public async Task<ApiResponse<List<BidComparisonWFALoadDto>>> GetComparisonWFA(
+            BidComparisonWFAFilterDto filterDto)
         {
             var filter = _mapper.Map<BidComparisonWFAFilter>(filterDto);
             var data = await _bidComparisonRepository.GetComparisonWFA(filter);
             var dtos = _mapper.Map<List<BidComparisonWFALoadDto>>(data);
             return ApiResponse<List<BidComparisonWFALoadDto>>.Success(dtos, 200);
-
         }
 
-        public async Task<ApiResponse<List<BidComparisonHeldLoadDto>>> GetComparisonHeld(BidComparisonHeldFilterDto filterDto)
+        public async Task<ApiResponse<List<BidComparisonHeldLoadDto>>> GetComparisonHeld(
+            BidComparisonHeldFilterDto filterDto)
         {
             var filter = _mapper.Map<BidComparisonHeldFilter>(filterDto);
             var data = await _bidComparisonRepository.GetComparisonHeld(filter);
@@ -171,7 +190,8 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<BidComparisonHeldLoadDto>>.Success(dtos, 200);
         }
 
-        public async Task<ApiResponse<List<BidComparisonMyChartsLoadDto>>> GetComparisonMyCharts(BidComparisonMyChartsFilterDto filterDto, string userIdentity)
+        public async Task<ApiResponse<List<BidComparisonMyChartsLoadDto>>> GetComparisonMyCharts(
+            BidComparisonMyChartsFilterDto filterDto, string userIdentity)
         {
             var filter = _mapper.Map<BidComparisonMyChartsFilter>(filterDto);
             filter.UserId = Convert.ToInt32(userIdentity);
@@ -180,7 +200,8 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<BidComparisonMyChartsLoadDto>>.Success(dtos, 200);
         }
 
-        public async Task<ApiResponse<List<BidComparisonNotReleasedLoadDto>>> GetComparisonNotReleased(BidComparisonNotReleasedFilterDto filterDto)
+        public async Task<ApiResponse<List<BidComparisonNotReleasedLoadDto>>> GetComparisonNotReleased(
+            BidComparisonNotReleasedFilterDto filterDto)
         {
             var filter = _mapper.Map<BidComparisonNotReleasedFilter>(filterDto);
             var data = await _bidComparisonRepository.GetComparisonNotReleased(filter);
@@ -188,7 +209,8 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<BidComparisonNotReleasedLoadDto>>.Success(dtos, 200);
         }
 
-        public async Task<ApiResponse<List<BidComparisonRejectedLoadDto>>> GetComparisonRejected(BidComparisonRejectedFilterDto filterDto)
+        public async Task<ApiResponse<List<BidComparisonRejectedLoadDto>>> GetComparisonRejected(
+            BidComparisonRejectedFilterDto filterDto)
         {
             var filter = _mapper.Map<BidComparisonRejectedFilter>(filterDto);
             var data = await _bidComparisonRepository.GetComparisonRejected(filter);
