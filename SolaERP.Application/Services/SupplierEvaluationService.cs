@@ -688,7 +688,12 @@ namespace SolaERP.Persistence.Services
             var vendorBusinessCategoriesTask = await _repository.GetVendorBuCategoriesAsync(vendor);
             var companyInfoTask = await _repository.GetCompanyInfoAsync(vendor);
             if (vendor == 0)
+            {
                 companyInfoTask.CompanyRegistrationDate = null;
+                companyInfoTask.CreditDays = 60;
+                companyInfoTask.AgreeWithDefaultDays = 1;
+            }
+                
 
             var vendorProductsTask = await _repository.GetVendorProductServices(vendor);
             var vendorRepresentedCompany = await _repository.GetRepresentedCompanyAsync(vendor);
