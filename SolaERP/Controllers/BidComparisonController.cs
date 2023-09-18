@@ -15,7 +15,7 @@ namespace SolaERP.API.Controllers
         public BidComparisonController(IBidComparisonService bidComparisonService) => _bidComparisonService = bidComparisonService;
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAll([FromQuery] BidComparisonAllFilterDto filter)
+        public async Task<IActionResult> GetAll([FromQuery]BidComparisonAllFilterDto filter)
         {
            return CreateActionResult(await _bidComparisonService.GetBidComparisonAllAsync(filter));
         }
