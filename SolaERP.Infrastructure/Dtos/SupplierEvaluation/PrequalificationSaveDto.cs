@@ -2,7 +2,7 @@ using SolaERP.Application.Dtos.Attachment;
 
 namespace SolaERP.Application.Dtos.SupplierEvaluation;
 
-public class PrequalificationSaveDto
+public class PrequalificationChildSaveDto
 {
     public int VendorPrequalificationId { get; set; }
     public int DesignId { get; set; }
@@ -47,4 +47,15 @@ public class PrequalificationSaveDto
     public decimal Scoring { get; set; }
     public decimal AllPoint { get; set; }
     public bool Disabled { get; set; }
+}
+
+public class PrequalificationDesignSaveDto
+{
+    public string Title { get; set; }
+    public List<PrequalificationChildSaveDto> Childs { get; set; }
+}
+
+public class PrequalificationDesignListDto
+{
+    public List<PrequalificationDesignSaveDto> Prequalifications { get; set; }
 }
