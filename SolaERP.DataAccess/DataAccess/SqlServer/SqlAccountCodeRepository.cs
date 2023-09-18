@@ -28,39 +28,26 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public async Task<List<AccountCode>> GetAccountCodesByBusinessUnit(string businessUnitId)
+        public async Task<List<AccountCode>> GetAccountCodesByBusinessUnit(int businessUnitId)
         {
-            List<AccountCode> accounts = new List<AccountCode>();
-            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            var accounts = new List<AccountCode>();
+            await using var command = _unitOfWork.CreateCommand() as SqlCommand;
+            command.CommandText = "EXEC dbo.SP_AccountList @BusinessUnitId";
+
+            command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+
+            await using var reader = await command.ExecuteReaderAsync();
+
+            while (reader.Read())
             {
-                command.CommandText = ReplaceQuery("[dbo].[VW_UNI_AccountCodeList]", new ReplaceParams { ParamName = "APT", Value = businessUnitId });
-
-                using var reader = await command.ExecuteReaderAsync();
-
-                while (reader.Read())
-                {
-                    accounts.Add(reader.GetByEntityStructure<AccountCode>());
-                }
-                return accounts;
+                accounts.Add(reader.GetByEntityStructure<AccountCode>());
             }
+            return accounts;
         }
 
         public async Task<List<AccountCode>> GetAllAsync()
         {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "Select * from dbo.VW_UNI_AccountCodeList";
-                using var reader = await command.ExecuteReaderAsync();
-
-                List<AccountCode> accountCodes = new List<AccountCode>();
-
-                while (reader.Read())
-                {
-                    accountCodes.Add(reader.GetByEntityStructure<AccountCode>());
-                }
-                return accountCodes;
-            }
-
+            throw new NotImplementedException();
         }
 
         public Task<AccountCode> GetByIdAsync(int id)

@@ -12,7 +12,7 @@ public class OrderCreateRequestListDto
     public string ItemCode { get; set; }
     public string ItemName1 { get; set; }
     public string ItemName2 { get; set; }
-    public string DefaultUOM { get; set; }
+    public string UOM { get; set; }
     public decimal RequestQuantity { get; set; }
     public decimal RFQQuantity { get; set; }
     public decimal OrderQuantity { get; set; }
@@ -28,6 +28,7 @@ public class OrderCreateRequestListDto
     public decimal RemainingBudget { get; set; }
     public decimal Amount { get; set; }
     public string AccountCode { get; set; }
+    public string AccountName { get; set; }
     public int Condition { get; set; }
     public int Priority { get; set; }
     public decimal ManualUP { get; set; }

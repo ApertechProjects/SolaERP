@@ -16,21 +16,19 @@ namespace SolaERP.Persistence.Services
             _accountCodeRepository = accountCodeRepository;
         }
 
+        public async Task<ApiResponse<List<AccountCodeDto>>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
+
         public Task AddAsync(AccountCodeDto model)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ApiResponse<List<AccountCodeDto>>> GetAccountCodesByBusinessUnit(string businessUnit)
+        public async Task<ApiResponse<List<AccountCodeDto>>> GetAccountCodesByBusinessUnit(int businessUnitId)
         {
-            var accountCodes = await _accountCodeRepository.GetAccountCodesByBusinessUnit(businessUnit);
-            var dto = _mapper.Map<List<AccountCodeDto>>(accountCodes);
-            return ApiResponse<List<AccountCodeDto>>.Success(dto, 200);
-        }
-
-        public async Task<ApiResponse<List<AccountCodeDto>>> GetAllAsync()
-        {
-            var accountCodes = await _accountCodeRepository.GetAllAsync();
+            var accountCodes = await _accountCodeRepository.GetAccountCodesByBusinessUnit(businessUnitId);
             var dto = _mapper.Map<List<AccountCodeDto>>(accountCodes);
             return ApiResponse<List<AccountCodeDto>>.Success(dto, 200);
         }

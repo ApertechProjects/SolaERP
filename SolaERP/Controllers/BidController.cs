@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Bid;
-using SolaERP.Application.Models;
 using SolaERP.Controllers;
 
 namespace SolaERP.API.Controllers
@@ -38,14 +36,18 @@ namespace SolaERP.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Save(BidMainDto bidMain)
-           => CreateActionResult(await _bidService.SaveBidMainAsync(bidMain, User.Identity.Name));
+            => CreateActionResult(await _bidService.SaveBidMainAsync(bidMain, User.Identity.Name));
 
         [HttpDelete]
         public async Task<IActionResult> Delete(int bidMainId)
-           => CreateActionResult(await _bidService.DeleteBidMainAsync(bidMainId, User.Identity.Name));
+            => CreateActionResult(await _bidService.DeleteBidMainAsync(bidMainId, User.Identity.Name));
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Disqualify(BidDisqualifyDto dto)
-          => CreateActionResult(await _bidService.BidDisqualifyAsync(dto, User.Identity.Name));
+            => CreateActionResult(await _bidService.BidDisqualifyAsync(dto, User.Identity.Name));
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> OrderCreateFromApproveBids([FromBody] List<int> bidMainIdList)
+            => CreateActionResult(await _bidService.OrderCreateFromApproveBidsAsync(bidMainIdList, User.Identity.Name));
     }
 }

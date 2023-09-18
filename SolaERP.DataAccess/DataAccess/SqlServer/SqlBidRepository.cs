@@ -1,28 +1,14 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
-using SolaERP.Application.Dtos.BidComparison;
-using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Bid;
-using SolaERP.Application.Entities.BusinessUnits;
-using SolaERP.Application.Entities.Item_Code;
-using SolaERP.Application.Entities.RFQ;
-using SolaERP.Application.Entities.SupplierEvaluation;
-using SolaERP.Application.Enums;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
     public class SqlBidRepository : IBidRepository
     {
-
         private readonly IUnitOfWork _unitOfWork;
         public SqlBidRepository(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
@@ -93,6 +79,7 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
 
             return await command.ExecuteNonQueryAsync() > 0;
         }
+
         public async Task<bool> SaveBidDetailsAsync(List<BidDetail> details)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
@@ -242,6 +229,7 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                 EntryDate = reader.Get<DateTime>("EntryDate")
             };
         }
+
         private BidIUDResponse GetBidSaveResponse(IDataReader reader)
         {
             return new()
@@ -270,8 +258,20 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                     Emergency = reader.Get<string>("Emergency"),
                     RFQDeadline = reader.Get<DateTime>("RFQDeadline"),
                     RFQNo = reader.Get<string>("RFQNo")
-                }) ;
+                });
             return data;
+        }
+
+        public async Task OrderCreateFromApproveBidAsync(int bidMainId, int userId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+
+            command.CommandText = @"EXEC dbo.SP_OrderCreateFromApprovedBid @BidMainId, @Userid";
+
+            command.Parameters.AddWithValue(command, "@BidMainId", bidMainId);
+            command.Parameters.AddWithValue(command, "@Userid", userId);
+
+            await command.ExecuteNonQueryAsync();
         }
     }
 }

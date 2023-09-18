@@ -45,7 +45,7 @@
         public int AnalysisCode7Id { get; set; } 
         public int AnalysisCode8Id { get; set; }
         public int AnalysisCode9Id { get; set; }
-        public int AnalysisCode10Id { get; set; }
+        public int AnalysisCode10Id { get; set; }   
         public string StatusName { get; set; }
         public string ApproveStatusName { get; set; }
         public int Priority { get; set; }
