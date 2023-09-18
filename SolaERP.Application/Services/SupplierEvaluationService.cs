@@ -80,10 +80,14 @@ namespace SolaERP.Persistence.Services
                 Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
 
                 int vendorId;
-                if (command.VendorId is 0 or null)
+                if (command.VendorId is null)
                 {
                     vendor.VendorId = user.VendorId;
                     vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
+                }
+                else if (command.VendorId == 0)
+                {
+                    vendorId = 0;
                 }
                 else
                 {
