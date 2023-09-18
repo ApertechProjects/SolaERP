@@ -271,6 +271,8 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
             command.Parameters.AddWithValue(command, "@BidMainId", bidMainId);
             command.Parameters.AddWithValue(command, "@Userid", userId);
 
+            await _unitOfWork.SaveChangesAsync();
+            
             await command.ExecuteNonQueryAsync();
         }
     }
