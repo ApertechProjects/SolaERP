@@ -27,5 +27,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<BidComparisonMyChartsLoadDto>>> GetComparisonMyCharts(BidComparisonMyChartsFilterDto filterDto, string userIdentity);
         Task<ApiResponse<List<BidComparisonNotReleasedLoadDto>>> GetComparisonNotReleased(BidComparisonNotReleasedFilterDto filterDto);
         Task<ApiResponse<List<BidComparisonRejectedLoadDto>>> GetComparisonRejected(BidComparisonRejectedFilterDto filterDto);
+        Task<ApiResponse<bool>> HoldBidComparison(HoldBidComparisonRequest request);
     }
 }
