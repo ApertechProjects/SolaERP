@@ -125,11 +125,7 @@ public class OrderService : IOrderService
         string identityName)
     {
         int userId = Convert.ToInt32(identityName);
-        foreach (var selectedOrder in statusDto.SelectedList)
-        {
-            await _orderRepository.ChangeOrderMainStatusAsync(statusDto, userId, selectedOrder.OrderMainId,
-                selectedOrder.Sequence);
-        }
+        await _orderRepository.ChangeOrderMainStatusAsync(statusDto, userId, statusDto.OrderMainId, statusDto.Sequence);
 
         await _unitOfWork.SaveChangesAsync();
 
