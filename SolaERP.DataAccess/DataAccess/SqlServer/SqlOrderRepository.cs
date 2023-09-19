@@ -98,7 +98,7 @@ public class SqlOrderRepository : IOrderRepository
         List<OrderAllDto> data = new();
         while (await reader.ReadAsync())
         {
-            data.Add(MapFromReaderForOrderAllDto(reader));
+            data.Add(MapFromReaderForOrderWFADto(reader));
         }
 
         return data;
@@ -692,6 +692,25 @@ public class SqlOrderRepository : IOrderRepository
             Comment = reader.Get<string>("Comment"),
             Currency = reader.Get<string>("Currency"),
             Status = reader.Get<string>("Status"),
+            BidNo = reader.Get<string>("BidNo"),
+            ComparisonNo = reader.Get<string>("ComparisonNo"),
+            EnteredBy = reader.Get<string>("EnteredBy"),
+            EnteredDate = reader.Get<DateTime>("EnteredDate"),
+            OrderNo = reader.Get<string>("OrderNo"),
+            VendorName = reader.Get<string>("VendorName"),
+            RFQNo = reader.Get<string>("RFQNo")
+        };
+    }
+    
+    private OrderAllDto MapFromReaderForOrderWFADto(DbDataReader reader)
+    {
+        return new OrderAllDto()
+        {
+            OrderMainId = reader.Get<int>("OrderMainId"),
+            OrderType = reader.Get<string>("Ordertype"),
+            Comment = reader.Get<string>("Comment"),
+            Currency = reader.Get<string>("Currency"),
+            Sequence = reader.Get<int>("Sequence"),
             BidNo = reader.Get<string>("BidNo"),
             ComparisonNo = reader.Get<string>("ComparisonNo"),
             EnteredBy = reader.Get<string>("EnteredBy"),
