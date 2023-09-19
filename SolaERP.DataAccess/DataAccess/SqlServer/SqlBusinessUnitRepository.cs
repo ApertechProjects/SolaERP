@@ -107,7 +107,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 if (reader.Read())
-                    result = reader.GetByEntityStructure<BusinessUnits>();
+                    result = new BusinessUnits()
+                    {
+                        BusinessUnitCode = reader.Get<string>("BusinessUnitCode"),
+                        BusinessUnitName =  reader.Get<string>("BusinessUnitName"),
+                        BusinessUnitId = reader.Get<int>("BusinessUnitId"),
+                        TaxId = reader.Get<string>("TaxId"),
+                        Address = reader.Get<string>("Address"),
+                        Position = reader.Get<string>("Position"),
+                        CountryCode = reader.Get<string>("CountryCode"),
+                        FullName = reader.Get<string>("FullName")
+                    };
 
                 return result;
             }
