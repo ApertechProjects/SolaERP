@@ -51,8 +51,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
+        #region Readers
 
-        #region Readers 
         private void PopulateRfqBaseFromReader(RFQBase rfqBase, IDataReader reader)
         {
             rfqBase.RFQMainId = reader.Get<int>("RFQMainId");
@@ -72,7 +72,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             rfqBase.SingleUnitPrice = reader.Get<bool>("SingleUnitPrice");
             rfqBase.PlaceOfDelivery = reader.Get<string>("PlaceOfDelivery");
             rfqBase.BusinessCategoryId = reader.Get<int>("BusinessCategoryId");
-            rfqBase.BiddingType = reader.Get<int>("BiddingType");
+
+            try
+            {
+                rfqBase.BiddingType = reader.Get<int>("BiddingType");
+            }
+            catch (Exception)
+            {
+                rfqBase.BiddingType = 0;
+            }
+
             rfqBase.BusinessCategory = new()
             {
                 Id = reader.Get<int>("BusinessCategoryId"),
@@ -216,7 +225,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@BusinessCategoryId", request?.BusinessCategoryId);
                 command.Parameters.AddWithValue(command, "@UserId", request?.UserId);
                 command.Parameters.AddWithValue(command, "@BiddingType", request?.BiddingType);
-                command.Parameters.AddTableValue(command, "@SingleSourceReasonId", "SingleIdItems", request?.SingleSourceReasonIds?.ConvertListToDataTable());
+                command.Parameters.AddTableValue(command, "@SingleSourceReasonId", "SingleIdItems",
+                    request?.SingleSourceReasonIds?.ConvertListToDataTable());
 
                 using var reader = await command.ExecuteReaderAsync();
                 RfqSaveCommandResponse response = null;
@@ -227,7 +237,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
-
         private RfqSaveCommandResponse GetRfqSaveResponse(IDataReader reader)
         {
             return new()
@@ -236,7 +245,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RfqNo = reader.Get<string>("@NewRFQNo"),
             };
         }
-
 
 
         public async Task<List<SingleSourceReasonModel>> GetSingleSourceReasonsAsync()
@@ -252,6 +260,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return singleSourceReasons;
             }
         }
+
         private SingleSourceReasonModel GetReasonsFromReader(IDataReader reader)
         {
             return new()
@@ -266,7 +275,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         //    => await ModifyRfqDetailAsync(details, rfqMainId);
 
         public async Task<bool> DetailsIUDAsync(List<RfqDetailSaveModel> details, int rfqMainId)
-           => await ModifyRfqDetailAsync(details, rfqMainId);
+            => await ModifyRfqDetailAsync(details, rfqMainId);
 
 
         private async Task<bool> ModifyRfqDetailAsync(List<RfqDetailSaveModel> details, int? mainId)
@@ -276,22 +285,24 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = @"SET NOCOUNT OFF EXEC SP_RFQDetails_IUD @RFQMainId,@Data";
 
                 command.Parameters.AddWithValue(command, "@RFQMainId", mainId);
-                command.Parameters.AddTableValue(command, "@Data", "dbo.RFQDetailsType2", details?.ConvertToDataTable());
+                command.Parameters.AddTableValue(command, "@Data", "dbo.RFQDetailsType2",
+                    details?.ConvertToDataTable());
                 var res = await command.ExecuteNonQueryAsync();
                 return res > 0;
             }
         }
 
 
-
         public async Task<List<RequestForRFQ>> GetRequestsForRfq(RFQRequestModel model)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_RFQCreateRequestList @BusinessUnitId,@Businesscategoryid,@Buyer,@UserId";
+                command.CommandText =
+                    @"EXEC SP_RFQCreateRequestList @BusinessUnitId,@Businesscategoryid,@Buyer,@UserId";
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", model?.BusinessUnitId);
-                command.Parameters.AddWithValue(command, "@Businesscategoryid", string.Join(",", model?.BusinessCategoryIds));
+                command.Parameters.AddWithValue(command, "@Businesscategoryid",
+                    string.Join(",", model?.BusinessCategoryIds));
                 command.Parameters.AddWithValue(command, "@Buyer", string.Join(",", model?.Buyer));
                 command.Parameters.AddWithValue(command, "@UserId", model.UserId);
 
@@ -302,16 +313,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return requestListForRfq;
             }
         }
+
         public async Task<bool> RFQRequestDetailsIUDAsync(List<RfqRequestDetailSaveModel> details)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_RFQRequestDetails_IUD @Data";
-                command.Parameters.AddTableValue(command, "@Data", "RFQRequestDetailsType2", details?.ConvertToDataTable());
+                command.Parameters.AddTableValue(command, "@Data", "RFQRequestDetailsType2",
+                    details?.ConvertToDataTable());
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
+
         public async Task<List<RfqVendorToSend>> GetVendorsForRfqAync(int businessCategoryId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -326,6 +340,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return rfqVendors;
             }
         }
+
         public async Task<bool> ChangeRFQStatusAsync(RfqChangeStatusModel model, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -340,6 +355,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
+
         public async Task<List<RFQSingleSourceReasonsLoad>> GetSingleSourceReasons(int rfqMainId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -412,7 +428,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return rfqDetails;
             }
         }
-
 
 
         private RFQDetail GetRFQDetailFromReader(IDataReader reader)
@@ -506,7 +521,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"EXEC SP_RFQInProgress @BusinessUnitId,@ItemCode,@Emergency,@RFQType,@ProcurementType";
+                command.CommandText =
+                    @"EXEC SP_RFQInProgress @BusinessUnitId,@ItemCode,@Emergency,@RFQType,@ProcurementType";
 
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", filter.BusinessUnitId);
@@ -520,7 +536,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 while (reader.Read()) inProgressRFQs.Add(reader.GetByEntityStructure<RFQInProgress>());
                 return inProgressRFQs;
-
             }
         }
 
@@ -567,12 +582,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 
                 command.Parameters.AddWithValue(command, "@RFQMainId", vendorIUD.Id);
-                command.Parameters.AddTableValue(command, "@VendorCode", "SingleNvarcharItems", vendorIUD.VendorCodes.ConvertListToDataTable());
+                command.Parameters.AddTableValue(command, "@VendorCode", "SingleNvarcharItems",
+                    vendorIUD.VendorCodes.ConvertListToDataTable());
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
+
         #endregion
     }
 }
