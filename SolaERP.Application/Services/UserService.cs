@@ -290,6 +290,15 @@ namespace SolaERP.Persistence.Services
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            if (user.Description == "null")
+            {
+                user.Description = null;
+            }
+            
+            if (user.ERPUser == "null")
+            {
+                user.ERPUser = null;
+            }
 
             var userEntry = _mapper.Map<User>(user);
 
