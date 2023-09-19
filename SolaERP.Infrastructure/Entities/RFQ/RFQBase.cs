@@ -22,5 +22,6 @@ namespace SolaERP.Application.Entities.RFQ
         public string PlaceOfDelivery { get; set; }
         public int BusinessCategoryId { get; set; }
         public BusinessCategory BusinessCategory { get; set; }
+        public int BiddingType { get; set; }
     }
 }
