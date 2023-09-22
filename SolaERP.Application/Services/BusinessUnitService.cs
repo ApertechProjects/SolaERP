@@ -38,6 +38,16 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<BaseBusinessUnitDto>>.Success(dto, 200);
         }
 
+        public async Task<ApiResponse<List<BaseBusinessUnitDto>>> GetBusinessUnitListByCurrentUser(string identityName)
+        {
+            var businessUnits = await _businessUnitRepository.GetBusinessUnitListByCurrentUser(
+                await _userRepository.ConvertIdentity(identityName));
+
+            var dto = _mapper.Map<List<BaseBusinessUnitDto>>(businessUnits);
+
+            return ApiResponse<List<BaseBusinessUnitDto>>.Success(dto, 200);
+        }
+
 
         public Task<ApiResponse<bool>> RemoveAsync(int Id)
         {
