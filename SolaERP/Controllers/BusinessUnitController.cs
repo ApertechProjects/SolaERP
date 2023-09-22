@@ -24,5 +24,9 @@ namespace SolaERP.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBusinessUnitListByUser()
             => CreateActionResult(await _businessUnitService.GetBusinessUnitListByUserToken(User.Identity.Name));
+        
+        [HttpGet]
+        public async Task<IActionResult> GetBusinessUnitListByCurrentUser() 
+            => CreateActionResult(await _businessUnitService.GetBusinessUnitListByCurrentUser(User.Identity.Name));
     }
 }

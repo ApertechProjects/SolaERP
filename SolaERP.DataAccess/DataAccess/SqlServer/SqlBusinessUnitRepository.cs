@@ -96,6 +96,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return businessUnits;
             }
         }
+
+        public async Task<List<BaseBusinessUnit>> GetBusinessUnitListByCurrentUser(int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = $"EXEC SP_UserBusinessUnitsList {userId}";
+                using var reader = await command.ExecuteReaderAsync();
+
+                List<BaseBusinessUnit> businessUnits = new List<BaseBusinessUnit>();
+
+                while (reader.Read())
+                    businessUnits.Add(reader.GetByEntityStructure<BaseBusinessUnit>());
+
+                return businessUnits;
+            }
+        }
+
         public async Task<BusinessUnits> GetByIdAsync(int id)
         {
             BusinessUnits result = null;
@@ -107,7 +124,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 if (reader.Read())
-                    result = reader.GetByEntityStructure<BusinessUnits>();
+                    result = new BusinessUnits()
+                    {
+                        BusinessUnitCode = reader.Get<string>("BusinessUnitCode"),
+                        BusinessUnitName =  reader.Get<string>("BusinessUnitName"),
+                        BusinessUnitId = reader.Get<int>("BusinessUnitId"),
+                        TaxId = reader.Get<string>("TaxId"),
+                        Address = reader.Get<string>("Address"),
+                        Position = reader.Get<string>("Position"),
+                        CountryCode = reader.Get<string>("CountryCode"),
+                        FullName = reader.Get<string>("FullName")
+                    };
 
                 return result;
             }

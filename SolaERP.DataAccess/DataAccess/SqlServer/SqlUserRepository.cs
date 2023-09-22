@@ -390,6 +390,8 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@Comment", model.Comment);
 
+                await _unitOfWork.SaveChangesAsync();
+                
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
@@ -493,6 +495,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
                 command.Parameters.Add("@dataTable", SqlDbType.Structured).Value = data;
                 command.Parameters["@dataTable"].TypeName = "UserChangeStatus";
+                await _unitOfWork.SaveChangesAsync();
                 var value = await command.ExecuteNonQueryAsync();
                 return value > 0;
             }

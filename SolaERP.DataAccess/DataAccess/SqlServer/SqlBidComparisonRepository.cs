@@ -180,7 +180,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     Comment = reader.Get<string>("Comment"),
                     FullName = reader.Get<string>("FullName"),
                     Sequence = reader.Get<int>("Sequence"),
-                    SignaturePhoto = reader.Get<string>("SignaturePhoto")
+                    SignaturePhoto = reader.Get<string>("SignaturePhoto"),
+                    UserPhoto = reader.Get<string>("UserPhoto")
                 });
             }
 
@@ -503,6 +504,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
 
             return data;
+        }
+
+        public async Task<bool> HoldBidComparison(HoldBidComparisonRequest request)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"EXEC SP_BidComparisonHold @BidComparisonId, @Sequence, @UserId, @Comment";
+
+            command.Parameters.AddWithValue(command, "@BidComparisonId", request.BidComparisonId);
+            command.Parameters.AddWithValue(command, "@Sequence", request.Sequence);
+            command.Parameters.AddWithValue(command, "@UserId", request.UserId);
+            command.Parameters.AddWithValue(command, "@Comment", request.Comment);
+
+            await _unitOfWork.SaveChangesAsync();
+            
+            return await command.ExecuteNonQueryAsync() > 0;
         }
 
 

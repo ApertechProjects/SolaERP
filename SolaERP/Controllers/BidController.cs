@@ -47,7 +47,10 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _bidService.BidDisqualifyAsync(dto, User.Identity.Name));
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> OrderCreateFromApproveBids([FromBody] List<int> bidMainIdList)
-            => CreateActionResult(await _bidService.OrderCreateFromApproveBidsAsync(bidMainIdList, User.Identity.Name));
+        public async Task<IActionResult> OrderCreateFromApproveBids(
+            [FromBody] OrderCreateFromApproveRequest bidMainIdList)
+            => CreateActionResult(
+                await _bidService.OrderCreateFromApproveBidsAsync(bidMainIdList.bidMainIdList, User.Identity.Name)
+            );
     }
 }

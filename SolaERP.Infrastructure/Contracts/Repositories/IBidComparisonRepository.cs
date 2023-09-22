@@ -31,5 +31,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<BidComparisonMyChartsLoad>> GetComparisonMyCharts(BidComparisonMyChartsFilter filter);
         Task<List<BidComparisonNotReleasedLoad>> GetComparisonNotReleased(BidComparisonNotReleasedFilter filter);
         Task<List<BidComparisonRejectedLoad>> GetComparisonRejected(BidComparisonRejectedFilter filter);
+        Task<bool> HoldBidComparison(HoldBidComparisonRequest request);
     }
 }

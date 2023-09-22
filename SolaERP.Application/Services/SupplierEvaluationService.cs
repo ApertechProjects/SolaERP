@@ -78,18 +78,22 @@ namespace SolaERP.Persistence.Services
                 user.Description = command.CompanyInformation.Position;
 
                 Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
-                
+
                 int vendorId;
-                if (command.VendorId is 0 or null)
+                if (command.VendorId is null)
                 {
                     vendor.VendorId = user.VendorId;
                     vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
+                }
+                else if (command.VendorId == 0)
+                {
+                    vendorId = 0;
                 }
                 else
                 {
                     vendorId = (int)command.VendorId;
                 }
-                
+
                 vendor.RegistrationDate = vendor.RegistrationDate.ConvertDateToValidDate();
 
                 #region Represented Company & Represented Products
@@ -404,108 +408,117 @@ namespace SolaERP.Persistence.Services
 
                 if (command.Prequalification is not null)
                 {
-                    tasks.AddRange(command?.Prequalification?.SelectMany(item =>
+                    for (int i = 0; i < command.Prequalification.Count; i++)
                     {
-                        if (item.HasCheckbox == false)
+                        for (int j = 0; j < command.Prequalification[i].Prequalifications.Count; j++)
                         {
-                            item.CheckboxValue = false;
-                        }
-
-                        if (item.HasRadiobox == false)
-                        {
-                            item.RadioboxValue = false;
-                        }
-
-                        if (item.HasDateTime == false && string.IsNullOrEmpty(item.DateTimeValue))
-                        {
-                            item.DateTimeValue = null;
-                        }
-
-                        if (item.TextareaValue == "null" || string.IsNullOrEmpty(item.TextareaValue))
-                        {
-                            item.TextareaValue = "";
-                        }
-
-                        if (item.TextboxValue == "null" || string.IsNullOrEmpty(item.TextboxValue))
-                        {
-                            item.TextboxValue = "";
-                        }
-
-                        var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
-                        if (!string.IsNullOrEmpty(item.DateTimeValue) && item.DateTimeValue != "null")
-                        {
-                            try
+                            tasks.AddRange(command?.Prequalification?[i].Prequalifications[j]?.Childs.SelectMany(item =>
                             {
-                                prequalificationValue.DateTimeValue = Convert.ToDateTime(item.DateTimeValue);
-                            }
-                            catch (Exception e)
-                            {
-                                prequalificationValue.DateTimeValue = null;
-                            }
-                        }
-                        else
-                        {
-                            prequalificationValue.DateTimeValue = null;
-                        }
-
-                        prequalificationValue.VendorId = vendorId;
-
-                        var tasksList = new List<Task<bool>>();
-                        _repository.UpdatePrequalification(prequalificationValue); //+
-
-                        if (item?.Attachments is not null)
-                        {
-                            for (int i = 0; i < item?.Attachments.Count; i++)
-                            {
-                                if (item.Attachments[i].Type == 2)
+                                if (item.HasCheckbox == false)
                                 {
-                                    tasksList.Add(
-                                        _attachmentRepository.DeleteAttachmentAsync(item.Attachments[i].AttachmentId));
-                                    _fileUploadService.DeleteFile(Modules.EvaluationForm, item.Attachments[i].FileLink);
+                                    item.CheckboxValue = false;
                                 }
 
-                                if (item.Attachments[i].Type != 2 && item.Attachments[i].AttachmentId <= 0)
+                                if (item.HasRadiobox == false)
                                 {
-                                    var attachedFile = _mapper.Map<AttachmentSaveModel>(item.Attachments[i]);
-
-                                    attachedFile.SourceId = vendorId;
-                                    attachedFile.AttachmentTypeId = item.DesignId;
-                                    attachedFile.SourceType = SourceType.VEN_PREQ.ToString();
-                                    attachedFile.FileLink = _fileUploadService.AddFile(
-                                        new List<IFormFile>() { item?.Attachments[i].File },
-                                        Modules.EvaluationForm,
-                                        new List<string>()).Result.Data[0];
-
-                                    tasksList.Add(_attachmentRepository.SaveAttachmentAsync(attachedFile));
+                                    item.RadioboxValue = false;
                                 }
 
-                                tasksList.Add(Task.FromResult(true));
-                            }
-                        }
-
-
-                        if (item.HasGrid == true)
-                        {
-                            if (item.GridDatas != null)
-                            {
-                                tasksList.AddRange(item.GridDatas.Select(gridData =>
+                                if (item.HasDateTime == false && string.IsNullOrEmpty(item.DateTimeValue))
                                 {
-                                    var gridDatas = _mapper.Map<PrequalificationGridData>(gridData);
-                                    if (gridData.Type == 2)
+                                    item.DateTimeValue = null;
+                                }
+
+                                if (item.TextareaValue == "null" || string.IsNullOrEmpty(item.TextareaValue))
+                                {
+                                    item.TextareaValue = "";
+                                }
+
+                                if (item.TextboxValue == "null" || string.IsNullOrEmpty(item.TextboxValue))
+                                {
+                                    item.TextboxValue = "";
+                                }
+
+                                var prequalificationValue = _mapper.Map<VendorPrequalificationValues>(item);
+                                if (!string.IsNullOrEmpty(item.DateTimeValue) && item.DateTimeValue != "null")
+                                {
+                                    try
                                     {
-                                        return _repository.DeletePreGridAsync(gridDatas.PreqqualificationGridDataId);
+                                        prequalificationValue.DateTimeValue = Convert.ToDateTime(item.DateTimeValue);
                                     }
+                                    catch (Exception e)
+                                    {
+                                        prequalificationValue.DateTimeValue = null;
+                                    }
+                                }
+                                else
+                                {
+                                    prequalificationValue.DateTimeValue = null;
+                                }
 
-                                    gridDatas.PreqqualificationDesignId = item.DesignId;
-                                    gridDatas.VendorId = vendorId;
+                                prequalificationValue.VendorId = vendorId;
 
-                                    return _repository.UpdatePreGridAsync(gridDatas);
-                                }));
-                            }
+                                var tasksList = new List<Task<bool>>();
+                                _repository.UpdatePrequalification(prequalificationValue); //+
+
+                                if (item?.Attachments is not null)
+                                {
+                                    for (int i = 0; i < item?.Attachments.Count; i++)
+                                    {
+                                        if (item.Attachments[i].Type == 2)
+                                        {
+                                            tasksList.Add(
+                                                _attachmentRepository.DeleteAttachmentAsync(item.Attachments[i]
+                                                    .AttachmentId));
+                                            _fileUploadService.DeleteFile(Modules.EvaluationForm,
+                                                item.Attachments[i].FileLink);
+                                        }
+
+                                        if (item.Attachments[i].Type != 2 && item.Attachments[i].AttachmentId <= 0)
+                                        {
+                                            var attachedFile = _mapper.Map<AttachmentSaveModel>(item.Attachments[i]);
+
+                                            attachedFile.SourceId = vendorId;
+                                            attachedFile.AttachmentTypeId = item.DesignId;
+                                            attachedFile.SourceType = SourceType.VEN_PREQ.ToString();
+                                            attachedFile.FileLink = _fileUploadService.AddFile(
+                                                new List<IFormFile>() { item?.Attachments[i].File },
+                                                Modules.EvaluationForm,
+                                                new List<string>()).Result.Data[0];
+
+                                            tasksList.Add(_attachmentRepository.SaveAttachmentAsync(attachedFile));
+                                        }
+
+                                        tasksList.Add(Task.FromResult(true));
+                                    }
+                                }
+
+
+                                if (item.HasGrid == true)
+                                {
+                                    if (item.GridDatas != null)
+                                    {
+                                        tasksList.AddRange(item.GridDatas.Select(gridData =>
+                                        {
+                                            var gridDatas = _mapper.Map<PrequalificationGridData>(gridData);
+                                            if (gridData.Type == 2)
+                                            {
+                                                return _repository.DeletePreGridAsync(gridDatas
+                                                    .PreqqualificationGridDataId);
+                                            }
+
+                                            gridDatas.PreqqualificationDesignId = item.DesignId;
+                                            gridDatas.VendorId = vendorId;
+
+                                            return _repository.UpdatePreGridAsync(gridDatas);
+                                        }));
+                                    }
+                                }
+
+                                return tasksList;
+                            }));
                         }
-
-                        return tasksList;
-                    }));
+                    }
                 }
 
                 #endregion
@@ -671,8 +684,9 @@ namespace SolaERP.Persistence.Services
         }
 
         public async Task<ApiResponse<List<DueDiligenceDesignDto>>> GetDueDiligenceAsync(string userIdentity,
-            string acceptLanguage, int? revisedVendorId = null)
-            => ApiResponse<List<DueDiligenceDesignDto>>.Success(await GetDueDesignsAsync(userIdentity, Language.en));
+            string acceptLanguage, int? vendorId = null)
+            => ApiResponse<List<DueDiligenceDesignDto>>.Success(await GetDueDesignsAsync(userIdentity, Language.en,
+                vendorId));
 
 
         public async Task<ApiResponse<VM_GET_InitalRegistration>> GetInitRegistrationAsync(string userIdentity,
@@ -688,7 +702,12 @@ namespace SolaERP.Persistence.Services
             var vendorBusinessCategoriesTask = await _repository.GetVendorBuCategoriesAsync(vendor);
             var companyInfoTask = await _repository.GetCompanyInfoAsync(vendor);
             if (vendor == 0)
+            {
                 companyInfoTask.CompanyRegistrationDate = null;
+                companyInfoTask.CreditDays = 60;
+                companyInfoTask.AgreeWithDefaultDays = 1;
+            }
+
 
             var vendorProductsTask = await _repository.GetVendorProductServices(vendor);
             var vendorRepresentedCompany = await _repository.GetRepresentedCompanyAsync(vendor);
@@ -1042,7 +1061,7 @@ namespace SolaERP.Persistence.Services
                             d.Column2Alias,
                             d.Column3Alias,
                             d.Column4Alias,
-                            d.Column5Alias,
+                            d.Column5Alias
                         }.Where(col => col != null).ToArray(), //: null,
                         TextBoxPoint = d.HasTextBox, //> 0 ? d.HasTextBox : null,
                         TextAreaPoint = d.HasTexArea, //> 0 ? d.HasTexArea : null,

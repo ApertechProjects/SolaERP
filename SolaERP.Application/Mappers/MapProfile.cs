@@ -314,7 +314,7 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.DecimalValue, opt => opt.MapFrom(src => src.DecimalValue))
                 .ForMember(dest => dest.DateTimeValue, opt => opt.MapFrom(src => src.DateTimeValue)).ReverseMap();
 
-            CreateMap<VendorPrequalificationValues, PrequalificationSaveDto>()
+            CreateMap<VendorPrequalificationValues, PrequalificationChildSaveDto>()
                 .ForMember(dest => dest.DesignId, opt => opt.MapFrom(src => src.PrequalificationDesignId))
                 .ForMember(dest => dest.IntValue, opt => opt.MapFrom(src => src.IntValue))
                 .ForMember(dest => dest.TextboxValue, opt => opt.MapFrom(src => src.TextboxValue))
@@ -324,7 +324,7 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.DecimalValue, opt => opt.MapFrom(src => src.DecimalValue))
                 .ForMember(dest => dest.DateTimeValue, opt => opt.Ignore());
 
-            CreateMap<PrequalificationSaveDto, VendorPrequalificationValues>()
+            CreateMap<PrequalificationChildSaveDto, VendorPrequalificationValues>()
                 .ForMember(dest => dest.PrequalificationDesignId, opt => opt.MapFrom(src => src.DesignId))
                 .ForMember(dest => dest.DateTimeValue, opt => opt.Ignore());
 
