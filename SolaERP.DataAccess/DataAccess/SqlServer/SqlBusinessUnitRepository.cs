@@ -96,6 +96,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return businessUnits;
             }
         }
+
+        public async Task<List<BaseBusinessUnit>> GetBusinessUnitListByCurrentUser(int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = $"EXEC SP_UserBusinessUnitsList {userId}";
+                using var reader = await command.ExecuteReaderAsync();
+
+                List<BaseBusinessUnit> businessUnits = new List<BaseBusinessUnit>();
+
+                while (reader.Read())
+                    businessUnits.Add(reader.GetByEntityStructure<BaseBusinessUnit>());
+
+                return businessUnits;
+            }
+        }
+
         public async Task<BusinessUnits> GetByIdAsync(int id)
         {
             BusinessUnits result = null;
