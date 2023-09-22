@@ -7,13 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Dtos\NewFolder\**" />
     <Compile Remove="Entities\ApproveStage\**" />
     <Compile Remove="Entities\Log\**" />
-    <EmbeddedResource Remove="Dtos\NewFolder\**" />
     <EmbeddedResource Remove="Entities\ApproveStage\**" />
     <EmbeddedResource Remove="Entities\Log\**" />
-    <None Remove="Dtos\NewFolder\**" />
     <None Remove="Entities\ApproveStage\**" />
     <None Remove="Entities\Log\**" />
   </ItemGroup>

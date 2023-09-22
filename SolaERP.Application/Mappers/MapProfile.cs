@@ -23,6 +23,7 @@ using SolaERP.Application.Dtos.Layout;
 using SolaERP.Application.Dtos.Location;
 using SolaERP.Application.Dtos.LogInfo;
 using SolaERP.Application.Dtos.Menu;
+using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Dtos.Procedure;
 using SolaERP.Application.Dtos.Request;
 using SolaERP.Application.Dtos.RFQ;
@@ -57,6 +58,7 @@ using SolaERP.Application.Entities.Layout;
 using SolaERP.Application.Entities.Location;
 using SolaERP.Application.Entities.LogInfo;
 using SolaERP.Application.Entities.Menu;
+using SolaERP.Application.Entities.Payment;
 using SolaERP.Application.Entities.Procedure;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Entities.RFQ;
@@ -564,6 +566,13 @@ namespace SolaERP.Persistence.Mappers
 
 
             CreateMap<RequestHeld, RequestHeldDto>().ReverseMap();
+
+            CreateMap<CreateAdvance, CreateAdvanceDto>().ReverseMap();
+            CreateMap<CreateOrder, CreateOrderDto>().ReverseMap();
+            CreateMap<CreateBalance, CreateBalanceDto>().ReverseMap();
+            CreateMap<InfoHeader, InfoHeaderDto>().ReverseMap();
+            CreateMap<InfoDetail, InfoDetailDto>().ReverseMap();
+            CreateMap<InfoApproval, InfoApprovalDto>().ReverseMap();
 
         }
     }
