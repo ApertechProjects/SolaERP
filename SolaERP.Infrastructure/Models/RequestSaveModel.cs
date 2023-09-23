@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Dtos.Request;
+﻿using SolaERP.Application.Dtos.Attachment;
+using SolaERP.Application.Dtos.Request;
 
 namespace SolaERP.Application.Models
 {
@@ -25,5 +26,6 @@ namespace SolaERP.Application.Models
         public int ApproveStageMainId { get; set; }
         public string RequestNo { get; set; }
         public List<RequestDetailDto> Details { get; set; }
+        public List<AttachmentDto> Attachments { get; set; }
     }
 }
