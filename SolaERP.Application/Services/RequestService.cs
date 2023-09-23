@@ -134,7 +134,7 @@ namespace SolaERP.Persistence.Services
             var attachmentDtoList = attachments.Select(x =>
             {
                 var dto = _mapper.Map<AttachmentDto>(x);
-                dto.FileLink = _fileUploadService.GetDownloadFileLink(dto.FileLink, Modules.EvaluationForm);
+                dto.FileLink = _fileUploadService.GetDownloadFileLink(dto.FileLink, Modules.Request);
                 return dto;
             }).ToList();
             var requestDto = _mapper.Map<RequestCardMainDto>(requestMain);
