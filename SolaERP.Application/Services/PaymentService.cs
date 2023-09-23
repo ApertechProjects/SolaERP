@@ -5,22 +5,43 @@ using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Entities.Payment;
 using SolaERP.Application.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.Persistence.Services
 {
     public class PaymentService : IPaymentService
     {
-        private readonly IMapper _mapper;
         private readonly IPaymentRepository _paymentRepository;
-        public PaymentService(IPaymentRepository paymentRepository, IMapper mapper)
+        private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
+        public PaymentService(IPaymentRepository paymentRepository, IUserRepository userRepository, IMapper mapper)
         {
             _mapper = mapper;
+            _userRepository = userRepository;
             _paymentRepository = paymentRepository;
+        }
+
+        public async Task<ApiResponse<List<AllDto>>> All(string name, PaymentGetModel payment)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            var data = await _paymentRepository.All(userId, payment);
+            var dto = _mapper.Map<List<AllDto>>(data);
+            return ApiResponse<List<AllDto>>.Success(dto);
+        }
+
+        public async Task<ApiResponse<List<ApprovedDto>>> Approved(string name, PaymentGetModel payment)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            var data = await _paymentRepository.Approved(userId, payment);
+            var dto = _mapper.Map<List<ApprovedDto>>(data);
+            return ApiResponse<List<ApprovedDto>>.Success(dto);
+        }
+
+        public async Task<ApiResponse<List<BankDto>>> Bank(string name, PaymentGetModel payment)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            var data = await _paymentRepository.Bank(userId, payment);
+            var dto = _mapper.Map<List<BankDto>>(data);
+            return ApiResponse<List<BankDto>>.Success(dto);
         }
 
         public async Task<ApiResponse<List<CreateAdvanceDto>>> CreateAdvanceAsync(CreateAdvanceModel createAdvance)
@@ -44,6 +65,22 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<CreateOrderDto>>.Success(dto);
         }
 
+        public async Task<ApiResponse<List<DraftDto>>> Draft(string name, PaymentGetModel payment)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            var data = await _paymentRepository.Draft(userId, payment);
+            var dto = _mapper.Map<List<DraftDto>>(data);
+            return ApiResponse<List<DraftDto>>.Success(dto);
+        }
+
+        public async Task<ApiResponse<List<HeldDto>>> Held(string name, PaymentGetModel payment)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            var data = await _paymentRepository.Held(userId, payment);
+            var dto = _mapper.Map<List<HeldDto>>(data);
+            return ApiResponse<List<HeldDto>>.Success(dto);
+        }
+
         public async Task<ApiResponse<PaymentInfoModel>> Info(int paymentDocumentMainId)
         {
             var header = await _paymentRepository.InfoHeader(paymentDocumentMainId);
@@ -58,6 +95,29 @@ namespace SolaERP.Persistence.Services
                 InfoDetail = detailsDto,
                 InfoHeader = headerDto,
             });
+        }
+
+        public async Task<ApiResponse<List<RejectedDto>>> Rejected(string name, PaymentGetModel payment)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            var data = await _paymentRepository.Rejected(userId, payment);
+            var dto = _mapper.Map<List<RejectedDto>>(data);
+            return ApiResponse<List<RejectedDto>>.Success(dto);
+        }
+
+        public async Task<ApiResponse<bool>> SendToApprove(string name, int paymentDocumentMainId)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            var result = await _paymentRepository.SendToApprove(userId, paymentDocumentMainId);
+            return result ? ApiResponse<bool>.Success(200) : ApiResponse<bool>.Fail("Problem detected. Payment can not be send to approvals", 400);
+        }
+
+        public async Task<ApiResponse<List<WaitingForApprovalDto>>> WaitingForApproval(string name, PaymentGetModel payment)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            var data = await _paymentRepository.WaitingForApproval(userId, payment);
+            var dto = _mapper.Map<List<WaitingForApprovalDto>>(data);
+            return ApiResponse<List<WaitingForApprovalDto>>.Success(dto);
         }
     }
 }

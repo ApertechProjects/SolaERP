@@ -574,6 +574,13 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<InfoDetail, InfoDetailDto>().ReverseMap();
             CreateMap<InfoApproval, InfoApprovalDto>().ReverseMap();
 
+            CreateMap<WaitingForApproval, WaitingForApprovalDto>().ReverseMap();
+            CreateMap<All, AllDto>().ReverseMap();
+            CreateMap<Draft, DraftDto>().ReverseMap();
+            CreateMap<Approved, ApprovedDto>().ReverseMap();
+            CreateMap<Rejected, RejectedDto>().ReverseMap();
+            CreateMap<Held, HeldDto>().ReverseMap();
+            CreateMap<Bank, BankDto>().ReverseMap();
         }
     }
 }

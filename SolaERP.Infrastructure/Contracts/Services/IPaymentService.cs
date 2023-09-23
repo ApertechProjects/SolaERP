@@ -1,12 +1,6 @@
 ﻿using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Dtos.Shared;
-using SolaERP.Application.Entities.Payment;
 using SolaERP.Application.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.Application.Contracts.Services
 {
@@ -16,5 +10,13 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<CreateAdvanceDto>>> CreateAdvanceAsync(CreateAdvanceModel createAdvance);
         Task<ApiResponse<List<CreateOrderDto>>> CreateOrderAsync(CreateOrderModel createOrder);
         Task<ApiResponse<PaymentInfoModel>> Info(int paymentDocumentMainId);
+        Task<ApiResponse<List<WaitingForApprovalDto>>> WaitingForApproval(string name, PaymentGetModel payment);
+        Task<ApiResponse<List<AllDto>>> All(string name, PaymentGetModel payment);
+        Task<ApiResponse<List<DraftDto>>> Draft(string name, PaymentGetModel payment);
+        Task<ApiResponse<List<ApprovedDto>>> Approved(string name, PaymentGetModel payment);
+        Task<ApiResponse<List<HeldDto>>> Held(string name, PaymentGetModel payment);
+        Task<ApiResponse<List<RejectedDto>>> Rejected(string name, PaymentGetModel payment);
+        Task<ApiResponse<List<BankDto>>> Bank(string name, PaymentGetModel payment);
+        Task<ApiResponse<bool>> SendToApprove(string name, int paymentDocumentMainId);
     }
 }

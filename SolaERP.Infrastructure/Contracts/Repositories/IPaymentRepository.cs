@@ -1,11 +1,5 @@
-﻿using SolaERP.Application.Dtos.Payment;
-using SolaERP.Application.Entities.Payment;
+﻿using SolaERP.Application.Entities.Payment;
 using SolaERP.Application.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.Application.Contracts.Repositories
 {
@@ -17,5 +11,13 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<InfoHeader> InfoHeader(int paymentDocumentMainId);
         Task<List<InfoDetail>> InfoDetail(int paymentDocumentMainId);
         Task<List<InfoApproval>> InfoApproval(int paymentDocumentMainId);
+        Task<List<All>> All(int userId, PaymentGetModel payment);
+        Task<List<Approved>> Approved(int userId, PaymentGetModel payment);
+        Task<List<Bank>> Bank(int userId, PaymentGetModel payment);
+        Task<List<Draft>> Draft(int userId, PaymentGetModel payment);
+        Task<List<Held>> Held(int userId, PaymentGetModel payment);
+        Task<List<Rejected>> Rejected(int userId, PaymentGetModel payment);
+        Task<List<WaitingForApproval>> WaitingForApproval(int userId, PaymentGetModel payment);
+        Task<bool> SendToApprove(int userId, int paymentDocumentMainId);
     }
 }
