@@ -212,9 +212,8 @@ namespace SolaERP.Persistence.Services
                 .Select(x => x.RequestDetailId).ToList()
                 .Except(model.Details.Select(x => x.RequestDetailId).ToList()
                 ).ToList();
-
-            var attachments = _mapper.Map<List<AttachmentSaveModel>>(model.Attachments);
-            attachments.ForEach(attachment =>
+            
+            model.Attachments.ForEach(attachment =>
             {
                 attachment.SourceId = resultModel.RequestMainId;
                 attachment.SourceType = SourceType.REQ.ToString();
