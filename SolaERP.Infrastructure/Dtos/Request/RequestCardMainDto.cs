@@ -1,4 +1,6 @@
-﻿namespace SolaERP.Application.Dtos.Request
+﻿using SolaERP.Application.Dtos.Attachment;
+
+namespace SolaERP.Application.Dtos.Request
 {
     public class RequestCardMainDto
     {
@@ -42,6 +44,7 @@
         public int ApproveStageMainId { get; set; }
         public List<RequestCardDetailDto> requestCardDetails { get; set; }
         public List<RequestCardAnalysisDto> requestCardAnalysis { get; set; }
+        public List<AttachmentDto> Attachments { get; set; }
 
     }
 }
