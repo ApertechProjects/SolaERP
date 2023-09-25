@@ -6,7 +6,7 @@ namespace SolaERP.Persistence.Utils
 {
     public static class ConvertListToTable
     {
-        public static DataTable ConvertToDataTable<T>(this List<T> list) where T : class
+        public static DataTable ConvertListOfCLassToDataTable<T>(this List<T> list) where T : class
         {
             var properties = typeof(T).GetProperties();
 

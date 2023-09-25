@@ -1,5 +1,6 @@
 ﻿using SolaERP.Application.Entities.Payment;
 using SolaERP.Application.Models;
+using System.Data;
 
 namespace SolaERP.Application.Contracts.Repositories
 {
@@ -19,5 +20,9 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<Rejected>> Rejected(int userId, PaymentGetModel payment);
         Task<List<WaitingForApproval>> WaitingForApproval(int userId, PaymentGetModel payment);
         Task<bool> SendToApprove(int userId, int paymentDocumentMainId);
+        Task<PaymentDocumentSaveResultModel> MainSave(int userId, PaymentDocumentMainSaveModel model);
+        Task<bool> DetailSave(DataTable model);
+        Task<bool> Delete(int paymentDocumentMainId);
+        Task<decimal> VendorBalance(int businessUnitId, string vendorCode);
     }
 }

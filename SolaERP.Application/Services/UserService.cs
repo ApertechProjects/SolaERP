@@ -258,7 +258,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> UserChangeStatusAsync(string name, List<UserChangeStatusModel> model)
         {
-            var table = model.ConvertToDataTable();
+            var table = model.ConvertListOfCLassToDataTable();
             var userId = await _userRepository.ConvertIdentity(name);
             var user = await _userRepository.UserChangeStatusAsync(userId, table);
             await _unitOfWork.SaveChangesAsync();

@@ -5,6 +5,8 @@ using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Entities.Payment;
 using SolaERP.Application.Models;
+using SolaERP.Persistence.Utils;
+using System.Data;
 
 namespace SolaERP.Persistence.Services
 {
@@ -65,6 +67,14 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<CreateOrderDto>>.Success(dto);
         }
 
+        public async Task<ApiResponse<bool>> Delete(int paymentDocumentMainId)
+        {
+            var result = await _paymentRepository.Delete(paymentDocumentMainId);
+            if (result)
+                return ApiResponse<bool>.Success(200);
+            return ApiResponse<bool>.Fail("Data can not be deleted", 400);
+        }
+
         public async Task<ApiResponse<List<DraftDto>>> Draft(string name, PaymentGetModel payment)
         {
             int userId = await _userRepository.ConvertIdentity(name);
@@ -105,11 +115,33 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<RejectedDto>>.Success(dto);
         }
 
+        public async Task<ApiResponse<PaymentDocumentSaveResultModel>> Save(string name, PaymentDocumentSaveModel model)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            var mainResult = await _paymentRepository.MainSave(userId, model.Main);
+            if (mainResult != null)
+            {
+                DataTable data = model.Details.ConvertListOfCLassToDataTable();
+                var detailResult = await _paymentRepository.DetailSave(data);
+            }
+            return ApiResponse<PaymentDocumentSaveResultModel>.Success(new PaymentDocumentSaveResultModel
+            {
+                PaymentDocumentMainId = mainResult.PaymentDocumentMainId,
+                PaymentRequestNo = mainResult.PaymentRequestNo
+            });
+        }
+
         public async Task<ApiResponse<bool>> SendToApprove(string name, int paymentDocumentMainId)
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var result = await _paymentRepository.SendToApprove(userId, paymentDocumentMainId);
             return result ? ApiResponse<bool>.Success(200) : ApiResponse<bool>.Fail("Problem detected. Payment can not be send to approvals", 400);
+        }
+
+        public async Task<ApiResponse<decimal>> VendorBalance(int businessUnitId, string vendorCode)
+        {
+            var data = await _paymentRepository.VendorBalance(businessUnitId, vendorCode);
+            return ApiResponse<decimal>.Success(data);
         }
 
         public async Task<ApiResponse<List<WaitingForApprovalDto>>> WaitingForApproval(string name, PaymentGetModel payment)

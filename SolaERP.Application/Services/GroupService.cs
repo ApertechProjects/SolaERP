@@ -205,7 +205,7 @@ namespace SolaERP.Persistence.Services
 
             if (model.AddMenus != null)
             {
-                await _groupRepository.AddMenuAsync(model.GroupId, model.AddMenus.ConvertToDataTable());
+                await _groupRepository.AddMenuAsync(model.GroupId, model.AddMenus.ConvertListOfCLassToDataTable());
             }
             if (model.RemoveMenus != null)
                 await _groupRepository.DeleteMenuAsync(model.GroupId, model.RemoveMenus.ConvertListToDataTable());
@@ -238,13 +238,13 @@ namespace SolaERP.Persistence.Services
 
         private async Task DeleteBuyersAsync(List<GroupBuyerSaveModel> removeBuyers, int groupId)
         {
-            var data = removeBuyers.ConvertToDataTable();
+            var data = removeBuyers.ConvertListOfCLassToDataTable();
             await _groupRepository.DeleteBuyersAsync(data, groupId);
         }
 
         private async Task AddBuyersAsync(List<GroupBuyerSaveModel> addBuyers, int groupId)
         {
-            var data = addBuyers.ConvertToDataTable();
+            var data = addBuyers.ConvertListOfCLassToDataTable();
             await _groupRepository.AddBuyersAsync(data, groupId);
         }
 

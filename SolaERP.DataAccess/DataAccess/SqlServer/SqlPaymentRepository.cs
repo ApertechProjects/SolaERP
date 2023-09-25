@@ -3,7 +3,9 @@ using SolaERP.Application.Entities.Payment;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
+using System.Data;
 using System.Data.Common;
+using System.Data.SqlClient;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -472,6 +474,111 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@paymentDocumentMainId", paymentDocumentMainId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
+        public async Task<PaymentDocumentSaveResultModel> MainSave(int userId, PaymentDocumentMainSaveModel model)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = @"EXEC SP_PaymentDocumentMain_IUD 
+                                                                @PaymentDocumentMainId,
+                                                                @BusinessUnitId,
+                                                                @Reference,
+                                                                @VendorCode,
+                                                                @CurrencyCode,
+                                                                @Comment,
+                                                                @OrderAdvance,
+                                                                @PaymentDocumentTypeId,
+                                                                @PaymentDocumentPriorityId,
+                                                                @ApproveStageMainId,
+                                                                @PaymentRequestNo,
+                                                                @PaymentRequestDate,
+                                                                @SentDate,
+                                                                @UserId,
+                                                                @NewPaymentDocumentMainId = @NewPaymentDocumentMainId OUTPUT,
+                                                                @NewPaymentRequestNo = @NewPaymentRequestNo OUTPUT 
+                                                                select @NewPaymentDocumentMainId as NewPaymentDocumentMainId,
+                                                               
+                                                                @NewPaymentRequestNo as NewPaymentRequestNo";
+
+                command.Parameters.AddWithValue(command, "@PaymentDocumentMainId", model.PaymentDocumentMainId);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@Reference", model.Reference);
+                command.Parameters.AddWithValue(command, "@VendorCode", model.VendorCode);
+                command.Parameters.AddWithValue(command, "@CurrencyCode", model.CurrencyCode);
+                command.Parameters.AddWithValue(command, "@Comment", model.Comment);
+                command.Parameters.AddWithValue(command, "@OrderAdvance", model.OrderAdvance);
+                command.Parameters.AddWithValue(command, "@PaymentDocumentTypeId", model.PaymentDocumentTypeId);
+                command.Parameters.AddWithValue(command, "@PaymentDocumentPriorityId", model.PaymentDocumentPriorityId);
+                command.Parameters.AddWithValue(command, "@ApproveStageMainId", model.ApproveStageMainId);
+                command.Parameters.AddWithValue(command, "@PaymentRequestNo", model.PaymentRequestNo);
+                command.Parameters.AddWithValue(command, "@PaymentRequestDate", model.PaymentRequestDate);
+                command.Parameters.AddWithValue(command, "@SentDate", model.SentDate);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+
+
+                command.Parameters.Add("@NewPaymentDocumentMainId", SqlDbType.Int);
+                command.Parameters["@NewPaymentDocumentMainId"].Direction = ParameterDirection.Output;
+
+                command.Parameters.Add("@NewPaymentRequestNo", SqlDbType.NVarChar, 50);
+                command.Parameters["@NewPaymentRequestNo"].Direction = ParameterDirection.Output;
+
+                using var reader = await command.ExecuteReaderAsync();
+                int requestId = 0;
+                string requestNo = "";
+                if (reader.Read())
+                {
+                    requestId = reader.Get<int>("NewRequestmainId");
+                    requestNo = reader.Get<string>("NewRequestNo");
+                }
+
+                return new PaymentDocumentSaveResultModel { PaymentDocumentMainId = requestId, PaymentRequestNo = requestNo };
+            }
+        }
+
+        public async Task<bool> DetailSave(DataTable model)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentDocumentDetails_IUD @Data";
+                command.Parameters.AddTableValue(command, "@Data", "PaymentDocumentDetailsType", model);
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
+            }
+        }
+
+        public async Task<bool> Delete(int paymentDocumentMainId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentDocumentMain_IUD @PaymentDocumentMainId";
+                command.Parameters.AddWithValue(command, "@PaymentDocumentMainId", paymentDocumentMainId);
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
+            }
+        }
+
+        public async Task<decimal> VendorBalance(int businessUnitId, string vendorCode)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = @"EXEC SP_PaymentDocumentVendorBalance 
+                                                                @VendorCode,
+                                                                @BusinessUnitId"
+                ;
+
+                command.Parameters.AddWithValue(command, "@VendorCode", vendorCode);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                decimal result = 0;
+                if (reader.Read())
+                {
+                    result = reader.Get<decimal>("Amount");
+                }
+
+                return result;
             }
         }
     }

@@ -43,11 +43,11 @@ namespace SolaERP.API.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Bank([FromQuery] PaymentGetModel payment)
-          => CreateActionResult(await _paymentService.Bank(User.Identity.Name, payment));
+            => CreateActionResult(await _paymentService.Bank(User.Identity.Name, payment));
 
         [HttpPost]
         public async Task<IActionResult> SendToApprove(int paymentDocumentMainId)
-          => CreateActionResult(await _paymentService.SendToApprove(User.Identity.Name, paymentDocumentMainId));
+            => CreateActionResult(await _paymentService.SendToApprove(User.Identity.Name, paymentDocumentMainId));
 
         [HttpGet]
         public async Task<IActionResult> Balance([FromQuery] CreateBalanceModel createBalance)
@@ -59,10 +59,22 @@ namespace SolaERP.API.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Order([FromQuery] CreateOrderModel createOrder)
-         => CreateActionResult(await _paymentService.CreateOrderAsync(createOrder));
+            => CreateActionResult(await _paymentService.CreateOrderAsync(createOrder));
 
         [HttpGet("{paymentDocumentMainId}")]
         public async Task<IActionResult> Info(int paymentDocumentMainId)
-         => CreateActionResult(await _paymentService.Info(paymentDocumentMainId));
+            => CreateActionResult(await _paymentService.Info(paymentDocumentMainId));
+
+        [HttpGet]
+        public async Task<IActionResult> VendorBalance(int businessUnitId, string vendorCode)
+            => CreateActionResult(await _paymentService.VendorBalance(businessUnitId, vendorCode));
+
+        [HttpPost]
+        public async Task<IActionResult> Save(PaymentDocumentSaveModel model)
+            => CreateActionResult(await _paymentService.Save(User.Identity.Name, model));
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int paymentDocumentMainId)
+            => CreateActionResult(await _paymentService.Delete(paymentDocumentMainId));
     }
 }
