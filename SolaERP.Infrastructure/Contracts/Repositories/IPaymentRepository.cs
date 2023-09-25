@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Entities.Payment;
+﻿using SolaERP.Application.Dtos.Payment;
+using SolaERP.Application.Entities.Payment;
 using SolaERP.Application.Models;
 using System.Data;
 
@@ -24,5 +25,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> DetailSave(DataTable model);
         Task<bool> Delete(int paymentDocumentMainId);
         Task<decimal> VendorBalance(int businessUnitId, string vendorCode);
+        Task<List<AttachmentDto>> Attachments(int paymentDocumentMainId);
     }
 }

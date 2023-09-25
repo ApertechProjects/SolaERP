@@ -38,6 +38,13 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<ApprovedDto>>.Success(dto);
         }
 
+        public async Task<ApiResponse<List<AttachmentDto>>> Attachments(int paymentDocumentMainId)
+        {
+            var data = await _paymentRepository.Attachments(paymentDocumentMainId);
+            var dto = _mapper.Map<List<AttachmentDto>>(data);
+            return ApiResponse<List<AttachmentDto>>.Success(dto);
+        }
+
         public async Task<ApiResponse<List<BankDto>>> Bank(string name, PaymentGetModel payment)
         {
             int userId = await _userRepository.ConvertIdentity(name);

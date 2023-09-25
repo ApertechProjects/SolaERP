@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Entities.Payment;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -580,6 +581,33 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 return result;
             }
+        }
+
+        public async Task<List<AttachmentDto>> Attachments(int paymentDocumentMainId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_PaymentDocumentAttachmentsDataLoad @paymentDocumentMainId";
+            command.Parameters.AddWithValue(command, "@paymentDocumentMainId", paymentDocumentMainId);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<AttachmentDto> list = new List<AttachmentDto>();
+            while (reader.Read())
+                list.Add(GetAttachment(reader));
+
+            return list;
+        }
+
+        public AttachmentDto GetAttachment(DbDataReader reader)
+        {
+            return new AttachmentDto
+            {
+                Checked = reader.Get<bool>("Checked"),
+                PaymentDocumentSubType = reader.Get<string>("PaymentDocumentSubType"),
+                PaymentDocumentSubTypeId = reader.Get<int>("PaymentDocumentSubTypeId"),
+                PaymentDocumentType = reader.Get<string>("PaymentDocumentType"),
+                PaymentDocumentTypeId = reader.Get<int>("PaymentDocumentTypeId")
+            };
         }
     }
 }

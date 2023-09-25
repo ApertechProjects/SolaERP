@@ -21,5 +21,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<PaymentDocumentSaveResultModel>> Save(string name, PaymentDocumentSaveModel model);
         Task<ApiResponse<bool>> Delete(int paymentDocumentMainId);
         Task<ApiResponse<decimal>> VendorBalance(int businessUnitId, string vendorCode);
+        Task<ApiResponse<List<AttachmentDto>> Attachments(int paymentDocumentMainId);
     }
 }
