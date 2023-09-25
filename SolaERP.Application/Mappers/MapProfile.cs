@@ -42,7 +42,6 @@ using SolaERP.Application.Entities.AnalysisStructure;
 using SolaERP.Application.Entities.ApproveRole;
 using SolaERP.Application.Entities.ApproveStage;
 using SolaERP.Application.Entities.ApproveStages;
-using SolaERP.Application.Entities.Attachment;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Bid;
 using SolaERP.Application.Entities.BidComparison;
@@ -70,6 +69,8 @@ using SolaERP.Application.Entities.User;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Models;
 using AnalysisCodes = SolaERP.Application.Entities.AnalysisCode.AnalysisCodes;
+using Attachment = SolaERP.Application.Entities.Attachment.Attachment;
+using AttachmentDto = SolaERP.Application.Dtos.Attachment.AttachmentDto;
 using UOM = SolaERP.Application.Entities.UOM.UOM;
 using UOMDto = SolaERP.Application.Dtos.UOM.UOMDto;
 
@@ -581,6 +582,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<Rejected, RejectedDto>().ReverseMap();
             CreateMap<Held, HeldDto>().ReverseMap();
             CreateMap<Bank, BankDto>().ReverseMap();
+            CreateMap<SolaERP.Application.Entities.Payment.Attachment, SolaERP.Application.Dtos.Payment.AttachmentDto>().ReverseMap();
         }
     }
 }
