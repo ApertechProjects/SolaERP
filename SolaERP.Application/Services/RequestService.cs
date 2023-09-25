@@ -28,7 +28,8 @@ namespace SolaERP.Persistence.Services
 
         public RequestService(IUnitOfWork unitOfWork, IMapper mapper, IRequestMainRepository requestMainRepository,
             IRequestDetailRepository requestDetailRepository, IUserRepository userRepository, IMailService mailService,
-            IEmailNotificationService emailNotificationService, IAttachmentRepository attachmentRepository, IFileUploadService fileUploadService)
+            IEmailNotificationService emailNotificationService, IAttachmentRepository attachmentRepository,
+            IFileUploadService fileUploadService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -212,12 +213,22 @@ namespace SolaERP.Persistence.Services
                 .Select(x => x.RequestDetailId).ToList()
                 .Except(model.Details.Select(x => x.RequestDetailId).ToList()
                 ).ToList();
-            
+
             model.Attachments.ForEach(attachment =>
             {
-                attachment.SourceId = resultModel.RequestMainId;
-                attachment.SourceType = SourceType.REQ.ToString();
-                _attachmentRepository.SaveAttachmentAsync(attachment);
+                if (attachment.Type == 2)
+                {
+                    if (attachment.AttachmentId > 0)
+                    {
+                        _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
+                    }
+                }
+                else
+                {
+                    attachment.SourceId = resultModel.RequestMainId;
+                    attachment.SourceType = SourceType.REQ.ToString();
+                    _attachmentRepository.SaveAttachmentAsync(attachment);
+                }
             });
 
 
