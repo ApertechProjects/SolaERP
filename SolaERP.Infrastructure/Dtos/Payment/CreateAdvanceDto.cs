@@ -9,7 +9,7 @@ namespace SolaERP.Application.Dtos.Payment
 {
     public class CreateAdvanceDto : CreateAdvance
     {
-        public string OrderNo { get; set; }
+        public string TransactionReference { get; set; }
         public string SystemInvoiceNo { get; set; }
         public string InvoiceNo { get; set; }
         public string AccountCode { get; set; }

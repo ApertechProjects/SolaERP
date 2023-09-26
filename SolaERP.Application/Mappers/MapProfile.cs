@@ -582,6 +582,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<Rejected, RejectedDto>().ReverseMap();
             CreateMap<Held, HeldDto>().ReverseMap();
             CreateMap<Bank, BankDto>().ReverseMap();
+            CreateMap<Bank, BankDto>().ReverseMap();
             CreateMap<SolaERP.Application.Entities.Payment.Attachment, SolaERP.Application.Dtos.Payment.AttachmentDto>().ReverseMap();
         }
     }

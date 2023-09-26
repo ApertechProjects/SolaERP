@@ -91,7 +91,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Budget = reader.Get<string>("Budget"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 InvoiceNo = reader.Get<string>("InvoiceNo"),
-                OrderNo = reader.Get<string>("OrderNo"),
+                TransactionReference = reader.Get<string>("TransactionReference"),
                 OrderTotal = reader.Get<decimal>("OrderTotal"),
                 PayableAmount = reader.Get<decimal>("PayableAmount"),
                 PaymentRequestAmount = reader.Get<decimal>("PaymentRequestAmount"),
