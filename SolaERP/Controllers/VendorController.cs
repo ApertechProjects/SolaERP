@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Vendors;
@@ -9,7 +10,7 @@ using SolaERP.Controllers;
 namespace SolaERP.API.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [ApiController]
+    [Authorize]
     public class VendorController : CustomBaseController
     {
         private readonly IVendorService _service;
