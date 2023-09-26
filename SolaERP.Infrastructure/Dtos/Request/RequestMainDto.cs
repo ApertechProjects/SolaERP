@@ -1,4 +1,6 @@
-﻿namespace SolaERP.Application.Dtos.Request
+﻿using SolaERP.Application.Dtos.Attachment;
+
+namespace SolaERP.Application.Dtos.Request
 {
     public class RequestMainDto
     {
@@ -22,5 +24,6 @@
         public string StatusName { get; set; }
         public string ApproveStatus { get; set; }
         public string ApproveStatusName { get; set; }
+        public List<AttachmentDto> Attachments { get; set; }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Attachment;
@@ -16,7 +15,6 @@ using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
-using SolaERP.Application.Shared;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Infrastructure.ViewModels;
 using SolaERP.Persistence.Utils;
@@ -32,12 +30,12 @@ namespace SolaERP.Persistence.Services
         private readonly ISupplierEvaluationRepository _repository;
         private readonly IUserRepository _userRepository;
         private readonly IVendorRepository _vendorRepository;
-        private readonly IAttachmentRepository _attachmentRepository;
         private readonly IEmailNotificationService _emailNotificationService;
         private readonly IMailService _mailService;
         private readonly IUserService _userService;
         private readonly IFileUploadService _fileUploadService;
         private readonly IGeneralRepository _generalRepository;
+        private readonly IAttachmentService _attachmentService;
 
         public SupplierEvaluationService(ISupplierEvaluationRepository repository,
             IMapper mapper,
@@ -45,12 +43,12 @@ namespace SolaERP.Persistence.Services
             IBusinessUnitRepository buRepository,
             IUserRepository userRepository,
             IVendorRepository vendorRepository,
-            IAttachmentRepository attachmentRepository,
             IEmailNotificationService emailNotificationService,
             IMailService mailService,
             IUserService userService,
             IFileUploadService fileUploadService,
-            IGeneralRepository generalRepository)
+            IGeneralRepository generalRepository,
+            IAttachmentService attachmentService)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
@@ -58,13 +56,12 @@ namespace SolaERP.Persistence.Services
             _mapper = mapper;
             _userRepository = userRepository;
             _vendorRepository = vendorRepository;
-
-            _attachmentRepository = attachmentRepository;
             _emailNotificationService = emailNotificationService;
             _mailService = mailService;
             _userService = userService;
             _fileUploadService = fileUploadService;
             _generalRepository = generalRepository;
+            _attachmentService = attachmentService;
         }
 
         public async Task<ApiResponse<bool>> AddAsync(string useridentity, string token,
@@ -180,7 +177,7 @@ namespace SolaERP.Persistence.Services
                 {
                     if (companyLogoList[i].Type == 2)
                     {
-                        await _attachmentRepository.DeleteAttachmentAsync(companyLogoList[i].AttachmentId);
+                        await _attachmentService.DeleteAttachmentAsync(companyLogoList[i].AttachmentId);
                         await _fileUploadService.DeleteFile(Modules.Vendors, companyLogoList[i].FileLink);
                     }
 
@@ -190,7 +187,7 @@ namespace SolaERP.Persistence.Services
                             new List<IFormFile> { command.CompanyInformation.CompanyLogo[i].File },
                             Modules.Vendors, new List<string>())).Data[0];
 
-                        await _attachmentRepository.SaveAttachmentAsync(companyLogoList[i]);
+                        await _attachmentService.SaveAttachmentAsync(companyLogoList[i]);
                     }
                 }
 
@@ -211,7 +208,7 @@ namespace SolaERP.Persistence.Services
                 {
                     if (attachments[i].Type == 2)
                     {
-                        await _attachmentRepository.DeleteAttachmentAsync(attachments[i].AttachmentId);
+                        await _attachmentService.DeleteAttachmentAsync(attachments[i].AttachmentId);
                         await _fileUploadService.DeleteFile(Modules.EvaluationForm, attachments[i].FileLink);
                     }
 
@@ -221,7 +218,7 @@ namespace SolaERP.Persistence.Services
                             new List<IFormFile> { command.CompanyInformation.Attachments[i].File },
                             Modules.EvaluationForm, new List<string>())).Data[0];
 
-                        await _attachmentRepository.SaveAttachmentAsync(attachments[i]);
+                        await _attachmentService.SaveAttachmentAsync(attachments[i]);
                     }
                 }
 
@@ -270,11 +267,7 @@ namespace SolaERP.Persistence.Services
                                 {
                                     if (attachment.Type == 2)
                                     {
-                                        var attachmentInDb = _attachmentRepository
-                                            .GetAttachmentsWithFileDataAsync(attachment.AttachmentId).Result[0];
-                                        _fileUploadService.DeleteFile(Modules.EvaluationForm, attachmentInDb.FileLink)
-                                            .Wait();
-                                        return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
+                                        return _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId);
                                     }
 
                                     if (attachment.Type != 2 && attachment.AttachmentId <= 0)
@@ -285,7 +278,7 @@ namespace SolaERP.Persistence.Services
                                         entity.FileLink = _fileUploadService.AddFile(
                                             new List<IFormFile> { attachment.File },
                                             Modules.EvaluationForm, new List<string>()).Result.Data[0];
-                                        return _attachmentRepository.SaveAttachmentAsync(entity);
+                                        return _attachmentService.SaveAttachmentAsync(entity);
                                     }
 
                                     return Task.FromResult(true);
@@ -378,7 +371,7 @@ namespace SolaERP.Persistence.Services
                                     if (attachment.Type == 2)
                                     {
                                         _fileUploadService.DeleteFile(Modules.EvaluationForm, attachment.FileLink);
-                                        return _attachmentRepository.DeleteAttachmentAsync(attachment.AttachmentId);
+                                        return _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId);
                                     }
 
                                     if (attachment.Type != 2 && attachment.AttachmentId <= 0)
@@ -390,7 +383,7 @@ namespace SolaERP.Persistence.Services
                                         attachedFile.FileLink = _fileUploadService
                                             .AddFile(new List<IFormFile> { attachment.File }, Modules.EvaluationForm,
                                                 new List<string>()).Result.Data[0];
-                                        return _attachmentRepository.SaveAttachmentAsync(attachedFile);
+                                        return _attachmentService.SaveAttachmentAsync(attachedFile);
                                     }
 
                                     return Task.FromResult(true);
@@ -468,7 +461,7 @@ namespace SolaERP.Persistence.Services
                                         if (item.Attachments[i].Type == 2)
                                         {
                                             tasksList.Add(
-                                                _attachmentRepository.DeleteAttachmentAsync(item.Attachments[i]
+                                                _attachmentService.DeleteAttachmentAsync(item.Attachments[i]
                                                     .AttachmentId));
                                             _fileUploadService.DeleteFile(Modules.EvaluationForm,
                                                 item.Attachments[i].FileLink);
@@ -486,7 +479,7 @@ namespace SolaERP.Persistence.Services
                                                 Modules.EvaluationForm,
                                                 new List<string>()).Result.Data[0];
 
-                                            tasksList.Add(_attachmentRepository.SaveAttachmentAsync(attachedFile));
+                                            tasksList.Add(_attachmentService.SaveAttachmentAsync(attachedFile));
                                         }
 
                                         tasksList.Add(Task.FromResult(true));
@@ -629,7 +622,7 @@ namespace SolaERP.Persistence.Services
             foreach (var item in bankAccount)
             {
                 var attachments =
-                    await _attachmentRepository.GetAttachmentsAsync(item.Id, null, SourceType.VEN_BNK.ToString());
+                    await _attachmentService.GetAttachmentsAsync(item.Id, SourceType.VEN_BNK, Modules.EvaluationForm);
                 var attachment = attachments.Select(x =>
                 {
                     var dto = _mapper.Map<AttachmentDto>(x);
@@ -708,13 +701,12 @@ namespace SolaERP.Persistence.Services
                 companyInfoTask.AgreeWithDefaultDays = 1;
             }
 
-
             var vendorProductsTask = await _repository.GetVendorProductServices(vendor);
             var vendorRepresentedCompany = await _repository.GetRepresentedCompanyAsync(vendor);
             var venLogoAttachmentTask =
-                await _attachmentRepository.GetAttachmentsAsync(vendor, null, SourceType.VEN_LOGO.ToString());
+                await _attachmentService.GetAttachmentsAsync(vendor, SourceType.VEN_LOGO, Modules.Vendors);
             var venOletAttachmentTask =
-                await _attachmentRepository.GetAttachmentsAsync(vendor, null, SourceType.VEN_OLET.ToString());
+                await _attachmentService.GetAttachmentsAsync(vendor, SourceType.VEN_OLET, Modules.Vendors);
             var productServicesTask = await _repository.GetProductServicesAsync();
             var countries = await _repository.GetCountriesAsync();
 
@@ -833,8 +825,8 @@ namespace SolaERP.Persistence.Services
                     var prequalificationTasks = titleGroup.Select(async design =>
                     {
                         var attachments = _mapper.Map<List<AttachmentDto>>(
-                            await _attachmentRepository.GetAttachmentsAsync(vendorId, null,
-                                SourceType.VEN_PREQ.ToString(), design.PrequalificationDesignId));
+                            await _attachmentService.GetAttachmentsAsync(vendorId, SourceType.VEN_PREQ,
+                                Modules.EvaluationForm, design.PrequalificationDesignId.ToString()));
                         attachments = attachments.Count > 0 ? attachments : Enumerable.Empty<AttachmentDto>().ToList();
 
                         attachments = attachments.Select(x =>
@@ -1009,8 +1001,8 @@ namespace SolaERP.Persistence.Services
                     if (d.HasAttachment > 0)
                     {
                         attachments = _mapper.Map<List<AttachmentDto>>(
-                            await _attachmentRepository.GetAttachmentsAsync(vendorId, null,
-                                SourceType.VEN_DUE.ToString(), d.DesignId));
+                            await _attachmentService.GetAttachmentsAsync(vendorId, SourceType.VEN_DUE, 
+                                Modules.EvaluationForm, d.DesignId.ToString()));
 
                         attachments = attachments.Select(x =>
                         {

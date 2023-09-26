@@ -2,7 +2,6 @@
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Attachment;
-using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -14,62 +13,96 @@ namespace SolaERP.Persistence.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IAttachmentRepository _attachmentRepository;
+        private readonly IFileUploadService _fileUploadService;
 
-        public AttachmentService(IAttachmentRepository attachmentRepository, IUnitOfWork unitOfWork, IMapper mapper)
+        public AttachmentService(IAttachmentRepository attachmentRepository,
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            IFileUploadService fileUploadService)
         {
             _attachmentRepository = attachmentRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _fileUploadService = fileUploadService;
         }
 
-        public async Task<ApiResponse<string>> DeleteAttachmentAsync(int attachmentId)
+        public async Task<bool> DeleteAttachmentAsync(int attachmentId)
         {
             bool result = await _attachmentRepository.DeleteAttachmentAsync(attachmentId);
             await _unitOfWork.SaveChangesAsync();
 
-            return result ? ApiResponse<string>.Success("Operation is succesfull", 200) : ApiResponse<string>.Fail("Operation failed", 400);
+            return result;
         }
 
-        public async Task<ApiResponse<string>> DeleteAttachmentAsync(int sourceId, SourceType sourceType)
+        public async Task<bool> DeleteAttachmentAsync(int sourceId, SourceType sourceType)
         {
             bool result = await _attachmentRepository.DeleteAttachmentAsync(sourceId, sourceType);
             await _unitOfWork.SaveChangesAsync();
 
-            return result ? ApiResponse<string>.Success("Operation is succesfull", 200) : ApiResponse<string>.Fail("Operation failed", 400);
+            return result;
         }
 
-        public async Task<ApiResponse<List<AttachmentDto>>> GetAttachmentsAsync(int sourceId, string reference, string sourceType)
+        public async Task<List<AttachmentDto>> GetAttachmentsAsync(int sourceId, SourceType sourceType, Modules module,
+            string reference = null, bool isDownloadLink = true)
         {
-            var entity = await _attachmentRepository.GetAttachmentsAsync(sourceId, reference, sourceType);
+            var entity = await _attachmentRepository.GetAttachmentsAsync(sourceId, reference, sourceType.ToString());
             var result = _mapper.Map<List<AttachmentDto>>(entity);
 
-            return ApiResponse<List<AttachmentDto>>.Success(result, 200);
-        }
-
-        public async Task<ApiResponse<List<string>>> GetAttachmentsAsync(int sourceId, SourceType sourceType)
-        {
-            var entity = await _attachmentRepository.GetAttachmentsAsync(sourceId, sourceType);
-
-            return ApiResponse<List<string>>.Success(entity, 200);
-        }
-
-        public async Task<ApiResponse<List<AttachmentWithFileDto>>> GetAttachmentWithFilesAsync(int attachmentId)
-        {
-            var entity = await _attachmentRepository.GetAttachmentsWithFileDataAsync(attachmentId);
-            var result = _mapper.Map<List<AttachmentWithFileDto>>(entity);
-            for (int i = 0; i < result.Count; i++)
+            if (isDownloadLink)
             {
-                result[i].Preview = $"data:{result[i].ExtensionType};base64," + result[i].FileData;
+                SetDownloadLink(result, module);
             }
-            return ApiResponse<List<AttachmentWithFileDto>>.Success(result, 200);
+            else
+            {
+                SetGetFileLink(result, module);
+            }
+
+            return result;
         }
 
-        public async Task<ApiResponse<string>> SaveAttachmentAsync(AttachmentSaveModel model)
+        public async Task<AttachmentDto> GetAttachmentById(int attachmentId, bool getLink = false,
+            Modules module = default, bool isDownloadLink = true)
+        {
+            var result = _mapper.Map<AttachmentDto>(_attachmentRepository.GetAttachmentByIdAsync(attachmentId));
+
+            if (!getLink) return result;
+            if (isDownloadLink)
+            {
+                SetDownloadLink(result, module);
+            }
+            else
+            {
+                SetGetFileLink(result, module);
+            }
+
+            return result;
+        }
+
+        public async Task<bool> SaveAttachmentAsync(AttachmentSaveModel model)
         {
             bool result = await _attachmentRepository.SaveAttachmentAsync(model);
             await _unitOfWork.SaveChangesAsync();
+            return result;
+        }
 
-            return result ? ApiResponse<string>.Success("Operation is succesfull", 200) : ApiResponse<string>.Fail("Operation failed", 400);
+        private void SetDownloadLink(AttachmentDto attachmentDto, Modules module)
+        {
+            attachmentDto.FileLink = _fileUploadService.GetDownloadFileLink(attachmentDto.FileLink, module);
+        }
+
+        private void SetDownloadLink(List<AttachmentDto> attachmentList, Modules module)
+        {
+            attachmentList.ForEach(x => SetDownloadLink(x, module));
+        }
+
+        private void SetGetFileLink(AttachmentDto attachmentDto, Modules module)
+        {
+            attachmentDto.FileLink = _fileUploadService.GetFileLink(attachmentDto.FileLink, module);
+        }
+
+        private void SetGetFileLink(List<AttachmentDto> attachmentList, Modules module)
+        {
+            attachmentList.ForEach(x => SetGetFileLink(x, module));
         }
     }
 }

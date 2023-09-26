@@ -22,7 +22,7 @@ namespace SolaERP.Persistence.Services
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ISupplierEvaluationRepository _supplierRepository;
-        private readonly IAttachmentRepository _attachment;
+        private readonly IAttachmentService _attachmentService;
         private readonly IFileUploadService _fileUploadService;
         private readonly IGeneralRepository _generalRepository;
 
@@ -31,18 +31,18 @@ namespace SolaERP.Persistence.Services
             IMapper mapper,
             ISupplierEvaluationRepository supplierRepository,
             IUnitOfWork unitOfWork,
-            IAttachmentRepository attachment,
             IFileUploadService fileUploadService,
-            IGeneralRepository generalRepository)
+            IGeneralRepository generalRepository, 
+            IAttachmentService attachmentService)
         {
             _repository = vendorRepository;
             _userRepository = userRepository;
             _mapper = mapper;
             _supplierRepository = supplierRepository;
             _unitOfWork = unitOfWork;
-            _attachment = attachment;
             _fileUploadService = fileUploadService;
             _generalRepository = generalRepository;
+            _attachmentService = attachmentService;
         }
 
         public async Task<ApiResponse<bool>> ApproveAsync(string userIdentity, VendorApproveModel model)
@@ -223,11 +223,12 @@ namespace SolaERP.Persistence.Services
             var header = _mapper.Map<VendorLoadDto>(await _repository.GetHeader(vendorId));
             if (vendorId == 0)
                 header.CompanyRegistrationDate = null;
-            var logo = await _attachment.GetAttachmentsAsync(header.VendorId, SourceType.VEN_LOGO);
-            if (logo != null && logo.Count > 0)
-                header.Logo = logo[0];
-            header.Logo = _fileUploadService.GetFileLink(header.Logo, Modules.Vendors);
-
+            var logo = await _attachmentService.GetAttachmentsAsync(header.VendorId, SourceType.VEN_LOGO, Modules.Vendors);
+            if (logo is { Count: > 0 })
+            {
+                header.Logo = logo[0].FileLink;
+            }
+            
             var paymentTerms = _supplierRepository.GetPaymentTermsAsync();
             var deliveryTerms = _supplierRepository.GetDeliveryTermsAsync();
             var currency = _supplierRepository.GetCurrenciesAsync();
@@ -327,7 +328,7 @@ namespace SolaERP.Persistence.Services
                 vendorDto.CheckLogoIsDeleted, vendorLogo);
 
 
-            await _attachment.DeleteAttachmentAsync(vendorId, SourceType.VEN_LOGO);
+            await _attachmentService.DeleteAttachmentAsync(vendorId, SourceType.VEN_LOGO);
 
             if (!vendorDto.CheckLogoIsDeleted)
             {
@@ -335,7 +336,7 @@ namespace SolaERP.Persistence.Services
                 attachmentSaveModel.SourceId = vendorId;
                 attachmentSaveModel.SourceType = SourceType.VEN_LOGO.ToString();
                 attachmentSaveModel.FileLink = vendor.Logo;
-                await _attachment.SaveAttachmentAsync(attachmentSaveModel);
+                await _attachmentService.SaveAttachmentAsync(attachmentSaveModel);
             }
 
             if (vendorDto.BankAccounts is not null)
@@ -354,13 +355,13 @@ namespace SolaERP.Persistence.Services
                             tasks.AddRange(x.AccountVerificationLetter.Select(attachment => //+
                             {
                                 if (attachment.Type == 2 && attachment.AttachmentId > 0)
-                                    return _attachment.DeleteAttachmentAsync(attachment.AttachmentId);
+                                    return _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId);
                                 else
                                 {
                                     var entity = _mapper.Map<AttachmentSaveModel>(attachment);
                                     entity.SourceId = detaildId;
                                     entity.SourceType = SourceType.VEN_BNK.ToString();
-                                    return _attachment.SaveAttachmentAsync(entity);
+                                    return _attachmentService.SaveAttachmentAsync(entity);
                                 }
                             }));
                         }
