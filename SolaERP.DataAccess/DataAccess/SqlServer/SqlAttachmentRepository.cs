@@ -1,13 +1,10 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
-using SolaERP.Application.Entities.Attachment;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Net.Mail;
-using System.Text;
 using Attachment = SolaERP.Application.Entities.Attachment.Attachment;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
@@ -15,17 +12,28 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
     public class SqlAttachmentRepository : IAttachmentRepository
     {
         private readonly IUnitOfWork _unitOfWork;
+
         public SqlAttachmentRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+        }
+
+        public async Task<Attachment> GetAttachmentByIdAsync(int attachmentId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = $"SELECT * FROM  Register.Attachments where AttachmentId = {attachmentId}";
+
+            await using var reader = await command.ExecuteReaderAsync();
+
+            return reader.GetByEntityStructure<Attachment>();
         }
 
         public async Task<bool> SaveAttachmentAsync(AttachmentSaveModel attachment)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_Attachments_IUD @AttachmentId,@FileName,@FileData,@SourceId,@SourceType,@Reference,@ExtensionType,@AttachmentTypeId,@AttachmentSubTypeId,@UploadDateTime,@Size,@FileLink";
+                command.CommandText =
+                    "SET NOCOUNT OFF EXEC SP_Attachments_IUD @AttachmentId,@FileName,@FileData,@SourceId,@SourceType,@Reference,@ExtensionType,@AttachmentTypeId,@AttachmentSubTypeId,@UploadDateTime,@Size,@FileLink";
                 command.Parameters.AddWithValue(command, "@AttachmentId", attachment.AttachmentId);
                 command.Parameters.AddWithValue(command, "@FileName", attachment.Name);
                 command.Parameters.AddWithValue(command, "@FileData", attachment.FileLink);
@@ -43,25 +51,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 return result;
             }
-
         }
 
-        public async Task<List<Attachment>> GetAttachmentsWithFileDataAsync(int attachmentId)
-        {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "EXEC SP_Attachment_Load @AttachmentId";
-                command.Parameters.AddWithValue(command, "@AttachmentId", attachmentId);
-
-                using var reader = await command.ExecuteReaderAsync();
-                List<Attachment> attachments = new List<Attachment>();
-
-                while (await reader.ReadAsync()) { attachments.Add(reader.GetByEntityStructure<Attachment>()); }
-                return attachments;
-            }
-        }
-
-        public async Task<List<Attachment>> GetAttachmentsAsync(int sourceId, string reference, string sourceType, int? attachmentTypeId = null)
+        public async Task<List<Attachment>> GetAttachmentsAsync(int sourceId, string reference, string sourceType,
+            int? attachmentTypeId = null)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -75,7 +68,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 List<Attachment> attachments = new List<Attachment>();
 
-                while (await reader.ReadAsync()) { attachments.Add(reader.GetByEntityStructure<Attachment>("FileData")); }
+                while (await reader.ReadAsync())
+                {
+                    attachments.Add(reader.GetByEntityStructure<Attachment>("FileData"));
+                }
+
                 if (attachments.Count == 0)
                     return Enumerable.Empty<Attachment>().ToList();
                 return attachments;
@@ -94,7 +91,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 List<string> attachments = new List<string>();
 
-                while (await reader.ReadAsync()) { attachments.Add(reader.Get<string>("FileData")); }
+                while (await reader.ReadAsync())
+                {
+                    attachments.Add(reader.Get<string>("FileData"));
+                }
+
                 return attachments;
             }
         }
