@@ -8,7 +8,7 @@ namespace SolaERP.Application.Models
 {
     public class CreateBalanceModel
     {
-        public string VendorCode { get; set; }
+        public List<string> VendorCode { get; set; }
         public int BusinessUnitId { get; set; }
         public int Type { get; set; }
     }

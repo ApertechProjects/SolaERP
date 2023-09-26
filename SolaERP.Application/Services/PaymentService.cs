@@ -53,6 +53,13 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<BankDto>>.Success(dto);
         }
 
+        public async Task<ApiResponse<bool>> ChangeStatus(string name, PaymentChangeStatusModel model)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            var data = await _paymentRepository.ChangeStatus(userId, model);
+            return ApiResponse<bool>.Success(data);
+        }
+
         public async Task<ApiResponse<List<CreateAdvanceDto>>> CreateAdvanceAsync(CreateAdvanceModel createAdvance)
         {
             var data = await _paymentRepository.CreateAdvanceAsync(createAdvance);
@@ -65,6 +72,13 @@ namespace SolaERP.Persistence.Services
             var data = await _paymentRepository.CreateBalanceAsync(createBalance);
             var dto = _mapper.Map<List<CreateBalanceDto>>(data);
             return ApiResponse<List<CreateBalanceDto>>.Success(dto);
+        }
+
+        public async Task<ApiResponse<List<CreateDocumentDto>>> CreateDocument(PaymentCreateDocumentModel model)
+        {
+            var data = await _paymentRepository.CreateDocument(model);
+            var dto = _mapper.Map<List<CreateDocumentDto>>(data);
+            return ApiResponse<List<CreateDocumentDto>>.Success(dto);
         }
 
         public async Task<ApiResponse<List<CreateOrderDto>>> CreateOrderAsync(CreateOrderModel createOrder)

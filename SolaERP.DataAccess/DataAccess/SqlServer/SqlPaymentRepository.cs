@@ -37,9 +37,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<CreateBalance>> CreateBalanceAsync(CreateBalanceModel createBalance)
         {
+            string vendorCode = string.Join(',', createBalance.VendorCode);
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = @"exec dbo.SP_PaymentDocumentCreateBalance @vendorCode,@businessUnitId,@type";
-            command.Parameters.AddWithValue(command, "@vendorCode", createBalance.VendorCode);
+            command.Parameters.AddWithValue(command, "@vendorCode", string.IsNullOrEmpty(vendorCode) ? "-1" : vendorCode);
             command.Parameters.AddWithValue(command, "@businessUnitId", createBalance.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@type", createBalance.Type);
 
@@ -607,6 +608,51 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 PaymentDocumentSubTypeId = reader.Get<int>("PaymentDocumentSubTypeId"),
                 PaymentDocumentType = reader.Get<string>("PaymentDocumentType"),
                 PaymentDocumentTypeId = reader.Get<int>("PaymentDocumentTypeId")
+            };
+        }
+
+        public async Task<bool> ChangeStatus(int userId, PaymentChangeStatusModel model)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentDocumentApprove @UserId,@PaymentDocumentMainId,@Sequence,@ApproveStatus";
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                command.Parameters.AddWithValue(command, "@PaymentDocumentMainId", model.PaymentDocumentMainId);
+                command.Parameters.AddWithValue(command, "@Sequence", model.Sequence);
+                command.Parameters.AddWithValue(command, "@ApproveStatus", model.ApproveStatus);
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
+            }
+        }
+
+        public async Task<List<CreateDocument>> CreateDocument(PaymentCreateDocumentModel model)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_PaymentDocumentCreateDocuments @vendorCode,@currencyCode";
+            command.Parameters.AddWithValue(command, "@vendorCode", model.VendorCode);
+            command.Parameters.AddWithValue(command, "@currencyCode", model.CurrencyCode);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<CreateDocument> createOrders = new List<CreateDocument>();
+            while (reader.Read())
+                createOrders.Add(GetCreateDocument(reader));
+
+            return createOrders;
+        }
+
+        private CreateDocument GetCreateDocument(DbDataReader reader)
+        {
+            return new CreateDocument
+            {
+                Amount = reader.Get<decimal>("Amount"),
+                ApproveStatus = reader.Get<string>("ApproveStatus"),
+                CurrencyCode = reader.Get<string>("CurrencyCode"),
+                PaymentDocumentMainId = reader.Get<int>("PaymentDocumentMainId"),
+                PaymentRequestNo = reader.Get<string>("PaymentRequestNo"),
+                PaymentStatus = reader.Get<string>("PaymentStatus"),
+                Status = reader.Get<string>("Status"),
+                TransactionReference = reader.Get<string>("TransactionReference")
             };
         }
     }

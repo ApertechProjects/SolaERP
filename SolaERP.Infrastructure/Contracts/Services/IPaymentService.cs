@@ -1,5 +1,6 @@
 ﻿using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.Payment;
 using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Contracts.Services
@@ -22,5 +23,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> Delete(int paymentDocumentMainId);
         Task<ApiResponse<decimal>> VendorBalance(int businessUnitId, string vendorCode);
         Task<ApiResponse<List<AttachmentDto>>> Attachments(int paymentDocumentMainId);
+        Task<ApiResponse<bool>> ChangeStatus(string name, PaymentChangeStatusModel model);
+        Task<ApiResponse<List<CreateDocumentDto>>> CreateDocument(PaymentCreateDocumentModel model);
     }
 }

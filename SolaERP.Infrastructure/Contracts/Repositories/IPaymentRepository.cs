@@ -26,5 +26,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> Delete(int paymentDocumentMainId);
         Task<decimal> VendorBalance(int businessUnitId, string vendorCode);
         Task<List<AttachmentDto>> Attachments(int paymentDocumentMainId);
+        Task<bool> ChangeStatus(int userId, PaymentChangeStatusModel model);
+        Task<List<CreateDocument>> CreateDocument(PaymentCreateDocumentModel model);
     }
 }

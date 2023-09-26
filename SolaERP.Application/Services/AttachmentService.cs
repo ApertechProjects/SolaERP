@@ -63,7 +63,7 @@ namespace SolaERP.Persistence.Services
         public async Task<AttachmentDto> GetAttachmentById(int attachmentId, bool getLink = false,
             Modules module = default, bool isDownloadLink = true)
         {
-            var result = _mapper.Map<AttachmentDto>(_attachmentRepository.GetAttachmentByIdAsync(attachmentId));
+            var result = _mapper.Map<AttachmentDto>(await _attachmentRepository.GetAttachmentByIdAsync(attachmentId));
 
             if (!getLink) return result;
             if (isDownloadLink)
