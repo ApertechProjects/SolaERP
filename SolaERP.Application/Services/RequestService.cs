@@ -48,12 +48,6 @@ namespace SolaERP.Persistence.Services
             var mainRequest = await _requestMainRepository.GetAllAsync(model);
             var mainRequestDto = _mapper.Map<List<RequestMainDto>>(mainRequest);
 
-            mainRequestDto.ForEach(x =>
-            {
-                x.Attachments = _attachmentService.GetAttachmentsAsync(x.RequestMainId, SourceType.REQ,
-                    Modules.Request).Result;
-            });
-
             return ApiResponse<List<RequestMainDto>>.Success(mainRequestDto);
         }
 
@@ -138,9 +132,6 @@ namespace SolaERP.Persistence.Services
             var mainDraftEntites = await _requestMainRepository.GetMainRequestDraftsAsync(getMainDraftParameters);
             var mainDraftDto = _mapper.Map<List<RequestMainDraftDto>>(mainDraftEntites);
 
-            if (mainDraftEntites.Count > 0)
-                return ApiResponse<List<RequestMainDraftDto>>.Success(mainDraftDto);
-
             return ApiResponse<List<RequestMainDraftDto>>.Success(mainDraftDto);
         }
 
@@ -151,9 +142,6 @@ namespace SolaERP.Persistence.Services
             var mainRequest =
                 await _requestMainRepository.GetApproveAmendmentRequestsAsync(userId, requestParametersDto);
             var mainRequestDto = _mapper.Map<List<RequestAmendmentDto>>(mainRequest);
-
-            if (mainRequestDto != null && mainRequestDto.Count > 0)
-                return ApiResponse<List<RequestAmendmentDto>>.Success(mainRequestDto);
 
             return ApiResponse<List<RequestAmendmentDto>>.Success(mainRequestDto);
         }

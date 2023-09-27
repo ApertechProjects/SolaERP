@@ -2,7 +2,7 @@
 {
     public class RequestMainAll : BaseEntity
     {
-        public Int64 RowNum { get; set; }
+        public long RowNum { get; set; }
         public int RequestMainId { get; set; }
         public string BusinessUnitCode { get; set; }
         public string BusinessUnitName { get; set; }
@@ -21,5 +21,6 @@
         public string StatusName { get; set; }
         public string ApproveStatus { get; set; }
         public string ApproveStatusName { get; set; }
+        public bool HasAttachments { get; set; }
     }
 }
