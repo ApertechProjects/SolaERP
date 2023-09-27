@@ -21,8 +21,6 @@ namespace SolaERP.Application.Dtos.RFQ
         public string Buyer { get; set; }
         public bool SingleUnitPrice { get; set; }
         public string PlaceOfDelivery { get; set; }
-        // public int BusinessCategoryId { get; set; }
-
         public int OfferCount { get; set; }
         public int Sent { get; set; }
         public int Accepted { get; set; }
@@ -31,5 +29,6 @@ namespace SolaERP.Application.Dtos.RFQ
         public int Rejected { get; set; }
         public int NoResponse { get; set; }
         public BusinessCategory BusinessCategory { get; set; }
+        public bool HasAttachments { get; set; }
     }
 }

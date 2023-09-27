@@ -5,6 +5,7 @@ using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.Order;
 using SolaERP.Application.Entities.Vendors;
+using SolaERP.Application.Enums;
 using SolaERP.Application.UnitOfWork;
 
 namespace SolaERP.Persistence.Services;
@@ -16,16 +17,18 @@ public class OrderService : IOrderService
     private readonly ISupplierEvaluationRepository _supplierRepository;
     private readonly IGeneralService _generalService;
     private readonly IVendorRepository _vendorRepository;
+    private readonly IAttachmentService _attachmentService;
 
     public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork,
         ISupplierEvaluationRepository supplierRepository, IGeneralService generalService,
-        IVendorRepository vendorRepository)
+        IVendorRepository vendorRepository, IAttachmentService attachmentService)
     {
         _orderRepository = orderRepository;
         _unitOfWork = unitOfWork;
         _supplierRepository = supplierRepository;
         _generalService = generalService;
         _vendorRepository = vendorRepository;
+        _attachmentService = attachmentService;
     }
 
     public async Task<ApiResponse<List<OrderTypeLoadDto>>> GetTypesAsync(int businessUnitId)
@@ -93,6 +96,24 @@ public class OrderService : IOrderService
         int userId = Convert.ToInt32(identityName);
         var mainDto = await _orderRepository.SaveOrderMainAsync(orderMainDto, userId);
 
+        orderMainDto.Attachments.ForEach(attachment =>
+        {
+            if (attachment.Type == 2)
+            {
+                if (attachment.AttachmentId > 0)
+                {
+                    _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId).Wait();
+                }
+            }
+            else
+            {
+                if (attachment.AttachmentId > 0) return;
+                attachment.SourceId = mainDto.OrderMainId;
+                attachment.SourceType = SourceType.ORDER.ToString();
+                _attachmentService.SaveAttachmentAsync(attachment).Wait();
+            }
+        });
+
         if (orderMainDto.OrderDetails.Count > 0)
         {
             foreach (var detail in orderMainDto.OrderDetails)
@@ -144,6 +165,8 @@ public class OrderService : IOrderService
     {
         var orderHeader = await _orderRepository.GetHeaderLoadAsync(orderMainId);
         orderHeader.OrderDetails = await _orderRepository.GetAllDetailsAsync(orderMainId);
+        orderHeader.Attachments =
+            await _attachmentService.GetAttachmentsAsync(orderMainId, SourceType.ORDER, Modules.Orders);
         return ApiResponse<OrderHeadLoaderDto>.Success(orderHeader);
     }
 

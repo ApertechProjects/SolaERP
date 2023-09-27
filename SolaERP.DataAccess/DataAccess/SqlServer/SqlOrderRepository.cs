@@ -714,7 +714,8 @@ public class SqlOrderRepository : IOrderRepository
             EnteredDate = reader.Get<DateTime>("EnteredDate"),
             OrderNo = reader.Get<string>("OrderNo"),
             VendorName = reader.Get<string>("VendorName"),
-            RFQNo = reader.Get<string>("RFQNo")
+            RFQNo = reader.Get<string>("RFQNo"),
+            HasAttachments = reader.Get<bool>("HasAttachments")
         };
     }
 
@@ -733,7 +734,8 @@ public class SqlOrderRepository : IOrderRepository
             EnteredDate = reader.Get<DateTime>("EnteredDate"),
             OrderNo = reader.Get<string>("OrderNo"),
             VendorName = reader.Get<string>("VendorName"),
-            RFQNo = reader.Get<string>("RFQNo")
+            RFQNo = reader.Get<string>("RFQNo"),
+            HasAttachments = reader.Get<bool>("HasAttachments")
         };
     }
 }

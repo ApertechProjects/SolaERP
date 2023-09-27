@@ -17,6 +17,7 @@
         public string SpecialistComment { get; set; }
         public string CreatedBy { get; set; }
         public DateTime ComparisonDate { get; set; }
+        public bool HasAttachments { get; set; }
 
         public T GetChild<T>() where T : BaseBidComparisonLoad, new()
         {
@@ -36,7 +37,8 @@
                 SpecialistComment = this.SpecialistComment,
                 SingleSourceReasons = this.SingleSourceReasons,
                 CreatedBy = this.CreatedBy,
-                ComparisonDate = this.ComparisonDate
+                ComparisonDate = this.ComparisonDate,
+                HasAttachments = this.HasAttachments
             };
         }
     }

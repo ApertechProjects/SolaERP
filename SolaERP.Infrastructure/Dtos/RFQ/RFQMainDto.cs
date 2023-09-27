@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Entities.BusinessUnits;
+﻿using SolaERP.Application.Dtos.Attachment;
+using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
@@ -29,5 +30,6 @@ namespace SolaERP.Application.Dtos.RFQ
         public List<SingleSourceReasonModel> SingleSourceReasons { get; set; }
         public BiddingType BiddingType { get; set; }
         public List<RFQDetailDto> Details { get; set; }
+        public List<AttachmentDto> Attachments { get; set; }
     }
 }

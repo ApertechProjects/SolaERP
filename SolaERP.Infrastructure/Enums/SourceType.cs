@@ -11,6 +11,11 @@
         VEN_DUE = 8,
         VEN_PREQ = 9,
         REQ = 10,
-        SUPP = 11
+        SUPP = 11,
+        USERS = 12,
+        RFQ = 16,
+        BID = 17,
+        BID_COMP = 19,
+        ORDER = 20
     }
 }

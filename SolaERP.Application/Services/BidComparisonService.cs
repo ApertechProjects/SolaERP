@@ -19,25 +19,46 @@ namespace SolaERP.Persistence.Services
         private readonly IBidComparisonRepository _bidComparisonRepository;
         private readonly IRfqRepository _rfqRepository;
         private readonly IFileUploadService _fileUploadService;
+        private readonly IAttachmentService _attachmentService;
 
         public BidComparisonService(IUnitOfWork unitOfWork, IMapper mapper,
             IBidComparisonRepository bidComparisonRepository,
             IRfqRepository rfqRepository,
-            IFileUploadService fileUploadService)
+            IFileUploadService fileUploadService,
+            IAttachmentService attachmentService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _bidComparisonRepository = bidComparisonRepository;
             _rfqRepository = rfqRepository;
             _fileUploadService = fileUploadService;
+            _attachmentService = attachmentService;
         }
 
         public async Task<ApiResponse<bool>> SaveBidComparisonAsync(BidComparisonCreateDto bidComparison)
         {
             var entity = _mapper.Map<BidComparisonIUD>(bidComparison);
             var saveResponse = await _bidComparisonRepository.AddComparisonAsync(entity);
-
             await _unitOfWork.SaveChangesAsync();
+
+            bidComparison.Attachments.ForEach(attachment =>
+            {
+                if (attachment.Type == 2)
+                {
+                    if (attachment.AttachmentId > 0)
+                    {
+                        _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId).Wait();
+                    }
+                }
+                else
+                {
+                    if (attachment.AttachmentId > 0) return;
+                    attachment.SourceId = entity.BidComparisonId;
+                    attachment.SourceType = SourceType.BID_COMP.ToString();
+                    _attachmentService.SaveAttachmentAsync(attachment).Wait();
+                }
+            });
+
             return ApiResponse<bool>.Success(saveResponse, 200);
         }
 
@@ -96,6 +117,8 @@ namespace SolaERP.Persistence.Services
             header.RFQDeadline = header.RFQDeadline.ConvertDateToValidDate();
             header.Entrydate = header.Entrydate.ConvertDateToValidDate();
             header.Comparisondeadline = header.Comparisondeadline.ConvertDateToValidDate();
+            header.Attachments = await _attachmentService.GetAttachmentsAsync(header.BidComparisonId,
+                SourceType.BID_COMP, Modules.BidComparison);
 
             comparison.BidComparisonHeader = _mapper.Map<BidComparisonHeaderLoadDto>(header);
 

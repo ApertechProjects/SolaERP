@@ -23,5 +23,6 @@ namespace SolaERP.Application.Entities.RFQ
         public int BusinessCategoryId { get; set; }
         public BusinessCategory BusinessCategory { get; set; }
         public int BiddingType { get; set; }
+        public bool HasAttachments { get; set; }
     }
 }
