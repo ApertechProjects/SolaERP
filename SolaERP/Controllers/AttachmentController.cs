@@ -25,4 +25,34 @@ public class AttachmentController : CustomBaseController
         var attachments = await _attachmentService.GetAttachmentsAsync(sourceId, SourceType.REQ, Modules.Request);
         return CreateActionResult(ApiResponse<List<AttachmentDto>>.Success(attachments));
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetRFQAttachments(int sourceId)
+    {
+        var attachments = await _attachmentService.GetAttachmentsAsync(sourceId, SourceType.RFQ, Modules.Rfqs);
+        return CreateActionResult(ApiResponse<List<AttachmentDto>>.Success(attachments));
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetBidAttachments(int sourceId)
+    {
+        var attachments = await _attachmentService.GetAttachmentsAsync(sourceId, SourceType.BID, Modules.Bid);
+        return CreateActionResult(ApiResponse<List<AttachmentDto>>.Success(attachments));
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetBidComparisonAttachments(int sourceId)
+    {
+        var attachments = await _attachmentService.GetAttachmentsAsync(sourceId, SourceType.BID_COMP, Modules.BidComparison);
+        return CreateActionResult(ApiResponse<List<AttachmentDto>>.Success(attachments));
+    }
+    
+        
+    [HttpGet]
+    public async Task<IActionResult> GetOrderAttachments(int sourceId)
+    {
+        var attachments = await _attachmentService.GetAttachmentsAsync(sourceId, SourceType.ORDER, Modules.Orders);
+        return CreateActionResult(ApiResponse<List<AttachmentDto>>.Success(attachments));
+    }
+    
 }
