@@ -540,7 +540,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 SingleSourceReasons = reader.Get<string>("SingleSourceReasons"),
                 SpecialistComment = reader.Get<string>("SpecialistComment"),
                 CreatedBy = reader.Get<string>("CreatedBy"),
-                ComparisonDate = reader.Get<DateTime>("ComparisonDate")
+                ComparisonDate = reader.Get<DateTime>("ComparisonDate"),
+                HasAttachments = reader.Get<bool>("HasAttachments")
             };
         }
     }

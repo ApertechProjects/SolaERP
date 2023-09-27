@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SolaERP.Application.Dtos.Attachment;
 
 namespace SolaERP.Application.Entities.BidComparison
 {
@@ -29,5 +30,6 @@ namespace SolaERP.Application.Entities.BidComparison
         public int Status { get; set; }
         public int ApproveStatus { get; set; }
         public string SpecialistComment { get; set; }
+        public List<AttachmentDto> Attachments { get; set; }
     }
 }
