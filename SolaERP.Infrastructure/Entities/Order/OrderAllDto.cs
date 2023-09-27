@@ -21,4 +21,5 @@ public class OrderAllDto : BaseEntity
     public int Sequence { get; set; }
     public string Status { get; set; }
     public string ApproveStatus { get; set; }
+    public bool HasAttachments { get; set; }
 }

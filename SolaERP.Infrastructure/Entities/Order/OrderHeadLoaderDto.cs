@@ -1,3 +1,5 @@
+using SolaERP.Application.Dtos.Attachment;
+
 namespace SolaERP.Application.Entities.Order;
 
 public class OrderHeadLoaderDto : BaseEntity
@@ -48,4 +50,5 @@ public class OrderHeadLoaderDto : BaseEntity
     public int InvoiceStatus { get; set; }
     public bool OrderPrint { get; set; }
     public List<OrderDetailLoadDto> OrderDetails { get; set; }
+    public List<AttachmentDto> Attachments { get; set; }
 }
