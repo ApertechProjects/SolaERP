@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SolaERP.Application.Enums;
 
 namespace SolaERP.Persistence.Services
 {
@@ -21,17 +22,21 @@ namespace SolaERP.Persistence.Services
         private readonly IBidRepository _bidRepository;
         private readonly ISupplierEvaluationRepository _supplierEvaluationRepository;
         private readonly IRfqRepository _rfqRepository;
+        private readonly IAttachmentService _attachmentService;
 
-        public BidService(IUnitOfWork unitOfWork, IMapper mapper,
+        public BidService(IUnitOfWork unitOfWork,
+            IMapper mapper,
             IBidRepository bidRepository,
             ISupplierEvaluationRepository supplierEvaluationRepository,
-            IRfqRepository rfqRepository)
+            IRfqRepository rfqRepository,
+            IAttachmentService attachmentService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _bidRepository = bidRepository;
             _supplierEvaluationRepository = supplierEvaluationRepository;
             _rfqRepository = rfqRepository;
+            _attachmentService = attachmentService;
         }
 
         public async Task<ApiResponse<List<BidAllDto>>> GetAllAsync(BidAllFilterDto filter)
@@ -59,6 +64,7 @@ namespace SolaERP.Persistence.Services
             var dtos = _mapper.Map<List<BidDetailsLoadDto>>(details);
             model.Details = dtos;
             model.RFQMain = _mapper.Map<RFQMainDto>(await _rfqRepository.GetRFQMainAsync(model.RFQMainId));
+            model.Attachments = await _attachmentService.GetAttachmentsAsync(bidMainId, SourceType.BID, Modules.Bid);
 
             return ApiResponse<BidMainLoadDto>.Success(model, 200);
         }
@@ -87,6 +93,24 @@ namespace SolaERP.Persistence.Services
 
             var details = _mapper.Map<List<BidDetail>>(bidMain.BidDetails);
             var saveResponse = await _bidRepository.BidMainIUDAsync(entity);
+
+            bidMain.Attachments.ForEach(attachment =>
+            {
+                if (attachment.Type == 2)
+                {
+                    if (attachment.AttachmentId > 0)
+                    {
+                        _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId).Wait();
+                    }
+                }
+                else
+                {
+                    if (attachment.AttachmentId > 0) return;
+                    attachment.SourceId = bidMain.BidMainId;
+                    attachment.SourceType = SourceType.BID.ToString();
+                    _attachmentService.SaveAttachmentAsync(attachment).Wait();
+                }
+            });
 
             foreach (var detail in details)
                 detail.BidMainId = saveResponse.Id;
