@@ -2,7 +2,7 @@
 {
     public class RequestMain : BaseEntity
     {
-        public Int64 RowNum { get; set; }
+        public long RowNum { get; set; }
         public int RequestMainId { get; set; }
         public int BusinessUnitId { get; set; }
         public string BusinessUnitCode { get; set; }
@@ -30,5 +30,6 @@
         public decimal LogisticsTotal { get; set; }
         public int Sequence { get; set; }
         public List<RequestDetailWithAnalysisCode> Details { get; set; }
+        public bool HasAtttachemt { get; set; }
     }
 }

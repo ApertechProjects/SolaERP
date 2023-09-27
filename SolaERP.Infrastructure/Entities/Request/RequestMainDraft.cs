@@ -22,5 +22,6 @@
         public string QualityRequired { get; set; }
         public string ApproveStatus { get; set; }
         public string ApproveStatusName { get; set; }
+        public bool HasAttachments { get; set; }
     }
 }

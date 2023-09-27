@@ -15,6 +15,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
     public class SqlRequestMainRepository : SqlBaseRepository, IRequestMainRepository
     {
         private readonly IUnitOfWork _unitOfWork;
+
         public SqlRequestMainRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -24,7 +25,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = "EXEC SP_RequestMain_IUD @Id,NULL,NULL,NULL,NULL,NULL,@UserId, @NewRequestmainId = @NewRequestmainId OUTPUT, @NewRequestNo = @NewRequestNo OUTPUT select @NewRequestmainId as NewRequestmainId, @NewRequestNo as NewRequestNo";
+                command.CommandText =
+                    "EXEC SP_RequestMain_IUD @Id,NULL,NULL,NULL,NULL,NULL,@UserId, @NewRequestmainId = @NewRequestmainId OUTPUT, @NewRequestNo = @NewRequestNo OUTPUT select @NewRequestmainId as NewRequestmainId, @NewRequestNo as NewRequestNo";
                 command.Parameters.AddWithValue(command, "@Id", Id);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.Add("@NewRequestMainId", SqlDbType.Int);
@@ -59,14 +61,15 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 return requestTypes;
             }
-
         }
 
-        public async Task<bool> RequestMainChangeStatusAsync(int userId, int requestMainId, int approveStatus, string comment, int rejectReasonId)
+        public async Task<bool> RequestMainChangeStatusAsync(int userId, int requestMainId, int approveStatus,
+            string comment, int rejectReasonId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_RequestMainApprove @UserId,@Id,@ApprovalStatus,@Comment,@RejectReasonId";
+                command.CommandText =
+                    "SET NOCOUNT OFF EXEC SP_RequestMainApprove @UserId,@Id,@ApprovalStatus,@Comment,@RejectReasonId";
 
                 command.Parameters.AddWithValue(command, "@Id", requestMainId);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
@@ -83,7 +86,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             string itemCode = string.Join(',', requestMain.ItemCode);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainDrafts]", new ReplaceParams { ParamName = "APT", Value = requestMain.BusinessUnitCode });
+                command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainDrafts]",
+                    new ReplaceParams { ParamName = "APT", Value = requestMain.BusinessUnitCode });
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", requestMain.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@ItemCode", string.IsNullOrEmpty(itemCode) ? "%" : itemCode);
@@ -127,6 +131,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 {
                     mainRequests = GetAllFromReader(reader);
                 }
+
                 return mainRequests;
             }
         }
@@ -136,7 +141,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             string itemCode = string.Join(',', requestWFA.ItemCode);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainWFA]", new ReplaceParams { ParamName = "APT", Value = requestWFA.BusinessUnitCode });
+                command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainWFA]",
+                    new ReplaceParams { ParamName = "APT", Value = requestWFA.BusinessUnitCode });
 
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", requestWFA.BusinessUnitId);
@@ -156,12 +162,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<RequestAmendment>> GetApproveAmendmentRequestsAsync(int userId, RequestApproveAmendmentModel requestParametersDto)
+        public async Task<List<RequestAmendment>> GetApproveAmendmentRequestsAsync(int userId,
+            RequestApproveAmendmentModel requestParametersDto)
         {
             string itemCode = string.Join(',', requestParametersDto.ItemCode);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainApproveAmendment]", new ReplaceParams { ParamName = "APT", Value = requestParametersDto.BusinessUnitCode });
+                command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainApproveAmendment]",
+                    new ReplaceParams { ParamName = "APT", Value = requestParametersDto.BusinessUnitCode });
 
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", requestParametersDto.BusinessUnitId);
@@ -283,7 +291,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RequestComment = reader.Get<string>("RequestComment"),
                 OperatorComment = reader.Get<string>("OperatorComment"),
                 QualityRequired = reader.Get<string>("QualityRequired"),
-                Priority = reader.Get<int>("Priority")
+                Priority = reader.Get<int>("Priority"),
+                HasAttachments = reader.Get<bool>("HasAttachments")
             };
         }
 
@@ -342,8 +351,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 QualityRequired = reader.Get<string>("QualityRequired"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 LogisticsTotal = reader.Get<decimal>("LogisticsTotal"),
-                Priority = reader.Get<int>("Priority")
-
+                Priority = reader.Get<int>("Priority"),
+                HasAttachments = reader.Get<bool>("HasAttachments")
             };
         }
 
@@ -370,7 +379,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 ApproveStatusName = reader.Get<string>("ApproveStatusName"),
                 Status = reader.Get<int>("Status"),
                 StatusName = reader.Get<string>("StatusName"),
-                Priority = reader.Get<int>("Priority")
+                Priority = reader.Get<int>("Priority"),
+                HasAttachments = reader.Get<bool>("HasAttachments")
             };
         }
 
@@ -442,13 +452,15 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainAll]", new ReplaceParams { ParamName = "APT", Value = requestMain.BusinessUnitCode });
+                command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainAll]",
+                    new ReplaceParams { ParamName = "APT", Value = requestMain.BusinessUnitCode });
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", requestMain.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@ItemCode", string.IsNullOrEmpty(itemCode) ? "%" : itemCode);
                 command.Parameters.AddWithValue(command, "@DateFrom", requestMain.DateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", requestMain.DateTo);
-                command.Parameters.AddWithValue(command, "@ApproveStatus", string.IsNullOrEmpty(approveStatus) ? "%" : approveStatus);
+                command.Parameters.AddWithValue(command, "@ApproveStatus",
+                    string.IsNullOrEmpty(approveStatus) ? "%" : approveStatus);
                 command.Parameters.AddWithValue(command, "@Status", string.IsNullOrEmpty(status) ? "%" : status);
 
                 using var reader = await command.ExecuteReaderAsync();
@@ -486,6 +498,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 {
                     followUsers.Add(reader.GetByEntityStructure<RequestFollow>());
                 }
+
                 return followUsers;
             }
         }
@@ -496,7 +509,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 command.CommandText = @"SET NOCOUNT OFF EXEC SP_RequestFollow_IUD @RequestFollowId,@UserId,
                                                                 @Id"
-                ;
+                    ;
 
                 command.Parameters.AddWithValue(command, "@RequestFollowId", 0);
                 command.Parameters.AddWithValue(command, "@UserId", saveModel.UserId);
@@ -511,7 +524,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText = @"SET NOCOUNT OFF EXEC SP_RequestFollow_IUD @RequestFollowId"
-                ;
+                    ;
 
                 command.Parameters.AddWithValue(command, "@RequestFollowId", requestFollowId);
 
@@ -574,7 +587,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             string itemCode = string.Join(',', requestMain.ItemCode);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainHeld]", new ReplaceParams { ParamName = "APT", Value = requestMain.BusinessUnitCode });
+                command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainHeld]",
+                    new ReplaceParams { ParamName = "APT", Value = requestMain.BusinessUnitCode });
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", requestMain.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@DateFrom", requestMain.DateFrom);
