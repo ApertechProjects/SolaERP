@@ -5,6 +5,7 @@ namespace SolaERP.Application.Dtos.Request
     public class RequestCardMainDto
     {
         private int _status;
+        private int _priority;
         public int RequestMainId { get; set; }
         public int BusinessUnitId { get; set; }
         public string Buyer { get; set; }
@@ -40,7 +41,19 @@ namespace SolaERP.Application.Dtos.Request
         public string CurrencyCode { get; set; }
         public decimal LogisticsTotal { get; set; }
         public string PotentialVendor { get; set; }
-        public int Priority { get; set; }
+        public int Priority
+        {
+            get
+            {
+                if (RequestMainId == 0)
+                    _priority = 1;
+                return _priority;
+            }
+            set
+            {
+                _priority = value;
+            }
+        }
         public int ApproveStageMainId { get; set; }
         public List<RequestCardDetailDto> requestCardDetails { get; set; }
         public List<RequestCardAnalysisDto> requestCardAnalysis { get; set; }
