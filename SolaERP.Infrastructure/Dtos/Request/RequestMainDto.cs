@@ -1,10 +1,8 @@
-﻿using SolaERP.Application.Dtos.Attachment;
-
-namespace SolaERP.Application.Dtos.Request
+﻿namespace SolaERP.Application.Dtos.Request
 {
     public class RequestMainDto
     {
-        public Int64 RowNum { get; set; }
+        public long RowNum { get; set; }
         public int RequestMainId { get; set; }
         public string BusinessUnitCode { get; set; }
         public string BusinessUnitName { get; set; }
@@ -24,6 +22,6 @@ namespace SolaERP.Application.Dtos.Request
         public string StatusName { get; set; }
         public string ApproveStatus { get; set; }
         public string ApproveStatusName { get; set; }
-        public List<AttachmentDto> Attachments { get; set; }
+        public bool HasAttachments { get; set; }
     }
 }

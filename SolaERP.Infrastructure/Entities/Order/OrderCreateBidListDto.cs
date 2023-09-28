@@ -12,7 +12,7 @@ public class OrderCreateBidListDto
     public int RequestDetailId { get; set; }
     public int RequestMainId { get; set; }
     public string RequestNo { get; set; }
-    public int RequestLine { get; set; }
+    public string RequestLine { get; set; }
     public string RequestUOM { get; set; }
     public string ItemCode { get; set; }
     public string ItemName { get; set; }
@@ -22,6 +22,8 @@ public class OrderCreateBidListDto
     public string AlternativeItemCode { get; set; }
     public string AlternativeItemName { get; set; }
     public string PUOM { get; set; }
+    public string AccountCode { get; set; }
+    public string AccountName { get; set; }
     public decimal ConversionRate { get; set; }
     public string LineDescription { get; set; }
     public int Condition { get; set; }
@@ -36,4 +38,15 @@ public class OrderCreateBidListDto
     public decimal ConvertedUnitPrice { get; set; }
     public int Status { get; set; }
     public int ApproveStatus { get; set; }
+    public int AnalysisCode1Id { get; set; }
+    public int AnalysisCode2Id { get; set; }
+    public int AnalysisCode3Id { get; set; }
+    public int AnalysisCode4Id { get; set; }
+    public int AnalysisCode5Id { get; set; }
+    public int AnalysisCode6Id { get; set; }
+    public int AnalysisCode7Id { get; set; }
+    public int AnalysisCode8Id { get; set; }
+    public int AnalysisCode9Id { get; set; }
+    public int AnalysisCode10Id { get; set; }
+    public int CatId { get; set; }
 }

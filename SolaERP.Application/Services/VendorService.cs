@@ -32,7 +32,7 @@ namespace SolaERP.Persistence.Services
             ISupplierEvaluationRepository supplierRepository,
             IUnitOfWork unitOfWork,
             IFileUploadService fileUploadService,
-            IGeneralRepository generalRepository, 
+            IGeneralRepository generalRepository,
             IAttachmentService attachmentService)
         {
             _repository = vendorRepository;
@@ -223,12 +223,13 @@ namespace SolaERP.Persistence.Services
             var header = _mapper.Map<VendorLoadDto>(await _repository.GetHeader(vendorId));
             if (vendorId == 0)
                 header.CompanyRegistrationDate = null;
-            var logo = await _attachmentService.GetAttachmentsAsync(header.VendorId, SourceType.VEN_LOGO, Modules.Vendors);
+            var logo = await _attachmentService.GetAttachmentsAsync(header.VendorId, SourceType.VEN_LOGO,
+                Modules.Vendors);
             if (logo is { Count: > 0 })
             {
                 header.Logo = logo[0].FileLink;
             }
-            
+
             var paymentTerms = _supplierRepository.GetPaymentTermsAsync();
             var deliveryTerms = _supplierRepository.GetDeliveryTermsAsync();
             var currency = _supplierRepository.GetCurrenciesAsync();
@@ -279,6 +280,11 @@ namespace SolaERP.Persistence.Services
                 TaxDatas = tax.Result,
                 Countries = countries.Result,
             };
+
+            header.WithHoldingTaxId = header.WithHoldingTaxId == 0 ? null : header.WithHoldingTaxId;
+            header.ShipVia = header.ShipVia == 0 ? null : header.ShipVia;
+            header.DeliveryTerms = header.DeliveryTerms == 0 ? null : header.DeliveryTerms;
+            header.Tax = header.Tax == 0 ? null : header.Tax;
 
             return ApiResponse<VM_VendorCard>.Success(vendorModel);
         }

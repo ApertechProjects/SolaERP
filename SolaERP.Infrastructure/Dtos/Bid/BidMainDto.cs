@@ -1,4 +1,6 @@
-﻿namespace SolaERP.Application.Dtos.Bid
+﻿using SolaERP.Application.Models;
+
+namespace SolaERP.Application.Dtos.Bid
 {
     public class BidMainDto
     {
@@ -22,5 +24,6 @@
         public string NewBidNo { get; set; }
 
         public List<BidDetailDto> BidDetails { get; set; }
+        public List<AttachmentSaveModel> Attachments { get; set; }
     }
 }

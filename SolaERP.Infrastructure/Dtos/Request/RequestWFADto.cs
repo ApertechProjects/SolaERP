@@ -28,5 +28,6 @@
         public decimal LogisticsTotal { get; set; }
         public int Sequence { get; set; }
         public List<RequestDetailDto> RequestDetailDtos { get; set; }
+        public bool HasAttachments { get; set; }
     }
 }

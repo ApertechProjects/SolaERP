@@ -32,6 +32,7 @@ namespace SolaERP.Application.Models
 
         public List<RfqDetailSaveModel> Details { get; set; }
         public List<int> DeletedDetailIds { get; set; }
+        public List<AttachmentSaveModel> Attachments { get; set; }
     }
 
     public class RfqSaveCommandResponse

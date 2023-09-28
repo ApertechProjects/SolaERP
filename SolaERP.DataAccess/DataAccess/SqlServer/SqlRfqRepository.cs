@@ -82,6 +82,15 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 rfqBase.BiddingType = 0;
             }
 
+            try
+            {
+                rfqBase.HasAttachments = reader.Get<bool>("HasAttachments");
+            }
+            catch (Exception)
+            {
+                rfqBase.HasAttachments = false;
+            }
+
             rfqBase.BusinessCategory = new()
             {
                 Id = reader.Get<int>("BusinessCategoryId"),

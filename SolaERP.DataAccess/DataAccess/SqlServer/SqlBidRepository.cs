@@ -197,7 +197,8 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                 DiscountedPrice = reader.Get<decimal>("DiscountedPrice"),
                 DiscountedPriceBase = reader.Get<decimal>("DiscountedPriceBase"),
                 TotalPrice = reader.Get<decimal>("TotalPrice"),
-                TotalPriceBase = reader.Get<decimal>("TotalPriceBase")
+                TotalPriceBase = reader.Get<decimal>("TotalPriceBase"),
+                HasAttachments = reader.Get<bool>("HasAttachments")
             };
         }
 

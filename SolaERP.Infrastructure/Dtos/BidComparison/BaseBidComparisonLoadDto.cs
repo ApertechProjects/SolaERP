@@ -17,5 +17,6 @@
         public string SpecialistComment { get; set; }
         public string CreatedBy { get; set; }
         public DateTime ComparisonDate { get; set; }
+        public bool HasAttachments { get; set; }
     }
 }

@@ -22,6 +22,7 @@
         public string QualityRequired { get; set; }
         public string CurrencyCode { get; set; }
         public decimal LogisticsTotal { get; set; }
+        public bool HasAttachments { get; set; }
 
     }
 }

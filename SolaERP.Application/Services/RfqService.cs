@@ -11,6 +11,7 @@ using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using System.Reflection.Metadata.Ecma335;
+using SolaERP.Application.Enums;
 
 namespace SolaERP.Persistence.Services
 {
@@ -22,13 +23,15 @@ namespace SolaERP.Persistence.Services
         private readonly IBusinessUnitRepository _bURepository;
         private readonly ISupplierEvaluationRepository _evaluationRepository;
         private readonly IGeneralRepository _generalRepository;
+        private readonly IAttachmentService _attachmentService;
 
         public RfqService(IUnitOfWork unitOfWork,
-                          IRfqRepository repository,
-                          IMapper mapper,
-                          ISupplierEvaluationRepository evaluationRepository,
-                          IBusinessUnitRepository bURepository,
-                          IGeneralRepository generalRepository)
+            IRfqRepository repository,
+            IMapper mapper,
+            ISupplierEvaluationRepository evaluationRepository,
+            IBusinessUnitRepository bURepository,
+            IGeneralRepository generalRepository,
+            IAttachmentService attachmentService)
         {
             _unitOfWork = unitOfWork;
             _repository = repository;
@@ -36,16 +39,36 @@ namespace SolaERP.Persistence.Services
             _evaluationRepository = evaluationRepository;
             _bURepository = bURepository;
             _generalRepository = generalRepository;
+            _attachmentService = attachmentService;
         }
 
 
-        public async Task<ApiResponse<RfqSaveCommandResponse>> SaveRfqAsync(RfqSaveCommandRequest request, string useridentity)
+        public async Task<ApiResponse<RfqSaveCommandResponse>> SaveRfqAsync(RfqSaveCommandRequest request,
+            string useridentity)
         {
             request.UserId = Convert.ToInt32(useridentity);
             RfqSaveCommandResponse response = null;
 
             if (request.Id <= 0) response = await _repository.AddMainAsync(request);
             else response = await _repository.UpdateMainAsync(request);
+
+            request.Attachments.ForEach(attachment =>
+            {
+                if (attachment.Type == 2)
+                {
+                    if (attachment.AttachmentId > 0)
+                    {
+                        _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId).Wait();
+                    }
+                }
+                else
+                {
+                    if (attachment.AttachmentId > 0) return;
+                    attachment.SourceId = response.Id;
+                    attachment.SourceType = SourceType.RFQ.ToString();
+                    _attachmentService.SaveAttachmentAsync(attachment).Wait();
+                }
+            });
 
             CombineWithDeletedDetails(request);
             var combinedRequestDetails = CombineDeletedRequestsWithAll(request.Details);
@@ -62,10 +85,10 @@ namespace SolaERP.Persistence.Services
         }
 
         private List<RfqDetailSaveModel> GenerateModelBasedPostedDeletedIds(List<int> postedDeletedIds)
-             => postedDeletedIds?.Select(x => new RfqDetailSaveModel
-             {
-                 Id = x
-             }).ToList();
+            => postedDeletedIds?.Select(x => new RfqDetailSaveModel
+            {
+                Id = x
+            }).ToList();
 
         private List<RfqRequestDetailSaveModel> CombineDeletedRequestsWithAll(List<RfqDetailSaveModel> postedRfqdetails)
         {
@@ -83,7 +106,8 @@ namespace SolaERP.Persistence.Services
         }
 
 
-        private List<RfqRequestDetailSaveModel> GenerateModelBasedPostedDeletedIds(List<RfqDetailSaveModel> postedRFQDetails)
+        private List<RfqRequestDetailSaveModel> GenerateModelBasedPostedDeletedIds(
+            List<RfqDetailSaveModel> postedRFQDetails)
         {
             List<RfqRequestDetailSaveModel> deletedRequestDetails = new();
 
@@ -92,10 +116,11 @@ namespace SolaERP.Persistence.Services
                 if (postedRFQDetails[i].DeletedRequestDetailIds is null)
                     continue;
 
-                deletedRequestDetails.AddRange(postedRFQDetails[i].DeletedRequestDetailIds.Select(deletedRequestDetailId => new RfqRequestDetailSaveModel
-                {
-                    Id = deletedRequestDetailId
-                }));
+                deletedRequestDetails.AddRange(postedRFQDetails[i].DeletedRequestDetailIds.Select(
+                    deletedRequestDetailId => new RfqRequestDetailSaveModel
+                    {
+                        Id = deletedRequestDetailId
+                    }));
             }
 
             return deletedRequestDetails;
@@ -111,7 +136,8 @@ namespace SolaERP.Persistence.Services
         }
 
 
-        private async Task<List<RfqDetailSaveModel>> GetNotIncludedRfqDetailsOnlyWithIdsAsync(List<RfqDetailSaveModel> postedRfqDetals, int rfqMainId)
+        private async Task<List<RfqDetailSaveModel>> GetNotIncludedRfqDetailsOnlyWithIdsAsync(
+            List<RfqDetailSaveModel> postedRfqDetals, int rfqMainId)
         {
             //Returns Ids only for iteracting with repsotiory
 
@@ -145,7 +171,6 @@ namespace SolaERP.Persistence.Services
         }
 
 
-
         public async Task<ApiResponse<List<BusinessCategory>>> GetBuCategoriesAsync()
         {
             var data = await _generalRepository.BusinessCategories();
@@ -160,7 +185,8 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<RfqDraftDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<List<RequestRfqDto>>> GetRequestsForRFQ(string userIdentity, RFQRequestModel model)
+        public async Task<ApiResponse<List<RequestRfqDto>>> GetRequestsForRFQ(string userIdentity,
+            RFQRequestModel model)
         {
             model.UserId = Convert.ToInt32(userIdentity);
             var rfqRequests = await _repository.GetRequestsForRfq(model);
@@ -201,8 +227,10 @@ namespace SolaERP.Persistence.Services
             var mainDetails = mainDetailsTask.Result;
             var rfqRequestDetails = rfqRequestDetailsTask.Result;
             var rfqSingleReasons = rfqSingleReasonsTask.Result;
-            var matchedBuCategory = businessCategoriesTask.Result.FirstOrDefault(x => x.Id == mainRFQ.BusinessCategoryId);
-            var matchedBU = businessUnitTask.Result.FirstOrDefault(x => x.BusinessUnitId == mainRFQ.BusinessUnitId);
+            var matchedBuCategory =
+                businessCategoriesTask.Result.FirstOrDefault(x => x.Id == mainRFQ.BusinessCategoryId);
+            var matchedBU = businessUnitTask.Result
+                .FirstOrDefault(x => x.BusinessUnitId == mainRFQ.BusinessUnitId);
 
             var mainRFQDto = _mapper.Map<RFQMainDto>(mainRFQ);
             var mainDetailsDto = _mapper.Map<List<RFQDetailDto>>(mainDetails);
@@ -211,6 +239,8 @@ namespace SolaERP.Persistence.Services
             mainRFQDto.SingleSourceReasons = rfqSingleReasons;
             mainRFQDto.BusinessCategory = matchedBuCategory;
             mainRFQDto.BusinessUnit = matchedBU;
+            mainRFQDto.Attachments =
+                await _attachmentService.GetAttachmentsAsync(rfqMainId, SourceType.RFQ, Modules.Rfqs);
 
             var groupedRequestDetails = rfqRequestDetailsDto.GroupBy(requestLine => requestLine.GUID);
             mainDetailsDto.ForEach(detail =>
@@ -249,7 +279,8 @@ namespace SolaERP.Persistence.Services
             return allDeleted ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Fail(false, 400);
         }
 
-        public async Task<ApiResponse<List<Application.Dtos.RFQ.UOMDto>>> GetPUOMAsync(int businessUnitId, string itemCodes)
+        public async Task<ApiResponse<List<Application.Dtos.RFQ.UOMDto>>> GetPUOMAsync(int businessUnitId,
+            string itemCodes)
         {
             var puomList = await _repository.GetPUOMAsync(businessUnitId, itemCodes);
             var dto = _mapper.Map<List<Application.Dtos.RFQ.UOMDto>>(puomList);
@@ -261,8 +292,8 @@ namespace SolaERP.Persistence.Services
         {
             var data = _mapper.Map<RFQVendorIUD>(dto);
             var result = await _repository.RFQVendorIUDAsync(data, Convert.ToInt32(userIdentity));
-            
-            await _unitOfWork.SaveChangesAsync();   
+
+            await _unitOfWork.SaveChangesAsync();
             return result ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Fail(false, 400);
         }
     }

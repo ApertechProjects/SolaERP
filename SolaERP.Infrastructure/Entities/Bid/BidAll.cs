@@ -33,5 +33,6 @@ namespace SolaERP.Application.Entities.Bid
         public decimal Discount { get; set; }
         public decimal DiscountedPrice { get; set; }
         public object DiscountedPriceBase { get; set; }
+        public bool HasAttachments { get; set; }
     }
 }

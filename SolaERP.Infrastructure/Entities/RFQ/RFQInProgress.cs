@@ -27,5 +27,6 @@ namespace SolaERP.Application.Entities.RFQ
         public DateTime SentDate { get; set; }
         public string Comment { get; set; }
         public BusinessCategory BusinessCategory { get; set; }
+        public bool HasAttachments { get; set; }
     }
 }

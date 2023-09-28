@@ -1,3 +1,5 @@
+using SolaERP.Application.Models;
+
 namespace SolaERP.Application.Dtos.Order;
 
 public class OrderMainDto
@@ -28,4 +30,5 @@ public class OrderMainDto
     public bool OrderPrint { get; set; }
 
     public List<OrderDetailDto> OrderDetails { get; set; }
+    public List<AttachmentSaveModel> Attachments { get; set; }
 }

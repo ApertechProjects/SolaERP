@@ -321,7 +321,7 @@ public class SqlOrderRepository : IOrderRepository
         command.Parameters.AddWithValue(command, "@RejectReasonId", statusDto.RejectReasonId);
 
         await _unitOfWork.SaveChangesAsync();
-        
+
         return await command.ExecuteNonQueryAsync() > 0;
     }
 
@@ -559,7 +559,7 @@ public class SqlOrderRepository : IOrderRepository
 
     private static OrderCreateBidListDto MapFromReaderForOrderCreateBidsListDto(DbDataReader reader)
     {
-        return new OrderCreateBidListDto
+        var dto = new OrderCreateBidListDto
         {
             ItemCode = reader.Get<string>("ItemCode"),
             Condition = reader.Get<int>("Condition"),
@@ -574,7 +574,7 @@ public class SqlOrderRepository : IOrderRepository
             DiscountType = reader.Get<int>("DiscountType"),
             ComparisonNo = reader.Get<string>("ComparisonNo"),
             Status = reader.Get<int>("Status"),
-            DiscountValue = reader.Get<int>("DiscountValue"),
+            DiscountValue = reader.Get<decimal>("DiscountValue"),
             ApproveStatus = reader.Get<int>("ApproveStatus"),
             BidNo = reader.Get<string>("BidNo"),
             Quantity = reader.Get<decimal>("Quantity"),
@@ -582,7 +582,7 @@ public class SqlOrderRepository : IOrderRepository
             DiscountedAmount = reader.Get<decimal>("DiscountedAmount"),
             LineDescription = reader.Get<string>("LineDescription"),
             BidMainId = reader.Get<int>("BidMainId"),
-            RequestLine = reader.Get<int>("RequestLine"),
+            RequestLine = reader.Get<string>("RequestLine"),
             TotalAmount = reader.Get<decimal>("TotalAmount"),
             UnitPrice = reader.Get<decimal>("UnitPrice"),
             AlternativeItemCode = reader.Get<string>("AlternativeItemCode"),
@@ -594,8 +594,22 @@ public class SqlOrderRepository : IOrderRepository
             ConvertedQTY = reader.Get<decimal>("ConvertedQTY"),
             PUOM = reader.Get<string>("PUOM"),
             RequestUOM = reader.Get<string>("RequestUOM"),
-            RFQDetailId = reader.Get<int>("RFQDetailId")
+            RFQDetailId = reader.Get<int>("RFQDetailId"),
+            AccountCode = reader.Get<string>("AccountCode"),
+            AccountName = reader.Get<string>("AccountName"),
+            CatId = reader.Get<int>("CatId"),
+            AnalysisCode1Id = reader.Get<int>("AnalysisCode1Id"),
+            AnalysisCode2Id = reader.Get<int>("AnalysisCode2Id"),
+            AnalysisCode3Id = reader.Get<int>("AnalysisCode3Id"),
+            AnalysisCode4Id = reader.Get<int>("AnalysisCode4Id"),
+            AnalysisCode5Id = reader.Get<int>("AnalysisCode5Id"),
+            AnalysisCode6Id = reader.Get<int>("AnalysisCode6Id"),
+            AnalysisCode7Id = reader.Get<int>("AnalysisCode7Id"),
+            AnalysisCode8Id = reader.Get<int>("AnalysisCode8Id"),
+            AnalysisCode9Id = reader.Get<int>("AnalysisCode9Id"),
+            AnalysisCode10Id = reader.Get<int>("AnalysisCode10Id")
         };
+        return dto;
     }
 
     private static OrderHeadLoaderDto MapFromReaderForOrderHeaderLoaderDto(IDataReader reader)
@@ -700,10 +714,11 @@ public class SqlOrderRepository : IOrderRepository
             EnteredDate = reader.Get<DateTime>("EnteredDate"),
             OrderNo = reader.Get<string>("OrderNo"),
             VendorName = reader.Get<string>("VendorName"),
-            RFQNo = reader.Get<string>("RFQNo")
+            RFQNo = reader.Get<string>("RFQNo"),
+            HasAttachments = reader.Get<bool>("HasAttachments")
         };
     }
-    
+
     private OrderAllDto MapFromReaderForOrderWFADto(DbDataReader reader)
     {
         return new OrderAllDto()
@@ -719,7 +734,8 @@ public class SqlOrderRepository : IOrderRepository
             EnteredDate = reader.Get<DateTime>("EnteredDate"),
             OrderNo = reader.Get<string>("OrderNo"),
             VendorName = reader.Get<string>("VendorName"),
-            RFQNo = reader.Get<string>("RFQNo")
+            RFQNo = reader.Get<string>("RFQNo"),
+            HasAttachments = reader.Get<bool>("HasAttachments")
         };
     }
 }
