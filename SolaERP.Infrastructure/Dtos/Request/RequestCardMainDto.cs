@@ -6,6 +6,7 @@ namespace SolaERP.Application.Dtos.Request
     {
         private int _status;
         private int _priority;
+        private int _destination;
         public int RequestMainId { get; set; }
         public int BusinessUnitId { get; set; }
         public string Buyer { get; set; }
@@ -13,7 +14,19 @@ namespace SolaERP.Application.Dtos.Request
         public string BusinessUnitName { get; set; }
         public int RequestTypeId { get; set; }
         public string RequestNo { get; set; }
-        public int Destination { get; set; }
+        public int Destination
+        {
+            get
+            {
+                if (RequestMainId == 0)
+                    _destination = 1;
+                return _destination;
+            }
+            set
+            {
+                _destination = value;
+            }
+        }
         public string ApproveStatus { get; set; }
         public string AccountCode { get; set; }
         public string AccountName { get; set; }
