@@ -100,10 +100,10 @@ namespace SolaERP.Controllers
         {
             for (int i = 0; i < model.RequestDetailIds.Count; i++)
             {
-                var res = await _requestService.ChangeDetailStatusAsync(User.Identity.Name, model.RequestDetailIds[i], model.ApproveStatusId, model.Comment, model.Sequence, model.RejectReasonId);
+                var res = await _requestService.ChangeDetailStatusAsync(User.Identity.Name, model.RequestDetailIds[i], model.ApproveStatus, model.Comment, model.Sequence, model.RejectReasonId);
                 if (res)
                 {
-                    var users = await _userService.UsersRequestDetails(model.RequestDetailIds[0], model.Sequence, (ApproveStatus)model.ApproveStatusId);
+                    var users = await _userService.UsersRequestDetails(model.RequestDetailIds[0], model.Sequence, (ApproveStatus)model.ApproveStatus);
                     await _mailService.SendRequestMailsForChangeStatus(Response, users, model.Sequence, model.BusinessUnitName, model.RejectReason);
                 }
             }
