@@ -27,6 +27,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                         DECLARE @NewVendorId int 
                                         EXEC SP_Vendors_IUD @VendorId,
                                                             @BusinessUnitId,
+                                                            @VendorCode,
                                                             @VendorName,
                                                             @TaxId,
                                                             @TaxOffice,
@@ -63,6 +64,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@VendorId", vendor.VendorId);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", null);
+                command.Parameters.AddWithValue(command, "@VendorCode", vendor.VendorCode);
                 command.Parameters.AddWithValue(command, "@VendorName", vendor.CompanyName);
                 command.Parameters.AddWithValue(command, "@TaxId", vendor.TaxId);
                 command.Parameters.AddWithValue(command, "@TaxOffice", vendor.TaxOffice);
