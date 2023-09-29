@@ -24,7 +24,8 @@ namespace SolaERP.Persistence.Services
         private readonly IUnitOfWork _unitOfWork;
         private IMapper _mapper;
 
-        public GroupService(IGroupRepository groupRepository, IUserRepository userRepository, IMapper mapper, IUnitOfWork unitOfWork)
+        public GroupService(IGroupRepository groupRepository, IUserRepository userRepository, IMapper mapper,
+            IUnitOfWork unitOfWork)
         {
             _groupRepository = groupRepository;
             _userRepository = userRepository;
@@ -37,6 +38,7 @@ namespace SolaERP.Persistence.Services
             var data = users.ConvertListToDataTable();
             await _groupRepository.AddBusinessUnitsAsync(data, groupId);
         }
+
         public async Task DeleteBusinessUnitsAsync(List<int> users, int groupId)
         {
             var data = users.ConvertListToDataTable();
@@ -176,7 +178,8 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> SaveGroupAsync(string identity, GroupSaveModel model)
         {
             var userId = await _userRepository.ConvertIdentity(identity);
-            model.GroupId = await _groupRepository.AddUpdateOrDeleteGroupAsync(userId, new() { GroupId = model.GroupId, GroupName = model.GroupName, Description = model.Description });
+            model.GroupId = await _groupRepository.AddUpdateOrDeleteGroupAsync(userId,
+                new() { GroupId = model.GroupId, GroupName = model.GroupName, Description = model.Description });
 
             if (model.AddUsers != null)
                 await AddUsersAsync(model.AddUsers, model.GroupId);
@@ -207,6 +210,7 @@ namespace SolaERP.Persistence.Services
             {
                 await _groupRepository.AddMenuAsync(model.GroupId, model.AddMenus.ConvertListOfCLassToDataTable());
             }
+
             if (model.RemoveMenus != null)
                 await _groupRepository.DeleteMenuAsync(model.GroupId, model.RemoveMenus.ConvertListToDataTable());
 
@@ -216,9 +220,11 @@ namespace SolaERP.Persistence.Services
                 await DeleteEmailNotificationAsync(model.GroupId, model.RemoveEmailNotification);
 
             if (model.AddAnalysisCodeIds != null)
-                await _groupRepository.AddAnalysisCodeAsync(model.GroupId, model.AddAnalysisCodeIds.ConvertListToDataTable());
+                await _groupRepository.AddAnalysisCodeAsync(model.GroupId,
+                    model.AddAnalysisCodeIds.ConvertListToDataTable());
             if (model.RemoveAnalysisCodeIds != null)
-                await _groupRepository.DeleteAnalysisCodeAsync(model.GroupId, model.RemoveAnalysisCodeIds.ConvertListToDataTable());
+                await _groupRepository.DeleteAnalysisCodeAsync(model.GroupId,
+                    model.RemoveAnalysisCodeIds.ConvertListToDataTable());
 
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(true, 200);
@@ -236,15 +242,31 @@ namespace SolaERP.Persistence.Services
             await _groupRepository.AddEmailNotificationsAsync(data, groupId);
         }
 
-        private async Task DeleteBuyersAsync(List<GroupBuyerSaveModel> removeBuyers, int groupId)
+        private async Task DeleteBuyersAsync(List<GroupBuyerSaveModelDto> removeBuyers, int groupId)
         {
-            var data = removeBuyers.ConvertListOfCLassToDataTable();
+            var list = new List<GroupBuyerSaveModel>();
+            removeBuyers.ForEach(x =>
+            {
+                list.Add(new GroupBuyerSaveModel
+                {
+                    BusinessUnitId = x.BusinessUnitId, Buyer = x.BuyerCode
+                });
+            });
+            var data = list.ConvertListOfCLassToDataTable();
             await _groupRepository.DeleteBuyersAsync(data, groupId);
         }
 
-        private async Task AddBuyersAsync(List<GroupBuyerSaveModel> addBuyers, int groupId)
+        private async Task AddBuyersAsync(List<GroupBuyerSaveModelDto> addBuyers, int groupId)
         {
-            var data = addBuyers.ConvertListOfCLassToDataTable();
+            var list = new List<GroupBuyerSaveModel>();
+            addBuyers.ForEach(x =>
+            {
+                list.Add(new GroupBuyerSaveModel
+                {
+                    BusinessUnitId = x.BusinessUnitId, Buyer = x.BuyerCode
+                });
+            });
+            var data = list.ConvertListOfCLassToDataTable();
             await _groupRepository.AddBuyersAsync(data, groupId);
         }
 
@@ -286,9 +308,9 @@ namespace SolaERP.Persistence.Services
         {
             var result = await _groupRepository.UpdateEmailNotificationAsync(model);
             await _unitOfWork.SaveChangesAsync();
-            return result ?
-                            ApiResponse<bool>.Success(204)
-                          : ApiResponse<bool>.Fail($"Something went wrong. The email notification was not updated.", 400);
+            return result
+                ? ApiResponse<bool>.Success(204)
+                : ApiResponse<bool>.Fail($"Something went wrong. The email notification was not updated.", 400);
         }
 
         public async Task<ApiResponse<bool>> DeleteGroupAsync(string identity, GroupDeleteModel model)
@@ -297,10 +319,12 @@ namespace SolaERP.Persistence.Services
             int counter = 0;
             for (int i = 0; i < model.groupIds.Count; i++)
             {
-                var data = await _groupRepository.AddUpdateOrDeleteGroupAsync(userId, new() { GroupId = model.groupIds[i] });
+                var data = await _groupRepository.AddUpdateOrDeleteGroupAsync(userId,
+                    new() { GroupId = model.groupIds[i] });
                 if (data == 0)
                     counter++;
             }
+
             await _unitOfWork.SaveChangesAsync();
             if (counter == model.groupIds.Count)
                 return ApiResponse<bool>.Success(200);
