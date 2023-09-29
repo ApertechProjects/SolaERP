@@ -22,8 +22,8 @@
         public List<int> RemoveAdditionalPrivileges { get; set; }
         #endregion
         #region Buyers
-        public List<GroupBuyerSaveModel> AddBuyers { get; set; }
-        public List<GroupBuyerSaveModel> RemoveBuyers { get; set; }
+        public List<GroupBuyerSaveModelDto> AddBuyers { get; set; }
+        public List<GroupBuyerSaveModelDto> RemoveBuyers { get; set; }
         #endregion
         #region EmailNotification
         public List<int> AddEmailNotification { get; set; }
