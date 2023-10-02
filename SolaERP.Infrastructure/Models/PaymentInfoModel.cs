@@ -13,5 +13,53 @@ namespace SolaERP.Application.Models
         public InfoHeaderDto InfoHeader { get; set; }
         public List<InfoDetailDto> InfoDetail { get; set; }
         public List<InfoApproval> InfoApproval { get; set; }
+        public PaymentLink InfoPaymentLink { get; set; }
+    }
+
+    public class PaymentLink
+    {
+        public List<RequestLink> RequestLinks { get; set; }
+        public List<RFQLink> RFQLinks { get; set; }
+        public List<BidLink> BidLinks { get; set; }
+        public List<BidComparisonLink> BidComparisonLinks { get; set; }
+        public List<OrderLink> OrderLinks { get; set; }
+        public List<InvoiceLink> InvoiceLinks { get; set; }
+    }
+
+    public class InvoiceLink
+    {
+        public int InvoiceId { get; set; }
+        public string InvoiceNo { get; set; }
+    }
+
+    public class OrderLink
+    {
+        public int OrderMainId { get; set; }
+        public string OrderNo { get; set; }
+    }
+
+    public class BidComparisonLink
+    {
+        public int BidBidComparisonId { get; set; }
+        public string ComparisonNo { get; set; }
+    }
+
+    public class BidLink
+    {
+        public int BidMainId { get; set; }
+        public string BidNo { get; set; }
+    }
+
+    public class RFQLink
+    {
+        public int RFQMainId { get; set; }
+        public string RFQNo { get; set; }
+    }
+
+    public class RequestLink
+    {
+        public int RequestMainId { get; set; }
+        public string RequestNo { get; set; }
     }
 }
+

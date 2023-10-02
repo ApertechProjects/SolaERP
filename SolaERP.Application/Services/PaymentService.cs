@@ -123,11 +123,13 @@ namespace SolaERP.Persistence.Services
             var detailsDto = _mapper.Map<List<InfoDetailDto>>(details);
             var approvalInformation = await _paymentRepository.InfoApproval(paymentDocumentMainId);
             var approvalDto = _mapper.Map<List<InfoApproval>>(approvalInformation);
+            PaymentLink link = new PaymentLink();
             return ApiResponse<PaymentInfoModel>.Success(new PaymentInfoModel
             {
                 InfoApproval = approvalDto,
                 InfoDetail = detailsDto,
                 InfoHeader = headerDto,
+                
             });
         }
 
