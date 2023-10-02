@@ -70,26 +70,17 @@ namespace SolaERP.Persistence.Services
             try
             {
                 User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
-                user.FullName = command.CompanyInformation.FullName;
-                user.PhoneNumber = command.CompanyInformation.PhoneNumber;
-                user.Description = command.CompanyInformation.Position;
+                var processSelector = GetProcessSelector(command.VendorCode, command.VendorId);
+                
+                if (processSelector.IsCreate)
+                {
+                    user.FullName = command.CompanyInformation.FullName;
+                    user.PhoneNumber = command.CompanyInformation.PhoneNumber;
+                    user.Description = command.CompanyInformation.Position;
+                }
 
                 Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
-
-                int vendorId;
-                if (command.VendorId is null)
-                {
-                    vendor.VendorId = user.VendorId;
-                    vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
-                }
-                else if (command.VendorId == 0)
-                {
-                    vendorId = 0;
-                }
-                else
-                {
-                    vendorId = (int)command.VendorId;
-                }
+                int vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
 
                 vendor.RegistrationDate = vendor.RegistrationDate.ConvertDateToValidDate();
 
@@ -564,9 +555,12 @@ namespace SolaERP.Persistence.Services
 
                 #endregion
 
-                user.VendorId = vendorId;
-                await _userRepository.SaveUserAsync(user);
 
+                if (processSelector.IsCreate)
+                {
+                    user.VendorId = vendorId;
+                    await _userRepository.SaveUserAsync(user);
+                }
 
                 await Task.WhenAll(tasks);
                 await _unitOfWork.SaveChangesAsync();
@@ -1001,7 +995,7 @@ namespace SolaERP.Persistence.Services
                     if (d.HasAttachment > 0)
                     {
                         attachments = _mapper.Map<List<AttachmentDto>>(
-                            await _attachmentService.GetAttachmentsAsync(vendorId, SourceType.VEN_DUE, 
+                            await _attachmentService.GetAttachmentsAsync(vendorId, SourceType.VEN_DUE,
                                 Modules.EvaluationForm, d.DesignId.ToString()));
 
                         attachments = attachments.Select(x =>
@@ -1219,6 +1213,25 @@ namespace SolaERP.Persistence.Services
             if (result)
                 return ApiResponse<bool>.Success(result);
             return ApiResponse<bool>.Fail(result, 400);
+        }
+
+        private static ProcessSelectorDto GetProcessSelector(string vendorCode, int? vendorId)
+        {
+            var processSelector = new ProcessSelectorDto();
+            if (vendorId > 0)
+            {
+                processSelector.IsUpdate = true;
+                return processSelector;
+            }
+
+            if (string.IsNullOrEmpty(vendorCode))
+            {
+                processSelector.IsCreate = true;
+                return processSelector;
+            }
+
+            processSelector.IsRevise = true;
+            return processSelector;
         }
     }
 }
