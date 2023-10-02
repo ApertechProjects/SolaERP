@@ -14,7 +14,7 @@
 
     public class PaymentDocumentMainSaveModel
     {
-        public int PaymentDocumentMainId { get; set; }
+        public int? PaymentDocumentMainId { get; set; }
         public int BusinessUnitId { get; set; }
         public string Reference { get; set; }
         public string VendorCode { get; set; }
@@ -32,7 +32,7 @@
     public class PaymentDocumentDetailSaveModel
     {
         public int PaymentDocumentDetailId { get; set; }
-        public int PaymentDocumentMainId { get; set; }
+        public int? PaymentDocumentMainId { get; set; }
         public string TransactionReference { get; set; }
         public string Reference { get; set; }
         public string InvoiceNo { get; set; }

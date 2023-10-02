@@ -28,11 +28,11 @@ namespace SolaERP.Application.Dtos.Payment
         public DateTime SentDate { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
-        public bool HasRequestAttach { get; set; }
-        public bool HasRFQAttach { get; set; }
-        public bool HasBidAttach { get; set; }
-        public bool HasBCCAttach { get; set; }
-        public bool HasOrderAttach { get; set; }
-        public bool HasInvoiceAttach { get; set; }
+        public int HasRequestAttach { get; set; }
+        public int HasRFQAttach { get; set; }
+        public int HasBidAttach { get; set; }
+        public int HasBCCAttach { get; set; }
+        public int HasOrderAttach { get; set; }
+        public int HasInvoiceAttach { get; set; }
     }
 }

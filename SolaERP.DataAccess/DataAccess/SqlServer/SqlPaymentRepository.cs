@@ -133,7 +133,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 AccountName = reader.Get<string>("AccountName"),
                 AmountToPay = reader.Get<decimal>("AmountToPay"),
                 Budget = reader.Get<string>("Budget"),
-                PaymenRequestAmount = reader.Get<decimal>("PaymenRequestAmount"),
+                PaymentRequestAmount = reader.Get<decimal>("PaymentRequestAmount"),
                 InvoiceNo = reader.Get<string>("InvoiceNo"),
                 Employee = reader.Get<string>("Employee"),
                 PayableAmount = reader.Get<decimal>("PayableAmount"),
@@ -531,8 +531,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 string requestNo = "";
                 if (reader.Read())
                 {
-                    requestId = reader.Get<int>("NewRequestmainId");
-                    requestNo = reader.Get<string>("NewRequestNo");
+                    requestId = reader.Get<int>("NewPaymentDocumentMainId");
+                    requestNo = reader.Get<string>("NewPaymentRequestNo");
                 }
 
                 return new PaymentDocumentSaveResultModel { PaymentDocumentMainId = requestId, PaymentRequestNo = requestNo };

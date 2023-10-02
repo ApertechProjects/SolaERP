@@ -5,6 +5,7 @@ using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Entities.Payment;
 using SolaERP.Application.Models;
+using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
 using System.Data;
 
@@ -14,10 +15,12 @@ namespace SolaERP.Persistence.Services
     {
         private readonly IPaymentRepository _paymentRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public PaymentService(IPaymentRepository paymentRepository, IUserRepository userRepository, IMapper mapper)
+        public PaymentService(IPaymentRepository paymentRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
             _userRepository = userRepository;
             _paymentRepository = paymentRepository;
         }
@@ -142,9 +145,13 @@ namespace SolaERP.Persistence.Services
             var mainResult = await _paymentRepository.MainSave(userId, model.Main);
             if (mainResult != null)
             {
+                foreach (var item in model.Details)
+                    item.PaymentDocumentMainId = mainResult.PaymentDocumentMainId;
+
                 DataTable data = model.Details.ConvertListOfCLassToDataTable();
                 var detailResult = await _paymentRepository.DetailSave(data);
             }
+            await _unitOfWork.SaveChangesAsync();
             return ApiResponse<PaymentDocumentSaveResultModel>.Success(new PaymentDocumentSaveResultModel
             {
                 PaymentDocumentMainId = mainResult.PaymentDocumentMainId,

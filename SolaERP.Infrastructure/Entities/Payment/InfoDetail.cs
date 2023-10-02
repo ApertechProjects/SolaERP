@@ -18,7 +18,7 @@ namespace SolaERP.Application.Entities.Payment
         public string AccountName { get; set; }
         public string PaymentTerms { get; set; }
         public decimal PayableAmount { get; set; }
-        public decimal PaymenRequestAmount { get; set; }
+        public decimal PaymentRequestAmount { get; set; }
         public decimal AmountToPay { get; set; }
         public string Budget { get; set; }
         public string Employee { get; set; }

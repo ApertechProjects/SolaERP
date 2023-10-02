@@ -24,5 +24,6 @@ namespace SolaERP.Application.Dtos.Vendors
         public string StatusName { get; set; }
         public int StatusId { get; set; }
         public int Sequence { get; set; }
+        public string CountryName { get; set; }
     }
 }

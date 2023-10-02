@@ -17,5 +17,6 @@
         public string DefaultCurrency { get; set; }
         public int StatusId { get; set; }
         public string StatusName { get; set; }
+        public string CountryName { get; set; }
     }
 }

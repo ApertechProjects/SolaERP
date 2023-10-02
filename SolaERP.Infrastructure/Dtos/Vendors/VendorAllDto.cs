@@ -19,5 +19,6 @@
         public int StatusId { get; set; }
         public string StatusName { get; set; }
         public string ApproveStatusName { get; set; }
+        public string CountryName { get; set; }
     }
 }
