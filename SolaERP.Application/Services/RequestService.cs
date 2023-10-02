@@ -47,7 +47,6 @@ namespace SolaERP.Persistence.Services
         {
             var mainRequest = await _requestMainRepository.GetAllAsync(model);
             var mainRequestDto = _mapper.Map<List<RequestMainDto>>(mainRequest);
-            mainRequestDto.Reverse();
             return ApiResponse<List<RequestMainDto>>.Success(mainRequestDto);
         }
 
@@ -131,7 +130,6 @@ namespace SolaERP.Persistence.Services
         {
             var mainDraftEntites = await _requestMainRepository.GetMainRequestDraftsAsync(getMainDraftParameters);
             var mainDraftDto = _mapper.Map<List<RequestMainDraftDto>>(mainDraftEntites);
-            mainDraftDto.Reverse();
             return ApiResponse<List<RequestMainDraftDto>>.Success(mainDraftDto);
         }
 
@@ -142,7 +140,6 @@ namespace SolaERP.Persistence.Services
             var mainRequest =
                 await _requestMainRepository.GetApproveAmendmentRequestsAsync(userId, requestParametersDto);
             var mainRequestDto = _mapper.Map<List<RequestAmendmentDto>>(mainRequest);
-            mainRequestDto.Reverse();
             return ApiResponse<List<RequestAmendmentDto>>.Success(mainRequestDto);
         }
 
@@ -273,7 +270,6 @@ namespace SolaERP.Persistence.Services
             var mainreq = await _requestMainRepository.GetWaitingForApprovalsAsync(userId, requestWFAGetParametersDto);
 
             var mainRequestDto = _mapper.Map<List<RequestWFADto>>(mainreq);
-            mainRequestDto.Reverse();
             if (mainRequestDto != null && mainRequestDto.Count > 0)
                 return ApiResponse<List<RequestWFADto>>.Success(mainRequestDto);
 
@@ -347,7 +343,6 @@ namespace SolaERP.Persistence.Services
             var mainreq = await _requestMainRepository.GetHeldAsync(requestMainGet);
 
             var mainRequestDto = _mapper.Map<List<RequestHeldDto>>(mainreq);
-            mainRequestDto.Reverse();
             if (mainRequestDto != null && mainRequestDto.Count > 0)
                 return ApiResponse<List<RequestHeldDto>>.Success(mainRequestDto);
 
