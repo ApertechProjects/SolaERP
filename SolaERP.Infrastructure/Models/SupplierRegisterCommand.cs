@@ -11,8 +11,5 @@ namespace SolaERP.Application.Models
         public List<VendorBankDetailDto> BankAccounts { get; set; }
         public List<DueDiligenceDesignSaveDto> DueDiligence { get; set; }
         public List<PrequalificationDesignListDto> Prequalification { get; set; }
-        public int? VendorId { get; set; }
-        public string VendorCode { get; set; }
-        public int? ReviseNo { get; set; }
     }
 }
