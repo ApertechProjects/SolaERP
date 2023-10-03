@@ -10,29 +10,29 @@ public class TestController : ControllerBase
     [HttpGet("{count:int}")]
     public IActionResult GetUsers(int count)
     {
-        var user = new User
-        {
-            EmployeeID = 1,
-            FullName = "Nancy Davolio",
-            Position = "Sales Representative",
-            TitleOfCourtesy = "Ms.",
-            BirthDate = new DateTime(1968, 12, 8),
-            HireDate = new DateTime(2011, 5, 1),
-            Address = "507 - 20th Ave. E.\r\nApt. 2A",
-            City = "Seattle",
-            Region = "WA",
-            PostalCode = "98122",
-            Country = "USA",
-            HomePhone = "(206) 555-9857",
-            Extension = "5467",
-            Photo = "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png",
-            Notes =
-                "Education includes a BA in psychology from Colorado State University in 1990. She also completed \"The Art of the Cold Call.\" Nancy is a member of Toastmasters International.",
-            ReportsTo = 2
-        };
         var users = new List<User>();
         for (int i = 0; i < count; i++)
         {
+            var user = new User
+            {
+                FullName = "Nancy Davolio",
+                Position = "Sales Representative",
+                TitleOfCourtesy = "Ms.",
+                BirthDate = new DateTime(1968, 12, 8),
+                HireDate = new DateTime(2011, 5, 1),
+                Address = "507 - 20th Ave. E.\r\nApt. 2A",
+                City = "Seattle",
+                Region = "WA",
+                PostalCode = "98122",
+                Country = "USA",
+                HomePhone = "(206) 555-9857",
+                Extension = "5467",
+                Photo = "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png",
+                Notes =
+                    "Education includes a BA in psychology from Colorado State University in 1990. She also completed \"The Art of the Cold Call.\" Nancy is a member of Toastmasters International.",
+                ReportsTo = 2,
+                EmployeeID = i + 1
+            };
             users.Add(user);
         }
 
