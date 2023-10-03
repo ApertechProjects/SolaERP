@@ -70,7 +70,9 @@ namespace SolaERP.Persistence.Services
             try
             {
                 User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
-                var processSelector = GetProcessSelector(command.VendorCode, command.VendorId);
+                var processSelector = GetProcessSelector(command.CompanyInformation.VendorCode,
+                    command.CompanyInformation.VendorId);
+                SetRevisionNumber(command, processSelector);
 
                 if (processSelector.IsCreate)
                 {
@@ -78,8 +80,6 @@ namespace SolaERP.Persistence.Services
                     user.PhoneNumber = command.CompanyInformation.PhoneNumber;
                     user.Description = command.CompanyInformation.Position;
                 }
-
-                command.CompanyInformation.ReviseNo++;
 
                 Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
                 int vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
@@ -1234,6 +1234,20 @@ namespace SolaERP.Persistence.Services
 
             processSelector.IsRevise = true;
             return processSelector;
+        }
+
+        private void SetRevisionNumber(SupplierRegisterCommand command, ProcessSelectorDto processSelector)
+        {
+            if (processSelector.IsCreate)
+            {
+                command.CompanyInformation.ReviseNo = 0;
+                return;
+            }
+
+            if (processSelector.IsRevise)
+            {
+                //   
+            }
         }
     }
 }
