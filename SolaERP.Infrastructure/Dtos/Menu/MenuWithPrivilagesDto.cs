@@ -20,6 +20,12 @@
     {
         public int MenuId { get; set; }
         public string MenuName { get; set; }
+        public bool ReadAccess { get; set; }
+        public bool CreateAccess { get; set; }
+        public bool EditAccess { get; set; }
+        public bool DeleteAccess { get; set; }
+        public bool ExportAccess { get; set; }
+        public string ReactIcon { get; set; }
         public List<MenuWithPrivilegeDetail> Details { get; set; }
     }
 

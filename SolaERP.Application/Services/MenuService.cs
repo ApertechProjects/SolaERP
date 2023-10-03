@@ -124,10 +124,28 @@ namespace SolaERP.Persistence.Services
             for (int i = 1; i < ttt.Count; i++)
             {
                 IGrouping<int, MenuWithPrivilagesDto> item = ttt[i];
+                bool createAccessValue = true;
+                bool editAccessValue = true;
+                bool deleteAccessValue = true;
+                bool exportAccessValue = true;
+                bool readAccessValue = true;
+                foreach (var data in item)
+                {
+                    createAccessValue = createAccessValue && data.CreateAccess;
+                    editAccessValue = editAccessValue && data.EditAccess;
+                    deleteAccessValue = deleteAccessValue && data.DeleteAccess;
+                    exportAccessValue = exportAccessValue && data.ExportAccess;
+                    readAccessValue = readAccessValue && data.ReadAccess;
+                }
                 menuWithPrivileges.Add(new MenuWithPrivilege
                 {
                     MenuId = item.Key,
                     MenuName = ttt[0].Where(x => x.ParentId == 0).ToList()[i - 1].MenuName,
+                    CreateAccess = createAccessValue,
+                    DeleteAccess = deleteAccessValue,
+                    EditAccess = editAccessValue,
+                    ExportAccess = exportAccessValue,
+                    ReadAccess = readAccessValue,
                     Details = item.Select(x => new MenuWithPrivilegeDetail
                     {
                         MenuId = x.MenuId,
