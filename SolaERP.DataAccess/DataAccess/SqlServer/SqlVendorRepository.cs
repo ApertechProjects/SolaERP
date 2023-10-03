@@ -559,5 +559,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return result;
         }
+
+        public async Task<int> GetRevisionNumberByVendorCode(string vendorCode)
+        {
+            int result = 0;
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"SELECT TOP 1 ReviseNo
+                                    FROM Procurement.Vendors
+                                    WHERE VendorCode = @VendorCode ORDER BY ReviseNo DESC ";
+            command.Parameters.AddWithValue(command, "@VendorCode", vendorCode);
+
+            await using DbDataReader reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+                result = reader.Get<int>("ReviseNo");
+
+            return result;
+        }
     }
 }

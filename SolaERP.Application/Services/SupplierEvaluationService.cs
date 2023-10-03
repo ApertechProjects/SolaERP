@@ -1244,10 +1244,11 @@ namespace SolaERP.Persistence.Services
                 return;
             }
 
-            if (processSelector.IsRevise)
-            {
-                //   
-            }
+            if (!processSelector.IsRevise) return;
+
+            var resviseNo = _vendorRepository
+                .GetRevisionNumberByVendorCode(command.CompanyInformation.VendorCode).Result;
+            command.CompanyInformation.ReviseNo = resviseNo + 1;
         }
     }
 }
