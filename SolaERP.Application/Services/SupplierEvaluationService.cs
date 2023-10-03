@@ -71,13 +71,15 @@ namespace SolaERP.Persistence.Services
             {
                 User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
                 var processSelector = GetProcessSelector(command.VendorCode, command.VendorId);
-                
+
                 if (processSelector.IsCreate)
                 {
                     user.FullName = command.CompanyInformation.FullName;
                     user.PhoneNumber = command.CompanyInformation.PhoneNumber;
                     user.Description = command.CompanyInformation.Position;
                 }
+
+                command.CompanyInformation.ReviseNo++;
 
                 Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
                 int vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
