@@ -1,12 +1,15 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Entities.Payment;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Reflection;
+using System.Reflection.PortableExecutable;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -584,7 +587,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<AttachmentDto>> Attachments(int paymentDocumentMainId)
+        public async Task<List<AttachmentDto>> InfoAttachments(int paymentDocumentMainId)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = @"exec dbo.SP_PaymentDocumentAttachmentsDataLoad @paymentDocumentMainId";
@@ -653,6 +656,155 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 PaymentStatus = reader.Get<string>("PaymentStatus"),
                 Status = reader.Get<string>("Status"),
                 TransactionReference = reader.Get<string>("TransactionReference")
+            };
+        }
+
+        public async Task<List<InvoiceLink>> InvoiceLinks(int paymentDocumentMainId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec [dbo].[SP_PaymentDocumentsOtherAttachments] @paymentDocumentMainId,@attachmentType";
+            command.Parameters.AddWithValue(command, "@paymentDocumentMainId", paymentDocumentMainId);
+            command.Parameters.AddWithValue(command, "@attachmentType", AttachmentPaymentTypes.InvoiceLink);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<InvoiceLink> invoiceLinks = new List<InvoiceLink>();
+            while (reader.Read())
+                invoiceLinks.Add(GetInvoiceLink(reader));
+
+            return invoiceLinks;
+        }
+
+        public InvoiceLink GetInvoiceLink(DbDataReader reader)
+        {
+            return new InvoiceLink
+            {
+                InvoiceId = reader.Get<int>("InvoiceId"),
+                InvoiceNo = reader.Get<string>("InvoiceNo")
+            };
+        }
+
+        public async Task<List<OrderLink>> OrderLinks(int paymentDocumentMainId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec [dbo].[SP_PaymentDocumentsOtherAttachments] @paymentDocumentMainId,@attachmentType";
+            command.Parameters.AddWithValue(command, "@paymentDocumentMainId", paymentDocumentMainId);
+            command.Parameters.AddWithValue(command, "@attachmentType", AttachmentPaymentTypes.OrderLink);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<OrderLink> orderLinks = new List<OrderLink>();
+            while (reader.Read())
+                orderLinks.Add(GetOrderLink(reader));
+
+            return orderLinks;
+        }
+
+        public OrderLink GetOrderLink(DbDataReader reader)
+        {
+            return new OrderLink
+            {
+                OrderMainId = reader.Get<int>("OrderMainId"),
+                OrderNo = reader.Get<string>("OrderNo")
+            };
+        }
+
+        public async Task<List<BidComparisonLink>> BidComparisonLinks(int paymentDocumentMainId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec [dbo].[SP_PaymentDocumentsOtherAttachments] @paymentDocumentMainId,@attachmentType";
+            command.Parameters.AddWithValue(command, "@paymentDocumentMainId", paymentDocumentMainId);
+            command.Parameters.AddWithValue(command, "@attachmentType", AttachmentPaymentTypes.BidComparisonLink);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<BidComparisonLink> bidComparisonLinks = new List<BidComparisonLink>();
+            while (reader.Read())
+                bidComparisonLinks.Add(GetBidComparisonLink(reader));
+
+            return bidComparisonLinks;
+        }
+
+        public BidComparisonLink GetBidComparisonLink(DbDataReader reader)
+        {
+            return new BidComparisonLink
+            {
+                BidComparisonId = reader.Get<int>("OrderMainId"),
+                ComparisonNo = reader.Get<string>("OrderNo")
+            };
+        }
+
+        public async Task<List<BidLink>> BidLinks(int paymentDocumentMainId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec [dbo].[SP_PaymentDocumentsOtherAttachments] @paymentDocumentMainId,@attachmentType";
+            command.Parameters.AddWithValue(command, "@paymentDocumentMainId", paymentDocumentMainId);
+            command.Parameters.AddWithValue(command, "@attachmentType", AttachmentPaymentTypes.BidLink);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<BidLink> bidLinks = new List<BidLink>();
+            while (reader.Read())
+                bidLinks.Add(GetBidLink(reader));
+
+            return bidLinks;
+        }
+
+        public BidLink GetBidLink(DbDataReader reader)
+        {
+            return new BidLink
+            {
+                BidMainId = reader.Get<int>("BidMainId"),
+                BidNo = reader.Get<string>("BidNo")
+            };
+        }
+
+        public async Task<List<RFQLink>> RFQLinks(int paymentDocumentMainId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec [dbo].[SP_PaymentDocumentsOtherAttachments] @paymentDocumentMainId,@attachmentType";
+            command.Parameters.AddWithValue(command, "@paymentDocumentMainId", paymentDocumentMainId);
+            command.Parameters.AddWithValue(command, "@attachmentType", AttachmentPaymentTypes.RFQLink);
+
+            using var reader = await command.ExecuteReaderAsync();
+            List<RFQLink> rfqLinks = new List<RFQLink>();
+            while (reader.Read())
+                rfqLinks.Add(GetRFQLink(reader));
+
+            return rfqLinks;
+        }
+
+        public RFQLink GetRFQLink(DbDataReader reader)
+        {
+            return new RFQLink
+            {
+                RFQMainId = reader.Get<int>("RFQMainId"),
+                RFQNo = reader.Get<string>("RFQNo")
+            };
+        }
+
+        public async Task<List<RequestLink>> RequestLinks(int paymentDocumentMainId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec [dbo].[SP_PaymentDocumentsOtherAttachments] @paymentDocumentMainId,@attachmentType";
+            command.Parameters.AddWithValue(command, "@paymentDocumentMainId", paymentDocumentMainId);
+            command.Parameters.AddWithValue(command, "@attachmentType", AttachmentPaymentTypes.RequestLink);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<RequestLink> rfqLinks = new List<RequestLink>();
+            while (reader.Read())
+                rfqLinks.Add(GetRequestLink(reader));
+
+            return rfqLinks;
+        }
+
+        public RequestLink GetRequestLink(DbDataReader reader)
+        {
+            return new RequestLink
+            {
+                RequestMainId = reader.Get<int>("RequestMainId"),
+                RequestNo = reader.Get<string>("RequestNo")
             };
         }
     }

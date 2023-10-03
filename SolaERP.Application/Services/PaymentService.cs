@@ -43,7 +43,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<AttachmentDto>>> Attachments(int paymentDocumentMainId)
         {
-            var data = await _paymentRepository.Attachments(paymentDocumentMainId);
+            var data = await _paymentRepository.InfoAttachments(paymentDocumentMainId);
             var dto = _mapper.Map<List<AttachmentDto>>(data);
             return ApiResponse<List<AttachmentDto>>.Success(dto);
         }
@@ -123,13 +123,23 @@ namespace SolaERP.Persistence.Services
             var detailsDto = _mapper.Map<List<InfoDetailDto>>(details);
             var approvalInformation = await _paymentRepository.InfoApproval(paymentDocumentMainId);
             var approvalDto = _mapper.Map<List<InfoApproval>>(approvalInformation);
+            var attachmentTypes = await _paymentRepository.InfoAttachments(paymentDocumentMainId);
+
             PaymentLink link = new PaymentLink();
+            link.RFQLinks = await _paymentRepository.RFQLinks(paymentDocumentMainId);
+            link.InvoiceLinks = await _paymentRepository.InvoiceLinks(paymentDocumentMainId);
+            link.OrderLinks = await _paymentRepository.OrderLinks(paymentDocumentMainId);
+            link.RequestLinks = await _paymentRepository.RequestLinks(paymentDocumentMainId);
+            link.BidLinks = await _paymentRepository.BidLinks(paymentDocumentMainId);
+            link.BidComparisonLinks = await _paymentRepository.BidComparisonLinks(paymentDocumentMainId);
+
             return ApiResponse<PaymentInfoModel>.Success(new PaymentInfoModel
             {
-                InfoApproval = approvalDto,
-                InfoDetail = detailsDto,
-                InfoHeader = headerDto,
-                
+                Approval = approvalDto,
+                Detail = detailsDto,
+                Header = headerDto,
+                AttachmentTypes = attachmentTypes,
+                PaymentLink = link
             });
         }
 

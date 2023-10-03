@@ -10,10 +10,11 @@ namespace SolaERP.Application.Models
 {
     public class PaymentInfoModel
     {
-        public InfoHeaderDto InfoHeader { get; set; }
-        public List<InfoDetailDto> InfoDetail { get; set; }
-        public List<InfoApproval> InfoApproval { get; set; }
-        public PaymentLink InfoPaymentLink { get; set; }
+        public InfoHeaderDto Header { get; set; }
+        public List<InfoDetailDto> Detail { get; set; }
+        public List<InfoApproval> Approval { get; set; }
+        public List<AttachmentDto> AttachmentTypes { get; set; }
+        public PaymentLink PaymentLink { get; set; }
     }
 
     public class PaymentLink
@@ -40,7 +41,7 @@ namespace SolaERP.Application.Models
 
     public class BidComparisonLink
     {
-        public int BidBidComparisonId { get; set; }
+        public int BidComparisonId { get; set; }
         public string ComparisonNo { get; set; }
     }
 

@@ -1,5 +1,6 @@
 ﻿using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Entities.Payment;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using System.Data;
 
@@ -13,6 +14,13 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<InfoHeader> InfoHeader(int paymentDocumentMainId);
         Task<List<InfoDetail>> InfoDetail(int paymentDocumentMainId);
         Task<List<InfoApproval>> InfoApproval(int paymentDocumentMainId);
+        Task<List<AttachmentDto>> InfoAttachments(int paymentDocumentMainId);
+        Task<List<InvoiceLink>> InvoiceLinks(int paymentDocumentMainId);
+        Task<List<OrderLink>> OrderLinks(int paymentDocumentMainId);
+        Task<List<BidComparisonLink>> BidComparisonLinks(int paymentDocumentMainId);
+        Task<List<BidLink>> BidLinks(int paymentDocumentMainId);
+        Task<List<RFQLink>> RFQLinks(int paymentDocumentMainId);
+        Task<List<RequestLink>> RequestLinks(int paymentDocumentMainId);
         Task<List<All>> All(int userId, PaymentGetModel payment);
         Task<List<Approved>> Approved(int userId, PaymentGetModel payment);
         Task<List<Bank>> Bank(int userId, PaymentGetModel payment);
@@ -25,7 +33,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> DetailSave(DataTable model);
         Task<bool> Delete(int paymentDocumentMainId);
         Task<decimal> VendorBalance(int businessUnitId, string vendorCode);
-        Task<List<AttachmentDto>> Attachments(int paymentDocumentMainId);
         Task<bool> ChangeStatus(int userId, PaymentChangeStatusModel model);
         Task<List<CreateDocument>> CreateDocument(PaymentCreateDocumentModel model);
     }
