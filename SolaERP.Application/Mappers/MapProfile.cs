@@ -501,7 +501,7 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.Status,
                     opt => opt.MapFrom(src => string.Join(",", src.Status.Select(x => (int)x))))
                 .ForMember(dest => dest.ApproveStatus,
-                    opt => opt.MapFrom(src => string.Join(",", src.ApproveStatus.Select(x => (int)x))))
+                    opt => opt.MapFrom(src => string.Join(",", src.ApprovalStatus.Select(x => (int)x))))
                 .ForMember(dest => dest.Emergency,
                     opt => opt.MapFrom(src => string.Join(",", src.Emergency.Select(x => (int)x))));
             CreateMap<BidComparisonAll, BidComparisonAllDto>().ReverseMap();
@@ -541,7 +541,7 @@ namespace SolaERP.Persistence.Mappers
                  ForMember(dest => dest.Status,
                     opt => opt.MapFrom(src => string.Join(",", src.Status.Select(x => (int)x)))).
                  ForMember(dest => dest.ApproveStatus,
-                    opt => opt.MapFrom(src => string.Join(",", src.ApproveStatus.Select(x => (int)x))));
+                    opt => opt.MapFrom(src => string.Join(",", src.ApprovalStatus.Select(x => (int)x))));
             CreateMap<BidComparisonMyChartsLoad, BidComparisonMyChartsLoadDto>().ReverseMap();
 
             CreateMap<BidComparisonNotReleasedFilter, BidComparisonNotReleasedFilterDto>().ReverseMap().
