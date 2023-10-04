@@ -1,9 +1,11 @@
 using SolaERP.Application.Dtos.Attachment;
+using System.Xml.Linq;
 
 namespace SolaERP.Application.Entities.Order;
 
 public class OrderHeadLoaderDto : BaseEntity
 {
+    private int? approveStageMainId;
     public int OrderMainId { get; set; }
     public int OrderTypeId { get; set; }
     public string OrderNo { get; set; }
@@ -15,7 +17,19 @@ public class OrderHeadLoaderDto : BaseEntity
     public string ReasonName { get; set; }
     public string Buyer { get; set; }
     public string Comment { get; set; }
-    public int ApproveStageMainId { get; set; }
+    public int? ApproveStageMainId
+    {
+        get
+        {
+            if (approveStageMainId == 0)
+                approveStageMainId = null;
+            return approveStageMainId;
+        }
+        set
+        {
+            approveStageMainId = value;
+        }
+    }
     public string VendorCode { get; set; }
     public string VendorName { get; set; }
     public string CompanyAddress { get; set; }

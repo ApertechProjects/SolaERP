@@ -1,5 +1,6 @@
 using System.Data;
 using System.Data.Common;
+using System.Numerics;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Order;
 using SolaERP.Application.Dtos.Vendors;
@@ -463,9 +464,9 @@ public class SqlOrderRepository : IOrderRepository
             UnitPrice = reader.Get<decimal>("UnitPrice"),
             TotalAmount = reader.Get<decimal>("Total"),
             BaseRate = reader.Get<decimal>("BaseRate"),
-            BaseMultplyDivide = reader.Get<int>("BaseMultplyDivide"),
+            BaseMultplyDivide = reader.Get<Int16>("BaseMultplyDivide"),
             ReportingRate = reader.Get<decimal>("ReportingRate"),
-            ReportingMultplyDivide = reader.Get<int>("ReportingMultplyDivide"),
+            ReportingMultplyDivide = reader.Get<Int16>("ReportingMultplyDivide"),
             ReportingTotal = reader.Get<decimal>("ReportingTotal"),
             DiscountType = reader.Get<int>("Discount"),
             DiscountValue = reader.Get<decimal>("DiscountValue"),
