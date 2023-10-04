@@ -14,6 +14,6 @@ namespace SolaERP.Application.Entities.BidComparison
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
         public List<Enums.Status> Status { get; set; }
-        public List<Enums.ApprovalStatus> ApproveStatus { get; set; }
+        public List<Enums.ApprovalStatus> ApprovalStatus { get; set; }
     }
 }

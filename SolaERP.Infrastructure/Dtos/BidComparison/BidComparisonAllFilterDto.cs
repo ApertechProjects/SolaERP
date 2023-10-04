@@ -14,6 +14,6 @@ namespace SolaERP.Application.Dtos.BidComparison
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
         public List<int> Status { get; set; }
-        public List<int> ApproveStatus { get; set; }
+        public List<int> ApprovalStatus { get; set; }
     }
 }
