@@ -30,5 +30,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<string> GetVendorNameByUserId(int userId);
         Task<List<VendorRFQListDto>> GetVendorRFQList(string vendorCode, int userId);
         Task<bool> RFQVendorResponseChangeStatus(int rfqMainId, int status, string vendorCode);
+        Task<int> GetRevisionVendorIdByVendorCode(string vendorCode);
+        Task<int> GetRevisionNumberByVendorCode(string vendorCode);
     }
 }

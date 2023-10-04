@@ -222,9 +222,14 @@ namespace SolaERP.Persistence.Services
         {
             var header = _mapper.Map<VendorLoadDto>(await _repository.GetHeader(vendorId));
             if (vendorId == 0)
+            {
                 header.CompanyRegistrationDate = null;
-            var logo = await _attachmentService.GetAttachmentsAsync(header.VendorId, SourceType.VEN_LOGO,
-                Modules.Vendors);
+            }
+
+            header.RevisionVendorId = await _repository.GetRevisionVendorIdByVendorCode(header.VendorCode);
+
+            var logo = await _attachmentService.GetAttachmentsAsync(header.VendorId,
+                SourceType.VEN_LOGO, Modules.Vendors);
             if (logo is { Count: > 0 })
             {
                 header.Logo = logo[0].FileLink;
