@@ -3,7 +3,9 @@ using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Payment;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
@@ -15,14 +17,16 @@ namespace SolaERP.Persistence.Services
     {
         private readonly IPaymentRepository _paymentRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IFileUploadService _fileUploadService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public PaymentService(IPaymentRepository paymentRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, IMapper mapper)
+        public PaymentService(IPaymentRepository paymentRepository, IUserRepository userRepository, IFileUploadService fileUploadService, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _userRepository = userRepository;
             _paymentRepository = paymentRepository;
+            _fileUploadService = fileUploadService;
         }
 
         public async Task<ApiResponse<List<AllDto>>> All(string name, PaymentGetModel payment)
@@ -123,8 +127,13 @@ namespace SolaERP.Persistence.Services
             var detailsDto = _mapper.Map<List<InfoDetailDto>>(details);
             var approvalInformation = await _paymentRepository.InfoApproval(paymentDocumentMainId);
             var approvalDto = _mapper.Map<List<InfoApproval>>(approvalInformation);
-            var attachmentTypes = await _paymentRepository.InfoAttachments(paymentDocumentMainId);
+            foreach (var item in approvalDto)
+            {
+                item.UserPhoto = _fileUploadService.GetFileLink(item.UserPhoto, Modules.Users);
+                item.SignaturePhoto = _fileUploadService.GetFileLink(item.SignaturePhoto, Modules.Users);
+            }
 
+            var attachmentTypes = await _paymentRepository.InfoAttachments(paymentDocumentMainId);
             PaymentLink link = new PaymentLink();
             link.RFQLinks = await _paymentRepository.RFQLinks(paymentDocumentMainId);
             link.InvoiceLinks = await _paymentRepository.InvoiceLinks(paymentDocumentMainId);
