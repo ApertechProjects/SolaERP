@@ -50,6 +50,9 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public string VendorCode { get; set; }
         public int ReviseNo { get; set; }
         public string VendorName { get; set; }
+        public string PhoneNo { get; set; }
+        public string Email { get; set; }
+        public string ContactPerson { get; set; }
         public string TaxId { get; set; }
         public string TaxOffice { get; set; }
         public string Location { get; set; }
