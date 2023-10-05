@@ -1,5 +1,4 @@
 ﻿using SolaERP.Application.Dtos.SupplierEvaluation;
-using SolaERP.Application.Entities.SupplierEvaluation;
 
 namespace SolaERP.Application.Models
 {
