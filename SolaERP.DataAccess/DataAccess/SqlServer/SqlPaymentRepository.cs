@@ -219,7 +219,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@businessUnitId", payment.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@dateFrom", payment.DateFrom);
             command.Parameters.AddWithValue(command, "@dateTo", payment.DateTo);
-            command.Parameters.AddWithValue(command, "@vendorCode", payment.VendorCode);
+            command.Parameters.AddWithValue(command, "@vendorCode", payment.VendorCode ?? "-1");
 
             using var reader = await command.ExecuteReaderAsync();
 
@@ -370,6 +370,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@businessUnitId", payment.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@dateFrom", payment.DateFrom);
             command.Parameters.AddWithValue(command, "@dateTo", payment.DateTo);
+            command.Parameters.AddWithValue(command, "@vendorCode", payment.VendorCode ?? "-1");
 
             using var reader = await command.ExecuteReaderAsync();
 
@@ -388,6 +389,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@businessUnitId", payment.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@dateFrom", payment.DateFrom);
             command.Parameters.AddWithValue(command, "@dateTo", payment.DateTo);
+            command.Parameters.AddWithValue(command, "@vendorCode", payment.VendorCode ?? "-1");
 
             using var reader = await command.ExecuteReaderAsync();
 
@@ -406,7 +408,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@businessUnitId", payment.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@dateFrom", payment.DateFrom);
             command.Parameters.AddWithValue(command, "@dateTo", payment.DateTo);
-            command.Parameters.AddWithValue(command, "@vendorCode", payment.VendorCode);
+            command.Parameters.AddWithValue(command, "@vendorCode", payment.VendorCode ?? "-1");
 
             using var reader = await command.ExecuteReaderAsync();
 
@@ -426,7 +428,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@dateFrom", payment.DateFrom);
             command.Parameters.AddWithValue(command, "@dateTo", payment.DateTo);
             command.Parameters.AddWithValue(command, "@dateTo", payment.DateTo);
-            command.Parameters.AddWithValue(command, "@vendorCode", payment.VendorCode);
+            command.Parameters.AddWithValue(command, "@vendorCode", payment.VendorCode ?? "-1");
+
 
             using var reader = await command.ExecuteReaderAsync();
 
@@ -445,6 +448,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@businessUnitId", payment.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@dateFrom", payment.DateFrom);
             command.Parameters.AddWithValue(command, "@dateTo", payment.DateTo);
+            command.Parameters.AddWithValue(command, "@vendorCode", payment.VendorCode ?? "-1");
 
             using var reader = await command.ExecuteReaderAsync();
 
@@ -463,7 +467,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@businessUnitId", payment.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@dateFrom", payment.DateFrom);
             command.Parameters.AddWithValue(command, "@dateTo", payment.DateTo);
-            command.Parameters.AddWithValue(command, "@vendorCode", payment.VendorCode);
+            command.Parameters.AddWithValue(command, "@vendorCode", payment.VendorCode ?? "-1");
 
             using var reader = await command.ExecuteReaderAsync();
 
