@@ -355,7 +355,7 @@ public class SqlOrderRepository : IOrderRepository
             data.Add(MapFromReaderForOrderHeaderLoaderDto(reader));
         }
 
-        return data[0];
+        return null;
     }
 
     public async Task<List<OrderCreateRequestListDto>> GetOrderCreateListForRequestAsync(OrderCreateListRequest dto)

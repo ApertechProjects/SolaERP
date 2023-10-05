@@ -690,6 +690,17 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             return users;
         }
 
+        public async Task UpdateLastActivityAsync(int id)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_UserLastActivity_U @UserId";
+
+                command.Parameters.AddWithValue(command, "@UserId", id);
+                await command.ExecuteNonQueryAsync();
+            }
+        }
+
         #endregion
     }
 }

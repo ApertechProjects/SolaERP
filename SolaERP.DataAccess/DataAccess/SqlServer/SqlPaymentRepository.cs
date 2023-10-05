@@ -219,6 +219,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@businessUnitId", payment.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@dateFrom", payment.DateFrom);
             command.Parameters.AddWithValue(command, "@dateTo", payment.DateTo);
+            command.Parameters.AddWithValue(command, "@vendorCode", payment.VendorCode);
 
             using var reader = await command.ExecuteReaderAsync();
 
@@ -400,11 +401,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<List<Draft>> Draft(int userId, PaymentGetModel payment)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_PaymentDocumentDrafts @userId,@businessUnitId,@dateFrom,@dateTo";
+            command.CommandText = @"exec dbo.SP_PaymentDocumentDrafts @userId,@businessUnitId,@dateFrom,@dateTo,@vendorCode";
             command.Parameters.AddWithValue(command, "@userId", userId);
             command.Parameters.AddWithValue(command, "@businessUnitId", payment.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@dateFrom", payment.DateFrom);
             command.Parameters.AddWithValue(command, "@dateTo", payment.DateTo);
+            command.Parameters.AddWithValue(command, "@vendorCode", payment.VendorCode);
 
             using var reader = await command.ExecuteReaderAsync();
 
@@ -418,11 +420,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<List<Held>> Held(int userId, PaymentGetModel payment)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_PaymentDocumentHeld @userId,@businessUnitId,@dateFrom,@dateTo";
+            command.CommandText = @"exec dbo.SP_PaymentDocumentHeld @userId,@businessUnitId,@dateFrom,@dateTo,@vendorCode";
             command.Parameters.AddWithValue(command, "@userId", userId);
             command.Parameters.AddWithValue(command, "@businessUnitId", payment.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@dateFrom", payment.DateFrom);
             command.Parameters.AddWithValue(command, "@dateTo", payment.DateTo);
+            command.Parameters.AddWithValue(command, "@dateTo", payment.DateTo);
+            command.Parameters.AddWithValue(command, "@vendorCode", payment.VendorCode);
 
             using var reader = await command.ExecuteReaderAsync();
 
@@ -454,11 +458,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<List<WaitingForApproval>> WaitingForApproval(int userId, PaymentGetModel payment)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_PaymentDocumentWFA @userId,@businessUnitId,@dateFrom,@dateTo";
+            command.CommandText = @"exec dbo.SP_PaymentDocumentWFA @userId,@businessUnitId,@dateFrom,@dateTo,@vendorCode";
             command.Parameters.AddWithValue(command, "@userId", userId);
             command.Parameters.AddWithValue(command, "@businessUnitId", payment.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@dateFrom", payment.DateFrom);
             command.Parameters.AddWithValue(command, "@dateTo", payment.DateTo);
+            command.Parameters.AddWithValue(command, "@vendorCode", payment.VendorCode);
 
             using var reader = await command.ExecuteReaderAsync();
 

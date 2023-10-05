@@ -45,5 +45,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<bool> CheckUserVerifyByVendor(string email);
         Task<List<UserList>> UsersRequestDetails(int requestDetailId, int sequence, ApproveStatus status);
         Task<List<UserList>> UsersForRequestMain(int requestMainId, int sequence, ApproveStatus status);
+        Task UpdateUserLastActivity(int id);
     }
 }

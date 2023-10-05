@@ -47,6 +47,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<UserImage> UserImageData(int userId);
         Task<List<UserList>> UsersRequestDetails(int requestDetailId, int sequence, ApproveStatus status);
         Task<List<UserList>> UsersRequestMain(int requestMainId, int sequence, ApproveStatus status);
+        Task UpdateLastActivityAsync(int id);
     }
 
     public enum Filetype { Profile = 1, Signature = 2 }

@@ -70,6 +70,7 @@ namespace SolaERP.Persistence.Services
             user.PasswordHash = SecurityUtil.ComputeSha256Hash(model.Password);
 
             var result = await _userRepository.RegisterUserAsync(user);
+            await _userRepository.UpdateLastActivityAsync(user.Id);
             await _unitOfWork.SaveChangesAsync();
 
             return ApiResponse<int>.Success(result, 200);
@@ -535,6 +536,11 @@ namespace SolaERP.Persistence.Services
             var users = await _userRepository.UsersRequestMain(requestMainId, sequence, status);
             var dto = _mapper.Map<List<Application.Dtos.User.UserList>>(users);
             return dto;
+        }
+
+        public async Task UpdateUserLastActivity(int id)
+        {
+            await _userRepository.UpdateLastActivityAsync(id);
         }
     }
 }
