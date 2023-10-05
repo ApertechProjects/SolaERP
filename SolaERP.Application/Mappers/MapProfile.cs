@@ -243,7 +243,6 @@ namespace SolaERP.Persistence.Mappers
 
 
             CreateMap<CompanyInfoDto, Vendor>()
-                .ForMember(dest => dest.VendorId, opt => opt.Ignore())
                 .ForMember(dest => dest.Buid, opt => opt.Ignore())
                 .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.CompanyName))
                 .ForMember(dest => dest.TaxId, opt => opt.MapFrom(src => src.TaxId))

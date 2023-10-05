@@ -18,10 +18,10 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
     {
         public int? VendorId { get; set; }
         public int? ReviseNo { get; set; }
+        public string ContactPerson { get; set; }
+        public string Email { get; set; }
+        public string PhoneNo { get; set; }
         public string VendorCode { get; set; }
-        public string FullName { get; set; }
-        public string Position { get; set; }
-        public string PhoneNumber { get; set; }
         public string CompanyName { get; set; }
         public string TaxId { get; set; }
         public string TaxOffice { get; set; }
@@ -46,6 +46,9 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
 
     public class CompanyInfo : BaseEntity
     {
+        public int? VendorId { get; set; }
+        public string VendorCode { get; set; }
+        public int ReviseNo { get; set; }
         public string VendorName { get; set; }
         public string TaxId { get; set; }
         public string TaxOffice { get; set; }
