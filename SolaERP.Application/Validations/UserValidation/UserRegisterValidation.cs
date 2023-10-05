@@ -8,6 +8,8 @@ namespace SolaERP.Application.Validations.UserValidation
         public UserRegisterValidation()
         {
             RuleFor(x => x.FullName).NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.PhoneNumber).NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.Position).NotEmpty().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.UserName).NotEmpty().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.Email).NotEmpty().WithMessage("Please, enter {PropertyName}").EmailAddress().WithMessage("Please, enter valid {PropertyName}")
                 .Matches(@"^[^@\s]+@[^@\s]+\.[^@\s]+$").WithMessage("Please, enter valid {PropertyName}");
