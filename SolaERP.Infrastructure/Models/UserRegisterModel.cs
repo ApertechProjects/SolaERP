@@ -15,13 +15,12 @@ namespace SolaERP.Application.Models
         public bool ChangePassword { get; set; }
         public int Gender { get; set; }
         public string TaxId { get; set; }
-        [JsonIgnore]
-        public int VendorId { get; set; }
-        [JsonIgnore]
-        public Guid UserToken { get; set; }
+        [JsonIgnore] public int VendorId { get; set; }
+        [JsonIgnore] public Guid UserToken { get; set; }
         public int UserTypeId { get; set; }
-        [JsonIgnore]
-        public string VerifyToken { get; set; }
+        [JsonIgnore] public string VerifyToken { get; set; }
         public Language Language { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Position { get; set; }
     }
 }
