@@ -165,8 +165,7 @@ public class OrderService : IOrderService
     {
         var orderHeader = await _orderRepository.GetHeaderLoadAsync(orderMainId);
         orderHeader.OrderDetails = await _orderRepository.GetAllDetailsAsync(orderMainId);
-        orderHeader.Attachments =
-            await _attachmentService.GetAttachmentsAsync(orderMainId, SourceType.ORDER, Modules.Orders);
+        orderHeader.Attachments = await _attachmentService.GetAttachmentsAsync(orderMainId, SourceType.ORDER, Modules.Orders);
         return ApiResponse<OrderHeadLoaderDto>.Success(orderHeader);
     }
 

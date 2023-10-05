@@ -63,6 +63,7 @@ public class OrderHeadLoaderDto : BaseEntity
     public int GRNStatus { get; set; }
     public int InvoiceStatus { get; set; }
     public bool OrderPrint { get; set; }
+
     public List<OrderDetailLoadDto> OrderDetails { get; set; }
     public List<AttachmentDto> Attachments { get; set; }
 }
