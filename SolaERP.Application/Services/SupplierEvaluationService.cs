@@ -223,62 +223,109 @@ namespace SolaERP.Persistence.Services
 
                 //
 
-                // #region Bank Accounts
+
+                #region NDA
+
+                if (command.NonDisclosureAgreement is not null)
+                {
+                    if (command.NonDisclosureAgreement.Count > 0)
+                    {
+                        await _repository.DeleteNDAAsync(vendorId);
+                    }
+
+                    for (int i = 0; i < command.NonDisclosureAgreement.Count; i++)
+                    {
+                        command.NonDisclosureAgreement[i].VendorId = vendorId;
+
+                        if (command.NonDisclosureAgreement[i].Type != 2)
+                        {
+                            var mappedNDA = _mapper.Map<VendorNDA>(command.NonDisclosureAgreement[i]);
+                            await _repository.AddNDAAsync(mappedNDA);
+                        }
+                    }
+                }
+
+                #endregion
+
+
+                #region COBC
+
+                if (command.CodeOfBuConduct is not null)
+                {
+                    if (command.CodeOfBuConduct.Count > 0)
+                    {
+                        await _repository.DeleteCOBCAsync(vendorId);
+                    }
+
+                    for (int i = 0; i < command.CodeOfBuConduct.Count; i++)
+                    {
+                        command.CodeOfBuConduct[i].VendorId = vendorId;
+
+                        if (command.CodeOfBuConduct[i].Type != 2)
+                        {
+                            await _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(command.CodeOfBuConduct[i]));
+                        }
+                    }
+                }
+
+                #endregion
+
+                #region Bank Accounts
+
+                if (command.BankAccounts is not null)
+                {
+                    for (var i = 0; i < command.BankAccounts.Count; i++)
+                    {
+                        var x = command.BankAccounts[i];
+
+                        if (x.Type == 2)
+                        {
+                            await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
+                        }
+
+                        else
+                        {
+                            x.VendorId = vendorId;
+
+                            // if (await _repository.HasBankDetailByAccountNumberAsync(x.AccountNumber))
+                            // {
+                            //     throw new Exception("The Account Number must be unique.");
+                            // }
+
+                            var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id,
+                                _mapper.Map<VendorBankDetail>(x));
+
+                            if (x.AccountVerificationLetter != null)
+                            {
+                                tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
+                                {
+                                    if (attachment.Type == 2)
+                                    {
+                                        return _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId);
+                                    }
+
+                                    if (attachment.Type != 2 && attachment.AttachmentId <= 0)
+                                    {
+                                        var entity = _mapper.Map<AttachmentSaveModel>(attachment);
+                                        entity.SourceId = detaildId;
+                                        entity.SourceType = SourceType.VEN_BNK.ToString();
+                                        entity.FileLink = _fileUploadService.AddFile(
+                                            new List<IFormFile> { attachment.File },
+                                            Modules.EvaluationForm, new List<string>()).Result.Data[0];
+                                        return _attachmentService.SaveAttachmentAsync(entity);
+                                    }
+
+                                    return Task.FromResult(true);
+                                }));
+                            }
+                        }
+                    }
+                }
+
+                #endregion
+
                 //
-                // if (command.BankAccounts is not null)
-                // {
-                //     for (var i = 0; i < command.BankAccounts.Count; i++)
-                //     {
-                //         var x = command.BankAccounts[i];
-                //
-                //         if (x.Type == 2)
-                //         {
-                //             await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
-                //         }
-                //
-                //         else
-                //         {
-                //             x.VendorId = vendorId;
-                //
-                //             // if (await _repository.HasBankDetailByAccountNumberAsync(x.AccountNumber))
-                //             // {
-                //             //     throw new Exception("The Account Number must be unique.");
-                //             // }
-                //
-                //             var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id,
-                //                 _mapper.Map<VendorBankDetail>(x));
-                //
-                //             if (x.AccountVerificationLetter != null)
-                //             {
-                //                 tasks.AddRange(x.AccountVerificationLetter.Select(attachment =>
-                //                 {
-                //                     if (attachment.Type == 2)
-                //                     {
-                //                         return _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId);
-                //                     }
-                //
-                //                     if (attachment.Type != 2 && attachment.AttachmentId <= 0)
-                //                     {
-                //                         var entity = _mapper.Map<AttachmentSaveModel>(attachment);
-                //                         entity.SourceId = detaildId;
-                //                         entity.SourceType = SourceType.VEN_BNK.ToString();
-                //                         entity.FileLink = _fileUploadService.AddFile(
-                //                             new List<IFormFile> { attachment.File },
-                //                             Modules.EvaluationForm, new List<string>()).Result.Data[0];
-                //                         return _attachmentService.SaveAttachmentAsync(entity);
-                //                     }
-                //
-                //                     return Task.FromResult(true);
-                //                 }));
-                //             }
-                //         }
-                //     }
-                // }
-                //
-                // #endregion
-                //
-                // //
-                //
+
                 // #region DueDiligence
                 //
                 // if (command.DueDiligence is not null)
@@ -502,53 +549,6 @@ namespace SolaERP.Persistence.Services
                 // }
                 //
                 // #endregion
-                //
-                //
-                // #region NDA
-                //
-                // if (command.NonDisclosureAgreement is not null)
-                // {
-                //     if (command.NonDisclosureAgreement.Count > 0)
-                //     {
-                //         await _repository.DeleteNDAAsync(vendorId);
-                //     }
-                //
-                //     for (int i = 0; i < command.NonDisclosureAgreement.Count; i++)
-                //     {
-                //         command.NonDisclosureAgreement[i].VendorId = vendorId;
-                //
-                //         if (command.NonDisclosureAgreement[i].Type != 2)
-                //         {
-                //             var mappedNDA = _mapper.Map<VendorNDA>(command.NonDisclosureAgreement[i]);
-                //             await _repository.AddNDAAsync(mappedNDA);
-                //         }
-                //     }
-                // }
-                //
-                // #endregion
-                //
-                //
-                // #region COBC
-                //
-                // if (command.CodeOfBuConduct is not null)
-                // {
-                //     if (command.CodeOfBuConduct.Count > 0)
-                //     {
-                //         await _repository.DeleteCOBCAsync(vendorId);
-                //     }
-                //
-                //     for (int i = 0; i < command.CodeOfBuConduct.Count; i++)
-                //     {
-                //         command.CodeOfBuConduct[i].VendorId = vendorId;
-                //
-                //         if (command.CodeOfBuConduct[i].Type != 2)
-                //         {
-                //             await _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(command.CodeOfBuConduct[i]));
-                //         }
-                //     }
-                // }
-                //
-                // #endregion
 
 
                 if (processSelector.IsCreate)
@@ -610,14 +610,8 @@ namespace SolaERP.Persistence.Services
 
             foreach (var item in bankAccount)
             {
-                var attachments =
+                var attachment =
                     await _attachmentService.GetAttachmentsAsync(item.Id, SourceType.VEN_BNK, Modules.EvaluationForm);
-                var attachment = attachments.Select(x =>
-                {
-                    var dto = _mapper.Map<AttachmentDto>(x);
-                    dto.FileLink = _fileUploadService.GetDownloadFileLink(dto.FileLink, Modules.EvaluationForm);
-                    return dto;
-                }).ToList();
                 attachment = attachment.Count > 0 ? attachment : Enumerable.Empty<AttachmentDto>().ToList();
                 item.AccountVerificationLetter = attachment;
             }
@@ -695,7 +689,7 @@ namespace SolaERP.Persistence.Services
             var venLogoAttachmentTask =
                 await _attachmentService.GetAttachmentsAsync(vendor, SourceType.VEN_LOGO, Modules.Vendors);
             var venOletAttachmentTask =
-                await _attachmentService.GetAttachmentsAsync(vendor, SourceType.VEN_OLET, Modules.Vendors);
+                await _attachmentService.GetAttachmentsAsync(vendor, SourceType.VEN_OLET, Modules.EvaluationForm);
             var productServicesTask = await _repository.GetProductServicesAsync();
             var countries = await _repository.GetCountriesAsync();
 
@@ -714,19 +708,8 @@ namespace SolaERP.Persistence.Services
             CompanyInfoDto companyInfo = _mapper.Map<CompanyInfoDto>(companyInfoTask);
             companyInfo.PrequalificationTypes = matchedPrequalificationTypes;
             companyInfo.BusinessCategories = matchedBuCategories;
-            companyInfo.CompanyLogo = venLogoAttachmentTask.Select(x =>
-            {
-                var dto = _mapper.Map<AttachmentDto>(x);
-                dto.FileLink = _fileUploadService.GetDownloadFileLink(dto.FileLink, Modules.Vendors);
-                return dto;
-            }).ToList();
-
-            companyInfo.Attachments = venOletAttachmentTask.Select(x =>
-            {
-                var dto = _mapper.Map<AttachmentDto>(x);
-                dto.FileLink = _fileUploadService.GetDownloadFileLink(dto.FileLink, Modules.EvaluationForm);
-                return dto;
-            }).ToList();
+            companyInfo.CompanyLogo = venLogoAttachmentTask;
+            companyInfo.Attachments = venOletAttachmentTask;
             companyInfo.City ??= "";
             companyInfo.RepresentedProducts = vendorRepresentedProduct?.RepresentedProductName?.Split(",");
             companyInfo.RepresentedCompanies = vendorRepresentedCompany?.RepresentedCompanyName?.Split(",");
