@@ -18,20 +18,6 @@ namespace SolaERP.DataAccess.Extensions
 
             if (value != DBNull.Value && value != null)
                 returnType = (T)value;
-            else if (typeof(T) == typeof(DateTime))
-            {
-                string value1 = string.IsNullOrEmpty(reader[columnName]?.ToString()) ? null : reader[columnName].ToString();
-                //returnType = (T)Convert.ChangeType(value1, typeof(DateTime));
-                var aa = (object)(T)returnType;
-                if (Convert.ToDateTime(aa) == DateTime.MinValue)
-                {
-                    object a = null;
-                    DateTime? dd = null;
-                    string aaa = string.Empty;
-                    return (T)(object)a;
-                }
-
-            }
             return returnType;
         }
 
