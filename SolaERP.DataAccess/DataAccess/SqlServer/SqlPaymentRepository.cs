@@ -498,7 +498,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = @"EXEC SP_PaymentDocumentMain_IUD 
                                                                 @PaymentDocumentMainId,
                                                                 @BusinessUnitId,
-                                                                @Reference,
                                                                 @VendorCode,
                                                                 @CurrencyCode,
                                                                 @Comment,
@@ -518,7 +517,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@PaymentDocumentMainId", model.PaymentDocumentMainId);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
-                command.Parameters.AddWithValue(command, "@Reference", model.Reference);
                 command.Parameters.AddWithValue(command, "@VendorCode", model.VendorCode);
                 command.Parameters.AddWithValue(command, "@CurrencyCode", model.CurrencyCode);
                 command.Parameters.AddWithValue(command, "@Comment", model.Comment);

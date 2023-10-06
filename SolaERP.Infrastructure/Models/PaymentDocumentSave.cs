@@ -16,7 +16,6 @@
     {
         public int? PaymentDocumentMainId { get; set; }
         public int BusinessUnitId { get; set; }
-        public string Reference { get; set; }
         public string VendorCode { get; set; }
         public string CurrencyCode { get; set; }
         public string Comment { get; set; }
