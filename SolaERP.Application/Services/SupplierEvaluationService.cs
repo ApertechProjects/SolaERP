@@ -64,7 +64,7 @@ namespace SolaERP.Persistence.Services
             _attachmentService = attachmentService;
         }
 
-        public async Task<ApiResponse<bool>> AddAsync(string useridentity, string token,
+        public async Task<ApiResponse<int>> AddAsync(string useridentity, string token,
             SupplierRegisterCommand command)
         {
             try
@@ -501,11 +501,11 @@ namespace SolaERP.Persistence.Services
                                             _fileUploadService.DeleteFile(Modules.EvaluationForm,
                                                 item.Attachments[i].FileLink);
                                         }
-                                
+
                                         if (item.Attachments[i].Type != 2 && item.Attachments[i].AttachmentId <= 0)
                                         {
                                             var attachedFile = _mapper.Map<AttachmentSaveModel>(item.Attachments[i]);
-                                
+
                                             attachedFile.SourceId = vendorId;
                                             attachedFile.AttachmentTypeId = item.DesignId;
                                             attachedFile.SourceType = SourceType.VEN_PREQ.ToString();
@@ -513,15 +513,15 @@ namespace SolaERP.Persistence.Services
                                                 new List<IFormFile>() { item?.Attachments[i].File },
                                                 Modules.EvaluationForm,
                                                 new List<string>()).Result.Data[0];
-                                
+
                                             tasksList.Add(_attachmentService.SaveAttachmentAsync(attachedFile));
                                         }
-                                
+
                                         tasksList.Add(Task.FromResult(true));
                                     }
                                 }
-                                
-                                
+
+
                                 if (item.HasGrid == true)
                                 {
                                     if (item.GridDatas != null)
@@ -534,10 +534,10 @@ namespace SolaERP.Persistence.Services
                                                 return _repository.DeletePreGridAsync(gridDatas
                                                     .PreqqualificationGridDataId);
                                             }
-                                
+
                                             gridDatas.PreqqualificationDesignId = item.DesignId;
                                             gridDatas.VendorId = vendorId;
-                                
+
                                             return _repository.UpdatePreGridAsync(gridDatas);
                                         }));
                                     }
@@ -560,12 +560,11 @@ namespace SolaERP.Persistence.Services
 
                 await Task.WhenAll(tasks);
                 await _unitOfWork.SaveChangesAsync();
-
-                return ApiResponse<bool>.Success(tasks.All(x => x.Result), 200);
+                return ApiResponse<int>.Success(vendorId, 200);
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail(ex.Message, 400);
+                return ApiResponse<int>.Fail(ex.Message, 400);
             }
         }
 
@@ -885,10 +884,11 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<PrequalificationWithCategoryDto>>.Success(response, 200);
         }
 
-        public async Task<ApiResponse<bool>> SubmitAsync(string userIdentity, string token,
+        public async Task<ApiResponse<int>> SubmitAsync(string userIdentity, string token,
             SupplierRegisterCommand command)
         {
             var result = await AddAsync(userIdentity, token, command);
+            int vendorId = result.Data;
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
             var submitResult = await _vendorRepository.ChangeStatusAsync(user.VendorId, 1, user.Id);
@@ -933,7 +933,7 @@ namespace SolaERP.Persistence.Services
 
             await Task.WhenAll(emails);
 
-            return ApiResponse<bool>.Success(true, 200);
+            return ApiResponse<int>.Success(vendorId, 200);
         }
 
         private static VM_RegistrationIsPendingAdminApprove GetVM(SupplierRegisterCommand command, User user,
