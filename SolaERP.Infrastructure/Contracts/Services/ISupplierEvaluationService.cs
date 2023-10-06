@@ -14,8 +14,8 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<NonDisclosureAgreement>>> GetNDAAsync(string userIdentity, int? vendorId = null);
         Task<ApiResponse<List<CodeOfBuConduct>>> GetCOBCAsync(string userIdentity);
         Task<ApiResponse<List<PrequalificationWithCategoryDto>>> GetPrequalificationAsync(string userIdentity, List<int> categoryIds, string acceptlang, int? vendorId = null);
-        Task<ApiResponse<bool>> AddAsync(string userIdentity, string Token, SupplierRegisterCommand command);
-        Task<ApiResponse<bool>> SubmitAsync(string userIdentity, string Token, SupplierRegisterCommand command);
+        Task<ApiResponse<int>> AddAsync(string userIdentity, string Token, SupplierRegisterCommand command);
+        Task<ApiResponse<int>> SubmitAsync(string userIdentity, string Token, SupplierRegisterCommand command);
         Task<ApiResponse<bool>> UpdateVendor(string name, string taxId);
     }
 }
