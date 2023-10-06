@@ -521,7 +521,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@CurrencyCode", model.CurrencyCode);
                 command.Parameters.AddWithValue(command, "@Comment", model.Comment);
                 command.Parameters.AddWithValue(command, "@OrderAdvance", model.OrderAdvance);
-                command.Parameters.AddWithValue(command, "@PaymentDocumentTypeId", model.PaymentDocumentTypeId);
+                command.Parameters.AddWithValue(command, "@PaymentDocumentTypeId", model.PaymentAttachmentTypeId);
                 command.Parameters.AddWithValue(command, "@PaymentDocumentPriorityId", model.PaymentDocumentPriorityId);
                 command.Parameters.AddWithValue(command, "@ApproveStageMainId", model.ApproveStageMainId);
                 command.Parameters.AddWithValue(command, "@PaymentRequestNo", model.PaymentRequestNo);

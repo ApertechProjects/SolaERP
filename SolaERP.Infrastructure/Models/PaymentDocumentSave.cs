@@ -20,7 +20,7 @@
         public string CurrencyCode { get; set; }
         public string Comment { get; set; }
         public int OrderAdvance { get; set; }
-        public int PaymentDocumentTypeId { get; set; }
+        public int PaymentAttachmentTypeId { get; set; }
         public int PaymentDocumentPriorityId { get; set; }
         public int ApproveStageMainId { get; set; }
         public string PaymentRequestNo { get; set; }

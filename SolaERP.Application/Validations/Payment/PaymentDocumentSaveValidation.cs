@@ -17,7 +17,7 @@ namespace SolaERP.Persistence.Validations.Payment
             RuleFor(x => x.Main.BusinessUnitId).NotEmpty().WithMessage("Please, enter Business Unit");
             RuleFor(x => x.Main.ApproveStageMainId).NotEmpty().WithMessage("Please, enter Approve Stage");
             RuleFor(x => x.Main.PaymentDocumentPriorityId).NotEmpty().WithMessage("Please, enter Payment Document Priority");
-            RuleFor(x => x.Main.PaymentDocumentTypeId).NotEmpty().WithMessage("Please, enter Payment Document Type");
+            RuleFor(x => x.Main.PaymentAttachmentTypeId).NotEmpty().WithMessage("Please, enter Payment Document Type");
             RuleFor(x => x.Main.SentDate).NotEmpty().WithMessage("Please, enter Sent Date");
         }
     }
