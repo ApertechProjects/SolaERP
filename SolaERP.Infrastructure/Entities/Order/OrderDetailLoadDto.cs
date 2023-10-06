@@ -53,8 +53,8 @@ public class OrderDetailLoadDto
     public decimal TaxAmount { get; set; }
     public int Status { get; set; }
     public int ApproveStatus { get; set; }
-    public DateTime RequestDate { get; set; }
-    public DateTime RequestDeadline { get; set; }
+    public DateTime? RequestDate { get; set; }
+    public DateTime? RequestDeadline { get; set; }
     public string Buyer { get; set; }
     public decimal RequestQuantity { get; set; }
     public string RFQNo { get; set; }

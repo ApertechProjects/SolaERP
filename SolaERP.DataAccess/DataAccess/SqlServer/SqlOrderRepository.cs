@@ -692,7 +692,7 @@ public class SqlOrderRepository : IOrderRepository
             BidNo = reader.Get<string>("BidNo"),
             ComparisonNo = reader.Get<string>("ComparisonNo"),
             EnteredBy = reader.Get<string>("EnteredBy"),
-            EnteredDate = reader.Get<DateTime>("EnteredDate"),
+            EnteredDate = reader.Get<DateTime?>("EnteredDate"),
             OrderNo = reader.Get<string>("OrderNo"),
             VendorName = reader.Get<string>("VendorName"),
             ApproveStageDetailsName = reader.Get<string>("ApproveStageDetailsName"),
