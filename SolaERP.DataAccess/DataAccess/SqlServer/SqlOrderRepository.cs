@@ -355,10 +355,9 @@ public class SqlOrderRepository : IOrderRepository
             data.Add(MapFromReaderForOrderHeaderLoaderDto(reader));
         }
 
-        if (data.Count > 0)
-            return data[0];
 
-        return new OrderHeadLoaderDto();
+        return data[0];
+
     }
 
     public async Task<List<OrderCreateRequestListDto>> GetOrderCreateListForRequestAsync(OrderCreateListRequest dto)
@@ -425,8 +424,7 @@ public class SqlOrderRepository : IOrderRepository
         {
             data.Add(MapFromReaderForOrderDetailListDto(reader));
         }
-        if (data.Count == 0)
-            return null;
+
         return data;
     }
 
