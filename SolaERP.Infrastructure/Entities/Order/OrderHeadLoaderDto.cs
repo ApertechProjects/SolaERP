@@ -9,9 +9,9 @@ public class OrderHeadLoaderDto : BaseEntity
     public int OrderMainId { get; set; }
     public int OrderTypeId { get; set; }
     public string OrderNo { get; set; }
-    public DateTime OrderDate { get; set; }
+    public DateTime? OrderDate { get; set; }
     public int Emergency { get; set; }
-    public DateTime EntryDate { get; set; }
+    public DateTime? EntryDate { get; set; }
     public string EnteredBy { get; set; }
     public string ReasonCode { get; set; }
     public string ReasonName { get; set; }
@@ -46,16 +46,16 @@ public class OrderHeadLoaderDto : BaseEntity
     public string DeliveryTime { get; set; }
     public string PaymentTermId { get; set; }
     public decimal ExpectedCost { get; set; }
-    public DateTime DeliveryDate { get; set; }
-    public DateTime DesiredDeliveryDate { get; set; }
+    public DateTime? DeliveryDate { get; set; }
+    public DateTime? DesiredDeliveryDate { get; set; }
     public int RFQMainId { get; set; }
     public string RFQNo { get; set; }
-    public DateTime RFQDeadline { get; set; }
-    public DateTime RFQDate { get; set; }
-    public DateTime RequiredOnSiteDate { get; set; }
+    public DateTime? RFQDeadline { get; set; }
+    public DateTime? RFQDate { get; set; }
+    public DateTime? RequiredOnSiteDate { get; set; }
     public string ComparisonNo { get; set; }
-    public DateTime Comparisondeadline { get; set; }
-    public DateTime ComparisonDate { get; set; }
+    public DateTime? Comparisondeadline { get; set; }
+    public DateTime? ComparisonDate { get; set; }
     public int BidMainId { get; set; }
     public int Status { get; set; }
     public int ApproveStatus { get; set; }

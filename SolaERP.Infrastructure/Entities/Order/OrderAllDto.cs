@@ -16,7 +16,7 @@ public class OrderAllDto : BaseEntity
     public string ComparisonNo { get; set; }
     public string Comment { get; set; }
     public string EnteredBy { get; set; }
-    public DateTime EnteredDate { get; set; }
+    public DateTime? EnteredDate { get; set; }
     public string ApproveStageDetailsName { get; set; }
     public int Sequence { get; set; }
     public string Status { get; set; }
