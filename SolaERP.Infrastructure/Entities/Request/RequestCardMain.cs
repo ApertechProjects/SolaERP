@@ -15,7 +15,7 @@ namespace SolaERP.Application.Entities.Request
         public string RequestNo { get; set; }
         public DateTime EntryDate { get; set; } = DateTime.Now.Date;
         public DateTime RequestDate { get; set; } = DateTime.Now.Date;
-        public DateTime RequestDeadline { get; set; } = DateTime.Now.Date;
+        public DateTime RequestDeadline { get; set; } = DateTime.Now.AddDays(7);
         public int UserId { get; set; }
         public int Requester { get; set; }
         public int Status { get; set; }

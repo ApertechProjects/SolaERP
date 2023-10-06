@@ -6,7 +6,7 @@
         public int RequestMainId { get; set; }
         public string LineNo { get; set; }
         public DateTime RequestDate { get; set; }
-        public DateTime RequestDeadline { get; set; }
+        public DateTime RequestDeadline { get; set; } = DateTime.Now.AddDays(7);
         public DateTime RequestedDate { get; set; }
         public string ItemCode { get; set; }
         public string ItemName1 { get; set; }
@@ -42,10 +42,10 @@
         public int AnalysisCode4Id { get; set; }
         public int AnalysisCode5Id { get; set; }
         public int AnalysisCode6Id { get; set; }
-        public int AnalysisCode7Id { get; set; } 
+        public int AnalysisCode7Id { get; set; }
         public int AnalysisCode8Id { get; set; }
         public int AnalysisCode9Id { get; set; }
-        public int AnalysisCode10Id { get; set; }   
+        public int AnalysisCode10Id { get; set; }
         public string StatusName { get; set; }
         public string ApproveStatusName { get; set; }
         public int Priority { get; set; }
