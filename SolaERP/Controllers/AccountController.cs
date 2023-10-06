@@ -104,7 +104,6 @@ namespace SolaERP.Controllers
             dto.VerifyToken = Regex.Replace(dto.VerifyToken, @"[^a-zA-Z0-9_.~\-]", "");
             dto.VendorId = await _vendorService.GetByTaxIdAsync(dto.TaxId);
             ApiResponse<int> response = response = await _userService.UserRegisterAsync(dto);
-
             AccountResponseDto account = new();
             if (response.Data > 0)
             {

@@ -70,7 +70,7 @@ namespace SolaERP.Persistence.Services
             user.PasswordHash = SecurityUtil.ComputeSha256Hash(model.Password);
 
             var result = await _userRepository.RegisterUserAsync(user);
-            await _userRepository.UpdateLastActivityAsync(user.Id);
+            await _userRepository.UpdateLastActivityAsync(result);
             await _unitOfWork.SaveChangesAsync();
 
             return ApiResponse<int>.Success(result, 200);
