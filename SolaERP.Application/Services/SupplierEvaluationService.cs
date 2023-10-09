@@ -552,7 +552,7 @@ namespace SolaERP.Persistence.Services
                 #endregion
 
 
-                if (processSelector.IsCreate)
+                if (processSelector.IsCreate && user.UserTypeId == 0)
                 {
                     user.VendorId = vendorId;
                     await _userRepository.SaveUserAsync(user);
