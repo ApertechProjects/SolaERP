@@ -200,10 +200,9 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<ContactPersonDto, User>()
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
-                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.Fullname))
-                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
-                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Position)).ReverseMap();
-            //TODO: Map Position also
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.ContactPerson))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNo))
+                .ReverseMap();
 
 
             CreateMap<CompanyInfo, CompanyInfoDto>()
