@@ -18,7 +18,10 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> SetEmailCode(string token, int id);
         Task<int> ConvertIdentity(string name);
         Task<string> GetUserNameByTokenAsync(string finderToken);
-        Task<bool> UpdateUserTokenAsync(int userId, string refreshtoken, DateTime expirationDate, int refreshTokenLifeTime);
+
+        Task<bool> UpdateUserTokenAsync(int userId, string refreshtoken, DateTime expirationDate,
+            int refreshTokenLifeTime);
+
         Task<bool> ResetUserPasswordAsync(string email, string passwordHash);
         Task<List<ActiveUser>> GetActiveUsersAsync();
         Task<List<ActiveUser>> GetActiveUsersWithoutCurrentUserAsync(int userId);
@@ -48,7 +51,12 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<UserList>> UsersRequestDetails(int requestDetailId, int sequence, ApproveStatus status);
         Task<List<UserList>> UsersRequestMain(int requestMainId, int sequence, ApproveStatus status);
         Task UpdateLastActivityAsync(int id);
+        Task<bool> AddDefaultVendorAccessToVendorUser(int userId);
     }
 
-    public enum Filetype { Profile = 1, Signature = 2 }
+    public enum Filetype
+    {
+        Profile = 1,
+        Signature = 2
+    }
 }
