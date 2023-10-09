@@ -19,6 +19,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
     public class SqlUserRepository : IUserRepository
     {
         private readonly IUnitOfWork _unitOfWork;
+
         public SqlUserRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -54,12 +55,15 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 while (reader.Read())
                 {
                     string languageString = reader.GetString("Language");
-                    user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate", "VerifyToken", "Language");
+                    user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate",
+                        "VerifyToken", "Language");
                     user.Language = languageString.GetLanguageEnumValue();
                 }
+
                 return user;
             }
         }
+
         public async Task<User> GetByEmailAsync(string email)
         {
             User user = null;
@@ -71,7 +75,8 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
 
                 if (reader.Read())
-                    user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate", "VerifyToken", "Language", "DefaultBusinessUnitId");
+                    user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate",
+                        "VerifyToken", "Language", "DefaultBusinessUnitId");
 
                 return user;
             }
@@ -124,18 +129,23 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "SELECT FullName FROM CONFIG.APPUSER WHERE USERTOKEN = @USERTOKEN";
-                command.Parameters.AddWithValue(command, "@USERTOKEN", finderToken == null ? DBNull.Value : finderToken);
+                command.Parameters.AddWithValue(command, "@USERTOKEN",
+                    finderToken == null ? DBNull.Value : finderToken);
 
                 using var reader = await command.ExecuteReaderAsync();
                 if (reader.Read())
                     userName = reader.Get<string>("FullName");
             }
+
             return null;
         }
 
         #endregion
+
         //
-        #region DML Operations 
+
+        #region DML Operations
+
         public async Task<int> SaveUserAsync(User entity)
         {
             string query = @"SET NOCOUNT OFF Exec SP_AppUser_IUD @Id,@FullName,@ChangePassword,@Theme,@UserName
@@ -210,15 +220,17 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         }
 
 
-        public async Task<bool> UpdateUserTokenAsync(int userId, string token, DateTime expirationDate, int refreshTokenLifeTime)
+        public async Task<bool> UpdateUserTokenAsync(int userId, string token, DateTime expirationDate,
+            int refreshTokenLifeTime)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SP_UPDATE_USER_REFRESH_TOKEN";//@USERID,@USERTOKEN";
+                command.CommandText = "SP_UPDATE_USER_REFRESH_TOKEN"; //@USERID,@USERTOKEN";
 
                 command.Parameters.AddWithValue(command, "@USERID", userId);
                 command.Parameters.AddWithValue(command, "@USERTOKEN", token);
-                command.Parameters.AddWithValue(command, "@EXPIRATION_DATE", expirationDate.AddSeconds(refreshTokenLifeTime));
+                command.Parameters.AddWithValue(command, "@EXPIRATION_DATE",
+                    expirationDate.AddSeconds(refreshTokenLifeTime));
                 command.CommandType = CommandType.StoredProcedure;
 
                 var result = await command.ExecuteNonQueryAsync();
@@ -256,6 +268,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 {
                     activeUser.Add(reader.GetByEntityStructure<ActiveUser>());
                 }
+
                 return activeUser;
             }
         }
@@ -272,13 +285,25 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 {
                     activeUser.Add(reader.GetByEntityStructure<ActiveUser>());
                 }
+
                 return activeUser;
             }
         }
 
+        public async Task<bool> AddDefaultVendorAccessToVendorUser(int userId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = "INSERT INTO Config.GroupUsers (GroupId, UserId) VALUES (1785, @UserId)";
+            command.Parameters.AddWithValue(command, "@UserId", userId);
+            return await command.ExecuteNonQueryAsync() > 0;
+        }
+
         #endregion
+
         //
+
         #region Readers
+
         private User GetFromReader(IDataReader reader)
         {
             return new() { UserId = reader.Get<int>("Id"), FullName = reader.Get<string>("FullName") };
@@ -293,8 +318,10 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             {
                 command.CommandText = "exec SP_UsersWFA @UserType, @UserStatus, @UserId";
 
-                command.Parameters.AddWithValue(command, "@UserType", userType is -1 ? "%" : string.Join(',', userType));
-                command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
+                command.Parameters.AddWithValue(command, "@UserType",
+                    userType is -1 ? "%" : string.Join(',', userType));
+                command.Parameters.AddWithValue(command, "@UserStatus",
+                    userStatus is -1 ? "%" : string.Join(',', userStatus));
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 using (var reader = await command.ExecuteReaderAsync())
@@ -304,8 +331,8 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                         users.Add(reader.GetByEntityStructure<UserMain>());
                     }
                 }
-
             }
+
             return users;
         }
 
@@ -316,11 +343,14 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             {
                 command.CommandText = "exec SP_UsersAll @UserType,@UserStatus,@UserId";
 
-                command.Parameters.AddWithValue(command, "@UserType", userType is -1 ? "%" : string.Join(',', userType));
-                command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
+                command.Parameters.AddWithValue(command, "@UserType",
+                    userType is -1 ? "%" : string.Join(',', userType));
+                command.Parameters.AddWithValue(command, "@UserStatus",
+                    userStatus is -1 ? "%" : string.Join(',', userStatus));
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
-                var totalDataCountParam = new SqlParameter("@count", SqlDbType.Int) { Direction = ParameterDirection.Output };
+                var totalDataCountParam = new SqlParameter("@count", SqlDbType.Int)
+                    { Direction = ParameterDirection.Output };
                 command.Parameters.Add(totalDataCountParam);
 
                 using (var reader = await command.ExecuteReaderAsync())
@@ -331,6 +361,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     }
                 }
             }
+
             return users;
         }
 
@@ -341,7 +372,8 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "exec SP_UsersCompany @UserStatus,@UserId";
-                command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
+                command.Parameters.AddWithValue(command, "@UserStatus",
+                    userStatus is -1 ? "%" : string.Join(',', userStatus));
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 using (var reader = await command.ExecuteReaderAsync())
@@ -351,8 +383,8 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                         users.Add(reader.GetByEntityStructure<UserMain>());
                     }
                 }
-
             }
+
             return users;
         }
 
@@ -363,7 +395,8 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "exec SP_UsersVendor @UserStatus,@UserId";
-                command.Parameters.AddWithValue(command, "@UserStatus", userStatus is -1 ? "%" : string.Join(',', userStatus));
+                command.Parameters.AddWithValue(command, "@UserStatus",
+                    userStatus is -1 ? "%" : string.Join(',', userStatus));
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 using (var reader = await command.ExecuteReaderAsync())
@@ -373,8 +406,8 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                         users.Add(reader.GetByEntityStructure<UserMain>());
                     }
                 }
-
             }
+
             return users;
         }
 
@@ -382,7 +415,8 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_UserApprove @Id,@Sequence,@ApprovalStatus,@UserId,@Comment";
+                command.CommandText =
+                    "SET NOCOUNT OFF EXEC SP_UserApprove @Id,@Sequence,@ApprovalStatus,@UserId,@Comment";
 
                 command.Parameters.AddWithValue(command, "@Id", model.Id);
                 command.Parameters.AddWithValue(command, "@Sequence", model.Sequence);
@@ -391,7 +425,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@Comment", model.Comment);
 
                 await _unitOfWork.SaveChangesAsync();
-                
+
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
@@ -409,6 +443,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 {
                     user = reader.GetByEntityStructure<UserLoad>();
                 }
+
                 return user;
             }
         }
@@ -424,6 +459,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 {
                     user.Add(reader.GetByEntityStructure<ERPUser>());
                 }
+
                 return user;
             }
         }
@@ -470,6 +506,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 {
                     users.Add(reader.GetByEntityStructure<UsersByGroup>());
                 }
+
                 return users;
             }
         }
@@ -663,8 +700,8 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                         users.Add(reader.GetByEntityStructure<UserList>());
                     }
                 }
-
             }
+
             return users;
         }
 
@@ -685,8 +722,8 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                         users.Add(reader.GetByEntityStructure<UserList>());
                     }
                 }
-
             }
+
             return users;
         }
 

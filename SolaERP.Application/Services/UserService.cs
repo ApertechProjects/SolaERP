@@ -71,8 +71,12 @@ namespace SolaERP.Persistence.Services
 
             var result = await _userRepository.RegisterUserAsync(user);
             await _userRepository.UpdateLastActivityAsync(result);
+            if (user.UserTypeId == 0)
+            {
+                await _userRepository.AddDefaultVendorAccessToVendorUser(result);
+            }
             await _unitOfWork.SaveChangesAsync();
-
+            
             return ApiResponse<int>.Success(result, 200);
         }
 
@@ -295,7 +299,7 @@ namespace SolaERP.Persistence.Services
             {
                 user.Description = null;
             }
-            
+
             if (user.ERPUser == "null")
             {
                 user.ERPUser = null;
@@ -309,8 +313,10 @@ namespace SolaERP.Persistence.Services
 
             UserImage userImage = await _userRepository.UserImageData(user.Id);
             userEntry.UserPhoto =
-                await _fileUploadService.GetLinkForEntity(user.UserPhoto, Modules.Users, user.UserPhotoIsDeleted, userImage.UserPhoto);
-            userEntry.SignaturePhoto = await _fileUploadService.GetLinkForEntity(user.SignaturePhoto, Modules.Users, user.SignaturePhotoIsDeleted,
+                await _fileUploadService.GetLinkForEntity(user.UserPhoto, Modules.Users, user.UserPhotoIsDeleted,
+                    userImage.UserPhoto);
+            userEntry.SignaturePhoto = await _fileUploadService.GetLinkForEntity(user.SignaturePhoto, Modules.Users,
+                user.SignaturePhotoIsDeleted,
                 userImage.SignaturePhoto);
 
             var result = await _userRepository.SaveUserAsync(userEntry);
@@ -524,14 +530,16 @@ namespace SolaERP.Persistence.Services
             userDto.UserPhoto = _fileUploadService.GetFileLink(userDto.UserPhoto, Modules.Users);
         }
 
-        public async Task<List<Application.Dtos.User.UserList>> UsersRequestDetails(int requestDetailId, int sequence, ApproveStatus status)
+        public async Task<List<Application.Dtos.User.UserList>> UsersRequestDetails(int requestDetailId, int sequence,
+            ApproveStatus status)
         {
             var users = await _userRepository.UsersRequestDetails(requestDetailId, sequence, status);
             var dto = _mapper.Map<List<Application.Dtos.User.UserList>>(users);
             return dto;
         }
 
-        public async Task<List<Application.Dtos.User.UserList>> UsersForRequestMain(int requestMainId, int sequence, ApproveStatus status)
+        public async Task<List<Application.Dtos.User.UserList>> UsersForRequestMain(int requestMainId, int sequence,
+            ApproveStatus status)
         {
             var users = await _userRepository.UsersRequestMain(requestMainId, sequence, status);
             var dto = _mapper.Map<List<Application.Dtos.User.UserList>>(users);
