@@ -530,17 +530,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RFQMainId = reader.Get<int>("RFQMainId"),
                 ApproveStatus = reader.Get<int>("ApproveStatus"),
                 Buyer = reader.Get<string>("Buyer"),
-                Comparisondeadline = reader.Get<DateTime>("Comparisondeadline"),
+                Comparisondeadline = reader.Get<DateTime?>("Comparisondeadline"),
                 ComparisonNo = reader.Get<string>("ComparisonNo"),
                 Emergency = reader.Get<int>("Emergency"),
                 ProcurementType = reader.Get<int>("ProcurementType"),
-                RFQDeadline = reader.Get<DateTime>("RFQDeadline"),
+                RFQDeadline = reader.Get<DateTime?>("RFQDeadline"),
                 RFQNo = reader.Get<string>("RFQNo"),
                 RowNum = reader.Get<long>("RowNum"),
                 SingleSourceReasons = reader.Get<string>("SingleSourceReasons"),
                 SpecialistComment = reader.Get<string>("SpecialistComment"),
                 CreatedBy = reader.Get<string>("CreatedBy"),
-                ComparisonDate = reader.Get<DateTime>("ComparisonDate"),
+                ComparisonDate = reader.Get<DateTime?>("ComparisonDate"),
                 HasAttachments = reader.Get<bool>("HasAttachments")
             };
         }
