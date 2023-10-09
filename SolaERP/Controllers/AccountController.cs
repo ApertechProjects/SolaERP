@@ -28,13 +28,13 @@ namespace SolaERP.Controllers
         private readonly IEmailNotificationService _emailNotificationService;
 
         public AccountController(UserManager<Application.Entities.Auth.User> userManager,
-                                 SignInManager<Application.Entities.Auth.User> signInManager,
-                                 IUserService userService,
-                                 IVendorService vendorService,
-                                 ITokenHandler handler,
-                                 IMapper mapper,
-                                 IMailService mailService,
-                                 IEmailNotificationService emailNotificationService)
+            SignInManager<Application.Entities.Auth.User> signInManager,
+            IUserService userService,
+            IVendorService vendorService,
+            ITokenHandler handler,
+            IMapper mapper,
+            IMailService mailService,
+            IEmailNotificationService emailNotificationService)
         {
             _userService = userService;
             _signInManager = signInManager;
@@ -45,7 +45,6 @@ namespace SolaERP.Controllers
             _mailService = mailService;
             _emailNotificationService = emailNotificationService;
         }
-
 
 
         [HttpGet("{email}")]
@@ -76,7 +75,7 @@ namespace SolaERP.Controllers
                 var result = await _userService.CheckUserVerifyByVendor(dto.Email);
                 if (!result)
                     return CreateActionResult(ApiResponse<AccountResponseDto>.Success(
-                   new AccountResponseDto { Token = token, IsEvaluation = true }, 200));
+                        new AccountResponseDto { Token = token, IsEvaluation = true }, 200));
 
 
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(
@@ -103,15 +102,15 @@ namespace SolaERP.Controllers
             dto.VerifyToken = newtoken + _tokenHandler.CreateRefreshToken();
             dto.VerifyToken = Regex.Replace(dto.VerifyToken, @"[^a-zA-Z0-9_.~\-]", "");
             dto.VendorId = await _vendorService.GetByTaxIdAsync(dto.TaxId);
-            ApiResponse<int> response = response = await _userService.UserRegisterAsync(dto);
+            var response = await _userService.UserRegisterAsync(dto);
             AccountResponseDto account = new();
             if (response.Data > 0)
             {
-
-                var templateDataForVerification = await _emailNotificationService.GetEmailTemplateData(dto.Language, EmailTemplateKey.VER);
+                var templateDataForVerification =
+                    await _emailNotificationService.GetEmailTemplateData(dto.Language, EmailTemplateKey.VER);
                 var companyName = await _emailNotificationService.GetCompanyName(dto.Email);
 
-                VM_EmailVerification emailVerification = new VM_EmailVerification()
+                VM_EmailVerification emailVerification = new VM_EmailVerification
                 {
                     Username = dto.UserName,
                     Body = new HtmlString(string.Format(templateDataForVerification.Body, dto.FullName)),
@@ -124,13 +123,15 @@ namespace SolaERP.Controllers
 
                 Response.OnCompleted(async () =>
                 {
-                    await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification, emailVerification.TemplateName(), emailVerification.ImageName(), new List<string> { dto.Email });
-
+                    await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification,
+                        emailVerification.TemplateName(), emailVerification.ImageName(),
+                        new List<string> { dto.Email });
                 });
 
                 account.UserId = response.Data;
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
             }
+
             return CreateActionResult(ApiResponse<AccountResponseDto>.Fail(response.Errors, 400));
         }
 
@@ -149,6 +150,5 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> ResetPasswordAsync(ResetPasswordModel resetPasswordrequestDto)
             => CreateActionResult(await _userService.ResetPasswordAsync(resetPasswordrequestDto));
-
     }
 }
