@@ -67,8 +67,11 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> ChangeStatus(string name, PaymentChangeStatusModel model)
         {
             int userId = await _userRepository.ConvertIdentity(name);
-            var data = await _paymentRepository.ChangeStatus(userId, model);
-            return ApiResponse<bool>.Success(data);
+            for (int i = 0; i < model.Payments.Count; i++)
+            {
+                var data = await _paymentRepository.ChangeStatus(userId, model.Payments[i].PaymentDocumentMainId, model.Payments[i].Sequence, model.ApproveStatus);
+            }
+            return ApiResponse<bool>.Success(true);
         }
 
         public async Task<ApiResponse<List<CreateAdvanceDto>>> CreateAdvanceAsync(CreateAdvanceModel createAdvance)

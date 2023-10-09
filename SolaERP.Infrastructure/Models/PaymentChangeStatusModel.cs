@@ -8,9 +8,14 @@ namespace SolaERP.Application.Models
 {
     public class PaymentChangeStatusModel
     {
-        public int PaymentDocumentMainId { get; set; }
-        public int Sequence { get; set; }
+        public List<Payment> Payments { get; set; }
         public int ApproveStatus { get; set; }
 
+    }
+
+    public class Payment
+    {
+        public int PaymentDocumentMainId { get; set; }
+        public int Sequence { get; set; }
     }
 }

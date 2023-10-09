@@ -630,15 +630,15 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             };
         }
 
-        public async Task<bool> ChangeStatus(int userId, PaymentChangeStatusModel model)
+        public async Task<bool> ChangeStatus(int userId, int paymentDocumentId, int sequence, int approveStatus)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentDocumentApprove @UserId,@PaymentDocumentMainId,@Sequence,@ApproveStatus";
                 command.Parameters.AddWithValue(command, "@UserId", userId);
-                command.Parameters.AddWithValue(command, "@PaymentDocumentMainId", model.PaymentDocumentMainId);
-                command.Parameters.AddWithValue(command, "@Sequence", model.Sequence);
-                command.Parameters.AddWithValue(command, "@ApproveStatus", model.ApproveStatus);
+                command.Parameters.AddWithValue(command, "@PaymentDocumentMainId", paymentDocumentId);
+                command.Parameters.AddWithValue(command, "@Sequence", sequence);
+                command.Parameters.AddWithValue(command, "@ApproveStatus", approveStatus);
                 var value = await command.ExecuteNonQueryAsync();
                 return value > 0;
             }
