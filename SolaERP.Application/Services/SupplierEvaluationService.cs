@@ -716,7 +716,9 @@ namespace SolaERP.Persistence.Services
 
             companyInfo.Services = matchedProductServices;
             var contactPerson = _mapper.Map<ContactPersonDto>(user);
-            contactPerson.Position ??= "";
+            contactPerson.ContactPerson ??= "";
+            contactPerson.Email ??= "";
+            contactPerson.PhoneNo ??= "";
             VM_GET_InitalRegistration viewModel = new()
             {
                 CompanyInformation = companyInfo,
