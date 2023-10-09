@@ -379,7 +379,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText =
-                    @"SET NOCOUNT OFF EXEC SP_VendorsApprove @VendorId,@UserId,@ApproveStatusId,@Comment,@Sequence";
+                    @"SET NOCOUNT OFF EXEC SP_VendorApprove @VendorId,@UserId,@ApproveStatusId,@Comment,@Sequence";
 
 
                 command.Parameters.AddWithValue(command, "@VendorId", model.VendorId);
