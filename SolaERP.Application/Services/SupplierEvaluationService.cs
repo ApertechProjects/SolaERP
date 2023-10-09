@@ -893,7 +893,7 @@ namespace SolaERP.Persistence.Services
             int vendorId = result.Data;
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
-            var submitResult = await _vendorRepository.ChangeStatusAsync(user.VendorId, 1, user.Id);
+            var submitResult = await _vendorRepository.ChangeStatusAsync(vendorId, 1, user.Id);
             await _unitOfWork.SaveChangesAsync();
 
 
