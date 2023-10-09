@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Newtonsoft.Json;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Payment;
@@ -119,6 +120,8 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<HeldDto>>.Success(dto);
         }
 
+
+
         public async Task<ApiResponse<PaymentInfoModel>> Info(int paymentDocumentMainId)
         {
             var header = await _paymentRepository.InfoHeader(paymentDocumentMainId);
@@ -127,13 +130,14 @@ namespace SolaERP.Persistence.Services
             var detailsDto = _mapper.Map<List<InfoDetailDto>>(details);
             var approvalInformation = await _paymentRepository.InfoApproval(paymentDocumentMainId);
             var approvalDto = _mapper.Map<List<InfoApproval>>(approvalInformation);
+            var paymentAttachmentTypes = PaymentAttachmentTypes().Data;
             foreach (var item in approvalDto)
             {
                 item.UserPhoto = _fileUploadService.GetFileLink(item.UserPhoto, Modules.Users);
                 item.SignaturePhoto = _fileUploadService.GetFileLink(item.SignaturePhoto, Modules.Users);
             }
 
-            var attachmentTypes = await _paymentRepository.InfoAttachments(paymentDocumentMainId);
+            var attachmentSubTypes = await _paymentRepository.InfoAttachments(paymentDocumentMainId);
             PaymentLink link = new PaymentLink();
             link.RFQLinks = await _paymentRepository.RFQLinks(paymentDocumentMainId);
             link.InvoiceLinks = await _paymentRepository.InvoiceLinks(paymentDocumentMainId);
@@ -147,9 +151,23 @@ namespace SolaERP.Persistence.Services
                 Approval = approvalDto,
                 Detail = detailsDto,
                 Header = headerDto,
-                AttachmentTypes = attachmentTypes,
+                AttachmentTypes = paymentAttachmentTypes,
+                AttachmentSubTypes = attachmentSubTypes,
                 PaymentLink = link
             });
+        }
+
+        public ApiResponse<List<AttachmentTypes>> PaymentAttachmentTypes()
+        {
+            var paymentAttachmentTypes = Enum.GetNames(typeof(PaymentAttachmentTypes));
+            List<AttachmentTypes> types = new List<AttachmentTypes>();
+            int i = 0;
+            foreach (var item in paymentAttachmentTypes)
+            {
+                types.Add(new AttachmentTypes { TypeId = i, TypeName = item.ToString() });
+                i++;
+            }
+            return ApiResponse<List<AttachmentTypes>>.Success(types, 200);
         }
 
         public async Task<ApiResponse<List<RejectedDto>>> Rejected(string name, PaymentGetModel payment)

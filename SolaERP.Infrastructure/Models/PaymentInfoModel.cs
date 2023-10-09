@@ -1,5 +1,6 @@
 ﻿using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Entities.Payment;
+using SolaERP.Application.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,8 @@ namespace SolaERP.Application.Models
         public InfoHeaderDto Header { get; set; }
         public List<InfoDetailDto> Detail { get; set; }
         public List<InfoApproval> Approval { get; set; }
-        public List<AttachmentDto> AttachmentTypes { get; set; }
+        public List<AttachmentTypes> AttachmentTypes { get; set; }
+        public List<AttachmentDto> AttachmentSubTypes { get; set; }
         public PaymentLink PaymentLink { get; set; }
     }
 

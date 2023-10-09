@@ -614,10 +614,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return new AttachmentDto
             {
                 Checked = reader.Get<bool>("Checked"),
-                PaymentDocumentSubType = reader.Get<string>("PaymentDocumentSubType"),
-                PaymentDocumentSubTypeId = reader.Get<int>("PaymentDocumentSubTypeId"),
-                PaymentDocumentType = reader.Get<string>("PaymentDocumentType"),
-                PaymentDocumentTypeId = reader.Get<int>("PaymentDocumentTypeId")
+                AttachmentSubType = reader.Get<string>("PaymentDocumentSubType"),
+                AttachmentSubTypeId = reader.Get<int>("PaymentDocumentSubTypeId"),
+                AttachmentType = reader.Get<string>("PaymentDocumentType"),
+                AttachmentTypeId = reader.Get<int>("PaymentDocumentTypeId")
             };
         }
 

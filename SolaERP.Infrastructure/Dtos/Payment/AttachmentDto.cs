@@ -2,10 +2,10 @@
 {
     public class AttachmentDto
     {
-        public int PaymentDocumentTypeId { get; set; }
-        public string PaymentDocumentType { get; set; }
-        public int PaymentDocumentSubTypeId { get; set; }
-        public string PaymentDocumentSubType { get; set; }
+        public int AttachmentTypeId { get; set; }
+        public string AttachmentType { get; set; }
+        public int AttachmentSubTypeId { get; set; }
+        public string AttachmentSubType { get; set; }
         public bool Checked { get; set; }
     }
 }
