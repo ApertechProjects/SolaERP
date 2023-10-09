@@ -6,6 +6,7 @@ using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Payment;
+using SolaERP.Application.Entities.RFQ;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -134,6 +135,7 @@ namespace SolaERP.Persistence.Services
             var approvalDto = _mapper.Map<List<InfoApproval>>(approvalInformation);
             var documentTypes = DocumentTypes().Data;
             var attachmentTypes = await _paymentRepository.AttachmentTypes();
+            var attachments = await _attachmentService.GetAttachmentsAsync(paymentDocumentMainId, SourceType.PYMDC, Modules.Payment);
             foreach (var item in approvalDto)
             {
                 item.UserPhoto = _fileUploadService.GetFileLink(item.UserPhoto, Modules.Users);
@@ -157,7 +159,8 @@ namespace SolaERP.Persistence.Services
                 DocumentTypes = documentTypes,
                 AttachmentTypes = attachmentTypes,
                 AttachmentSubTypes = attachmentSubTypes,
-                PaymentLink = link
+                PaymentLink = link,
+                Attachments = attachments
             });
         }
 
@@ -221,32 +224,6 @@ namespace SolaERP.Persistence.Services
                 PaymentRequestNo = mainResult.PaymentRequestNo
             });
         }
-
-        //private async Task UploadFileToPayment(List<List<Application.Dtos.Attachment.AttachmentDto>> attachments)
-        //{
-        //    AttachmentSaveModel attachmentSaveModel = new AttachmentSaveModel();
-        //    foreach (var item in attachments)
-        //    {
-        //        var deletedAttachmentsForDB = item.Where(x => x.Type == 2).Select(x => x.SourceId).ToList();
-        //        var deletedAttachmentsForServer = item.Where(x => x.Type == 2).Select(x => x.Name).ToList();
-        //        var modifiedAttachments = item.Select(item => item.File).ToList();
-        //        var list = await _fileUploadService.AddFile(modifiedAttachments, Modules.Payment, deletedAttachmentsForServer);
-        //        foreach (var attachmentItem in item)
-        //        {
-        //            attachmentSaveModel.AttachmentSubTypeId = attachmentItem.AttachmentSubTypeId;
-        //            attachmentSaveModel.AttachmentTypeId = attachmentItem.AttachmentTypeId;
-        //            attachmentSaveModel.FileLink = attachmentItem.FileLink;
-        //            attachmentSaveModel.Name = attachmentItem.Name;
-        //            attachmentSaveModel.SourceId = attachmentItem.SourceId;
-        //            attachmentSaveModel.SourceType = SourceType.PYMDC.ToString();
-        //            await _attachmentService.SaveAttachmentAsync(attachmentSaveModel);
-        //        }
-        //        foreach (var deletedAttachmentItem in deletedAttachmentsForDB)
-        //        {
-        //            await _attachmentService.DeleteAttachmentAsync(deletedAttachmentItem);
-        //        }
-        //    }
-        //}
 
         public async Task<ApiResponse<bool>> SendToApprove(string name, int paymentDocumentMainId)
         {

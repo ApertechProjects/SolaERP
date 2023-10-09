@@ -16,6 +16,7 @@ namespace SolaERP.Application.Models
         public List<InfoApproval> Approval { get; set; }
         public List<AttachmentTypes> DocumentTypes { get; set; }
         public List<AttachmentTypes> AttachmentTypes { get; set; }
+        public List<Dtos.Attachment.AttachmentDto> Attachments { get; set; }
         public List<AttachmentDto> AttachmentSubTypes { get; set; }
         public PaymentLink PaymentLink { get; set; }
     }
