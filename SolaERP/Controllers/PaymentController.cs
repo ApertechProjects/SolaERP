@@ -69,8 +69,8 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _paymentService.Info(paymentDocumentMainId));
 
         [HttpGet]
-        public IActionResult PaymentAttachmentTypes()
-           => CreateActionResult(_paymentService.PaymentAttachmentTypes());
+        public IActionResult DocumentTypes()
+           => CreateActionResult(_paymentService.DocumentTypes());
 
         [HttpGet("{businessUnitId}/{vendorCode}")]
         public async Task<IActionResult> VendorBalance(int businessUnitId, string vendorCode)

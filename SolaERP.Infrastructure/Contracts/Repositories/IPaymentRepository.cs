@@ -35,5 +35,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<decimal> VendorBalance(int businessUnitId, string vendorCode);
         Task<bool> ChangeStatus(int userId, PaymentChangeStatusModel model);
         Task<List<CreateDocument>> CreateDocument(PaymentCreateDocumentModel model);
+        Task<List<AttachmentTypes>> AttachmentTypes();
     }
 }

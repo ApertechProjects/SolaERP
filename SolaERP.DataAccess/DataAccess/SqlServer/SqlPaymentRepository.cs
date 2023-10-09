@@ -604,12 +604,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             List<AttachmentDto> list = new List<AttachmentDto>();
             while (reader.Read())
-                list.Add(GetAttachment(reader));
+                list.Add(GetAttachmentSubTypes(reader));
 
             return list;
         }
 
-        public AttachmentDto GetAttachment(DbDataReader reader)
+        public AttachmentDto GetAttachmentSubTypes(DbDataReader reader)
         {
             return new AttachmentDto
             {
@@ -618,6 +618,15 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 AttachmentSubTypeId = reader.Get<int>("PaymentDocumentSubTypeId"),
                 AttachmentType = reader.Get<string>("PaymentDocumentType"),
                 AttachmentTypeId = reader.Get<int>("PaymentDocumentTypeId")
+            };
+        }
+
+        public AttachmentTypes GetAttachmentTypes(DbDataReader reader)
+        {
+            return new AttachmentTypes
+            {
+                TypeId = reader.Get<int>("PaymentDocumentTypeId"),
+                TypeName = reader.Get<string>("PaymentDocumentType")
             };
         }
 
@@ -813,6 +822,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 RequestMainId = reader.Get<int>("RequestMainId"),
                 RequestNo = reader.Get<string>("RequestNo")
             };
+        }
+
+        public async Task<List<AttachmentTypes>> AttachmentTypes()
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"select * from Register.PaymentDocumentTypes";
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<AttachmentTypes> list = new List<AttachmentTypes>();
+            while (reader.Read())
+                list.Add(GetAttachmentTypes(reader));
+
+            return list;
         }
     }
 }

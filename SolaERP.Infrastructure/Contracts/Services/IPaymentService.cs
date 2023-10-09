@@ -11,7 +11,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<CreateAdvanceDto>>> CreateAdvanceAsync(CreateAdvanceModel createAdvance);
         Task<ApiResponse<List<CreateOrderDto>>> CreateOrderAsync(CreateOrderModel createOrder);
         Task<ApiResponse<PaymentInfoModel>> Info(int paymentDocumentMainId);
-        ApiResponse<List<AttachmentTypes>> PaymentAttachmentTypes();
+        ApiResponse<List<AttachmentTypes>> DocumentTypes();
         Task<ApiResponse<List<WaitingForApprovalDto>>> WaitingForApproval(string name, PaymentGetModel payment);
         Task<ApiResponse<List<AllDto>>> All(string name, PaymentGetModel payment);
         Task<ApiResponse<List<DraftDto>>> Draft(string name, PaymentGetModel payment);

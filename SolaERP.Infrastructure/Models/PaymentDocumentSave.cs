@@ -1,9 +1,12 @@
-﻿namespace SolaERP.Application.Models
+﻿using SolaERP.Application.Dtos.Attachment;
+
+namespace SolaERP.Application.Models
 {
     public class PaymentDocumentSaveModel
     {
         public PaymentDocumentMainSaveModel Main { get; set; }
         public List<PaymentDocumentDetailSaveModel> Details { get; set; }
+        public List<AttachmentSaveModel> Attachments { get; set; }
     }
 
     public class PaymentDocumentSaveResultModel

@@ -9,6 +9,7 @@
         Orders,
         Request,
         Rfqs,
-        Vendors
+        Vendors,
+        Payment
     }
 }
