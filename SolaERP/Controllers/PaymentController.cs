@@ -87,5 +87,9 @@ namespace SolaERP.API.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeStatus(PaymentChangeStatusModel model)
             => CreateActionResult(await _paymentService.ChangeStatus(User.Identity.Name, model));
+
+        [HttpGet]
+        public async Task<IActionResult> PaymentRequest([FromQuery] PaymentRequestGetModel model)
+            => CreateActionResult(await _paymentService.PaymentRequest(model));
     }
 }

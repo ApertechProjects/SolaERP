@@ -26,5 +26,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<AttachmentDto>>> Attachments(int paymentDocumentMainId);
         Task<ApiResponse<bool>> ChangeStatus(string name, PaymentChangeStatusModel model);
         Task<ApiResponse<List<CreateDocumentDto>>> CreateDocument(PaymentCreateDocumentModel model);
+        Task<ApiResponse<List<PaymentRequestDto>>> PaymentRequest(PaymentRequestGetModel model);
     }
 }

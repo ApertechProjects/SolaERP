@@ -1,6 +1,7 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Entities.Payment;
+using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -526,7 +527,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@ApproveStageMainId", model.ApproveStageMainId);
                 command.Parameters.AddWithValue(command, "@PaymentRequestNo", model.PaymentRequestNo);
                 command.Parameters.AddWithValue(command, "@PaymentRequestDate", model.PaymentRequestDate);
-                command.Parameters.AddWithValue(command, "@SentDate", model.SentDate);
+                command.Parameters.AddWithValue(command, "@SentDate", null);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
 
@@ -835,6 +836,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             List<AttachmentTypes> list = new List<AttachmentTypes>();
             while (reader.Read())
                 list.Add(GetAttachmentTypes(reader));
+
+            return list;
+        }
+
+        public async Task<List<PaymentRequest>> PaymentRequest(PaymentRequestGetModel model)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_PaymentDocumentCreateDocuments @vendorCode,@currencyCode";
+            command.Parameters.AddWithValue(command, "@vendorCode", model.VendorCode);
+            command.Parameters.AddWithValue(command, "@currencyCode", model.CurrencyCode);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<PaymentRequest> list = new List<PaymentRequest>();
+            while (await reader.ReadAsync()) list.Add(reader.GetByEntityStructure<PaymentRequest>());
 
             return list;
         }

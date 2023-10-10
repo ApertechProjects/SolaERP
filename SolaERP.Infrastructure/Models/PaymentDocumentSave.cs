@@ -28,7 +28,7 @@ namespace SolaERP.Application.Models
         public int ApproveStageMainId { get; set; }
         public string PaymentRequestNo { get; set; }
         public DateTime PaymentRequestDate { get; set; }
-        public DateTime SentDate { get; set; }
+        //public DateTime SentDate { get; set; }
     }
 
     public class PaymentDocumentDetailSaveModel

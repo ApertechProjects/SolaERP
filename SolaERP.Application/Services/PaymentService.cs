@@ -253,5 +253,12 @@ namespace SolaERP.Persistence.Services
             var dto = _mapper.Map<List<WaitingForApprovalDto>>(data);
             return ApiResponse<List<WaitingForApprovalDto>>.Success(dto);
         }
+
+        public async Task<ApiResponse<List<PaymentRequestDto>>> PaymentRequest(PaymentRequestGetModel model)
+        {
+            var data = await _paymentRepository.PaymentRequest(model);
+            var dto = _mapper.Map<List<PaymentRequestDto>>(data);
+            return ApiResponse<List<PaymentRequestDto>>.Success(dto);
+        }
     }
 }
