@@ -89,13 +89,6 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<CreateBalanceDto>>.Success(dto);
         }
 
-        public async Task<ApiResponse<List<CreateDocumentDto>>> CreateDocument(PaymentCreateDocumentModel model)
-        {
-            var data = await _paymentRepository.CreateDocument(model);
-            var dto = _mapper.Map<List<CreateDocumentDto>>(data);
-            return ApiResponse<List<CreateDocumentDto>>.Success(dto);
-        }
-
         public async Task<ApiResponse<List<CreateOrderDto>>> CreateOrderAsync(CreateOrderModel createOrder)
         {
             var data = await _paymentRepository.CreateOrderAsync(createOrder);

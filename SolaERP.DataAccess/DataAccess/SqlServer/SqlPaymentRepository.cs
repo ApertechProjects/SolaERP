@@ -646,37 +646,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<CreateDocument>> CreateDocument(PaymentCreateDocumentModel model)
-        {
-            using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_PaymentDocumentCreateDocuments @vendorCode,@currencyCode";
-            command.Parameters.AddWithValue(command, "@vendorCode", model.VendorCode);
-            command.Parameters.AddWithValue(command, "@currencyCode", model.CurrencyCode);
-
-            using var reader = await command.ExecuteReaderAsync();
-
-            List<CreateDocument> createOrders = new List<CreateDocument>();
-            while (reader.Read())
-                createOrders.Add(GetCreateDocument(reader));
-
-            return createOrders;
-        }
-
-        private CreateDocument GetCreateDocument(DbDataReader reader)
-        {
-            return new CreateDocument
-            {
-                Amount = reader.Get<decimal>("Amount"),
-                ApproveStatus = reader.Get<string>("ApproveStatus"),
-                CurrencyCode = reader.Get<string>("CurrencyCode"),
-                PaymentDocumentMainId = reader.Get<int>("PaymentDocumentMainId"),
-                PaymentRequestNo = reader.Get<string>("PaymentRequestNo"),
-                PaymentStatus = reader.Get<string>("PaymentStatus"),
-                Status = reader.Get<string>("Status"),
-                TransactionReference = reader.Get<string>("TransactionReference")
-            };
-        }
-
         public async Task<List<InvoiceLink>> InvoiceLinks(int paymentDocumentMainId)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
