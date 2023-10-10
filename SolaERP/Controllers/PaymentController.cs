@@ -60,9 +60,6 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Order([FromQuery] CreateOrderModel createOrder)
             => CreateActionResult(await _paymentService.CreateOrderAsync(createOrder));
 
-        [HttpGet]
-        public async Task<IActionResult> CreateDocument([FromQuery] PaymentCreateDocumentModel model)
-            => CreateActionResult(await _paymentService.CreateDocument(model));
 
         [HttpGet("{paymentDocumentMainId}")]
         public async Task<IActionResult> Info(int paymentDocumentMainId)
