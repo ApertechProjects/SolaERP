@@ -726,7 +726,7 @@ public class SqlOrderRepository : IOrderRepository
     {
         return new OrderAllDto()
         {
-            LineNo = reader.Get<long>("LineNo"),
+            //LineNo = reader.Get<long>("LineNo"),
             OrderMainId = reader.Get<int>("OrderMainId"),
             OrderType = reader.Get<string>("Ordertype"),
             Comment = reader.Get<string>("Comment"),
