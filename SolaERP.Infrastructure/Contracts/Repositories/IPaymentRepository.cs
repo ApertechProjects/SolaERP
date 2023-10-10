@@ -33,7 +33,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> DetailSave(DataTable model);
         Task<bool> Delete(int paymentDocumentMainId);
         Task<decimal> VendorBalance(int businessUnitId, string vendorCode);
-        Task<bool> ChangeStatus(int userId, int paymentDocumentMainId, int sequence, int approveStatus);
+        Task<bool> ChangeStatus(int userId, int paymentDocumentMainId, int sequence, int approveStatus, string comment);
         Task<List<CreateDocument>> CreateDocument(PaymentCreateDocumentModel model);
         Task<List<AttachmentTypes>> AttachmentTypes();
     }

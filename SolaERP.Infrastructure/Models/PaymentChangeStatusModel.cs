@@ -10,7 +10,7 @@ namespace SolaERP.Application.Models
     {
         public List<Payment> Payments { get; set; }
         public int ApproveStatus { get; set; }
-
+        public string Comment { get; set; }
     }
 
     public class Payment
