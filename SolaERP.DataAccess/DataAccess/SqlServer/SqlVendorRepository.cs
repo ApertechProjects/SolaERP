@@ -203,6 +203,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@Status", status);
 
+                await _unitOfWork.SaveChangesAsync();
+                
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }

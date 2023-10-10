@@ -80,10 +80,11 @@ namespace SolaERP.Persistence.Services
                 {
                     vendor.ReviseDate = DateTime.UtcNow.AddHours(4);
                 }
+
                 int vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
 
                 vendor.RegistrationDate = vendor.RegistrationDate.ConvertDateToValidDate();
-                
+
                 #region Represented Company & Represented Products
 
                 await _repository.DeleteRepresentedProductAsync(vendorId);
@@ -893,13 +894,14 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<int>> SubmitAsync(string userIdentity, string token,
             SupplierRegisterCommand command)
         {
-            var result = await AddAsync(userIdentity, token, command, true);
-            int vendorId = result.Data;
+            var vendorId = (await AddAsync(userIdentity, token, command, true)).Data;
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
-            var submitResult = await _vendorRepository.ChangeStatusAsync(vendorId, 1, user.Id);
-            await _unitOfWork.SaveChangesAsync();
-
+            var vendor = await _vendorRepository.GetHeader(vendorId);
+            if (vendor.ReviseNo == 0)
+            {
+                await _vendorRepository.ChangeStatusAsync(vendorId, 1, user.Id);
+            }
 
             List<Task> emails = new List<Task>();
             Language language = "en".GetLanguageEnumValue();
@@ -937,10 +939,7 @@ namespace SolaERP.Persistence.Services
                 }
             }
 
-            Task.Run(() =>
-            {
-                Task.WhenAll(emails);
-            });
+            Task.Run(() => { Task.WhenAll(emails); });
 
             return ApiResponse<int>.Success(vendorId, 200);
         }
@@ -1222,7 +1221,8 @@ namespace SolaERP.Persistence.Services
             return processSelector;
         }
 
-        private void SetRevisionNumber(SupplierRegisterCommand command, ProcessSelectorDto processSelector, bool isSubmitted)
+        private void SetRevisionNumber(SupplierRegisterCommand command, ProcessSelectorDto processSelector,
+            bool isSubmitted)
         {
             if (processSelector.IsCreate)
             {
@@ -1231,7 +1231,7 @@ namespace SolaERP.Persistence.Services
             }
 
             if (!isSubmitted) return;
-            
+
             var resviseNo = _vendorRepository
                 .GetRevisionNumberByVendorCode(command.CompanyInformation.VendorCode).Result;
             command.CompanyInformation.ReviseNo = resviseNo + 1;
