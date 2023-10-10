@@ -29,7 +29,6 @@ using UserValidation = SolaERP.Application.Validations.UserValidation.UserValida
 
 namespace SolaERP.Extensions
 {
-
     public static class ServiceRegistrations
     {
         private static void UseSqlConnection(this WebApplicationBuilder builder)
@@ -40,6 +39,7 @@ namespace SolaERP.Extensions
                 return ConnectionFactory.CreateSqlConnection(connectionString);
             });
         }
+
         private static void UseServices(this WebApplicationBuilder builder)
         {
             builder.Services.AddScoped<IUnitOfWork, SqlUnitOfWork>();
@@ -81,7 +81,6 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<HeaderReaderService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
-
         }
 
         private static void UseRepositories(this WebApplicationBuilder builder)
@@ -121,6 +120,8 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IBidComparisonRepository, SqlBidComparisonRepository>();
             builder.Services.AddScoped<IOrderRepository, SqlOrderRepository>();
             builder.Services.AddScoped<IPaymentRepository, SqlPaymentRepository>();
+            builder.Services.AddScoped<IUserApprovalRepository, SqlUserApprovalRepository>();
+            builder.Services.AddScoped<IUserApprovalService, UserApprovalService>();
         }
 
         public static void UseValidationExtension(this WebApplicationBuilder builder)
@@ -149,6 +150,7 @@ namespace SolaERP.Extensions
             builder.Services.AddValidatorsFromAssemblyContaining<VendorCardValidation>();
             builder.Services.AddScoped<ValidationFilter>();
         }
+
         public static void UseIdentityService(this WebApplicationBuilder builder)
         {
             builder.Services.AddIdentity<User, Role>().AddDefaultTokenProviders();
@@ -157,6 +159,7 @@ namespace SolaERP.Extensions
             builder.Services.AddSingleton<IRoleStore<Role>, RoleStore>();
             builder.Services.AddSingleton<IPasswordHasher<User>, CustomPasswordHasher>();
         }
+
         public static void ConfigureServices(this WebApplicationBuilder builder)
         {
             builder.UseRepositories();

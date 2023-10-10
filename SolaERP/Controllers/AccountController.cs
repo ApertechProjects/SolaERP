@@ -26,6 +26,7 @@ namespace SolaERP.Controllers
         private readonly IMapper _mapper;
         private readonly IMailService _mailService;
         private readonly IEmailNotificationService _emailNotificationService;
+        private readonly IUserApprovalService _userApprovalService;
 
         public AccountController(UserManager<Application.Entities.Auth.User> userManager,
             SignInManager<Application.Entities.Auth.User> signInManager,
@@ -34,7 +35,8 @@ namespace SolaERP.Controllers
             ITokenHandler handler,
             IMapper mapper,
             IMailService mailService,
-            IEmailNotificationService emailNotificationService)
+            IEmailNotificationService emailNotificationService,
+            IUserApprovalService userApprovalService)
         {
             _userService = userService;
             _signInManager = signInManager;
@@ -44,6 +46,7 @@ namespace SolaERP.Controllers
             _mapper = mapper;
             _mailService = mailService;
             _emailNotificationService = emailNotificationService;
+            _userApprovalService = userApprovalService;
         }
 
 
@@ -63,7 +66,16 @@ namespace SolaERP.Controllers
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
             var emailVerified = await _userService.CheckEmailIsVerified(dto.Email);
             if (!emailVerified)
-                return CreateActionResult(ApiResponse<bool>.Fail("email", "Please,verify your account", 422));
+                return CreateActionResult(ApiResponse<bool>.Fail("email", "Please, verify your account", 422));
+
+            var isApproved = await _userApprovalService.CheckIsUserApproved(user.Id);
+            if (!isApproved)
+                return CreateActionResult(ApiResponse<bool>.Fail("email", "Please, wait for User approval", 422));
+
+            if (user.InActive)
+            {
+                return CreateActionResult(ApiResponse<bool>.Fail("email", "Your user is inactive", 422));
+            }
 
             if (signInResult.Succeeded && emailVerified)
             {
