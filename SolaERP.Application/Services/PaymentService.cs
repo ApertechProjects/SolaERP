@@ -71,6 +71,7 @@ namespace SolaERP.Persistence.Services
             {
                 var data = await _paymentRepository.ChangeStatus(userId, model.Payments[i].PaymentDocumentMainId, model.Payments[i].Sequence, model.ApproveStatus, model.Comment);
             }
+            await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(true);
         }
 
@@ -233,7 +234,7 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.ConvertIdentity(name);
             foreach (var item in paymentDocumentMainIds)
             {
-                await _paymentRepository.SendToApprove(userId, item);
+                var status = await _paymentRepository.SendToApprove(userId, item);
             }
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
