@@ -119,8 +119,8 @@ namespace SolaERP.Controllers
             if (response.Data > 0)
             {
                 var templateDataForVerification =
-                    await _emailNotificationService.GetEmailTemplateData(dto.Language, EmailTemplateKey.VER);
-                var companyName = await _emailNotificationService.GetCompanyName(dto.Email);
+                    _emailNotificationService.GetEmailTemplateData(dto.Language, EmailTemplateKey.VER).Result;
+                var companyName = _emailNotificationService.GetCompanyName(dto.Email).Result;
 
                 VM_EmailVerification emailVerification = new VM_EmailVerification
                 {
@@ -133,14 +133,15 @@ namespace SolaERP.Controllers
                     Token = HttpUtility.HtmlDecode(dto.VerifyToken),
                 };
 
-                Response.OnCompleted(async () =>
+                Task.Run(() =>
                 {
-                    await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification,
+                    _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification,
                         emailVerification.TemplateName(), emailVerification.ImageName(),
                         new List<string> { dto.Email });
                 });
 
                 account.UserId = response.Data;
+
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
             }
 
