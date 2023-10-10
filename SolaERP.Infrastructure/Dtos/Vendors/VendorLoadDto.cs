@@ -10,7 +10,7 @@ namespace SolaERP.Application.Dtos.Vendors
         public string BlackListDescription { get; set; }
         public decimal Rating { get; set; }
         public int ReviseNo { get; set; }
-        public DateTime ReviseDate { get; set; }
+        public DateTime? ReviseDate { get; set; }
         public int ApproveStatus { get; set; }
         public int Status { get; set; }
         public string VendorCode { get; set; }
