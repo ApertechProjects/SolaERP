@@ -45,8 +45,8 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _paymentService.Bank(User.Identity.Name, payment));
 
         [HttpPost]
-        public async Task<IActionResult> SendToApprove(List<int> paymentDocumentMainIds)
-            => CreateActionResult(await _paymentService.SendToApprove(User.Identity.Name, paymentDocumentMainIds));
+        public async Task<IActionResult> SendToApprove(SendToApproveModel sendToApprove)
+            => CreateActionResult(await _paymentService.SendToApprove(User.Identity.Name, sendToApprove.Ids));
 
         [HttpGet]
         public async Task<IActionResult> Balance([FromQuery] CreateBalanceModel createBalance)
