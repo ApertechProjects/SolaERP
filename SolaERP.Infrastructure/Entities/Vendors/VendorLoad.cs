@@ -1,9 +1,4 @@
 ﻿using SolaERP.Application.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.Application.Entities.Vendors
 {
@@ -17,9 +12,8 @@ namespace SolaERP.Application.Entities.Vendors
 
         public decimal Rating { get; set; }
         public int ReviseNo { get; set; }
-        public DateTime ReviseDate { get; set; }
-
-
+        public DateTime? ReviseDate { get; set; }
+        
         public int ApproveStatus { get; set; }
         public int Status { get; set; }
 
