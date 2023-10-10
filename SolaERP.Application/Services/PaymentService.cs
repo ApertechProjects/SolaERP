@@ -228,11 +228,14 @@ namespace SolaERP.Persistence.Services
             });
         }
 
-        public async Task<ApiResponse<bool>> SendToApprove(string name, int paymentDocumentMainId)
+        public async Task<ApiResponse<bool>> SendToApprove(string name, List<int> paymentDocumentMainIds)
         {
             int userId = await _userRepository.ConvertIdentity(name);
-            var result = await _paymentRepository.SendToApprove(userId, paymentDocumentMainId);
-            return result ? ApiResponse<bool>.Success(200) : ApiResponse<bool>.Fail("Problem detected. Payment can not be send to approvals", 400);
+            foreach (var item in paymentDocumentMainIds)
+            {
+                await _paymentRepository.SendToApprove(userId, item);
+            }
+            return ApiResponse<bool>.Success(200);
         }
 
         public async Task<ApiResponse<decimal>> VendorBalance(int businessUnitId, string vendorCode)
