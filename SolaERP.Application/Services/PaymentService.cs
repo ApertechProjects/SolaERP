@@ -235,6 +235,7 @@ namespace SolaERP.Persistence.Services
             {
                 await _paymentRepository.SendToApprove(userId, item);
             }
+            await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }
 
