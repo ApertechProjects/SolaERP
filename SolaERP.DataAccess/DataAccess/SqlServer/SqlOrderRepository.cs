@@ -160,7 +160,7 @@ public class SqlOrderRepository : IOrderRepository
         List<OrderAllDto> data = new();
         while (await reader.ReadAsync())
         {
-            data.Add(MapFromReaderForOrderAllDto(reader));
+            data.Add(MapFromReaderForOrderHeldDto(reader));
         }
 
         return data;
@@ -673,6 +673,30 @@ public class SqlOrderRepository : IOrderRepository
         {
             OrderMainId = reader.Get<int>("@NewOrderMainId"),
             OrderNo = reader.Get<string>("@NewOrderNo"),
+        };
+    }
+
+    private static OrderAllDto MapFromReaderForOrderHeldDto(IDataReader reader)
+    {
+        return new OrderAllDto
+        {
+            OrderMainId = reader.Get<int>("OrderMainId"),
+            OrderType = reader.Get<string>("Ordertype"),
+            LineNo = reader.Get<long>("LineNo"),
+            VendorCode = reader.Get<string>("VendorCode"),
+            ApproveStatus = reader.Get<string>("ApproveStatus"),
+            Comment = reader.Get<string>("Comment"),
+            Currency = reader.Get<string>("Currency"),
+            Sequence = reader.Get<int>("Sequence"),
+            Status = reader.Get<string>("Status"),
+            BidNo = reader.Get<string>("BidNo"),
+            ComparisonNo = reader.Get<string>("ComparisonNo"),
+            EnteredBy = reader.Get<string>("EnteredBy"),
+            EnteredDate = reader.Get<DateTime?>("EnteredDate"),
+            OrderNo = reader.Get<string>("OrderNo"),
+            VendorName = reader.Get<string>("VendorName"),
+            ApproveStageDetailsName = reader.Get<string>("ApproveStageDetailsName"),
+            RFQNo = reader.Get<string>("RFQNo")
         };
     }
 
