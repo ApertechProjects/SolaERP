@@ -237,6 +237,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 Amount = reader.Get<decimal>("Amount"),
                 Comment = reader.Get<string>("Comment"),
+                PaymentType = reader.Get<string>("OrderAdvance"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 PaymentDocumentMainId = reader.Get<int>("PaymentDocumentMainId"),
                 Priority = reader.Get<string>("Priority"),
@@ -255,6 +256,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 Amount = reader.Get<decimal>("Amount"),
                 Comment = reader.Get<string>("Comment"),
+                PaymentType = reader.Get<string>("OrderAdvance"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 PaymentDocumentMainId = reader.Get<int>("PaymentDocumentMainId"),
                 Priority = reader.Get<string>("Priority"),
@@ -272,6 +274,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 Amount = reader.Get<decimal>("Amount"),
                 ApproveStatus = reader.Get<string>("ApproveStatus"),
+                PaymentType = reader.Get<string>("OrderAdvance"),
                 Comment = reader.Get<string>("Comment"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 PaymentDocumentMainId = reader.Get<int>("PaymentDocumentMainId"),
@@ -292,6 +295,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 Amount = reader.Get<decimal>("Amount"),
                 Comment = reader.Get<string>("Comment"),
+                PaymentType = reader.Get<string>("OrderAdvance"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 PaymentDocumentMainId = reader.Get<int>("PaymentDocumentMainId"),
                 Priority = reader.Get<string>("Priority"),
@@ -309,6 +313,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 Amount = reader.Get<decimal>("Amount"),
                 Comment = reader.Get<string>("Comment"),
+                PaymentType = reader.Get<string>("OrderAdvance"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 PaymentDocumentMainId = reader.Get<int>("PaymentDocumentMainId"),
                 Priority = reader.Get<string>("Priority"),
@@ -327,6 +332,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 Amount = reader.Get<decimal>("Amount"),
                 Comment = reader.Get<string>("Comment"),
+                PaymentType = reader.Get<string>("OrderAdvance"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 PaymentDocumentMainId = reader.Get<int>("PaymentDocumentMainId"),
                 Priority = reader.Get<string>("Priority"),
@@ -345,6 +351,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 Amount = reader.Get<decimal>("Amount"),
                 Comment = reader.Get<string>("Comment"),
+                PaymentType = reader.Get<string>("OrderAdvance"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 PaymentDocumentMainId = reader.Get<int>("PaymentDocumentMainId"),
                 Priority = reader.Get<string>("Priority"),
