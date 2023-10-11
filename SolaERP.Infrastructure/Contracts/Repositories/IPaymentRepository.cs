@@ -36,5 +36,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> ChangeStatus(int userId, int paymentDocumentMainId, int sequence, int approveStatus, string comment);
         Task<List<AttachmentTypes>> AttachmentTypes();
         Task<List<PaymentRequest>> PaymentRequest(PaymentRequestGetModel model);
+        Task<bool> PaymentOperation(int userId, DataTable table, PaymentOperations operation);
     }
 }

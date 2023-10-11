@@ -1,6 +1,7 @@
 ﻿using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Entities.Payment;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Contracts.Services
@@ -26,5 +27,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<AttachmentDto>>> Attachments(int paymentDocumentMainId);
         Task<ApiResponse<bool>> ChangeStatus(string name, PaymentChangeStatusModel model);
         Task<ApiResponse<List<PaymentRequestDto>>> PaymentRequest(PaymentRequestGetModel model);
+        Task<ApiResponse<bool>> PaymentOperation(string name, PaymentOperationModel model, PaymentOperations operation);
     }
 }

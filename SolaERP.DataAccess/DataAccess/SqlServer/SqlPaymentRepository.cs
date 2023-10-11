@@ -822,5 +822,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return list;
         }
+
+        public async Task<bool> PaymentOperation(int userId, DataTable table, PaymentOperations operation)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentDocumentChangeStatus @UserId,@PaymentDocumentMainId,@ApproveStatus";
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                command.Parameters.AddTableValue(command, "@PaymentDocumentMainId", "SingleIdItems", table);
+                command.Parameters.AddWithValue(command, "@ApproveStatus", operation);
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
+            }
+        }
     }
 }

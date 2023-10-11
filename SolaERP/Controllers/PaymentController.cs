@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
 
@@ -84,6 +85,18 @@ namespace SolaERP.API.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeStatus(PaymentChangeStatusModel model)
             => CreateActionResult(await _paymentService.ChangeStatus(User.Identity.Name, model));
+
+        [HttpPost]
+        public async Task<IActionResult> Retrieve(PaymentOperationModel model)
+            => CreateActionResult(await _paymentService.PaymentOperation(User.Identity.Name, model, PaymentOperations.Retrieve));
+
+        [HttpPost]
+        public async Task<IActionResult> SendToApproved(PaymentOperationModel model)
+           => CreateActionResult(await _paymentService.PaymentOperation(User.Identity.Name, model, PaymentOperations.SendToApproved));
+
+        [HttpPost]
+        public async Task<IActionResult> SendToBank(PaymentOperationModel model)
+           => CreateActionResult(await _paymentService.PaymentOperation(User.Identity.Name, model, PaymentOperations.SendToBank));
 
         [HttpGet]
         public async Task<IActionResult> PaymentRequest([FromQuery] PaymentRequestGetModel model)
