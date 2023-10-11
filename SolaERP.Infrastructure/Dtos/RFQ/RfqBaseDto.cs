@@ -22,5 +22,6 @@ namespace SolaERP.Application.Dtos.RFQ
         public string PlaceOfDelivery { get; set; }
         public int BusinessCategoryid { get; set; }
         public bool HasAttachments { get; set; }
+        public string EnteredBy { get; set; }
     }
 }
