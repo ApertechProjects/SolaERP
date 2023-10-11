@@ -30,6 +30,6 @@
         public decimal LogisticsTotal { get; set; }
         public int Sequence { get; set; }
         public List<RequestDetailWithAnalysisCode> Details { get; set; }
-        public bool HasAtttachemt { get; set; }
+        public bool HasAttachments { get; set; }
     }
 }
