@@ -3,8 +3,7 @@
     public class RejectedDto
     {
         public int PaymentDocumentMainId { get; set; }
-        public int PaymentDocumentPriorityId { get; set; }
-        public int PaymentDocumentTypeId { get; set; }
+        public string Priority { get; set; }
         public DateTime PaymentRequestDate { get; set; }
         public string PaymentRequestNo { get; set; }
         public string VendorCode { get; set; }

@@ -215,7 +215,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<List<All>> All(int userId, PaymentGetModel payment)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_PaymentDocumentAll @userId,@businessUnitId,@dateFrom,@dateTo";
+            command.CommandText = @"exec dbo.SP_PaymentDocumentAll @userId,@businessUnitId,@dateFrom,@dateTo,@vendorCode";
             command.Parameters.AddWithValue(command, "@userId", userId);
             command.Parameters.AddWithValue(command, "@businessUnitId", payment.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@dateFrom", payment.DateFrom);
@@ -239,8 +239,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Comment = reader.Get<string>("Comment"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 PaymentDocumentMainId = reader.Get<int>("PaymentDocumentMainId"),
-                PaymentDocumentPriorityId = reader.Get<int>("PaymentDocumentPriorityId"),
-                PaymentDocumentTypeId = reader.Get<int>("PaymentDocumentTypeId"),
+                Priority = reader.Get<string>("Priority"),
                 PaymentRequestDate = reader.Get<DateTime>("PaymentRequestDate"),
                 PaymentRequestNo = reader.Get<string>("PaymentRequestNo"),
                 TransactionReference = reader.Get<string>("TransactionReference"),
@@ -258,8 +257,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Comment = reader.Get<string>("Comment"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 PaymentDocumentMainId = reader.Get<int>("PaymentDocumentMainId"),
-                PaymentDocumentPriorityId = reader.Get<int>("PaymentDocumentPriorityId"),
-                PaymentDocumentTypeId = reader.Get<int>("PaymentDocumentTypeId"),
+                Priority = reader.Get<string>("Priority"),
                 PaymentRequestDate = reader.Get<DateTime>("PaymentRequestDate"),
                 PaymentRequestNo = reader.Get<string>("PaymentRequestNo"),
                 TransactionReference = reader.Get<string>("TransactionReference"),
@@ -277,8 +275,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Comment = reader.Get<string>("Comment"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 PaymentDocumentMainId = reader.Get<int>("PaymentDocumentMainId"),
-                PaymentDocumentPriorityId = reader.Get<int>("PaymentDocumentPriorityId"),
-                PaymentDocumentTypeId = reader.Get<int>("PaymentDocumentTypeId"),
+                Priority = reader.Get<string>("Priority"),
                 PaymentRequestDate = reader.Get<DateTime>("PaymentRequestDate"),
                 PaymentRequestNo = reader.Get<string>("PaymentRequestNo"),
                 PaymentStatus = reader.Get<string>("PaymentStatus"),
@@ -297,8 +294,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Comment = reader.Get<string>("Comment"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 PaymentDocumentMainId = reader.Get<int>("PaymentDocumentMainId"),
-                PaymentDocumentPriorityId = reader.Get<int>("PaymentDocumentPriorityId"),
-                PaymentDocumentTypeId = reader.Get<int>("PaymentDocumentTypeId"),
+                Priority = reader.Get<string>("Priority"),
                 PaymentRequestDate = reader.Get<DateTime>("PaymentRequestDate"),
                 PaymentRequestNo = reader.Get<string>("PaymentRequestNo"),
                 TransactionReference = reader.Get<string>("TransactionReference"),
@@ -315,8 +311,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Comment = reader.Get<string>("Comment"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 PaymentDocumentMainId = reader.Get<int>("PaymentDocumentMainId"),
-                PaymentDocumentPriorityId = reader.Get<int>("PaymentDocumentPriorityId"),
-                PaymentDocumentTypeId = reader.Get<int>("PaymentDocumentTypeId"),
+                Priority = reader.Get<string>("Priority"),
                 PaymentRequestDate = reader.Get<DateTime>("PaymentRequestDate"),
                 PaymentRequestNo = reader.Get<string>("PaymentRequestNo"),
                 TransactionReference = reader.Get<string>("TransactionReference"),
@@ -334,8 +329,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Comment = reader.Get<string>("Comment"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 PaymentDocumentMainId = reader.Get<int>("PaymentDocumentMainId"),
-                PaymentDocumentPriorityId = reader.Get<int>("PaymentDocumentPriorityId"),
-                PaymentDocumentTypeId = reader.Get<int>("PaymentDocumentTypeId"),
+                Priority = reader.Get<string>("Priority"),
                 PaymentRequestDate = reader.Get<DateTime>("PaymentRequestDate"),
                 PaymentRequestNo = reader.Get<string>("PaymentRequestNo"),
                 TransactionReference = reader.Get<string>("TransactionReference"),
@@ -353,8 +347,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Comment = reader.Get<string>("Comment"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 PaymentDocumentMainId = reader.Get<int>("PaymentDocumentMainId"),
-                PaymentDocumentPriorityId = reader.Get<int>("PaymentDocumentPriorityId"),
-                PaymentDocumentTypeId = reader.Get<int>("PaymentDocumentTypeId"),
+                Priority = reader.Get<string>("Priority"),
                 PaymentRequestDate = reader.Get<DateTime>("PaymentRequestDate"),
                 PaymentRequestNo = reader.Get<string>("PaymentRequestNo"),
                 TransactionReference = reader.Get<string>("TransactionReference"),
@@ -366,7 +359,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<List<Approved>> Approved(int userId, PaymentGetModel payment)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_PaymentDocumentApproved @userId,@businessUnitId,@dateFrom,@dateTo";
+            command.CommandText = @"exec dbo.SP_PaymentDocumentApproved @userId,@businessUnitId,@dateFrom,@dateTo,@vendorCode";
             command.Parameters.AddWithValue(command, "@userId", userId);
             command.Parameters.AddWithValue(command, "@businessUnitId", payment.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@dateFrom", payment.DateFrom);
@@ -385,7 +378,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<List<Bank>> Bank(int userId, PaymentGetModel payment)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_PaymentDocumentBank @userId,@businessUnitId,@dateFrom,@dateTo";
+            command.CommandText = @"exec dbo.SP_PaymentDocumentBank @userId,@businessUnitId,@dateFrom,@dateTo,@vendorCode";
             command.Parameters.AddWithValue(command, "@userId", userId);
             command.Parameters.AddWithValue(command, "@businessUnitId", payment.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@dateFrom", payment.DateFrom);
@@ -428,7 +421,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@businessUnitId", payment.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@dateFrom", payment.DateFrom);
             command.Parameters.AddWithValue(command, "@dateTo", payment.DateTo);
-            command.Parameters.AddWithValue(command, "@dateTo", payment.DateTo);
             command.Parameters.AddWithValue(command, "@vendorCode", payment.VendorCode ?? "-1");
 
 
@@ -444,7 +436,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<List<Rejected>> Rejected(int userId, PaymentGetModel payment)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_PaymentDocumentRejected @userId,@businessUnitId,@dateFrom,@dateTo";
+            command.CommandText = @"exec dbo.SP_PaymentDocumentRejected @userId,@businessUnitId,@dateFrom,@dateTo,@vendorCode";
             command.Parameters.AddWithValue(command, "@userId", userId);
             command.Parameters.AddWithValue(command, "@businessUnitId", payment.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@dateFrom", payment.DateFrom);
