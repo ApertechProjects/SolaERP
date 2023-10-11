@@ -314,10 +314,15 @@ namespace SolaERP.Persistence.Services
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
             List<Task<bool>> tasks = new();
             Vendor vendor = _mapper.Map<Vendor>(vendorDto);
-            vendor.BlackListDescription = string.IsNullOrEmpty(vendor.BlackListDescription) ||
-                                          vendor.BlackListDescription == "null"
-                ? ""
-                : vendor.BlackListDescription;
+
+            vendor.ShipmentId = vendorDto.ShipVia == "null" ? null : Convert.ToInt32(vendorDto.ShipVia);
+            vendor.DeliveryTermId = vendorDto.DeliveryTerms == "null" ? null : Convert.ToInt32(vendorDto.DeliveryTerms);
+            vendor.WithHoldingTaxId = vendorDto.WithHoldingTaxId == "null"
+                ? null
+                : Convert.ToInt32(vendorDto.WithHoldingTaxId);
+            vendor.TaxesId = vendorDto.Tax == "null" ? null : Convert.ToInt32(vendorDto.Tax);
+
+            CheckNullForFormData(vendor);
 
             int userId = Convert.ToInt32(userIdentity);
             int vendorId = 0;
@@ -441,6 +446,34 @@ namespace SolaERP.Persistence.Services
             };
 
             return statuses.SingleOrDefault(x => x.Id == id).Value;
+        }
+
+        private void CheckNullForFormData(Vendor vendor)
+        {
+            vendor.BlackListDescription = string.IsNullOrEmpty(vendor.BlackListDescription) ||
+                                          vendor.BlackListDescription == "null"
+                ? ""
+                : vendor.BlackListDescription;
+
+            vendor.Email = string.IsNullOrEmpty(vendor.Email) || vendor.Email == "null"
+                ? ""
+                : vendor.Email;
+            
+            vendor.Postal = string.IsNullOrEmpty(vendor.Postal) || vendor.Postal == "null"
+                ? ""
+                : vendor.Postal;
+            
+            vendor.Address2 = string.IsNullOrEmpty(vendor.Address2) || vendor.Address2 == "null"
+                ? ""
+                : vendor.Address2;
+            
+            vendor.ContactPerson = string.IsNullOrEmpty(vendor.ContactPerson) || vendor.ContactPerson == "null"
+                ? ""
+                : vendor.ContactPerson;
+            
+            vendor.Description = string.IsNullOrEmpty(vendor.Description) || vendor.Description == "null"
+                ? ""
+                : vendor.Description;
         }
     }
 }
