@@ -9,7 +9,6 @@ namespace SolaERP.Application.Models
     public class PaymentOperationModel
     {
         public List<int> PaymentDocumentMainIds { get; set; }
-        public int ApproveStatus { get; set; }
     }
 
 
