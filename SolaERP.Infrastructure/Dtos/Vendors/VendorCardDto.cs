@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using SolaERP.Application.Dtos.Attachment;
 using SolaERP.Application.Dtos.SupplierEvaluation;
 
 namespace SolaERP.Application.Dtos.Vendors
@@ -43,13 +42,13 @@ namespace SolaERP.Application.Dtos.Vendors
 
 
         //public int VendorType { get; set; }
-        public int ShipVia { get; set; }
-        public int DeliveryTerms { get; set; }
+        public string? ShipVia { get; set; }
+        public string? DeliveryTerms { get; set; }
         public string PaymentTerms { get; set; }
 
 
-        public int WithHoldingTaxId { get; set; }
-        public int Tax { get; set; }
+        public string? WithHoldingTaxId { get; set; }
+        public string? Tax { get; set; }
 
 
         public string RepresentedProducts { get; set; }

@@ -75,6 +75,15 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             try
             {
+                rfqBase.EnteredBy = reader.Get<string>("EnteredBy");
+            }
+            catch (Exception)
+            {
+                rfqBase.EnteredBy = null;
+            }
+
+            try
+            {
                 rfqBase.BiddingType = reader.Get<int>("BiddingType");
             }
             catch (Exception)
