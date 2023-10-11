@@ -681,22 +681,19 @@ public class SqlOrderRepository : IOrderRepository
         return new OrderAllDto
         {
             OrderMainId = reader.Get<int>("OrderMainId"),
-            OrderType = reader.Get<string>("Ordertype"),
-            LineNo = reader.Get<long>("LineNo"),
-            VendorCode = reader.Get<string>("VendorCode"),
-            ApproveStatus = reader.Get<string>("ApproveStatus"),
-            Comment = reader.Get<string>("Comment"),
+            OrderNo = reader.Get<string>("OrderNo"),
+            OrderType = reader.Get<string>("OrderType"),
+            VendorName = reader.Get<string>("VendorName"),
             Currency = reader.Get<string>("Currency"),
-            Sequence = reader.Get<int>("Sequence"),
-            Status = reader.Get<string>("Status"),
+            RFQNo = reader.Get<string>("RFQNo"),
             BidNo = reader.Get<string>("BidNo"),
             ComparisonNo = reader.Get<string>("ComparisonNo"),
-            EnteredBy = reader.Get<string>("EnteredBy"),
+            Comment = reader.Get<string>("Comment"),
             EnteredDate = reader.Get<DateTime?>("EnteredDate"),
-            OrderNo = reader.Get<string>("OrderNo"),
-            VendorName = reader.Get<string>("VendorName"),
-            ApproveStageDetailsName = reader.Get<string>("ApproveStageDetailsName"),
-            RFQNo = reader.Get<string>("RFQNo")
+            EnteredBy = reader.Get<string>("EnteredBy"),
+            ApproveStatus = reader.Get<string>("ApproveStatus"),
+            Status = reader.Get<string>("Status"),
+            HasAttachments = reader.Get<bool>("HasAttachments")
         };
     }
 
