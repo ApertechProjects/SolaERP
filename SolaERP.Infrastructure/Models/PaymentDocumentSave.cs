@@ -50,6 +50,7 @@ namespace SolaERP.Application.Models
         public string LinkAccount { get; set; }
         public decimal GRNAmount { get; set; }
         public DateTime DueDate { get; set; }
+        public string Department { get; set; }
 
     }
 
