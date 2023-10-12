@@ -91,7 +91,7 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _paymentService.PaymentOperation(User.Identity.Name, model, PaymentOperations.Retrieve));
 
         [HttpPost]
-        public async Task<IActionResult> SendToApproved(PaymentOperationModel model)
+        public async Task<IActionResult> ReturnToApproved(PaymentOperationModel model)
            => CreateActionResult(await _paymentService.PaymentOperation(User.Identity.Name, model, PaymentOperations.SendToApproved));
 
         [HttpPost]
