@@ -101,7 +101,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 PaymentRequestAmount = reader.Get<decimal>("PaymentRequestAmount"),
                 PaymentTerms = reader.Get<string>("PaymentTerms"),
                 PaymentTermsName = reader.Get<string>("PaymentTermsName"),
-                SystemInvoiceNo = reader.Get<string>("SystemInvoiceNo")
+                SystemInvoiceNo = reader.Get<string>("SystemInvoiceNo"),
+                Department = reader.Get<string>("Department")
             };
         }
 

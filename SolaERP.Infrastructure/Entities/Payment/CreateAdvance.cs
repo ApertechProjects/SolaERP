@@ -21,5 +21,6 @@ namespace SolaERP.Application.Entities.Payment
         public decimal PaymentRequestAmount { get; set; }
         public decimal AmountToPay { get; set; }
         public string Budget { get; set; }
+        public string Department { get; set; }
     }
 }
