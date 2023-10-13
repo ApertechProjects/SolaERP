@@ -281,5 +281,15 @@ namespace SolaERP.Persistence.Services
             };
             return ApiResponse<PaymentOrderLoadModel>.Success(loadModel);
         }
+
+        public async Task<ApiResponse<List<PaymentOrderTransactionDto>>> PaymentOrderTransaction(PaymentOrderTransactionModel model)
+        {
+            var table = model.PaymentDocuments.ConvertListOfCLassToDataTable();
+            var dataMain = await _paymentRepository.PaymentOrderTransaction(table, model.PaymentOrderMainId, model.PaymentDate, model.BankAccount, model.BankCharge);
+
+            var dto = _mapper.Map<List<PaymentOrderTransactionDto>>(dataMain);
+
+            return ApiResponse<List<PaymentOrderTransactionDto>>.Success(dto);
+        }
     }
 }

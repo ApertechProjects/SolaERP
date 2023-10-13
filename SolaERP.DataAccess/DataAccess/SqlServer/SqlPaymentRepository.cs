@@ -868,5 +868,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return datas;
         }
+
+        public async Task<List<PaymentOrderTransaction>> PaymentOrderTransaction(DataTable table, int paymentOrderMainId, DateTime paymentDate, string bankAccount, decimal bankCharge)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_PaymentOrderDetailsTransactions @paymentOrderMainId,@paymentDocuments,@paymentDate,@bankAccount,@bankCharge";
+            command.Parameters.AddWithValue(command, "@paymentOrderMainId", paymentOrderMainId);
+            command.Parameters.AddTableValue(command, "@paymentDocuments", "PaymentDocumentPay", table);
+            command.Parameters.AddWithValue(command, "@paymentDate", paymentDate);
+            command.Parameters.AddWithValue(command, "@bankAccount", bankAccount);
+            command.Parameters.AddWithValue(command, "@bankCharge", bankCharge);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<PaymentOrderTransaction> datas = new List<PaymentOrderTransaction>();
+            while (await reader.ReadAsync()) datas.Add(reader.GetByEntityStructure<PaymentOrderTransaction>());
+
+            return datas;
+        }
     }
 }

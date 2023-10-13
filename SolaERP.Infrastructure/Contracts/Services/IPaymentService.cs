@@ -29,5 +29,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<PaymentRequestDto>>> PaymentRequest(PaymentRequestGetModel model);
         Task<ApiResponse<bool>> PaymentOperation(string name, PaymentOperationModel model, PaymentOperations operation);
         Task<ApiResponse<PaymentOrderLoadModel>> PaymentOrderLoad(PaymentOrderParamModel model);
+        Task<ApiResponse<List<PaymentOrderTransactionDto>>> PaymentOrderTransaction(PaymentOrderTransactionModel model);
     }
 }
