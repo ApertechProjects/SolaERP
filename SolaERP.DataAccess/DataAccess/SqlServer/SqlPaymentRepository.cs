@@ -836,5 +836,37 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return value > 0;
             }
         }
+
+        public async Task<PaymentOrderMain> PaymentOrderMainLoad(PaymentOrderParamModel model)
+        {
+            string paymentDocumentMainIds = string.Join(",", model.PaymentDocumentMainIds);
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_PaymentOrderMainLoad @paymentOrderMainId,@paymentDocumentMainId";
+            command.Parameters.AddWithValue(command, "@paymentOrderMainId", model.PaymentOrderMainId);
+            command.Parameters.AddWithValue(command, "@paymentDocumentMainId", paymentDocumentMainIds);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            PaymentOrderMain data = new PaymentOrderMain();
+            while (await reader.ReadAsync()) data = reader.GetByEntityStructure<PaymentOrderMain>();
+
+            return data;
+        }
+
+        public async Task<List<PaymentOrderDetail>> PaymentOrderDetailLoad(PaymentOrderParamModel model)
+        {
+            string paymentDocumentMainIds = string.Join(",", model.PaymentDocumentMainIds);
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_PaymentOrderDetailsLoad @paymentOrderMainId,@paymentDocumentMainId";
+            command.Parameters.AddWithValue(command, "@paymentOrderMainId", model.PaymentOrderMainId);
+            command.Parameters.AddWithValue(command, "@paymentDocumentMainId", paymentDocumentMainIds);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<PaymentOrderDetail> datas = new List<PaymentOrderDetail>();
+            while (await reader.ReadAsync()) datas.Add(reader.GetByEntityStructure<PaymentOrderDetail>());
+
+            return datas;
+        }
     }
 }

@@ -37,5 +37,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<AttachmentTypes>> AttachmentTypes();
         Task<List<PaymentRequest>> PaymentRequest(PaymentRequestGetModel model);
         Task<bool> PaymentOperation(int userId, DataTable table, PaymentOperations operation);
+        Task<PaymentOrderMain> PaymentOrderMainLoad(PaymentOrderParamModel model);
+        Task<List<PaymentOrderDetail>> PaymentOrderDetailLoad(PaymentOrderParamModel model);
     }
 }

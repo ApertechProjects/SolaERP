@@ -262,5 +262,24 @@ namespace SolaERP.Persistence.Services
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(detailResult);
         }
+
+        public async Task<ApiResponse<PaymentOrderLoadModel>> PaymentOrderLoad(PaymentOrderParamModel model)
+        {
+            var dataMain = await _paymentRepository.PaymentOrderMainLoad(model);
+            var dtoMain = _mapper.Map<PaymentOrderMainDto>(dataMain);
+            var dataDetail = await _paymentRepository.PaymentOrderDetailLoad(model);
+            var dtoDetail = _mapper.Map<List<PaymentOrderDetailDto>>(dataDetail);
+            foreach (var item in dtoDetail)
+            {
+                item.PaymentRequestDate = item.PaymentRequestDate.ConvertDateToValidDate();
+                item.SentDate = item.SentDate.ConvertDateToValidDate();
+            }
+            PaymentOrderLoadModel loadModel = new PaymentOrderLoadModel()
+            {
+                Main = dtoMain,
+                Details = dtoDetail
+            };
+            return ApiResponse<PaymentOrderLoadModel>.Success(loadModel);
+        }
     }
 }

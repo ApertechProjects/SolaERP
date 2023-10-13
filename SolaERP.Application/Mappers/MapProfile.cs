@@ -395,10 +395,10 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.CompanyRegistrationDate, opt => opt.MapFrom(src => src.CompanyRegistrationDate))
                 .ForMember(dest => dest.TaxOffice, opt => opt.MapFrom(src => src.TaxOffice))
                 .ReverseMap();
-            
+
             CreateMap<VendorWFA, VendorWFADto>().ReverseMap();
             CreateMap<VendorAllDto, VendorAll>().ReverseMap();
-            
+
             CreateMap<VendorCardDto, Vendor>()
                 .ForMember(dest => dest.RepresentedProducts, opt => opt.MapFrom(src => src.RepresentedProducts))
                 .ForMember(dest => dest.CompanyAdress, opt => opt.MapFrom(src => src.Address1))
@@ -415,10 +415,10 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.TaxesId, opt => opt.Ignore())
                 .ForMember(dest => dest.WithHoldingTaxId, opt => opt.Ignore())
                 .ForMember(dest => dest.AgreeWithDefaultDays, opt => opt.MapFrom(src => src._60DaysPayment));
-           
+
             CreateMap<RfqDraft, RfqDraftDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RFQMainId)).ReverseMap();
-            
+
             CreateMap<RfqAll, RfqAllDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RFQMainId)).ReverseMap();
 
@@ -546,6 +546,9 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<Bank, BankDto>().ReverseMap();
             CreateMap<SolaERP.Application.Entities.Payment.Attachment, SolaERP.Application.Dtos.Payment.AttachmentDto>().ReverseMap();
             CreateMap<PaymentRequest, PaymentRequestDto>().ReverseMap();
+
+            CreateMap<PaymentOrderMain, PaymentOrderMainDto>().ReverseMap();
+            CreateMap<PaymentOrderDetail, PaymentOrderDetailDto>().ReverseMap();
         }
     }
 }

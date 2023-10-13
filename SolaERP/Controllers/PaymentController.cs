@@ -101,5 +101,9 @@ namespace SolaERP.API.Controllers
         [HttpGet]
         public async Task<IActionResult> PaymentRequest([FromQuery] PaymentRequestGetModel model)
             => CreateActionResult(await _paymentService.PaymentRequest(model));
+
+        [HttpGet]
+        public async Task<IActionResult> PaymentOrderLoad([FromQuery] PaymentOrderParamModel paymentOrder)
+            => CreateActionResult(await _paymentService.PaymentOrderLoad(paymentOrder));
     }
 }
