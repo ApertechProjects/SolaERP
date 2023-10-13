@@ -4,7 +4,7 @@ services:
   app:
     build: .
     image: sola-erp-api-image
-    container_name: sola-erp-api
+    container_name: sola-erp-api-old
     restart: always
     ports:
       - "3030:80"
