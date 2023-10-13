@@ -291,5 +291,12 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<List<PaymentOrderTransactionDto>>.Success(dto);
         }
+
+        public async Task<ApiResponse<List<BankAccountListDto>>> BankAccountList(int businessUnitId)
+        {
+            var data = await _paymentRepository.BankAccountList(businessUnitId);
+            var dto = _mapper.Map<List<BankAccountListDto>>(data);
+            return ApiResponse<List<BankAccountListDto>>.Success(dto);
+        }
     }
 }

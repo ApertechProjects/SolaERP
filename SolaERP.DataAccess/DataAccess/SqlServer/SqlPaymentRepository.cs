@@ -886,5 +886,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return datas;
         }
+
+        public async Task<List<BankAccountList>> BankAccountList(int businessUnitId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_BankAccountList @businessUnitId";
+            command.Parameters.AddWithValue(command, "@businessUnitId", businessUnitId);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<BankAccountList> datas = new List<BankAccountList>();
+            while (await reader.ReadAsync()) datas.Add(reader.GetByEntityStructure<BankAccountList>());
+
+            return datas;
+        }
     }
 }
