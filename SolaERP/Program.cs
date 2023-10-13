@@ -10,6 +10,7 @@ using SolaERP.Application.Validations;
 using SolaERP.Extensions;
 using SolaERP.Middlewares;
 using SolaERP.Persistence.Mappers;
+using SolaERP.SignalR.Hubs;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -74,6 +75,14 @@ builder.Services
     .AddRazorRenderer()
     .AddSmtpSender(builder.Configuration["Mail:Host"], Convert.ToInt32(builder.Configuration["Mail:Port"]));
 
+
+
+builder.Services.Configure<HubOptions<ChatHub>>(config =>
+{
+    config.ClientTimeoutInterval = TimeSpan.FromMinutes(30);
+    config.KeepAliveInterval = TimeSpan.FromMinutes(30);
+
+});
 builder.Services.Configure<ConnectionFactory>(option =>
 {
     option.Uri = new Uri(builder.Configuration["FileOptions:URI"]);
@@ -167,6 +176,7 @@ app.UseCors("CorsPolicy");
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseAuthentication();
+app.MapHub<ChatHub>("/ChatHub");
 app.UseAuthorization();
 app.UseGlobalExceptionHandlerMiddleware(app.Services.GetRequiredService<ILogger<Program>>());
 app.MapControllers();
