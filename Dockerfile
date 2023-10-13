@@ -14,4 +14,4 @@ RUN dotnet publish -c Release -o output
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
 COPY --from=build-env /app/output .
-ENTRYPOINT ["dotnet", "SolaERP.API.dll"]
+ENTRYPOINT ["dotnet", "SolaERP.API.dll"] 
