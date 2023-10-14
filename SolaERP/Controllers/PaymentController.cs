@@ -80,7 +80,7 @@ namespace SolaERP.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Delete(int paymentDocumentMainId)
-            => CreateActionResult(await _paymentService.Delete(paymentDocumentMainId));
+            => CreateActionResult(await _paymentService.Delete(paymentDocumentMainId, User.Identity.Name));
 
         [HttpPost]
         public async Task<IActionResult> ChangeStatus(PaymentChangeStatusModel model)

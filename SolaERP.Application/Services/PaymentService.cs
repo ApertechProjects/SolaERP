@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
-using Newtonsoft.Json;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Dtos.Shared;
-using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Payment;
-using SolaERP.Application.Entities.RFQ;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -96,9 +93,11 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<CreateOrderDto>>.Success(dto);
         }
 
-        public async Task<ApiResponse<bool>> Delete(int paymentDocumentMainId)
+        public async Task<ApiResponse<bool>> Delete(int paymentDocumentMainId, string name)
         {
-            var result = await _paymentRepository.Delete(paymentDocumentMainId);
+            var userId = await _userRepository.ConvertIdentity(name);
+            var result = await _paymentRepository.Delete(paymentDocumentMainId, userId);
+            await _unitOfWork.SaveChangesAsync();
             if (result)
                 return ApiResponse<bool>.Success(200);
             return ApiResponse<bool>.Fail("Data can not be deleted", 400);

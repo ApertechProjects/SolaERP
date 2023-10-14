@@ -1,7 +1,6 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Entities.Payment;
-using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -9,8 +8,6 @@ using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Reflection;
-using System.Reflection.PortableExecutable;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -561,12 +558,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> Delete(int paymentDocumentMainId)
+        public async Task<bool> Delete(int paymentDocumentMainId, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentDocumentMain_IUD @PaymentDocumentMainId";
+                command.CommandText = "EXEC SP_PaymentDocumentMain_IUD \r\n                                                               @PaymentDocumentMainId,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,@UserId,@NewPaymentDocumentMainId = @NewPaymentDocumentMainId OUTPUT,@NewPaymentRequestNo = @NewPaymentRequestNo OUTPUT select @NewPaymentDocumentMainId as NewPaymentDocumentMainId, @NewPaymentRequestNo as NewPaymentRequestNo";
                 command.Parameters.AddWithValue(command, "@PaymentDocumentMainId", paymentDocumentMainId);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+
+                command.Parameters.Add("@NewPaymentDocumentMainId", SqlDbType.Int);
+                command.Parameters["@NewPaymentDocumentMainId"].Direction = ParameterDirection.Output;
+                command.Parameters.Add("@NewPaymentRequestNo", SqlDbType.NVarChar, 20);
+                command.Parameters["@NewPaymentRequestNo"].Direction = ParameterDirection.Output;
                 var value = await command.ExecuteNonQueryAsync();
                 return value > 0;
             }

@@ -31,7 +31,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> SendToApprove(int userId, int paymentDocumentMainId);
         Task<PaymentDocumentSaveResultModel> MainSave(int userId, PaymentDocumentMainSaveModel model);
         Task<bool> DetailSave(DataTable model);
-        Task<bool> Delete(int paymentDocumentMainId);
+        Task<bool> Delete(int paymentDocumentMainId, int userId);
         Task<decimal> VendorBalance(int businessUnitId, string vendorCode);
         Task<bool> ChangeStatus(int userId, int paymentDocumentMainId, int sequence, int approveStatus, string comment);
         Task<List<AttachmentTypes>> AttachmentTypes();
