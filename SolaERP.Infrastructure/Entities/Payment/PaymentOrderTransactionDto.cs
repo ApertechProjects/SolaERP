@@ -8,6 +8,7 @@ namespace SolaERP.Application.Entities.Payment
 {
     public class PaymentOrderTransactionDto
     {
+        public long LineNo { get; set; }
         public int PaymentdocumentDetailId { get; set; }
         public string TransactionReference { get; set; }
         public string Reference { get; set; }
