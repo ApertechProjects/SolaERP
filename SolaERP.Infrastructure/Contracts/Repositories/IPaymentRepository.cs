@@ -41,5 +41,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<PaymentOrderDetail>> PaymentOrderDetailLoad(PaymentOrderParamModel model);
         Task<List<PaymentOrderTransaction>> PaymentOrderTransaction(DataTable table, int paymentOrderMainId, DateTime paymentDate, string bankAccount, decimal bankCharge);
         Task<List<BankAccountList>> BankAccountList(int businessUnitId);
+        Task<bool> PaymentOrderPost(DataTable table, int journalNo, int userId);
     }
 }

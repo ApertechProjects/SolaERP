@@ -297,5 +297,16 @@ namespace SolaERP.Persistence.Services
             var dto = _mapper.Map<List<BankAccountListDto>>(data);
             return ApiResponse<List<BankAccountListDto>>.Success(dto);
         }
+
+        public async Task<ApiResponse<bool>> PaymentOrderPost(PaymentOrderPostModel model, string name)
+        {
+            var userId = await _userRepository.ConvertIdentity(name);
+            var table = model.PaymentDocumentPosts.ConvertListOfCLassToDataTable();
+            var data = await _paymentRepository.PaymentOrderPost(table, model.JournalNo, userId);
+            await _unitOfWork.SaveChangesAsync();
+            if (data)
+                return ApiResponse<bool>.Success(data);
+            return ApiResponse<bool>.Fail("Problem detected", 400);
+        }
     }
 }

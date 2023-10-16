@@ -903,5 +903,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return datas;
         }
+
+        public async Task<bool> PaymentOrderPost(DataTable table, int journalNo, int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentOrderPost @JournalNo,@UserId,@PaymentOrderTransactions";
+                command.Parameters.AddWithValue(command, "@JournalNo", journalNo);
+                command.Parameters.AddTableValue(command, "@PaymentOrderTransactions", "PaymentDocumentPost", table);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
+            }
+        }
     }
 }
