@@ -10,7 +10,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<RequestMainAll>> GetAllAsync(RequestMainGetModel requestMain);
         Task<List<RequestHeld>> GetHeldAsync(RequestWFAGetModel requestMain);
         Task<RequestMain> GetRequestByRequestMainIdAsync(int requestMainId);
-        Task<List<RequestTypes>> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId, string keyCode);
+        Task<List<RequestTypes>> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId);
         Task<List<RequestMain>> GetWaitingForApprovalsAsync(int userId, RequestWFAGetModel requestWFA);
         Task<List<RequestMainDraft>> GetMainRequestDraftsAsync(RequestMainDraftModel requestMain);
         Task<RequestCardMain> GetRequesMainHeaderAsync(int requestMainId, int userId);

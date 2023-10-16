@@ -59,9 +59,9 @@ namespace SolaERP.Persistence.Services
             return requestDetails;
         }
 
-        public async Task<ApiResponse<List<RequestTypesDto>>> GetTypesAsync(int businessUnitId, string keyCode)
+        public async Task<ApiResponse<List<RequestTypesDto>>> GetTypesAsync(int businessUnitId)
         {
-            var entity = await _requestMainRepository.GetRequestTypesByBusinessUnitIdAsync(businessUnitId, keyCode);
+            var entity = await _requestMainRepository.GetRequestTypesByBusinessUnitIdAsync(businessUnitId);
             var dto = _mapper.Map<List<RequestTypesDto>>(entity);
 
             return entity.Count > 0

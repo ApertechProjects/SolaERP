@@ -46,13 +46,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public async Task<List<RequestTypes>> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId, string keyCode)
+        public async Task<List<RequestTypes>> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec SP_RequestTypesByBuId @BusinessUnitId,@KeyCode";
+                command.CommandText = "exec SP_RequestTypesByBuId @BusinessUnitId";
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
-                command.Parameters.AddWithValue(command, "@KeyCode", keyCode);
 
                 using var reader = await command.ExecuteReaderAsync();
                 List<RequestTypes> requestTypes = new List<RequestTypes>();

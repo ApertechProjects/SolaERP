@@ -28,9 +28,9 @@ namespace SolaERP.Controllers
             _mailService = mailService;
         }
 
-        [HttpGet("{businessUnitId}/{keyCode}")]
-        public async Task<IActionResult> Type(int businessUnitId, string keyCode)
-            => CreateActionResult(await _requestService.GetTypesAsync(businessUnitId, keyCode));
+        [HttpGet("{businessUnitId}")]
+        public async Task<IActionResult> Type(int businessUnitId)
+            => CreateActionResult(await _requestService.GetTypesAsync(businessUnitId));
 
         [HttpGet("{requestMainId}")]
         public async Task<IActionResult> MainApprovalInfo(int requestMainId)
