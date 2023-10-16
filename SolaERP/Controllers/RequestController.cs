@@ -28,9 +28,9 @@ namespace SolaERP.Controllers
             _mailService = mailService;
         }
 
-        [HttpGet("{businessUnitId}")]
-        public async Task<IActionResult> Type(int businessUnitId)
-            => CreateActionResult(await _requestService.GetTypesAsync(businessUnitId));
+        [HttpGet("{businessUnitId}/{keyCode}")]
+        public async Task<IActionResult> Type(int businessUnitId, string keyCode)
+            => CreateActionResult(await _requestService.GetTypesAsync(businessUnitId, keyCode));
 
         [HttpGet("{requestMainId}")]
         public async Task<IActionResult> MainApprovalInfo(int requestMainId)
@@ -135,7 +135,7 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> CategoryList()
             => CreateActionResult(await _requestService.CategoryList());
 
-       
+
     }
 }
 

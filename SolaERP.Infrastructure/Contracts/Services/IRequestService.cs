@@ -12,7 +12,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<RequestHeldDto>>> GetHeldAsync(RequestWFAGetModel requestMainGet);
         Task<ApiResponse<List<RequestWFADto>>> GetWFAAsync(string name, RequestWFAGetModel requestWFAGetParametersDto);
         Task<bool> RemoveDetailAsync(int requestDetailId);
-        Task<ApiResponse<List<RequestTypesDto>>> GetTypesAsync(int businessUnitId);
+        Task<ApiResponse<List<RequestTypesDto>>> GetTypesAsync(int businessUnitId, string keyCode);
         Task<bool> ChangeMainStatusAsync(string name, int requestMainId, int approveStatus, string comment, int rejectReasonId);
         Task<ApiResponse<bool>> SendToApproveAsync(string name, List<int> requestMainIds);
         Task<ApiResponse<List<RequestMainDraftDto>>> GetDraftsAsync(RequestMainDraftModel getMainDraftParameters);
