@@ -13,6 +13,7 @@ namespace SolaERP.Application.Dtos.Request
         public string BusinessUnitCode { get; set; }
         public string BusinessUnitName { get; set; }
         public int RequestTypeId { get; set; }
+        public string KeyCode { get; set; }
         public string RequestNo { get; set; }
         public int Destination
         {

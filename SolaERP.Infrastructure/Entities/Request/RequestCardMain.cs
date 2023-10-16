@@ -12,6 +12,7 @@ namespace SolaERP.Application.Entities.Request
         public string AccountCode { get; set; }
         public string AccountName { get; set; }
         public int RequestTypeId { get; set; }
+        public string KeyCode { get; set; }
         public string RequestNo { get; set; }
         public DateTime EntryDate { get; set; } = DateTime.Now.Date;
         public DateTime RequestDate { get; set; } = DateTime.Now.Date;
