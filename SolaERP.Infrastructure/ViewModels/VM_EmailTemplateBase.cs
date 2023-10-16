@@ -17,7 +17,7 @@ namespace SolaERP.Infrastructure.ViewModels
             return this.Language switch
             {
                 Language.az => $@"© {ActualYear} Sola ERP bütün hüquqlar qorunur.",
-                Language.en => $@"© {ActualYear} Sola ERP GetAll rights reserved.",
+                Language.en => $@"© {ActualYear} Sola ERP all rights reserved.",
                 //Language.ru => $@"© {ActualYear}  Sola ERP Все права защищены."
             };
         }
