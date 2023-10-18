@@ -18,6 +18,7 @@ namespace SolaERP.Application.Dtos.Payment
         public string AccountCode { get; set; }
         public string AccountName { get; set; }
         public string PaymentTerms { get; set; }
+        public string PaymentTermName { get; set; }
         public decimal PayableAmount { get; set; }
         public decimal PaymentRequestAmount { get; set; }
         public decimal AmountToPay { get; set; }

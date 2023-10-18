@@ -133,9 +133,9 @@ namespace SolaERP.Controllers
                     Token = HttpUtility.HtmlDecode(dto.VerifyToken),
                 };
 
-                Task.Run(() =>
+                Response.OnCompleted(async () =>
                 {
-                    _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification,
+                   await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification,
                         emailVerification.TemplateName(), emailVerification.ImageName(),
                         new List<string> { dto.Email });
                 });

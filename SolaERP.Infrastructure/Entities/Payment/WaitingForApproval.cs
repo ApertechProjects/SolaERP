@@ -5,7 +5,6 @@
         public int PaymentDocumentMainId { get; set; }
         public string Priority { get; set; }
         public string PaymentType { get; set; }
-        public int PaymentDocumentTypeId { get; set; }
         public DateTime PaymentRequestDate { get; set; }
         public string PaymentRequestNo { get; set; }
         public string VendorCode { get; set; }
@@ -15,5 +14,6 @@
         public string CurrencyCode { get; set; }
         public string Comment { get; set; }
         public int Sequence { get; set; }
+        public DateTime? SentDate { get; set; }
     }
 }

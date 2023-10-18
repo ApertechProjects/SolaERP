@@ -14,5 +14,6 @@
         public string CurrencyCode { get; set; }
         public string RejectComment { get; set; }
         public string Comment { get; set; }
+        public DateTime? SentDate { get; set; }
     }
 }

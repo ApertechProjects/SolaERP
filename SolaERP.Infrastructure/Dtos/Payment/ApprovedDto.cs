@@ -14,5 +14,6 @@
         public decimal Amount { get; set; }
         public string CurrencyCode { get; set; }
         public string Comment { get; set; }
+        public DateTime? SentDate { get; set; }
     }
 }
