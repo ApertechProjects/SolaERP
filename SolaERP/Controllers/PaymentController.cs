@@ -114,10 +114,7 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> BankAccountList(int businessUnitId)
             => CreateActionResult(await _paymentService.BankAccountList(businessUnitId));
 
-        //[HttpPost]
-        //public async Task<IActionResult> PaymentOrderPost(Lis)
-        //    => CreateActionResult(await _paymentService.PaymentOrderPost(model));
-
+      
         [HttpPost]
         public async Task<IActionResult> PaymentOrderPostData(PaymentOrderPostModel model)
             => CreateActionResult(await _paymentService.PaymentOrderPostData(model, User.Identity.Name));
