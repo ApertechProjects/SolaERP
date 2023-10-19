@@ -13,7 +13,7 @@ namespace SolaERP.Application.Entities.Payment
         public string FullName { get; set; }
         public string Description { get; set; }
         public DateTime ApproveDate { get; set; }
-        public int ApproveStatus { get; set; }
+        public string ApproveStatus { get; set; }
         public string SignaturePhoto { get; set; }
         public string Comment { get; set; }
     }

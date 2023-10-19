@@ -157,7 +157,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return new InfoApproval
             {
                 ApproveDate = reader.Get<DateTime>("ApproveDate"),
-                ApproveStatus = reader.Get<int>("ApproveStatus"),
+                ApproveStatus = reader.Get<string>("ApproveStatus"),
                 Comment = reader.Get<string>("Comment"),
                 Description = reader.Get<string>("Description"),
                 FullName = reader.Get<string>("FullName"),
