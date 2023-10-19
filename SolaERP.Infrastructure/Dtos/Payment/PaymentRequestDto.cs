@@ -17,6 +17,7 @@ namespace SolaERP.Application.Dtos.Payment
         public string CurrencyCode { get; set; }
         public string VendorCode { get; set; }
         public string VendorName { get; set; }
-        public DateTime? SentDate { get; set; }
+        //public DateTime? SentDate { get; set; }
+        public string TransactionReference{ get; set; }
     }
 }
