@@ -8,6 +8,8 @@ using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Net.NetworkInformation;
+using System.Reflection.PortableExecutable;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -923,6 +925,31 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 var value = await command.ExecuteNonQueryAsync();
                 return value > 0;
             }
+        }
+
+        public async Task<List<ASalfldg>> PaymentOrderPostData(DataTable table, int journalNo, int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentOrderPostData @JournalNo,@UserId,@PaymentOrderTransactions";
+                command.Parameters.AddWithValue(command, "@JournalNo", journalNo);
+                command.Parameters.AddTableValue(command, "@PaymentOrderTransactions", "PaymentDocumentPost", table);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                using var reader = await command.ExecuteReaderAsync();
+
+                List<ASalfldg> datas = new List<ASalfldg>();
+                while (await reader.ReadAsync()) datas.Add(reader.GetByEntityStructure<ASalfldg>());
+
+                return datas;
+            }
+        }
+
+        public ASalfldg GetSalfldg(DbDataReader reader)
+        {
+            return new ASalfldg
+            {
+                ACCNT_CODE = reader.Get<string>("AccountCode")
+            };
         }
     }
 }

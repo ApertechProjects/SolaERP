@@ -551,6 +551,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<PaymentOrderDetail, PaymentOrderDetailDto>().ReverseMap();
             CreateMap<PaymentOrderTransaction, PaymentOrderTransactionDto>().ReverseMap();
             CreateMap<BankAccountList, BankAccountListDto>().ReverseMap();
+            CreateMap<ASalfldg, ASalfldgDto>().ReverseMap();
         }
     }
 }

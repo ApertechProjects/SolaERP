@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Payment;
@@ -9,6 +10,10 @@ using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
 using System.Data;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
+using System.Xml.Linq;
 
 namespace SolaERP.Persistence.Services
 {
@@ -20,7 +25,8 @@ namespace SolaERP.Persistence.Services
         private readonly IAttachmentService _attachmentService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public PaymentService(IPaymentRepository paymentRepository, IUserRepository userRepository, IFileUploadService fileUploadService, IAttachmentService attachmentService, IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IConfiguration _configuration;
+        public PaymentService(IPaymentRepository paymentRepository, IUserRepository userRepository, IFileUploadService fileUploadService, IAttachmentService attachmentService, IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -28,6 +34,7 @@ namespace SolaERP.Persistence.Services
             _paymentRepository = paymentRepository;
             _attachmentService = attachmentService;
             _fileUploadService = fileUploadService;
+            _configuration = configuration;
         }
 
         public async Task<ApiResponse<List<AllDto>>> All(string name, PaymentGetModel payment)
@@ -298,15 +305,28 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<BankAccountListDto>>.Success(dto);
         }
 
-        public async Task<ApiResponse<bool>> PaymentOrderPost(PaymentOrderPostModel model, string name)
+        public async Task<ApiResponse<bool>> PaymentPostOperation(List<ASalfldgDto> models)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(_configuration["BusinessUnits:TGH"] + "/api/v1/a-salfldg");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                string json = JsonSerializer.Serialize(models);
+                HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync(_configuration["BusinessUnits:TGH"] + "api/v1/a-salfldg", content);
+            }
+            return ApiResponse<bool>.Success(true);
+        }
+
+        public async Task<ApiResponse<bool>> PaymentOrderPostData(PaymentOrderPostModel model, string name)
         {
             var userId = await _userRepository.ConvertIdentity(name);
             var table = model.PaymentDocumentPosts.ConvertListOfCLassToDataTable();
-            var data = await _paymentRepository.PaymentOrderPost(table, model.JournalNo, userId);
-            await _unitOfWork.SaveChangesAsync();
-            if (data)
-                return ApiResponse<bool>.Success(data);
-            return ApiResponse<bool>.Fail("Problem detected", 400);
+            var data = await _paymentRepository.PaymentOrderPostData(table, model.JournalNo, userId);
+            var dto = _mapper.Map<List<ASalfldgDto>>(data);
+            var result = await PaymentPostOperation(dto);
+            return ApiResponse<bool>.Success(result.StatusCode);
         }
     }
 }

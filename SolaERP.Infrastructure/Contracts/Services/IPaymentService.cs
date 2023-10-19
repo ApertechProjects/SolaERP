@@ -31,6 +31,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<PaymentOrderLoadModel>> PaymentOrderLoad(PaymentOrderParamModel model);
         Task<ApiResponse<List<PaymentOrderTransactionDto>>> PaymentOrderTransaction(PaymentOrderTransactionModel model);
         Task<ApiResponse<List<BankAccountListDto>>> BankAccountList(int businessUnitId);
-        Task<ApiResponse<bool>> PaymentOrderPost(PaymentOrderPostModel model, string name);
+        Task<ApiResponse<bool>> PaymentPostOperation(List<ASalfldgDto> models);
+        Task<ApiResponse<bool>> PaymentOrderPostData(PaymentOrderPostModel model, string name);
     }
 }

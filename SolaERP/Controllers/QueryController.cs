@@ -35,5 +35,7 @@ namespace SolaERP.API.Controllers
             return Ok(_queryBuilder.GetSqlElementResult(className, elementName, elementTypes));
         }
 
+       
+
     }
 }

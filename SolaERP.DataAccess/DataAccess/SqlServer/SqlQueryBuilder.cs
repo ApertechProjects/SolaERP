@@ -254,6 +254,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+
         public string GenerateCommandText(SqlElementTypes sqlElementTypes)
         {
             string text = string.Empty;

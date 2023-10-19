@@ -81,6 +81,8 @@ namespace SolaERP.DataAccess.Extensions
         {
             if (objectResult != DBNull.Value && objectResult != null)
                 property.SetValue(entity, objectResult);
+            else
+                property.SetValue(entity, null);
         }
 
         private static string GenerateEntityMappingScript<T>(IDataReader reader)
