@@ -4,6 +4,7 @@ using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Invoice;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Models;
+using SolaERP.Application.UnitOfWork;
 
 namespace SolaERP.Persistence.Services
 {
@@ -12,11 +13,13 @@ namespace SolaERP.Persistence.Services
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly IInvoiceRepository _invoiceRepository;
-        public InvoiceService(IUserRepository userRepository, IMapper mapper, IInvoiceRepository invoiceRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public InvoiceService(IUserRepository userRepository, IMapper mapper, IInvoiceRepository invoiceRepository, IUnitOfWork unitOfWork)
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _invoiceRepository = invoiceRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<ApiResponse<List<RegisterAllDto>>> RegisterAll(InvoiceRegisterGetModel model, string name)
@@ -25,6 +28,18 @@ namespace SolaERP.Persistence.Services
             var data = await _invoiceRepository.RegisterAll(model, userId);
             var dto = _mapper.Map<List<RegisterAllDto>>(data);
             return ApiResponse<List<RegisterAllDto>>.Success(dto);
+        }
+
+        public async Task<ApiResponse<bool>> RegisterSendToApprove(InvoiceSendToApproveModel model, string name)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            bool result = false;
+            foreach (var item in model.InvoiceRegisterIds)
+            {
+                result = await _invoiceRepository.RegisterSendToApprove(model.InvoiceRegisterIds[item], userId);
+            }
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(result);
         }
 
         public async Task<ApiResponse<List<RegisterWFADto>>> RegisterWFA(InvoiceRegisterGetModel model, string name)
