@@ -100,14 +100,15 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<CreateOrderDto>>.Success(dto);
         }
 
-        public async Task<ApiResponse<bool>> Delete(int paymentDocumentMainId, string name)
+        public async Task<ApiResponse<bool>> Delete(PaymentDocumentDeleteModel model, string name)
         {
             var userId = await _userRepository.ConvertIdentity(name);
-            var result = await _paymentRepository.Delete(paymentDocumentMainId, userId);
+            for (int i = 0; i < model.paymentDocumentMainIds.Count; i++)
+            {
+                var result = await _paymentRepository.Delete(model.paymentDocumentMainIds[i], userId);
+            }
             await _unitOfWork.SaveChangesAsync();
-            if (result)
-                return ApiResponse<bool>.Success(200);
-            return ApiResponse<bool>.Fail("Data can not be deleted", 400);
+            return ApiResponse<bool>.Success(200);
         }
 
         public async Task<ApiResponse<List<DraftDto>>> Draft(string name, PaymentGetModel payment)

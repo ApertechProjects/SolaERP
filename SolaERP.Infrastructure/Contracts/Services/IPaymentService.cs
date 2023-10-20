@@ -22,7 +22,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<BankDto>>> Bank(string name, PaymentGetModel payment);
         Task<ApiResponse<bool>> SendToApprove(string name, List<int> paymentDocumentMainIds);
         Task<ApiResponse<PaymentDocumentSaveResultModel>> Save(string name, PaymentDocumentSaveModel model);
-        Task<ApiResponse<bool>> Delete(int paymentDocumentMainId, string name);
+        Task<ApiResponse<bool>> Delete(PaymentDocumentDeleteModel model, string name);
         Task<ApiResponse<decimal>> VendorBalance(int businessUnitId, string vendorCode);
         Task<ApiResponse<List<AttachmentDto>>> Attachments(int paymentDocumentMainId);
         Task<ApiResponse<bool>> ChangeStatus(string name, PaymentChangeStatusModel model);
