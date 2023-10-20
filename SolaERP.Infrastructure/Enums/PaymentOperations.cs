@@ -9,7 +9,7 @@ namespace SolaERP.Application.Enums
     public enum PaymentOperations
     {
         Retrieve = 0,
-        SendToApproved = 1,
-        SendToBank = 2,
+        SendToApproved = 2,
+        SendToBank = 3,
     }
 }
