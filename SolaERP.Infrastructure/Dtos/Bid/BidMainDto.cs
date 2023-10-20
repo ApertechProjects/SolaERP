@@ -25,5 +25,6 @@ namespace SolaERP.Application.Dtos.Bid
 
         public List<BidDetailDto> BidDetails { get; set; }
         public List<AttachmentSaveModel> Attachments { get; set; }
+        public List<AttachmentSaveModel> CommercialAttachments { get; set; }
     }
 }

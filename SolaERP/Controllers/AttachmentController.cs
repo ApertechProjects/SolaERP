@@ -41,6 +41,13 @@ public class AttachmentController : CustomBaseController
     }
     
     [HttpGet]
+    public async Task<IActionResult> GetBidCommercialAttachments(int sourceId)
+    {
+        var attachments = await _attachmentService.GetAttachmentsAsync(sourceId, SourceType.BID_COMM, Modules.Bid);
+        return CreateActionResult(ApiResponse<List<AttachmentDto>>.Success(attachments));
+    }
+    
+    [HttpGet]
     public async Task<IActionResult> GetBidComparisonAttachments(int sourceId)
     {
         var attachments = await _attachmentService.GetAttachmentsAsync(sourceId, SourceType.BID_COMP, Modules.BidComparison);

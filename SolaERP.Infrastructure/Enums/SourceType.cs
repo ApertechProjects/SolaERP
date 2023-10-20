@@ -16,6 +16,7 @@
         RFQ = 16,
         BID = 17,
         BID_COMP = 19,
-        ORDER = 20
+        ORDER = 20,
+        BID_COMM = 22
     }
 }
