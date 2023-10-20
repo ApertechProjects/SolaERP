@@ -13,5 +13,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<RegisterMainLoadDto>> RegisterLoadMain(int invoiceRegisterId);
         Task<ApiResponse<bool>> RegisterSendToApprove(InvoiceSendToApproveModel model, string name);
         Task<ApiResponse<List<RegisterWFADto>>> RegisterWFA(InvoiceRegisterGetModel model, string name);
+        Task<ApiResponse<bool>> Save(InvoiceRegisterSaveModel model, string name);
     }
 }

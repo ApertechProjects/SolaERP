@@ -45,5 +45,9 @@ namespace SolaERP.API.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterChangeStatus(InvoiceRegisterApproveModel model)
             => CreateActionResult(await _invoiceService.RegisterChangeStatus(model, User.Identity.Name));
+
+        [HttpPost]
+        public async Task<IActionResult> Save(InvoiceRegisterSaveModel model)
+            => CreateActionResult(await _invoiceService.Save(model, User.Identity.Name));
     }
 }

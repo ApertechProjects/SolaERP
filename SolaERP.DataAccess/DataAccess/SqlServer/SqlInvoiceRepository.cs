@@ -127,5 +127,58 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return list;
         }
+
+        public async Task<bool> Save(InvoiceRegisterSaveModel model, int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC SP_InvoiceRegister_IUD @InvoiceRegisterId,@BusinessUnitId,@InvoiceType,@InvoiceDate,@InvoiceReceivedDate,@InvoiceNo,@SystemInvoiceNo,@OrderType,@OrderMainId,@ReferenceDocNo,@InvoiceAmount,@CurrencyCode,@LineDescription,@VendorCode,@DueDate,@AgingDays,@ProblematicInvoiceReasonId,@Status,@ApproveStatus,@ReasonAdditionalDescription,@UserId";
+
+
+                command.Parameters.AddWithValue(command, "@InvoiceRegisterId", model.InvoiceRegisterId);
+
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
+
+                command.Parameters.AddWithValue(command, "@InvoiceType", model.InvoiceType);
+
+                command.Parameters.AddWithValue(command, "@InvoiceDate", model.InvoiceDate);
+
+                command.Parameters.AddWithValue(command, "@InvoiceReceivedDate", model.InvoiceReceivedDate);
+
+                command.Parameters.AddWithValue(command, "@InvoiceNo", model.InvoiceNo);
+
+                command.Parameters.AddWithValue(command, "@SystemInvoiceNo", model.SystemInvoiceNo);
+
+                command.Parameters.AddWithValue(command, "@OrderType", model.OrderType);
+
+                command.Parameters.AddWithValue(command, "@OrderMainId", model.OrderMainId);
+
+                command.Parameters.AddWithValue(command, "@ReferenceDocNo", model.ReferenceDocNo);
+
+                command.Parameters.AddWithValue(command, "@InvoiceAmount", model.InvoiceAmount);
+
+                command.Parameters.AddWithValue(command, "@CurrencyCode", model.CurrencyCode);
+
+                command.Parameters.AddWithValue(command, "@LineDescription", model.LineDescription);
+
+                command.Parameters.AddWithValue(command, "@VendorCode", model.VendorCode);
+
+                command.Parameters.AddWithValue(command, "@DueDate", model.DueDate);
+
+                command.Parameters.AddWithValue(command, "@AgingDays", model.AgingDays);
+
+                command.Parameters.AddWithValue(command, "@ProblematicInvoiceReasonId", model.ProblematicInvoiceReasonId);
+
+                command.Parameters.AddWithValue(command, "@Status", model.Status);
+
+                command.Parameters.AddWithValue(command, "@ApproveStatus", model.ApproveStatus);
+
+                command.Parameters.AddWithValue(command, "@ReasonAdditionalDescription", model.ReasonAdditionalDescription);
+
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
     }
 }

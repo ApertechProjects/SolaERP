@@ -82,5 +82,12 @@ namespace SolaERP.Persistence.Services
             var dto = _mapper.Map<List<RegisterWFADto>>(data);
             return ApiResponse<List<RegisterWFADto>>.Success(dto);
         }
+
+        public async Task<ApiResponse<bool>> Save(InvoiceRegisterSaveModel model, string name)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            var data = await _invoiceRepository.Save(model, userId);
+            return ApiResponse<bool>.Success(data);
+        }
     }
 }
