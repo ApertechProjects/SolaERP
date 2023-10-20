@@ -65,6 +65,8 @@ namespace SolaERP.Persistence.Services
             model.Details = dtos;
             model.RFQMain = _mapper.Map<RFQMainDto>(await _rfqRepository.GetRFQMainAsync(model.RFQMainId));
             model.Attachments = await _attachmentService.GetAttachmentsAsync(bidMainId, SourceType.BID, Modules.Bid);
+            model.CommercialAttachments =
+                await _attachmentService.GetAttachmentsAsync(bidMainId, SourceType.BID_COMM, Modules.Bid);
 
             return ApiResponse<BidMainLoadDto>.Success(model, 200);
         }
@@ -108,6 +110,24 @@ namespace SolaERP.Persistence.Services
                     if (attachment.AttachmentId > 0) return;
                     attachment.SourceId = bidMain.BidMainId;
                     attachment.SourceType = SourceType.BID.ToString();
+                    _attachmentService.SaveAttachmentAsync(attachment).Wait();
+                }
+            });
+
+            bidMain.CommercialAttachments.ForEach(attachment =>
+            {
+                if (attachment.Type == 2)
+                {
+                    if (attachment.AttachmentId > 0)
+                    {
+                        _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId).Wait();
+                    }
+                }
+                else
+                {
+                    if (attachment.AttachmentId > 0) return;
+                    attachment.SourceId = bidMain.BidMainId;
+                    attachment.SourceType = SourceType.BID_COMM.ToString();
                     _attachmentService.SaveAttachmentAsync(attachment).Wait();
                 }
             });

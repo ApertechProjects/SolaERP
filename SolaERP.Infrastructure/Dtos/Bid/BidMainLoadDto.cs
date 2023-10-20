@@ -31,5 +31,6 @@ namespace SolaERP.Application.Dtos.Bid
         public RFQMainDto RFQMain { get; set; }
         public List<BidDetailsLoadDto> Details { get; set; }
         public List<AttachmentDto> Attachments { get; set; }
+        public List<AttachmentDto> CommercialAttachments { get; set; }
     }
 }
