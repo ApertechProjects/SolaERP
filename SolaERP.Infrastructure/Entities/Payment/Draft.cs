@@ -15,5 +15,7 @@
         public string CurrencyCode { get; set; }
         public string Comment { get; set; }
         public long LineNo { get; set; }
+        public bool HasAttachment { get; set; }
+
     }
 }

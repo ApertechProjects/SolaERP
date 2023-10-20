@@ -17,6 +17,8 @@
         public string Comment { get; set; }
         public DateTime? SentDate { get; set; }
         public long LineNo { get; set; }
+        public bool HasAttachment { get; set; }
+
 
     }
 }

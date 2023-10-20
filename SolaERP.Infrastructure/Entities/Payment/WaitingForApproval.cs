@@ -16,5 +16,7 @@
         public string Comment { get; set; }
         public int Sequence { get; set; }
         public DateTime? SentDate { get; set; }
+        public bool HasAttachment { get; set; }
+
     }
 }
