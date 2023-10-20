@@ -16,5 +16,7 @@
         public string HoldComment { get; set; }
         public string Comment { get; set; }
         public DateTime? SentDate { get; set; }
+        public long LineNo { get; set; }
+
     }
 }

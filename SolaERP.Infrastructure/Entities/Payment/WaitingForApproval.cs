@@ -3,6 +3,7 @@
     public class WaitingForApproval : BaseEntity
     {
         public int PaymentDocumentMainId { get; set; }
+        public long LineNo { get; set; }
         public string Priority { get; set; }
         public string PaymentType { get; set; }
         public DateTime PaymentRequestDate { get; set; }

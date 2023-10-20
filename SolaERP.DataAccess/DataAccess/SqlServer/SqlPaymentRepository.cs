@@ -248,7 +248,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 VendorCode = reader.Get<string>("VendorCode"),
                 VendorName = reader.Get<string>("VendorName"),
                 Sequence = reader.Get<int>("Sequence"),
-                SentDate = reader.Get<DateTime?>("SentDate")
+                SentDate = reader.Get<DateTime?>("SentDate"),
+                LineNo = reader.Get<long>("LineNo")
             };
         }
 
@@ -267,6 +268,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 TransactionReference = reader.Get<string>("TransactionReference"),
                 VendorCode = reader.Get<string>("VendorCode"),
                 VendorName = reader.Get<string>("VendorName"),
+                LineNo = reader.Get<long>("LineNo")
             };
         }
 
@@ -288,7 +290,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 TransactionReference = reader.Get<string>("TransactionReference"),
                 VendorCode = reader.Get<string>("VendorCode"),
                 VendorName = reader.Get<string>("VendorName"),
-                SentDate = reader.Get<DateTime?>("SentDate")
+                SentDate = reader.Get<DateTime?>("SentDate"),
+                LineNo = reader.Get<long>("LineNo")
             };
         }
 
@@ -307,7 +310,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 TransactionReference = reader.Get<string>("TransactionReference"),
                 VendorCode = reader.Get<string>("VendorCode"),
                 VendorName = reader.Get<string>("VendorName"),
-                SentDate = reader.Get<DateTime?>("SentDate")
+                SentDate = reader.Get<DateTime?>("SentDate"),
+                LineNo = reader.Get<long>("LineNo")
             };
         }
 
@@ -327,7 +331,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 VendorCode = reader.Get<string>("VendorCode"),
                 VendorName = reader.Get<string>("VendorName"),
                 RejectComment = reader.Get<string>("RejectComment"),
-                SentDate = reader.Get<DateTime?>("SentDate")
+                SentDate = reader.Get<DateTime?>("SentDate"),
+                LineNo = reader.Get<long>("LineNo")
             };
         }
 
@@ -347,7 +352,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 VendorCode = reader.Get<string>("VendorCode"),
                 VendorName = reader.Get<string>("VendorName"),
                 HoldComment = reader.Get<string>("HoldComment"),
-                SentDate = reader.Get<DateTime?>("SentDate")
+                SentDate = reader.Get<DateTime?>("SentDate"),
+                LineNo = reader.Get<long>("LineNo")
             };
         }
 
@@ -366,7 +372,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 TransactionReference = reader.Get<string>("TransactionReference"),
                 VendorCode = reader.Get<string>("VendorCode"),
                 VendorName = reader.Get<string>("VendorName"),
-                SentDate = reader.Get<DateTime?>("SentDate")
+                SentDate = reader.Get<DateTime?>("SentDate"),
+                LineNo = reader.Get<long>("LineNo")
             };
         }
 

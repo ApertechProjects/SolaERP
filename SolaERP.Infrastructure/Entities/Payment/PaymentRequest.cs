@@ -18,5 +18,7 @@ namespace SolaERP.Application.Entities.Payment
         public string VendorCode { get; set; }
         public string VendorName { get; set; }
         public string TransactionReference { get; set; }
+        public long LineNo { get; set; }
+
     }
 }
