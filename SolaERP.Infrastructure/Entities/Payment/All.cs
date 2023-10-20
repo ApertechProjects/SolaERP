@@ -19,6 +19,7 @@
         public DateTime? SentDate { get; set; }
         public long LineNo { get; set; }
         public bool HasAttachment { get; set; }
+        public string RejectHoldComment { get; set; }
 
     }
 }

@@ -294,7 +294,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 VendorName = reader.Get<string>("VendorName"),
                 SentDate = reader.Get<DateTime?>("SentDate"),
                 LineNo = reader.Get<long>("LineNo"),
-                HasAttachment = reader.Get<bool>("HasAttachment")
+                HasAttachment = reader.Get<bool>("HasAttachment"),
+                RejectHoldComment = reader.Get<string>("RejectHoldComment")
             };
         }
 
