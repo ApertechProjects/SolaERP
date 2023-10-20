@@ -9,10 +9,13 @@
   <ItemGroup>
     <Compile Remove="Entities\ApproveStage\**" />
     <Compile Remove="Entities\Log\**" />
+    <Compile Remove="Models\NewFolder\**" />
     <EmbeddedResource Remove="Entities\ApproveStage\**" />
     <EmbeddedResource Remove="Entities\Log\**" />
+    <EmbeddedResource Remove="Models\NewFolder\**" />
     <None Remove="Entities\ApproveStage\**" />
     <None Remove="Entities\Log\**" />
+    <None Remove="Models\NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,10 +27,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.48.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\NewFolder\" />
   </ItemGroup>
 
 </Project>

@@ -17,6 +17,7 @@ using SolaERP.Application.Dtos.Email;
 using SolaERP.Application.Dtos.General;
 using SolaERP.Application.Dtos.GridLayout;
 using SolaERP.Application.Dtos.Group;
+using SolaERP.Application.Dtos.Invoice;
 using SolaERP.Application.Dtos.Item_Code;
 using SolaERP.Application.Dtos.Language;
 using SolaERP.Application.Dtos.Layout;
@@ -51,6 +52,7 @@ using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Entities.General;
 using SolaERP.Application.Entities.GridLayout;
 using SolaERP.Application.Entities.Groups;
+using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Entities.Item_Code;
 using SolaERP.Application.Entities.Language;
 using SolaERP.Application.Entities.Layout;
@@ -552,6 +554,9 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<PaymentOrderTransaction, PaymentOrderTransactionDto>().ReverseMap();
             CreateMap<BankAccountList, BankAccountListDto>().ReverseMap();
             CreateMap<ASalfldg, ASalfldgDto>().ReverseMap();
+
+            CreateMap<RegisterWFA, RegisterWFADto>().ReverseMap();
+            CreateMap<RegisterAll, RegisterAllDto>().ReverseMap();
         }
     }
 }
