@@ -11,7 +11,7 @@ namespace SolaERP.Application.Models
     public class PaymentOrderPostAudit
     {
         public int JournalNo { get; set; }
-        public int SunUser { get; set; }
+        public string SunUser { get; set; }
         public int CurrentPeriod { get; set; }
         public List<ASalfldgDto> ASalfldgs { get; set; }
     }

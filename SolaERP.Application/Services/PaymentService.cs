@@ -331,7 +331,7 @@ namespace SolaERP.Persistence.Services
                 ASalfldgs = dto,
                 CurrentPeriod = dto[0].ENTRY_PRD,
                 JournalNo = dto[0].JRNAL_NO,
-                SunUser = userId,
+                SunUser = dto[0].JRNAL_SRCE,
             };
             var result = await PaymentPostOperation(auditModel, model.BusinessUnitCode);
             return ApiResponse<int>.Success(data.Item2);
