@@ -30,6 +30,8 @@ namespace SolaERP.Application.Entities.Payment
         public string LinkAccount { get; set; }
         public string VendorCode { get; set; }
         public string Department { get; set; }
+        public string CurrencyCode { get; set; }
+
 
 
     }
