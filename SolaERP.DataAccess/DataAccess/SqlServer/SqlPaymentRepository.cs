@@ -267,7 +267,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 TransactionReference = reader.Get<string>("TransactionReference"),
                 VendorCode = reader.Get<string>("VendorCode"),
                 VendorName = reader.Get<string>("VendorName"),
-                PaymentDocumentTypeId = reader.Get<int>("PaymentDocumentTypeId")
             };
         }
 
