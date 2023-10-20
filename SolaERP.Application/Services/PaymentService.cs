@@ -334,7 +334,7 @@ namespace SolaERP.Persistence.Services
                 SunUser = dto[0].JRNAL_SRCE,
             };
             var result = await PaymentPostOperation(auditModel, model.BusinessUnitCode);
-            return ApiResponse<int>.Success(data.Item2);
+            return ApiResponse<int>.Success(data.Item2,200);
         }
     }
 }
