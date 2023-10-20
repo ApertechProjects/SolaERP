@@ -36,6 +36,51 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return list;
         }
 
+        public async Task<List<RegisterListByOrder>> RegisterListByOrder(int orderMainId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_InvoiceRegisterListByOrder @orderMainId";
+            command.Parameters.AddWithValue(command, "@orderMainId", orderMainId);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<RegisterListByOrder> list = new List<RegisterListByOrder>();
+            while (reader.Read())
+                list.Add(reader.GetByEntityStructure<RegisterListByOrder>());
+
+            return list;
+        }
+
+        public async Task<List<RegisterLoadGRN>> RegisterLoadGRN(int invoiceRegisterId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_InvoiceRegisterLoadGRNs @invoiceRegisterId";
+            command.Parameters.AddWithValue(command, "@invoiceRegisterId", invoiceRegisterId);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<RegisterLoadGRN> list = new List<RegisterLoadGRN>();
+            while (reader.Read())
+                list.Add(reader.GetByEntityStructure<RegisterLoadGRN>());
+
+            return list;
+        }
+
+        public async Task<RegisterMainLoad> RegisterMainLoad(int invoiceRegisterId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_InvoiceRegisterLoadMain @invoiceRegisterId";
+            command.Parameters.AddWithValue(command, "@invoiceRegisterId", invoiceRegisterId);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            RegisterMainLoad data = new RegisterMainLoad();
+            if (reader.Read())
+                data = reader.GetByEntityStructure<RegisterMainLoad>();
+
+            return data;
+        }
+
         public async Task<bool> RegisterSendToApprove(int invoiceRegisterId, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)

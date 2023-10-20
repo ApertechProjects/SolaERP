@@ -30,6 +30,27 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<RegisterAllDto>>.Success(dto);
         }
 
+        public async Task<ApiResponse<List<RegisterListByOrderDto>>> RegisterListByOrder(int orderMainId)
+        {
+            var data = await _invoiceRepository.RegisterListByOrder(orderMainId);
+            var dto = _mapper.Map<List<RegisterListByOrderDto>>(data);
+            return ApiResponse<List<RegisterListByOrderDto>>.Success(dto);
+        }
+
+        public async Task<ApiResponse<List<RegisterLoadGRNDto>>> RegisterLoadGRN(int invoiceRegisterId)
+        {
+            var data = await _invoiceRepository.RegisterLoadGRN(invoiceRegisterId);
+            var dto = _mapper.Map<List<RegisterLoadGRNDto>>(data);
+            return ApiResponse<List<RegisterLoadGRNDto>>.Success(dto);
+        }
+
+        public async Task<ApiResponse<RegisterMainLoadDto>> RegisterLoadMain(int invoiceRegisterId)
+        {
+            var data = await _invoiceRepository.RegisterMainLoad(invoiceRegisterId);
+            var dto = _mapper.Map<RegisterMainLoadDto>(data);
+            return ApiResponse<RegisterMainLoadDto>.Success(dto);
+        }
+
         public async Task<ApiResponse<bool>> RegisterSendToApprove(InvoiceSendToApproveModel model, string name)
         {
             int userId = await _userRepository.ConvertIdentity(name);

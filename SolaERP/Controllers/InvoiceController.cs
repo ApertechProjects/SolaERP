@@ -29,5 +29,17 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> RegisterSendToApprove(InvoiceSendToApproveModel model)
             => CreateActionResult(await _invoiceService.RegisterSendToApprove(model, User.Identity.Name));
 
+        [HttpGet]
+        public async Task<IActionResult> RegisterLoadMain(int invoiceRegisterId)
+            => CreateActionResult(await _invoiceService.RegisterLoadMain(invoiceRegisterId));
+
+        [HttpGet]
+        public async Task<IActionResult> RegisterLoadGRN(int invoiceRegisterId)
+            => CreateActionResult(await _invoiceService.RegisterLoadGRN(invoiceRegisterId));
+
+        [HttpGet]
+        public async Task<IActionResult> RegisterListByOrder(int orderMainId)
+            => CreateActionResult(await _invoiceService.RegisterListByOrder(orderMainId));
+
     }
 }

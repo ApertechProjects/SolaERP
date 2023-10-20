@@ -557,6 +557,9 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<RegisterWFA, RegisterWFADto>().ReverseMap();
             CreateMap<RegisterAll, RegisterAllDto>().ReverseMap();
+            CreateMap<RegisterMainLoad, RegisterMainLoadDto>().ReverseMap();
+            CreateMap<RegisterLoadGRN, RegisterLoadGRNDto>().ReverseMap();
+            CreateMap<RegisterListByOrder, RegisterListByOrderDto>().ReverseMap();
         }
     }
 }
