@@ -306,28 +306,35 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<BankAccountListDto>>.Success(dto);
         }
 
-        public async Task<ApiResponse<bool>> PaymentPostOperation(List<ASalfldgDto> models)
+        public async Task<ApiResponse<bool>> PaymentPostOperation(PaymentOrderPostAudit model, string businessUnitCode)
         {
             using (HttpClient client = new HttpClient())
             {
-                client.BaseAddress = new Uri(_configuration["BusinessUnits:TGH"] + "/api/v1/a-salfldg");
+                client.BaseAddress = new Uri(_configuration[$"BusinessUnits:{businessUnitCode}"] + "/api/v1/a-salfldg");
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                string json = JsonSerializer.Serialize(models);
+                string json = JsonSerializer.Serialize(model);
                 HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PostAsync(_configuration["BusinessUnits:TGH"] + "api/v1/a-salfldg", content);
+                HttpResponseMessage response = await client.PostAsync(_configuration[$"BusinessUnits:{businessUnitCode}"] + "api/v1/a-salfldg", content);
             }
             return ApiResponse<bool>.Success(true);
         }
 
-        public async Task<ApiResponse<bool>> PaymentOrderPostData(PaymentOrderPostModel model, string name)
+        public async Task<ApiResponse<int>> PaymentOrderPostData(PaymentOrderPostModel model, string name)
         {
             var userId = await _userRepository.ConvertIdentity(name);
             var table = model.PaymentDocumentPosts.ConvertListOfCLassToDataTable();
             var data = await _paymentRepository.PaymentOrderPostData(table, model.JournalNo, userId);
-            var dto = _mapper.Map<List<ASalfldgDto>>(data);
-            var result = await PaymentPostOperation(dto);
-            return ApiResponse<bool>.Success(result.StatusCode);
+            var dto = _mapper.Map<List<ASalfldgDto>>(data.Item1);
+            PaymentOrderPostAudit auditModel = new PaymentOrderPostAudit()
+            {
+                ASalfldgs = dto,
+                CurrentPeriod = dto[0].ENTRY_PRD,
+                JournalNo = dto[0].JRNAL_NO,
+                SunUser = userId,
+            };
+            var result = await PaymentPostOperation(auditModel, model.BusinessUnitCode);
+            return ApiResponse<int>.Success(data.Item2);
         }
     }
 }

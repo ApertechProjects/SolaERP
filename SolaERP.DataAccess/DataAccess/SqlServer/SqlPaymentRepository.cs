@@ -926,20 +926,30 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<ASalfldg>> PaymentOrderPostData(DataTable table, int journalNo, int userId)
+        public async Task<(List<ASalfldg>, int)> PaymentOrderPostData(DataTable table, int journalNo, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentOrderPostData @JournalNo,@UserId,@PaymentOrderTransactions";
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentOrderPostData @JournalNo,@UserId,@PaymentOrderTransactions,@NewJournalNo = @NewJournalNo OUTPUT select @NewJournalNo as NewJournalNo";
                 command.Parameters.AddWithValue(command, "@JournalNo", journalNo);
                 command.Parameters.AddTableValue(command, "@PaymentOrderTransactions", "PaymentDocumentPost", table);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
+
+                command.Parameters.Add("@NewJournalNo", SqlDbType.Int);
+                command.Parameters["@NewJournalNo"].Direction = ParameterDirection.Output;
+
                 using var reader = await command.ExecuteReaderAsync();
 
                 List<ASalfldg> datas = new List<ASalfldg>();
-                while (await reader.ReadAsync()) datas.Add(reader.GetByEntityStructure<ASalfldg>());
+                while (await reader.ReadAsync())
+                {
+                    datas.Add(reader.GetByEntityStructure<ASalfldg>());
+                }
+                int newJournalNo = 0;
+                if (datas.Count > 0)
+                    newJournalNo = datas[0].JRNAL_NO;
 
-                return datas;
+                return (datas, newJournalNo);
             }
         }
 
