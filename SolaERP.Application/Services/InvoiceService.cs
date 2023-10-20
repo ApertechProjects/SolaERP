@@ -30,6 +30,18 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<RegisterAllDto>>.Success(dto);
         }
 
+        public async Task<ApiResponse<bool>> RegisterChangeStatus(InvoiceRegisterApproveModel model, string name)
+        {
+            var userId = await _userRepository.ConvertIdentity(name);
+            bool res = false;
+            for (int i = 0; i < model.InvoiceRegisterIds.Count; i++)
+            {
+                await _invoiceRepository.ChangeStatus(model.InvoiceRegisterIds[i].InvoiceRegisterId, model.InvoiceRegisterIds[i].Sequence, model.ApproveStatus, model.Comment, userId);
+            }
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(res);
+        }
+
         public async Task<ApiResponse<List<RegisterListByOrderDto>>> RegisterListByOrder(int orderMainId)
         {
             var data = await _invoiceRepository.RegisterListByOrder(orderMainId);

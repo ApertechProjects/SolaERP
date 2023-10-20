@@ -18,6 +18,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<bool> ChangeStatus(int invoiceRegisterId, int sequence, int approveStatus, string comment, int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_InvoiceRegisterApprove @invoiceRegisterId,@sequence,@approveStatus,@userId,@comment";
+
+                command.Parameters.AddWithValue(command, "@invoiceRegisterId", invoiceRegisterId);
+                command.Parameters.AddWithValue(command, "@sequence", sequence);
+                command.Parameters.AddWithValue(command, "@approveStatus", approveStatus);
+                command.Parameters.AddWithValue(command, "@userId", userId);
+                command.Parameters.AddWithValue(command, "@comment", comment);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
         public async Task<List<RegisterAll>> RegisterAll(InvoiceRegisterGetModel model, int userId)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
