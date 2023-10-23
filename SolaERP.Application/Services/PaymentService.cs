@@ -361,7 +361,8 @@ namespace SolaERP.Persistence.Services
                     LAST_CHANGE_USER_ID = a.LAST_CHANGE_USER_ID,
                     USER_NAME = a.JRNAL_SRCE,
                     INTCO_TYPE = 0,
-                    INTCO_PSTG_STATUS = 0
+                    INTCO_PSTG_STATUS = 0,
+                    LAST_CHANGE_DATETIME = a.LAST_CHANGE_DATETIME
                 });
             }
 
