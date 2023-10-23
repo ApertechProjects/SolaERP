@@ -26,7 +26,10 @@ namespace SolaERP.Persistence.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
-        public PaymentService(IPaymentRepository paymentRepository, IUserRepository userRepository, IFileUploadService fileUploadService, IAttachmentService attachmentService, IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
+
+        public PaymentService(IPaymentRepository paymentRepository, IUserRepository userRepository,
+            IFileUploadService fileUploadService, IAttachmentService attachmentService, IUnitOfWork unitOfWork,
+            IMapper mapper, IConfiguration configuration)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -73,8 +76,10 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.ConvertIdentity(name);
             for (int i = 0; i < model.Payments.Count; i++)
             {
-                var data = await _paymentRepository.ChangeStatus(userId, model.Payments[i].PaymentDocumentMainId, model.Payments[i].Sequence, model.ApproveStatus, model.Comment);
+                var data = await _paymentRepository.ChangeStatus(userId, model.Payments[i].PaymentDocumentMainId,
+                    model.Payments[i].Sequence, model.ApproveStatus, model.Comment);
             }
+
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(true);
         }
@@ -107,6 +112,7 @@ namespace SolaERP.Persistence.Services
             {
                 var result = await _paymentRepository.Delete(model.paymentDocumentMainIds[i], userId);
             }
+
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }
@@ -128,7 +134,6 @@ namespace SolaERP.Persistence.Services
         }
 
 
-
         public async Task<ApiResponse<PaymentInfoModel>> Info(int paymentDocumentMainId)
         {
             var header = await _paymentRepository.InfoHeader(paymentDocumentMainId);
@@ -139,7 +144,8 @@ namespace SolaERP.Persistence.Services
             var approvalDto = _mapper.Map<List<InfoApproval>>(approvalInformation);
             var documentTypes = DocumentTypes().Data;
             var attachmentTypes = await _paymentRepository.AttachmentTypes();
-            var attachments = await _attachmentService.GetAttachmentsAsync(paymentDocumentMainId, SourceType.PYMDC, Modules.Payment);
+            var attachments =
+                await _attachmentService.GetAttachmentsAsync(paymentDocumentMainId, SourceType.PYMDC, Modules.Payment);
             foreach (var item in approvalDto)
             {
                 item.UserPhoto = _fileUploadService.GetFileLink(item.UserPhoto, Modules.Users);
@@ -178,6 +184,7 @@ namespace SolaERP.Persistence.Services
                 types.Add(new AttachmentTypes { TypeId = i, TypeName = item.ToString() });
                 i++;
             }
+
             return ApiResponse<List<AttachmentTypes>>.Success(types, 200);
         }
 
@@ -236,6 +243,7 @@ namespace SolaERP.Persistence.Services
             {
                 var status = await _paymentRepository.SendToApprove(userId, item);
             }
+
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }
@@ -246,7 +254,8 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<decimal>.Success(data);
         }
 
-        public async Task<ApiResponse<List<WaitingForApprovalDto>>> WaitingForApproval(string name, PaymentGetModel payment)
+        public async Task<ApiResponse<List<WaitingForApprovalDto>>> WaitingForApproval(string name,
+            PaymentGetModel payment)
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var data = await _paymentRepository.WaitingForApproval(userId, payment);
@@ -261,7 +270,8 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<PaymentRequestDto>>.Success(dto);
         }
 
-        public async Task<ApiResponse<bool>> PaymentOperation(string name, PaymentOperationModel model, PaymentOperations operation)
+        public async Task<ApiResponse<bool>> PaymentOperation(string name, PaymentOperationModel model,
+            PaymentOperations operation)
         {
             var userId = await _userRepository.ConvertIdentity(name);
             var table = model.PaymentDocumentMainIds.ConvertListToDataTable();
@@ -281,6 +291,7 @@ namespace SolaERP.Persistence.Services
                 item.PaymentRequestDate = item.PaymentRequestDate.ConvertDateToValidDate();
                 item.SentDate = item.SentDate.ConvertDateToValidDate();
             }
+
             PaymentOrderLoadModel loadModel = new PaymentOrderLoadModel()
             {
                 Main = dtoMain,
@@ -289,10 +300,12 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<PaymentOrderLoadModel>.Success(loadModel);
         }
 
-        public async Task<ApiResponse<List<PaymentOrderTransactionDto>>> PaymentOrderTransaction(PaymentOrderTransactionModel model)
+        public async Task<ApiResponse<List<PaymentOrderTransactionDto>>> PaymentOrderTransaction(
+            PaymentOrderTransactionModel model)
         {
             var table = model.PaymentDocuments.ConvertListOfCLassToDataTable();
-            var dataMain = await _paymentRepository.PaymentOrderTransaction(table, model.PaymentOrderMainId, model.PaymentDate, model.BankAccount, model.BankCharge);
+            var dataMain = await _paymentRepository.PaymentOrderTransaction(table, model.PaymentOrderMainId,
+                model.PaymentDate, model.BankAccount, model.BankCharge);
 
             var dto = _mapper.Map<List<PaymentOrderTransactionDto>>(dataMain);
 
@@ -308,16 +321,21 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> PaymentPostOperation(PaymentOrderPostAudit model, string businessUnitCode)
         {
-            using (HttpClient client = new HttpClient())
+            using HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri(_configuration[$"BusinessUnits:{businessUnitCode}"] + "/api/v1/a-salfldg");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            string json = JsonSerializer.Serialize(model);
+            HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpResponseMessage response =
+                await client.PostAsync(_configuration[$"BusinessUnits:{businessUnitCode}"] + "api/v1/a-salfldg",
+                    content);
+            if (response.IsSuccessStatusCode)
             {
-                client.BaseAddress = new Uri(_configuration[$"BusinessUnits:{businessUnitCode}"] + "/api/v1/a-salfldg");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                string json = JsonSerializer.Serialize(model);
-                HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PostAsync(_configuration[$"BusinessUnits:{businessUnitCode}"] + "api/v1/a-salfldg", content);
+                return ApiResponse<bool>.Success(true);
             }
-            return ApiResponse<bool>.Success(true);
+
+            return ApiResponse<bool>.Fail(false, 400);
         }
 
         public async Task<ApiResponse<int>> PaymentOrderPostData(PaymentOrderPostModel model, string name)
@@ -334,7 +352,7 @@ namespace SolaERP.Persistence.Services
                 SunUser = dto[0].JRNAL_SRCE,
             };
             var result = await PaymentPostOperation(auditModel, model.BusinessUnitCode);
-            return ApiResponse<int>.Success(data.Item2,200);
+            return ApiResponse<int>.Success(data.Item2, 200);
         }
     }
 }
