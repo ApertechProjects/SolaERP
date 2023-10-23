@@ -14,7 +14,9 @@ namespace SolaERP.Persistence.Services
         private readonly IUserRepository _userRepository;
         private readonly IInvoiceRepository _invoiceRepository;
         private readonly IUnitOfWork _unitOfWork;
-        public InvoiceService(IUserRepository userRepository, IMapper mapper, IInvoiceRepository invoiceRepository, IUnitOfWork unitOfWork)
+
+        public InvoiceService(IUserRepository userRepository, IMapper mapper, IInvoiceRepository invoiceRepository,
+            IUnitOfWork unitOfWork)
         {
             _userRepository = userRepository;
             _mapper = mapper;
@@ -36,8 +38,10 @@ namespace SolaERP.Persistence.Services
             bool res = false;
             for (int i = 0; i < model.InvoiceRegisterIds.Count; i++)
             {
-                await _invoiceRepository.ChangeStatus(model.InvoiceRegisterIds[i].InvoiceRegisterId, model.InvoiceRegisterIds[i].Sequence, model.ApproveStatus, model.Comment, userId);
+                await _invoiceRepository.ChangeStatus(model.InvoiceRegisterIds[i].InvoiceRegisterId,
+                    model.InvoiceRegisterIds[i].Sequence, model.ApproveStatus, model.Comment, userId);
             }
+
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(res);
         }
@@ -71,6 +75,7 @@ namespace SolaERP.Persistence.Services
             {
                 result = await _invoiceRepository.RegisterSendToApprove(model.InvoiceRegisterIds[item], userId);
             }
+
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(result);
         }
@@ -88,6 +93,14 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.ConvertIdentity(name);
             var data = await _invoiceRepository.Save(model, userId);
             return ApiResponse<bool>.Success(data);
+        }
+
+        public async Task<ApiResponse<List<OrderListApprovedDto>>> GetOrderListApproved(int businessUnitId,
+            string vendorCode)
+        {
+            var data = await _invoiceRepository.GetOrderListApproved(businessUnitId, vendorCode);
+            var dto = _mapper.Map<List<OrderListApprovedDto>>(data);
+            return ApiResponse<List<OrderListApprovedDto>>.Success(dto);
         }
     }
 }
