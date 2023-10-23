@@ -26,5 +26,7 @@ namespace SolaERP.Application.Dtos.Payment
         public string Employee { get; set; }
         public string WellNo { get; set; }
         public string LinkAccount { get; set; }
+        public string PaymentTermsName { get; set; }
+        public int AgingDays { get; set; }
     }
 }

@@ -127,7 +127,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 PaymentRequestAmount = reader.Get<decimal>("PaymentRequestAmount"),
                 Reference = reader.Get<string>("Reference"),
                 TransactionReference = reader.Get<string>("TransactionReference"),
-                WellNo = reader.Get<string>("WellNo")
+                WellNo = reader.Get<string>("WellNo"),
+                PaymentTermsName = reader.Get<string>("PaymenttermsName"),
+                AgingDays = reader.Get<int>("AgingDays")
             };
         }
 
