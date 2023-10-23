@@ -567,7 +567,9 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<RegisterLoadGRN, RegisterLoadGRNDto>().ReverseMap();
             CreateMap<RegisterListByOrder, RegisterListByOrderDto>().ReverseMap();
             CreateMap<OrderListApproved, OrderListApprovedDto>().ReverseMap();
-            CreateMap<ProblematicInvoiceReason, ProblematicInvoiceReasonDto>().ReverseMap();
+            CreateMap<ProblematicInvoiceReason, ProblematicInvoiceReasonDto>()
+                .ForMember(x => x.ProblematicInvoiceReason, y => y.MapFrom(x => x.ProblematicInvoiceReasin))
+                .ReverseMap();
             CreateMap<Currency, CurrencyDto>().ReverseMap();
         }
     }
