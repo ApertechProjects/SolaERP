@@ -345,12 +345,22 @@ namespace SolaERP.Persistence.Services
             var data = await _paymentRepository.PaymentOrderPostData(table, model.JournalNo, userId);
             var dto = _mapper.Map<List<ASalfldgDto>>(data.Item1);
             var aSaldldgLadList = new List<ASalfldgLadDto>();
-            
-            foreach (var aSalfldg in data.Item1)
+
+            foreach (var a in data.Item1)
             {
-                aSaldldgLadList.Add(new ASalfldgLadDto());
+                aSaldldgLadList.Add(new ASalfldgLadDto
+                {
+                    ACCNT_CODE = a.ACCNT_CODE,
+                    PERIOD = a.PERIOD,
+                    TRANS_DATETIME = a.TRANS_DATETIME,
+                    JRNAL_NO = a.JRNAL_NO,
+                    JRNAL_LINE = a.JRNAL_LINE,
+                    GNRL_DESCR_24 = a.InvoiceNo,
+                    GNRL_DESCR_25 = a.Reference,
+                    
+                });
             }
-            
+
             PaymentOrderPostAudit auditModel = new PaymentOrderPostAudit()
             {
                 ASalfldgs = dto,

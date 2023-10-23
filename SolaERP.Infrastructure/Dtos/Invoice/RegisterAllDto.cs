@@ -4,8 +4,10 @@
     {
         public int InvoiceRegisterId { get; set; }
         public long LineNo { get; set; }
-        public string ApproveStatus { get; set; }
-        public string Status { get; set; }
+        public int ApproveStatus { get; set; }
+        public int Status { get; set; }
+        public string ApproveStatusName { get; set; }
+        public string StatusName { get; set; }
         public int InvoiceType { get; set; }
         public DateTime InvoiceDate { get; set; }
         public DateTime InvoiceReceivedDate { get; set; }
