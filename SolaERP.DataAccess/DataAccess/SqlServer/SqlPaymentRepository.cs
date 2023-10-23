@@ -973,7 +973,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText =
-                    "SET NOCOUNT OFF EXEC SP_PaymentOrderPostData @JournalNo,@UserId,@PaymentOrderTransactions,@NewJournalNo = @NewJournalNo OUTPUT select @NewJournalNo as NewJournalNo";
+                    @"SET NOCOUNT OFF EXEC SP_PaymentOrderPostData @JournalNo,@UserId,@PaymentOrderTransactions,@NewJournalNo = @NewJournalNo OUTPUT select @NewJournalNo as NewJournalNo";
                 command.Parameters.AddWithValue(command, "@JournalNo", journalNo);
                 command.Parameters.AddTableValue(command, "@PaymentOrderTransactions", "PaymentDocumentPost", table);
                 command.Parameters.AddWithValue(command, "@UserId", userId);

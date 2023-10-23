@@ -344,9 +344,17 @@ namespace SolaERP.Persistence.Services
             var table = model.PaymentDocumentPosts.ConvertListOfCLassToDataTable();
             var data = await _paymentRepository.PaymentOrderPostData(table, model.JournalNo, userId);
             var dto = _mapper.Map<List<ASalfldgDto>>(data.Item1);
+            var aSaldldgLadList = new List<ASalfldgLadDto>();
+            
+            foreach (var aSalfldg in data.Item1)
+            {
+                aSaldldgLadList.Add(new ASalfldgLadDto());
+            }
+            
             PaymentOrderPostAudit auditModel = new PaymentOrderPostAudit()
             {
                 ASalfldgs = dto,
+                ASalfldgLads = aSaldldgLadList,
                 CurrentPeriod = dto[0].ENTRY_PRD,
                 JournalNo = dto[0].JRNAL_NO,
                 SunUser = dto[0].JRNAL_SRCE,

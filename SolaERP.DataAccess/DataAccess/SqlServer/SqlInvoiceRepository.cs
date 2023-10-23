@@ -164,7 +164,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@VendorCode", model.VendorCode);
 
-                command.Parameters.AddWithValue(command, "@DueDate", model.DueDate);
+                command.Parameters.AddWithValue(command, "@DueDate", null);
 
                 command.Parameters.AddWithValue(command, "@AgingDays", model.AgingDays);
 

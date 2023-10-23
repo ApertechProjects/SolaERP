@@ -16,7 +16,6 @@
         public string CurrencyCode { get; set; }
         public string LineDescription { get; set; }
         public string VendorCode { get; set; }
-        public DateTime DueDate { get; set; }
         public int AgingDays { get; set; }
         public int ProblematicInvoiceReasonId { get; set; }
         public int Status { get; set; }

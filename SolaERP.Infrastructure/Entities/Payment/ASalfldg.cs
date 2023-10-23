@@ -112,5 +112,7 @@ namespace SolaERP.Application.Entities.Payment
         public string POSTER_ID { get; set; }
         public string ALLOC_ID { get; set; }
         public int JNL_REVERSAL_TYPE { get; set; }
+        public string InvoiceNo { get; set; }
+        public string Reference { get; set; }
     }
 }
