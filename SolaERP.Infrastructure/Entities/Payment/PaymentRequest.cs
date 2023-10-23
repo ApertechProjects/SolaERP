@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Application.Entities.Payment
+﻿namespace SolaERP.Application.Entities.Payment
 {
     public class PaymentRequest : BaseEntity
     {
@@ -18,8 +12,8 @@ namespace SolaERP.Application.Entities.Payment
         public string VendorCode { get; set; }
         public string VendorName { get; set; }
         public string TransactionReference { get; set; }
-        public long LineNo { get; set; }
-        public bool HasAttachment { get; set; }
+        // public long LineNo { get; set; }
+        // public bool HasAttachment { get; set; }
 
     }
 }

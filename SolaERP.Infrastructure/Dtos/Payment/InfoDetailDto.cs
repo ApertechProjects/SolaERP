@@ -18,7 +18,7 @@ namespace SolaERP.Application.Dtos.Payment
         public string AccountCode { get; set; }
         public string AccountName { get; set; }
         public string PaymentTerms { get; set; }
-        public string PaymentTermName { get; set; }
+        public string PaymentTermsName { get; set; }
         public decimal PayableAmount { get; set; }
         public decimal PaymentRequestAmount { get; set; }
         public decimal AmountToPay { get; set; }
@@ -27,5 +27,6 @@ namespace SolaERP.Application.Dtos.Payment
         public string WellNo { get; set; }
         public string LinkAccount { get; set; }
         public decimal GRNAmount { get; set; }
+        public int AgingDays { get; set; }
     }
 }

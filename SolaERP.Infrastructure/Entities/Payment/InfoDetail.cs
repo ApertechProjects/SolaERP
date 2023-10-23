@@ -26,5 +26,6 @@ namespace SolaERP.Application.Entities.Payment
         public string WellNo { get; set; }
         public string LinkAccount { get; set; }
         public decimal GRNAmount { get; set; }
+        public int AgingDays { get; set; }
     }
 }

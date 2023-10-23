@@ -538,7 +538,9 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<CreateOrder, CreateOrderDto>().ReverseMap();
             CreateMap<CreateBalance, CreateBalanceDto>().ReverseMap();
             CreateMap<InfoHeader, InfoHeaderDto>().ReverseMap();
-            CreateMap<InfoDetail, InfoDetailDto>().ReverseMap();
+            CreateMap<InfoDetail, InfoDetailDto>()
+                .ForMember(x => x.PaymentTermsName, y => y.MapFrom(x => x.PaymentTermName))
+                .ReverseMap();
             CreateMap<InfoApproval, InfoApprovalDto>().ReverseMap();
 
             CreateMap<WaitingForApproval, WaitingForApprovalDto>().ReverseMap();
