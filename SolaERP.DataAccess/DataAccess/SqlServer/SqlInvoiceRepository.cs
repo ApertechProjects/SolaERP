@@ -1,5 +1,4 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
-using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -11,11 +10,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
     public class SqlInvoiceRepository : IInvoiceRepository
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IInvoiceService _invoiceService;
 
-        public SqlInvoiceRepository(IInvoiceService invoiceService, IUnitOfWork unitOfWork)
+        public SqlInvoiceRepository(IUnitOfWork unitOfWork)
         {
-            _invoiceService = invoiceService;
             _unitOfWork = unitOfWork;
         }
 
@@ -199,6 +196,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             var list = new List<OrderListApproved>();
             while (await reader.ReadAsync())
                 list.Add(reader.GetByEntityStructure<OrderListApproved>());
+
+            return list;
+        }
+
+        public async Task<List<ProblematicInvoiceReason>> GetProblematicInvoiceReasonList()
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"SELECT * FROM VW_ProblematicInvoiceReasonList";
+
+            await using var reader = await command.ExecuteReaderAsync();
+
+            var list = new List<ProblematicInvoiceReason>();
+            while (await reader.ReadAsync())
+                list.Add(reader.GetByEntityStructure<ProblematicInvoiceReason>());
 
             return list;
         }

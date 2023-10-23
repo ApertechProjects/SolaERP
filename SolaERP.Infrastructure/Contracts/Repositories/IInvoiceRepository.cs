@@ -14,5 +14,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<RegisterWFA>> RegisterWFA(InvoiceRegisterGetModel model, int userId);
         Task<bool> Save(InvoiceRegisterSaveModel model, int userId);
         Task<List<OrderListApproved>> GetOrderListApproved(int businessUnitId, string vendorCode);
+        Task<List<ProblematicInvoiceReason>> GetProblematicInvoiceReasonList();
     }
 }

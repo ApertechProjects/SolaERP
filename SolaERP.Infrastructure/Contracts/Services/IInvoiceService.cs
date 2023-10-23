@@ -15,5 +15,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<RegisterWFADto>>> RegisterWFA(InvoiceRegisterGetModel model, string name);
         Task<ApiResponse<bool>> Save(InvoiceRegisterSaveModel model, string name);
         Task<ApiResponse<List<OrderListApprovedDto>>> GetOrderListApproved(int businessUnitId, string vendorCode);
+        Task<ApiResponse<List<ProblematicInvoiceReasonDto>>> GetProblematicInvoiceReasonList();
     }
 }

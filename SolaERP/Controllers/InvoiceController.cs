@@ -11,6 +11,7 @@ namespace SolaERP.API.Controllers
     public class InvoiceController : CustomBaseController
     {
         private readonly IInvoiceService _invoiceService;
+
         public InvoiceController(IInvoiceService invoiceService)
         {
             _invoiceService = invoiceService;
@@ -53,5 +54,9 @@ namespace SolaERP.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetOrderListApproved(int businessUnitId, string vendorCode)
             => CreateActionResult(await _invoiceService.GetOrderListApproved(businessUnitId, vendorCode));
+
+        [HttpGet]
+        public async Task<IActionResult> GetProblematicInvoiceReasonList()
+            => CreateActionResult(await _invoiceService.GetProblematicInvoiceReasonList());
     }
 }
