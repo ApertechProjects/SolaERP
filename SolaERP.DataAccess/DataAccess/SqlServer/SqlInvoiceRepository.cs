@@ -12,17 +12,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IInvoiceService _invoiceService;
+
         public SqlInvoiceRepository(IInvoiceService invoiceService, IUnitOfWork unitOfWork)
         {
             _invoiceService = invoiceService;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> ChangeStatus(int invoiceRegisterId, int sequence, int approveStatus, string comment, int userId)
+        public async Task<bool> ChangeStatus(int invoiceRegisterId, int sequence, int approveStatus, string comment,
+            int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_InvoiceRegisterApprove @invoiceRegisterId,@sequence,@approveStatus,@userId,@comment";
+                command.CommandText =
+                    "SET NOCOUNT OFF EXEC SP_InvoiceRegisterApprove @invoiceRegisterId,@sequence,@approveStatus,@userId,@comment";
 
                 command.Parameters.AddWithValue(command, "@invoiceRegisterId", invoiceRegisterId);
                 command.Parameters.AddWithValue(command, "@sequence", sequence);
@@ -132,7 +135,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "EXEC SP_InvoiceRegister_IUD @InvoiceRegisterId,@BusinessUnitId,@InvoiceType,@InvoiceDate,@InvoiceReceivedDate,@InvoiceNo,@SystemInvoiceNo,@OrderType,@OrderMainId,@ReferenceDocNo,@InvoiceAmount,@CurrencyCode,@LineDescription,@VendorCode,@DueDate,@AgingDays,@ProblematicInvoiceReasonId,@Status,@ApproveStatus,@ReasonAdditionalDescription,@UserId";
+                command.CommandText =
+                    "EXEC SP_InvoiceRegister_IUD @InvoiceRegisterId,@BusinessUnitId,@InvoiceType,@InvoiceDate,@InvoiceReceivedDate,@InvoiceNo,@SystemInvoiceNo,@OrderType,@OrderMainId,@ReferenceDocNo,@InvoiceAmount,@CurrencyCode,@LineDescription,@VendorCode,@DueDate,@AgingDays,@ProblematicInvoiceReasonId,@Status,@ApproveStatus,@ReasonAdditionalDescription,@UserId";
 
 
                 command.Parameters.AddWithValue(command, "@InvoiceRegisterId", model.InvoiceRegisterId);
@@ -167,18 +171,36 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@AgingDays", model.AgingDays);
 
-                command.Parameters.AddWithValue(command, "@ProblematicInvoiceReasonId", model.ProblematicInvoiceReasonId);
+                command.Parameters.AddWithValue(command, "@ProblematicInvoiceReasonId",
+                    model.ProblematicInvoiceReasonId);
 
                 command.Parameters.AddWithValue(command, "@Status", model.Status);
 
                 command.Parameters.AddWithValue(command, "@ApproveStatus", model.ApproveStatus);
 
-                command.Parameters.AddWithValue(command, "@ReasonAdditionalDescription", model.ReasonAdditionalDescription);
+                command.Parameters.AddWithValue(command, "@ReasonAdditionalDescription",
+                    model.ReasonAdditionalDescription);
 
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
+        }
+
+        public async Task<List<OrderListApproved>> GetOrderListApproved(int businessUnitId, string vendorCode)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"EXEC SP_OrderListApproved @BusinessUnitId, @VendorCode";
+            command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+            command.Parameters.AddWithValue(command, "@VendorCode", vendorCode);
+
+            await using var reader = await command.ExecuteReaderAsync();
+
+            var list = new List<OrderListApproved>();
+            while (await reader.ReadAsync())
+                list.Add(reader.GetByEntityStructure<OrderListApproved>());
+
+            return list;
         }
     }
 }
