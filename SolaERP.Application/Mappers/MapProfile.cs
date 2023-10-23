@@ -73,6 +73,7 @@ using SolaERP.Application.Models;
 using AnalysisCodes = SolaERP.Application.Entities.AnalysisCode.AnalysisCodes;
 using Attachment = SolaERP.Application.Entities.Attachment.Attachment;
 using AttachmentDto = SolaERP.Application.Dtos.Attachment.AttachmentDto;
+using Currency = SolaERP.Application.Entities.Currency.Currency;
 using UOM = SolaERP.Application.Entities.UOM.UOM;
 using UOMDto = SolaERP.Application.Dtos.UOM.UOMDto;
 
@@ -567,6 +568,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<RegisterListByOrder, RegisterListByOrderDto>().ReverseMap();
             CreateMap<OrderListApproved, OrderListApprovedDto>().ReverseMap();
             CreateMap<ProblematicInvoiceReason, ProblematicInvoiceReasonDto>().ReverseMap();
+            CreateMap<Currency, CurrencyDto>().ReverseMap();
         }
     }
 }
