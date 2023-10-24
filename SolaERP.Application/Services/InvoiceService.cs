@@ -109,5 +109,7 @@ namespace SolaERP.Persistence.Services
             var dto = _mapper.Map<List<ProblematicInvoiceReasonDto>>(data);
             return ApiResponse<List<ProblematicInvoiceReasonDto>>.Success(dto);
         }
+
+
     }
 }
