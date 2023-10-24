@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -233,6 +234,44 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
+        }
+
+        public async Task<List<MatchingMainGRN>> MatchingMainGRN(InvoiceMatchingGRNModel model)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_InvoiceMatchingMainGRN @businessUnitId,@dateFrom,@dateTo,@invoiceStatus,@toMatch";
+            command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
+            command.Parameters.AddWithValue(command, "@dateFrom", model.DateFrom);
+            command.Parameters.AddWithValue(command, "@dateTo", model.DateTo);
+            command.Parameters.AddWithValue(command, "@invoiceStatus", model.InvoiceStatus);
+            command.Parameters.AddWithValue(command, "@toMatch", model.ToMatch);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<MatchingMainGRN> list = new List<MatchingMainGRN>();
+            while (reader.Read())
+                list.Add(reader.GetByEntityStructure<MatchingMainGRN>());
+
+            return list;
+        }
+
+        public async Task<List<MatchingMainService>> MatchingMainService(InvoiceMatchingGRNModel model)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_InvoiceMatchingMainService @businessUnitId,@dateFrom,@dateTo,@invoiceStatus,@toMatch";
+            command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
+            command.Parameters.AddWithValue(command, "@dateFrom", model.DateFrom);
+            command.Parameters.AddWithValue(command, "@dateTo", model.DateTo);
+            command.Parameters.AddWithValue(command, "@invoiceStatus", model.InvoiceStatus);
+            command.Parameters.AddWithValue(command, "@toMatch", model.ToMatch);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<MatchingMainService> list = new List<MatchingMainService>();
+            while (reader.Read())
+                list.Add(reader.GetByEntityStructure<MatchingMainService>());
+
+            return list;
         }
     }
 }

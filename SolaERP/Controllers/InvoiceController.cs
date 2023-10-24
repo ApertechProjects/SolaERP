@@ -64,8 +64,12 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> GetProblematicInvoiceReasonList()
             => CreateActionResult(await _invoiceService.GetProblematicInvoiceReasonList());
 
-        //[HttpGet]
-        //public async Task<IActionResult
-        //    >
+        [HttpGet]
+        public async Task<IActionResult> MatchingMainGRN([FromQuery]InvoiceMatchingGRNModel model)
+            => CreateActionResult(await _invoiceService.MatchingMainGRN(model));
+
+        [HttpGet]
+        public async Task<IActionResult> MatchingMainService([FromQuery]InvoiceMatchingGRNModel model)
+          => CreateActionResult(await _invoiceService.MatchingMainService(model));
     }
 }

@@ -574,6 +574,9 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(x => x.ProblematicInvoiceReason, y => y.MapFrom(x => x.ProblematicInvoiceReasin))
                 .ReverseMap();
             CreateMap<Currency, CurrencyDto>().ReverseMap();
+            
+            CreateMap<MatchingMainGRN, MatchingMainGRNDto>().ReverseMap();
+            CreateMap<MatchingMainService, MatchingMainServiceDto>().ReverseMap();
         }
     }
 }

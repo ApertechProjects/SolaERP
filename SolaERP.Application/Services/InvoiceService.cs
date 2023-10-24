@@ -120,5 +120,19 @@ namespace SolaERP.Persistence.Services
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(true);
         }
+
+        public async Task<ApiResponse<List<MatchingMainGRNDto>>> MatchingMainGRN(InvoiceMatchingGRNModel model)
+        {
+            var data = await _invoiceRepository.MatchingMainGRN(model);
+            var dto = _mapper.Map<List<MatchingMainGRNDto>>(data);
+            return ApiResponse<List<MatchingMainGRNDto>>.Success(dto);
+        }
+
+        public async Task<ApiResponse<List<MatchingMainServiceDto>>> MatchingMainService(InvoiceMatchingGRNModel model)
+        {
+            var data = await _invoiceRepository.MatchingMainService(model);
+            var dto = _mapper.Map<List<MatchingMainServiceDto>>(data);
+            return ApiResponse<List<MatchingMainServiceDto>>.Success(dto);
+        }
     }
 }

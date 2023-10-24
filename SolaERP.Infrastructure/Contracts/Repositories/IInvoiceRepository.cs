@@ -16,5 +16,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<OrderListApproved>> GetOrderListApproved(int businessUnitId, string vendorCode);
         Task<List<ProblematicInvoiceReason>> GetProblematicInvoiceReasonList();
         Task<bool> Delete(int item, int userId);
+        Task<List<MatchingMainGRN>> MatchingMainGRN(InvoiceMatchingGRNModel model);
+        Task<List<MatchingMainService>> MatchingMainService(InvoiceMatchingGRNModel model);
     }
 }

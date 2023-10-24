@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SolaERP.Application.Models
+{
+    public class InvoiceMatchingGRNModel
+    {
+        public int BusinessUnitId { get; set; }
+        public DateTime DateFrom { get; set; }
+        public DateTime DateTo { get; set; }
+        public int InvoiceStatus { get; set; }
+        public int ToMatch { get; set; }
+    }
+}
