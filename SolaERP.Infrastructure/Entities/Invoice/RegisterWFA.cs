@@ -5,8 +5,8 @@
         public int InvoiceRegisterId { get; set; }
         public string ApproveStatusName { get; set; }
         public string StatusName { get; set; }
-        public int ApproveStatusId { get; set; }
-        public int StatusId { get; set; }
+        public int ApproveStatus { get; set; }
+        public int Status { get; set; }
         public int InvoiceType { get; set; }
         public DateTime InvoiceDate { get; set; }
         public DateTime InvoiceReceivedDate { get; set; }
