@@ -3,14 +3,17 @@
     public class RegisterWFADto
     {
         public int InvoiceRegisterId { get; set; }
-        public string ApproveStatus { get; set; }
-        public string Status { get; set; }
+        public string ApproveStatusName { get; set; }
+        public string StatusName { get; set; }
+        public int ApproveStatus { get; set; }
+        public int Status { get; set; }
         public int InvoiceType { get; set; }
         public DateTime InvoiceDate { get; set; }
         public DateTime InvoiceReceivedDate { get; set; }
         public string InvoiceNo { get; set; }
         public string SystemInvoiceNo { get; set; }
-        public int OrderType { get; set; }
+        public int OrderTypeId { get; set; }
+        public string OrderType { get; set; }
         public int OrderMainId { get; set; }
         public string OrderNo { get; set; }
         public string ReferenceDocNo { get; set; }
@@ -25,5 +28,6 @@
         public int ProblematicInvoiceReasonId { get; set; }
         public string ReasonAdditionalDescription { get; set; }
         public int Sequence { get; set; }
+        public long LineNo { get; set; }
     }
 }
