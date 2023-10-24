@@ -51,6 +51,11 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Save(InvoiceRegisterSaveModel model)
             => CreateActionResult(await _invoiceService.Save(model, User.Identity.Name));
 
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(List<int> ids)
+            => CreateActionResult(await _invoiceService.Delete(ids, User.Identity.Name));
+
         [HttpGet]
         public async Task<IActionResult> GetOrderListApproved(int businessUnitId, string vendorCode)
             => CreateActionResult(await _invoiceService.GetOrderListApproved(businessUnitId, vendorCode));

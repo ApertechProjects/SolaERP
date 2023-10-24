@@ -15,5 +15,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> Save(InvoiceRegisterSaveModel model, int userId);
         Task<List<OrderListApproved>> GetOrderListApproved(int businessUnitId, string vendorCode);
         Task<List<ProblematicInvoiceReason>> GetProblematicInvoiceReasonList();
+        Task<bool> Delete(int item, int userId);
     }
 }

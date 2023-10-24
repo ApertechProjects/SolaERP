@@ -110,6 +110,15 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<ProblematicInvoiceReasonDto>>.Success(dto);
         }
 
-
+        public async Task<ApiResponse<bool>> Delete(List<int> ids, string name)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            foreach (var item in ids)
+            {
+                var data = await _invoiceRepository.Delete(item, userId);
+            }
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(true);
+        }
     }
 }

@@ -16,5 +16,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> Save(InvoiceRegisterSaveModel model, string name);
         Task<ApiResponse<List<OrderListApprovedDto>>> GetOrderListApproved(int businessUnitId, string vendorCode);
         Task<ApiResponse<List<ProblematicInvoiceReasonDto>>> GetProblematicInvoiceReasonList();
+        Task<ApiResponse<bool>> Delete(List<int> ids, string name);
     }
 }

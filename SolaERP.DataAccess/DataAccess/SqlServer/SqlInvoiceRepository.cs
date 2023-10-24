@@ -4,6 +4,7 @@ using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
+using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -214,6 +215,24 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 list.Add(reader.GetByEntityStructure<ProblematicInvoiceReason>());
 
             return list;
+        }
+
+        public async Task<bool> Delete(int item, int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText =
+                    "EXEC SP_InvoiceRegister_IUD @InvoiceRegisterId,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,@UserId";
+
+
+                command.Parameters.AddWithValue(command, "@InvoiceRegisterId", item);
+
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+
+                await _unitOfWork.SaveChangesAsync();
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
         }
     }
 }
