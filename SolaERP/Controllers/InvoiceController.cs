@@ -63,5 +63,9 @@ namespace SolaERP.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetProblematicInvoiceReasonList()
             => CreateActionResult(await _invoiceService.GetProblematicInvoiceReasonList());
+
+        //[HttpGet]
+        //public async Task<IActionResult
+        //    >
     }
 }

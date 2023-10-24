@@ -71,9 +71,9 @@ namespace SolaERP.Persistence.Services
         {
             int userId = await _userRepository.ConvertIdentity(name);
             bool result = false;
-            foreach (var item in model.InvoiceRegisterIds)
+            for (int i = 0; i < model.InvoiceRegisterIds.Count; i++)
             {
-                result = await _invoiceRepository.RegisterSendToApprove(model.InvoiceRegisterIds[item], userId);
+                result = await _invoiceRepository.RegisterSendToApprove(model.InvoiceRegisterIds[i], userId);
             }
 
             await _unitOfWork.SaveChangesAsync();
@@ -113,9 +113,9 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> Delete(List<int> ids, string name)
         {
             int userId = await _userRepository.ConvertIdentity(name);
-            foreach (var item in ids)
+            for (int i = 0; i < ids.Count; i++)
             {
-                var data = await _invoiceRepository.Delete(item, userId);
+                var data = await _invoiceRepository.Delete(ids[i], userId);
             }
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(true);
