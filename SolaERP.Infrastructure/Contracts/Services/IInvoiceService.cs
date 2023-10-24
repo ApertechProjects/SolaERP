@@ -10,7 +10,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> RegisterChangeStatus(InvoiceRegisterApproveModel model, string name);
         Task<ApiResponse<List<RegisterListByOrderDto>>> RegisterListByOrder(int orderMainId);
         Task<ApiResponse<List<RegisterLoadGRNDto>>> RegisterLoadGRN(int invoiceRegisterId);
-        Task<ApiResponse<RegisterMainLoadDto>> RegisterLoadMain(int invoiceRegisterId);
+        Task<ApiResponse<RegisterMainLoadDto>> Info(int invoiceRegisterId);
         Task<ApiResponse<bool>> RegisterSendToApprove(InvoiceSendToApproveModel model, string name);
         Task<ApiResponse<List<RegisterWFADto>>> RegisterWFA(InvoiceRegisterGetModel model, string name);
         Task<ApiResponse<bool>> Save(InvoiceRegisterSaveModel model, string name);

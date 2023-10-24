@@ -31,8 +31,8 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _invoiceService.RegisterSendToApprove(model, User.Identity.Name));
 
         [HttpGet]
-        public async Task<IActionResult> RegisterLoadMain(int invoiceRegisterId)
-            => CreateActionResult(await _invoiceService.RegisterLoadMain(invoiceRegisterId));
+        public async Task<IActionResult> Info(int invoiceRegisterId)
+            => CreateActionResult(await _invoiceService.Info(invoiceRegisterId));
 
         [HttpGet]
         public async Task<IActionResult> RegisterLoadGRN(int invoiceRegisterId)
@@ -65,11 +65,11 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _invoiceService.GetProblematicInvoiceReasonList());
 
         [HttpGet]
-        public async Task<IActionResult> MatchingMainGRN([FromQuery]InvoiceMatchingGRNModel model)
+        public async Task<IActionResult> MatchingMainGRN([FromQuery] InvoiceMatchingGRNModel model)
             => CreateActionResult(await _invoiceService.MatchingMainGRN(model));
 
         [HttpGet]
-        public async Task<IActionResult> MatchingMainService([FromQuery]InvoiceMatchingGRNModel model)
+        public async Task<IActionResult> MatchingMainService([FromQuery] InvoiceMatchingGRNModel model)
           => CreateActionResult(await _invoiceService.MatchingMainService(model));
     }
 }
