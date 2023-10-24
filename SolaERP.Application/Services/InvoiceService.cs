@@ -62,8 +62,9 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<RegisterMainLoadDto>> Info(int invoiceRegisterId)
         {
-            var data = await _invoiceRepository.RegisterMainLoad(invoiceRegisterId);
-            var dto = _mapper.Map<RegisterMainLoadDto>(data);
+            var dataMain = await _invoiceRepository.RegisterMainLoad(invoiceRegisterId);
+
+            var dto = _mapper.Map<RegisterMainLoadDto>(dataMain);
             return ApiResponse<RegisterMainLoadDto>.Success(dto);
         }
 
