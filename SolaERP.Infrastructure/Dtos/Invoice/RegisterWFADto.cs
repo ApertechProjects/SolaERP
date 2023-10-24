@@ -28,5 +28,6 @@
         public int ProblematicInvoiceReasonId { get; set; }
         public string ReasonAdditionalDescription { get; set; }
         public int Sequence { get; set; }
+        public long LineNo { get; set; }
     }
 }
