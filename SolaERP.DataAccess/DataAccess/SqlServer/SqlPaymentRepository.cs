@@ -1,5 +1,6 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Payment;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Payment;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
@@ -9,6 +10,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Net.NetworkInformation;
+using System.Reflection;
 using System.Reflection.PortableExecutable;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
@@ -581,7 +583,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 }
 
                 return new PaymentDocumentSaveResultModel
-                    { PaymentDocumentMainId = requestId, PaymentRequestNo = requestNo };
+                { PaymentDocumentMainId = requestId, PaymentRequestNo = requestNo };
             }
         }
 
@@ -1003,6 +1005,91 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 ACCNT_CODE = reader.Get<string>("AccountCode")
             };
+        }
+
+        public async Task<PaymentOrderPostMainSaveResult> PaymentOrderPostSaveMain(PaymentOrderPostMain paymentOrderMain, int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText =
+                    @"SET NOCOUNT OFF EXEC SP_PaymentOrderMain_IUD @PaymentOrderMainId,@BusinessUnitId,@PaymentOrderNo,
+                                                                   @VendorCode,@CurrencyCode,@PaymentDate,@BankAccount,
+                                                                   @BankCharge,@BankChargeAmount,@Comment,@Amount,@JournalNo,
+                                                                   @AllocationReference,@UserId,
+                                                                   @NewPaymentOrderMainId = @NewPaymentOrderMainId OUTPUT,
+                                                                   @NewPaymentOrderNo = @NewPaymentOrderNo OUTPUT 
+                                                                   select @NewPaymentOrderMainId as NewPaymentOrderMainId,
+                                                                   @NewPaymentOrderNo as NewPaymentOrderNo";
+
+                command.Parameters.AddWithValue(command, "@PaymentOrderMainId", paymentOrderMain.PaymentOrderMainId);
+
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", paymentOrderMain.BusinessUnitId);
+
+                command.Parameters.AddWithValue(command, "@PaymentOrderNo", paymentOrderMain.PaymentOrderNo);
+
+                command.Parameters.AddWithValue(command, "@VendorCode", paymentOrderMain.VendorCode);
+
+                command.Parameters.AddWithValue(command, "@CurrencyCode", paymentOrderMain.CurrencyCode);
+
+                command.Parameters.AddWithValue(command, "@PaymentDate", paymentOrderMain.PaymentDate);
+
+                command.Parameters.AddWithValue(command, "@BankAccount", paymentOrderMain.BankAccount);
+
+                command.Parameters.AddWithValue(command, "@BankCharge", paymentOrderMain.BankCharge);
+
+                command.Parameters.AddWithValue(command, "@BankChargeAmount", paymentOrderMain.BankChargeAmount);
+
+                command.Parameters.AddWithValue(command, "@Comment", paymentOrderMain.Comment);
+
+                command.Parameters.AddWithValue(command, "@Amount", paymentOrderMain.Amount);
+
+                command.Parameters.AddWithValue(command, "@JournalNo", paymentOrderMain.JournalNo);
+
+                command.Parameters.AddWithValue(command, "@AllocationReference", paymentOrderMain.AllocationReference);
+
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+
+                command.Parameters.Add("@NewPaymentOrderMainId", SqlDbType.Int);
+                command.Parameters["@NewPaymentOrderMainId"].Direction = ParameterDirection.Output;
+
+                command.Parameters.Add("@NewPaymentOrderNo", SqlDbType.NVarChar,15);
+                command.Parameters["@NewPaymentOrderNo"].Direction = ParameterDirection.Output;
+
+                PaymentOrderPostMainSaveResult saveResult = new PaymentOrderPostMainSaveResult();
+                using var reader = await command.ExecuteReaderAsync();
+
+                if (reader.Read())
+                {
+                    saveResult.PaymentOrderMainId = reader.Get<int>("NewPaymentOrderMainId");
+                    saveResult.PaymentOrderNo = reader.Get<string>("NewPaymentOrderNo");
+                }
+
+                return saveResult;
+            }
+        }
+
+        public async Task<bool> PaymentOrderPostDetailSave(int paymentOrderMainId, DataTable detailData)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentOrderDetails_IUD @PaymentOrderMainId,@PaymentOrderDetails";
+                command.Parameters.AddWithValue(command, "@PaymentOrderMainId", paymentOrderMainId);
+                command.Parameters.AddTableValue(command, "@PaymentOrderDetails", "PaymentOrderDetailsType", detailData);
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
+            }
+        }
+
+        public async Task<bool> PaymentOrderPostTransactionSave(int paymentOrderMainId, DataTable transactionData)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentOrderTransactin_IUD @PaymentOrderMainId,@PaymentOrderTransaction";
+                command.Parameters.AddWithValue(command, "@PaymentOrderMainId", paymentOrderMainId);
+                command.Parameters.AddTableValue(command, "@PaymentOrderTransaction", "PaymentOrderTransactionType", transactionData);
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
+            }
         }
     }
 }

@@ -338,11 +338,24 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Fail(false, 400);
         }
 
-        public async Task<ApiResponse<int>> PaymentOrderPostData(PaymentOrderPostModel model, string name)
+        public async Task<ApiResponse<PaymentOrderPostDataResult>> PaymentOrderPostData(PaymentOrderPostModel model, string name)
         {
             var userId = await _userRepository.ConvertIdentity(name);
             var table = model.PaymentDocumentPosts.ConvertListOfCLassToDataTable();
             var data = await _paymentRepository.PaymentOrderPostData(table, model.JournalNo, userId);
+            #region
+            var paymentOrderSaveMain = await _paymentRepository.PaymentOrderPostSaveMain(model.PaymentOrderMain, userId);
+
+            DataTable detailData = model.PaymentOrderDetails.ConvertListOfCLassToDataTable();
+            var paymentOrderSaveDetail = await _paymentRepository.PaymentOrderPostDetailSave(paymentOrderSaveMain.PaymentOrderMainId, detailData);
+
+            var paymentOrderTransaction = _mapper.Map<List<PaymentTransaction>>(model.PaymentDocumentPosts);
+
+            DataTable transactionData = paymentOrderTransaction.ConvertListOfCLassToDataTable();
+            var paymentOrderSaveTransaction = await _paymentRepository.PaymentOrderPostTransactionSave(paymentOrderSaveMain.PaymentOrderMainId, transactionData);
+            await _unitOfWork.SaveChangesAsync();
+            #endregion
+
             var dto = _mapper.Map<List<ASalfldgDto>>(data.Item1);
             var aSaldldgLadList = new List<ASalfldgLadDto>();
 
@@ -375,7 +388,11 @@ namespace SolaERP.Persistence.Services
                 SunUser = dto[0].JRNAL_SRCE,
             };
             var result = await PaymentPostOperation(auditModel, model.BusinessUnitCode);
-            return ApiResponse<int>.Success(data.Item2, 200);
+            return ApiResponse<PaymentOrderPostDataResult>.Success(new PaymentOrderPostDataResult
+            {
+                JournalNo = data.Item2,
+                PaymentOrderNo = paymentOrderSaveMain.PaymentOrderNo
+            }, 200);
         }
     }
 }
