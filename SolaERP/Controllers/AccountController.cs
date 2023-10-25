@@ -62,6 +62,9 @@ namespace SolaERP.Controllers
             if (user == null)
                 return CreateActionResult(ApiResponse<bool>.Fail("email", $" {dto.Email} not found", 422));
 
+            if (user.IsDeleted)
+                return CreateActionResult(ApiResponse<bool>.Fail("email", "This user was deleted.", 422));
+
             var userdto = _mapper.Map<UserRegisterModel>(user);
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
             var emailVerified = await _userService.CheckEmailIsVerified(dto.Email);
@@ -135,9 +138,9 @@ namespace SolaERP.Controllers
 
                 Response.OnCompleted(async () =>
                 {
-                   await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification,
-                        emailVerification.TemplateName(), emailVerification.ImageName(),
-                        new List<string> { dto.Email });
+                    await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification,
+                         emailVerification.TemplateName(), emailVerification.ImageName(),
+                         new List<string> { dto.Email });
                 });
 
                 account.UserId = response.Data;
