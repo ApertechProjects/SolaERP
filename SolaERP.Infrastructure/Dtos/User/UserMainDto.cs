@@ -10,7 +10,7 @@
         public string ApproveStatus { get; set; }
         public Int64 RowNum { get; set; }
         public string Status { get; set; }
-        public DateTime LastActivity { get; set; }
+        public DateTime? LastActivity { get; set; }
         public string UserName { get; set; }
         public string Description { get; set; }
         public int Gender { get; set; }
