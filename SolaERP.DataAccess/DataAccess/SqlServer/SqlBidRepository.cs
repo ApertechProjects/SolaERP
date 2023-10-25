@@ -166,7 +166,7 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
             List<BidMainLoad> data = new();
             if (reader.Read())
                 return GetBidMainLoadFromReader(reader);
-            return null;
+            return new BidMainLoad();
         }
 
         private BidAll GetBidFromReader(DbDataReader reader)
