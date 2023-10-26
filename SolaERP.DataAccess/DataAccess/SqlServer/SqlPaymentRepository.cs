@@ -1014,7 +1014,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText =
                     @"SET NOCOUNT OFF EXEC SP_PaymentOrderMain_IUD @PaymentOrderMainId,@BusinessUnitId,@PaymentOrderNo,
                                                                    @VendorCode,@CurrencyCode,@PaymentDate,@BankAccount,
-                                                                   @BankCharge,@BankChargeAmount,@Comment,@Amount,@JournalNo,
+                                                                   @BankCharge,@BankChargeAccount,@Comment,@Amount,@JournalNo,
                                                                    @AllocationReference,@UserId,
                                                                    @NewPaymentOrderMainId = @NewPaymentOrderMainId OUTPUT,
                                                                    @NewPaymentOrderNo = @NewPaymentOrderNo OUTPUT 
@@ -1037,7 +1037,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@BankCharge", paymentOrderMain.BankCharge);
 
-                command.Parameters.AddWithValue(command, "@BankChargeAmount", paymentOrderMain.BankChargeAmount);
+                command.Parameters.AddWithValue(command, "@BankChargeAccount", paymentOrderMain.BankChargeAccount);
 
                 command.Parameters.AddWithValue(command, "@Comment", paymentOrderMain.Comment);
 

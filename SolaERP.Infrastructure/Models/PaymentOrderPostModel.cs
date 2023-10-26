@@ -26,7 +26,7 @@ namespace SolaERP.Application.Models
         public DateTime? PaymentDate { get; set; }
         public string BankAccount { get; set; }
         public decimal BankCharge { get; set; }
-        public string BankChargeAmount { get; set; }
+        public string BankChargeAccount { get; set; }
         public string Comment { get; set; }
         public decimal Amount { get; set; }
         public int AllocationReference { get; set; }
