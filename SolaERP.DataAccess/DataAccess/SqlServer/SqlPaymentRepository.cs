@@ -1007,7 +1007,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             };
         }
 
-        public async Task<PaymentOrderPostMainSaveResult> PaymentOrderPostSaveMain(PaymentOrderPostMain paymentOrderMain, int userId)
+        public async Task<PaymentOrderPostMainSaveResult> PaymentOrderPostSaveMain(PaymentOrderPostMain paymentOrderMain, int journalNo, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
@@ -1043,7 +1043,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@Amount", paymentOrderMain.Amount);
 
-                command.Parameters.AddWithValue(command, "@JournalNo", paymentOrderMain.JournalNo);
+                command.Parameters.AddWithValue(command, "@JournalNo", journalNo);
 
                 command.Parameters.AddWithValue(command, "@AllocationReference", paymentOrderMain.AllocationReference);
 
@@ -1052,7 +1052,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.Add("@NewPaymentOrderMainId", SqlDbType.Int);
                 command.Parameters["@NewPaymentOrderMainId"].Direction = ParameterDirection.Output;
 
-                command.Parameters.Add("@NewPaymentOrderNo", SqlDbType.NVarChar,15);
+                command.Parameters.Add("@NewPaymentOrderNo", SqlDbType.NVarChar, 15);
                 command.Parameters["@NewPaymentOrderNo"].Direction = ParameterDirection.Output;
 
                 PaymentOrderPostMainSaveResult saveResult = new PaymentOrderPostMainSaveResult();

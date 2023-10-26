@@ -29,7 +29,6 @@ namespace SolaERP.Application.Models
         public string BankChargeAmount { get; set; }
         public string Comment { get; set; }
         public decimal Amount { get; set; }
-        public int JournalNo { get; set; }
         public int AllocationReference { get; set; }
     }
 
