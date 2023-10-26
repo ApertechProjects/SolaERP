@@ -563,8 +563,9 @@ namespace SolaERP.Persistence.Services
                     await _userRepository.SaveUserAsync(user);
                 }
 
+                await _unitOfWork.SaveChangesAsync();
                 await Task.WhenAll(tasks);
-                // await _unitOfWork.SaveChangesAsync();
+                
                 return ApiResponse<int>.Success(vendorId, 200);
             }
             catch (Exception ex)
