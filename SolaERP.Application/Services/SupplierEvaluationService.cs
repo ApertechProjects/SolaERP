@@ -564,7 +564,7 @@ namespace SolaERP.Persistence.Services
                 }
 
                 await Task.WhenAll(tasks);
-                await _unitOfWork.SaveChangesAsync();
+                // await _unitOfWork.SaveChangesAsync();
                 return ApiResponse<int>.Success(vendorId, 200);
             }
             catch (Exception ex)
