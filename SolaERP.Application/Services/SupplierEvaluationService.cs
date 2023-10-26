@@ -562,9 +562,9 @@ namespace SolaERP.Persistence.Services
                     user.VendorId = vendorId;
                     await _userRepository.SaveUserAsync(user);
                 }
-
-                await _unitOfWork.SaveChangesAsync();
+                
                 await Task.WhenAll(tasks);
+                await _unitOfWork.SaveChangesAsync();
                 
                 return ApiResponse<int>.Success(vendorId, 200);
             }
