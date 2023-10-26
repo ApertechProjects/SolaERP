@@ -1091,5 +1091,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return value > 0;
             }
         }
+
+        public async Task<bool> PaymentOrderDetailsCheckNonAllocated(DataTable detailData)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentOrderDetailsCheckNonAllocated @PaymentOrderDetails";
+                command.Parameters.AddTableValue(command, "@PaymentOrderDetails", "PaymentOrderDetailsType", detailData);
+                using var reader = await command.ExecuteReaderAsync();
+                return true;
+            }
+        }
     }
 }

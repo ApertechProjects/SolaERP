@@ -344,9 +344,10 @@ namespace SolaERP.Persistence.Services
             var table = model.PaymentDocumentPosts.ConvertListOfCLassToDataTable();
             var data = await _paymentRepository.PaymentOrderPostData(table, model.JournalNo, userId);
             #region
+            DataTable detailData = model.PaymentOrderDetails.ConvertListOfCLassToDataTable();
+            var checkNonAllocated = _paymentRepository.PaymentOrderDetailsCheckNonAllocated(detailData);
             var paymentOrderSaveMain = await _paymentRepository.PaymentOrderPostSaveMain(model.PaymentOrderMain, model.JournalNo, userId);
 
-            DataTable detailData = model.PaymentOrderDetails.ConvertListOfCLassToDataTable();
             var paymentOrderSaveDetail = await _paymentRepository.PaymentOrderPostDetailSave(paymentOrderSaveMain.PaymentOrderMainId, detailData);
 
             var paymentOrderTransaction = _mapper.Map<List<PaymentTransaction>>(model.PaymentDocumentPosts);
