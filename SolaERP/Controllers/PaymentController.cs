@@ -45,6 +45,10 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Bank([FromQuery] PaymentGetModel payment)
             => CreateActionResult(await _paymentService.Bank(User.Identity.Name, payment));
 
+        [HttpGet]
+        public async Task<IActionResult> PaymentOrders([FromQuery] PaymentOrderGetModel payment)
+            => CreateActionResult(await _paymentService.PaymentOrders(payment));
+
         [HttpPost]
         public async Task<IActionResult> SendToApprove(SendToApproveModel sendToApprove)
             => CreateActionResult(await _paymentService.SendToApprove(User.Identity.Name, sendToApprove.Ids));
@@ -114,7 +118,7 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> BankAccountList(int businessUnitId)
             => CreateActionResult(await _paymentService.BankAccountList(businessUnitId));
 
-      
+
         [HttpPost]
         public async Task<IActionResult> PaymentOrderPostData(PaymentOrderPostModel model)
             => CreateActionResult(await _paymentService.PaymentOrderPostData(model, User.Identity.Name));

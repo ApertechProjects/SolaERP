@@ -48,5 +48,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> PaymentOrderPostTransactionSave(int paymentOrderMainId, DataTable transactionData);
         Task<bool> PaymentOrderDetailsCheckNonAllocated(DataTable detailData);
         Task<List<AllocationData>> PaymentOrderAllocationData(int paymentOrderMainId, int userId);
+        Task<List<PaymentOrder>> PaymentOrders(PaymentOrderGetModel payment);
     }
 }

@@ -7,4 +7,13 @@
         public DateTime DateTo { get; set; }
         public string VendorCode { get; set; }
     }
+
+
+    public class PaymentOrderGetModel : PaymentGetModel
+    {
+        public string InvoiceNo { get; set; }
+        public string Reference { get; set; }
+        public string TransactionReference { get; set; }
+    }
+
 }

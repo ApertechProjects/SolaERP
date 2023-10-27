@@ -406,5 +406,12 @@ namespace SolaERP.Persistence.Services
                 PaymentOrderNo = paymentOrderSaveMain.PaymentOrderNo
             }, 200);
         }
+
+        public async Task<ApiResponse<List<PaymentOrderDto>>> PaymentOrders(PaymentOrderGetModel payment)
+        {
+            var data = await _paymentRepository.PaymentOrders(payment);
+            var dto = _mapper.Map<List<PaymentOrderDto>>(data);
+            return ApiResponse<List<PaymentOrderDto>>.Success(dto);
+        }
     }
 }
