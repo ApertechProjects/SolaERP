@@ -400,7 +400,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                 @OperatorComment,
                                                                 @QualityRequired,@Currency,
                                                                 @LogisticTotal,@Buyer,@Destination,
-                                                                @Priority,@ApproveStageMainId,@Location
+                                                                @Priority,@ApproveStageMainId,@Location,
                                                                 @NewRequestmainId = @NewRequestmainId OUTPUT,
                                                                 @NewRequestNo = @NewRequestNo OUTPUT 
                                                                 select @NewRequestmainId as NewRequestmainId,
