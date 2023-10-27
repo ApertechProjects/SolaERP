@@ -19,6 +19,7 @@
         public string Buyer { get; set; }
         public int Destination { get; set; }
         public int Priority { get; set; }
+        public string Location { get; set; }
         public int ApproveStageMainId { get; set; }
         public string RequestNo { get; set; }
 

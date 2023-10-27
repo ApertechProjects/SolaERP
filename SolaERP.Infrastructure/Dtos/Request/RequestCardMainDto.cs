@@ -68,6 +68,7 @@ namespace SolaERP.Application.Dtos.Request
                 _priority = value;
             }
         }
+        public string Location { get; set; }
         public int ApproveStageMainId { get; set; }
         public List<RequestCardDetailDto> requestCardDetails { get; set; }
         public List<RequestCardAnalysisDto> requestCardAnalysis { get; set; }

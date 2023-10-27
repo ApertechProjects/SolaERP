@@ -326,7 +326,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 PotentialVendor = reader.Get<string>("PotentialVendor"),
                 Priority = reader.Get<int>("Priority"),
                 ApproveStageMainId = reader.Get<int>("ApproveStageMainId"),
-                KeyCode = reader.Get<string>("KeyCode")
+                KeyCode = reader.Get<string>("KeyCode"),
+                Location = reader.Get<string>("Location")
             };
         }
 
@@ -399,7 +400,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                 @OperatorComment,
                                                                 @QualityRequired,@Currency,
                                                                 @LogisticTotal,@Buyer,@Destination,
-                                                                @Priority,@ApproveStageMainId,
+                                                                @Priority,@ApproveStageMainId,@Location
                                                                 @NewRequestmainId = @NewRequestmainId OUTPUT,
                                                                 @NewRequestNo = @NewRequestNo OUTPUT 
                                                                 select @NewRequestmainId as NewRequestmainId,
@@ -426,6 +427,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Destination", model.Destination);
                 command.Parameters.AddWithValue(command, "@Priority", model.Priority);
                 command.Parameters.AddWithValue(command, "@ApproveStageMainId", model.ApproveStageMainId);
+                command.Parameters.AddWithValue(command, "@Location", model.Location);
 
                 command.Parameters.Add("@NewRequestmainId", SqlDbType.Int);
                 command.Parameters["@NewRequestmainId"].Direction = ParameterDirection.Output;

@@ -30,6 +30,7 @@ namespace SolaERP.Application.Entities.Request
         public string PotentialVendor { get; set; }
         public int Priority { get; set; }
         public int ApproveStageMainId { get; set; }
+        public string Location { get; set; }
         public List<RequestCardDetail> requestCardDetails { get; set; }
         public List<RequestCardAnalysis> requestCardAnalysis { get; set; }
 

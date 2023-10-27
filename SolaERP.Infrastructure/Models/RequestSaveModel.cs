@@ -16,7 +16,7 @@ namespace SolaERP.Application.Models
         public string RequestComment { get; set; }
         public string OperatorComment { get; set; }
         public string PotentialVendor { get; set; }
-
+        public string Location { get; set; }
         public string QualityRequired { get; set; }
         public string CurrencyCode { get; set; }
         public decimal LogisticsTotal { get; set; }
