@@ -10,6 +10,7 @@ namespace SolaERP.Application.Models
     {
         public string BusinessUnitCode { get; set; }
         public int JournalNo { get; set; }
+        public int AllocationReference { get; set; }
         public List<PaymentDocumentPost> PaymentDocumentPosts { get; set; }
         public PaymentOrderPostMain PaymentOrderMain { get; set; }
         public List<PaymentOrderPostDetail> PaymentOrderDetails { get; set; }
@@ -29,7 +30,6 @@ namespace SolaERP.Application.Models
         public string BankChargeAccount { get; set; }
         public string Comment { get; set; }
         public decimal Amount { get; set; }
-        public int AllocationReference { get; set; }
     }
 
     public class PaymentOrderPostDetail

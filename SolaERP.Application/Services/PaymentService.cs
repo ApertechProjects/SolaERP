@@ -341,12 +341,16 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<PaymentOrderPostDataResult>> PaymentOrderPostData(PaymentOrderPostModel model, string name)
         {
             var userId = await _userRepository.ConvertIdentity(name);
-            var table = model.PaymentDocumentPosts.ConvertListOfCLassToDataTable();
-            var data = await _paymentRepository.PaymentOrderPostData(table, model.JournalNo, userId);
-            #region
             DataTable detailData = model.PaymentOrderDetails.ConvertListOfCLassToDataTable();
-            var checkNonAllocated = _paymentRepository.PaymentOrderDetailsCheckNonAllocated(detailData);
-            var paymentOrderSaveMain = await _paymentRepository.PaymentOrderPostSaveMain(model.PaymentOrderMain, model.JournalNo, userId);
+            var checkNonAllocated = await _paymentRepository.PaymentOrderDetailsCheckNonAllocated(detailData);
+
+            if (checkNonAllocated)
+                return ApiResponse<PaymentOrderPostDataResult>.Success("Post to SS already created for this data");
+
+            var table = model.PaymentDocumentPosts.ConvertListOfCLassToDataTable();
+            var data = await _paymentRepository.PaymentOrderPostData(table, model.AllocationReference, model.JournalNo, userId);
+
+            var paymentOrderSaveMain = await _paymentRepository.PaymentOrderPostSaveMain(model.PaymentOrderMain, model.AllocationReference, model.JournalNo, userId);
 
             var paymentOrderSaveDetail = await _paymentRepository.PaymentOrderPostDetailSave(paymentOrderSaveMain.PaymentOrderMainId, detailData);
 
@@ -355,7 +359,6 @@ namespace SolaERP.Persistence.Services
             DataTable transactionData = paymentOrderTransaction.ConvertListOfCLassToDataTable();
             var paymentOrderSaveTransaction = await _paymentRepository.PaymentOrderPostTransactionSave(paymentOrderSaveMain.PaymentOrderMainId, transactionData);
             await _unitOfWork.SaveChangesAsync();
-            #endregion
 
             var dto = _mapper.Map<List<ASalfldgDto>>(data.Item1);
             var aSaldldgLadList = new List<ASalfldgLadDto>();
@@ -388,7 +391,9 @@ namespace SolaERP.Persistence.Services
                 JournalNo = dto[0].JRNAL_NO,
                 SunUser = dto[0].JRNAL_SRCE,
             };
+
             var result = await PaymentPostOperation(auditModel, model.BusinessUnitCode);
+
             return ApiResponse<PaymentOrderPostDataResult>.Success(new PaymentOrderPostDataResult
             {
                 JournalNo = data.Item2,

@@ -970,13 +970,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<(List<ASalfldg>, int)> PaymentOrderPostData(DataTable table, int journalNo, int userId)
+        public async Task<(List<ASalfldg>, int)> PaymentOrderPostData(DataTable table, int allocationReference, int journalNo, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText =
-                    @"SET NOCOUNT OFF EXEC SP_PaymentOrderPostData @JournalNo,@UserId,@PaymentOrderTransactions,@NewJournalNo = @NewJournalNo OUTPUT select @NewJournalNo as NewJournalNo";
+                    @"SET NOCOUNT OFF EXEC SP_PaymentOrderPostData @JournalNo,@AllocationReference,@UserId,@PaymentOrderTransactions,@NewJournalNo = @NewJournalNo OUTPUT select @NewJournalNo as NewJournalNo";
                 command.Parameters.AddWithValue(command, "@JournalNo", journalNo);
+                command.Parameters.AddWithValue(command, "@AllocationReference", allocationReference);
                 command.Parameters.AddTableValue(command, "@PaymentOrderTransactions", "PaymentDocumentPost", table);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
@@ -1007,7 +1008,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             };
         }
 
-        public async Task<PaymentOrderPostMainSaveResult> PaymentOrderPostSaveMain(PaymentOrderPostMain paymentOrderMain, int journalNo, int userId)
+        public async Task<PaymentOrderPostMainSaveResult> PaymentOrderPostSaveMain(PaymentOrderPostMain paymentOrderMain, int allocationReference, int journalNo, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
@@ -1045,7 +1046,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@JournalNo", journalNo);
 
-                command.Parameters.AddWithValue(command, "@AllocationReference", paymentOrderMain.AllocationReference);
+                command.Parameters.AddWithValue(command, "@AllocationReference", allocationReference);
 
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
@@ -1099,7 +1100,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentOrderDetailsCheckNonAllocated @PaymentOrderDetails";
                 command.Parameters.AddTableValue(command, "@PaymentOrderDetails", "PaymentOrderDetailsType", detailData);
                 using var reader = await command.ExecuteReaderAsync();
-                return true;
+                if (reader.HasRows)
+                    return true;
+
+                return false;
             }
         }
     }
