@@ -391,6 +391,7 @@ namespace SolaERP.Persistence.Services
             PaymentOrderPostAudit auditModel = new PaymentOrderPostAudit()
             {
                 ASalfldgs = dto,
+                AllocationReference = model.AllocationReference,
                 AllocationDatas = allocationDataDto,
                 ASalfldgLads = aSaldldgLadList,
                 CurrentPeriod = dto[0].ENTRY_PRD,
