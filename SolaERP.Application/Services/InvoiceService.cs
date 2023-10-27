@@ -3,6 +3,7 @@ using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Invoice;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 
@@ -13,10 +14,10 @@ namespace SolaERP.Persistence.Services
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly IInvoiceRepository _invoiceRepository;
+        private readonly IAttachmentService _attachmentService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public InvoiceService(IUserRepository userRepository, IMapper mapper, IInvoiceRepository invoiceRepository,
-            IUnitOfWork unitOfWork)
+        public InvoiceService(IUserRepository userRepository, IMapper mapper, IInvoiceRepository invoiceRepository, IAttachmentService attachmentService, IUnitOfWork unitOfWork)
         {
             _userRepository = userRepository;
             _mapper = mapper;
@@ -93,6 +94,26 @@ namespace SolaERP.Persistence.Services
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var data = await _invoiceRepository.Save(model, userId);
+
+            model.Attachments.ForEach(attachment =>
+            {
+                if (attachment.Type == 2)
+                {
+                    if (attachment.AttachmentId > 0)
+                    {
+                        _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId).Wait();
+                    }
+                }
+                else
+                {
+                    if (attachment.AttachmentId > 0) return;
+                    attachment.SourceId = data;
+                    attachment.SourceType = SourceType.INV.ToString();
+                    _attachmentService.SaveAttachmentAsync(attachment).Wait();
+                }
+            });
+
+            await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(data);
         }
 

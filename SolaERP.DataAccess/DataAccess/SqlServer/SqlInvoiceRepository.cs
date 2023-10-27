@@ -4,7 +4,9 @@ using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
+using System.Data;
 using System.Data.Common;
+using System.Data.SqlClient;
 using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
@@ -130,61 +132,69 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return list;
         }
 
-        public async Task<bool> Save(InvoiceRegisterSaveModel model, int userId)
+        public async Task<int> Save(InvoiceRegisterSaveModel model, int userId)
         {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText =
-                    "EXEC SP_InvoiceRegister_IUD @InvoiceRegisterId,@BusinessUnitId,@InvoiceType,@InvoiceDate,@InvoiceReceivedDate,@InvoiceNo,@SystemInvoiceNo,@OrderType,@OrderMainId,@ReferenceDocNo,@InvoiceAmount,@CurrencyCode,@LineDescription,@VendorCode,@DueDate,@AgingDays,@ProblematicInvoiceReasonId,@Status,@ApproveStatus,@ReasonAdditionalDescription,@UserId";
+                    "EXEC SP_InvoiceRegister_IUD @InvoiceRegisterId,@BusinessUnitId,@InvoiceType,        @InvoiceDate,@InvoiceReceivedDate,@InvoiceNo, @SystemInvoiceNo,@OrderType,@OrderMainId, @ReferenceDocNo,@InvoiceAmount,@CurrencyCode, @LineDescription,@VendorCode,@DueDate,@AgingDays, @ProblematicInvoiceReasonId,@Status,@ApproveStatus, @ReasonAdditionalDescription,@UserId,@NewInvoiceRegisterId = @NewInvoiceRegisterId OUTPUT select @NewInvoiceRegisterId as NewInvoiceRegisterId";
 
 
-                command.Parameters.AddWithValue(command, "@InvoiceRegisterId", model.InvoiceRegisterId);
+                command.Parameters.AddWithValue(command, "@InvoiceRegisterId", model.InvoiceRegisterSave.InvoiceRegisterId);
 
-                command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", model.InvoiceRegisterSave.BusinessUnitId);
 
-                command.Parameters.AddWithValue(command, "@InvoiceType", model.InvoiceType);
+                command.Parameters.AddWithValue(command, "@InvoiceType", model.InvoiceRegisterSave.InvoiceType);
 
-                command.Parameters.AddWithValue(command, "@InvoiceDate", model.InvoiceDate);
+                command.Parameters.AddWithValue(command, "@InvoiceDate", model.InvoiceRegisterSave.InvoiceDate);
 
-                command.Parameters.AddWithValue(command, "@InvoiceReceivedDate", model.InvoiceReceivedDate);
+                command.Parameters.AddWithValue(command, "@InvoiceReceivedDate", model.InvoiceRegisterSave.InvoiceReceivedDate);
 
-                command.Parameters.AddWithValue(command, "@InvoiceNo", model.InvoiceNo);
+                command.Parameters.AddWithValue(command, "@InvoiceNo", model.InvoiceRegisterSave.InvoiceNo);
 
-                command.Parameters.AddWithValue(command, "@SystemInvoiceNo", model.SystemInvoiceNo);
+                command.Parameters.AddWithValue(command, "@SystemInvoiceNo", model.InvoiceRegisterSave.SystemInvoiceNo);
 
-                command.Parameters.AddWithValue(command, "@OrderType", model.OrderType);
+                command.Parameters.AddWithValue(command, "@OrderType", model.InvoiceRegisterSave.OrderType);
 
-                command.Parameters.AddWithValue(command, "@OrderMainId", model.OrderMainId);
+                command.Parameters.AddWithValue(command, "@OrderMainId", model.InvoiceRegisterSave.OrderMainId);
 
-                command.Parameters.AddWithValue(command, "@ReferenceDocNo", model.ReferenceDocNo);
+                command.Parameters.AddWithValue(command, "@ReferenceDocNo", model.InvoiceRegisterSave.ReferenceDocNo);
 
-                command.Parameters.AddWithValue(command, "@InvoiceAmount", model.InvoiceAmount);
+                command.Parameters.AddWithValue(command, "@InvoiceAmount", model.InvoiceRegisterSave.InvoiceAmount);
 
-                command.Parameters.AddWithValue(command, "@CurrencyCode", model.CurrencyCode);
+                command.Parameters.AddWithValue(command, "@CurrencyCode", model.InvoiceRegisterSave.CurrencyCode);
 
-                command.Parameters.AddWithValue(command, "@LineDescription", model.LineDescription);
+                command.Parameters.AddWithValue(command, "@LineDescription", model.InvoiceRegisterSave.LineDescription);
 
-                command.Parameters.AddWithValue(command, "@VendorCode", model.VendorCode);
+                command.Parameters.AddWithValue(command, "@VendorCode", model.InvoiceRegisterSave.VendorCode);
 
                 command.Parameters.AddWithValue(command, "@DueDate", null);
 
-                command.Parameters.AddWithValue(command, "@AgingDays", model.AgingDays);
+                command.Parameters.AddWithValue(command, "@AgingDays", model.InvoiceRegisterSave.AgingDays);
 
                 command.Parameters.AddWithValue(command, "@ProblematicInvoiceReasonId",
-                    model.ProblematicInvoiceReasonId);
+                    model.InvoiceRegisterSave.ProblematicInvoiceReasonId);
 
-                command.Parameters.AddWithValue(command, "@Status", model.Status);
+                command.Parameters.AddWithValue(command, "@Status", model.InvoiceRegisterSave.Status);
 
-                command.Parameters.AddWithValue(command, "@ApproveStatus", model.ApproveStatus);
+                command.Parameters.AddWithValue(command, "@ApproveStatus", model.InvoiceRegisterSave.ApproveStatus);
 
                 command.Parameters.AddWithValue(command, "@ReasonAdditionalDescription",
-                    model.ReasonAdditionalDescription);
+                    model.InvoiceRegisterSave.ReasonAdditionalDescription);
 
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
-                await _unitOfWork.SaveChangesAsync();
+                command.Parameters.Add("@NewInvoiceRegisterId", SqlDbType.Int);
+                command.Parameters["@NewInvoiceRegisterId"].Direction = ParameterDirection.Output;
 
-                return await command.ExecuteNonQueryAsync() > 0;
+                using var reader = await command.ExecuteReaderAsync();
+                int invoiceRegisterId = 0;
+                if (reader.Read())
+                {
+                    invoiceRegisterId = reader.Get<int>("NewInvoiceRegisterId");
+                }
+
+                return invoiceRegisterId;
             }
         }
 

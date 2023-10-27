@@ -17,6 +17,7 @@
         BID = 17,
         BID_COMP = 19,
         ORDER = 20,
-        BID_COMM = 22
+        BID_COMM = 22,
+        INV = 23
     }
 }
