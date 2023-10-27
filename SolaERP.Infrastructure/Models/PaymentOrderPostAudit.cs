@@ -8,6 +8,7 @@ namespace SolaERP.Application.Models
         public string SunUser { get; set; }
         public int CurrentPeriod { get; set; }
         public List<ASalfldgDto> ASalfldgs { get; set; }
+        public List<AllocationDataDto> AllocationDatas { get; set; }
         public List<ASalfldgLadDto> ASalfldgLads { get; set; }
     }
 }

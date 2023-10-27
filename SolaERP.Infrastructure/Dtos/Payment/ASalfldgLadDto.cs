@@ -12,7 +12,7 @@ public DateTime? GNRL_1_DATETIME { get; set; }
     public string? INTCO_SRCE_BU_CODE { get; set; }
     public string? INTCO_TRGT_BU_CODE { get; set; }
     public DateTime? TRANS_DATETIME { get; set; }
-    public int? JRNAL_LINE { get; set; }
+    public long? JRNAL_LINE { get; set; }
     public int? JRNAL_NO { get; set; }
     public int? INTCO_SRCE_JRNAL_NO { get; set; }
     public int? INTCO_TRGT_JRNAL_NO { get; set; }

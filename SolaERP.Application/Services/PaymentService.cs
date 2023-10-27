@@ -363,6 +363,9 @@ namespace SolaERP.Persistence.Services
             var dto = _mapper.Map<List<ASalfldgDto>>(data.Item1);
             var aSaldldgLadList = new List<ASalfldgLadDto>();
 
+            var allocationData = await _paymentRepository.PaymentOrderAllocationData(paymentOrderSaveMain.PaymentOrderMainId, userId);
+            var allocationDataDto = _mapper.Map<List<AllocationDataDto>>(allocationData);
+
             foreach (var a in data.Item1)
             {
                 aSaldldgLadList.Add(new ASalfldgLadDto
@@ -383,9 +386,12 @@ namespace SolaERP.Persistence.Services
                 });
             }
 
+
+
             PaymentOrderPostAudit auditModel = new PaymentOrderPostAudit()
             {
                 ASalfldgs = dto,
+                AllocationDatas = allocationDataDto,
                 ASalfldgLads = aSaldldgLadList,
                 CurrentPeriod = dto[0].ENTRY_PRD,
                 JournalNo = dto[0].JRNAL_NO,

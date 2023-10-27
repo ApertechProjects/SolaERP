@@ -1106,5 +1106,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return false;
             }
         }
+
+        public async Task<List<AllocationData>> PaymentOrderAllocationData(int paymentOrderMainId, int userId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText =
+                @"exec dbo.SP_PaymentOrderAllocationData @paymentOrderMainId,@userId";
+            command.Parameters.AddWithValue(command, "@paymentOrderMainId", paymentOrderMainId);
+            command.Parameters.AddWithValue(command, "@userId", userId);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<AllocationData> list = new List<AllocationData>();
+            while (reader.Read())
+                list.Add(reader.GetByEntityStructure<AllocationData>());
+
+            return list;
+        }
     }
 }

@@ -579,6 +579,8 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<MatchingMainService, MatchingMainServiceDto>().ReverseMap();
 
             CreateMap<PaymentTransaction, PaymentDocumentPost>().ReverseMap();
+
+            CreateMap<AllocationData, AllocationDataDto>().ReverseMap();
         }
     }
 }

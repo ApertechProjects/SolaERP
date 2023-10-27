@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Entities.Payment
 {
-    public class ASalfldg : ASalfldgAndAllocation
+    public class AllocationData : ASalfldgAndAllocation
     {
-     
-        public string InvoiceNo { get; set; }
-        public string Reference { get; set; }
+        public int Action { get; set; }
     }
 }
