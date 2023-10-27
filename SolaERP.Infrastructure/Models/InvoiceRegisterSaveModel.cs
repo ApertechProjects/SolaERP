@@ -1,12 +1,5 @@
 ﻿namespace SolaERP.Application.Models
 {
-
-    public class InvoiceRegisterSaveModel
-    {
-        public InvoiceRegisterMainSaveModel InvoiceRegisterSave { get; set; }
-        public List<AttachmentSaveModel> Attachments { get; set; }
-    }
-
     public class InvoiceRegisterMainSaveModel
     {
         public int InvoiceRegisterId { get; set; }
@@ -28,5 +21,6 @@
         public int Status { get; set; }
         public int ApproveStatus { get; set; }
         public string ReasonAdditionalDescription { get; set; }
+        public List<AttachmentSaveModel> Attachments { get; set; }
     }
 }
