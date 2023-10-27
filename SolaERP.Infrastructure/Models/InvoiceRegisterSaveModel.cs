@@ -1,6 +1,6 @@
 ﻿namespace SolaERP.Application.Models
 {
-    public class InvoiceRegisterMainSaveModel
+    public class InvoiceRegisterSaveModel
     {
         public int InvoiceRegisterId { get; set; }
         public int BusinessUnitId { get; set; }

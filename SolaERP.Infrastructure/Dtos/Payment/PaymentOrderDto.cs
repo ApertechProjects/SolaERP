@@ -9,6 +9,7 @@ namespace SolaERP.Application.Dtos.Payment
     public class PaymentOrderDto
     {
         public int PaymentOrderMainId { get; set; }
+        public long LineNo { get; set; }
         public string PaymentOrderNo { get; set; }
         public DateTime PaymentDate { get; set; }
         public string PaymentType { get; set; }
