@@ -17,5 +17,6 @@ namespace SolaERP.Application.Entities.Invoice
         public decimal InvoiceTotal { get; set; }
         public decimal RNETotal { get; set; }
         public decimal UnmatchedAmount { get; set; }
+        public string MatchStatus { get; set; }
     }
 }
