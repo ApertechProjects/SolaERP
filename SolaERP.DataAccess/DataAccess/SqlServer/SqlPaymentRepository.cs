@@ -368,7 +368,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 HoldComment = reader.Get<string>("HoldComment"),
                 SentDate = reader.Get<DateTime?>("SentDate"),
                 LineNo = reader.Get<long>("LineNo"),
-                HasAttachment = reader.Get<bool>("HasAttachment")
+                HasAttachment = reader.Get<bool>("HasAttachment"),
+                Sequence = reader.Get<int>("HasAttachment")
             };
         }
 
@@ -583,7 +584,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 }
 
                 return new PaymentDocumentSaveResultModel
-                { PaymentDocumentMainId = requestId, PaymentRequestNo = requestNo };
+                    { PaymentDocumentMainId = requestId, PaymentRequestNo = requestNo };
             }
         }
 
@@ -901,7 +902,26 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using var reader = await command.ExecuteReaderAsync();
 
             PaymentOrderMain data = new PaymentOrderMain();
-            while (await reader.ReadAsync()) data = reader.GetByEntityStructure<PaymentOrderMain>();
+            while (await reader.ReadAsync())
+            {
+                data.BusinessUnitId = reader.Get<int>("BusinessUnitId");
+                data.VendorCode = reader.Get<string>("VendorCode");
+                data.VendorName = reader.Get<string>("VendorName");
+                data.CurrencyCode = reader.Get<string>("CurrencyCode");
+                data.PaymentOrderMainId = reader.Get<int>("PaymentOrderMainId");
+                data.PaymentOrderNo = reader.Get<string>("PaymentOrderNo");
+                data.PaymentDate = reader.Get<DateTime>("PaymentDate");
+                data.BankAccount = reader.Get<string>("BankAccount");
+                data.BankCharge = reader.Get<decimal>("BankCharge");
+                data.BankChargeAccount = reader.Get<string>("BankChargeAccount");
+                data.Comment = reader.Get<string>("Comment");
+                data.Amount = reader.Get<decimal>("Amount");
+                data.CreatedUserId = reader.Get<int>("CreatedUserId");
+                data.CreatedDate = reader.Get<DateTime>("CreatedDate");
+                data.JournalNo = reader.Get<int>("JournalNo");
+                data.AllocationReference = reader.Get<int>("AllocationReference");
+                data.CreatedBy = reader.Get<string>("CreatedBy");
+            }
 
             return data;
         }
@@ -970,7 +990,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<(List<ASalfldg>, int)> PaymentOrderPostData(DataTable table, int allocationReference, int journalNo, int userId)
+        public async Task<(List<ASalfldg>, int)> PaymentOrderPostData(DataTable table, int allocationReference,
+            int journalNo, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
@@ -1008,7 +1029,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             };
         }
 
-        public async Task<PaymentOrderPostMainSaveResult> PaymentOrderPostSaveMain(PaymentOrderPostMain paymentOrderMain, int allocationReference, int journalNo, int userId)
+        public async Task<PaymentOrderPostMainSaveResult> PaymentOrderPostSaveMain(
+            PaymentOrderPostMain paymentOrderMain, int allocationReference, int journalNo, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
@@ -1073,9 +1095,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentOrderDetails_IUD @PaymentOrderMainId,@PaymentOrderDetails";
+                command.CommandText =
+                    "SET NOCOUNT OFF EXEC SP_PaymentOrderDetails_IUD @PaymentOrderMainId,@PaymentOrderDetails";
                 command.Parameters.AddWithValue(command, "@PaymentOrderMainId", paymentOrderMainId);
-                command.Parameters.AddTableValue(command, "@PaymentOrderDetails", "PaymentOrderDetailsType", detailData);
+                command.Parameters.AddTableValue(command, "@PaymentOrderDetails", "PaymentOrderDetailsType",
+                    detailData);
                 var value = await command.ExecuteNonQueryAsync();
                 return value > 0;
             }
@@ -1085,9 +1109,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentOrderTransactin_IUD @PaymentOrderMainId,@PaymentOrderTransaction";
+                command.CommandText =
+                    "SET NOCOUNT OFF EXEC SP_PaymentOrderTransactin_IUD @PaymentOrderMainId,@PaymentOrderTransaction";
                 command.Parameters.AddWithValue(command, "@PaymentOrderMainId", paymentOrderMainId);
-                command.Parameters.AddTableValue(command, "@PaymentOrderTransaction", "PaymentOrderTransactionType", transactionData);
+                command.Parameters.AddTableValue(command, "@PaymentOrderTransaction", "PaymentOrderTransactionType",
+                    transactionData);
                 var value = await command.ExecuteNonQueryAsync();
                 return value > 0;
             }
@@ -1097,8 +1123,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentOrderDetailsCheckNonAllocated @PaymentOrderDetails";
-                command.Parameters.AddTableValue(command, "@PaymentOrderDetails", "PaymentOrderDetailsType", detailData);
+                command.CommandText =
+                    "SET NOCOUNT OFF EXEC SP_PaymentOrderDetailsCheckNonAllocated @PaymentOrderDetails";
+                command.Parameters.AddTableValue(command, "@PaymentOrderDetails", "PaymentOrderDetailsType",
+                    detailData);
                 using var reader = await command.ExecuteReaderAsync();
                 if (reader.HasRows)
                     return true;
@@ -1127,7 +1155,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<List<PaymentOrder>> PaymentOrders(PaymentOrderGetModel payment)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_PaymentOrderAll @businessUnitId,@vendorCode,@dateFrom,@dateTo,@invoiceNo,@reference,@transactionReference";
+            command.CommandText =
+                @"exec dbo.SP_PaymentOrderAll @businessUnitId,@vendorCode,@dateFrom,@dateTo,@invoiceNo,@reference,@transactionReference";
             command.Parameters.AddWithValue(command, "@businessUnitId", payment.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@vendorCode", payment.VendorCode ?? "-1");
             command.Parameters.AddWithValue(command, "@dateFrom", payment.DateFrom);

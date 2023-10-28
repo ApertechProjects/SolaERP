@@ -14,6 +14,15 @@ namespace SolaERP.DataAccess.Extensions
         public static T? Get<T>(this IDataReader reader, string columnName)
         {
             T returnType = default(T);
+            try
+            {
+                var z = reader[columnName];
+            }
+            catch (Exception e)
+            {
+                return returnType;
+            }
+          
             var value = reader[columnName];
 
             if (value != DBNull.Value && value != null)
