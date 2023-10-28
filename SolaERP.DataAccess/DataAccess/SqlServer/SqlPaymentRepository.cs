@@ -369,7 +369,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 SentDate = reader.Get<DateTime?>("SentDate"),
                 LineNo = reader.Get<long>("LineNo"),
                 HasAttachment = reader.Get<bool>("HasAttachment"),
-                Sequence = reader.Get<int>("HasAttachment")
+                Sequence = reader.Get<int>("Sequence")
             };
         }
 
