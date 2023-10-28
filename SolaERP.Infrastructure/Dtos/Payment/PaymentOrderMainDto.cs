@@ -13,6 +13,18 @@ namespace SolaERP.Application.Dtos.Payment
         public string VendorCode { get; set; }
         public string VendorName { get; set; }
         public string CurrencyCode { get; set; }
+        public int PaymentOrderMainId { get; set; }
+        public string PaymentOrderNo { get; set; }
+        public DateTime PaymentDate { get; set; }
+        public decimal BankAccount { get; set; }
+        public decimal BankCharge { get; set; }
+        public decimal BankChargeAccount { get; set; }
+        public string Comment { get; set; }
+        public decimal Amount { get; set; }
+        public int CreatedUserId { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int JournalNo { get; set; }
+        public int AllocationReference { get; set; }
     }
 
     public class PaymentOrderDetailDto
