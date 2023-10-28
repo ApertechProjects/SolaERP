@@ -18,6 +18,7 @@
         public DateTime EntryDate { get; set; }
         public int JournalNumber { get; set; }
         public int AllocationReference { get; set; }
+        public string CreatedBy { get; set; }
     }
 
     public class PaymentOrderDetailDto

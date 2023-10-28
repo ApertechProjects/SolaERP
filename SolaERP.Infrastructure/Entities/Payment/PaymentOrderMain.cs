@@ -18,6 +18,7 @@
         public DateTime CreatedDate { get; set; }
         public int JournalNo { get; set; }
         public int AllocationReference { get; set; }
+        public string CreatedBy { get; set; }
     }
 
     public class PaymentOrderDetail : BaseEntity
