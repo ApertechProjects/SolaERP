@@ -114,7 +114,7 @@ namespace SolaERP.Persistence.Services
             });
 
             await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<bool>.Success(data);
+            return ApiResponse<bool>.Success(true);
         }
 
         public async Task<ApiResponse<List<OrderListApprovedDto>>> GetOrderListApproved(int businessUnitId,
