@@ -10,6 +10,7 @@ using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
 using System.Data;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -332,7 +333,7 @@ namespace SolaERP.Persistence.Services
             HttpResponseMessage response =
                 await client.PostAsync(_configuration[$"BusinessUnits:{businessUnitCode}"] + "api/v1/a-salfldg",
                     content);
-            if (response.IsSuccessStatusCode)
+            if (response.StatusCode == HttpStatusCode.OK)
             {
                 return ApiResponse<bool>.Success(true);
             }
