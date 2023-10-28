@@ -559,6 +559,7 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(x=>x.JournalNumber,y=>y.MapFrom(x=>x.JournalNo))
                 .ForMember(x=>x.AllocateAmounttoPay,y=>y.MapFrom(x=>x.Amount))
                 .ForMember(x=>x.PaymentOrder,y=>y.MapFrom(x=>x.PaymentOrderNo))
+                .ForMember(x=>x.EntryDate,y=>y.MapFrom(x=>x.CreatedDate))
                 .ReverseMap();
             CreateMap<PaymentOrderDetail, PaymentOrderDetailDto>().ReverseMap();
             CreateMap<PaymentOrderTransaction, PaymentOrderTransactionDto>().ReverseMap();

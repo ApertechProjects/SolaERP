@@ -1,11 +1,4 @@
-﻿using SolaERP.Application.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Application.Dtos.Payment
+﻿namespace SolaERP.Application.Dtos.Payment
 {
     public class PaymentOrderMainDto 
     {
@@ -22,7 +15,7 @@ namespace SolaERP.Application.Dtos.Payment
         public string Comment { get; set; }
         public decimal AllocateAmounttoPay { get; set; }
         public int CreatedUserId { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime EntryDate { get; set; }
         public int JournalNumber { get; set; }
         public int AllocationReference { get; set; }
     }
