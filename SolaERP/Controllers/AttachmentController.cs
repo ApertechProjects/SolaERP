@@ -68,5 +68,12 @@ public class AttachmentController : CustomBaseController
         var attachments = await _attachmentService.GetAttachmentsAsync(sourceId, SourceType.PYMDC, Modules.Payment);
         return CreateActionResult(ApiResponse<List<AttachmentDto>>.Success(attachments));
     }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetInvoiceAttachments(int sourceId)
+    {
+        var attachments = await _attachmentService.GetAttachmentsAsync(sourceId, SourceType.INV, Modules.Invoices);
+        return CreateActionResult(ApiResponse<List<AttachmentDto>>.Success(attachments));
+    }
 
 }
