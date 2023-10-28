@@ -14,16 +14,16 @@ namespace SolaERP.Application.Dtos.Payment
         public string VendorName { get; set; }
         public string CurrencyCode { get; set; }
         public int PaymentOrderMainId { get; set; }
-        public string PaymentOrderNo { get; set; }
+        public string PaymentOrder { get; set; }
         public DateTime PaymentDate { get; set; }
         public string BankAccount { get; set; }
         public decimal BankCharge { get; set; }
         public string BankChargeAccount { get; set; }
         public string Comment { get; set; }
-        public decimal Amount { get; set; }
+        public decimal AllocateAmounttoPay { get; set; }
         public int CreatedUserId { get; set; }
         public DateTime CreatedDate { get; set; }
-        public int JournalNo { get; set; }
+        public int JournalNumber { get; set; }
         public int AllocationReference { get; set; }
     }
 
