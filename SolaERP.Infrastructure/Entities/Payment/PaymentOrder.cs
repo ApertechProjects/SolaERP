@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Application.Entities.Payment
+﻿namespace SolaERP.Application.Entities.Payment
 {
     public class PaymentOrder : BaseEntity
     {
@@ -21,5 +15,9 @@ namespace SolaERP.Application.Entities.Payment
         public string CurrencyCode { get; set; }
         public string PaymentTerms { get; set; }
         public string Comment { get; set; }
+        public int JournalNo { get; set; }
+        public decimal Base { get; set; }
+        public decimal Reporting { get; set; }
+        public decimal BankCharge { get; set; }
     }
 }
