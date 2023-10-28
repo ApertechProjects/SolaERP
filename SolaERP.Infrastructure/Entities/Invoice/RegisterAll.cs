@@ -28,5 +28,6 @@
         public int MatchedAmount { get; set; }
         public int ProblematicInvoiceReasonId { get; set; }
         public string ReasonAdditionalDescription { get; set; }
+        public bool HasAttachments { get; set; }
     }
 }
