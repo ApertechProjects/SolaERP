@@ -284,6 +284,8 @@ namespace SolaERP.Persistence.Services
         {
             var dataMain = await _paymentRepository.PaymentOrderMainLoad(model);
             var dtoMain = _mapper.Map<PaymentOrderMainDto>(dataMain);
+            dtoMain.EntryDate = dtoMain.EntryDate.ConvertDateToValidDate();
+            dtoMain.PaymentDate = dtoMain.PaymentDate.ConvertDateToValidDate();
             var dataDetail = await _paymentRepository.PaymentOrderDetailLoad(model);
             var dtoDetail = _mapper.Map<List<PaymentOrderDetailDto>>(dataDetail);
             foreach (var item in dtoDetail)

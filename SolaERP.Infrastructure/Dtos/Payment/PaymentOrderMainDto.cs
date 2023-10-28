@@ -8,14 +8,14 @@
         public string CurrencyCode { get; set; }
         public int PaymentOrderMainId { get; set; }
         public string PaymentOrder { get; set; }
-        public DateTime PaymentDate { get; set; }
+        public DateTime? PaymentDate { get; set; }
         public string BankAccount { get; set; }
         public decimal BankCharge { get; set; }
         public string BankChargeAccount { get; set; }
         public string Comment { get; set; }
         public decimal AllocateAmounttoPay { get; set; }
         public int CreatedUserId { get; set; }
-        public DateTime EntryDate { get; set; }
+        public DateTime? EntryDate { get; set; }
         public int JournalNumber { get; set; }
         public int AllocationReference { get; set; }
         public string CreatedBy { get; set; }
