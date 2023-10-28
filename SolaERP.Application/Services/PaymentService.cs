@@ -338,7 +338,8 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Fail(false, 400);
         }
 
-        public async Task<ApiResponse<PaymentOrderPostDataResult>> PaymentOrderPostData(PaymentOrderPostModel model, string name)
+        public async Task<ApiResponse<PaymentOrderPostDataResult>> PaymentOrderPostData(PaymentOrderPostModel model,
+            string name)
         {
             var userId = await _userRepository.ConvertIdentity(name);
             DataTable detailData = model.PaymentOrderDetails.ConvertListOfCLassToDataTable();
@@ -348,22 +349,29 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<PaymentOrderPostDataResult>.Success("Post to SS already created for this data");
 
             var table = model.PaymentDocumentPosts.ConvertListOfCLassToDataTable();
-            var data = await _paymentRepository.PaymentOrderPostData(table, model.AllocationReference, model.JournalNo, userId);
+            var data = await _paymentRepository.PaymentOrderPostData(table, model.AllocationReference, model.JournalNo,
+                userId);
 
-            var paymentOrderSaveMain = await _paymentRepository.PaymentOrderPostSaveMain(model.PaymentOrderMain, model.AllocationReference, model.JournalNo, userId);
+            var paymentOrderSaveMain = await _paymentRepository.PaymentOrderPostSaveMain(model.PaymentOrderMain,
+                model.AllocationReference, model.JournalNo, userId);
 
-            var paymentOrderSaveDetail = await _paymentRepository.PaymentOrderPostDetailSave(paymentOrderSaveMain.PaymentOrderMainId, detailData);
+            var paymentOrderSaveDetail =
+                await _paymentRepository.PaymentOrderPostDetailSave(paymentOrderSaveMain.PaymentOrderMainId,
+                    detailData);
 
             var paymentOrderTransaction = _mapper.Map<List<PaymentTransaction>>(model.PaymentDocumentPosts);
 
             DataTable transactionData = paymentOrderTransaction.ConvertListOfCLassToDataTable();
-            var paymentOrderSaveTransaction = await _paymentRepository.PaymentOrderPostTransactionSave(paymentOrderSaveMain.PaymentOrderMainId, transactionData);
+            var paymentOrderSaveTransaction =
+                await _paymentRepository.PaymentOrderPostTransactionSave(paymentOrderSaveMain.PaymentOrderMainId,
+                    transactionData);
             await _unitOfWork.SaveChangesAsync();
 
             var dto = _mapper.Map<List<ASalfldgDto>>(data.Item1);
             var aSaldldgLadList = new List<ASalfldgLadDto>();
 
-            var allocationData = await _paymentRepository.PaymentOrderAllocationData(paymentOrderSaveMain.PaymentOrderMainId, userId);
+            var allocationData =
+                await _paymentRepository.PaymentOrderAllocationData(paymentOrderSaveMain.PaymentOrderMainId, userId);
             var allocationDataDto = _mapper.Map<List<AllocationDataDto>>(allocationData);
 
             foreach (var a in data.Item1)
@@ -385,7 +393,6 @@ namespace SolaERP.Persistence.Services
                     LAST_CHANGE_DATETIME = a.LAST_CHANGE_DATETIME
                 });
             }
-
 
 
             PaymentOrderPostAudit auditModel = new PaymentOrderPostAudit()
@@ -412,6 +419,12 @@ namespace SolaERP.Persistence.Services
         {
             var data = await _paymentRepository.PaymentOrders(payment);
             var dto = _mapper.Map<List<PaymentOrderDto>>(data);
+            foreach (var paymentOrderDto in dto)
+            {
+                paymentOrderDto.Base = Convert.ToDecimal(paymentOrderDto.Base.ToString("0.00"));
+                paymentOrderDto.Reporting = Convert.ToDecimal(paymentOrderDto.Reporting.ToString("0.00"));
+            }
+
             return ApiResponse<List<PaymentOrderDto>>.Success(dto);
         }
     }
