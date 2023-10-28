@@ -564,7 +564,9 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(x => x.Reference, y => y.Ignore())
                 .ReverseMap();
 
-            CreateMap<RegisterWFA, RegisterWFADto>().ReverseMap();
+            CreateMap<RegisterWFA, RegisterWFADto>()
+                .ForMember(x=>x.LinkedGRNsServices, y=>y.MapFrom(x=>x.GRNList))
+                .ReverseMap();
             CreateMap<RegisterAll, RegisterAllDto>().ReverseMap();
             CreateMap<RegisterMainLoad, RegisterMainLoadDto>().ReverseMap();
             CreateMap<RegisterLoadGRN, RegisterLoadGRNDto>().ReverseMap();

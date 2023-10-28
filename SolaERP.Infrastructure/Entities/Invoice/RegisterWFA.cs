@@ -29,5 +29,6 @@
         public string ReasonAdditionalDescription { get; set; }
         public int Sequence { get; set; }
         public long LineNo { get; set; }
+        public string GRNList { get; set; }
     }
 }
