@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Dtos.Invoice;
+﻿using SolaERP.Application.Dtos;
+using SolaERP.Application.Dtos.Invoice;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Models;
 
@@ -19,5 +20,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> Delete(List<int> ids, string name);
         Task<ApiResponse<List<MatchingMainGRNDto>>> MatchingMainGRN(InvoiceMatchingGRNModel model);
         Task<ApiResponse<List<MatchingMainServiceDto>>> MatchingMainService(InvoiceMatchingGRNModel model);
+        Task<ApiResponse<MatchingMainDto>> GetMatchingMain(int orderMainId);
     }
 }

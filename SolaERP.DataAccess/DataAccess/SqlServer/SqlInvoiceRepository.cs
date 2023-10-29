@@ -249,7 +249,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<List<MatchingMainGRN>> MatchingMainGRN(InvoiceMatchingGRNModel model)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_InvoiceMatchingMainGRN @businessUnitId,@dateFrom,@dateTo,@invoiceStatus,@toMatch";
+            command.CommandText =
+                @"exec dbo.SP_InvoiceMatchingMainGRN @businessUnitId,@dateFrom,@dateTo,@invoiceStatus,@toMatch";
             command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@dateFrom", model.DateFrom);
             command.Parameters.AddWithValue(command, "@dateTo", model.DateTo);
@@ -268,7 +269,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<List<MatchingMainService>> MatchingMainService(InvoiceMatchingGRNModel model)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_InvoiceMatchingMainService @businessUnitId,@dateFrom,@dateTo,@invoiceStatus,@toMatch";
+            command.CommandText =
+                @"exec dbo.SP_InvoiceMatchingMainService @businessUnitId,@dateFrom,@dateTo,@invoiceStatus,@toMatch";
             command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@dateFrom", model.DateFrom);
             command.Parameters.AddWithValue(command, "@dateTo", model.DateTo);
@@ -282,6 +284,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 list.Add(reader.GetByEntityStructure<MatchingMainService>());
 
             return list;
+        }
+
+        public async Task<MatchingMain> GetMatchingMain(int orderMainId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_InvoiceRegisterMatchingMain @OrderMainId";
+            command.Parameters.AddWithValue(command, "@OrderMainId", orderMainId);
+
+            await using var reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+                return reader.GetByEntityStructure<MatchingMain>();
+
+            return new MatchingMain();
         }
     }
 }

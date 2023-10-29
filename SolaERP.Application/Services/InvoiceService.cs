@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos;
 using SolaERP.Application.Dtos.Invoice;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Enums;
@@ -17,7 +18,8 @@ namespace SolaERP.Persistence.Services
         private readonly IAttachmentService _attachmentService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public InvoiceService(IUserRepository userRepository, IMapper mapper, IInvoiceRepository invoiceRepository, IAttachmentService attachmentService, IUnitOfWork unitOfWork)
+        public InvoiceService(IUserRepository userRepository, IMapper mapper, IInvoiceRepository invoiceRepository,
+            IAttachmentService attachmentService, IUnitOfWork unitOfWork)
         {
             _userRepository = userRepository;
             _mapper = mapper;
@@ -139,6 +141,7 @@ namespace SolaERP.Persistence.Services
             {
                 var data = await _invoiceRepository.Delete(ids[i], userId);
             }
+
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(true);
         }
@@ -155,6 +158,13 @@ namespace SolaERP.Persistence.Services
             var data = await _invoiceRepository.MatchingMainService(model);
             var dto = _mapper.Map<List<MatchingMainServiceDto>>(data);
             return ApiResponse<List<MatchingMainServiceDto>>.Success(dto);
+        }
+
+        public async Task<ApiResponse<MatchingMainDto>> GetMatchingMain(int orderMainId)
+        {
+            var data = await _invoiceRepository.GetMatchingMain(orderMainId);
+            var dto = _mapper.Map<MatchingMainDto>(data);
+            return ApiResponse<MatchingMainDto>.Success(dto);
         }
     }
 }

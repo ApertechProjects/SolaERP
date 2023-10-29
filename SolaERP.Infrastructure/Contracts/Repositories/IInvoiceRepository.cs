@@ -18,5 +18,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> Delete(int item, int userId);
         Task<List<MatchingMainGRN>> MatchingMainGRN(InvoiceMatchingGRNModel model);
         Task<List<MatchingMainService>> MatchingMainService(InvoiceMatchingGRNModel model);
+        Task<MatchingMain> GetMatchingMain(int orderMainId);
     }
 }

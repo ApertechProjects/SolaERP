@@ -556,10 +556,10 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<PaymentRequest, PaymentRequestDto>().ReverseMap();
 
             CreateMap<PaymentOrderMain, PaymentOrderMainDto>()
-                .ForMember(x=>x.JournalNumber,y=>y.MapFrom(x=>x.JournalNo))
-                .ForMember(x=>x.AllocateAmounttoPay,y=>y.MapFrom(x=>x.Amount))
-                .ForMember(x=>x.PaymentOrder,y=>y.MapFrom(x=>x.PaymentOrderNo))
-                .ForMember(x=>x.EntryDate,y=>y.MapFrom(x=>x.CreatedDate))
+                .ForMember(x => x.JournalNumber, y => y.MapFrom(x => x.JournalNo))
+                .ForMember(x => x.AllocateAmounttoPay, y => y.MapFrom(x => x.Amount))
+                .ForMember(x => x.PaymentOrder, y => y.MapFrom(x => x.PaymentOrderNo))
+                .ForMember(x => x.EntryDate, y => y.MapFrom(x => x.CreatedDate))
                 .ReverseMap();
             CreateMap<PaymentOrderDetail, PaymentOrderDetailDto>().ReverseMap();
             CreateMap<PaymentOrderTransaction, PaymentOrderTransactionDto>().ReverseMap();
@@ -570,7 +570,7 @@ namespace SolaERP.Persistence.Mappers
                 .ReverseMap();
 
             CreateMap<RegisterWFA, RegisterWFADto>()
-                .ForMember(x=>x.LinkedGRNsServices, y=>y.MapFrom(x=>x.GRNList))
+                .ForMember(x => x.LinkedGRNsServices, y => y.MapFrom(x => x.GRNList))
                 .ReverseMap();
 
             CreateMap<RegisterAll, RegisterAllDto>().ReverseMap();
@@ -590,6 +590,7 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<AllocationData, AllocationDataDto>().ReverseMap();
             CreateMap<PaymentOrder, PaymentOrderDto>().ReverseMap();
+            CreateMap<MatchingMain, MatchingMainDto>().ReverseMap();
         }
     }
 }
