@@ -4,5 +4,6 @@
     {
         public int InvoiceMatchingGRNId { get; set; }
         public string GRNReference { get; set; }
+        public bool Checked { get; set; }
     }
 }
