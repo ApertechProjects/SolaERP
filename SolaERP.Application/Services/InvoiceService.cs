@@ -4,6 +4,7 @@ using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos;
 using SolaERP.Application.Dtos.Invoice;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -25,7 +26,7 @@ namespace SolaERP.Persistence.Services
             _mapper = mapper;
             _invoiceRepository = invoiceRepository;
             _unitOfWork = unitOfWork;
-            _attachmentService= attachmentService;
+            _attachmentService = attachmentService;
         }
 
         public async Task<ApiResponse<List<RegisterAllDto>>> RegisterAll(InvoiceRegisterGetModel model, string name)
@@ -166,6 +167,13 @@ namespace SolaERP.Persistence.Services
             var data = await _invoiceRepository.GetMatchingMain(orderMainId);
             var dto = _mapper.Map<MatchingMainDto>(data);
             return ApiResponse<MatchingMainDto>.Success(dto);
+        }
+
+        public async Task<ApiResponse<List<InvoiceRegisterDetailDto>>> GetDetails(InvoiceGetDetailsModel model)
+        {
+            var data = await _invoiceRepository.GetDetails(model);
+            var dto = _mapper.Map<List<InvoiceRegisterDetailDto>>(data);
+            return ApiResponse<List<InvoiceRegisterDetailDto>>.Success(dto, 200);
         }
     }
 }

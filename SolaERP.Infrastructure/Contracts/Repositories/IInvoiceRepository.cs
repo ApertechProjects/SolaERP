@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Entities.Invoice;
+﻿using SolaERP.Application.Dtos.Invoice;
+using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Contracts.Repositories
@@ -19,5 +20,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<MatchingMainGRN>> MatchingMainGRN(InvoiceMatchingGRNModel model);
         Task<List<MatchingMainService>> MatchingMainService(InvoiceMatchingGRNModel model);
         Task<MatchingMain> GetMatchingMain(int orderMainId);
+        Task<List<InvoiceRegisterDetail>> GetDetails(InvoiceGetDetailsModel model);
     }
 }

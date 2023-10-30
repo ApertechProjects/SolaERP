@@ -75,5 +75,9 @@ namespace SolaERP.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMatchingMain([FromQuery] int orderMainId)
             => CreateActionResult(await _invoiceService.GetMatchingMain(orderMainId));
+
+        [HttpGet]
+        public async Task<IActionResult> GetDetails([FromQuery] InvoiceGetDetailsModel model)
+            => CreateActionResult(await _invoiceService.GetDetails(model));
     }
 }

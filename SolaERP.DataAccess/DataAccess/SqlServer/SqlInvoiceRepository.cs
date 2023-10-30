@@ -1,6 +1,9 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Dtos.Invoice;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Invoice;
+using SolaERP.Application.Entities.Item_Code;
+using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
@@ -298,6 +301,24 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return reader.GetByEntityStructure<MatchingMain>();
 
             return new MatchingMain();
+        }
+
+        public async Task<List<InvoiceRegisterDetail>> GetDetails(InvoiceGetDetailsModel model)
+        {
+            string grns = string.Join(',', model.GRNs);
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_InvoiceRegisterDetailsLoad @businessUnitId,@grns,@invoiceRegisterId";
+            command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
+            command.Parameters.AddWithValue(command, "@grns", string.IsNullOrEmpty(grns) ? "-1" : grns);
+            command.Parameters.AddWithValue(command, "@invoiceRegisterId", model.InvoiceRegisterId);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<InvoiceRegisterDetail> list = new List<InvoiceRegisterDetail>();
+            while (reader.Read())
+                list.Add(reader.GetByEntityStructure<InvoiceRegisterDetail>());
+
+            return list;
         }
     }
 }

@@ -1,6 +1,13 @@
-﻿namespace SolaERP.Application.Entities.Invoice
+﻿using SolaERP.Application.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SolaERP.Application.Dtos.Invoice
 {
-    public class InvoiceRegisterDetailDto
+    public class InvoiceRegisterDetail : BaseEntity
     {
         public int InvoiceMatchingDetailId { get; set; }
         public int InvoiceMatchingMainId { get; set; }
