@@ -584,7 +584,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 }
 
                 return new PaymentDocumentSaveResultModel
-                    { PaymentDocumentMainId = requestId, PaymentRequestNo = requestNo };
+                { PaymentDocumentMainId = requestId, PaymentRequestNo = requestNo };
             }
         }
 
@@ -990,17 +990,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<(List<ASalfldg>, int)> PaymentOrderPostData(DataTable table, int allocationReference,
+        public async Task<(List<ASalfldg>, int)> PaymentOrderPostData(DataTable table, int paymentOrderMainId, int allocationReference,
             int journalNo, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText =
-                    @"SET NOCOUNT OFF EXEC SP_PaymentOrderPostData @JournalNo,@AllocationReference,@UserId,@PaymentOrderTransactions,@NewJournalNo = @NewJournalNo OUTPUT select @NewJournalNo as NewJournalNo";
+                    @"SET NOCOUNT OFF EXEC dbo.SP_PaymentOrderPostData @JournalNo,@AllocationReference,@PaymentOrderMainId,@UserId,@PaymentOrderTransactions,@NewJournalNo = @NewJournalNo OUTPUT select @NewJournalNo as NewJournalNo";
                 command.Parameters.AddWithValue(command, "@JournalNo", journalNo);
                 command.Parameters.AddWithValue(command, "@AllocationReference", allocationReference);
-                command.Parameters.AddTableValue(command, "@PaymentOrderTransactions", "PaymentDocumentPost", table);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
+                command.Parameters.AddWithValue(command, "@PaymentOrderMainId", paymentOrderMainId);
+                command.Parameters.AddTableValue(command, "@PaymentOrderTransactions", "PaymentDocumentPost", table);
 
                 command.Parameters.Add("@NewJournalNo", SqlDbType.Int);
                 command.Parameters["@NewJournalNo"].Direction = ParameterDirection.Output;

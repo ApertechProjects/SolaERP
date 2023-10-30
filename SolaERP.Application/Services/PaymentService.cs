@@ -352,7 +352,7 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<PaymentOrderPostDataResult>.Success("Post to SS already created for this data");
 
             var table = model.PaymentDocumentPosts.ConvertListOfCLassToDataTable();
-            var data = await _paymentRepository.PaymentOrderPostData(table, model.AllocationReference, model.JournalNo,
+            var data = await _paymentRepository.PaymentOrderPostData(table, model.PaymentOrderMain.PaymentOrderMainId, model.AllocationReference, model.JournalNo,
                 userId);
 
             var paymentOrderSaveMain = await _paymentRepository.PaymentOrderPostSaveMain(model.PaymentOrderMain,
