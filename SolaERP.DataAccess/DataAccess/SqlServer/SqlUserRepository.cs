@@ -76,7 +76,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
                 if (reader.Read())
                     user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate",
-                        "VerifyToken", "Language", "DefaultBusinessUnitId");
+                        "VerifyToken", "Language", "DefaultBusinessUnitId","BusinessUnitCode");
 
                 return user;
             }
@@ -110,7 +110,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
                 using var reader = await command.ExecuteReaderAsync();
                 if (reader.Read())
-                    user = reader.GetByEntityStructure<User>("Language");
+                    user = reader.GetByEntityStructure<User>("Language","BusinessUnitCode");
 
                 return user;
             }
