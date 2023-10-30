@@ -48,7 +48,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             User user = null;
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "Select * from Config.AppUser where Id = @Id";
+                command.CommandText = "Select *,bu.BusinessUnitCode from Config.AppUser au \r\nINNER JOIN Config.BusinessUnits bu\r\nON au.DefaultBusinessUnitId = Bu.BusinessUnitId\r\nwhere Id =  @Id";
                 command.Parameters.AddWithValue(command, "@Id", userId);
 
                 using var reader = await command.ExecuteReaderAsync();

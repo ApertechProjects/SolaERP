@@ -21,5 +21,6 @@ namespace SolaERP.Application.Dtos.UserDto
         public UserRegisterType UserType { get; set; }
         public string UserPhoto { get; set; }
         public int DefaultBusinessUnitId { get; set; }
+        public string BusinessUnitCode { get; set; }
     }
 }
