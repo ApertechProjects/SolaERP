@@ -9,6 +9,7 @@ namespace SolaERP.Application.Entities.Invoice
     public class MatchingMainService : BaseEntity
     {
         public int OrderMainId { get; set; }
+        public long LineNo { get; set; }
         public string OrderNo { get; set; }
         public decimal OrderTotal { get; set; }
         public string VendorCode { get; set; }
