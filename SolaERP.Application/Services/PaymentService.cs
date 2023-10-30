@@ -351,10 +351,7 @@ namespace SolaERP.Persistence.Services
             if (checkNonAllocated)
                 return ApiResponse<PaymentOrderPostDataResult>.Success("Post to SS already created for this data");
 
-            var table = model.PaymentDocumentPosts.ConvertListOfCLassToDataTable();
-            var data = await _paymentRepository.PaymentOrderPostData(table, model.PaymentOrderMain.PaymentOrderMainId, model.AllocationReference, model.JournalNo,
-                userId);
-
+            #region Save
             var paymentOrderSaveMain = await _paymentRepository.PaymentOrderPostSaveMain(model.PaymentOrderMain,
                 model.AllocationReference, model.JournalNo, userId);
 
@@ -368,6 +365,12 @@ namespace SolaERP.Persistence.Services
             var paymentOrderSaveTransaction =
                 await _paymentRepository.PaymentOrderPostTransactionSave(paymentOrderSaveMain.PaymentOrderMainId,
                     transactionData);
+            #endregion
+
+            var table = model.PaymentDocumentPosts.ConvertListOfCLassToDataTable();
+            var data = await _paymentRepository.PaymentOrderPostData(table, model.PaymentOrderMain.PaymentOrderMainId, model.AllocationReference, model.JournalNo,
+                userId);
+
             await _unitOfWork.SaveChangesAsync();
 
             var dto = _mapper.Map<List<ASalfldgDto>>(data.Item1);

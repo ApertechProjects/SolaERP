@@ -85,7 +85,7 @@ namespace SolaERP.Application.Entities.Payment
         public int PRINCIPAL_REQD { get; set; }
         public string BINDER_STATUS { get; set; }
         public int AGREED_STATUS { get; set; }
-        public int SPLIT_LINK_REF { get; set; }
+        public string SPLIT_LINK_REF { get; set; }
         public string PSTG_REF { get; set; }
         public int TRUE_RATED { get; set; }
         public DateTime? HOLD_DATETIME { get; set; }
