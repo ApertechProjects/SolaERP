@@ -25,6 +25,7 @@ namespace SolaERP.Persistence.Services
             _mapper = mapper;
             _invoiceRepository = invoiceRepository;
             _unitOfWork = unitOfWork;
+            _attachmentService= attachmentService;
         }
 
         public async Task<ApiResponse<List<RegisterAllDto>>> RegisterAll(InvoiceRegisterGetModel model, string name)
