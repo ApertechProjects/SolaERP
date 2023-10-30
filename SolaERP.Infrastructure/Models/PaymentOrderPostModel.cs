@@ -106,5 +106,7 @@ namespace SolaERP.Application.Models
     {
         public int JournalNo { get; set; }
         public string PaymentOrderNo { get; set; }
+        public int PaymentOrderMainId { get; set; }
+
     }
 }
