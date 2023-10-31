@@ -25,6 +25,8 @@
     {
         public long LineNo { get; set; }
         public int PaymentDocumentDetailId { get; set; }
+        public int PaymentOrderDetailId { get; set; }
+        public int PaymentOrderMainId { get; set; }
         public string PaymentRequestNo { get; set; }
         public DateTime PaymentRequestDate { get; set; }
         public string TransactionReference { get; set; }

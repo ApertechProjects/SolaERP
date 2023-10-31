@@ -24,6 +24,8 @@
     public class PaymentOrderDetailDto
     {
         public long LineNo { get; set; }
+        public int PaymentOrderDetailId { get; set; }
+        public int PaymentOrderMainId { get; set; }
         public int PaymentDocumentDetailId { get; set; }
         public string PaymentRequestNo { get; set; }
         public DateTime? PaymentRequestDate { get; set; }
