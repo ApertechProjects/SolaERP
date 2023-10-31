@@ -14,6 +14,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Transactions;
 using System.Xml.Linq;
 
 namespace SolaERP.Persistence.Services
@@ -338,88 +339,106 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<bool>.Success(true);
             }
 
-            return ApiResponse<bool>.Fail(false, 400);
+            throw new Exception("Post not successfull!");
         }
 
         public async Task<ApiResponse<PaymentOrderPostDataResult>> PaymentOrderPostData(PaymentOrderPostModel model,
             string name)
         {
-            var userId = await _userRepository.ConvertIdentity(name);
-            DataTable detailData = model.PaymentOrderDetails.ConvertListOfCLassToDataTable();
-            var checkNonAllocated = await _paymentRepository.PaymentOrderDetailsCheckNonAllocated(detailData);
-
-            if (checkNonAllocated)
-                return ApiResponse<PaymentOrderPostDataResult>.Success("Post to SS already created for this data");
-
-            #region Save
-            var paymentOrderSaveMain = await _paymentRepository.PaymentOrderPostSaveMain(model.PaymentOrderMain,
-                model.AllocationReference, model.JournalNo, userId);
-
-            var paymentOrderSaveDetail =
-                await _paymentRepository.PaymentOrderPostDetailSave(paymentOrderSaveMain.PaymentOrderMainId,
-                    detailData);
-
-            var paymentOrderTransaction = _mapper.Map<List<PaymentTransaction>>(model.PaymentDocumentPosts);
-
-            DataTable transactionData = paymentOrderTransaction.ConvertListOfCLassToDataTable();
-            var paymentOrderSaveTransaction =
-                await _paymentRepository.PaymentOrderPostTransactionSave(paymentOrderSaveMain.PaymentOrderMainId,
-                    transactionData);
-            #endregion
-
-            var table = model.PaymentDocumentPosts.ConvertListOfCLassToDataTable();
-            var data = await _paymentRepository.PaymentOrderPostData(table, paymentOrderSaveMain.PaymentOrderMainId, model.AllocationReference, model.JournalNo,
-                userId);
-
-            await _unitOfWork.SaveChangesAsync();
-
-            var dto = _mapper.Map<List<ASalfldgDto>>(data.Item1);
-            var aSaldldgLadList = new List<ASalfldgLadDto>();
-
-            var allocationData =
-                await _paymentRepository.PaymentOrderAllocationData(paymentOrderSaveMain.PaymentOrderMainId, userId);
-            var allocationDataDto = _mapper.Map<List<AllocationDataDto>>(allocationData);
-
-            foreach (var a in data.Item1)
+            using (TransactionScope scope = new TransactionScope())
             {
-                aSaldldgLadList.Add(new ASalfldgLadDto
+                try
                 {
-                    ACCNT_CODE = a.ACCNT_CODE,
-                    PERIOD = a.PERIOD,
-                    TRANS_DATETIME = a.TRANS_DATETIME,
-                    JRNAL_NO = a.JRNAL_NO,
-                    JRNAL_LINE = a.JRNAL_LINE,
-                    GNRL_DESCR_24 = a.InvoiceNo,
-                    GNRL_DESCR_25 = a.Reference,
-                    UPDATE_COUNT = 1,
-                    LAST_CHANGE_USER_ID = a.LAST_CHANGE_USER_ID,
-                    USER_NAME = a.JRNAL_SRCE,
-                    INTCO_TYPE = 0,
-                    INTCO_PSTG_STATUS = 0,
-                    LAST_CHANGE_DATETIME = a.LAST_CHANGE_DATETIME
-                });
+                    var userId = await _userRepository.ConvertIdentity(name);
+                    DataTable detailData = model.PaymentOrderDetails.ConvertListOfCLassToDataTable();
+                    var checkNonAllocated = await _paymentRepository.PaymentOrderDetailsCheckNonAllocated(detailData);
+
+                    if (checkNonAllocated)
+                        return ApiResponse<PaymentOrderPostDataResult>.Success(
+                            "Post to SS already created for this data");
+
+                    #region Save
+
+                    var paymentOrderSaveMain = await _paymentRepository.PaymentOrderPostSaveMain(model.PaymentOrderMain,
+                        model.AllocationReference, model.JournalNo, userId);
+
+                    var paymentOrderSaveDetail =
+                        await _paymentRepository.PaymentOrderPostDetailSave(paymentOrderSaveMain.PaymentOrderMainId,
+                            detailData);
+
+                    var paymentOrderTransaction = _mapper.Map<List<PaymentTransaction>>(model.PaymentDocumentPosts);
+
+                    DataTable transactionData = paymentOrderTransaction.ConvertListOfCLassToDataTable();
+                    var paymentOrderSaveTransaction =
+                        await _paymentRepository.PaymentOrderPostTransactionSave(
+                            paymentOrderSaveMain.PaymentOrderMainId,
+                            transactionData);
+
+                    #endregion
+
+                    var table = model.PaymentDocumentPosts.ConvertListOfCLassToDataTable();
+                    var data = await _paymentRepository.PaymentOrderPostData(table,
+                        paymentOrderSaveMain.PaymentOrderMainId,
+                        model.AllocationReference, model.JournalNo,
+                        userId);
+
+                    await _unitOfWork.SaveChangesAsync();
+
+                    var dto = _mapper.Map<List<ASalfldgDto>>(data.Item1);
+                    var aSaldldgLadList = new List<ASalfldgLadDto>();
+
+                    var allocationData =
+                        await _paymentRepository.PaymentOrderAllocationData(paymentOrderSaveMain.PaymentOrderMainId,
+                            userId);
+                    var allocationDataDto = _mapper.Map<List<AllocationDataDto>>(allocationData);
+
+                    foreach (var a in data.Item1)
+                    {
+                        aSaldldgLadList.Add(new ASalfldgLadDto
+                        {
+                            ACCNT_CODE = a.ACCNT_CODE,
+                            PERIOD = a.PERIOD,
+                            TRANS_DATETIME = a.TRANS_DATETIME,
+                            JRNAL_NO = a.JRNAL_NO,
+                            JRNAL_LINE = a.JRNAL_LINE,
+                            GNRL_DESCR_24 = a.InvoiceNo,
+                            GNRL_DESCR_25 = a.Reference,
+                            UPDATE_COUNT = 1,
+                            LAST_CHANGE_USER_ID = a.LAST_CHANGE_USER_ID,
+                            USER_NAME = a.JRNAL_SRCE,
+                            INTCO_TYPE = 0,
+                            INTCO_PSTG_STATUS = 0,
+                            LAST_CHANGE_DATETIME = a.LAST_CHANGE_DATETIME
+                        });
+                    }
+
+
+                    PaymentOrderPostAudit auditModel = new PaymentOrderPostAudit()
+                    {
+                        ASalfldgs = dto,
+                        AllocationReference = model.AllocationReference,
+                        AllocationDatas = allocationDataDto,
+                        ASalfldgLads = aSaldldgLadList,
+                        CurrentPeriod = dto[0].ENTRY_PRD,
+                        JournalNo = dto[0].JRNAL_NO,
+                        SunUser = dto[0].JRNAL_SRCE,
+                    };
+
+                    await PaymentPostOperation(auditModel, model.BusinessUnitCode);
+                    scope.Complete();
+                    return ApiResponse<PaymentOrderPostDataResult>.Success(new PaymentOrderPostDataResult
+                    {
+                        JournalNo = data.Item2,
+                        PaymentOrderNo = paymentOrderSaveMain.PaymentOrderNo,
+                        PaymentOrderMainId = paymentOrderSaveMain.PaymentOrderMainId,
+                    }, 200);
+                }
+                catch (Exception e)
+                {
+                    scope.Dispose();
+                    return ApiResponse<PaymentOrderPostDataResult>.Fail(e.Message, 400);
+                }
             }
-
-
-            PaymentOrderPostAudit auditModel = new PaymentOrderPostAudit()
-            {
-                ASalfldgs = dto,
-                AllocationReference = model.AllocationReference,
-                AllocationDatas = allocationDataDto,
-                ASalfldgLads = aSaldldgLadList,
-                CurrentPeriod = dto[0].ENTRY_PRD,
-                JournalNo = dto[0].JRNAL_NO,
-                SunUser = dto[0].JRNAL_SRCE,
-            };
-
-            var result = await PaymentPostOperation(auditModel, model.BusinessUnitCode);
-
-            return ApiResponse<PaymentOrderPostDataResult>.Success(new PaymentOrderPostDataResult
-            {
-                JournalNo = data.Item2,
-                PaymentOrderNo = paymentOrderSaveMain.PaymentOrderNo,
-                PaymentOrderMainId = paymentOrderSaveMain.PaymentOrderMainId,
-            }, 200);
         }
 
         public async Task<ApiResponse<List<PaymentOrderDto>>> PaymentOrders(PaymentOrderGetModel payment)
