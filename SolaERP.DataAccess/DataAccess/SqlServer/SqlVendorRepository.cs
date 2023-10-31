@@ -204,7 +204,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Status", status);
 
                 await _unitOfWork.SaveChangesAsync();
-                
+
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
@@ -526,7 +526,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     RespondedDate = reader.Get<DateTime>("RespondedDate"),
                     EnteredBy = reader.Get<string>("EnteredBy"),
                     SentDate = reader.Get<DateTime>("SentDate"),
-                    CreatedDate = reader.Get<DateTime>("CreatedDate")
+                    CreatedDate = reader.Get<DateTime>("CreatedDate"),
+                    BiddingType = reader.Get<int>("BiddingType")
                 });
             }
 

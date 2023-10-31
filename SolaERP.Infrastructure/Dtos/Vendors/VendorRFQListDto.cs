@@ -18,4 +18,5 @@ public class VendorRFQListDto
     public string EnteredBy { get; set; }
     public DateTime SentDate { get; set; }
     public DateTime CreatedDate { get; set; }
+    public int BiddingType { get; set; }
 }
