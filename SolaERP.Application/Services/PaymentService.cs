@@ -326,13 +326,13 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> DeleteAndUpdateAlloc(PaymentOrderPostAudit model, string businessUnitCode)
         {
             using HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(_configuration[$"BusinessUnits:{businessUnitCode}"] + "/api/v1/delete-and-update-alloc");
+            client.BaseAddress = new Uri(_configuration[$"BusinessUnits:{businessUnitCode}"] + "/api/v1/a-salfldg/delete-and-update-alloc");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             string json = JsonSerializer.Serialize(model);
             HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response =
-                await client.PostAsync(_configuration[$"BusinessUnits:{businessUnitCode}"] + "api/v1/delete-and-update-alloc",
+                await client.PostAsync(_configuration[$"BusinessUnits:{businessUnitCode}"] + "api/v1/a-salfldg/delete-and-update-alloc",
                     content);
 
             return ApiResponse<bool>.Success(true);
@@ -341,13 +341,13 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> SaveAsalfldgAndPstgAudit(PaymentOrderPostAudit model, string businessUnitCode)
         {
             using HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(_configuration[$"BusinessUnits:{businessUnitCode}"] + "/api/v1/save-asalfdg-and-pstg-audit");
+            client.BaseAddress = new Uri(_configuration[$"BusinessUnits:{businessUnitCode}"] + "/api/v1/a-salfldg/save-asalfdg-and-pstg-audit");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             string json = JsonSerializer.Serialize(model);
             HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response =
-                await client.PostAsync(_configuration[$"BusinessUnits:{businessUnitCode}"] + "api/v1/save-asalfdg-and-pstg-audit",
+                await client.PostAsync(_configuration[$"BusinessUnits:{businessUnitCode}"] + "api/v1/a-salfldg/save-asalfdg-and-pstg-audit",
                     content);
 
             return ApiResponse<bool>.Success(true);
@@ -357,13 +357,13 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> SaveAllocations(PaymentOrderPostAudit model, string businessUnitCode)
         {
             using HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(_configuration[$"BusinessUnits:{businessUnitCode}"] + "/api/v1/sava-all-locations");
+            client.BaseAddress = new Uri(_configuration[$"BusinessUnits:{businessUnitCode}"] + "/api/v1/a-salfldg/sava-all-locations");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             string json = JsonSerializer.Serialize(model);
             HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response =
-                await client.PostAsync(_configuration[$"BusinessUnits:{businessUnitCode}"] + "api/v1/sava-all-locations",
+                await client.PostAsync(_configuration[$"BusinessUnits:{businessUnitCode}"] + "api/v1/a-salfldg/sava-all-locations",
                     content);
 
             return ApiResponse<bool>.Success(true);
