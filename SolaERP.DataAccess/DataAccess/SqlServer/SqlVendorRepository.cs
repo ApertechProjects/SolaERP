@@ -527,7 +527,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     EnteredBy = reader.Get<string>("EnteredBy"),
                     SentDate = reader.Get<DateTime>("SentDate"),
                     CreatedDate = reader.Get<DateTime>("CreatedDate"),
-                    BiddingType = reader.Get<int>("BiddingType")
+                    BiddingType = reader.Get<string>("BiddingType")
                 });
             }
 
