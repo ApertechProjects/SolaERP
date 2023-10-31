@@ -169,11 +169,24 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<MatchingMainDto>.Success(dto);
         }
 
-        public async Task<ApiResponse<List<InvoiceRegisterDetailDto>>> GetDetails(InvoiceGetDetailsModel model)
+        public async Task<ApiResponse<List<InvoiceRegisterDetailForPODto>>> GetDetailsForPO(InvoiceGetDetailsModel model)
         {
-            var data = await _invoiceRepository.GetDetails(model);
-            var dto = _mapper.Map<List<InvoiceRegisterDetailDto>>(data);
-            return ApiResponse<List<InvoiceRegisterDetailDto>>.Success(dto, 200);
+            var data = await _invoiceRepository.GetDetailsForPO(model);
+            var dto = _mapper.Map<List<InvoiceRegisterDetailForPODto>>(data);
+            return ApiResponse<List<InvoiceRegisterDetailForPODto>>.Success(dto, 200);
         }
+        public async Task<ApiResponse<List<InvoiceRegisterDetailForOtherDto>>> GetDetailsForOtherOrderTypes(InvoiceGetDetailsModel model)
+        {
+            var data = await _invoiceRepository.GetDetailsForOther(model);
+            var dto = _mapper.Map<List<InvoiceRegisterDetailForOtherDto>>(data);
+            return ApiResponse<List<InvoiceRegisterDetailForOtherDto>>.Success(dto, 200);
+        }
+
+        public async Task<string> GetKeyCode(int invoiceRegisterId)
+        {
+            var data = await _invoiceRepository.GetKeyKode(invoiceRegisterId);
+            return data;
+        }
+
     }
 }

@@ -20,6 +20,8 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<MatchingMainGRN>> MatchingMainGRN(InvoiceMatchingGRNModel model);
         Task<List<MatchingMainService>> MatchingMainService(InvoiceMatchingGRNModel model);
         Task<MatchingMain> GetMatchingMain(int orderMainId);
-        Task<List<InvoiceRegisterDetail>> GetDetails(InvoiceGetDetailsModel model);
+        Task<List<InvoiceRegisterDetailForPO>> GetDetailsForPO(InvoiceGetDetailsModel model);
+        Task<List<InvoiceRegisterDetailForOther>> GetDetailsForOther(InvoiceGetDetailsModel model);
+        Task<string> GetKeyKode(int invoiceRegisterId);
     }
 }

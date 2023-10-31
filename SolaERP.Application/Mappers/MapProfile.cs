@@ -592,7 +592,9 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<PaymentOrder, PaymentOrderDto>().ReverseMap();
             CreateMap<MatchingMain, MatchingMainDto>().ReverseMap();
 
-            CreateMap<InvoiceRegisterDetail, InvoiceRegisterDetailDto>();
+            CreateMap<InvoiceRegisterDetailForPO, InvoiceRegisterDetailForPODto>().ReverseMap();
+            CreateMap<InvoiceRegisterDetailForOther, InvoiceRegisterDetailForOtherDto>().ReverseMap();
+            CreateMap<InvoiceRegisterDetailForGeneral, InvoiceRegisterDetailForGeneralDto>().ReverseMap();
         }
     }
 }

@@ -78,6 +78,15 @@ namespace SolaERP.API.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetDetails([FromQuery] InvoiceGetDetailsModel model)
-            => CreateActionResult(await _invoiceService.GetDetails(model));
+        {
+            string keyCode = await _invoiceService.GetKeyCode(model.InvoiceRegisterId);
+            if (keyCode == "PO")
+                return CreateActionResult(await _invoiceService.GetDetailsForPO(model));
+            else
+                return CreateActionResult(await _invoiceService.GetDetailsForOtherOrderTypes(model));
+
+
+
+        }
     }
 }

@@ -303,7 +303,27 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return new MatchingMain();
         }
 
-        public async Task<List<InvoiceRegisterDetail>> GetDetails(InvoiceGetDetailsModel model)
+        public async Task<string> GetKeyKode(int invoiceRegisterId)
+        {
+            string result = null;
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"SELECT TOP 1 ot.KeyCode FROM Finance.InvoiceRegister ir
+                                    INNER JOIN Procurement.OrderMain om1
+                                    ON ir.OrderMainId = om1.OrderMainId
+                                    INNER JOIN Register.OrderTypes ot
+                                    ON om1.OrderTypeId = ot.OrderTypeId
+                                    WHERE ir.InvoiceRegisterId = @invoiceRegisterId";
+            command.Parameters.AddWithValue(command, "@invoiceRegisterId", invoiceRegisterId);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            while (reader.Read())
+                result = reader.Get<string>("KeyCode");
+
+            return result;
+        }
+
+        public async Task<List<InvoiceRegisterDetailForPO>> GetDetailsForPO(InvoiceGetDetailsModel model)
         {
             string grns = string.Join(',', model.GRNs);
             using var command = _unitOfWork.CreateCommand() as DbCommand;
@@ -314,9 +334,27 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             using var reader = await command.ExecuteReaderAsync();
 
-            List<InvoiceRegisterDetail> list = new List<InvoiceRegisterDetail>();
+            List<InvoiceRegisterDetailForPO> list = new List<InvoiceRegisterDetailForPO>();
             while (reader.Read())
-                list.Add(reader.GetByEntityStructure<InvoiceRegisterDetail>());
+                list.Add(reader.GetByEntityStructure<InvoiceRegisterDetailForPO>());
+
+            return list;
+        }
+
+        public async Task<List<InvoiceRegisterDetailForOther>> GetDetailsForOther(InvoiceGetDetailsModel model)
+        {
+            string grns = string.Join(',', model.GRNs);
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_InvoiceRegisterDetailsLoad @businessUnitId,@grns,@invoiceRegisterId";
+            command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
+            command.Parameters.AddWithValue(command, "@grns", string.IsNullOrEmpty(grns) ? "-1" : grns);
+            command.Parameters.AddWithValue(command, "@invoiceRegisterId", model.InvoiceRegisterId);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<InvoiceRegisterDetailForOther> list = new List<InvoiceRegisterDetailForOther>();
+            while (reader.Read())
+                list.Add(reader.GetByEntityStructure<InvoiceRegisterDetailForOther>());
 
             return list;
         }

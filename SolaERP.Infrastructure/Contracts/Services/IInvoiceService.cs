@@ -22,6 +22,8 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<MatchingMainGRNDto>>> MatchingMainGRN(InvoiceMatchingGRNModel model);
         Task<ApiResponse<List<MatchingMainServiceDto>>> MatchingMainService(InvoiceMatchingGRNModel model);
         Task<ApiResponse<MatchingMainDto>> GetMatchingMain(int orderMainId);
-        Task<ApiResponse<List<InvoiceRegisterDetailDto>>> GetDetails(InvoiceGetDetailsModel model);
+        Task<ApiResponse<List<InvoiceRegisterDetailForPODto>>> GetDetailsForPO(InvoiceGetDetailsModel model);
+        Task<ApiResponse<List<InvoiceRegisterDetailForOtherDto>>> GetDetailsForOtherOrderTypes(InvoiceGetDetailsModel model);
+        Task<string> GetKeyCode(int invoiceRegisterId);
     }
 }

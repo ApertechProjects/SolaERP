@@ -39,7 +39,6 @@ namespace SolaERP.Persistence.Services
         {
             var entity = _mapper.Map<BidComparisonIUD>(bidComparison);
             var saveResponse = await _bidComparisonRepository.AddComparisonAsync(entity);
-            await _unitOfWork.SaveChangesAsync();
 
             bidComparison.Attachments.ForEach(attachment =>
             {
@@ -58,6 +57,8 @@ namespace SolaERP.Persistence.Services
                     _attachmentService.SaveAttachmentAsync(attachment).Wait();
                 }
             });
+
+            await _unitOfWork.SaveChangesAsync();
 
             return ApiResponse<bool>.Success(saveResponse, 200);
         }
