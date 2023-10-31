@@ -368,7 +368,7 @@ namespace SolaERP.Persistence.Services
             #endregion
 
             var table = model.PaymentDocumentPosts.ConvertListOfCLassToDataTable();
-            var data = await _paymentRepository.PaymentOrderPostData(table, model.PaymentOrderMain.PaymentOrderMainId, model.AllocationReference, model.JournalNo,
+            var data = await _paymentRepository.PaymentOrderPostData(table, paymentOrderSaveMain.PaymentOrderMainId, model.AllocationReference, model.JournalNo,
                 userId);
 
             await _unitOfWork.SaveChangesAsync();
