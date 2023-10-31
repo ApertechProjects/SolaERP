@@ -342,8 +342,6 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<PaymentOrderPostDataResult>> PaymentOrderPostData(PaymentOrderPostModel model,
             string name)
         {
-
-
             var userId = await _userRepository.ConvertIdentity(name);
             DataTable detailData = model.PaymentOrderDetails.ConvertListOfCLassToDataTable();
             var checkNonAllocated = await _paymentRepository.PaymentOrderDetailsCheckNonAllocated(detailData);
@@ -370,6 +368,8 @@ namespace SolaERP.Persistence.Services
                     transactionData);
 
             #endregion
+            
+            //todo 2 delete + 1 balaca update alloc
 
             var table = model.PaymentDocumentPosts.ConvertListOfCLassToDataTable();
             var data = await _paymentRepository.PaymentOrderPostData(table,
@@ -382,10 +382,14 @@ namespace SolaERP.Persistence.Services
             var dto = _mapper.Map<List<ASalfldgDto>>(data.Item1);
             var aSaldldgLadList = new List<ASalfldgLadDto>();
 
+            //todo 4- 5 - 6 - 7
+            
             var allocationData =
                 await _paymentRepository.PaymentOrderAllocationData(paymentOrderSaveMain.PaymentOrderMainId,
                     userId);
             var allocationDataDto = _mapper.Map<List<AllocationDataDto>>(allocationData);
+            
+            //todo 8
 
             foreach (var a in data.Item1)
             {
