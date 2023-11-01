@@ -108,7 +108,7 @@ namespace SolaERP.Persistence.Services
                 else
                 {
                     if (attachment.AttachmentId > 0) return;
-                    attachment.SourceId = bidMain.BidMainId;
+                    attachment.SourceId = saveResponse.Id;
                     attachment.SourceType = SourceType.BID.ToString();
                     _attachmentService.SaveAttachmentAsync(attachment).Wait();
                 }
@@ -126,7 +126,7 @@ namespace SolaERP.Persistence.Services
                 else
                 {
                     if (attachment.AttachmentId > 0) return;
-                    attachment.SourceId = bidMain.BidMainId;
+                    attachment.SourceId = saveResponse.Id;
                     attachment.SourceType = SourceType.BID_COMM.ToString();
                     _attachmentService.SaveAttachmentAsync(attachment).Wait();
                 }
