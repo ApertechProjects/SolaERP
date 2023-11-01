@@ -22,6 +22,8 @@ namespace SolaERP.Application.Entities.Payment
         public decimal Amount { get; set; }
         public decimal BaseRate { get; set; }
         public decimal BaseAmount { get; set; }
+        public decimal ReportRate { get; set; }
+
         public decimal ReportAmount { get; set; }
         public string JournalType { get; set; }
         public string Budget { get; set; }

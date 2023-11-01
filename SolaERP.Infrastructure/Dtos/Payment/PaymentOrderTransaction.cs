@@ -22,6 +22,7 @@ namespace SolaERP.Application.Dtos.Payment
         public string D_C { get; set; }
         public decimal Amount { get; set; }
         public decimal BaseRate { get; set; }
+        public decimal ReportRate { get; set; }
         public decimal BaseAmount { get; set; }
         public decimal ReportAmount { get; set; }
         public string JournalType { get; set; }
