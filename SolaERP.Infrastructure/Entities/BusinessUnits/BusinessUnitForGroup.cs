@@ -1,6 +1,6 @@
 ﻿namespace SolaERP.Application.Entities.BusinessUnits
 {
-    public class BusinessUnitForGroup : BaseBusinessUnit
+    public class BusinessUnitForGroup : BaseEntity
     {
         public int GroupBusinessUnitId { get; set; }
         public int BusinessUnitId { get; set; }
