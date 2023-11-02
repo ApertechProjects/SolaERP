@@ -61,7 +61,7 @@ namespace SolaERP.Persistence.Services
             var userExsist = await _userRepository.GetByEmailAsync(model.Email);
 
             if (userExsist is not null)
-                return ApiResponse<int>.Fail("user", "This user is already exsist in our system", 422, false);
+                return ApiResponse<int>.Fail("user", "This user is already exist in our system", 422, false);
 
             if (model.Password != model.ConfirmPassword)
                 return ApiResponse<int>.Fail("password", "Password doesn't match with confirm password", 422, false);
