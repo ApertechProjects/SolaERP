@@ -9,4 +9,18 @@ namespace SolaERP.Application.Entities.Vendors
         public string VendorType { get; set; }
 
     }
+
+    public class VendorDraft : BaseVendor
+    {
+        public string CountryCode { get; set; }
+        public string ApproveStatusName { get; set; }
+
+    }
+
+    public class VendorApproved : BaseVendor
+    {
+        public string CountryCode { get; set; }
+        public string ApproveStatusName { get; set; }
+
+    }
 }

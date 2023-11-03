@@ -329,7 +329,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<VendorAll>> GetDraftAsync(int userId, VendorFilter filter)
+        public async Task<List<VendorDraft>> GetDraftAsync(int userId, VendorFilter filter)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -350,10 +350,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     string.Join(",", filter.BusinessCategoryId));
 
                 using var reader = await command.ExecuteReaderAsync();
-                List<VendorAll> data = new List<VendorAll>();
+                List<VendorDraft> data = new List<VendorDraft>();
 
                 while (reader.Read())
-                    data.Add(reader.GetByEntityStructure<VendorAll>());
+                    data.Add(reader.GetByEntityStructure<VendorDraft>());
 
                 return data;
             }
@@ -435,9 +435,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<VendorAll>> GetApprovedAsync(int userId)
+        public async Task<List<VendorApproved>> GetApprovedAsync(int userId)
         {
-            List<VendorAll> data = new();
+            List<VendorApproved> data = new();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "EXEC SP_VendorApproved @UserId";
@@ -445,7 +445,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 using var reader = await command.ExecuteReaderAsync();
                 while (reader.Read())
-                    data.Add(reader.GetByEntityStructure<VendorAll>());
+                    data.Add(reader.GetByEntityStructure<VendorApproved>());
 
                 return data;
             }

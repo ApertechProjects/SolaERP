@@ -151,15 +151,15 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<VendorAllDto>>.Fail("Data not found", 404);
         }
 
-        public async Task<ApiResponse<List<VendorAllDto>>> GetApprovedAsync(string userIdentity, string text)
+        public async Task<ApiResponse<List<VendorApprovedDto>>> GetApprovedAsync(string userIdentity, string text)
         {
             var approvedByCurrentUser = await _repository.GetApprovedAsync(Convert.ToInt32(userIdentity));
             approvedByCurrentUser = approvedByCurrentUser.GetDataByFilter(text);
 
-            var dto = _mapper.Map<List<VendorAllDto>>(approvedByCurrentUser);
+            var dto = _mapper.Map<List<VendorApprovedDto>>(approvedByCurrentUser);
             if (dto.Count > 0)
-                return ApiResponse<List<VendorAllDto>>.Success(dto, 200);
-            return ApiResponse<List<VendorAllDto>>.Fail("Data not found", 404);
+                return ApiResponse<List<VendorApprovedDto>>.Success(dto, 200);
+            return ApiResponse<List<VendorApprovedDto>>.Fail("Data not found", 404);
         }
 
         public async Task<VendorInfo> GetByTaxAsync(string taxId)
@@ -171,13 +171,13 @@ namespace SolaERP.Persistence.Services
             return entity.VendorId;
         }
 
-        public async Task<ApiResponse<List<VendorAll>>> GetDraftAsync(string userIdentity, VendorFilter filter)
+        public async Task<ApiResponse<List<VendorDraft>>> GetDraftAsync(string userIdentity, VendorFilter filter)
         {
             var data = await _repository.GetDraftAsync(Convert.ToInt32(userIdentity), filter);
             data = data.GetDataByFilter(filter.Text);
             if (data.Count > 0)
-                return ApiResponse<List<VendorAll>>.Success(data, 200);
-            return ApiResponse<List<VendorAll>>.Fail("Data not found", 404);
+                return ApiResponse<List<VendorDraft>>.Success(data, 200);
+            return ApiResponse<List<VendorDraft>>.Fail("Data not found", 404);
         }
 
         public async Task<ApiResponse<VM_GetVendorFilters>> GetFiltersAsync()
