@@ -343,11 +343,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<InvoiceRegisterDetailForOther>> GetDetailsForOther(InvoiceGetDetailsModel model)
         {
-            string grns = string.Join(',', model.GRNs);
-            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            string grns = model.GRNs is null ? "-1" : string.Join(',', model.GRNs);
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = @"exec dbo.SP_InvoiceRegisterDetailsLoad @businessUnitId,@grns,@invoiceRegisterId";
             command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
-            command.Parameters.AddWithValue(command, "@grns", string.IsNullOrEmpty(grns) ? "-1" : grns);
+            command.Parameters.AddWithValue(command, "@grns", grns);
             command.Parameters.AddWithValue(command, "@invoiceRegisterId", model.InvoiceRegisterId);
 
             using var reader = await command.ExecuteReaderAsync();
