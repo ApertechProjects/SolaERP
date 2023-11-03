@@ -613,7 +613,7 @@ public class SqlOrderRepository : IOrderRepository
             AnalysisCode10Id = reader.Get<int>("AnalysisCode10Id"),
             RFQNo = reader.Get<string>("RFQNo"),
             ComparisonDeadline = reader.Get<DateTime>("ComparisonDeadline"),
-            Priority = reader.Get<int>("Priority"),
+            Priority = reader.Get<string>("Priority"),
             RequestedDate = reader.Get<DateTime>("RequestedDate")
         };
         return dto;
