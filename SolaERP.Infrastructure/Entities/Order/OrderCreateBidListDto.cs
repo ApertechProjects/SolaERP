@@ -49,4 +49,8 @@ public class OrderCreateBidListDto
     public int AnalysisCode9Id { get; set; }
     public int AnalysisCode10Id { get; set; }
     public int CatId { get; set; }
+    public string RFQNo { get; set; }
+    public DateTime ComparisonDeadline { get; set; }
+    public DateTime RequestedDate { get; set; }
+    public int Priority { get; set; }
 }
