@@ -402,6 +402,7 @@ namespace SolaERP.Persistence.Services
             var auditModel = new PaymentOrderPostAudit()
             {
                 AllocationReference = model.AllocationReference,
+                JournalNo = model.JournalNo
             };
             
             //API process: 1-2-3
