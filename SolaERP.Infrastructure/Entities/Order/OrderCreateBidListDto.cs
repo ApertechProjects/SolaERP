@@ -52,5 +52,5 @@ public class OrderCreateBidListDto
     public string RFQNo { get; set; }
     public DateTime ComparisonDeadline { get; set; }
     public DateTime RequestedDate { get; set; }
-    public int Priority { get; set; }
+    public string Priority { get; set; }
 }
