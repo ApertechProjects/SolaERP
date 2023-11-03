@@ -20,5 +20,6 @@
         public string StatusName { get; set; }
         public string ApproveStatusName { get; set; }
         public string CountryName { get; set; }
+        public string VendorType { get; set; }
     }
 }
