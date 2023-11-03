@@ -6,5 +6,7 @@ namespace SolaERP.Application.Entities.Vendors
     {
         public string CountryCode { get; set; }
         public string ApproveStatusName { get; set; }
+        public string VendorType { get; set; }
+
     }
 }
