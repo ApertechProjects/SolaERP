@@ -1,9 +1,4 @@
 ﻿using SolaERP.Application.Entities.Payment;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.Application.Dtos.Payment
 {
@@ -28,5 +23,6 @@ namespace SolaERP.Application.Dtos.Payment
         public string LinkAccount { get; set; }
         public string PaymentTermsName { get; set; }
         public int AgingDays { get; set; }
+        public decimal PaidAmount { get; set; }
     }
 }
