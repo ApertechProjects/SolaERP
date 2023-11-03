@@ -453,7 +453,7 @@ namespace SolaERP.Persistence.Services
             var allocationDataDto = _mapper.Map<List<AllocationDataDto>>(allocationData);
 
             auditModel.AllocationDatas = allocationDataDto;
-            await SaveAllocations(auditModel, model.BusinessUnitCode);
+            // await SaveAllocations(auditModel, model.BusinessUnitCode);
 
             return ApiResponse<PaymentOrderPostDataResult>.Success(new PaymentOrderPostDataResult
             {
