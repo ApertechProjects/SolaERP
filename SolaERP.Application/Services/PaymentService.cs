@@ -434,7 +434,6 @@ namespace SolaERP.Persistence.Services
             auditModel.AllocationReference = model.AllocationReference;
             auditModel.ASalfldgLads = aSaldldgLadList;
             auditModel.CurrentPeriod = dto[0].ENTRY_PRD;
-            auditModel.JournalNo = dto[0].JRNAL_NO;
             auditModel.SunUser = dto[0].JRNAL_SRCE;
             await SaveAsalfldgAndPstgAudit(auditModel, model.BusinessUnitCode);
             
