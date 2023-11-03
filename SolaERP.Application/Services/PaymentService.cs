@@ -326,9 +326,6 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> DeleteAndUpdateAlloc(PaymentOrderPostAudit model, string businessUnitCode)
         {
             using HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(_configuration[$"BusinessUnits:{businessUnitCode}"] + "/api/v1/a-salfldg/delete-and-update-alloc");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             string json = JsonSerializer.Serialize(model);
             HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response =
@@ -341,9 +338,6 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> SaveAsalfldgAndPstgAudit(PaymentOrderPostAudit model, string businessUnitCode)
         {
             using HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(_configuration[$"BusinessUnits:{businessUnitCode}"] + "/api/v1/a-salfldg/save-asalfdg-and-pstg-audit");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             string json = JsonSerializer.Serialize(model);
             HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response =
@@ -357,9 +351,6 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> SaveAllocations(PaymentOrderPostAudit model, string businessUnitCode)
         {
             using HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(_configuration[$"BusinessUnits:{businessUnitCode}"] + "/api/v1/a-salfldg/sava-all-locations");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             string json = JsonSerializer.Serialize(model);
             HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response =
