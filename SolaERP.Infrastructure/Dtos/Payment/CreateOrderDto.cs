@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Dtos.Payment
 {
-    public class CreateOrderDto : CreateOrder
+    public class CreateOrderDto 
     {
         public string TransactionReference { get; set; }
         public string SystemInvoiceNo { get; set; }
@@ -28,5 +28,6 @@ namespace SolaERP.Application.Dtos.Payment
         public string LinkAccount { get; set; }
         public string PaymentTermsName { get; set; }
         public int AgingDays { get; set; }
+        public decimal PaidAmount { get; set; }
     }
 }
