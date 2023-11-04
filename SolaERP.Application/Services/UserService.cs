@@ -75,8 +75,9 @@ namespace SolaERP.Persistence.Services
             {
                 await _userRepository.AddDefaultVendorAccessToVendorUser(result);
             }
+
             await _unitOfWork.SaveChangesAsync();
-            
+
             return ApiResponse<int>.Success(result, 200);
         }
 
@@ -285,6 +286,7 @@ namespace SolaERP.Persistence.Services
                 dto.Gender = null;
                 dto.VendorId = null;
             }
+
             return ApiResponse<UserLoadDto>.Success(dto, 200);
         }
 
@@ -298,6 +300,13 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<int>> SaveUserAsync(UserSaveModel user, string token,
             CancellationToken cancellationToken)
         {
+            if (user.Id == 0)
+            {
+                var userInDb = await _userRepository.GetByEmailAsync(user.Email);
+                if (userInDb is not null)
+                    ApiResponse<int>.Fail("This mail is already in use", 400);
+            }
+
             cancellationToken.ThrowIfCancellationRequested();
             if (user.Description == "null")
             {

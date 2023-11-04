@@ -112,6 +112,10 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterModel dto)
         {
+            var user = await _userManager.FindByNameAsync(dto.Email);
+            if (user is not null)
+                return CreateActionResult(ApiResponse<bool>.Fail("email", $" This mail is already in use", 422));
+
             var newtoken = Guid.NewGuid();
 
             dto.VerifyToken = newtoken + _tokenHandler.CreateRefreshToken();
@@ -139,8 +143,8 @@ namespace SolaERP.Controllers
                 Response.OnCompleted(async () =>
                 {
                     await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification,
-                         emailVerification.TemplateName(), emailVerification.ImageName(),
-                         new List<string> { dto.Email });
+                        emailVerification.TemplateName(), emailVerification.ImageName(),
+                        new List<string> { dto.Email });
                 });
 
                 account.UserId = response.Data;
