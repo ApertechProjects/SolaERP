@@ -9,6 +9,7 @@ COPY ./SolaERP/SolaERP.API.csproj ./SolaERP/SolaERP.API.csproj
 RUN dotnet restore "./SolaERP/SolaERP.API.csproj"
 
 COPY . ./
+COPY ./SolaERP/wwwroot ./SolaERP/wwwroot
 RUN dotnet publish -c Release -o output
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
