@@ -9,10 +9,11 @@ COPY ./SolaERP/SolaERP.API.csproj ./SolaERP/SolaERP.API.csproj
 RUN dotnet restore "./SolaERP/SolaERP.API.csproj"
 
 COPY . ./
-COPY ./SolaERP/wwwroot ./SolaERP/wwwroot
 RUN dotnet publish -c Release -o output
+RUN rm -r /app/output/wwwroot
+COPY ./SolaERP/wwwroot /app/output/wwwroot
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
 COPY --from=build-env /app/output .
-ENTRYPOINT ["dotnet", "SolaERP.API.dll"] 
+ENTRYPOINT ["dotnet", "SolaERP.API.dll"]
