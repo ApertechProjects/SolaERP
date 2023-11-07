@@ -169,13 +169,16 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<MatchingMainDto>.Success(dto);
         }
 
-        public async Task<ApiResponse<List<InvoiceRegisterDetailForPODto>>> GetDetailsForPO(InvoiceGetDetailsModel model)
+        public async Task<ApiResponse<List<InvoiceRegisterDetailForPODto>>> GetDetailsForPO(
+            InvoiceGetDetailsModel model)
         {
             var data = await _invoiceRepository.GetDetailsForPO(model);
             var dto = _mapper.Map<List<InvoiceRegisterDetailForPODto>>(data);
             return ApiResponse<List<InvoiceRegisterDetailForPODto>>.Success(dto, 200);
         }
-        public async Task<ApiResponse<List<InvoiceRegisterDetailForOtherDto>>> GetDetailsForOtherOrderTypes(InvoiceGetDetailsModel model)
+
+        public async Task<ApiResponse<List<InvoiceRegisterDetailForOtherDto>>> GetDetailsForOtherOrderTypes(
+            InvoiceGetDetailsModel model)
         {
             var data = await _invoiceRepository.GetDetailsForOther(model);
             var dto = _mapper.Map<List<InvoiceRegisterDetailForOtherDto>>(data);
@@ -188,5 +191,20 @@ namespace SolaERP.Persistence.Services
             return data;
         }
 
+        public async Task<ApiResponse<List<string>>> GetTransactionReferenceList(int businessUnitId)
+        {
+            return ApiResponse<List<string>>.Success(
+                await _invoiceRepository.GetTransactionReferenceList(businessUnitId));
+        }
+
+        public async Task<ApiResponse<List<string>>> GetReferenceList(int businessUnitId)
+        {
+            return ApiResponse<List<string>>.Success(await _invoiceRepository.GetReferenceList(businessUnitId));
+        }
+
+        public async Task<ApiResponse<List<string>>> GetInvoiceList(int businessUnitId)
+        {
+            return ApiResponse<List<string>>.Success(await _invoiceRepository.GetInvoiceList(businessUnitId));
+        }
     }
 }

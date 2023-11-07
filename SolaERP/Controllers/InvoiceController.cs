@@ -82,11 +82,21 @@ namespace SolaERP.API.Controllers
             string keyCode = await _invoiceService.GetKeyCode(model.InvoiceRegisterId);
             if (keyCode == "PO")
                 return CreateActionResult(await _invoiceService.GetDetailsForPO(model));
-            else
-                return CreateActionResult(await _invoiceService.GetDetailsForOtherOrderTypes(model));
 
-
-
+            return CreateActionResult(await _invoiceService.GetDetailsForOtherOrderTypes(model));
         }
+
+        [HttpGet("{businessUnitId:int}")]
+        public async Task<IActionResult> GetTransactionReferenceList(int businessUnitId)
+            => CreateActionResult(await _invoiceService.GetTransactionReferenceList(businessUnitId));
+
+        [HttpGet("{businessUnitId:int}")]
+        public async Task<IActionResult> GetReferenceList(int businessUnitId)
+            => CreateActionResult(await _invoiceService.GetReferenceList(businessUnitId));
+
+        [HttpGet("{businessUnitId:int}")]
+        public async Task<IActionResult> GetInvoiceList(int businessUnitId)
+            => CreateActionResult(await _invoiceService.GetInvoiceList(businessUnitId));
+        
     }
 }
