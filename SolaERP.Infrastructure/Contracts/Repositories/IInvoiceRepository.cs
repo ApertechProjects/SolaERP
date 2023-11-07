@@ -23,5 +23,8 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<InvoiceRegisterDetailForPO>> GetDetailsForPO(InvoiceGetDetailsModel model);
         Task<List<InvoiceRegisterDetailForOther>> GetDetailsForOther(InvoiceGetDetailsModel model);
         Task<string> GetKeyKode(int invoiceRegisterId);
+        Task<List<string>> GetTransactionReferenceList(int businessUnitId);
+        Task<List<string>> GetReferenceList(int businessUnitId);
+        Task<List<string>> GetInvoiceList(int businessUnitId);
     }
 }
