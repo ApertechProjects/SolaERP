@@ -90,7 +90,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     new ReplaceParams { ParamName = "APT", Value = requestMain.BusinessUnitCode });
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", requestMain.BusinessUnitId);
-                command.Parameters.AddWithValue(command, "@ItemCode", string.IsNullOrEmpty(itemCode) ? "%" : itemCode);
+                command.Parameters.AddWithValue(command, "@ItemCode", itemCode == "All" ? "%" : itemCode);
                 command.Parameters.AddWithValue(command, "@DateFrom", requestMain.DateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", requestMain.DateTo);
 
@@ -175,7 +175,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", requestParametersDto.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@DateFrom", requestParametersDto.DateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", requestParametersDto.DateTo);
-                command.Parameters.AddWithValue(command, "@ItemCode", string.IsNullOrEmpty(itemCode) ? "%" : itemCode);
+                command.Parameters.AddWithValue(command, "@ItemCode", itemCode == "All" ? "%" : itemCode);
 
                 List<RequestAmendment> mainRequestsForAmendment = new();
                 using var reader = await command.ExecuteReaderAsync();
@@ -460,7 +460,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     new ReplaceParams { ParamName = "APT", Value = requestMain.BusinessUnitCode });
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", requestMain.BusinessUnitId);
-                command.Parameters.AddWithValue(command, "@ItemCode", string.IsNullOrEmpty(itemCode) ? "%" : itemCode);
+                command.Parameters.AddWithValue(command, "@ItemCode", itemCode == "All" ? "%" : itemCode);
                 command.Parameters.AddWithValue(command, "@DateFrom", requestMain.DateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", requestMain.DateTo);
                 command.Parameters.AddWithValue(command, "@ApproveStatus",
@@ -597,7 +597,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", requestMain.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@DateFrom", requestMain.DateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", requestMain.DateTo);
-                command.Parameters.AddWithValue(command, "@ItemCode", string.IsNullOrEmpty(itemCode) ? "%" : itemCode);
+                command.Parameters.AddWithValue(command, "@ItemCode", itemCode == "All" ? "%" : itemCode);
 
                 using var reader = await command.ExecuteReaderAsync();
 
