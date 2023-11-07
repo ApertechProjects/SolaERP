@@ -9,7 +9,8 @@ namespace SolaERP.Application.Models
         public int CurrentPeriod { get; set; }
         public int AllocationReference { get; set; }
         public List<ASalfldgDto> ASalfldgs { get; set; }
-        public List<AllocationDataDto> AllocationDatas { get; set; }
         public List<ASalfldgLadDto> ASalfldgLads { get; set; }
+        public List<AllocationDataDto> AllocationDatas { get; set; }
+        public List<ASalfldgLadDto> AllocationLads { get; set; }
     }
 }
