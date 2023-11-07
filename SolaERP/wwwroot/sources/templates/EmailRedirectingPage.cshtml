@@ -1,0 +1,58 @@
+﻿<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="x-apple-disable-message-reformatting">
+    <title></title>
+</head>
+
+<body onload="sendRequest()">
+    <div style="text-align:center;margin: 5%;">
+        <h1 id="verified"></h1>
+        <br>
+        <img alt="" id="emailIcon" style="width:300px;height:auto" />
+        <br>
+        <a id="verified-text" href="http://23.88.63.245:3000/login"></a>
+    </div>
+
+    <script>
+        var url = window.location.href;
+
+        // Get the query string part of the URL
+        var queryString = url.split('?')[1];
+
+        // Get the value of the parameter named 'verifyToken'
+        var verifyToken = queryString.split('=')[1];
+
+        // Output the value of the parameter to the console
+        console.log(verifyToken);
+
+        let token = new DOMParser().parseFromString(verifyToken, "text/html").body.textContent;
+
+        function sendRequest() {
+            fetch(`http://23.88.63.245:3030/api/Account/ConfirmEmail?verifyToken=${token}`, {
+                method: "GET",
+                headers: { "Content-type": "application/json; charset=UTF-8" }
+            })
+
+                .then(response => response.json())
+                .then(res => {
+                    document.getElementById('emailIcon').src = res.statusCode === 200 ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxvBjDaMkJ7RKUlUZxS4YTjoguA3W3Hb4SBA&amp;usqp=CAU" : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdw0amfVifI9kniIMKtEb67VS2P10uS_YYhw&usqp=CAU";
+                    document.getElementById('verified').innerText = res.statusCode === 200 ? "Email Verified" : "Problem Detected, Please, contact administrator";
+                    document.getElementById('verified').style.color = res.statusCode === 200 ? "green" : "red";
+                    document.getElementById('verified-text').innerText = res.statusCode === 200 ? "Return To Login Page" : "";
+                })
+                .catch(err => console.log(err));
+
+        }
+
+
+        // Get the URL of the HTML page
+    </script>
+
+
+</body>
+
+</html>

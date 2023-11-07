@@ -39,7 +39,7 @@ namespace SolaERP.Infrastructure.ViewModels
 
         public string GetEmailVerifiedLink()
         {
-            return _configuration["Mail:ServerUrl"] + $"/EmailRedirectingPage/EmailVerified.html?verifyToken={Token}";
+            return _configuration["Url"] + $"/EmailRedirectingPage.html?verifyToken={Token}";
         }
 
     }
