@@ -329,32 +329,36 @@ namespace SolaERP.Persistence.Services
             string json = JsonSerializer.Serialize(model);
             HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response =
-                await client.PostAsync(_configuration[$"BusinessUnits:{businessUnitCode}"] + "api/v1/a-salfldg/delete-and-update-alloc",
+                await client.PostAsync(
+                    _configuration[$"BusinessUnits:{businessUnitCode}"] + "api/v1/a-salfldg/delete-and-update-alloc",
                     content);
 
             return ApiResponse<bool>.Success(true);
         }
-        
-        public async Task<ApiResponse<bool>> SaveAsalfldgAndPstgAudit(PaymentOrderPostAudit model, string businessUnitCode)
+
+        public async Task<ApiResponse<bool>> SaveAsalfldgAndPstgAudit(PaymentOrderPostAudit model,
+            string businessUnitCode)
         {
             using HttpClient client = new HttpClient();
             string json = JsonSerializer.Serialize(model);
             HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response =
-                await client.PostAsync(_configuration[$"BusinessUnits:{businessUnitCode}"] + "api/v1/a-salfldg/save-asalfdg-and-pstg-audit",
+                await client.PostAsync(
+                    _configuration[$"BusinessUnits:{businessUnitCode}"] +
+                    "api/v1/a-salfldg/save-asalfdg-and-pstg-audit",
                     content);
 
             return ApiResponse<bool>.Success(true);
-
         }
-        
+
         public async Task<ApiResponse<bool>> SaveAllocations(PaymentOrderPostAudit model, string businessUnitCode)
         {
             using HttpClient client = new HttpClient();
             string json = JsonSerializer.Serialize(model);
             HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response =
-                await client.PostAsync(_configuration[$"BusinessUnits:{businessUnitCode}"] + "api/v1/a-salfldg/sava-all-locations",
+                await client.PostAsync(
+                    _configuration[$"BusinessUnits:{businessUnitCode}"] + "api/v1/a-salfldg/sava-all-locations",
                     content);
 
             return ApiResponse<bool>.Success(true);
@@ -389,13 +393,13 @@ namespace SolaERP.Persistence.Services
                     transactionData);
 
             #endregion
-            
+
             var auditModel = new PaymentOrderPostAudit()
             {
                 AllocationReference = model.AllocationReference,
                 JournalNo = model.JournalNo
             };
-            
+
             //API process: 1-2-3
             await DeleteAndUpdateAlloc(auditModel, model.BusinessUnitCode);
 
@@ -410,7 +414,7 @@ namespace SolaERP.Persistence.Services
 
             var dto = _mapper.Map<List<ASalfldgDto>>(data.Item1);
             var aSaldldgLadList = new List<ASalfldgLadDto>();
-            
+
             foreach (var a in data.Item1)
             {
                 aSaldldgLadList.Add(new ASalfldgLadDto
@@ -430,20 +434,46 @@ namespace SolaERP.Persistence.Services
                     LAST_CHANGE_DATETIME = a.LAST_CHANGE_DATETIME
                 });
             }
+
             auditModel.ASalfldgs = dto;
             auditModel.AllocationReference = model.AllocationReference;
             auditModel.ASalfldgLads = aSaldldgLadList;
             auditModel.CurrentPeriod = dto[0].ENTRY_PRD;
             auditModel.SunUser = dto[0].JRNAL_SRCE;
             await SaveAsalfldgAndPstgAudit(auditModel, model.BusinessUnitCode);
-            
-            //API process: 8
+
+            //API process: 8-9
             var allocationData =
                 await _paymentRepository.PaymentOrderAllocationData(paymentOrderSaveMain.PaymentOrderMainId,
                     userId);
             var allocationDataDto = _mapper.Map<List<AllocationDataDto>>(allocationData);
 
+            var allocationLadList = new List<ASalfldgLadDto>();
+            foreach (var a in allocationData)
+            {
+                if (a.Action == 2)
+                {
+                    allocationLadList.Add(new ASalfldgLadDto
+                    {
+                        ACCNT_CODE = a.ACCNT_CODE,
+                        PERIOD = a.PERIOD,
+                        TRANS_DATETIME = a.TRANS_DATETIME,
+                        JRNAL_NO = a.JRNAL_NO,
+                        JRNAL_LINE = a.JRNAL_LINE,
+                        GNRL_DESCR_24 = a.GNRL_DESCR_24,
+                        GNRL_DESCR_25 = a.GNRL_DESCR_25,
+                        UPDATE_COUNT = 1,
+                        LAST_CHANGE_USER_ID = a.LAST_CHANGE_USER_ID,
+                        USER_NAME = a.JRNAL_SRCE,
+                        INTCO_TYPE = 0,
+                        INTCO_PSTG_STATUS = 0,
+                        LAST_CHANGE_DATETIME = a.LAST_CHANGE_DATETIME
+                    });
+                }
+            }
+
             auditModel.AllocationDatas = allocationDataDto;
+            auditModel.AllocationLads = allocationLadList;
             await SaveAllocations(auditModel, model.BusinessUnitCode);
 
             return ApiResponse<PaymentOrderPostDataResult>.Success(new PaymentOrderPostDataResult
@@ -452,7 +482,6 @@ namespace SolaERP.Persistence.Services
                 PaymentOrderNo = paymentOrderSaveMain.PaymentOrderNo,
                 PaymentOrderMainId = paymentOrderSaveMain.PaymentOrderMainId,
             }, 200);
-
         }
 
         public async Task<ApiResponse<List<PaymentOrderDto>>> PaymentOrders(PaymentOrderGetModel payment)
