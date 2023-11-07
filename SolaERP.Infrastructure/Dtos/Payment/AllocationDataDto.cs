@@ -9,5 +9,7 @@ namespace SolaERP.Application.Dtos.Payment
     public class AllocationDataDto : ASalfldgDto
     {
         public int Action { get; set; }
+        public string GNRL_DESCR_24 { get; set; }
+        public string GNRL_DESCR_25 { get; set; }
     }
 }
