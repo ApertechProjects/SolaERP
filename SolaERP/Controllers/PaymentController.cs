@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
@@ -12,6 +13,7 @@ namespace SolaERP.API.Controllers
     public class PaymentController : CustomBaseController
     {
         private readonly IPaymentService _paymentService;
+
         public PaymentController(IPaymentService paymentService)
         {
             _paymentService = paymentService;
@@ -23,23 +25,23 @@ namespace SolaERP.API.Controllers
 
         [HttpGet]
         public async Task<IActionResult> All([FromQuery] PaymentGetModel payment)
-          => CreateActionResult(await _paymentService.All(User.Identity.Name, payment));
+            => CreateActionResult(await _paymentService.All(User.Identity.Name, payment));
 
         [HttpGet]
         public async Task<IActionResult> Draft([FromQuery] PaymentGetModel payment)
-          => CreateActionResult(await _paymentService.Draft(User.Identity.Name, payment));
+            => CreateActionResult(await _paymentService.Draft(User.Identity.Name, payment));
 
         [HttpGet]
         public async Task<IActionResult> Approved([FromQuery] PaymentGetModel payment)
-          => CreateActionResult(await _paymentService.Approved(User.Identity.Name, payment));
+            => CreateActionResult(await _paymentService.Approved(User.Identity.Name, payment));
 
         [HttpGet]
         public async Task<IActionResult> Held([FromQuery] PaymentGetModel payment)
-          => CreateActionResult(await _paymentService.Held(User.Identity.Name, payment));
+            => CreateActionResult(await _paymentService.Held(User.Identity.Name, payment));
 
         [HttpGet]
         public async Task<IActionResult> Rejected([FromQuery] PaymentGetModel payment)
-          => CreateActionResult(await _paymentService.Rejected(User.Identity.Name, payment));
+            => CreateActionResult(await _paymentService.Rejected(User.Identity.Name, payment));
 
         [HttpGet]
         public async Task<IActionResult> Bank([FromQuery] PaymentGetModel payment)
@@ -72,7 +74,7 @@ namespace SolaERP.API.Controllers
 
         [HttpGet]
         public IActionResult DocumentTypes()
-           => CreateActionResult(_paymentService.DocumentTypes());
+            => CreateActionResult(_paymentService.DocumentTypes());
 
         [HttpGet("{businessUnitId}/{vendorCode}")]
         public async Task<IActionResult> VendorBalance(int businessUnitId, string vendorCode)
@@ -92,15 +94,18 @@ namespace SolaERP.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Retrieve(PaymentOperationModel model)
-            => CreateActionResult(await _paymentService.PaymentOperation(User.Identity.Name, model, PaymentOperations.Retrieve));
+            => CreateActionResult(
+                await _paymentService.PaymentOperation(User.Identity.Name, model, PaymentOperations.Retrieve));
 
         [HttpPost]
         public async Task<IActionResult> ReturnToApproved(PaymentOperationModel model)
-           => CreateActionResult(await _paymentService.PaymentOperation(User.Identity.Name, model, PaymentOperations.SendToApproved));
+            => CreateActionResult(await _paymentService.PaymentOperation(User.Identity.Name, model,
+                PaymentOperations.SendToApproved));
 
         [HttpPost]
         public async Task<IActionResult> SendToBank(PaymentOperationModel model)
-           => CreateActionResult(await _paymentService.PaymentOperation(User.Identity.Name, model, PaymentOperations.SendToBank));
+            => CreateActionResult(
+                await _paymentService.PaymentOperation(User.Identity.Name, model, PaymentOperations.SendToBank));
 
         [HttpGet]
         public async Task<IActionResult> PaymentRequest([FromQuery] PaymentRequestGetModel model)
@@ -122,5 +127,12 @@ namespace SolaERP.API.Controllers
         [HttpPost]
         public async Task<IActionResult> PaymentOrderPostData(PaymentOrderPostModel model)
             => CreateActionResult(await _paymentService.PaymentOrderPostData(model, User.Identity.Name));
+
+        [HttpPost]
+        public async Task<IActionResult> CreateVendor(CreateVendorRequest request)
+        {
+            request.UserId = Convert.ToInt32(User.Identity.Name);
+            return CreateActionResult(await _paymentService.CreateVendor(request));
+        }
     }
 }

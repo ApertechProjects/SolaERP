@@ -91,6 +91,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<BusinessUnits, BusinessUnitsAllDto>().ReverseMap();
             CreateMap<BusinessUnits, BusinessUnitsDto>().ReverseMap();
             CreateMap<BaseBusinessUnit, BaseBusinessUnitDto>().ReverseMap();
+            CreateMap<BusinessUnits, BusinessUnitConnectionDto>().ReverseMap();
             CreateMap<Groups, GroupsDto>().ReverseMap();
             CreateMap<GroupUser, GroupUserDto>().ReverseMap();
             CreateMap<MenuWithPrivilagesDto, MenuWithPrivilages>().ReverseMap();

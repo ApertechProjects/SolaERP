@@ -33,5 +33,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<BankAccountListDto>>> BankAccountList(int businessUnitId);
         Task<ApiResponse<PaymentOrderPostDataResult>> PaymentOrderPostData(PaymentOrderPostModel model, string name);
         Task<ApiResponse<List<PaymentOrderDto>>> PaymentOrders(PaymentOrderGetModel payment);
+        Task<ApiResponse<bool>> CreateVendor(CreateVendorRequest request);
     }
 }

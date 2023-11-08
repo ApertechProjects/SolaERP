@@ -496,5 +496,12 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<List<PaymentOrderDto>>.Success(dto);
         }
+
+        public async Task<ApiResponse<bool>> CreateVendor(CreateVendorRequest request)
+        {
+            return ApiResponse<bool>.Success(
+                await _paymentRepository.CreateVendor(request)
+            );
+        }
     }
 }
