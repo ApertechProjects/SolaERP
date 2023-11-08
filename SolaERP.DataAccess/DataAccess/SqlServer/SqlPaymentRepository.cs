@@ -1,6 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Payment;
-using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Payment;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
@@ -9,19 +8,19 @@ using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Net.NetworkInformation;
-using System.Reflection;
-using System.Reflection.PortableExecutable;
+using SolaERP.Application.Helper;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
     public class SqlPaymentRepository : IPaymentRepository
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly BusinessUnitHelper _businessUnitHelper;
 
-        public SqlPaymentRepository(IUnitOfWork unitOfWork)
+        public SqlPaymentRepository(IUnitOfWork unitOfWork, BusinessUnitHelper businessUnitHelper)
         {
             _unitOfWork = unitOfWork;
+            _businessUnitHelper = businessUnitHelper;
         }
 
         public async Task<List<CreateAdvance>> CreateAdvanceAsync(CreateAdvanceModel createBalance)
@@ -585,7 +584,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 }
 
                 return new PaymentDocumentSaveResultModel
-                { PaymentDocumentMainId = requestId, PaymentRequestNo = requestNo };
+                    { PaymentDocumentMainId = requestId, PaymentRequestNo = requestNo };
             }
         }
 
@@ -991,7 +990,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<(List<ASalfldg>, int)> PaymentOrderPostData(DataTable table, int paymentOrderMainId, int allocationReference,
+        public async Task<(List<ASalfldg>, int)> PaymentOrderPostData(DataTable table, int paymentOrderMainId,
+            int allocationReference,
             int journalNo, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
@@ -1174,6 +1174,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 paymentOrders.Add(reader.GetByEntityStructure<PaymentOrder>());
 
             return paymentOrders;
+        }
+
+        public async Task<bool> CreateVendor(CreateVendorRequest request)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = _businessUnitHelper.BuildQueryForIntegration(request.BusinessUnitId,
+                "SP_Vendor_IUD @BusinessUnitId, @VendorCode, @UserId");
+            command.Parameters.AddWithValue(command, "@BusinessUnitId", request.BusinessUnitId);
+            command.Parameters.AddWithValue(command, "@VendorCode", request.VendorCode);
+            command.Parameters.AddWithValue(command, "@UserId", request.UserId);
+            await _unitOfWork.SaveChangesAsync();
+            return await command.ExecuteNonQueryAsync() > 0;
         }
     }
 }

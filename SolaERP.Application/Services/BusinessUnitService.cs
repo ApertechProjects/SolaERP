@@ -12,14 +12,15 @@ namespace SolaERP.Persistence.Services
         private readonly IUserRepository _userRepository;
         private IMapper _mapper;
 
-        public BusinessUnitService(IBusinessUnitRepository businessUnitRepository, IUserRepository userRepository, IMapper mapper)
+        public BusinessUnitService(IBusinessUnitRepository businessUnitRepository, IUserRepository userRepository,
+            IMapper mapper)
         {
             _businessUnitRepository = businessUnitRepository;
             _userRepository = userRepository;
             _mapper = mapper;
         }
 
-      
+
         public async Task<ApiResponse<List<BusinessUnitsAllDto>>> GetAllAsync()
         {
             var businessUnits = await _businessUnitRepository.GetAllAsync();
@@ -46,6 +47,12 @@ namespace SolaERP.Persistence.Services
             var dto = _mapper.Map<List<BaseBusinessUnitDto>>(businessUnits);
 
             return ApiResponse<List<BaseBusinessUnitDto>>.Success(dto, 200);
+        }
+
+        public async Task<List<BusinessUnitConnectionDto>> GetBusinessUnitListConnections()
+        {
+            var businessUnits = await _businessUnitRepository.GetAllAsync();
+            return _mapper.Map<List<BusinessUnitConnectionDto>>(businessUnits);
         }
 
 

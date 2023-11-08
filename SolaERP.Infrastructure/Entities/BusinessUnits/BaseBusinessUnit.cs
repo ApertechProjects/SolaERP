@@ -6,5 +6,6 @@
         public string BusinessUnitCode { get; set; }
         public string BusinessUnitName { get; set; }
         public string BankChargeAccount { get; set; }
+        public string ConnectionData { get; set; }
     }
 }
