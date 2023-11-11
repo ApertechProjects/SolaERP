@@ -28,6 +28,9 @@ public class OrderMainDto
     public int NewOrderMainId { get; set; }
     public string NewOrderNo { get; set; }
     public bool OrderPrint { get; set; }
+    public int BudgetYear { get; set; }
+    public string OrderNotes { get; set; }
+    public string DestinationPoint { get; set; }
 
     public List<OrderDetailDto> OrderDetails { get; set; }
     public List<AttachmentSaveModel> Attachments { get; set; }
