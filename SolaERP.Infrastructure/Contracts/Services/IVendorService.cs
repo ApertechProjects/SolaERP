@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Dtos.Shared;
+﻿using SolaERP.Application.Dtos.Payment;
+using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Dtos.Venndors;
 using SolaERP.Application.Entities.Vendors;
@@ -28,5 +29,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> HasVendorName(string vendorName, string userIdentity);
         Task<ApiResponse<List<VendorRFQListResponseDto>>> GetVendorRFQList(string vendorCode, string userIdentity);
         Task<ApiResponse<bool>> RFQVendorResponseChangeStatus(int rfqMainId, int status, string vendorCode);
+        Task<ApiResponse<bool>> TransferToIntegration(CreateVendorRequest request);
     }
 }

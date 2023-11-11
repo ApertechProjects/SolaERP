@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
-using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
@@ -127,12 +126,5 @@ namespace SolaERP.API.Controllers
         [HttpPost]
         public async Task<IActionResult> PaymentOrderPostData(PaymentOrderPostModel model)
             => CreateActionResult(await _paymentService.PaymentOrderPostData(model, User.Identity.Name));
-
-        [HttpPost]
-        public async Task<IActionResult> CreateVendor(CreateVendorRequest request)
-        {
-            request.UserId = Convert.ToInt32(User.Identity.Name);
-            return CreateActionResult(await _paymentService.CreateVendor(request));
-        }
     }
 }

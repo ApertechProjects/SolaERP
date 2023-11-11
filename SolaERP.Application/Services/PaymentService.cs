@@ -10,12 +10,8 @@ using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
 using System.Data;
-using System.Net;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using System.Transactions;
-using System.Xml.Linq;
 
 namespace SolaERP.Persistence.Services
 {
@@ -495,13 +491,6 @@ namespace SolaERP.Persistence.Services
             }
 
             return ApiResponse<List<PaymentOrderDto>>.Success(dto);
-        }
-
-        public async Task<ApiResponse<bool>> CreateVendor(CreateVendorRequest request)
-        {
-            return ApiResponse<bool>.Success(
-                await _paymentRepository.CreateVendor(request)
-            );
         }
     }
 }

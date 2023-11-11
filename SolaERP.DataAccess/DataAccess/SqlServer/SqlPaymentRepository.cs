@@ -1175,17 +1175,5 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return paymentOrders;
         }
-
-        public async Task<bool> CreateVendor(CreateVendorRequest request)
-        {
-            await using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = _businessUnitHelper.BuildQueryForIntegration(request.BusinessUnitId,
-                "SP_Vendor_IUD @BusinessUnitId, @VendorCode, @UserId");
-            command.Parameters.AddWithValue(command, "@BusinessUnitId", request.BusinessUnitId);
-            command.Parameters.AddWithValue(command, "@VendorCode", request.VendorCode);
-            command.Parameters.AddWithValue(command, "@UserId", request.UserId);
-            await _unitOfWork.SaveChangesAsync();
-            return await command.ExecuteNonQueryAsync() > 0;
-        }
     }
 }
