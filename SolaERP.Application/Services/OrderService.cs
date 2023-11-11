@@ -1,6 +1,7 @@
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Order;
+using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.Order;
@@ -18,10 +19,11 @@ public class OrderService : IOrderService
     private readonly IGeneralService _generalService;
     private readonly IVendorRepository _vendorRepository;
     private readonly IAttachmentService _attachmentService;
+    private readonly IVendorService _vendorService;
 
     public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork,
         ISupplierEvaluationRepository supplierRepository, IGeneralService generalService,
-        IVendorRepository vendorRepository, IAttachmentService attachmentService)
+        IVendorRepository vendorRepository, IAttachmentService attachmentService, IVendorService vendorService)
     {
         _orderRepository = orderRepository;
         _unitOfWork = unitOfWork;
@@ -29,6 +31,7 @@ public class OrderService : IOrderService
         _generalService = generalService;
         _vendorRepository = vendorRepository;
         _attachmentService = attachmentService;
+        _vendorService = vendorService;
     }
 
     public async Task<ApiResponse<List<OrderTypeLoadDto>>> GetTypesAsync(int businessUnitId)
@@ -147,6 +150,15 @@ public class OrderService : IOrderService
     {
         int userId = Convert.ToInt32(identityName);
         await _orderRepository.ChangeOrderMainStatusAsync(statusDto, userId, statusDto.OrderMainId, statusDto.Sequence);
+        var order = await _orderRepository.GetHeaderLoadAsync(statusDto.OrderMainId);
+        if (order.ApproveStatus == 1)
+        {
+            await _vendorService.TransferToIntegration(new CreateVendorRequest
+            {
+                VendorCode = order.VendorCode, UserId = userId, BusinessUnitId = order.BusinessUnitId
+            });
+            await _orderRepository.CreateOrderIntegration(order.BusinessUnitId, statusDto.OrderMainId, userId);
+        }
 
         await _unitOfWork.SaveChangesAsync();
 
@@ -165,7 +177,8 @@ public class OrderService : IOrderService
     {
         var orderHeader = await _orderRepository.GetHeaderLoadAsync(orderMainId);
         orderHeader.OrderDetails = await _orderRepository.GetAllDetailsAsync(orderMainId);
-        orderHeader.Attachments = await _attachmentService.GetAttachmentsAsync(orderMainId, SourceType.ORDER, Modules.Orders);
+        orderHeader.Attachments =
+            await _attachmentService.GetAttachmentsAsync(orderMainId, SourceType.ORDER, Modules.Orders);
         return ApiResponse<OrderHeadLoaderDto>.Success(orderHeader);
     }
 

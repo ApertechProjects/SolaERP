@@ -1,10 +1,10 @@
 using System.Data;
 using System.Data.Common;
-using System.Numerics;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Order;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.Order;
+using SolaERP.Application.Helper;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 
@@ -13,10 +13,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer;
 public class SqlOrderRepository : IOrderRepository
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly BusinessUnitHelper _businessUnitHelper;
 
-    public SqlOrderRepository(IUnitOfWork unitOfWork)
+    public SqlOrderRepository(IUnitOfWork unitOfWork, BusinessUnitHelper businessUnitHelper)
     {
         _unitOfWork = unitOfWork;
+        _businessUnitHelper = businessUnitHelper;
     }
 
     public async Task<List<OrderTypeLoadDto>> GetAllOrderTypesByBusinessIdAsync(int businessUnitId)
@@ -431,6 +433,19 @@ public class SqlOrderRepository : IOrderRepository
         }
 
         return data;
+    }
+
+    public async Task<bool> CreateOrderIntegration(int businessUnitId, int orderMainId, int userId)
+    {
+        await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = _businessUnitHelper.BuildQueryForIntegration(businessUnitId,
+            "SP_Order_IUD @BusinessUnitId, @OrderMainId, @UserId");
+
+        command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+        command.Parameters.AddWithValue(command, "@OrderMainId", orderMainId);
+        command.Parameters.AddWithValue(command, "@UserId", userId);
+        await _unitOfWork.SaveChangesAsync();
+        return await command.ExecuteNonQueryAsync() > 0;
     }
 
     private static OrderDetailLoadDto MapFromReaderForOrderDetailListDto(IDataReader reader)
