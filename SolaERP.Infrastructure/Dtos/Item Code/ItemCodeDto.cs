@@ -8,5 +8,6 @@ namespace SolaERP.Application.Dtos
         public string Description { get; set; }
         public string LongDescription { get; set; }
         public string UnitOfPurch { get; set; }
+        public string ItemDescriptionAze { get; set; }
     }
 }
