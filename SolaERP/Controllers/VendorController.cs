@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Models;
@@ -105,5 +106,13 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _service.RFQVendorResponseChangeStatus(
                 request.RFQMainId, request.Status, request.VendorCode
             ));
+        
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> TransferToIntegration(CreateVendorRequest request)
+        {
+            request.UserId = Convert.ToInt32(User.Identity.Name);
+            return CreateActionResult(await _service.TransferToIntegration(request));
+        }
     }
 }

@@ -6,16 +6,20 @@ using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
+using SolaERP.Application.Dtos.Payment;
+using SolaERP.Application.Helper;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
     public class SqlVendorRepository : IVendorRepository
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly BusinessUnitHelper _businessUnitHelper;
 
-        public SqlVendorRepository(IUnitOfWork unitOfWork)
+        public SqlVendorRepository(IUnitOfWork unitOfWork, BusinessUnitHelper businessUnitHelper)
         {
             _unitOfWork = unitOfWork;
+            _businessUnitHelper = businessUnitHelper;
         }
 
 
@@ -577,6 +581,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 result = reader.Get<int>("ReviseNo");
 
             return result;
+        }
+
+        public async Task<bool> TransferToIntegration(CreateVendorRequest request)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = _businessUnitHelper.BuildQueryForIntegration(request.BusinessUnitId,
+                "SP_Vendor_IUD @BusinessUnitId, @VendorCode, @UserId");
+            command.Parameters.AddWithValue(command, "@BusinessUnitId", request.BusinessUnitId);
+            command.Parameters.AddWithValue(command, "@VendorCode", request.VendorCode);
+            command.Parameters.AddWithValue(command, "@UserId", request.UserId);
+            await _unitOfWork.SaveChangesAsync();
+            return await command.ExecuteNonQueryAsync() > 0;
         }
     }
 }

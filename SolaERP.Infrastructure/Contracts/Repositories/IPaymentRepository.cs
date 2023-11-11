@@ -49,6 +49,5 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> PaymentOrderDetailsCheckNonAllocated(DataTable detailData);
         Task<List<AllocationData>> PaymentOrderAllocationData(int paymentOrderMainId, int userId);
         Task<List<PaymentOrder>> PaymentOrders(PaymentOrderGetModel payment);
-        Task<bool> CreateVendor(CreateVendorRequest request);
     }
 }
