@@ -257,6 +257,9 @@ public class SqlOrderRepository : IOrderRepository
                                 @RFQMainId,
                                 @UserId,
                                 @OrderPrint,
+                                @BudgetYear,
+                                @OrderNotes,
+                                @DestinationPoint,
                                 @NewOrderMainId = @NewOrderMainId OUTPUT,
 		                        @NewOrderNo = @NewOrderNo OUTPUT
                                         
@@ -284,6 +287,9 @@ public class SqlOrderRepository : IOrderRepository
         command.Parameters.AddWithValue(command, "@RFQMainId", orderMainDto.RFQMainId);
         command.Parameters.AddWithValue(command, "@UserId", userId);
         command.Parameters.AddWithValue(command, "@OrderPrint", orderMainDto.OrderPrint);
+        command.Parameters.AddWithValue(command, "@BudgetYear", orderMainDto.BudgetYear);
+        command.Parameters.AddWithValue(command, "@OrderNotes", orderMainDto.OrderNotes);
+        command.Parameters.AddWithValue(command, "@DestinationPoint", orderMainDto.DestinationPoint);
 
         await using var reader = await command.ExecuteReaderAsync();
         if (await reader.ReadAsync())
@@ -357,7 +363,6 @@ public class SqlOrderRepository : IOrderRepository
 
 
         return data[0];
-
     }
 
     public async Task<List<OrderCreateRequestListDto>> GetOrderCreateListForRequestAsync(OrderCreateListRequest dto)
@@ -491,6 +496,7 @@ public class SqlOrderRepository : IOrderRepository
             RequestQuantity = reader.Get<decimal>("RequestQuantity"),
             OrderAnalysisId = reader.Get<int>("OrderAnalysisId"),
             CatId = reader.Get<int>("CatId"),
+            Requester = reader.Get<string>("Requester"),
             AnalysisCode1Id = reader.Get<int>("AnalysisCode1Id"),
             AnalysisCode2Id = reader.Get<int>("AnalysisCode2Id"),
             AnalysisCode3Id = reader.Get<int>("AnalysisCode3Id"),
