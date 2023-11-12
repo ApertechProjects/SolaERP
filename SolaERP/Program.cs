@@ -1,11 +1,9 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.OpenApi.Models;
 using RabbitMQ.Client;
 using Serilog;
-using SolaERP.Application.Shared;
 using SolaERP.Application.Validations;
 using SolaERP.Extensions;
 using SolaERP.Middlewares;
@@ -42,18 +40,13 @@ builder.Services.AddTransient(sp => new ConnectionFactory()
 });
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.Configure<QueueOption>(builder.Configuration.GetSection("FileOptions"));
-builder.Services.Configure<StorageOption>(builder.Configuration.GetSection("StorageServer"));
-
-
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.Configure<ApiBehaviorOptions>(config => { config.SuppressModelStateInvalidFilter = true; });
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
-        corsBuilder => corsBuilder.WithOrigins(builder.Configuration["Cors:Origins"], builder.Configuration["Cors:OriginsProd"])
+        corsBuilder => corsBuilder
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowAnyOrigin()
