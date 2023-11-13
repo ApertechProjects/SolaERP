@@ -1,11 +1,9 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.OpenApi.Models;
 using RabbitMQ.Client;
 using Serilog;
-using SolaERP.Application.Shared;
 using SolaERP.Application.Validations;
 using SolaERP.Extensions;
 using SolaERP.Middlewares;
@@ -21,17 +19,14 @@ builder.Services.AddControllers(options =>
     {
         options.Filters.Add(new ValidationFilter());
         options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
-    }).AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-})
+    }).AddJsonOptions(options => { options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; })
 //.AddNewtonsoftJson(options =>
 //{
 //    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 //})
-.Services
-.AddFluentValidationAutoValidation()
-.AddFluentValidationClientsideAdapters();
+    .Services
+    .AddFluentValidationAutoValidation()
+    .AddFluentValidationClientsideAdapters();
 
 builder.UseIdentityService();
 builder.ConfigureServices();
@@ -42,18 +37,12 @@ builder.Services.AddTransient(sp => new ConnectionFactory()
 });
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.Configure<QueueOption>(builder.Configuration.GetSection("FileOptions"));
-builder.Services.Configure<StorageOption>(builder.Configuration.GetSection("StorageServer"));
-
-
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.Configure<ApiBehaviorOptions>(config => { config.SuppressModelStateInvalidFilter = true; });
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy",
-        corsBuilder => corsBuilder.WithOrigins(builder.Configuration["Cors:Origins"], builder.Configuration["Cors:OriginsProd"])
+    options.AddDefaultPolicy(corsBuilder => corsBuilder
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowAnyOrigin()
@@ -67,8 +56,6 @@ var logger = new LoggerConfiguration()
     .CreateLogger();
 
 
-
-
 builder.Services
     .AddFluentEmail(builder.Configuration["Mail:Mail"])
     .AddRazorRenderer()
@@ -80,10 +67,7 @@ builder.Services.Configure<ConnectionFactory>(option =>
     option.DispatchConsumersAsync = true;
 });
 
-builder.Services.Configure<FormOptions>(options =>
-{
-    options.ValueCountLimit = int.MaxValue;
-});
+builder.Services.Configure<FormOptions>(options => { options.ValueCountLimit = int.MaxValue; });
 
 builder.Host.UseSerilog(logger);
 
@@ -91,25 +75,27 @@ builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
 }).AddJwtBearer(options =>
-  {
-      options.RequireHttpsMetadata = false;
-      options.SaveToken = true;
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
 
-      options.TokenValidationParameters = new()
-      {
-          ValidateAudience = false,
-          ValidateIssuer = false,
-          ValidateLifetime = true,
-          ValidateIssuerSigningKey = true,
-          ValidAudience = builder.Configuration["Token:Audience"],
-          ValidIssuer = builder.Configuration["Token:Issuer"],
-          IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
-          NameClaimType = ClaimTypes.NameIdentifier,
-          LifetimeValidator = (notBefore, expires, securityToken, validationParametrs) => expires != null ? expires > DateTime.UtcNow : false
-      };
-  });
+    options.TokenValidationParameters = new()
+    {
+        ValidateAudience = false,
+        ValidateIssuer = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidAudience = builder.Configuration["Token:Audience"],
+        ValidIssuer = builder.Configuration["Token:Issuer"],
+        IssuerSigningKey =
+            new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
+        NameClaimType = ClaimTypes.NameIdentifier,
+        LifetimeValidator = (notBefore, expires, securityToken, validationParametrs) =>
+            expires != null ? expires > DateTime.UtcNow : false
+    };
+});
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -141,7 +127,7 @@ builder.Services.AddSwaggerGen(c =>
     c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
-       { jwtSecurityScheme, Array.Empty<string>() }
+        { jwtSecurityScheme, Array.Empty<string>() }
     });
 });
 builder.Services.AddHttpContextAccessor();
@@ -159,11 +145,11 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     {
         string swaggerJsonBasePath = string.IsNullOrWhiteSpace(c.RoutePrefix) ? "." : "..";
         c.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/v1/swagger.json", "Web API");
-
     });
 }
+
 app.UseHttpLogging();
-app.UseCors("CorsPolicy");
+app.UseCors();
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseAuthentication();
