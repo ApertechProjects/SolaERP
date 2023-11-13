@@ -8,3 +8,5 @@ services:
     restart: always
     ports:
       - "3030:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:Development}
