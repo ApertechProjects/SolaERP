@@ -7,5 +7,6 @@ namespace SolaERP.Application.Contracts.Services
     {
         Task<ApiResponse<List<BaseBusinessUnitDto>>> GetBusinessUnitListByUserToken(string finderToken);
         Task<ApiResponse<List<BaseBusinessUnitDto>>> GetBusinessUnitListByCurrentUser(string identityName);
+        Task<List<BusinessUnitConnectionDto>> GetBusinessUnitListConnections();
     }
 }

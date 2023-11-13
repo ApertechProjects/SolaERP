@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Dtos.Vendors;
+﻿using SolaERP.Application.Dtos.Payment;
+using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Models;
@@ -32,5 +33,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> RFQVendorResponseChangeStatus(int rfqMainId, int status, string vendorCode);
         Task<int> GetRevisionVendorIdByVendorCode(string vendorCode);
         Task<int> GetRevisionNumberByVendorCode(string vendorCode);
+        Task<bool> TransferToIntegration(CreateVendorRequest request);
     }
 }

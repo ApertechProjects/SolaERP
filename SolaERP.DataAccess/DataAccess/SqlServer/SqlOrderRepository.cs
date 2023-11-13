@@ -1,10 +1,10 @@
 using System.Data;
 using System.Data.Common;
-using System.Numerics;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Order;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.Order;
+using SolaERP.Application.Helper;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 
@@ -13,10 +13,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer;
 public class SqlOrderRepository : IOrderRepository
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly BusinessUnitHelper _businessUnitHelper;
 
-    public SqlOrderRepository(IUnitOfWork unitOfWork)
+    public SqlOrderRepository(IUnitOfWork unitOfWork, BusinessUnitHelper businessUnitHelper)
     {
         _unitOfWork = unitOfWork;
+        _businessUnitHelper = businessUnitHelper;
     }
 
     public async Task<List<OrderTypeLoadDto>> GetAllOrderTypesByBusinessIdAsync(int businessUnitId)
@@ -257,6 +259,9 @@ public class SqlOrderRepository : IOrderRepository
                                 @RFQMainId,
                                 @UserId,
                                 @OrderPrint,
+                                @BudgetYear,
+                                @OrderNotes,
+                                @DestinationPoint,
                                 @NewOrderMainId = @NewOrderMainId OUTPUT,
 		                        @NewOrderNo = @NewOrderNo OUTPUT
                                         
@@ -284,6 +289,9 @@ public class SqlOrderRepository : IOrderRepository
         command.Parameters.AddWithValue(command, "@RFQMainId", orderMainDto.RFQMainId);
         command.Parameters.AddWithValue(command, "@UserId", userId);
         command.Parameters.AddWithValue(command, "@OrderPrint", orderMainDto.OrderPrint);
+        command.Parameters.AddWithValue(command, "@BudgetYear", orderMainDto.BudgetYear);
+        command.Parameters.AddWithValue(command, "@OrderNotes", orderMainDto.OrderNotes);
+        command.Parameters.AddWithValue(command, "@DestinationPoint", orderMainDto.DestinationPoint);
 
         await using var reader = await command.ExecuteReaderAsync();
         if (await reader.ReadAsync())
@@ -357,7 +365,6 @@ public class SqlOrderRepository : IOrderRepository
 
 
         return data[0];
-
     }
 
     public async Task<List<OrderCreateRequestListDto>> GetOrderCreateListForRequestAsync(OrderCreateListRequest dto)
@@ -428,6 +435,19 @@ public class SqlOrderRepository : IOrderRepository
         return data;
     }
 
+    public async Task<bool> CreateOrderIntegration(int businessUnitId, int orderMainId, int userId)
+    {
+        await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = _businessUnitHelper.BuildQueryForIntegration(businessUnitId,
+            "SP_Order_IUD @BusinessUnitId, @OrderMainId, @UserId");
+
+        command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+        command.Parameters.AddWithValue(command, "@OrderMainId", orderMainId);
+        command.Parameters.AddWithValue(command, "@UserId", userId);
+        await _unitOfWork.SaveChangesAsync();
+        return await command.ExecuteNonQueryAsync() > 0;
+    }
+
     private static OrderDetailLoadDto MapFromReaderForOrderDetailListDto(IDataReader reader)
     {
         return new OrderDetailLoadDto
@@ -491,6 +511,7 @@ public class SqlOrderRepository : IOrderRepository
             RequestQuantity = reader.Get<decimal>("RequestQuantity"),
             OrderAnalysisId = reader.Get<int>("OrderAnalysisId"),
             CatId = reader.Get<int>("CatId"),
+            Requester = reader.Get<string>("Requester"),
             AnalysisCode1Id = reader.Get<int>("AnalysisCode1Id"),
             AnalysisCode2Id = reader.Get<int>("AnalysisCode2Id"),
             AnalysisCode3Id = reader.Get<int>("AnalysisCode3Id"),

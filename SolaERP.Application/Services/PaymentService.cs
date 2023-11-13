@@ -11,12 +11,8 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Enums;
 using SolaERP.Persistence.Utils;
 using System.Data;
-using System.Net;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using System.Transactions;
-using System.Xml.Linq;
 
 namespace SolaERP.Persistence.Services
 {
@@ -467,7 +463,7 @@ namespace SolaERP.Persistence.Services
                         GNRL_DESCR_24 = a.GNRL_DESCR_24,
                         GNRL_DESCR_25 = a.GNRL_DESCR_25,
                         UPDATE_COUNT = 1,
-                        LAST_CHANGE_USER_ID = a.LAST_CHANGE_USER_ID,
+                        LAST_CHANGE_USER_ID = auditModel.SunUser,
                         USER_NAME = a.JRNAL_SRCE,
                         INTCO_TYPE = 0,
                         INTCO_PSTG_STATUS = 0,

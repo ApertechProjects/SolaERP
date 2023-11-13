@@ -358,5 +358,50 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return list;
         }
+
+        public async Task<List<string>> GetTransactionReferenceList(int businessUnitId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_TransactionReferenceList @businessUnitId";
+            command.Parameters.AddWithValue(command, "@businessUnitId", businessUnitId);
+
+            await using var reader = await command.ExecuteReaderAsync();
+
+            var list = new List<string>();
+            while (await reader.ReadAsync())
+                list.Add(reader.Get<string>("TREFERENCE"));
+
+            return list;
+        }
+
+        public async Task<List<string>> GetReferenceList(int businessUnitId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_ReferenceList @businessUnitId";
+            command.Parameters.AddWithValue(command, "@businessUnitId", businessUnitId);
+
+            await using var reader = await command.ExecuteReaderAsync();
+
+            var list = new List<string>();
+            while (await reader.ReadAsync())
+                list.Add(reader.Get<string>("GNRL_DESCR_25"));
+
+            return list;
+        }
+
+        public async Task<List<string>> GetInvoiceList(int businessUnitId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_InvoiceList @businessUnitId";
+            command.Parameters.AddWithValue(command, "@businessUnitId", businessUnitId);
+
+            await using var reader = await command.ExecuteReaderAsync();
+
+            var list = new List<string>();
+            while (await reader.ReadAsync())
+                list.Add(reader.Get<string>("GNRL_DESCR_24"));
+
+            return list;
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Dtos.Venndors;
@@ -136,6 +137,13 @@ namespace SolaERP.Persistence.Services
         {
             return ApiResponse<bool>.Success(
                 await _repository.RFQVendorResponseChangeStatus(rfqMainId, status, vendorCode)
+            );
+        }
+
+        public async Task<ApiResponse<bool>> TransferToIntegration(CreateVendorRequest request)
+        {
+            return ApiResponse<bool>.Success(
+                await _repository.TransferToIntegration(request)
             );
         }
 
@@ -459,19 +467,19 @@ namespace SolaERP.Persistence.Services
             vendor.Email = string.IsNullOrEmpty(vendor.Email) || vendor.Email == "null"
                 ? ""
                 : vendor.Email;
-            
+
             vendor.Postal = string.IsNullOrEmpty(vendor.Postal) || vendor.Postal == "null"
                 ? ""
                 : vendor.Postal;
-            
+
             vendor.Address2 = string.IsNullOrEmpty(vendor.Address2) || vendor.Address2 == "null"
                 ? ""
                 : vendor.Address2;
-            
+
             vendor.ContactPerson = string.IsNullOrEmpty(vendor.ContactPerson) || vendor.ContactPerson == "null"
                 ? ""
                 : vendor.ContactPerson;
-            
+
             vendor.Description = string.IsNullOrEmpty(vendor.Description) || vendor.Description == "null"
                 ? ""
                 : vendor.Description;

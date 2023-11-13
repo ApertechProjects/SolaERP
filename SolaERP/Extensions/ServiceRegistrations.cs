@@ -4,6 +4,7 @@ using SolaERP.Application.Contracts.Common;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Helper;
 using SolaERP.Application.Identity_Server;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -82,6 +83,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IInvoiceService, InvoiceService>();
+            builder.Services.AddScoped<BusinessUnitHelper>();
         }
 
         private static void UseRepositories(this WebApplicationBuilder builder)
