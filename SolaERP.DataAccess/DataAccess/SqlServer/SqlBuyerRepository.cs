@@ -1,6 +1,7 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.AnalysisCode;
 using SolaERP.Application.Entities.Buyer;
+using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
@@ -31,13 +32,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public async Task<List<Buyer>> GetBuyersAsync(int userId, string businessUnitCode)
+        public async Task<List<Buyer>> GetBuyersAsync(int userId, int businessUnitId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = ReplaceQuery("[dbo].[SP_UNI_Buyer_List]", new ReplaceParams { ParamName = "APT", Value = businessUnitCode });
+                command.CommandText = "exec [dbo].[SP_UNI_Buyer_List] @userId,@businessUnitId";
+                command.Parameters.AddWithValue(command, "@businessUnitId", businessUnitId);
+                command.Parameters.AddWithValue(command, "@userId", userId);
                 using var reader = await command.ExecuteReaderAsync();
-
                 List<Buyer> status = new List<Buyer>();
 
                 while (reader.Read())

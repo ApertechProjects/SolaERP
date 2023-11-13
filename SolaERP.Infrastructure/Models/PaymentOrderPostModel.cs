@@ -8,7 +8,7 @@ namespace SolaERP.Application.Models
 {
     public class PaymentOrderPostModel
     {
-        public string BusinessUnitCode { get; set; }
+        public int BusinessUnitId { get; set; }
         public int JournalNo { get; set; }
         public int AllocationReference { get; set; }
         public List<PaymentDocumentPost> PaymentDocumentPosts { get; set; }
