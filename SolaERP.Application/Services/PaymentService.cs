@@ -349,9 +349,8 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(true);
         }
 
-        public async Task<ApiResponse<bool>> SaveAllocations(PaymentOrderPostAudit model, int businessUnitId)
+        public async Task<ApiResponse<bool>> SaveAllocations(PaymentOrderPostAudit model, string businessUnitCode)
         {
-            string businessUnitCode = businessUnitId.GetBusinessUnitCode();
             using HttpClient client = new HttpClient();
             string json = JsonSerializer.Serialize(model);
             HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -476,7 +475,7 @@ namespace SolaERP.Persistence.Services
 
             auditModel.AllocationDatas = allocationDataDto;
             auditModel.AllocationLads = allocationLadList;
-            await SaveAllocations(auditModel, model.BusinessUnitId);
+            await SaveAllocations(auditModel, currentBusinessUnitCode.BusinessUnitCode);
 
             return ApiResponse<PaymentOrderPostDataResult>.Success(new PaymentOrderPostDataResult
             {
