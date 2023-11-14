@@ -40,7 +40,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = ReplaceQuery("[dbo].[GET_ITEM_BY_ITEM_CODE]", new ReplaceParams { ParamName = "APT", Value = businessUnitCode });
+                command.CommandText = ReplaceQuery("[dbo].[GET_ITEM_BY_ITEM_CODE]",
+                    new ReplaceParams { ParamName = "APT", Value = businessUnitCode });
                 command.Parameters.AddWithValue(command, "@ItemCode", itemCode);
                 ItemCodeWithImages result = new();
 
@@ -91,9 +92,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Item_Code = reader.Get<string>("ItemCode").Trim(),
                 Description = reader.Get<string>("Description"),
                 LongDescription = reader.Get<string>("LongDescription"),
-                UnitOfPurch = reader.Get<string>("UnitOfPurch")
+                UnitOfPurch = reader.Get<string>("UnitOfPurch"),
+                ItemDescriptionAze = reader.Get<string>("ItemDescriptionAze")
             };
         }
-
     }
 }
