@@ -2,11 +2,23 @@ namespace SolaERP.Application.Dtos.Order;
 
 public class OrderDetailDto
 {
+    private int? _requestDetailId { get; set; }
     public int OrderDetailid { get; set; }
     public int OrderMainId { get; set; }
     public int LineNo { get; set; }
     public int? BidDetailid { get; set; }
-    public int RequestDetailId { get; set; }
+    public int? RequestDetailId
+    {
+        get
+        {
+            return _requestDetailId;
+        }
+        set
+        {
+            if (_requestDetailId <= 0)
+                _requestDetailId = null;
+        }
+    }
     public int? RFQRequestDetailid { get; set; }
     public DateTime OrderDate { get; set; }
     public string ItemCode { get; set; }

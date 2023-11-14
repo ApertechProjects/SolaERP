@@ -410,7 +410,7 @@ namespace SolaERP.Persistence.Services
             var data = await _paymentRepository.PaymentOrderPostData(table,
                 paymentOrderSaveMain.PaymentOrderMainId,
                 model.AllocationReference, model.JournalNo,
-                userId);
+                userId, model.BusinessUnitId);
 
             await _unitOfWork.SaveChangesAsync();
 
