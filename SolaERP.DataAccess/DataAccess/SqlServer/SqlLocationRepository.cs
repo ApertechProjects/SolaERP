@@ -1,15 +1,8 @@
 ﻿using SolaERP.DataAccess.Extensions;
 using SolaERP.Application.Contracts.Repositories;
-using SolaERP.Application.Contracts.Services;
-using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Location;
 using SolaERP.Application.UnitOfWork;
-using System;
-using System.Collections.Generic;
 using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -51,6 +44,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public Task<bool> RemoveAsync(int Id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<Location>> GetAllByBusinessUnitId(int businessUnitId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = "exec SP_LocationList @BusinessUnitId";
+            command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+            await using var reader = await command.ExecuteReaderAsync();
+
+            var locations = new List<Location>();
+
+            while (await reader.ReadAsync())
+            {
+                locations.Add(reader.GetByEntityStructure<Location>());
+            }
+            return locations;
         }
 
         public Task UpdateAsync(Location entity)
