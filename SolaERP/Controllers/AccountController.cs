@@ -149,7 +149,6 @@ namespace SolaERP.Controllers
                 });
 
                 account.UserId = response.Data;
-                account.MyProperty = AppSettingsHelper.GetAppSettingsFileName();
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
             }
 
