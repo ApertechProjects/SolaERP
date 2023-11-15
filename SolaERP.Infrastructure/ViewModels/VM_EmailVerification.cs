@@ -14,8 +14,6 @@ namespace SolaERP.Infrastructure.ViewModels
             IConfigurationBuilder builder = new ConfigurationBuilder()
             .AddJsonFile(appsettingsFileName, optional: true, reloadOnChange: true);
 
-            bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
-
             _configuration = builder.Build();
         }
 
