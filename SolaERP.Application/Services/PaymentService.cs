@@ -452,8 +452,8 @@ namespace SolaERP.Persistence.Services
                 auditModel.ASalfldgs = dto;
                 auditModel.AllocationReference = model.AllocationReference;
                 auditModel.ASalfldgLads = aSaldldgLadList;
-                auditModel.CurrentPeriod = dto[0].ENTRY_PRD;
-                auditModel.SunUser = dto[0].JRNAL_SRCE;
+                auditModel.CurrentPeriod = dto[0].ENTRY_PRD ?? 0;
+                auditModel.SunUser = dto[0].JRNAL_SRCE ?? null;
                 await SaveAsalfldgAndPstgAudit(auditModel, currentBusinessUnitCode.BusinessUnitCode);
 
                 //API process: 8-9
