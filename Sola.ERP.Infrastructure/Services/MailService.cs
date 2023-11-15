@@ -37,12 +37,6 @@ namespace SolaERP.Infrastructure.Services
             _emailNotificationService = emailNotificationService;
         }
 
-        public async Task<bool> SendEmailMessage(string tamplatePath, string to, string subject)
-        {
-            string templateContent = await GetTemplateAsync(tamplatePath);
-            await SendMailAsync("yaqub.nasibov@apertech.net", "Test Email For Registration is Pending", templateContent, true);
-            return true;
-        }
 
         private async Task<string> GetTemplateAsync(string templatePath) => await File.ReadAllTextAsync(templatePath);
 
@@ -188,7 +182,7 @@ namespace SolaERP.Infrastructure.Services
                 {
                     var basicCredential = new NetworkCredential(_configuration["Mail:UserName"], _configuration["Mail:Password"]);
 
-                    smtpClient.Host = "mail.apertech.net";
+                    smtpClient.Host = _configuration["Mail:Host"];
                     smtpClient.Port = 587;
                     smtpClient.EnableSsl = true;
                     smtpClient.UseDefaultCredentials = false;
@@ -198,7 +192,7 @@ namespace SolaERP.Infrastructure.Services
                     {
                         foreach (string item in tos)
                         {
-                            message.From = new MailAddress(_configuration["Mail:UserName"], "Apertech");
+                            message.From = new MailAddress(_configuration["Mail:UserName"], _configuration["Mail:UserAlias"]);
                             message.Subject = subject;
                             message.IsBodyHtml = isBodyHtml;
                             message.Body = body;
@@ -250,7 +244,7 @@ namespace SolaERP.Infrastructure.Services
             {
                 var basicCredential = new NetworkCredential(_configuration["Mail:UserName"], _configuration["Mail:Password"]);
 
-                smtpClient.Host = "mail.apertech.net";
+                smtpClient.Host = _configuration["Mail:Host"];
                 smtpClient.Port = 587;
                 smtpClient.EnableSsl = true;
                 smtpClient.UseDefaultCredentials = false;
