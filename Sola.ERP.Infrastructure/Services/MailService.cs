@@ -262,7 +262,7 @@ namespace SolaERP.Infrastructure.Services
                     {
                         if (IsValidEmail(item))
                         {
-                            message.From = new MailAddress(_configuration["Mail:UserName"], "Apertech");
+                            message.From = new MailAddress(_configuration["Mail:UserName"], _configuration["Mail:UserAlias"]);
                             message.Subject = subject;
                             message.IsBodyHtml = true;
 

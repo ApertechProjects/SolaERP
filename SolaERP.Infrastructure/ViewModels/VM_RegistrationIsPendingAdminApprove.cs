@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.Extensions.Configuration;
+using SolaERP.Application.Helper;
 using Language = SolaERP.Application.Enums.Language;
 namespace SolaERP.Infrastructure.ViewModels
 {
@@ -8,8 +9,9 @@ namespace SolaERP.Infrastructure.ViewModels
         private readonly IConfiguration _configuration;
         public VM_RegistrationIsPendingAdminApprove()
         {
+            string appsettingsFileName = AppSettingsHelper.GetAppSettingsFileName();
             IConfigurationBuilder builder = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            .AddJsonFile(appsettingsFileName, optional: true, reloadOnChange: true);
 
             _configuration = builder.Build();
         }
