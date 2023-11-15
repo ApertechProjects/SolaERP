@@ -44,7 +44,7 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> FollowUser(int requestMainId)
             => CreateActionResult(await _requestService.GetFollowUsersAsync(requestMainId));
 
-        [HttpGet("{requestMainId}/{businessUnitId}")]
+        [HttpGet]
         public async Task<IActionResult> Info(int requestMainId, int businessUnitId)
            => CreateActionResult(await _requestService.GetByMainId(User.Identity.Name, requestMainId, businessUnitId));
 
