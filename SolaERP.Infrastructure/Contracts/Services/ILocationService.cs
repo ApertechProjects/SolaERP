@@ -10,5 +10,6 @@ namespace SolaERP.Application.Contracts.Services
 {
     public interface ILocationService : ICrudService<LocationDto>
     {
+        Task<ApiResponse<List<LocationDto>>> GetAllByBusinessUnitId(int businessUnitId);
     }
 }

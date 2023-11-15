@@ -10,13 +10,14 @@ namespace SolaERP.Controllers
     public class LocationController : CustomBaseController
     {
         private readonly ILocationService _locationService;
+
         public LocationController(ILocationService locationService)
         {
             _locationService = locationService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetLocationListAsync()
-        => CreateActionResult(await _locationService.GetAllAsync());
+        [HttpGet("{businessUnitId:int}")]
+        public async Task<IActionResult> GetLocationListAsync(int businessUnitId)
+            => CreateActionResult(await _locationService.GetAllByBusinessUnitId(businessUnitId));
     }
 }
