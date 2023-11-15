@@ -34,15 +34,7 @@
 
         function sendRequest() {
 
-            let url
-            if (window.location.href.includes("23.88.63.245")) {
-                url = "http://23.88.63.245:3030"
-            }
-            else
-                url = "http://10.1.1.14:3030"
-
-
-            fetch(`${url}/api/Account/ConfirmEmail?verifyToken=${token}`, {
+            fetch(`${window.location.href}/api/Account/ConfirmEmail?verifyToken=${token}`, {
                 method: "GET",
                 headers: { "Content-type": "application/json; charset=UTF-8" }
             })
