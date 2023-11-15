@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Order;
 using SolaERP.Application.Dtos.Vendors;
+using SolaERP.Application.Models;
 using SolaERP.Controllers;
 
 namespace SolaERP.API.Controllers;
@@ -82,7 +83,7 @@ public class OrderController : CustomBaseController
         CreateActionResult(await _orderService.WithHoldingTaxDatas(vendorId));
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> Retrieve(List<int> ids)
-        => CreateActionResult(await _orderService.Retrieve(ids, User.Identity.Name));
+    public async Task<IActionResult> Retrieve(OrderRetrieveModel ids)
+        => CreateActionResult(await _orderService.Retrieve(ids.Ids, User.Identity.Name));
 
 }
