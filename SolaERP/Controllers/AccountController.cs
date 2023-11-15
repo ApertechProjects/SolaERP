@@ -7,6 +7,7 @@ using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Enums;
+using SolaERP.Application.Helper;
 using SolaERP.Application.Models;
 using SolaERP.Infrastructure.ViewModels;
 using System.Diagnostics;
@@ -148,7 +149,7 @@ namespace SolaERP.Controllers
                 });
 
                 account.UserId = response.Data;
-
+                account.MyProperty = AppSettingsHelper.GetAppSettingsFileName();
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
             }
 
