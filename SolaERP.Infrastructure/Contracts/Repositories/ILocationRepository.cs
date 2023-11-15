@@ -1,13 +1,9 @@
 ﻿using SolaERP.Application.Entities.Location;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.Application.Contracts.Repositories
 {
     public interface ILocationRepository : ICrudOperations<Location>
     {
+        Task<List<Location>> GetAllByBusinessUnitId(int businessUnitId);
     }
 }
