@@ -1,4 +1,5 @@
-﻿<html>
+﻿
+<html>
 
 <head>
     <meta charset="utf-8">
@@ -32,7 +33,16 @@
         let token = new DOMParser().parseFromString(verifyToken, "text/html").body.textContent;
 
         function sendRequest() {
-            fetch(`http://23.88.63.245:3030/api/Account/ConfirmEmail?verifyToken=${token}`, {
+
+            let url
+            if (window.location.href.includes("23.88.63.245")) {
+                url = "http://23.88.63.245:3030"
+            }
+            else
+                url = "http://10.1.1.14:3030"
+
+
+            fetch(`${url}/api/Account/ConfirmEmail?verifyToken=${token}`, {
                 method: "GET",
                 headers: { "Content-type": "application/json; charset=UTF-8" }
             })
@@ -49,7 +59,7 @@
         }
 
 
-        // Get the URL of the HTML page
+                        // Get the URL of the HTML page
     </script>
 
 
