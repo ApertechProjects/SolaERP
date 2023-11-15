@@ -2,7 +2,10 @@ using System.Data;
 using System.Data.Common;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Order;
+using SolaERP.Application.Dtos.Status;
 using SolaERP.Application.Dtos.Vendors;
+using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Order;
 using SolaERP.Application.Helper;
 using SolaERP.Application.UnitOfWork;
@@ -787,5 +790,20 @@ public class SqlOrderRepository : IOrderRepository
             RFQNo = reader.Get<string>("RFQNo"),
             HasAttachments = reader.Get<bool>("HasAttachments")
         };
+    }
+
+    public async Task<bool> Retrieve(int id, int userId)
+    {
+        await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = @"EXEC dbo.SP_OrderRetrieve 
+            @OrderMainId,
+            @UserId";
+
+        command.Parameters.AddWithValue(command, "@OrderMainId", id);
+        command.Parameters.AddWithValue(command, "@UserId", userId);
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return await command.ExecuteNonQueryAsync() > 0;
     }
 }

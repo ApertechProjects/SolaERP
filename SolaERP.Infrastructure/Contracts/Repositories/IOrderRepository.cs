@@ -25,4 +25,5 @@ public interface IOrderRepository
     Task<List<OrderCreateBidListDto>> GetOrderCreateListForBidsAsync(OrderCreateListRequest dto);
     Task<List<OrderDetailLoadDto>> GetAllDetailsAsync(int orderMainId);
     Task<bool> CreateOrderIntegration(int businessUnitId, int orderMainId, int userId);
+    Task<bool> Retrieve(int id, int userId);
 }

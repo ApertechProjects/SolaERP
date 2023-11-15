@@ -20,10 +20,11 @@ public class OrderService : IOrderService
     private readonly IVendorRepository _vendorRepository;
     private readonly IAttachmentService _attachmentService;
     private readonly IVendorService _vendorService;
+    private readonly IUserRepository _userRepository;
 
     public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork,
         ISupplierEvaluationRepository supplierRepository, IGeneralService generalService,
-        IVendorRepository vendorRepository, IAttachmentService attachmentService, IVendorService vendorService)
+        IVendorRepository vendorRepository, IAttachmentService attachmentService, IVendorService vendorService, IUserRepository userRepository)
     {
         _orderRepository = orderRepository;
         _unitOfWork = unitOfWork;
@@ -32,6 +33,7 @@ public class OrderService : IOrderService
         _vendorRepository = vendorRepository;
         _attachmentService = attachmentService;
         _vendorService = vendorService;
+        _userRepository = userRepository;
     }
 
     public async Task<ApiResponse<List<OrderTypeLoadDto>>> GetTypesAsync(int businessUnitId)
@@ -155,7 +157,9 @@ public class OrderService : IOrderService
         {
             await _vendorService.TransferToIntegration(new CreateVendorRequest
             {
-                VendorCode = order.VendorCode, UserId = userId, BusinessUnitId = order.BusinessUnitId
+                VendorCode = order.VendorCode,
+                UserId = userId,
+                BusinessUnitId = order.BusinessUnitId
             });
             await _orderRepository.CreateOrderIntegration(order.BusinessUnitId, statusDto.OrderMainId, userId);
         }
@@ -226,5 +230,30 @@ public class OrderService : IOrderService
         return ApiResponse<WithHoldingTaxData>.Success(
             holdingTaxDatas.SingleOrDefault(x => x.WithHoldingTaxId == vendor.WithHoldingTaxId)
         );
+    }
+
+    public async Task<ApiResponse<bool>> Retrieve(List<int> ids, string name)
+    {
+        int userId = await _userRepository.ConvertIdentity(name);
+        int count = 0;
+        string errorIds = string.Empty;
+        for (int i = 0; i < ids.Count; i++)
+        {
+            var result = await _orderRepository.Retrieve(ids[i], userId);
+            if (result)
+                count++;
+            else
+                errorIds += ids[i] + ",";
+        }
+
+        if (count == ids.Count)
+            return ApiResponse<bool>.Success(true);
+
+        else
+        {
+            errorIds.TrimEnd(',');
+            return ApiResponse<bool>.Fail($"{errorIds} orders can not be retrieved", 400);
+
+        }
     }
 }
