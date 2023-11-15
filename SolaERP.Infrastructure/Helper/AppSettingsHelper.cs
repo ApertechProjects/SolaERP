@@ -16,5 +16,12 @@ namespace SolaERP.Application.Helper
             else
                 return "appsettings.Production.json";
         }
+
+        public static string GetApp()
+        {
+            var aa = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            return aa;
+        }
     }
 }
