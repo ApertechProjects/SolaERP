@@ -84,6 +84,6 @@ public class OrderController : CustomBaseController
 
     [HttpPost("[action]")]
     public async Task<IActionResult> Retrieve(OrderRetrieveModel ids)
-        => CreateActionResult(await _orderService.Retrieve(ids.Ids, User.Identity.Name));
+        => CreateActionResult(await _orderService.Retrieve(ids.ids, User.Identity.Name));
 
 }
