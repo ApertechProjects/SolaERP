@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.Extensions.Configuration;
 using SolaERP.Application.Enums;
+using SolaERP.Application.Helper;
 
 namespace SolaERP.Infrastructure.ViewModels
 {
@@ -9,8 +10,11 @@ namespace SolaERP.Infrastructure.ViewModels
         private readonly IConfiguration _configuration;
         public VM_EmailVerification()
         {
+            string appsettingsFileName = AppSettingsHelper.GetAppSettingsFileName();
             IConfigurationBuilder builder = new ConfigurationBuilder()
-           .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            .AddJsonFile(appsettingsFileName, optional: true, reloadOnChange: true);
+
+            bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
 
             _configuration = builder.Build();
         }
@@ -39,8 +43,9 @@ namespace SolaERP.Infrastructure.ViewModels
 
         public string GetEmailVerifiedLink()
         {
+
             //return _configuration["Mail:ServerUrl"] + $"/EmailRedirectingPage/EmailVerified.html?verifyToken={Token}";
-            return _configuration["Url"] + $"sources/templates/EmailConfirmPage.html?verifyToken={Token}";
+            return _configuration["Mail:Url"] + $"sources/templates/EmailConfirmPage.html?verifyToken={Token}";
         }
 
     }
