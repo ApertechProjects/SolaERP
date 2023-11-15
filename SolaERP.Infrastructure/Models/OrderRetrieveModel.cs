@@ -8,6 +8,6 @@ namespace SolaERP.Application.Models
 {
     public class OrderRetrieveModel
     {
-        public List<int> Ids { get; set; }
+        public List<int> ids { get; set; }
     }
 }
