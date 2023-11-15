@@ -17,10 +17,10 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> SendToApproveAsync(string name, List<int> requestMainIds);
         Task<ApiResponse<List<RequestMainDraftDto>>> GetDraftsAsync(RequestMainDraftModel getMainDraftParameters);
         Task<ApiResponse<List<RequestAmendmentDto>>> GetChangeApprovalAsync(string name, RequestApproveAmendmentModel requestParametersDto);
-        Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId);
+        Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId, int businessUnitId);
         Task<ApiResponse<List<RequestApprovalInfoDto>>> GetApprovalInfoAsync(string name, int requestMainId);
         Task<ApiResponse<RequestMainDto>> GetHeaderAsync(string name, int requestMainId);
-        Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetDetails(int requestmainId);
+        Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetDetails(int requestmainId,int businessUnitId);
         Task<ApiResponse<RequestSaveResultModel>> AddOrUpdateAsync(string name, RequestSaveModel model);
         Task<ApiResponse<bool>> DeleteAsync(string name, int requestMainId);
         Task<ApiResponse<List<RequestDetailApprovalInfoDto>>> GetDetailApprvalInfoAsync(int requestDetaildId);

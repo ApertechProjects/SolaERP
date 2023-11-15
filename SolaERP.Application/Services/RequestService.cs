@@ -112,12 +112,12 @@ namespace SolaERP.Persistence.Services
                 : ApiResponse<bool>.Fail(false, 400);
         }
 
-        public async Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId)
+        public async Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId, int businessUnitId)
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var requestMain = await _requestMainRepository.GetRequesMainHeaderAsync(requestMainId, userId);
             requestMain.requestCardDetails =
-                await _requestDetailRepository.GetRequestDetailsByMainIdAsync(requestMainId);
+                await _requestDetailRepository.GetRequestDetailsByMainIdAsync(requestMainId, businessUnitId);
             requestMain.requestCardAnalysis = await _requestDetailRepository.GetAnalysis(requestMainId);
             var requestDto = _mapper.Map<RequestCardMainDto>(requestMain);
             requestDto.Attachments = await _attachmentService.GetAttachmentsAsync(requestDto.RequestMainId,
@@ -166,9 +166,9 @@ namespace SolaERP.Persistence.Services
                 : ApiResponse<RequestMainDto>.Fail("Bad request header is null", 404);
         }
 
-        public async Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetDetails(int requestmainId)
+        public async Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetDetails(int requestmainId, int businessUnitId)
         {
-            var requestDetails = await _requestDetailRepository.GetRequestDetailsByMainIdAsync(requestmainId);
+            var requestDetails = await _requestDetailRepository.GetRequestDetailsByMainIdAsync(requestmainId, businessUnitId);
             var requestDetailsResult = _mapper.Map<List<RequestDetailsWithAnalysisCodeDto>>(requestDetails);
 
             return requestDetailsResult.Count > 0
@@ -181,7 +181,7 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.ConvertIdentity(name);
             RequestSaveResultModel resultModel =
                 await _requestMainRepository.AddOrUpdateRequestAsync(userId, _mapper.Map<RequestMainSaveModel>(model));
-            var requestDetails = _requestDetailRepository.GetRequestDetailsByMainIdAsync(model.RequestMainId).Result
+            var requestDetails = _requestDetailRepository.GetRequestDetailsByMainIdAsync(model.RequestMainId, model.BusinessUnitId).Result
                 .Select(x => x.RequestDetailId).ToList()
                 .Except(model.Details.Select(x => x.RequestDetailId).ToList()
                 ).ToList();
