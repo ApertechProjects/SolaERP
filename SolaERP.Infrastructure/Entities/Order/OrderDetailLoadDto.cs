@@ -14,6 +14,7 @@ public class OrderDetailLoadDto
     public string ItemCode { get; set; }
     public string ItemName1 { get; set; }
     public string ItemName2 { get; set; }
+    public string ItemAZEDescription { get; set; }
     public string UOM { get; set; }
     public string RUOM { get; set; }
     public string PUOM { get; set; }
