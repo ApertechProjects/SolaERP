@@ -692,7 +692,10 @@ public class SqlOrderRepository : IOrderRepository
             BusinessUnitId = reader.Get<int>("BusinessUnitId"),
             InvoiceStatus = reader.Get<int>("BusinessUnitId"),
             GRNStatus = reader.Get<int>("GRNStatus"),
-            OrderPrint = reader.Get<bool>("OrderPrint")
+            OrderPrint = reader.Get<bool>("OrderPrint"),
+            BudgetYear = reader.Get<int>("BudgetYear"),
+            DestinationPoint = reader.Get<string>("DestinationPoint"),
+            OrderNotes = reader.Get<string>("OrderNotes")
         };
     }
 
