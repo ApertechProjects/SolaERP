@@ -33,7 +33,11 @@
         let token = new DOMParser().parseFromString(verifyToken, "text/html").body.textContent;
 
         function sendRequest() {
-            fetch(`${window.location.origin}:3030/api/Account/ConfirmEmail?verifyToken=${token}`, {
+            var currentUrl = window.location.href;
+            var apiIndex = currentUrl.indexOf("api");
+            var result = currentUrl.substring(0, apiIndex + 3);
+
+            fetch(`${result}/api/Account/ConfirmEmail?verifyToken=${token}`, {
                 method: "GET",
                 headers: { "Content-type": "application/json; charset=UTF-8" }
             })
