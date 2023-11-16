@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.API.Extensions;
+using SolaERP.API.Methods;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Shared;
@@ -117,10 +118,8 @@ namespace SolaERP.Controllers
             if (user is not null)
                 return CreateActionResult(ApiResponse<bool>.Fail("email", $" This mail is already in use", 422));
 
-            var newtoken = Guid.NewGuid();
+            dto.VerifyToken = Helper.GetVerifyToken(_tokenHandler.CreateRefreshToken());
 
-            dto.VerifyToken = newtoken + _tokenHandler.CreateRefreshToken();
-            dto.VerifyToken = Regex.Replace(dto.VerifyToken, @"[^a-zA-Z0-9_.~\-]", "");
             dto.VendorId = await _vendorService.GetByTaxIdAsync(dto.TaxId);
             var response = await _userService.UserRegisterAsync(dto);
             AccountResponseDto account = new();

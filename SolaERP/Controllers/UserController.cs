@@ -1,10 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
+using SolaERP.API.Methods;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Entities.Groups;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
+using SolaERP.Infrastructure.Services;
+using SolaERP.Infrastructure.ViewModels;
+using SolaERP.Persistence.Services;
+using System.Text.RegularExpressions;
+using System.Web;
 
 namespace SolaERP.Controllers
 {
@@ -16,12 +23,16 @@ namespace SolaERP.Controllers
         private readonly IFileUploadService _fileService;
         private readonly IGroupService _groupService;
         private readonly ITokenHandler _tokenHandler;
-        public UserController(IUserService userService, IFileUploadService fileService, IGroupService groupService, ITokenHandler tokenHandler)
+        private readonly IEmailNotificationService _emailNotificationService;
+        private readonly IMailService _mailService;
+        public UserController(IUserService userService, IFileUploadService fileService, IGroupService groupService, ITokenHandler tokenHandler, IEmailNotificationService emailNotificationService, IMailService mailService)
         {
             _userService = userService;
             _fileService = fileService;
             _groupService = groupService;
             _tokenHandler = tokenHandler;
+            _emailNotificationService = emailNotificationService;
+            _mailService = mailService;
         }
 
         [HttpGet]
@@ -59,8 +70,36 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveUserAsync([FromForm] UserSaveModel userSaveModel, CancellationToken cancellationToken)
         {
-            var token = _tokenHandler.GetAccessToken();
-            var result = await _userService.SaveUserAsync(userSaveModel, token, cancellationToken);
+            userSaveModel.VerifyToken = Helper.GetVerifyToken(_tokenHandler.CreateRefreshToken());
+
+            var result = await _userService.SaveUserAsync(userSaveModel, cancellationToken);
+
+            if (result.StatusCode == 200)
+            {
+
+                var templateDataForVerification =
+                       _emailNotificationService.GetEmailTemplateData(Language.az, EmailTemplateKey.VER).Result;
+                var companyName = _emailNotificationService.GetCompanyName(userSaveModel.Email).Result;
+
+                VM_EmailVerification emailVerification = new VM_EmailVerification
+                {
+                    Username = userSaveModel.UserName,
+                    Body = new HtmlString(string.Format(templateDataForVerification.Body, userSaveModel.FullName)),
+                    CompanyName = companyName,
+                    Header = templateDataForVerification.Header,
+                    Language = Language.az,
+                    Subject = templateDataForVerification.Subject,
+                    Token = HttpUtility.HtmlDecode(userSaveModel.VerifyToken),
+                };
+
+                Response.OnCompleted(async () =>
+                {
+                    await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification,
+                        emailVerification.TemplateName(), emailVerification.ImageName(),
+                        new List<string> { userSaveModel.Email });
+                });
+            }
+
             return CreateActionResult(result);
         }
 

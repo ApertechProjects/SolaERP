@@ -297,7 +297,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<ERPUserDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<int>> SaveUserAsync(UserSaveModel user, string token,
+        public async Task<ApiResponse<int>> SaveUserAsync(UserSaveModel user,
             CancellationToken cancellationToken)
         {
             if (user.Id == 0)

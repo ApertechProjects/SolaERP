@@ -28,6 +28,7 @@ namespace SolaERP.Application.Models
         public bool UserPhotoIsDeleted { get; set; }
         public bool InActive { get; set; }
         public int? DefaultBusinessUnitId { get; set; }
+        public string VerifyToken { get; set; }
 
 
     }
