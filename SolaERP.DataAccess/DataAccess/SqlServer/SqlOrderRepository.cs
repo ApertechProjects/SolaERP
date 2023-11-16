@@ -465,7 +465,7 @@ public class SqlOrderRepository : IOrderRepository
             ItemCode = reader.Get<string>("ItemCode"),
             ItemName1 = reader.Get<string>("ItemName1"),
             ItemName2 = reader.Get<string>("ItemName2"),
-            ItemAZEDescription = reader.Get<string>("ItemDescriptionAze"),
+            ItemDescriptionAze = reader.Get<string>("ItemDescriptionAze"),
             UOM = reader.Get<string>("UOM"),
             PUOM = reader.Get<string>("PUOM"),
             BusinessCategoryId = reader.Get<int>("BusinessCategoryId"),
