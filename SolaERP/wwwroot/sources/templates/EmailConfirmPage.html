@@ -34,7 +34,7 @@
 
         function sendRequest() {
             var currentUrl = window.location.href;
-            var apiIndex = currentUrl.indexOf("api");
+            var apiIndex = currentUrl.indexOf("/sources");
             var result = currentUrl.substring(0, apiIndex + 3);
 
             fetch(`${result}/api/Account/ConfirmEmail?verifyToken=${token}`, {
