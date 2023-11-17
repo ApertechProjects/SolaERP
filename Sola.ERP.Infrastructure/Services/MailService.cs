@@ -183,8 +183,8 @@ namespace SolaERP.Infrastructure.Services
                     var basicCredential = new NetworkCredential(_configuration["Mail:UserName"], _configuration["Mail:Password"]);
 
                     smtpClient.Host = _configuration["Mail:Host"];
-                    smtpClient.Port = 587;
-                    smtpClient.EnableSsl = true;
+                    smtpClient.Port = Convert.ToInt32(_configuration["Mail:Port"]);
+                    smtpClient.EnableSsl = Convert.ToBoolean(_configuration["Mail:EnableSSL"]);
                     smtpClient.UseDefaultCredentials = false;
                     smtpClient.Credentials = basicCredential;
 
@@ -206,6 +206,7 @@ namespace SolaERP.Infrastructure.Services
                         }
                         catch (Exception ex)
                         {
+                            throw;
                         }
                     }
                 }

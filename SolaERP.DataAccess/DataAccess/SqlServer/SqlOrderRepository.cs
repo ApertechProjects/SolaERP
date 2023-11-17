@@ -367,7 +367,7 @@ public class SqlOrderRepository : IOrderRepository
         }
 
 
-        return data[0];
+        return new();
     }
 
     public async Task<List<OrderCreateRequestListDto>> GetOrderCreateListForRequestAsync(OrderCreateListRequest dto)
