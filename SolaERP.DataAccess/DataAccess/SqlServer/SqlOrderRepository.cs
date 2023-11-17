@@ -360,14 +360,13 @@ public class SqlOrderRepository : IOrderRepository
         command.Parameters.AddWithValue(command, "@OrderMainId", orderMainId);
 
         await using DbDataReader reader = await command.ExecuteReaderAsync();
-        List<OrderHeadLoaderDto> data = new();
+        OrderHeadLoaderDto data = new();
         while (await reader.ReadAsync())
         {
-            data.Add(MapFromReaderForOrderHeaderLoaderDto(reader));
+            data = MapFromReaderForOrderHeaderLoaderDto(reader);
         }
 
-
-        return new();
+        return data;
     }
 
     public async Task<List<OrderCreateRequestListDto>> GetOrderCreateListForRequestAsync(OrderCreateListRequest dto)
