@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
 
@@ -35,8 +36,8 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _invoiceService.Info(invoiceRegisterId));
 
         [HttpGet]
-        public async Task<IActionResult> RegisterLoadGRN(int invoiceRegisterId)
-            => CreateActionResult(await _invoiceService.RegisterLoadGRN(invoiceRegisterId));
+        public async Task<IActionResult> RegisterLoadGRN(int orderMainId)
+            => CreateActionResult(await _invoiceService.RegisterLoadGRN(orderMainId));
 
         [HttpGet]
         public async Task<IActionResult> RegisterListByOrder(int orderMainId)
@@ -97,6 +98,35 @@ namespace SolaERP.API.Controllers
         [HttpGet("{businessUnitId:int}")]
         public async Task<IActionResult> GetInvoiceList(int businessUnitId)
             => CreateActionResult(await _invoiceService.GetInvoiceList(businessUnitId));
+
+        [HttpGet("{orderMainId:int}")]
+        public async Task<IActionResult> GetAdvanceInvoicesList(int orderMainId)
+            => CreateActionResult(await _invoiceService.GetAdvanceInvoicesList(orderMainId));
+
+        [HttpPost]
+        public async Task<IActionResult> SaveInvoiceMatchingMain(InvoiceMathcingMain request)
+        {
+            int userId = Convert.ToInt32(User.Identity.Name);
+            return CreateActionResult(await _invoiceService.SaveInvoiceMatchingMain(request, userId));
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> SaveInvoiceMatchingGRNs(InvoiceMatchingGRNs request)
+        {
+            return CreateActionResult(await _invoiceService.SaveInvoiceMatchingGRNs(request));
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> SaveInvoiceMatchingAdvances(InvoiceMatchingAdvance request)
+        {
+            return CreateActionResult(await _invoiceService.SaveInvoiceMatchingAdvances(request));
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> SaveInvoiceMatchingDetails(InvoiceMatchingDetail request)
+        {
+            return CreateActionResult(await _invoiceService.SaveInvoiceMatchingDetails(request));
+        }
         
     }
 }

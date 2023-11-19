@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Dtos.Invoice;
+﻿using System.Data;
+using SolaERP.Application.Dtos.Invoice;
 using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Models;
 
@@ -26,5 +27,13 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<string>> GetTransactionReferenceList(int businessUnitId);
         Task<List<string>> GetReferenceList(int businessUnitId);
         Task<List<string>> GetInvoiceList(int businessUnitId);
+        Task<List<AdvanceInvoice>> GetAdvanceInvoicesList(int orderMainId);
+        Task<int> SaveInvoiceMatchingMain(InvoiceMathcingMain request, int userId);
+        Task<bool> SaveInvoiceMatchingGRNs(int requestInvoiceMatchingMainId, DataTable dataTable);
+
+        Task<bool> SaveInvoiceMatchingAdvances(int requestInvoiceRegisterId, int requestMatchingId,
+            DataTable dataTable);
+
+        Task<bool> SaveInvoiceMatchingDetails(int requestInvoiceMatchingMainid, DataTable dataTable);
     }
 }

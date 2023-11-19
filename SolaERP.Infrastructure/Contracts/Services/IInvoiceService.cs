@@ -11,7 +11,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<RegisterAllDto>>> RegisterAll(InvoiceRegisterGetModel model, string name);
         Task<ApiResponse<bool>> RegisterChangeStatus(InvoiceRegisterApproveModel model, string name);
         Task<ApiResponse<List<RegisterListByOrderDto>>> RegisterListByOrder(int orderMainId);
-        Task<ApiResponse<List<RegisterLoadGRNDto>>> RegisterLoadGRN(int invoiceRegisterId);
+        Task<ApiResponse<List<RegisterLoadGRNDto>>> RegisterLoadGRN(int orderMainId);
         Task<ApiResponse<RegisterMainLoadDto>> Info(int invoiceRegisterId);
         Task<ApiResponse<bool>> RegisterSendToApprove(InvoiceSendToApproveModel model, string name);
         Task<ApiResponse<List<RegisterWFADto>>> RegisterWFA(InvoiceRegisterGetModel model, string name);
@@ -31,5 +31,10 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<string>>> GetTransactionReferenceList(int businessUnitId);
         Task<ApiResponse<List<string>>> GetReferenceList(int businessUnitId);
         Task<ApiResponse<List<string>>> GetInvoiceList(int businessUnitId);
+        Task<ApiResponse<List<AdvanceInvoiceDto>>> GetAdvanceInvoicesList(int orderMainId);
+        Task<ApiResponse<int>> SaveInvoiceMatchingMain(InvoiceMathcingMain request, int userId);
+        Task<ApiResponse<bool>> SaveInvoiceMatchingGRNs(InvoiceMatchingGRNs request);
+        Task<ApiResponse<bool>> SaveInvoiceMatchingAdvances(InvoiceMatchingAdvance request);
+        Task<ApiResponse<bool>> SaveInvoiceMatchingDetails(InvoiceMatchingDetail request);
     }
 }

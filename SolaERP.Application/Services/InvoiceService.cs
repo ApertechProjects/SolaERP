@@ -8,6 +8,7 @@ using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.Persistence.Utils;
 
 namespace SolaERP.Persistence.Services
 {
@@ -58,9 +59,9 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<RegisterListByOrderDto>>.Success(dto);
         }
 
-        public async Task<ApiResponse<List<RegisterLoadGRNDto>>> RegisterLoadGRN(int invoiceRegisterId)
+        public async Task<ApiResponse<List<RegisterLoadGRNDto>>> RegisterLoadGRN(int orderMainId)
         {
-            var data = await _invoiceRepository.RegisterLoadGRN(invoiceRegisterId);
+            var data = await _invoiceRepository.RegisterLoadGRN(orderMainId);
             var dto = _mapper.Map<List<RegisterLoadGRNDto>>(data);
             return ApiResponse<List<RegisterLoadGRNDto>>.Success(dto);
         }
@@ -205,6 +206,45 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<List<string>>> GetInvoiceList(int businessUnitId)
         {
             return ApiResponse<List<string>>.Success(await _invoiceRepository.GetInvoiceList(businessUnitId));
+        }
+
+        public async Task<ApiResponse<List<AdvanceInvoiceDto>>> GetAdvanceInvoicesList(int orderMainId)
+        {
+            var data = await _invoiceRepository.GetAdvanceInvoicesList(orderMainId);
+            var dto = _mapper.Map<List<AdvanceInvoiceDto>>(data);
+            return ApiResponse<List<AdvanceInvoiceDto>>.Success(dto, 200);
+        }
+
+        public async Task<ApiResponse<int>> SaveInvoiceMatchingMain(InvoiceMathcingMain request, int userId)
+        {
+            var data = await _invoiceRepository.SaveInvoiceMatchingMain(request, userId);
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<int>.Success(data, 200);
+        }
+
+        public async Task<ApiResponse<bool>> SaveInvoiceMatchingGRNs(InvoiceMatchingGRNs request)
+        {
+            var dataTable = request.RNEInvoicesMatchingTypeList.ConvertListToDataTable();
+            await _invoiceRepository.SaveInvoiceMatchingGRNs(request.InvoiceMatchingMainId, dataTable);
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(true);
+        }
+
+        public async Task<ApiResponse<bool>> SaveInvoiceMatchingAdvances(InvoiceMatchingAdvance request)
+        {
+            var dataTable = request.AdvanceInvoicesMatchingTypeList.ConvertListToDataTable();
+            await _invoiceRepository.SaveInvoiceMatchingAdvances(request.InvoiceRegisterId,
+                request.InvoiceMatchingMainid, dataTable);
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(true);
+        }
+
+        public async Task<ApiResponse<bool>> SaveInvoiceMatchingDetails(InvoiceMatchingDetail request)
+        {
+            var dataTable = request.InvoicesMatchingDetailsTypeList.ConvertListToDataTable();
+            await _invoiceRepository.SaveInvoiceMatchingDetails(request.InvoiceMatchingMainid, dataTable);
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(true);
         }
     }
 }
