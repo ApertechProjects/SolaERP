@@ -58,9 +58,9 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<RegisterListByOrderDto>>.Success(dto);
         }
 
-        public async Task<ApiResponse<List<RegisterLoadGRNDto>>> RegisterLoadGRN(int invoiceRegisterId)
+        public async Task<ApiResponse<List<RegisterLoadGRNDto>>> RegisterLoadGRN(int orderMainId)
         {
-            var data = await _invoiceRepository.RegisterLoadGRN(invoiceRegisterId);
+            var data = await _invoiceRepository.RegisterLoadGRN(orderMainId);
             var dto = _mapper.Map<List<RegisterLoadGRNDto>>(data);
             return ApiResponse<List<RegisterLoadGRNDto>>.Success(dto);
         }

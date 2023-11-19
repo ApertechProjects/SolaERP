@@ -74,11 +74,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return list;
         }
 
-        public async Task<List<RegisterLoadGRN>> RegisterLoadGRN(int invoiceRegisterId)
+        public async Task<List<RegisterLoadGRN>> RegisterLoadGRN(int orderMainId)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_InvoiceRegisterLoadGRNs @invoiceRegisterId";
-            command.Parameters.AddWithValue(command, "@invoiceRegisterId", invoiceRegisterId);
+            command.CommandText = @"exec dbo.SP_InvoiceRegisterLoadGRNs @OrderMainId";
+            command.Parameters.AddWithValue(command, "@OrderMainId", orderMainId);
 
             using var reader = await command.ExecuteReaderAsync();
 
