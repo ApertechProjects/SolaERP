@@ -484,5 +484,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             var value = await command.ExecuteNonQueryAsync();
             return value > 0;
         }
+
+        public async Task<bool> SaveInvoiceMatchingDetails(int requestInvoiceMatchingMainid, DataTable dataTable)
+        {
+            await using var command = _unitOfWork.CreateCommand() as SqlCommand;
+            command.CommandText = @"EXEC SP_InvoiceMatchingDetails_IUD 
+                                    @InvoiceMatchingMainid,
+                                    @InvoicesMatchingDetailsType";
+
+            command.Parameters.AddWithValue(command, "@InvoiceMatchingMainid", requestInvoiceMatchingMainid);
+            command.Parameters.AddTableValue(command, "@InvoicesMatchingDetailsType", "InvoicesMatchingDetailsType",
+                dataTable);
+            var value = await command.ExecuteNonQueryAsync();
+            return value > 0;
+        }
     }
 }

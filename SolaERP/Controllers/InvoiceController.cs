@@ -121,5 +121,12 @@ namespace SolaERP.API.Controllers
         {
             return CreateActionResult(await _invoiceService.SaveInvoiceMatchingAdvances(request));
         }
+        
+        [HttpPost]
+        public async Task<IActionResult> SaveInvoiceMatchingDetails(InvoiceMatchingDetail request)
+        {
+            return CreateActionResult(await _invoiceService.SaveInvoiceMatchingDetails(request));
+        }
+        
     }
 }

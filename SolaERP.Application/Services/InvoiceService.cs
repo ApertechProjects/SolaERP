@@ -238,5 +238,13 @@ namespace SolaERP.Persistence.Services
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(true);
         }
+
+        public async Task<ApiResponse<bool>> SaveInvoiceMatchingDetails(InvoiceMatchingDetail request)
+        {
+            var dataTable = request.InvoicesMatchingDetailsTypeList.ConvertListToDataTable();
+            await _invoiceRepository.SaveInvoiceMatchingDetails(request.InvoiceMatchingMainid, dataTable);
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(true);
+        }
     }
 }
