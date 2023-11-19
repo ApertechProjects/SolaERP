@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
 
@@ -101,6 +102,12 @@ namespace SolaERP.API.Controllers
         [HttpGet("{orderMainId:int}")]
         public async Task<IActionResult> GetAdvanceInvoicesList(int orderMainId)
             => CreateActionResult(await _invoiceService.GetAdvanceInvoicesList(orderMainId));
-        
+
+        [HttpPost]
+        public async Task<IActionResult> SaveInvoiceMatchingMain(InvoiceMathcingMain request)
+        {
+            int userId = Convert.ToInt32(User.Identity.Name);
+            return CreateActionResult(await _invoiceService.SaveInvoiceMatchingMain(request, userId));
+        }
     }
 }

@@ -1,16 +1,12 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Invoice;
-using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Invoice;
-using SolaERP.Application.Entities.Item_Code;
-using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -140,7 +136,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText =
-                    "EXEC SP_InvoiceRegister_IUD @InvoiceRegisterId,@BusinessUnitId,@InvoiceType,        @InvoiceDate,@InvoiceReceivedDate,@InvoiceNo, @SystemInvoiceNo,@OrderType,@OrderMainId, @ReferenceDocNo,@InvoiceAmount,@CurrencyCode, @LineDescription,@VendorCode,@DueDate,@AgingDays, @ProblematicInvoiceReasonId,@Status,@ApproveStatus, @ReasonAdditionalDescription,@UserId,@NewInvoiceRegisterId = @NewInvoiceRegisterId OUTPUT select @NewInvoiceRegisterId as NewInvoiceRegisterId";
+                    @"EXEC SP_InvoiceRegister_IUD @InvoiceRegisterId,@BusinessUnitId,@InvoiceType,
+                    @InvoiceDate,@InvoiceReceivedDate,@InvoiceNo, @SystemInvoiceNo,@OrderType,@OrderMainId,
+                    @ReferenceDocNo,@InvoiceAmount,@CurrencyCode, 
+                    @LineDescription,@VendorCode,@DueDate,@AgingDays,
+                    @ProblematicInvoiceReasonId,@Status,@ApproveStatus, @ReasonAdditionalDescription
+                    ,@UserId,@NewInvoiceRegisterId = @NewInvoiceRegisterId OUTPUT select @NewInvoiceRegisterId as NewInvoiceRegisterId";
 
 
                 command.Parameters.AddWithValue(command, "@InvoiceRegisterId", model.InvoiceRegisterId);
@@ -417,6 +418,41 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 list.Add(reader.GetByEntityStructure<AdvanceInvoice>());
 
             return list;
+        }
+
+        public async Task<int> SaveInvoiceMatchingMain(InvoiceMathcingMain request, int userId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as SqlCommand;
+
+            command.CommandText = @"EXEC SP_InvoiceMatchingMain_IUD 
+                @InvoiceMatchingMainId,
+                @BusinessUnitId,
+                @OrderMainId,
+                @InvoiceRegisterId,
+                @WHT,
+                @Comment,
+                @UserId,
+                @NewInvoiceMatchingMainId = @NewInvoiceMatchingMainId OUTPUT select @NewInvoiceMatchingMainId 
+                as NewInvoiceMatchingMainId";
+
+            command.Parameters.AddWithValue(command, "@InvoiceMatchingMainId", request.InvoiceMatchingMainId);
+            command.Parameters.AddWithValue(command, "@BusinessUnitId", request.BusinessUnitId);
+            command.Parameters.AddWithValue(command, "@OrderMainId", request.OrderMainId);
+            command.Parameters.AddWithValue(command, "@InvoiceRegisterId", request.InvoiceRegisterId);
+            command.Parameters.AddWithValue(command, "@WHT", request.WHT);
+            command.Parameters.AddWithValue(command, "@Comment", request.Comment);
+            command.Parameters.AddWithValue(command, "@UserId", userId);
+            command.Parameters.Add("@NewInvoiceMatchingMainId", SqlDbType.Int);
+            command.Parameters["@NewInvoiceMatchingMainId"].Direction = ParameterDirection.Output;
+
+            await using var reader = await command.ExecuteReaderAsync();
+            int newInvoiceMatchingMainId = 0;
+            if (reader.Read())
+            {
+                newInvoiceMatchingMainId = reader.Get<int>("NewInvoiceMatchingMainId");
+            }
+
+            return newInvoiceMatchingMainId;
         }
     }
 }
