@@ -225,7 +225,16 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> SaveInvoiceMatchingGRNs(InvoiceMatchingGRNs request)
         {
             var dataTable = request.RNEInvoicesMatchingTypeList.ConvertListToDataTable();
-            var role = _invoiceRepository.SaveInvoiceMatchingGRNs(request.InvoiceMatchingMainId, dataTable);
+            await _invoiceRepository.SaveInvoiceMatchingGRNs(request.InvoiceMatchingMainId, dataTable);
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(true);
+        }
+
+        public async Task<ApiResponse<bool>> SaveInvoiceMatchingAdvances(InvoiceMatchingAdvance request)
+        {
+            var dataTable = request.AdvanceInvoicesMatchingTypeList.ConvertListToDataTable();
+            await _invoiceRepository.SaveInvoiceMatchingAdvances(request.InvoiceRegisterId,
+                request.InvoiceMatchingMainid, dataTable);
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(true);
         }
