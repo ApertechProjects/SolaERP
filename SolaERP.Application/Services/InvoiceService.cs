@@ -8,6 +8,7 @@ using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.Persistence.Utils;
 
 namespace SolaERP.Persistence.Services
 {
@@ -219,6 +220,14 @@ namespace SolaERP.Persistence.Services
             var data = await _invoiceRepository.SaveInvoiceMatchingMain(request, userId);
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<int>.Success(data, 200);
+        }
+
+        public async Task<ApiResponse<bool>> SaveInvoiceMatchingGRNs(InvoiceMatchingGRNs request)
+        {
+            var dataTable = request.RNEInvoicesMatchingTypeList.ConvertListToDataTable();
+            var role = _invoiceRepository.SaveInvoiceMatchingGRNs(request.InvoiceMatchingMainId, dataTable);
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(true);
         }
     }
 }

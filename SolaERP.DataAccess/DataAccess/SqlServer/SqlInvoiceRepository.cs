@@ -454,5 +454,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return newInvoiceMatchingMainId;
         }
+
+        public async Task<bool> SaveInvoiceMatchingGRNs(int requestInvoiceMatchingMainId, DataTable dataTable)
+        {
+            await using var command = _unitOfWork.CreateCommand() as SqlCommand;
+            command.CommandText = @"EXEC SP_InvoiceMatchingGRNs_IUD
+                                    @InvoiceMatchingMainId,
+                                    @RNEInvoicesMatchingType";
+
+            command.Parameters.AddWithValue(command, "@InvoiceMatchingMainId", requestInvoiceMatchingMainId);
+            command.Parameters.AddTableValue(command, "@RNEInvoicesMatchingType", "RNEInvoicesMatchingType", dataTable);
+            var value = await command.ExecuteNonQueryAsync();
+            return value > 0;
+        }
     }
 }
