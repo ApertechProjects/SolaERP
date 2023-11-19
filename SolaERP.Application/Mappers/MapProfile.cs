@@ -599,6 +599,7 @@ namespace SolaERP.Persistence.Mappers
 
 
             CreateMap<VendorApproved, VendorApprovedDto>().ReverseMap();
+            CreateMap<AdvanceInvoice, AdvanceInvoiceDto>().ReverseMap();
         }
     }
 }

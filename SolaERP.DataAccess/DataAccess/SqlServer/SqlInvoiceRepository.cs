@@ -403,5 +403,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return list;
         }
+
+        public async Task<List<AdvanceInvoice>> GetAdvanceInvoicesList(int orderMainId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_AdvanceInvoicesList @OrderMainId";
+            command.Parameters.AddWithValue(command, "@OrderMainId", orderMainId);
+
+            await using var reader = await command.ExecuteReaderAsync();
+
+            var list = new List<AdvanceInvoice>();
+            while (await reader.ReadAsync())
+                list.Add(reader.GetByEntityStructure<AdvanceInvoice>());
+
+            return list;
+        }
     }
 }

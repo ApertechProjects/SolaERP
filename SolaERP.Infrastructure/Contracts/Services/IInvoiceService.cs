@@ -31,5 +31,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<string>>> GetTransactionReferenceList(int businessUnitId);
         Task<ApiResponse<List<string>>> GetReferenceList(int businessUnitId);
         Task<ApiResponse<List<string>>> GetInvoiceList(int businessUnitId);
+        Task<ApiResponse<List<AdvanceInvoiceDto>>> GetAdvanceInvoicesList(int orderMainId);
     }
 }

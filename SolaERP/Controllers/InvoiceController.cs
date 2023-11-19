@@ -97,6 +97,10 @@ namespace SolaERP.API.Controllers
         [HttpGet("{businessUnitId:int}")]
         public async Task<IActionResult> GetInvoiceList(int businessUnitId)
             => CreateActionResult(await _invoiceService.GetInvoiceList(businessUnitId));
+
+        [HttpGet("{orderMainId:int}")]
+        public async Task<IActionResult> GetAdvanceInvoicesList(int orderMainId)
+            => CreateActionResult(await _invoiceService.GetAdvanceInvoicesList(orderMainId));
         
     }
 }
