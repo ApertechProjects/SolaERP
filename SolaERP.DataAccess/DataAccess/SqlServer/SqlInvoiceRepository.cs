@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Contracts.Repositories;
+﻿using Microsoft.Win32;
+using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Invoice;
 using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Models;
@@ -304,18 +305,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return new MatchingMain();
         }
 
-        public async Task<string> GetKeyKode(int invoiceRegisterId)
+        public async Task<string> GetKeyKode(int orderMainId)
         {
             string result = null;
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"SELECT TOP 1 ot.KeyCode FROM Finance.InvoiceRegister ir
-                                    INNER JOIN Procurement.OrderMain om1
-                                    ON ir.OrderMainId = om1.OrderMainId
+            command.CommandText = @"SELECT TOP 1
+                                    ot.KeyCode
+                                    FROM Procurement.OrderMain om1
                                     INNER JOIN Register.OrderTypes ot
                                     ON om1.OrderTypeId = ot.OrderTypeId
-                                    WHERE ir.InvoiceRegisterId = @invoiceRegisterId";
-            command.Parameters.AddWithValue(command, "@invoiceRegisterId", invoiceRegisterId);
-
+                                    WHERE om1.OrderMainId = @OrderMainId";
+            command.Parameters.AddWithValue(command, "@OrderMainId", orderMainId);
+          
             using var reader = await command.ExecuteReaderAsync();
 
             while (reader.Read())
@@ -328,10 +329,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             string grns = string.Join(',', model.GRNs);
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_InvoiceRegisterDetailsLoad @businessUnitId,@grns,@invoiceRegisterId";
+            command.CommandText = @"exec dbo.SP_InvoiceRegisterDetailsLoad @businessUnitId,@grns,@orderMainId,@date";
             command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@grns", string.IsNullOrEmpty(grns) ? "-1" : grns);
-            command.Parameters.AddWithValue(command, "@invoiceRegisterId", model.InvoiceRegisterId);
+            command.Parameters.AddWithValue(command, "@orderMainId", model.OrderMainId);
+            command.Parameters.AddWithValue(command, "@date", model.Date);
 
             using var reader = await command.ExecuteReaderAsync();
 
@@ -346,10 +348,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             string grns = model.GRNs is null ? "-1" : string.Join(',', model.GRNs);
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_InvoiceRegisterDetailsLoad @businessUnitId,@grns,@invoiceRegisterId";
+            command.CommandText = @"exec dbo.SP_InvoiceRegisterDetailsLoad @businessUnitId,@grns,@orderMainId,@date";
             command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
-            command.Parameters.AddWithValue(command, "@grns", grns);
-            command.Parameters.AddWithValue(command, "@invoiceRegisterId", model.InvoiceRegisterId);
+            command.Parameters.AddWithValue(command, "@grns", string.IsNullOrEmpty(grns) ? "-1" : grns);
+            command.Parameters.AddWithValue(command, "@orderMainId", model.OrderMainId);
+            command.Parameters.AddWithValue(command, "@date", model.Date);
 
             using var reader = await command.ExecuteReaderAsync();
 

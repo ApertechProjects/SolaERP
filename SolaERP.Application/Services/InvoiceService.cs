@@ -186,9 +186,9 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<InvoiceRegisterDetailForOtherDto>>.Success(dto, 200);
         }
 
-        public async Task<string> GetKeyCode(int invoiceRegisterId)
+        public async Task<string> GetKeyCode(int orderMainId)
         {
-            var data = await _invoiceRepository.GetKeyKode(invoiceRegisterId);
+            var data = await _invoiceRepository.GetKeyKode(orderMainId);
             return data;
         }
 
