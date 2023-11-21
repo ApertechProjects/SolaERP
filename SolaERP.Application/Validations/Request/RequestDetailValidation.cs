@@ -16,7 +16,7 @@ namespace SolaERP.Application.Validations.RequestValidation
             RuleFor(x => x.ItemCode).NotEmpty().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.RequestDeadline).NotEmpty().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.RequestDate).NotEmpty().WithMessage("Please, enter {PropertyName}");
-            //RuleFor(x => x.LineNo).NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.ItemCategory).NotEmpty().WithMessage("Please, enter {PropertyName}");
         }
     }
 }
