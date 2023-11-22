@@ -103,7 +103,7 @@ public class OrderService : IOrderService
     {
         int userId = Convert.ToInt32(identityName);
         var mainDto = await _orderRepository.SaveOrderMainAsync(orderMainDto, userId);
-
+        List<int> detailIds = new List<int>();
         orderMainDto.Attachments.ForEach(attachment =>
         {
             if (attachment.Type == 2)
@@ -127,7 +127,13 @@ public class OrderService : IOrderService
             foreach (var detail in orderMainDto.OrderDetails)
                 detail.OrderMainId = mainDto.OrderMainId;
 
-            await _orderRepository.SaveOrderDetailsAsync(orderMainDto.OrderDetails);
+
+            var result = await _orderRepository.SaveOrderDetailsAsync(orderMainDto.OrderDetails);
+            if (result)
+            {
+                detailIds = await _orderRepository.GetDetailIds(mainDto.OrderMainId);
+                mainDto.OrderDetailIds = detailIds;
+            }
         }
 
         await _unitOfWork.SaveChangesAsync();

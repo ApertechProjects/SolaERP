@@ -831,4 +831,20 @@ public class SqlOrderRepository : IOrderRepository
             return resultList;
         }
     }
+
+    public async Task<List<int>> GetDetailIds(int orderMainId)
+    {
+        await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = @"select OrderDetailid from Procurement.OrderDetails where OrderMainId = @OrderMainId";
+        command.Parameters.AddWithValue(command, "@OrderMainId", orderMainId);
+
+        await using DbDataReader reader = await command.ExecuteReaderAsync();
+        List<int> datas = new();
+        while (await reader.ReadAsync())
+        {
+            datas.Add(reader.Get<int>("OrderDetailid"));
+        }
+
+        return datas;
+    }
 }
