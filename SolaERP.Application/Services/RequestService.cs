@@ -220,6 +220,10 @@ namespace SolaERP.Persistence.Services
                     await SaveRequestDetailsAsync(requestDetailDto);
                 }
 
+                var detailIds = await _requestMainRepository.GetDetailIds(resultModel.RequestMainId);
+
+                resultModel.RequestDetailIds = detailIds;
+
                 return ApiResponse<RequestSaveResultModel>.Success(resultModel);
             }
 

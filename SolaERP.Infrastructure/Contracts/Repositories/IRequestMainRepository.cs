@@ -26,5 +26,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> RequestFollowCheckUserExistAsync(RequestFollowSaveModel saveModel);
         Task<int> GetDefaultApprovalStage(string keyCode, int businessUnitId);
         Task<List<RequestCategory>> CategoryList();
+        Task<List<int>> GetDetailIds(int requestMainId);
+
     }
 }

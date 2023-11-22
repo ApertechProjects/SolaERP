@@ -610,5 +610,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return mainRequests;
             }
         }
+
+        public async Task<List<int>> GetDetailIds(int requestMainId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"select RequestDetailId from Procurement.RequestDetails where RequestMainId = @RequestMainId";
+            command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+
+            await using DbDataReader reader = await command.ExecuteReaderAsync();
+            List<int> datas = new();
+            while (await reader.ReadAsync())
+            {
+                datas.Add(reader.Get<int>("RequestDetailId"));
+            }
+
+            return datas;
+        }
     }
 }
