@@ -15,7 +15,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<UserDto> GetUserByIdAsync(int userId);
         Task<UserDto> GetUserByEmailAsync(string email);
         Task<ApiResponse<NoContentDto>> UpdateUserIdentifierAsync(int userId, string refreshToken, DateTime expirationDate, int addOnAccessTokenDate);
-        Task<ApiResponse<bool>> SendResetPasswordEmail(string email);
+        Task<ApiResponse<string>> SendResetPasswordEmail(string email);
         Task<int> GetIdentityNameAsIntAsync(string name);
         Task<ApiResponse<bool>> ResetPasswordAsync(ResetPasswordModel resetPasswordRequestDto);
         Task<ApiResponse<List<ActiveUserDto>>> GetActiveUsersAsync();

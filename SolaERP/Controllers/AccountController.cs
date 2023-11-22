@@ -54,7 +54,19 @@ namespace SolaERP.Controllers
 
         [HttpGet("{email}")]
         public async Task<IActionResult> SendResetPasswordEmail(string email)
-            => CreateActionResult(await _userService.SendResetPasswordEmail(email));
+        {
+            var result = await _userService.SendResetPasswordEmail(email);
+            if (result.StatusCode == 200)
+            {
+                Response.OnCompleted(async () =>
+                {
+                    await _mailService.SendPasswordResetMailAsync(email, result.Data);
+                });
+
+                return CreateActionResult(ApiResponse<bool>.Fail("Plase, check you email", 200));
+            }
+            return CreateActionResult(result);
+        }
 
 
         [HttpPost]

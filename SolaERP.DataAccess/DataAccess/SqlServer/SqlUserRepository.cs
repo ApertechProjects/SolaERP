@@ -76,7 +76,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
                 if (reader.Read())
                     user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate",
-                        "VerifyToken", "Language", "DefaultBusinessUnitId","BusinessUnitCode");
+                        "VerifyToken", "Language", "DefaultBusinessUnitId", "BusinessUnitCode");
 
                 return user;
             }
@@ -84,17 +84,18 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public async Task<User> GetByEmailCode(string token)
         {
-            User user = null;
+            User user = new User();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SELECT * FROM Config.AppUser Where EmailVerificationToken = @EmailVerTok";
+                command.CommandText = "SELECT Email FROM Config.AppUser Where EmailVerificationToken = @EmailVerTok";
                 command.Parameters.AddWithValue(command, "@EmailVerTok", token == null ? DBNull.Value : token);
 
                 using var reader = await command.ExecuteReaderAsync();
-
+                string email = string.Empty;
                 if (reader.Read())
-                    user = reader.GetByEntityStructure<User>();
+                    email = reader.Get<string>("Email");
 
+                user.Email = email;
                 return user;
             }
         }
@@ -110,7 +111,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
                 using var reader = await command.ExecuteReaderAsync();
                 if (reader.Read())
-                    user = reader.GetByEntityStructure<User>("Language","BusinessUnitCode");
+                    user = reader.GetByEntityStructure<User>("Language", "BusinessUnitCode");
 
                 return user;
             }
@@ -350,7 +351,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 var totalDataCountParam = new SqlParameter("@count", SqlDbType.Int)
-                    { Direction = ParameterDirection.Output };
+                { Direction = ParameterDirection.Output };
                 command.Parameters.Add(totalDataCountParam);
 
                 using (var reader = await command.ExecuteReaderAsync())

@@ -104,7 +104,7 @@ namespace SolaERP.Persistence.Services
             var user = await _userRepository.GetByEmailCode(resetPasswordRequestDto.ResetPasswordCode);
 
             if (user == null)
-                return ApiResponse<bool>.Fail("resetPasswordCode", $"You entered wrong Code: ", 422);
+                return ApiResponse<bool>.Fail("resetPasswordCode", $"You entered wrong Code", 422);
 
 
             if (resetPasswordRequestDto.Password == resetPasswordRequestDto.ConfirmPassword)
@@ -143,7 +143,7 @@ namespace SolaERP.Persistence.Services
             return userDto;
         }
 
-        public async Task<ApiResponse<bool>> SendResetPasswordEmail(string email)
+        public async Task<ApiResponse<string>> SendResetPasswordEmail(string email)
         {
             var userExsist = await _userRepository.GetByEmailAsync(email);
 
@@ -151,14 +151,16 @@ namespace SolaERP.Persistence.Services
             var stringCode = random.Next(0, 999999).ToString();
 
             if (userExsist == null)
-                return ApiResponse<bool>.Fail($"We can't found this email: {email}", 404);
+                return ApiResponse<string>.Fail($"We can't found this email: {email}", 404);
 
-            await _userRepository.SetEmailCode(stringCode, userExsist.Id);
+            var result = await _userRepository.SetEmailCode(stringCode, userExsist.Id);
 
-            await _mailService.SendPasswordResetMailAsync(email, stringCode);
 
             await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<bool>.Success(true, 200);
+            if (result)
+                return ApiResponse<string>.Success(stringCode, 200);
+            return ApiResponse<string>.Fail("Email code can not be saved", 400);
+
         }
 
         public async Task<ApiResponse<UserDto>> GetUserByNameAsync(string name, string token)
