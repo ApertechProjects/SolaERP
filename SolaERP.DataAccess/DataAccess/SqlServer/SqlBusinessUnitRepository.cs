@@ -1,9 +1,11 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
+using System.Data.SqlClient;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -127,7 +129,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     result = new BusinessUnits()
                     {
                         BusinessUnitCode = reader.Get<string>("BusinessUnitCode"),
-                        BusinessUnitName =  reader.Get<string>("BusinessUnitName"),
+                        BusinessUnitName = reader.Get<string>("BusinessUnitName"),
                         BusinessUnitId = reader.Get<int>("BusinessUnitId"),
                         TaxId = reader.Get<string>("TaxId"),
                         Address = reader.Get<string>("Address"),
@@ -135,6 +137,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                         CountryCode = reader.Get<string>("CountryCode"),
                         FullName = reader.Get<string>("FullName")
                     };
+
+                return result;
+            }
+        }
+
+        public async Task<string> GetBusinessUnitCode(int businessUnitId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = $"select BusinessUnitCode from Config.BusinessUnits where BusinessUnitId = @businessUnitId";
+                command.Parameters.AddWithValue(command, "@businessUnitId", businessUnitId);
+                using var reader = await command.ExecuteReaderAsync();
+
+                string result = string.Empty;
+
+                if (reader.Read())
+                    result = reader.Get<string>("BusinessUnitCode");
 
                 return result;
             }

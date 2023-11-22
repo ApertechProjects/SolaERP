@@ -71,5 +71,11 @@ namespace SolaERP.Persistence.Services
         {
             throw new NotImplementedException();
         }
+
+        public async Task<string> GetBusinessUnitCode(int businessUnitId)
+        {
+            var data = await _businessUnitRepository.GetBusinessUnitCode(businessUnitId);
+            return data;
+        }
     }
 }

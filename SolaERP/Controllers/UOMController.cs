@@ -10,14 +10,19 @@ namespace SolaERP.Controllers
     public class UOMController : CustomBaseController
     {
         private readonly IUOMService _uomService;
-        public UOMController(IUOMService uomService)
+        private readonly IBusinessUnitService _businessUnitService;
+        public UOMController(IUOMService uomService, IBusinessUnitService businessUnitService)
         {
             _uomService = uomService;
+            _businessUnitService = businessUnitService;
         }
 
-      
-        [HttpGet("{businessUnitCode}")]
-        public async Task<IActionResult> UOM(string businessUnitCode)
-            => CreateActionResult(await _uomService.GetUOMListBusinessUnitCode(businessUnitCode));
+
+        [HttpGet("{businessUnitId}")]
+        public async Task<IActionResult> UOM(int businessUnitId)
+        {
+            var businessUnitCode = await _businessUnitService.GetBusinessUnitCode(businessUnitId);
+            return CreateActionResult(await _uomService.GetUOMListBusinessUnitCode(businessUnitCode));
+        }
     }
 }
