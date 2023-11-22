@@ -63,7 +63,7 @@ namespace SolaERP.Controllers
                     await _mailService.SendPasswordResetMailAsync(email, result.Data);
                 });
 
-                return CreateActionResult(ApiResponse<bool>.Success("Please, check your mail"));
+                return CreateActionResult(ApiResponse<bool>.Success(true));
             }
             return CreateActionResult(result);
         }
