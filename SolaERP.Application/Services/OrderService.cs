@@ -4,10 +4,13 @@ using SolaERP.Application.Dtos.Order;
 using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.Vendors;
+using SolaERP.Application.Entities.AnalysisCode;
 using SolaERP.Application.Entities.Order;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
+using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.Persistence.Utils;
 
 namespace SolaERP.Persistence.Services;
 
@@ -256,4 +259,12 @@ public class OrderService : IOrderService
 
         }
     }
+
+    public async Task<ApiResponse<List<AnalysisCodeIds>>> GetAnalysis(GetAnalysisByCode model)
+    {
+        var data = model.AnalysisCodes.ConvertListOfCLassToDataTable();
+        var result = await _orderRepository.GetAnalysis(model.BusinessUnitId, data);
+        return ApiResponse<List<AnalysisCodeIds>>.Success(result);
+    }
 }
+

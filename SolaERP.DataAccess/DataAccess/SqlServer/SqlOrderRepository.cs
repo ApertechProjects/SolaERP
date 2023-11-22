@@ -1,13 +1,17 @@
 using System.Data;
 using System.Data.Common;
+using System.Data.SqlClient;
+using System.Reflection;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Order;
 using SolaERP.Application.Dtos.Status;
 using SolaERP.Application.Dtos.Vendors;
+using SolaERP.Application.Entities.AnalysisCode;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Order;
 using SolaERP.Application.Helper;
+using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 
@@ -808,5 +812,23 @@ public class SqlOrderRepository : IOrderRepository
         await _unitOfWork.SaveChangesAsync();
 
         return await command.ExecuteNonQueryAsync() > 0;
+    }
+
+    public async Task<List<AnalysisCodeIds>> GetAnalysis(int businessUnitId, DataTable data)
+    {
+        using (var command = _unitOfWork.CreateCommand() as DbCommand)
+        {
+            command.CommandText = "SET NOCOUNT OFF EXEC SP_OrderAnalysisImport @businessUnitId,@analysis";
+            command.Parameters.AddWithValue(command, "@businessUnitId", businessUnitId);
+            command.Parameters.AddTableValue(command, "@analysis", "OrderAnalysis", data);
+
+            using var reader = await command.ExecuteReaderAsync();
+            List<AnalysisCodeIds> resultList = new();
+
+            while (reader.Read())
+                resultList.Add(reader.GetByEntityStructure<AnalysisCodeIds>());
+
+            return resultList;
+        }
     }
 }

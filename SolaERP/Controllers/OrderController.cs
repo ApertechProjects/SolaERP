@@ -52,6 +52,10 @@ public class OrderController : CustomBaseController
         => CreateActionResult(await _orderService.AddAsync(orderMainDto, User.Identity.Name));
 
     [HttpPost("[action]")]
+    public async Task<IActionResult> GetAnalysisByCode([FromBody] GetAnalysisByCode model)
+        => CreateActionResult(await _orderService.GetAnalysis(model));
+
+    [HttpPost("[action]")]
     public async Task<IActionResult> ChangeOrderMainStatus([FromBody] ChangeOrderMainStatusDto statusDto)
         => CreateActionResult(await _orderService.ChangeOrderMainStatusAsync(statusDto, User.Identity.Name));
 

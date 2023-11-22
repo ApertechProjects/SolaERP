@@ -1,6 +1,9 @@
 using SolaERP.Application.Dtos.Order;
 using SolaERP.Application.Dtos.Vendors;
+using SolaERP.Application.Entities.AnalysisCode;
 using SolaERP.Application.Entities.Order;
+using SolaERP.Application.Models;
+using System.Data;
 
 namespace SolaERP.Application.Contracts.Repositories;
 
@@ -26,4 +29,5 @@ public interface IOrderRepository
     Task<List<OrderDetailLoadDto>> GetAllDetailsAsync(int orderMainId);
     Task<bool> CreateOrderIntegration(int businessUnitId, int orderMainId, int userId);
     Task<bool> Retrieve(int id, int userId);
+    Task<List<AnalysisCodeIds>> GetAnalysis(int businessUnitId, DataTable data);
 }

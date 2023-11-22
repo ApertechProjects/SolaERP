@@ -101,7 +101,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<Application.Entities.AnalysisCode.AnalysisCodes>> GetAnalysisCodesByDimensionIdAsync(int dimensionId)
+        public async Task<List<AnalysisCodes>> GetAnalysisCodesByDimensionIdAsync(int dimensionId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

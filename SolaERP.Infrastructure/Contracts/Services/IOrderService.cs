@@ -1,8 +1,10 @@
 using SolaERP.Application.Dtos.Order;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.Vendors;
+using SolaERP.Application.Entities.AnalysisCode;
 using SolaERP.Application.Entities.Order;
 using SolaERP.Application.Entities.Vendors;
+using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Contracts.Services;
 
@@ -28,4 +30,5 @@ public interface IOrderService
     Task<ApiResponse<OrderMainGetDto>> GetOrderCardAsync();
     Task<ApiResponse<WithHoldingTaxData>> WithHoldingTaxDatas(int vendorId);
     Task<ApiResponse<bool>> Retrieve(List<int> ids, string name);
+    Task<ApiResponse<List<AnalysisCodeIds>>> GetAnalysis(GetAnalysisByCode model);
 }
