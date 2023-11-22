@@ -46,5 +46,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<List<UserList>> UsersRequestDetails(int requestDetailId, int sequence, ApproveStatus status);
         Task<List<UserList>> UsersForRequestMain(int requestMainId, int sequence, ApproveStatus status);
         Task UpdateUserLastActivity(int id);
+        Task<ApiResponse<object>> CheckVerifyCode(int verificationCode);
     }
 }

@@ -101,11 +101,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> ResetPasswordAsync(ResetPasswordModel resetPasswordRequestDto)
         {
-            var user = await _userRepository.GetByEmailCode(resetPasswordRequestDto.ResetPasswordCode);
-
-            if (user == null)
-                return ApiResponse<bool>.Fail("resetPasswordCode", $"You entered wrong Code", 422);
-
+            User user = new User();
 
             if (resetPasswordRequestDto.Password == resetPasswordRequestDto.ConfirmPassword)
             {
@@ -564,6 +560,15 @@ namespace SolaERP.Persistence.Services
         public async Task UpdateUserLastActivity(int id)
         {
             await _userRepository.UpdateLastActivityAsync(id);
+        }
+
+        public async Task<ApiResponse<bool>> CheckVerifyCode(int verificationCode)
+        {
+            var user = await _userRepository.GetByEmailCode(verificationCode);
+
+            if (user == null)
+                return ApiResponse<bool>.Fail("resetPasswordCode", $"You entered wrong Code", 422);
+            return ApiResponse<bool>.Success(200);
         }
     }
 }

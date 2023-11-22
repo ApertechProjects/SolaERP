@@ -82,13 +82,13 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<User> GetByEmailCode(string token)
+        public async Task<User> GetByEmailCode(int verifyCode)
         {
             User user = new User();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "SELECT Email FROM Config.AppUser Where EmailVerificationToken = @EmailVerTok";
-                command.Parameters.AddWithValue(command, "@EmailVerTok", token == null ? DBNull.Value : token);
+                command.Parameters.AddWithValue(command, "@EmailVerTok", verifyCode == null ? DBNull.Value : verifyCode);
 
                 using var reader = await command.ExecuteReaderAsync();
                 string email = string.Empty;

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.API.Extensions;
 using SolaERP.API.Methods;
+using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Shared;
@@ -179,7 +180,14 @@ namespace SolaERP.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> ResetPasswordAsync(ResetPasswordModel resetPasswordrequestDto)
+        public async Task<IActionResult> UpdatePasswordAsync(ResetPasswordModel resetPasswordrequestDto)
             => CreateActionResult(await _userService.ResetPasswordAsync(resetPasswordrequestDto));
+
+    
+
+        [HttpPost]
+        public async Task<IActionResult> CheckVerifyCode(int verificationCode)
+            => CreateActionResult(await _userService.CheckVerifyCode(verificationCode));
+
     }
 }
