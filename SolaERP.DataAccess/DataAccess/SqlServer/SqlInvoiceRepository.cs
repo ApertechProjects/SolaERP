@@ -137,11 +137,15 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText =
-                    @"EXEC SP_InvoiceRegister_IUD @InvoiceRegisterId,@BusinessUnitId,@InvoiceType,
-                    @InvoiceDate,@InvoiceReceivedDate,@InvoiceNo, @SystemInvoiceNo,@OrderType,@OrderMainId,
+                    @"EXEC SP_InvoiceRegister_IUD @InvoiceRegisterId,
+                                                  @BusinessUnitId,
+                                                  @InvoiceType,
+                                                  @InvoiceDate,
+                                                  @InvoiceReceivedDate,
+                                                  @InvoiceNo, @SystemInvoiceNo,@OrderType,@OrderMainId,
                     @ReferenceDocNo,@InvoiceAmount,@CurrencyCode, 
                     @LineDescription,@VendorCode,@DueDate,@AgingDays,
-                    @ProblematicInvoiceReasonId,@Status,@ApproveStatus, @ReasonAdditionalDescription
+                    @ProblematicInvoiceReasonId,@Status,@ApproveStatus, @ReasonAdditionalDescription,@AccountCode
                     ,@UserId,@NewInvoiceRegisterId = @NewInvoiceRegisterId OUTPUT select @NewInvoiceRegisterId as NewInvoiceRegisterId";
 
 
@@ -184,8 +188,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@ApproveStatus", model.ApproveStatus);
 
-                command.Parameters.AddWithValue(command, "@ReasonAdditionalDescription",
-                    model.ReasonAdditionalDescription);
+                command.Parameters.AddWithValue(command, "@ReasonAdditionalDescription", model.ReasonAdditionalDescription);
+
+                command.Parameters.AddWithValue(command, "@AccountCode",
+                    model.AccountCode);
 
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
@@ -316,7 +322,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                     ON om1.OrderTypeId = ot.OrderTypeId
                                     WHERE om1.OrderMainId = @OrderMainId";
             command.Parameters.AddWithValue(command, "@OrderMainId", orderMainId);
-          
+
             using var reader = await command.ExecuteReaderAsync();
 
             while (reader.Read())
