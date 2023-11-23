@@ -76,28 +76,30 @@ namespace SolaERP.Controllers
 
             if (result.StatusCode == 200)
             {
-
-                var templateDataForVerification =
-                       _emailNotificationService.GetEmailTemplateData(Language.az, EmailTemplateKey.VER).Result;
-                var companyName = _emailNotificationService.GetCompanyName(userSaveModel.Email).Result;
-
-                VM_EmailVerification emailVerification = new VM_EmailVerification
+                if (userSaveModel.Id == 0)
                 {
-                    Username = userSaveModel.UserName,
-                    Body = new HtmlString(string.Format(templateDataForVerification.Body, userSaveModel.FullName)),
-                    CompanyName = companyName,
-                    Header = templateDataForVerification.Header,
-                    Language = Language.az,
-                    Subject = templateDataForVerification.Subject,
-                    Token = HttpUtility.HtmlDecode(userSaveModel.VerifyToken),
-                };
+                    var templateDataForVerification =
+                           _emailNotificationService.GetEmailTemplateData(Language.az, EmailTemplateKey.VER).Result;
+                    var companyName = _emailNotificationService.GetCompanyName(userSaveModel.Email).Result;
 
-                Response.OnCompleted(async () =>
-                {
-                    await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification,
-                        emailVerification.TemplateName(), emailVerification.ImageName(),
-                        new List<string> { userSaveModel.Email });
-                });
+                    VM_EmailVerification emailVerification = new VM_EmailVerification
+                    {
+                        Username = userSaveModel.UserName,
+                        Body = new HtmlString(string.Format(templateDataForVerification.Body, userSaveModel.FullName)),
+                        CompanyName = companyName,
+                        Header = templateDataForVerification.Header,
+                        Language = Language.az,
+                        Subject = templateDataForVerification.Subject,
+                        Token = HttpUtility.HtmlDecode(userSaveModel.VerifyToken),
+                    };
+
+                    Response.OnCompleted(async () =>
+                    {
+                        await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification,
+                            emailVerification.TemplateName(), emailVerification.ImageName(),
+                            new List<string> { userSaveModel.Email });
+                    });
+                }
             }
 
             return CreateActionResult(result);
