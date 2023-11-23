@@ -1,4 +1,5 @@
 using SolaERP.Application.Dtos.Attachment;
+using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Dtos.SupplierEvaluation;
 
@@ -40,7 +41,7 @@ public class PrequalificationChildSaveDto
     public decimal? DecimalValue { get; set; }
 
     public string? DateTimeValue { get; set; }
-    public List<AttachmentDto> Attachments { get; set; }
+    public List<AttachmentSaveModel> Attachments { get; set; }
     public List<PrequalificationGridData> GridDatas { get; set; }
     public decimal Weight { get; set; }
     public decimal Outcome { get; set; }

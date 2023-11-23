@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using SolaERP.Application.Dtos.Attachment;
 using SolaERP.Application.Entities.SupplierEvaluation;
+using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Dtos.SupplierEvaluation
 {
@@ -267,7 +268,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         //
         public bool AgreementValue { get; set; }
         public decimal Scoring { get; set; }
-        public List<AttachmentDto> Attachments { get; set; }
+        public List<AttachmentSaveModel> Attachments { get; set; }
         public decimal DecimalPoint { get; set; }
         public decimal Weight { get; set; }
         public decimal Outcome { get; set; }
