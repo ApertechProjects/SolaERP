@@ -7,7 +7,7 @@ namespace SolaERP.Application.Models
     public class VM_GET_VendorBankDetails
     {
         public List<Currency> Currencies { get; set; }
-        public List<VendorBankDetailDto> BankDetails { get; set; }
+        public List<VendorBankDetailViewDto> BankDetails { get; set; }
 
 
     }

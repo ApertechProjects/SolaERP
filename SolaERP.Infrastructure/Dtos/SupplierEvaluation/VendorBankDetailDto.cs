@@ -1,11 +1,27 @@
-﻿
-using SolaERP.Application.Dtos.Attachment;
-using SolaERP.Application.Enums;
-using System.Reflection.Emit;
+﻿using SolaERP.Application.Dtos.Attachment;
+using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Dtos.SupplierEvaluation
 {
     public class VendorBankDetailDto
+    {
+        public int Id { get; set; }
+        public int VendorId { get; set; }
+        public string Beneficiary { get; set; }
+        public string BeneficiaruTaxId { get; set; }
+        public string Address { get; set; }
+        public string AccountNumber { get; set; }
+        public string Bank { get; set; }
+        public string SWIFT { get; set; }
+        public string BankCode { get; set; }
+        public string Currency { get; set; }
+        public string BankTaxId { get; set; }
+        public string CorrespondentAccount { get; set; }
+        public List<AttachmentSaveModel> AccountVerificationLetter { get; set; }
+        public int Type { get; set; }
+    }
+    
+    public class VendorBankDetailViewDto
     {
         public int Id { get; set; }
         public int VendorId { get; set; }
