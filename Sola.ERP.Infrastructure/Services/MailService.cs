@@ -149,7 +149,7 @@ namespace SolaERP.Infrastructure.Services
     
     <p>Dear Customer,</p>
     
-    <p>We have received a request to set a new password for your Sola-Soft account. To ensure the security of your account, please follow the steps below to create a new password. Your security code is : @SecurityCode</p>
+    <p>We have received a request to set a new password for your Sola-Soft account. To ensure the security of your account, please follow the steps below to create a new password. Your security code is : <span style='color: green;'><b>@SecurityCode</b></span></p>
     
     
     <p>If you did not request a new password, please contact our support team immediately at support@apertech.net to secure your account.</p>
