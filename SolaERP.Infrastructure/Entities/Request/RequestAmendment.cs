@@ -24,5 +24,7 @@
         public decimal LogisticsTotal { get; set; }
         public bool HasAttachments { get; set; }
         public string RequestType { get; set; }
+        public Int64 RowNum { get; set; }
+        public string ApproveStatusName { get; set; }
     }
 }

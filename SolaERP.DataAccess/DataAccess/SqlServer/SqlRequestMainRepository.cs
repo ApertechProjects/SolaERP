@@ -355,7 +355,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 LogisticsTotal = reader.Get<decimal>("LogisticsTotal"),
                 Priority = reader.Get<int>("Priority"),
-                HasAttachments = reader.Get<bool>("HasAttachments")
+                HasAttachments = reader.Get<bool>("HasAttachments"),
+                RequestType = reader.Get<string>("RequestType"),
+                RowNum = reader.Get<Int64>("RowNum"),
+                ApproveStatusName = reader.Get<string>("ApproveStatusName")
             };
         }
 
