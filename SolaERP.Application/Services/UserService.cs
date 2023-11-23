@@ -466,7 +466,7 @@ namespace SolaERP.Persistence.Services
                         var sendUsers = await GetAdminUserMailsAsync(1, enumElement.GetLanguageEnumValue());
                         if (sendUsers.Count > 0)
                         {
-                            var templateData = templates[i];
+                            var templateData = templates.Where(x => x.Language == enumElement).FirstOrDefault();
                             VM_RegistrationIsPendingAdminApprove adminApprove =
                                 new VM_RegistrationIsPendingAdminApprove()
                                 {
@@ -475,7 +475,7 @@ namespace SolaERP.Persistence.Services
                                     Header = templateData.Header,
                                     UserName = userData.UserName,
                                     CompanyOrVendorName = companyName,
-                                    Language = templateData.Language.GetLanguageEnumValue(),
+                                    Language = enumElement.GetLanguageEnumValue(),
                                 };
                             Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove,
                                 adminApprove.TemplateName, adminApprove.ImageName, sendUsers);
