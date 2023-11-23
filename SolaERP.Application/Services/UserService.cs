@@ -572,7 +572,7 @@ namespace SolaERP.Persistence.Services
 
             if (user == null || string.IsNullOrWhiteSpace(user.Email))
                 return ApiResponse<bool>.Fail("resetPasswordCode", $"You entered wrong Code", 422);
-            return ApiResponse<bool>.Success(200);
+            return ApiResponse<bool>.Success(true, 200);
         }
     }
 }
