@@ -138,27 +138,30 @@ namespace SolaERP.Controllers
             AccountResponseDto account = new();
             if (response.Data > 0)
             {
-                var templateDataForVerification =
-                    _emailNotificationService.GetEmailTemplateData(dto.Language, EmailTemplateKey.VER).Result;
-                var companyName = _emailNotificationService.GetCompanyName(dto.Email).Result;
-
-                VM_EmailVerification emailVerification = new VM_EmailVerification
+                if (user.Id == 0)
                 {
-                    Username = dto.UserName,
-                    Body = new HtmlString(string.Format(templateDataForVerification.Body, dto.FullName)),
-                    CompanyName = companyName,
-                    Header = templateDataForVerification.Header,
-                    Language = dto.Language,
-                    Subject = templateDataForVerification.Subject,
-                    Token = HttpUtility.HtmlDecode(dto.VerifyToken),
-                };
+                    var templateDataForVerification =
+                        _emailNotificationService.GetEmailTemplateData(dto.Language, EmailTemplateKey.VER).Result;
+                    var companyName = _emailNotificationService.GetCompanyName(dto.Email).Result;
 
-                Response.OnCompleted(async () =>
-                {
-                    await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification,
-                        emailVerification.TemplateName(), emailVerification.ImageName(),
-                        new List<string> { dto.Email });
-                });
+                    VM_EmailVerification emailVerification = new VM_EmailVerification
+                    {
+                        Username = dto.UserName,
+                        Body = new HtmlString(string.Format(templateDataForVerification.Body, dto.FullName)),
+                        CompanyName = companyName,
+                        Header = templateDataForVerification.Header,
+                        Language = dto.Language,
+                        Subject = templateDataForVerification.Subject,
+                        Token = HttpUtility.HtmlDecode(dto.VerifyToken),
+                    };
+
+                    Response.OnCompleted(async () =>
+                    {
+                        await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification,
+                            emailVerification.TemplateName(), emailVerification.ImageName(),
+                            new List<string> { dto.Email });
+                    });
+                }
 
                 account.UserId = response.Data;
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
@@ -183,10 +186,10 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> UpdatePasswordAsync(ResetPasswordModel resetPasswordrequestDto)
             => CreateActionResult(await _userService.ResetPasswordAsync(resetPasswordrequestDto));
 
-    
+
 
         [HttpPost]
-        public async Task<IActionResult> CheckVerifyCode([FromBody]SingleItemModel model)
+        public async Task<IActionResult> CheckVerifyCode([FromBody] SingleItemModel model)
             => CreateActionResult(await _userService.CheckVerifyCode(model.VerificationCode));
 
     }
