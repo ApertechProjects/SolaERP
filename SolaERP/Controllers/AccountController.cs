@@ -186,7 +186,7 @@ namespace SolaERP.Controllers
     
 
         [HttpPost]
-        public async Task<IActionResult> CheckVerifyCode(int verificationCode)
+        public async Task<IActionResult> CheckVerifyCode([FromBody]int verificationCode)
             => CreateActionResult(await _userService.CheckVerifyCode(verificationCode));
 
     }
