@@ -188,5 +188,6 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> CheckVerifyCode([FromBody] SingleItemModel model)
             => CreateActionResult(await _userService.CheckVerifyCode(model.VerificationCode));
 
+
     }
 }
