@@ -126,14 +126,16 @@ public class OrderService : IOrderService
         if (orderMainDto.OrderDetails.Count > 0)
         {
             foreach (var detail in orderMainDto.OrderDetails)
-                detail.OrderMainId = mainDto.OrderMainId;
-
-
-            var result = await _orderRepository.SaveOrderDetailsAsync(orderMainDto.OrderDetails);
-            orderMainDto.OrderDetails.ForEach(x =>
             {
-                if (x.RequestDetailId <= 0) x.RequestDetailId = null;
-            });
+                detail.OrderMainId = mainDto.OrderMainId;
+                if (detail.RequestDetailId <= 0)
+                {
+                    detail.RequestDetailId = null;
+                }
+            }
+            
+            var result = await _orderRepository.SaveOrderDetailsAsync(orderMainDto.OrderDetails);
+
             if (result)
             {
                 detailIds = await _orderRepository.GetDetailIds(mainDto.OrderMainId);
