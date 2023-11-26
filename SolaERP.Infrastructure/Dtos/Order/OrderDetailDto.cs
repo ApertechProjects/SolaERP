@@ -7,18 +7,7 @@ public class OrderDetailDto
     public int OrderMainId { get; set; }
     public int LineNo { get; set; }
     public int? BidDetailid { get; set; }
-    public int? RequestDetailId
-    {
-        get
-        {
-            return _requestDetailId;
-        }
-        set
-        {
-            if (_requestDetailId <= 0)
-                _requestDetailId = null;
-        }
-    }
+    public int? RequestDetailId { get; set; }
     public int? RFQRequestDetailid { get; set; }
     public DateTime OrderDate { get; set; }
     public string ItemCode { get; set; }
