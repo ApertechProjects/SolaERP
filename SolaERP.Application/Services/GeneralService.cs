@@ -80,7 +80,8 @@ namespace SolaERP.Persistence.Services
                 BaseRate = singleResultBase.ConvRate,
                 ReportRate = singleResultReport.ConvRate,
                 BaseMultiplyOrDivide = singleResultBase.MultiplyDivide,
-                ReportMultiplyOrDivide = singleResultReport.MultiplyDivide
+                ReportMultiplyOrDivide = singleResultReport.MultiplyDivide,
+                IsReportEqualsDisCount = currency == businessUnit.ReportingCurrencyCode
             };
 
             return ApiResponse<BaseAndReportCurrencyRate>.Success(result);

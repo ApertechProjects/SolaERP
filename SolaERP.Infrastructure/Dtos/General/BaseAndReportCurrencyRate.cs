@@ -6,4 +6,5 @@ public class BaseAndReportCurrencyRate
     public short BaseMultiplyOrDivide { get; set; }
     public decimal ReportRate { get; set; }
     public short ReportMultiplyOrDivide { get; set; }
+    public bool IsReportEqualsDisCount { get; set; }
 }
