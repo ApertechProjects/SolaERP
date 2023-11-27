@@ -850,7 +850,7 @@ public class SqlOrderRepository : IOrderRepository
         command.CommandText = @"DELETE FROM Procurement.OrderDetails WHERE OrderMainId = @OrderMainId
                                        AND OrderDetailId NOT IN (@OrderDetailIds)";
         command.Parameters.AddWithValue(command, "@OrderMainId", orderMaindId);
-        command.Parameters.AddWithValue(command, "@OrderDetailIds", orderDetailIdList);
+        command.Parameters.AddWithValue(command, "@OrderDetailIds", orderDetailIdList.ConvertListToDataTable());
         
         await command.ExecuteNonQueryAsync();
     }
