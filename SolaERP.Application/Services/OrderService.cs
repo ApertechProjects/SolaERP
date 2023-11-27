@@ -27,7 +27,8 @@ public class OrderService : IOrderService
 
     public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork,
         ISupplierEvaluationRepository supplierRepository, IGeneralService generalService,
-        IVendorRepository vendorRepository, IAttachmentService attachmentService, IVendorService vendorService, IUserRepository userRepository)
+        IVendorRepository vendorRepository, IAttachmentService attachmentService, IVendorService vendorService,
+        IUserRepository userRepository)
     {
         _orderRepository = orderRepository;
         _unitOfWork = unitOfWork;
@@ -125,10 +126,16 @@ public class OrderService : IOrderService
         if (orderMainDto.OrderDetails.Count > 0)
         {
             foreach (var detail in orderMainDto.OrderDetails)
+            {
                 detail.OrderMainId = mainDto.OrderMainId;
-
-
+                if (detail.RequestDetailId <= 0)
+                {
+                    detail.RequestDetailId = null;
+                }
+            }
+            
             var result = await _orderRepository.SaveOrderDetailsAsync(orderMainDto.OrderDetails);
+
             if (result)
             {
                 detailIds = await _orderRepository.GetDetailIds(mainDto.OrderMainId);
@@ -262,7 +269,6 @@ public class OrderService : IOrderService
         {
             errorIds.TrimEnd(',');
             return ApiResponse<bool>.Fail($"{errorIds} orders can not be retrieved", 400);
-
         }
     }
 
@@ -273,4 +279,3 @@ public class OrderService : IOrderService
         return ApiResponse<List<AnalysisCodeIds>>.Success(result);
     }
 }
-
