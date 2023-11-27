@@ -104,7 +104,10 @@ public class OrderService : IOrderService
     {
         int userId = Convert.ToInt32(identityName);
         var mainDto = await _orderRepository.SaveOrderMainAsync(orderMainDto, userId);
-        List<int> detailIds = new List<int>();
+
+        var orderIdList = orderMainDto.OrderDetails.Select(x => x.OrderDetailid).ToList();
+        await _orderRepository.DeleteDetailsNotIncludes(orderIdList, mainDto.OrderMainId);
+
         orderMainDto.Attachments.ForEach(attachment =>
         {
             if (attachment.Type == 2)
@@ -133,12 +136,12 @@ public class OrderService : IOrderService
                     detail.RequestDetailId = null;
                 }
             }
-            
+
             var result = await _orderRepository.SaveOrderDetailsAsync(orderMainDto.OrderDetails);
 
             if (result)
             {
-                detailIds = await _orderRepository.GetDetailIds(mainDto.OrderMainId);
+                var detailIds = await _orderRepository.GetDetailIds(mainDto.OrderMainId);
                 mainDto.OrderDetailIds = detailIds;
             }
         }
