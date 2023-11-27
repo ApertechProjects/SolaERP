@@ -112,7 +112,8 @@ namespace SolaERP.Persistence.Services
                 : ApiResponse<bool>.Fail(false, 400);
         }
 
-        public async Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId, int businessUnitId)
+        public async Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId,
+            int businessUnitId)
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var requestMain = await _requestMainRepository.GetRequesMainHeaderAsync(requestMainId, userId);
@@ -166,9 +167,11 @@ namespace SolaERP.Persistence.Services
                 : ApiResponse<RequestMainDto>.Fail("Bad request header is null", 404);
         }
 
-        public async Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetDetails(int requestmainId, int businessUnitId)
+        public async Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetDetails(int requestmainId,
+            int businessUnitId)
         {
-            var requestDetails = await _requestDetailRepository.GetRequestDetailsByMainIdAsync(requestmainId, businessUnitId);
+            var requestDetails =
+                await _requestDetailRepository.GetRequestDetailsByMainIdAsync(requestmainId, businessUnitId);
             var requestDetailsResult = _mapper.Map<List<RequestDetailsWithAnalysisCodeDto>>(requestDetails);
 
             return requestDetailsResult.Count > 0
@@ -181,7 +184,7 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.ConvertIdentity(name);
             var resultModel = await _requestMainRepository
                 .AddOrUpdateRequestAsync(userId, _mapper.Map<RequestMainSaveModel>(model));
-            
+
             model.Attachments.ForEach(attachment =>
             {
                 if (attachment.Type == 2)
@@ -200,24 +203,16 @@ namespace SolaERP.Persistence.Services
                 }
             });
 
-            foreach (var detail in model.Details)
-            {
-                if (detail.RequestMainId == 0)
-                {
-                    await RemoveDetailAsync(detail.RequestDetailId);
-                }
-            }
 
             if (resultModel != null)
             {
+                var detailIdList = model.Details.Select(x => x.RequestDetailId).ToList();
+                await _requestDetailRepository.DeleteDetailsNotIncludes(detailIdList, resultModel.RequestMainId);
                 foreach (var detail in model.Details)
                 {
-                    if (detail.RequestMainId > 0)
-                    {
-                        var requestDetailDto = detail;
-                        requestDetailDto.RequestMainId = resultModel.RequestMainId;
-                        await SaveRequestDetailsAsync(requestDetailDto);
-                    }
+                    var requestDetailDto = detail;
+                    requestDetailDto.RequestMainId = resultModel.RequestMainId;
+                    await SaveRequestDetailsAsync(requestDetailDto);
                 }
 
                 var detailIds = await _requestMainRepository.GetDetailIds(resultModel.RequestMainId);
