@@ -179,13 +179,9 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<RequestSaveResultModel>> AddOrUpdateAsync(string name, RequestSaveModel model)
         {
             int userId = await _userRepository.ConvertIdentity(name);
-            RequestSaveResultModel resultModel =
-                await _requestMainRepository.AddOrUpdateRequestAsync(userId, _mapper.Map<RequestMainSaveModel>(model));
-            var requestDetails = _requestDetailRepository.GetRequestDetailsByMainIdAsync(model.RequestMainId, model.BusinessUnitId).Result
-                .Select(x => x.RequestDetailId).ToList()
-                .Except(model.Details.Select(x => x.RequestDetailId).ToList()
-                ).ToList();
-
+            var resultModel = await _requestMainRepository
+                .AddOrUpdateRequestAsync(userId, _mapper.Map<RequestMainSaveModel>(model));
+            
             model.Attachments.ForEach(attachment =>
             {
                 if (attachment.Type == 2)
@@ -204,20 +200,24 @@ namespace SolaERP.Persistence.Services
                 }
             });
 
-
-            for (int i = 0; i < requestDetails.Count; i++) //deleting
+            foreach (var detail in model.Details)
             {
-                var requestDetailId = requestDetails[i];
-                await RemoveDetailAsync(requestDetailId);
+                if (detail.RequestMainId == 0)
+                {
+                    await RemoveDetailAsync(detail.RequestDetailId);
+                }
             }
 
             if (resultModel != null)
             {
-                for (int i = 0; i < model.Details.Count; i++)
+                foreach (var detail in model.Details)
                 {
-                    var requestDetailDto = model.Details[i];
-                    requestDetailDto.RequestMainId = resultModel.RequestMainId;
-                    await SaveRequestDetailsAsync(requestDetailDto);
+                    if (detail.RequestMainId > 0)
+                    {
+                        var requestDetailDto = detail;
+                        requestDetailDto.RequestMainId = resultModel.RequestMainId;
+                        await SaveRequestDetailsAsync(requestDetailDto);
+                    }
                 }
 
                 var detailIds = await _requestMainRepository.GetDetailIds(resultModel.RequestMainId);
