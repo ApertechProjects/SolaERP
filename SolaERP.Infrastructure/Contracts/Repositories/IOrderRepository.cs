@@ -2,7 +2,6 @@ using SolaERP.Application.Dtos.Order;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.AnalysisCode;
 using SolaERP.Application.Entities.Order;
-using SolaERP.Application.Models;
 using System.Data;
 
 namespace SolaERP.Application.Contracts.Repositories;
@@ -31,4 +30,5 @@ public interface IOrderRepository
     Task<bool> Retrieve(int id, int userId);
     Task<List<AnalysisCodeIds>> GetAnalysis(int businessUnitId, DataTable data);
     Task<List<int>> GetDetailIds(int orderMainId);
+    Task DeleteDetailsNotIncludes(List<int> orderDetailIdList, int orderMaindId);
 }

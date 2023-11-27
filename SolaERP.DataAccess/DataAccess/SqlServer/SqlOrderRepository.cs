@@ -1,17 +1,12 @@
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Reflection;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Order;
-using SolaERP.Application.Dtos.Status;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.AnalysisCode;
-using SolaERP.Application.Entities.Auth;
-using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Order;
 using SolaERP.Application.Helper;
-using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 
@@ -753,7 +748,7 @@ public class SqlOrderRepository : IOrderRepository
             VendorName = reader.Get<string>("VendorName"),
             ApproveStageDetailsName = reader.Get<string>("ApproveStageDetailsName"),
             RFQNo = reader.Get<string>("RFQNo"),
-            HasAttachments =  reader.Get<bool>("HasAttachments")
+            HasAttachments = reader.Get<bool>("HasAttachments")
         };
     }
 
@@ -847,5 +842,16 @@ public class SqlOrderRepository : IOrderRepository
         }
 
         return datas;
+    }
+
+    public async Task DeleteDetailsNotIncludes(List<int> orderDetailIdList, int orderMaindId)
+    {
+        await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = @"DELETE FROM Procurement.OrderDetails WHERE OrderMainId = @OrderMainId
+                                       AND OrderDetailId NOT IN (@OrderDetailIds)";
+        command.Parameters.AddWithValue(command, "@OrderMainId", orderMaindId);
+        command.Parameters.AddWithValue(command, "@OrderDetailIds", orderMaindId);
+        
+        await command.ExecuteNonQueryAsync();
     }
 }
