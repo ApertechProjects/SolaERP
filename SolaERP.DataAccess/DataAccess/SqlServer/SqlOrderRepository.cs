@@ -847,11 +847,11 @@ public class SqlOrderRepository : IOrderRepository
     public async Task DeleteDetailsNotIncludes(List<int> orderDetailIdList, int orderMaindId)
     {
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        string result = $"({string.Join(",", orderDetailIdList)})";
         command.CommandText = @"DELETE FROM Procurement.OrderDetails WHERE OrderMainId = @OrderMainId
-                                       AND OrderDetailId NOT IN (@OrderDetailIds)";
+                                       AND OrderDetailId NOT IN " + result;
         command.Parameters.AddWithValue(command, "@OrderMainId", orderMaindId);
-        command.Parameters.AddWithValue(command, "@OrderDetailIds", orderDetailIdList.ConvertListToDataTable());
-        
+
         await command.ExecuteNonQueryAsync();
     }
 }
