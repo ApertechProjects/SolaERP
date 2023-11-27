@@ -9,6 +9,7 @@ namespace SolaERP.Application.Entities.Bid
     public class BidRFQListFilter
     {
         public int UserId { get; set; }
+        public int BusinessUnitId { get; set; }
     }
 }
 

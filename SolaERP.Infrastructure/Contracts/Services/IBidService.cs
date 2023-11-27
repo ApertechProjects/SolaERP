@@ -13,7 +13,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<BidIUDResponse>> SaveBidMainAsync(BidMainDto bidMain, string userIdentity);
         Task<ApiResponse<bool>> DeleteBidMainAsync(int bidMainId, string userIdentity);
         Task<ApiResponse<bool>> BidDisqualifyAsync(BidDisqualifyDto dto, string userIdentity);
-        Task<ApiResponse<List<BidRFQListLoadDto>>> GetRfqListAsync(string userIdentity);
+        Task<ApiResponse<List<BidRFQListLoadDto>>> GetRfqListAsync(string userIdentity,int businessUnitId);
         Task<ApiResponse<bool>> OrderCreateFromApproveBidsAsync(List<int> bidMainIdList, string userIdentity);
     }
 }

@@ -243,9 +243,10 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
         public async Task<List<BidRFQListLoad>> GetRFQListForBidAsync(BidRFQListFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = "EXEC SP_BidRFQListLoad @UserId";
+            command.CommandText = "EXEC SP_BidRFQListLoad @UserId,@businessUnitId";
 
             command.Parameters.AddWithValue(command, "@UserId", filter.UserId);
+            command.Parameters.AddWithValue(command, "@businessUnitId", filter.BusinessUnitId);
 
             using DbDataReader reader = await command.ExecuteReaderAsync();
             List<BidRFQListLoad> data = new();
@@ -273,7 +274,7 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
             command.Parameters.AddWithValue(command, "@Userid", userId);
 
             await _unitOfWork.SaveChangesAsync();
-            
+
             await command.ExecuteNonQueryAsync();
         }
     }

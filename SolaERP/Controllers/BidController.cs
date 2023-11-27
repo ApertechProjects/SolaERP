@@ -26,9 +26,9 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> GetCard(int bidMainId)
             => CreateActionResult(await _bidService.GetMainLoadAsync(bidMainId));
 
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetRFQList()
-            => CreateActionResult(await _bidService.GetRfqListAsync(User.Identity.Name));
+        [HttpGet("[action]/{businessUnitId}")]
+        public async Task<IActionResult> GetRFQList(int businessUnitId)
+            => CreateActionResult(await _bidService.GetRfqListAsync(User.Identity.Name, businessUnitId));
 
         //[HttpGet("[action]/{bidMainId}")]
         //public async Task<IActionResult> GetCardWithLists(int bidMainId)
