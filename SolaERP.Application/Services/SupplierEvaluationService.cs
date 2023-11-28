@@ -417,7 +417,7 @@ namespace SolaERP.Persistence.Services
                                 if (item?.Attachments is not null)
                                 {
                                     item.Attachments.ForEach(x => x.AttachmentTypeId = item.DesignId);
-                                    await _attachmentService.SaveAttachmentAsync(item.Attachments, SourceType.VEN_DUE,
+                                    await _attachmentService.SaveAttachmentAsync(item.Attachments, SourceType.VEN_PREQ,
                                         vendorId);
                                 }
 
@@ -700,7 +700,7 @@ namespace SolaERP.Persistence.Services
                     {
                         var attachments = _mapper.Map<List<AttachmentDto>>(
                             await _attachmentService.GetAttachmentsAsync(vendorId, SourceType.VEN_PREQ,
-                                Modules.EvaluationForm, design.PrequalificationDesignId.ToString()));
+                                Modules.EvaluationForm, design.PrequalificationDesignId));
                         attachments = attachments.Count > 0 ? attachments : Enumerable.Empty<AttachmentDto>().ToList();
 
                         attachments = attachments.Select(x =>
@@ -872,23 +872,14 @@ namespace SolaERP.Persistence.Services
                 {
                     var correspondingValue =
                         dueDiligenceValues.FirstOrDefault(v => v.DueDiligenceDesignId == d.DesignId);
-                    List<AttachmentDto> attachments;
+                    List<AttachmentDto> attachments= Enumerable.Empty<AttachmentDto>().ToList();
 
                     if (d.HasAttachment > 0)
                     {
                         attachments = _mapper.Map<List<AttachmentDto>>(
                             await _attachmentService.GetAttachmentsAsync(vendorId, SourceType.VEN_DUE,
-                                Modules.EvaluationForm, d.DesignId.ToString()));
-
-                        attachments = attachments.Select(x =>
-                        {
-                            x.FileLink = _fileUploadService.GetDownloadFileLink(x.FileLink, Modules.EvaluationForm);
-                            return x;
-                        }).ToList();
-                    }
-                    else
-                    {
-                        attachments = Enumerable.Empty<AttachmentDto>().ToList();
+                                Modules.EvaluationForm, 
+                                d.DesignId));
                     }
 
                     var calculationResult =

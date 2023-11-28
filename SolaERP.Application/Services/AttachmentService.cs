@@ -43,9 +43,12 @@ namespace SolaERP.Persistence.Services
         }
 
         public async Task<List<AttachmentDto>> GetAttachmentsAsync(int sourceId, SourceType sourceType, Modules module,
-            string reference = null, bool isDownloadLink = true)
+            int attachmentTypeId = 0, string reference = null, bool isDownloadLink = true)
         {
-            var entity = await _attachmentRepository.GetAttachmentsAsync(sourceId, reference, sourceType.ToString());
+            var entity = await _attachmentRepository.GetAttachmentsAsync(sourceId,
+                reference,
+                sourceType.ToString(),
+                attachmentTypeId);
             var result = _mapper.Map<List<AttachmentDto>>(entity);
 
             if (isDownloadLink)

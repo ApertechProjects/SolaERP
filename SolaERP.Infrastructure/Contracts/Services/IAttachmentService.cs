@@ -7,7 +7,7 @@ namespace SolaERP.Application.Contracts.Services
     public interface IAttachmentService
     {
         Task<List<AttachmentDto>> GetAttachmentsAsync(int sourceId, SourceType sourceType, Modules module,
-            string reference = null, bool isDownloadLink = true);
+            int attachmentTypeId = 0, string reference = null, bool isDownloadLink = true);
 
         Task<AttachmentDto> GetAttachmentById(int attachmentId, bool getLink = false,
             Modules module = default, bool isDownloadLink = true);
