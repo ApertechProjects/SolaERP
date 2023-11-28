@@ -78,11 +78,29 @@ namespace SolaERP.Persistence.Services
             return result;
         }
 
-        public async Task<bool> SaveAttachmentAsync(AttachmentSaveModel model)
+        public async Task SaveAttachmentAsync(AttachmentSaveModel attachment, SourceType sourceType, int sourceId)
         {
-            bool result = await _attachmentRepository.SaveAttachmentAsync(model);
-            await _unitOfWork.SaveChangesAsync();
-            return result;
+            attachment.SourceId = sourceId;
+            attachment.SourceType = sourceType.ToString();
+            await _attachmentRepository.SaveAttachmentAsync(attachment);
+        }
+
+        public async Task SaveAttachmentAsync(List<AttachmentSaveModel> attachments,
+            SourceType sourceType,
+            int sourceId)
+        {
+            foreach (var attachment in attachments)
+            {
+                if (attachment.Type == 2)
+                {
+                    await DeleteAttachmentAsync(attachment.AttachmentId);
+                    continue;
+                }
+
+                if (attachment.AttachmentId > 0) continue;
+
+                await SaveAttachmentAsync(attachment, sourceType, sourceId);
+            }
         }
 
         private void SetDownloadLink(AttachmentDto attachmentDto, Modules module)
