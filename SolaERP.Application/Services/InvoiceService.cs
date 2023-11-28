@@ -100,23 +100,7 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.ConvertIdentity(name);
             var data = await _invoiceRepository.Save(model, userId);
 
-            model.Attachments.ForEach(attachment =>
-            {
-                if (attachment.Type == 2)
-                {
-                    if (attachment.AttachmentId > 0)
-                    {
-                        _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId).Wait();
-                    }
-                }
-                else
-                {
-                    if (attachment.AttachmentId > 0) return;
-                    attachment.SourceId = data;
-                    attachment.SourceType = SourceType.INV.ToString();
-                    _attachmentService.SaveAttachmentAsync(attachment).Wait();
-                }
-            });
+            await _attachmentService.SaveAttachmentAsync(model.Attachments, SourceType.INV, data);
 
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(true);

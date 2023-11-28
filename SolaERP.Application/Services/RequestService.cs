@@ -185,24 +185,7 @@ namespace SolaERP.Persistence.Services
             var resultModel = await _requestMainRepository
                 .AddOrUpdateRequestAsync(userId, _mapper.Map<RequestMainSaveModel>(model));
 
-            model.Attachments.ForEach(attachment =>
-            {
-                if (attachment.Type == 2)
-                {
-                    if (attachment.AttachmentId > 0)
-                    {
-                        _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId).Wait();
-                    }
-                }
-                else
-                {
-                    if (attachment.AttachmentId > 0) return;
-                    attachment.SourceId = resultModel.RequestMainId;
-                    attachment.SourceType = SourceType.REQ.ToString();
-                    _attachmentService.SaveAttachmentAsync(attachment).Wait();
-                }
-            });
-
+            await _attachmentService.SaveAttachmentAsync(model.Attachments, SourceType.REQ, resultModel.RequestMainId);
 
             if (resultModel != null)
             {

@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json.Linq;
-
-namespace SolaERP.Application.Models
+﻿namespace SolaERP.Application.Models
 {
     public class AttachmentSaveModel
     {

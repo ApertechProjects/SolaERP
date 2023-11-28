@@ -52,23 +52,7 @@ namespace SolaERP.Persistence.Services
             if (request.Id <= 0) response = await _repository.AddMainAsync(request);
             else response = await _repository.UpdateMainAsync(request);
 
-            request.Attachments.ForEach(attachment =>
-            {
-                if (attachment.Type == 2)
-                {
-                    if (attachment.AttachmentId > 0)
-                    {
-                        _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId).Wait();
-                    }
-                }
-                else
-                {
-                    if (attachment.AttachmentId > 0) return;
-                    attachment.SourceId = response.Id;
-                    attachment.SourceType = SourceType.RFQ.ToString();
-                    _attachmentService.SaveAttachmentAsync(attachment).Wait();
-                }
-            });
+            await _attachmentService.SaveAttachmentAsync(request.Attachments, SourceType.RFQ, response.Id);
 
             CombineWithDeletedDetails(request);
             var combinedRequestDetails = CombineDeletedRequestsWithAll(request.Details);

@@ -108,23 +108,7 @@ public class OrderService : IOrderService
         var orderIdList = orderMainDto.OrderDetails.Select(x => x.OrderDetailid).ToList();
         await _orderRepository.DeleteDetailsNotIncludes(orderIdList, mainDto.OrderMainId);
 
-        orderMainDto.Attachments.ForEach(attachment =>
-        {
-            if (attachment.Type == 2)
-            {
-                if (attachment.AttachmentId > 0)
-                {
-                    _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId).Wait();
-                }
-            }
-            else
-            {
-                if (attachment.AttachmentId > 0) return;
-                attachment.SourceId = mainDto.OrderMainId;
-                attachment.SourceType = SourceType.ORDER.ToString();
-                _attachmentService.SaveAttachmentAsync(attachment).Wait();
-            }
-        });
+        await _attachmentService.SaveAttachmentAsync( orderMainDto.Attachments,SourceType.ORDER,mainDto.OrderMainId);
 
         if (orderMainDto.OrderDetails.Count > 0)
         {
