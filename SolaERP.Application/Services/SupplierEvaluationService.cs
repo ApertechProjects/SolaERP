@@ -701,13 +701,6 @@ namespace SolaERP.Persistence.Services
                         var attachments = _mapper.Map<List<AttachmentDto>>(
                             await _attachmentService.GetAttachmentsAsync(vendorId, SourceType.VEN_PREQ,
                                 Modules.EvaluationForm, design.PrequalificationDesignId));
-                        attachments = attachments.Count > 0 ? attachments : Enumerable.Empty<AttachmentDto>().ToList();
-
-                        attachments = attachments.Select(x =>
-                        {
-                            x.FileLink = _fileUploadService.GetDownloadFileLink(x.FileLink, Modules.EvaluationForm);
-                            return x;
-                        }).ToList();
 
                         var correspondingValue = prequalificationValues.FirstOrDefault(v =>
                             v.PrequalificationDesignId == design.PrequalificationDesignId);
