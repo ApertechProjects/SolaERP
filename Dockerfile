@@ -9,6 +9,9 @@ COPY ./SolaERP/SolaERP.API.csproj ./SolaERP/SolaERP.API.csproj
 RUN dotnet restore "./SolaERP/SolaERP.API.csproj"
 
 COPY . ./
+
+ENV DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false
+
 RUN dotnet publish -c Release -o output
 RUN rm -r /app/output/wwwroot
 COPY ./SolaERP/wwwroot /app/output/wwwroot
