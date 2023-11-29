@@ -144,7 +144,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@RequestDetailId", requestDetailId);
                 using var reader = await command.ExecuteReaderAsync();
 
-                if (await reader.ReadAsync()) result.Add(reader.GetByEntityStructure<RequestDetailApprovalInfo>());
+                while (await reader.ReadAsync()) result.Add(reader.GetByEntityStructure<RequestDetailApprovalInfo>());
                 return result;
             }
         }
