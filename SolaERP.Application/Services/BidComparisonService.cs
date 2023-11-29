@@ -40,23 +40,9 @@ namespace SolaERP.Persistence.Services
             var entity = _mapper.Map<BidComparisonIUD>(bidComparison);
             var saveResponse = await _bidComparisonRepository.AddComparisonAsync(entity);
 
-            bidComparison.Attachments.ForEach(attachment =>
-            {
-                if (attachment.Type == 2)
-                {
-                    if (attachment.AttachmentId > 0)
-                    {
-                        _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId).Wait();
-                    }
-                }
-                else
-                {
-                    if (attachment.AttachmentId > 0) return;
-                    attachment.SourceId = entity.BidComparisonId;
-                    attachment.SourceType = SourceType.BID_COMP.ToString();
-                    _attachmentService.SaveAttachmentAsync(attachment).Wait();
-                }
-            });
+            await _attachmentService.SaveAttachmentAsync(bidComparison.Attachments, 
+                SourceType.BID_COMP,
+                entity.BidComparisonId);
 
             await _unitOfWork.SaveChangesAsync();
 

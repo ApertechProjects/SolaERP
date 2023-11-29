@@ -357,41 +357,12 @@ namespace SolaERP.Persistence.Services
 
             if (!vendorDto.CheckLogoIsDeleted)
             {
-                AttachmentSaveModel attachmentSaveModel = new AttachmentSaveModel();
-                attachmentSaveModel.SourceId = vendorId;
-                attachmentSaveModel.SourceType = SourceType.VEN_LOGO.ToString();
-                attachmentSaveModel.FileLink = vendor.Logo;
-                await _attachmentService.SaveAttachmentAsync(attachmentSaveModel);
-            }
-
-            if (vendorDto.BankAccounts is not null)
-                foreach (var x in vendorDto?.BankAccounts)
+                AttachmentSaveModel attachmentSaveModel = new AttachmentSaveModel
                 {
-                    if (x.Type == 2 && x.Id > 0)
-                        await _repository.DeleteBankDetailsAsync(user.Id, x.Id);
-                    else
-                    {
-                        var detaildId =
-                            await _repository.UpdateBankDetailsAsync(user.Id, _mapper.Map<VendorBankDetail>(x));
-                        x.VendorId = vendorId;
-
-                        if (x.AccountVerificationLetter != null)
-                        {
-                            tasks.AddRange(x.AccountVerificationLetter.Select(attachment => //+
-                            {
-                                if (attachment.Type == 2 && attachment.AttachmentId > 0)
-                                    return _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId);
-                                else
-                                {
-                                    var entity = _mapper.Map<AttachmentSaveModel>(attachment);
-                                    entity.SourceId = detaildId;
-                                    entity.SourceType = SourceType.VEN_BNK.ToString();
-                                    return _attachmentService.SaveAttachmentAsync(entity);
-                                }
-                            }));
-                        }
-                    }
-                }
+                    FileLink = vendor.Logo
+                };
+                await _attachmentService.SaveAttachmentAsync(attachmentSaveModel, SourceType.VEN_LOGO, vendorId);
+            }
 
             await Task.WhenAll(tasks);
 

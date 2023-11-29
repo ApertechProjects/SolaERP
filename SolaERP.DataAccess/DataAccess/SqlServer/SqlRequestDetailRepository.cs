@@ -1,6 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.Request;
-using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
@@ -10,6 +9,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
     public class SqlRequestDetailRepository : IRequestDetailRepository
     {
         private readonly IUnitOfWork _unitOfWork;
+
         public SqlRequestDetailRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -149,11 +149,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> RequestDetailChangeStatusAsync(int requestDetailId, int userId, int approveStatusId, string comment, int sequence, int rejectReasonId)
+        public async Task<bool> RequestDetailChangeStatusAsync(int requestDetailId, int userId, int approveStatusId,
+            string comment, int sequence, int rejectReasonId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_RequestApprove @RequestDetailId,@UserId,@ApproveStatusId,@Comment,@Sequence,@RejectReasonId";
+                command.CommandText =
+                    "SET NOCOUNT OFF EXEC SP_RequestApprove @RequestDetailId,@UserId,@ApproveStatusId,@Comment,@Sequence,@RejectReasonId";
 
                 command.Parameters.AddWithValue(command, "@RequestDetailId", requestDetailId);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
@@ -164,7 +166,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
-
         }
 
 
@@ -190,6 +191,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 while (await reader.ReadAsync()) result.Add(reader.GetByEntityStructure<RequestCardAnalysis>());
                 return result;
             }
+        }
+
+        public async Task DeleteDetailsNotIncludes(List<int> requestDetailIdList, int requestMainId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            string result = $"({string.Join(",", requestDetailIdList)})";
+            command.CommandText = @"DELETE FROM Procurement.RequestDetails WHERE RequestMainId = @RequestMainId
+                                       AND RequestDetailId NOT IN " + result;
+            command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+
+            await command.ExecuteNonQueryAsync();
         }
     }
 }

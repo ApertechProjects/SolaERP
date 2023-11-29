@@ -210,24 +210,8 @@ namespace SolaERP.Persistence.Services
                 var detailResult = await _paymentRepository.DetailSave(data);
             }
 
-            model.Attachments.ForEach(attachment =>
-            {
-                if (attachment.Type == 2)
-                {
-                    if (attachment.AttachmentId > 0)
-                    {
-                        _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId).Wait();
-                    }
-                }
-                else
-                {
-                    if (attachment.AttachmentId > 0) return;
-                    attachment.SourceId = mainResult.PaymentDocumentMainId;
-                    attachment.SourceType = SourceType.PYMDC.ToString();
-                    _attachmentService.SaveAttachmentAsync(attachment).Wait();
-                }
-            });
-
+            await _attachmentService.SaveAttachmentAsync(model.Attachments, SourceType.PYMDC,
+                mainResult.PaymentDocumentMainId);
             await _unitOfWork.SaveChangesAsync();
 
             return ApiResponse<PaymentDocumentSaveResultModel>.Success(new PaymentDocumentSaveResultModel

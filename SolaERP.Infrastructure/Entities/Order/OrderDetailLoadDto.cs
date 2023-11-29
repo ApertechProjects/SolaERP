@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Security.AccessControl;
 
 namespace SolaERP.Application.Entities.Order;
 
@@ -54,6 +55,8 @@ public class OrderDetailLoadDto
     public decimal TaxAmount { get; set; }
     public int Status { get; set; }
     public int ApproveStatus { get; set; }
+    public string StatusName { get; set; }
+    public string ApproveStatusName { get; set; }
     public DateTime? RequestDate { get; set; }
     public DateTime? RequestDeadline { get; set; }
     public string Buyer { get; set; }

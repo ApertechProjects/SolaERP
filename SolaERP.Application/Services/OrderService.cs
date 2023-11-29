@@ -104,24 +104,11 @@ public class OrderService : IOrderService
     {
         int userId = Convert.ToInt32(identityName);
         var mainDto = await _orderRepository.SaveOrderMainAsync(orderMainDto, userId);
-        List<int> detailIds = new List<int>();
-        orderMainDto.Attachments.ForEach(attachment =>
-        {
-            if (attachment.Type == 2)
-            {
-                if (attachment.AttachmentId > 0)
-                {
-                    _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId).Wait();
-                }
-            }
-            else
-            {
-                if (attachment.AttachmentId > 0) return;
-                attachment.SourceId = mainDto.OrderMainId;
-                attachment.SourceType = SourceType.ORDER.ToString();
-                _attachmentService.SaveAttachmentAsync(attachment).Wait();
-            }
-        });
+
+        var orderIdList = orderMainDto.OrderDetails.Select(x => x.OrderDetailid).ToList();
+        await _orderRepository.DeleteDetailsNotIncludes(orderIdList, mainDto.OrderMainId);
+
+        await _attachmentService.SaveAttachmentAsync( orderMainDto.Attachments,SourceType.ORDER,mainDto.OrderMainId);
 
         if (orderMainDto.OrderDetails.Count > 0)
         {
@@ -133,12 +120,12 @@ public class OrderService : IOrderService
                     detail.RequestDetailId = null;
                 }
             }
-            
+
             var result = await _orderRepository.SaveOrderDetailsAsync(orderMainDto.OrderDetails);
 
             if (result)
             {
-                detailIds = await _orderRepository.GetDetailIds(mainDto.OrderMainId);
+                var detailIds = await _orderRepository.GetDetailIds(mainDto.OrderMainId);
                 mainDto.OrderDetailIds = detailIds;
             }
         }

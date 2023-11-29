@@ -112,7 +112,8 @@ namespace SolaERP.Persistence.Services
                 : ApiResponse<bool>.Fail(false, 400);
         }
 
-        public async Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId, int businessUnitId)
+        public async Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId,
+            int businessUnitId)
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var requestMain = await _requestMainRepository.GetRequesMainHeaderAsync(requestMainId, userId);
@@ -166,9 +167,11 @@ namespace SolaERP.Persistence.Services
                 : ApiResponse<RequestMainDto>.Fail("Bad request header is null", 404);
         }
 
-        public async Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetDetails(int requestmainId, int businessUnitId)
+        public async Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetDetails(int requestmainId,
+            int businessUnitId)
         {
-            var requestDetails = await _requestDetailRepository.GetRequestDetailsByMainIdAsync(requestmainId, businessUnitId);
+            var requestDetails =
+                await _requestDetailRepository.GetRequestDetailsByMainIdAsync(requestmainId, businessUnitId);
             var requestDetailsResult = _mapper.Map<List<RequestDetailsWithAnalysisCodeDto>>(requestDetails);
 
             return requestDetailsResult.Count > 0
@@ -181,43 +184,18 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.ConvertIdentity(name);
             var resultModel = await _requestMainRepository
                 .AddOrUpdateRequestAsync(userId, _mapper.Map<RequestMainSaveModel>(model));
-            
-            model.Attachments.ForEach(attachment =>
-            {
-                if (attachment.Type == 2)
-                {
-                    if (attachment.AttachmentId > 0)
-                    {
-                        _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId).Wait();
-                    }
-                }
-                else
-                {
-                    if (attachment.AttachmentId > 0) return;
-                    attachment.SourceId = resultModel.RequestMainId;
-                    attachment.SourceType = SourceType.REQ.ToString();
-                    _attachmentService.SaveAttachmentAsync(attachment).Wait();
-                }
-            });
 
-            foreach (var detail in model.Details)
-            {
-                if (detail.RequestMainId == 0)
-                {
-                    await RemoveDetailAsync(detail.RequestDetailId);
-                }
-            }
+            await _attachmentService.SaveAttachmentAsync(model.Attachments, SourceType.REQ, resultModel.RequestMainId);
 
             if (resultModel != null)
             {
+                var detailIdList = model.Details.Select(x => x.RequestDetailId).ToList();
+                await _requestDetailRepository.DeleteDetailsNotIncludes(detailIdList, resultModel.RequestMainId);
                 foreach (var detail in model.Details)
                 {
-                    if (detail.RequestMainId > 0)
-                    {
-                        var requestDetailDto = detail;
-                        requestDetailDto.RequestMainId = resultModel.RequestMainId;
-                        await SaveRequestDetailsAsync(requestDetailDto);
-                    }
+                    var requestDetailDto = detail;
+                    requestDetailDto.RequestMainId = resultModel.RequestMainId;
+                    await SaveRequestDetailsAsync(requestDetailDto);
                 }
 
                 var detailIds = await _requestMainRepository.GetDetailIds(resultModel.RequestMainId);

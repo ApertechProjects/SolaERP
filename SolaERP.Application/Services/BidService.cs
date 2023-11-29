@@ -96,41 +96,8 @@ namespace SolaERP.Persistence.Services
             var details = _mapper.Map<List<BidDetail>>(bidMain.BidDetails);
             var saveResponse = await _bidRepository.BidMainIUDAsync(entity);
 
-            bidMain.Attachments.ForEach(attachment =>
-            {
-                if (attachment.Type == 2)
-                {
-                    if (attachment.AttachmentId > 0)
-                    {
-                        _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId).Wait();
-                    }
-                }
-                else
-                {
-                    if (attachment.AttachmentId > 0) return;
-                    attachment.SourceId = saveResponse.Id;
-                    attachment.SourceType = SourceType.BID.ToString();
-                    _attachmentService.SaveAttachmentAsync(attachment).Wait();
-                }
-            });
-
-            bidMain.CommercialAttachments.ForEach(attachment =>
-            {
-                if (attachment.Type == 2)
-                {
-                    if (attachment.AttachmentId > 0)
-                    {
-                        _attachmentService.DeleteAttachmentAsync(attachment.AttachmentId).Wait();
-                    }
-                }
-                else
-                {
-                    if (attachment.AttachmentId > 0) return;
-                    attachment.SourceId = saveResponse.Id;
-                    attachment.SourceType = SourceType.BID_COMM.ToString();
-                    _attachmentService.SaveAttachmentAsync(attachment).Wait();
-                }
-            });
+            await _attachmentService.SaveAttachmentAsync(bidMain.Attachments, SourceType.BID, saveResponse.Id);
+            await _attachmentService.SaveAttachmentAsync(bidMain.CommercialAttachments, SourceType.BID_COMM, saveResponse.Id);
 
             foreach (var detail in details)
                 detail.BidMainId = saveResponse.Id;
