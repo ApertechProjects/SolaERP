@@ -86,7 +86,7 @@ namespace SolaERP.Controllers
 
                 if (res)
                 {
-                    var users = await _userService.UsersForRequestMain(sendToApprove.RequestMainIds[i], 1, ApproveStatus.Approved);
+                    var users = await _userService.UsersForRequestMain(sendToApprove.RequestMainIds[i], 0, ApproveStatus.Approved);
                     await _mailService.SendRequestMailsForChangeStatus(Response, users, 1, businessUnit, null);
                 }
             }
