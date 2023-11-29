@@ -3,5 +3,7 @@
     public class RequestSendToApproveDto
     {
         public List<int> RequestMainIds { get; set; }
+        public int BusinessUnitId { get; set; }
     }
+
 }

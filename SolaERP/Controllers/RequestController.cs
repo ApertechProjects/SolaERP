@@ -18,13 +18,15 @@ namespace SolaERP.Controllers
         private readonly IFileUploadService _fileUploadService;
         private readonly IEmailNotificationService _emailNotificationService;
         private readonly IUserService _userService;
+        private readonly IBusinessUnitService _businessUnitService;
         private IMailService _mailService;
-        public RequestController(IRequestService requestService, IFileUploadService fileUploadService, IEmailNotificationService emailNotificationService, IUserService userService, IMailService mailService)
+        public RequestController(IRequestService requestService, IFileUploadService fileUploadService, IEmailNotificationService emailNotificationService, IUserService userService, IBusinessUnitService businessUnitService, IMailService mailService)
         {
             _requestService = requestService;
             _fileUploadService = fileUploadService;
             _emailNotificationService = emailNotificationService;
             _userService = userService;
+            _businessUnitService = businessUnitService;
             _mailService = mailService;
         }
 
@@ -74,7 +76,24 @@ namespace SolaERP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> SendToApprove(RequestSendToApproveDto sendToApprove)
-        => CreateActionResult(await _requestService.SendToApproveAsync(User.Identity.Name, sendToApprove.RequestMainIds));
+        {
+            var businessUnit = await _businessUnitService.GetBusinessUnitName(sendToApprove.BusinessUnitId);
+            var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQP);
+
+            for (int i = 0; i < sendToApprove.RequestMainIds.Count; i++)
+            {
+                var res = await _requestService.SendToApproveAsync(User.Identity.Name, sendToApprove.RequestMainIds);
+
+                if (res)
+                {
+                    var users = await _userService.UsersForRequestMain(sendToApprove.RequestMainIds[i], 1, ApproveStatus.Approved);
+                    await _mailService.SendRequestMailsForChangeStatus(Response, users, 1, businessUnit, null);
+                }
+            }
+
+            return CreateActionResult(ApiResponse<bool>.Success(200));
+        }
+        //=> CreateActionResult(await _requestService.SendToApproveAsync(User.Identity.Name, sendToApprove.RequestMainIds));
 
         [HttpPost]
         public async Task<IActionResult> ChangeMainStatus(RequestChangeStatusModel data)

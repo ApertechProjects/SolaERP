@@ -159,6 +159,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<string> GetBusinessUnitName(int businessUnitId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = $"select BusinessUnitName from Config.BusinessUnits where BusinessUnitId = @businessUnitId";
+                command.Parameters.AddWithValue(command, "@businessUnitId", businessUnitId);
+                using var reader = await command.ExecuteReaderAsync();
+
+                string result = string.Empty;
+
+                if (reader.Read())
+                    result = reader.Get<string>("BusinessUnitName");
+
+                return result;
+            }
+        }
+
         #endregion
 
     }

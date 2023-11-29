@@ -7,5 +7,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<BaseBusinessUnit>> GetBusinessUnitListByUserId(int userId);
         Task<List<BaseBusinessUnit>> GetBusinessUnitListByCurrentUser(int userId);
         Task<string> GetBusinessUnitCode(int businessUnitId);
+        Task<string> GetBusinessUnitName(int businessUnitId);
     }
 }

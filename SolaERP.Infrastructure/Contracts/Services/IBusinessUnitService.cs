@@ -9,5 +9,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<BaseBusinessUnitDto>>> GetBusinessUnitListByCurrentUser(string identityName);
         Task<List<BusinessUnitConnectionDto>> GetBusinessUnitListConnections();
         Task<string> GetBusinessUnitCode(int businessUnitId);
+        Task<string> GetBusinessUnitName(int businessUnitId);
     }
 }

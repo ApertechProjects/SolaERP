@@ -87,7 +87,7 @@ namespace SolaERP.Persistence.Services
         }
 
 
-        public async Task<ApiResponse<bool>> SendToApproveAsync(string name, List<int> requestMainIds)
+        public async Task<bool> SendToApproveAsync(string name, List<int> requestMainIds)
         {
             int userId = await _userRepository.ConvertIdentity(name);
             User user = await _userRepository.GetByIdAsync(userId);
@@ -107,9 +107,7 @@ namespace SolaERP.Persistence.Services
             await _mailService.SendSafeMailsAsync(followUserEmails, "Request Information", messageBody, false);
 
             bool allSuccess = sendToApproveTasks.All(task => task.Result);
-            return allSuccess
-                ? ApiResponse<bool>.Success(true)
-                : ApiResponse<bool>.Fail(false, 400);
+            return allSuccess;
         }
 
         public async Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId,
