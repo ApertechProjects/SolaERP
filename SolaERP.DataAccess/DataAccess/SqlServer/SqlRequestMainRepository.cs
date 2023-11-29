@@ -268,7 +268,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 LogisticsTotal = reader.Get<decimal>("LogisticsTotal"),
                 Priority = reader.Get<int>("Priority"),
-                HasAttachments = reader.Get<bool>("HasAttachments")
+                HasAttachments = reader.Get<bool>("HasAttachments"),
+                Sequence = reader.Get<int>("Sequence")
             };
         }
 
