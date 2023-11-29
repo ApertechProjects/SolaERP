@@ -19,20 +19,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             _unitOfWork = unitOfWork;
         }
 
-        public Task<bool> AddAsync(Menu entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Menu>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Menu> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+      
 
         public async Task<List<MenuWithPrivilages>> GetUserMenuWithPrivilegesAsync(int userId)
         {
@@ -68,15 +55,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public Task<bool> RemoveAsync(int Id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAsync(Menu entity)
-        {
-            throw new NotImplementedException();
-        }
+     
 
         public async Task<AdditionalPrivilegeAccess> GetAdditionalPrivilegeAccessAsync(int userId)
         {

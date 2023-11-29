@@ -3,7 +3,7 @@ using SolaERP.Application.Entities.User;
 
 namespace SolaERP.Application.Contracts.Repositories
 {
-    public interface IMenuRepository : ICrudOperations<Menu>
+    public interface IMenuRepository 
     {
         Task<List<MenuWithPrivilages>> GetUserMenuWithPrivilegesAsync(int userId);
         Task<List<GroupMenu>> GetGroupMenusByGroupIdAsync(int groupId);
