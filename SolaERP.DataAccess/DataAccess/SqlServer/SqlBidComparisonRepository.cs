@@ -517,7 +517,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@Comment", request.Comment);
 
             await _unitOfWork.SaveChangesAsync();
-            
+
             return await command.ExecuteNonQueryAsync() > 0;
         }
 
@@ -541,7 +541,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 SpecialistComment = reader.Get<string>("SpecialistComment"),
                 CreatedBy = reader.Get<string>("CreatedBy"),
                 ComparisonDate = reader.Get<DateTime?>("ComparisonDate"),
-                HasAttachments = reader.Get<bool>("HasAttachments")
+                HasAttachments = reader.Get<bool>("HasAttachments"),
+                Status = reader.Get<int>("Status")
             };
         }
     }
