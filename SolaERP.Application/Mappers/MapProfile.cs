@@ -152,7 +152,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<RequestDetailApprovalInfo, RequestDetailApprovalInfoDto>()
                 .ForMember(dest => dest.ApproveDate, opt => opt.MapFrom(src => src.ApproveDate))
                 .ForMember(dest => dest.ApprovedBy, opt => opt.MapFrom(src => src.FullName))
-                .ForMember(dest => dest.ApproveStatusName, opt => opt.MapFrom(src => src.ApproveStatusName))
+                .ForMember(dest => dest.ApprovalStatusName, opt => opt.MapFrom(src => src.ApprovalStatusName))
                 .ForMember(dest => dest.ApproveStageDetailsName, opt => opt.MapFrom(src => src.ApproveStageDetailsName))
                 .ForMember(dest => dest.Comment, opt => opt.MapFrom(src => src.Comment))
                 .ForMember(dest => dest.Sequence, opt => opt.MapFrom(src => src.Sequence)).ReverseMap();
