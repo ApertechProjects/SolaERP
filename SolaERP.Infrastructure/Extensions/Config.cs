@@ -13,7 +13,7 @@ namespace SolaERP.Application.Extensions
             _configuration = CreateSingleConfigurationInstance();
             _configuration.SetBasePath(Directory.GetCurrentDirectory());
 
-            _configuration.AddJsonFile("appsettings.json");
+            _configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
         }
 
         private NetworkCredential _networkCredential;
