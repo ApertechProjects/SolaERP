@@ -35,5 +35,6 @@ namespace SolaERP.Application.Contracts.Repositories
             DataTable dataTable);
 
         Task<bool> SaveInvoiceMatchingDetails(int requestInvoiceMatchingMainid, DataTable dataTable);
+        Task<bool> InvoiceIUD(int businessUnitId, int invoiceRegisterId, int userId);
     }
 }

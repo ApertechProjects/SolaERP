@@ -1,7 +1,9 @@
-﻿using Microsoft.Win32;
+﻿using MediatR;
+using Microsoft.Win32;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Invoice;
 using SolaERP.Application.Entities.Invoice;
+using SolaERP.Application.Helper;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
@@ -14,10 +16,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
     public class SqlInvoiceRepository : IInvoiceRepository
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly BusinessUnitHelper _businessUnitHelper;
 
-        public SqlInvoiceRepository(IUnitOfWork unitOfWork)
+        public SqlInvoiceRepository(IUnitOfWork unitOfWork, BusinessUnitHelper businessUnitHelper)
         {
             _unitOfWork = unitOfWork;
+            _businessUnitHelper = businessUnitHelper;
         }
 
         public async Task<bool> ChangeStatus(int invoiceRegisterId, int sequence, int approveStatus, string comment,
@@ -506,6 +510,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 dataTable);
             var value = await command.ExecuteNonQueryAsync();
             return value > 0;
+        }
+
+        public async Task<bool> InvoiceIUD(int businessUnitId, int invoiceRegisterId, int userId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = _businessUnitHelper.BuildQueryForIntegration(businessUnitId,
+                "SP_Invoice_IUD @BusinessUnitId, @InvoiceRegisterId, @UserId");
+            command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+            command.Parameters.AddWithValue(command, "@InvoiceRegisterId", invoiceRegisterId);
+            command.Parameters.AddWithValue(command, "@UserId", userId);
+            await _unitOfWork.SaveChangesAsync();
+            return await command.ExecuteNonQueryAsync() > 0;
         }
     }
 }

@@ -30,5 +30,6 @@
         public int Sequence { get; set; }
         public long LineNo { get; set; }
         public string LinkedGRNsServices { get; set; }
+        public bool InMaxSequence { get; set; }
     }
 }

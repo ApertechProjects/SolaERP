@@ -30,5 +30,7 @@
         public int Sequence { get; set; }
         public long LineNo { get; set; }
         public string GRNList { get; set; }
+        public bool InMaxSequence { get; set; }
+
     }
 }
