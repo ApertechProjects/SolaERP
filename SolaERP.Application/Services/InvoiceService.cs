@@ -236,11 +236,11 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(true);
         }
 
-        public async Task<ApiResponse<List<InvoiceRegisterByOrderMainIdDto>>> InvoiceRegisterList(int orderMainId)
+        public async Task<ApiResponse<InvoiceRegisterByOrderMainIdDto>> InvoiceRegisterList(int orderMainId)
         {
             var data = await _invoiceRepository.InvoiceRegisterList(orderMainId);
-            var dto = _mapper.Map<List<InvoiceRegisterByOrderMainIdDto>>(data);
-            return ApiResponse<List<InvoiceRegisterByOrderMainIdDto>>.Success(dto, 200);
+            var dto = _mapper.Map<InvoiceRegisterByOrderMainIdDto>(data);
+            return ApiResponse<InvoiceRegisterByOrderMainIdDto>.Success(dto, 200);
 
         }
     }

@@ -524,21 +524,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return await command.ExecuteNonQueryAsync() > 0;
         }
 
-        public async Task<List<InvoiceRegisterByOrderMainId>> InvoiceRegisterList(int orderMainId)
+        public async Task<InvoiceRegisterByOrderMainId> InvoiceRegisterList(int orderMainId)
         {
-            List<InvoiceRegisterByOrderMainId> orders = new List<InvoiceRegisterByOrderMainId>();
+            InvoiceRegisterByOrderMainId orders = new InvoiceRegisterByOrderMainId();
             await using var command = _unitOfWork.CreateCommand() as SqlCommand;
 
-            command.CommandText = @"EXEC SP_InvoiceRegisterListByOrder
+            command.CommandText = @"EXEC SP_InvoiceRegisterOrderData
                @OrderMainId";
 
             command.Parameters.AddWithValue(command, "@OrderMainId", orderMainId);
 
             await using var reader = await command.ExecuteReaderAsync();
-            while (reader.Read())
-            {
-                orders.Add(reader.GetByEntityStructure<InvoiceRegisterByOrderMainId>());
-            }
+            if (reader.Read())
+                orders = reader.GetByEntityStructure<InvoiceRegisterByOrderMainId>();
+
             return orders;
         }
     }

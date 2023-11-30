@@ -8,12 +8,13 @@ namespace SolaERP.Application.Dtos.Invoice
 {
     public class InvoiceRegisterByOrderMainIdDto
     {
-        public int InvoiceRegisterId { get; set; }
-        public string InvoiceNo { get; set; }
-        public decimal InvoiceAmount { get; set; }
-        public DateTime InvoiceReceivedDate { get; set; }
-        public string InvoiceComment { get; set; }
-        public decimal OrderTotal { get; set; }
+        public int OrderMainId { get; set; }
+        public string OrderNo { get; set; }
+        public string Currency { get; set; }
+        public string VendorCode { get; set; }
+        public string VendorName { get; set; }
+        public int WithHoldingTaxId { get; set; }
         public string WithHoldingTaxCode { get; set; }
+        public decimal OrderTotal { get; set; }
     }
 }
