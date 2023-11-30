@@ -65,7 +65,7 @@ namespace SolaERP.Persistence.Services
         }
 
         public async Task<ApiResponse<int>> AddAsync(string useridentity, string token,
-            SupplierRegisterCommand command, bool isSubmitted = false)
+            SupplierRegisterCommand command, bool isSubmitted = false, bool isRevise = false)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace SolaERP.Persistence.Services
                     ? null
                     : command.CompanyInformation.VendorCode;
 
-                var processSelector = GetProcessSelector(command.CompanyInformation.VendorId, isSubmitted);
+                var processSelector = GetProcessSelector(command.CompanyInformation.VendorId, isRevise);
 
                 SetRevisionNumber(command, processSelector, isSubmitted);
 
@@ -782,9 +782,9 @@ namespace SolaERP.Persistence.Services
         }
 
         public async Task<ApiResponse<int>> SubmitAsync(string userIdentity, string token,
-            SupplierRegisterCommand command)
+            SupplierRegisterCommand command, bool isRevise)
         {
-            var vendorId = (await AddAsync(userIdentity, token, command, true)).Data;
+            var vendorId = (await AddAsync(userIdentity, token, command, true, isRevise)).Data;
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
             var vendor = await _vendorRepository.GetHeader(vendorId);
@@ -1083,9 +1083,15 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Fail(result, 400);
         }
 
-        private static ProcessSelectorDto GetProcessSelector(int? vendorId, bool isSubmitted)
+        private static ProcessSelectorDto GetProcessSelector(int? vendorId, bool isRevise)
         {
             var processSelector = new ProcessSelectorDto();
+
+            if (isRevise)
+            {
+                processSelector.IsRevise = true;
+                return processSelector;
+            }
 
             if (vendorId is null or 0)
             {
@@ -1093,13 +1099,7 @@ namespace SolaERP.Persistence.Services
                 return processSelector;
             }
 
-            if (!isSubmitted)
-            {
-                processSelector.IsUpdate = true;
-                return processSelector;
-            }
-
-            processSelector.IsRevise = true;
+            processSelector.IsUpdate = true;
             return processSelector;
         }
 
@@ -1113,6 +1113,8 @@ namespace SolaERP.Persistence.Services
             }
 
             if (!isSubmitted) return;
+
+            if (!processSelector.IsRevise) return;
 
             var resviseNo = _vendorRepository
                 .GetRevisionNumberByVendorCode(command.CompanyInformation.VendorCode).Result;
