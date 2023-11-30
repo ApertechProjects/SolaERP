@@ -13,7 +13,7 @@
     {
         public int InvoiceRegisterId { get; set; }
         public int Sequence { get; set; }
-        public bool InMaxSequnce { get; set; }
+        public bool InMaxSequence { get; set; }
         public int InvoiceTypeId { get; set; }
     }
 }
