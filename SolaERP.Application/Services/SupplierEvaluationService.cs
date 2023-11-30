@@ -70,8 +70,11 @@ namespace SolaERP.Persistence.Services
             try
             {
                 User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
-                var processSelector = GetProcessSelector(command.CompanyInformation.VendorCode,
-                    command.CompanyInformation.VendorId);
+                command.CompanyInformation.VendorCode = command.CompanyInformation.VendorCode == ""
+                    ? null
+                    : command.CompanyInformation.VendorCode;
+
+                var processSelector = GetProcessSelector(command.CompanyInformation.VendorId, isSubmitted);
 
                 SetRevisionNumber(command, processSelector, isSubmitted);
 
@@ -81,7 +84,6 @@ namespace SolaERP.Persistence.Services
                     vendor.ReviseDate = DateTime.UtcNow.AddHours(4);
                 }
 
-                vendor.VendorCode = vendor.VendorCode == "" ? null : vendor.VendorCode;
                 int vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
 
                 vendor.RegistrationDate = vendor.RegistrationDate.ConvertDateToValidDate();
@@ -782,7 +784,8 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<int>> SubmitAsync(string userIdentity, string token,
             SupplierRegisterCommand command)
         {
-            var vendorId = (await AddAsync(userIdentity, token, command, true)).Data;
+            // var vendorId = (await AddAsync(userIdentity, token, command, true)).Data;
+            var vendorId = 2776;
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
             var vendor = await _vendorRepository.GetHeader(vendorId);
@@ -827,7 +830,7 @@ namespace SolaERP.Persistence.Services
                 }
             }
 
-            Task.Run(() => { Task.WhenAll(emails); });
+            await Task.Run(() => { Task.WhenAll(emails); });
 
             return ApiResponse<int>.Success(vendorId, 200);
         }
@@ -865,13 +868,13 @@ namespace SolaERP.Persistence.Services
                 {
                     var correspondingValue =
                         dueDiligenceValues.FirstOrDefault(v => v.DueDiligenceDesignId == d.DesignId);
-                    List<AttachmentDto> attachments= Enumerable.Empty<AttachmentDto>().ToList();
+                    List<AttachmentDto> attachments = Enumerable.Empty<AttachmentDto>().ToList();
 
                     if (d.HasAttachment > 0)
                     {
                         attachments = _mapper.Map<List<AttachmentDto>>(
                             await _attachmentService.GetAttachmentsAsync(vendorId, SourceType.VEN_DUE,
-                                Modules.EvaluationForm, 
+                                Modules.EvaluationForm,
                                 d.DesignId));
                     }
 
@@ -1081,18 +1084,19 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Fail(result, 400);
         }
 
-        private static ProcessSelectorDto GetProcessSelector(string vendorCode, int? vendorId)
+        private static ProcessSelectorDto GetProcessSelector(int? vendorId, bool isSubmitted)
         {
             var processSelector = new ProcessSelectorDto();
-            if (vendorId > 0)
+
+            if (vendorId is null or 0)
             {
-                processSelector.IsUpdate = true;
+                processSelector.IsCreate = true;
                 return processSelector;
             }
 
-            if (string.IsNullOrEmpty(vendorCode))
+            if (!isSubmitted)
             {
-                processSelector.IsCreate = true;
+                processSelector.IsUpdate = true;
                 return processSelector;
             }
 
