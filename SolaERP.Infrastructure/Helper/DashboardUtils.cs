@@ -12,7 +12,7 @@ public class DevExpressDashboardUtils
     public static DashboardConfigurator CreateDashboardConfigurator(IConfiguration configuration, IFileProvider fileProvider) {
         DashboardConfigurator configurator = new DashboardConfigurator();
         // configurator.SetDashboardStorage(new DashboardFileStorage(fileProvider.GetFileInfo("App_Data/Dashboards").PhysicalPath));
-        configurator.SetDashboardStorage(new DashboardFileStorage("/root"));
+        configurator.SetDashboardStorage(new DashboardFileStorage("/media"));
         configurator.SetDataSourceStorage(CreateDataSourceStorage());
         configurator.SetConnectionStringsProvider(new DashboardConnectionStringsProvider(configuration));
         configurator.ConfigureDataConnection += Configurator_ConfigureDataConnection;
