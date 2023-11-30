@@ -11,4 +11,4 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Development}
     volumes:
-      - /root:/root
+      - /media:/media
