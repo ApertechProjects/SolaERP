@@ -49,14 +49,15 @@ namespace SolaERP.API.Controllers
 
         [HttpPost]
         [RequestSizeLimit(100_000_000)]
-        public async Task<IActionResult> Post(SupplierRegisterCommand command)
+        public async Task<IActionResult> Post([FromBody] SupplierRegisterCommand command,
+            [FromQuery] bool isRevise = false)
         {
             var token = _tokenHandler.GetAccessToken();
-            return CreateActionResult(await _service.AddAsync(User.Identity.Name, token, command));
+            return CreateActionResult(await _service.AddAsync(User.Identity.Name, token, command, isRevise));
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Submit([FromBody]SupplierRegisterCommand command,
+        public async Task<IActionResult> Submit([FromBody] SupplierRegisterCommand command,
             [FromQuery] bool isRevise = false)
         {
             var token = _tokenHandler.GetAccessToken();
