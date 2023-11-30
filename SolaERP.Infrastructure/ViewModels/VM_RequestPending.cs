@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using SolaERP.Application.Entities.General;
 using SolaERP.Application.Enums;
+using SolaERP.Application.Helper;
 using SolaERP.Infrastructure.ViewModels;
 using Language = SolaERP.Application.Enums.Language;
 
@@ -13,8 +14,9 @@ namespace SolaERP.Application.ViewModels
         private readonly IConfiguration _configuration;
         public VM_RequestPending()
         {
+            string appsettingsFileName = AppSettingsHelper.GetAppSettingsFileName();
             IConfigurationBuilder builder = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            .AddJsonFile(appsettingsFileName, optional: true, reloadOnChange: true);
 
             _configuration = builder.Build();
         }
