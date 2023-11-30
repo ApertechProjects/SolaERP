@@ -108,7 +108,7 @@ public class OrderService : IOrderService
         var orderIdList = orderMainDto.OrderDetails.Select(x => x.OrderDetailid).ToList();
         await _orderRepository.DeleteDetailsNotIncludes(orderIdList, mainDto.OrderMainId);
 
-        await _attachmentService.SaveAttachmentAsync( orderMainDto.Attachments,SourceType.ORDER,mainDto.OrderMainId);
+        await _attachmentService.SaveAttachmentAsync(orderMainDto.Attachments, SourceType.ORDER, mainDto.OrderMainId);
 
         if (orderMainDto.OrderDetails.Count > 0)
         {
@@ -118,6 +118,7 @@ public class OrderService : IOrderService
                 if (detail.RequestDetailId <= 0)
                 {
                     detail.RequestDetailId = null;
+                    detail.OriginalQuantity = detail.Quantity;
                 }
             }
 
