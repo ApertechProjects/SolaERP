@@ -11,7 +11,13 @@ using SolaERP.Persistence.Mappers;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
+using DevExpress.AspNetCore;
+using DevExpress.AspNetCore.Reporting;
+using DevExpress.DashboardAspNetCore;
+using DevExpress.DashboardWeb;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.FileProviders;
+using SolaERP.Application.Helper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -133,10 +139,21 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSignalR();
 
+builder.Services.AddDevExpressControls();
+builder.Services.AddControllers();
+
+
+IFileProvider? fileProvider = builder.Environment.ContentRootFileProvider;
+IConfiguration? configuration = builder.Configuration;
+builder.Services.AddScoped<DashboardConfigurator>((IServiceProvider serviceProvider)
+    => DevExpressDashboardUtils.CreateDashboardConfigurator(configuration, fileProvider));
+
+builder.Services.ConfigureReportingServices(configurator => {
+    configurator.DisableCheckForCustomControllers();
+});
+
 var app = builder.Build();
 
-IConfiguration configuration = app.Configuration;
-IWebHostEnvironment _webEnviroment = app.Environment;
 
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
@@ -149,11 +166,13 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 }
 
 app.UseHttpLogging();
+app.UseDevExpressControls();
 app.UseCors();
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseGlobalExceptionHandlerMiddleware(app.Services.GetRequiredService<ILogger<Program>>());
+app.MapDashboardRoute("api/dashboard", "DefaultDashboard");
 app.MapControllers();
 app.Run();
