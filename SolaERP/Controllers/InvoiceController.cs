@@ -109,24 +109,27 @@ namespace SolaERP.API.Controllers
             int userId = Convert.ToInt32(User.Identity.Name);
             return CreateActionResult(await _invoiceService.SaveInvoiceMatchingMain(request, userId));
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> SaveInvoiceMatchingGRNs(InvoiceMatchingGRNs request)
         {
             return CreateActionResult(await _invoiceService.SaveInvoiceMatchingGRNs(request));
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> SaveInvoiceMatchingAdvances(InvoiceMatchingAdvance request)
         {
             return CreateActionResult(await _invoiceService.SaveInvoiceMatchingAdvances(request));
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> SaveInvoiceMatchingDetails(InvoiceMatchingDetail request)
         {
             return CreateActionResult(await _invoiceService.SaveInvoiceMatchingDetails(request));
         }
-        
+
+        [HttpGet("{orderMainId}")]
+        public async Task<IActionResult> InvoiceRegisterList(int orderMainId)
+            => CreateActionResult(await _invoiceService.InvoiceRegisterList(orderMainId));
     }
 }

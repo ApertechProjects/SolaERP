@@ -220,7 +220,7 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.RepresentedCompanies, opt => opt.Ignore())
                 .ForMember(dest => dest.RepresentedProducts, opt => opt.Ignore())
                 .ReverseMap();
-            
+
             CreateMap<CompanyInfo, CompanyInfoViewDto>()
                 .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.VendorName))
                 .ForMember(dest => dest.TaxOffice, opt => opt.MapFrom(src => src.TaxOffice))
@@ -242,7 +242,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<VendorBankDetailDto, VendorBankDetail>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ReverseMap();
-            
+
             CreateMap<VendorBankDetailViewDto, VendorBankDetail>().ReverseMap();
 
             //CreateMap<PrequalificationDto, Prequalification>()
@@ -274,7 +274,7 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.PaymentTerms, opt => opt.MapFrom(src => src.PaymentTerms))
                 .ForMember(dest => dest.AgreeWithDefaultDays, opt => opt.MapFrom(src => src.AgreeWithDefaultDays))
                 .ReverseMap();
-            
+
             CreateMap<CompanyInfoViewDto, Vendor>()
                 .ForMember(dest => dest.Buid, opt => opt.Ignore())
                 .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.CompanyName))
@@ -630,6 +630,8 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<VendorApproved, VendorApprovedDto>().ReverseMap();
             CreateMap<AdvanceInvoice, AdvanceInvoiceDto>().ReverseMap();
+
+            CreateMap<InvoiceRegisterByOrderMainId, InvoiceRegisterByOrderMainIdDto>().ReverseMap();
         }
     }
 }

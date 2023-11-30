@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Invoice;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Helper;
 using SolaERP.Application.Models;
@@ -521,6 +522,24 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@InvoiceRegisterId", invoiceRegisterId);
             command.Parameters.AddWithValue(command, "@UserId", userId);
             return await command.ExecuteNonQueryAsync() > 0;
+        }
+
+        public async Task<List<InvoiceRegisterByOrderMainId>> InvoiceRegisterList(int orderMainId)
+        {
+            List<InvoiceRegisterByOrderMainId> orders = new List<InvoiceRegisterByOrderMainId>();
+            await using var command = _unitOfWork.CreateCommand() as SqlCommand;
+
+            command.CommandText = @"EXEC SP_InvoiceRegisterListByOrder
+               @OrderMainId";
+
+            command.Parameters.AddWithValue(command, "@OrderMainId", orderMainId);
+
+            await using var reader = await command.ExecuteReaderAsync();
+            while (reader.Read())
+            {
+                orders.Add(reader.GetByEntityStructure<InvoiceRegisterByOrderMainId>());
+            }
+            return orders;
         }
     }
 }
