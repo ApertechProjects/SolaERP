@@ -784,8 +784,7 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<int>> SubmitAsync(string userIdentity, string token,
             SupplierRegisterCommand command)
         {
-            // var vendorId = (await AddAsync(userIdentity, token, command, true)).Data;
-            var vendorId = 2776;
+            var vendorId = (await AddAsync(userIdentity, token, command, true)).Data;
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
             var vendor = await _vendorRepository.GetHeader(vendorId);
