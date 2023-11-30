@@ -23,9 +23,11 @@ namespace SolaERP.Application.Contracts.Services
             List<int> categoryIds, string acceptlang, int? vendorId = null);
 
         Task<ApiResponse<int>> AddAsync(string userIdentity, string Token, SupplierRegisterCommand command,
-            bool isSubmitted = false);
+            bool isSubmitted = false, bool isRevise = false);
 
-        Task<ApiResponse<int>> SubmitAsync(string userIdentity, string Token, SupplierRegisterCommand command);
+        Task<ApiResponse<int>> SubmitAsync(string userIdentity, string Token, SupplierRegisterCommand command,
+            bool isRevise);
+
         Task<ApiResponse<bool>> UpdateVendor(string name, string taxId);
     }
 }
