@@ -9,6 +9,8 @@ COPY ./SolaERP/SolaERP.API.csproj ./SolaERP/SolaERP.API.csproj
 
 RUN dotnet nuget add source https://nuget.devexpress.com/YLH6eLIt6CT8AyD5UaNdNGbJh2a8LtONU5ONrbH9EVH4ktgQdb/api/v3/index.json
 
+RUN dotnet nuget locals all --clear
+
 RUN dotnet restore "./SolaERP/SolaERP.API.csproj"
 
 COPY . ./
