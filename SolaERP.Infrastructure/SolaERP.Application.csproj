@@ -27,8 +27,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.48.1" />
-    <PackageReference Include="DevExpress.AspNetCore.Dashboard" Version="23.1.6" />
-    <PackageReference Include="DevExpress.AspNetCore.Reporting" Version="23.1.6" />
+<!--    <PackageReference Include="DevExpress.AspNetCore.Dashboard" Version="23.1.6" />-->
+<!--    <PackageReference Include="DevExpress.AspNetCore.Reporting" Version="23.1.6" />-->
   </ItemGroup>
 
 </Project>
