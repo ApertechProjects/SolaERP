@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Models;
 using SolaERP.Controllers;
 
 namespace SolaERP.API.Controllers
@@ -16,17 +17,16 @@ namespace SolaERP.API.Controllers
             _mailService = mailService;
         }
         [HttpGet]
-        public async Task<string> SendMail(string to)
+        public async Task<string> SendMail([FromQuery] MailProperty mailProperty)
         {
             try
             {
-                await _mailService.SendSafeMailsAsync(new string[] { to }, "Test", "Test");
+                await _mailService.SendManualMailsAsync(mailProperty.Email, mailProperty.Password, mailProperty.Host, mailProperty.Port, mailProperty.To);
                 return "Operation Successful";
             }
             catch (Exception ex)
             {
                 return ex.Message;
-
             }
         }
     }

@@ -9,6 +9,7 @@ namespace SolaERP.Application.Contracts.Services
     public interface IMailService
     {
         Task SendSafeMailsAsync(string[] tos, string subject, string body, bool isBodyHtml = true);
+        Task SendManualMailsAsync(string email, string password, string host, int port, string to);
         Task SendMailAsync(string[] tos, string subject, string body, bool isBodyHtml = true);
         Task SendPasswordResetMailAsync(string to, string code);
         Task<bool> SendEmailMessage<T>(string template, T viewModel, string to, string subject);

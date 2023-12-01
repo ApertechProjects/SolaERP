@@ -213,6 +213,43 @@ namespace SolaERP.Infrastructure.Services
             }
         }
 
+        public async Task SendManualMailsAsync(string email, string password, string host, int port, string to)
+        {
+            if (!string.IsNullOrEmpty(to))
+            {
+                using (SmtpClient smtpClient = new SmtpClient())
+                {
+                    var basicCredential = new NetworkCredential(email, password);
+
+                    smtpClient.Host = host;
+                    smtpClient.Port = port;
+                    smtpClient.EnableSsl = Convert.ToBoolean(_configuration["Mail:EnableSSL"]);
+                    smtpClient.UseDefaultCredentials = false;
+                    smtpClient.Credentials = basicCredential;
+
+                    using (MailMessage message = new MailMessage())
+                    {
+
+                        message.From = new MailAddress(email, "");
+                        message.Subject = "Subject";
+                        message.IsBodyHtml = true;
+                        message.Body = "Test Mail";
+
+                        message.To.Add(to);
+
+                        try
+                        {
+                            await smtpClient.SendMailAsync(message);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw;
+                        }
+                    }
+                }
+            }
+        }
+
 
         public async Task<bool> SendUsingTemplate<T>(string subject, T viewModel, string templateName, string imageName, List<string> tos)
         {
