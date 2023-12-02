@@ -8,4 +8,5 @@ public class InvoiceMathcingMain : BaseEntity
     public int InvoiceRegisterId { get; set; }
     public decimal WHT { get; set; }
     public string Comment { get; set; }
+    public DateTime TransactionDate { get; set; }
 }
