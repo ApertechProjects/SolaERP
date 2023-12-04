@@ -23,6 +23,6 @@ namespace SolaERP.Application.Dtos.RFQ
         public int BusinessCategoryid { get; set; }
         public bool HasAttachments { get; set; }
         public string EnteredBy { get; set; }
-        public DateTime EnteredDate { get; set; }
+        public DateTime EntryDate { get; set; }
     }
 }

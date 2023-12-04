@@ -72,7 +72,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             rfqBase.SingleUnitPrice = reader.Get<bool>("SingleUnitPrice");
             rfqBase.PlaceOfDelivery = reader.Get<string>("PlaceOfDelivery");
             rfqBase.BusinessCategoryId = reader.Get<int>("BusinessCategoryId");
-            rfqBase.EnteredDate = reader.Get<DateTime>("EnteredDate");
+            rfqBase.EntryDate = reader.Get<DateTime>("EnteredDate");
             try
             {
                 rfqBase.EnteredBy = reader.Get<string>("EnteredBy");
