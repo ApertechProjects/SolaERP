@@ -9,4 +9,5 @@ public class InvoiceMatchingGRNs : BaseEntity
 public class RNEInvoicesMatchingType
 {
     public string RCVN_TXN_REF { get; set; }
+    public DateTime ReceiptDate { get; set; }
 }
