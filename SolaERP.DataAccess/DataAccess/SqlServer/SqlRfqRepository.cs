@@ -427,7 +427,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 OtherReasons = reader.Get<string>("OtherReasons"),
                 EnteredBy = reader.Get<string>("EnteredBy"),
                 BusinessCategoryId = reader.Get<int>("BusinessCategoryId"),
-                BiddingType = (BiddingType)reader.Get<int>("BiddingType")
+                BiddingType = (BiddingType)reader.Get<int>("BiddingType"),
+                EntryDate = reader.Get<DateTime>("EnteredDate")
             };
         }
 
