@@ -25,5 +25,6 @@ namespace SolaERP.Application.Entities.RFQ
         public int BiddingType { get; set; }
         public bool HasAttachments { get; set; }
         public string EnteredBy { get; set; }
+        public DateTime EnteredDate { get; set; }
     }
 }
