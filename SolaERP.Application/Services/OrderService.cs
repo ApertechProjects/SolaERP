@@ -115,11 +115,13 @@ public class OrderService : IOrderService
             foreach (var detail in orderMainDto.OrderDetails)
             {
                 detail.OrderMainId = mainDto.OrderMainId;
-                if (detail.OrderDetailid <= 0)
+                if (detail.RequestDetailId <= 0)
                 {
                     detail.RequestDetailId = null;
-                    detail.OriginalQuantity = detail.Quantity;
+
                 }
+                if (detail.OrderDetailid <= 0)
+                    detail.OriginalQuantity = detail.Quantity;
             }
 
             var result = await _orderRepository.SaveOrderDetailsAsync(orderMainDto.OrderDetails);
