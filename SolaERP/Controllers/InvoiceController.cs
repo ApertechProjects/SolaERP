@@ -133,7 +133,7 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _invoiceService.InvoiceRegisterList(orderMainId));
 
         [HttpPost]
-        public async Task<IActionResult> InvoiceRegisterDetailsLoad([FromBody] InvoiceRegisterLoadModel model)
+        public async Task<IActionResult> InvoiceRegisterDetailsLoad(InvoiceRegisterLoadModel model)
             => CreateActionResult(await _invoiceService.InvoiceRegisterDetailsLoad(model));
     }
 }
