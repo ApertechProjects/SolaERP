@@ -229,7 +229,7 @@ namespace SolaERP.Persistence.Services
             var data = await _invoiceRepository.SaveInvoiceMatchingMain(model.Main, userId);
             if (data > 0)
             {
-                var dataTable = model.Details.ConvertListToDataTable();
+                var dataTable = model.Details.ConvertListOfCLassToDataTable();
                 var result = await _invoiceRepository.SaveInvoiceMatchingDetails(data, dataTable);
                 if (result)
                 {
