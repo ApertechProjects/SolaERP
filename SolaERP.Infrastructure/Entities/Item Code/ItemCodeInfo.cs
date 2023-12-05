@@ -8,5 +8,7 @@ namespace SolaERP.Application.Dtos.Item_Code
         public string ItemName2 { get; set; }
         public string UnitOfPurch { get; set; }
         public decimal AvailableInMainStock { get; set; }
+        public string AccountCode { get; set; }
+        public string AccountName { get; set; }
     }
 }
