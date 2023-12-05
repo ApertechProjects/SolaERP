@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Invoice;
 using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Helper;
 using SolaERP.Application.Models;
@@ -541,6 +542,25 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 orders = reader.GetByEntityStructure<InvoiceRegisterByOrderMainId>();
 
             return orders;
+        }
+
+        public async Task<List<InvoiceRegisterServiceDetailsLoad>> InvoiceRegisterDetailsLoad(InvoiceRegisterLoadModel model)
+        {
+            List<InvoiceRegisterServiceDetailsLoad> invoices = new List<InvoiceRegisterServiceDetailsLoad>();
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_InvoiceRegisterServiceDetailsLoad @businessUnitId,@orderMainId,@date,@totalAmount";
+            command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
+            command.Parameters.AddWithValue(command, "@orderMainId", model.OrderMainId);
+            command.Parameters.AddWithValue(command, "@date", model.Date);
+            command.Parameters.AddWithValue(command, "@totalAmount", model.TotalAmount);
+
+            await using var reader = await command.ExecuteReaderAsync();
+
+            var list = new List<InvoiceRegisterServiceDetailsLoad>();
+            while (await reader.ReadAsync())
+                list.Add(reader.GetByEntityStructure<InvoiceRegisterServiceDetailsLoad>());
+
+            return list;
         }
     }
 }
