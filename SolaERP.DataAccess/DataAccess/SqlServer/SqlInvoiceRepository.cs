@@ -248,19 +248,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<bool> Delete(int item, int userId)
         {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText =
-                    "EXEC SP_InvoiceRegister_IUD @InvoiceRegisterId,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,@UserId,NULL";
+                    "EXEC SP_InvoiceRegister_IUD @InvoiceRegisterId,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,@UserId,@NewInvoiceRegisterId = @NewInvoiceRegisterId OUTPUT select @NewInvoiceRegisterId as NewInvoiceRegisterId";
 
 
                 command.Parameters.AddWithValue(command, "@InvoiceRegisterId", item);
 
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
-                await _unitOfWork.SaveChangesAsync();
+                command.Parameters.Add("@NewInvoiceRegisterId", SqlDbType.Int);
+                command.Parameters["@NewInvoiceRegisterId"].Direction = ParameterDirection.Output;
 
-                return await command.ExecuteNonQueryAsync() > 0;
+                await command.ExecuteNonQueryAsync();
+
+                var returnValue = command.Parameters["@NewInvoiceRegisterId"].Value;
+                return returnValue != DBNull.Value && returnValue != null ? true : false;
             }
         }
 
@@ -553,7 +557,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@orderMainId", model.OrderMainId);
             command.Parameters.AddWithValue(command, "@date", model.Date);
-            command.Parameters.AddWithValue(command, "@totalAmount", model.TotalAmount); 
+            command.Parameters.AddWithValue(command, "@totalAmount", model.TotalAmount);
 
             await using var reader = await command.ExecuteReaderAsync();
 
