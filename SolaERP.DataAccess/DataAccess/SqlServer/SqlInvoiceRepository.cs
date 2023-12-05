@@ -553,7 +553,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@orderMainId", model.OrderMainId);
             command.Parameters.AddWithValue(command, "@date", model.Date);
-            command.Parameters.AddWithValue(command, "@totalAmount", model.TotalAmount);
+            command.Parameters.AddWithValue(command, "@totalAmount", model.TotalAmount); 
 
             await using var reader = await command.ExecuteReaderAsync();
 
