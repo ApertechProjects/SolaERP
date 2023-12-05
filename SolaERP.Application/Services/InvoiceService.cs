@@ -222,8 +222,9 @@ namespace SolaERP.Persistence.Services
         }
 
 
-        public async Task<ApiResponse<bool>> SaveInvoiceMatching(SaveInvoiceMatchingModel model, string userName)
+        public async Task<ApiResponse<SaveResultModel>> SaveInvoiceMatching(SaveInvoiceMatchingModel model, string userName)
         {
+            SaveResultModel resultModel = new SaveResultModel();
             int userId = await _userRepository.ConvertIdentity(userName);
             var data = await _invoiceRepository.SaveInvoiceMatchingMain(model.Main, userId);
             if (data > 0)
@@ -233,16 +234,18 @@ namespace SolaERP.Persistence.Services
                 if (result)
                 {
                     await _unitOfWork.SaveChangesAsync();
-                    return ApiResponse<bool>.Success(true, 200);
+                    resultModel.MainId = data;
+                    resultModel.DetailIds = await _invoiceRepository.GetDetailIds(data);
+                    return ApiResponse<SaveResultModel>.Success(resultModel, 200);
                 }
                 else
                 {
-                    return ApiResponse<bool>.Fail("Data can not be saved for details", 400);
+                    return ApiResponse<SaveResultModel>.Fail("Data can not be saved for details", 400);
                 }
             }
             else
             {
-                return ApiResponse<bool>.Fail("Data can not be saved for main", 400);
+                return ApiResponse<SaveResultModel>.Fail("Data can not be saved for main", 400);
             }
         }
 

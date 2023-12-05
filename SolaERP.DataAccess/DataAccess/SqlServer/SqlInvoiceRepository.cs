@@ -12,6 +12,7 @@ using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -561,6 +562,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 list.Add(reader.GetByEntityStructure<InvoiceRegisterServiceDetailsLoad>());
 
             return list;
+        }
+
+        public async Task<List<int>> GetDetailIds(int invoiceMatchingMainId)
+        {
+            List<int> invoices = new List<int>();
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"select InvoiceMatchingDetailId from Finance.InvoiceMatchingDetails where InvoiceMatchingMainid = @id";
+            command.Parameters.AddWithValue(command, "@id", invoiceMatchingMainId);
+
+            await using var reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+                invoices.Add(reader.Get<int>("InvoiceMatchingDetailId"));
+
+            return invoices;
         }
     }
 }
