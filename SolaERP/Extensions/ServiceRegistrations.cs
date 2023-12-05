@@ -23,6 +23,7 @@ using SolaERP.Persistence.Validations.AnalysisCodeValidation;
 using SolaERP.Persistence.Validations.AnalysisDimensionValidation;
 using SolaERP.Persistence.Validations.AnalysisStructure;
 using SolaERP.Persistence.Validations.ApproveRoleValidation;
+using SolaERP.Persistence.Validations.Invoice;
 using SolaERP.Persistence.Validations.Order;
 using SolaERP.Persistence.Validations.Supplier;
 using SolaERP.Persistence.Validations.UserValidation;
@@ -154,6 +155,7 @@ namespace SolaERP.Extensions
             builder.Services.AddValidatorsFromAssemblyContaining<SupplierRegisterValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<VendorCardValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<OrderDetailDtoValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<InvoiceRegisterDetailsLoadValidation>();
             builder.Services.AddScoped<ValidationFilter>();
         }
 

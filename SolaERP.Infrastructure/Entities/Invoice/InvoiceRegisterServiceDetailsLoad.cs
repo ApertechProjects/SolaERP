@@ -17,7 +17,7 @@ namespace SolaERP.Application.Entities.Invoice
         public string ItemName { get; set; }
         public string AccountCode { get; set; }
         public string LineDescription { get; set; }
-        public int MWP { get; set; }
+        public string MWP { get; set; }
         public decimal Quantity { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal ServiceAmount { get; set; }
