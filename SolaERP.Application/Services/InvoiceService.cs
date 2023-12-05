@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using MediatR;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos;
 using SolaERP.Application.Dtos.Invoice;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
@@ -211,6 +213,39 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<int>.Success(data, 200);
         }
 
+        public async Task<ApiResponse<bool>> SaveInvoiceMatchingDetails(InvoiceMatchingDetail request)
+        {
+            var dataTable = request.InvoicesMatchingDetailsTypeList.ConvertListToDataTable();
+            await _invoiceRepository.SaveInvoiceMatchingDetails(request.InvoiceMatchingMainid, dataTable);
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(true);
+        }
+
+
+        public async Task<ApiResponse<bool>> SaveInvoiceMatching(SaveInvoiceMatchingModel model, string userName)
+        {
+            int userId = await _userRepository.ConvertIdentity(userName);
+            var data = await _invoiceRepository.SaveInvoiceMatchingMain(model.Main, userId);
+            if (data > 0)
+            {
+                var dataTable = model.Details.ConvertListToDataTable();
+                var result = await _invoiceRepository.SaveInvoiceMatchingDetails(data, dataTable);
+                if (result)
+                {
+                    await _unitOfWork.SaveChangesAsync();
+                    return ApiResponse<bool>.Success(true, 200);
+                }
+                else
+                {
+                    return ApiResponse<bool>.Fail("Data can not be saved for details", 400);
+                }
+            }
+            else
+            {
+                return ApiResponse<bool>.Fail("Data can not be saved for main", 400);
+            }
+        }
+
         public async Task<ApiResponse<bool>> SaveInvoiceMatchingGRNs(InvoiceMatchingGRNs request)
         {
             var dataTable = request.RNEInvoicesMatchingTypeList.ConvertListToDataTable();
@@ -228,13 +263,6 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(true);
         }
 
-        public async Task<ApiResponse<bool>> SaveInvoiceMatchingDetails(InvoiceMatchingDetail request)
-        {
-            var dataTable = request.InvoicesMatchingDetailsTypeList.ConvertListToDataTable();
-            await _invoiceRepository.SaveInvoiceMatchingDetails(request.InvoiceMatchingMainid, dataTable);
-            await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<bool>.Success(true);
-        }
 
         public async Task<ApiResponse<InvoiceRegisterByOrderMainIdDto>> InvoiceRegisterList(int orderMainId)
         {
@@ -253,5 +281,6 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<List<InvoiceRegisterServiceDetailsLoadDto>>.Fail("Please, enter valid parameters", 400);
         }
+
     }
 }
