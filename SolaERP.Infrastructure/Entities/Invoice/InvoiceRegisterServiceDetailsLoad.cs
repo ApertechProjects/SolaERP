@@ -27,15 +27,15 @@ namespace SolaERP.Application.Entities.Invoice
         public decimal BaseTotal { get; set; }
         public decimal ReportingTotal { get; set; }
         public string Description { get; set; }
-        public string AnalysisCode1Id { get; set; }
-        public string AnalysisCode2Id { get; set; }
-        public string AnalysisCode3Id { get; set; }
-        public string AnalysisCode4Id { get; set; }
-        public string AnalysisCode5Id { get; set; }
-        public string AnalysisCode6Id { get; set; }
-        public string AnalysisCode7Id { get; set; }
-        public string AnalysisCode8Id { get; set; }
-        public string AnalysisCode9Id { get; set; }
-        public string AnalysisCode10Id { get; set; }
+        public int AnalysisCode1Id { get; set; }
+        public int AnalysisCode2Id { get; set; }
+        public int AnalysisCode3Id { get; set; }
+        public int AnalysisCode4Id { get; set; }
+        public int AnalysisCode5Id { get; set; }
+        public int AnalysisCode6Id { get; set; }
+        public int AnalysisCode7Id { get; set; }
+        public int AnalysisCode8Id { get; set; }
+        public int AnalysisCode9Id { get; set; }
+        public int AnalysisCode10Id { get; set; }
     }
 }
