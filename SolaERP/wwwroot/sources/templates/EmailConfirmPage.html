@@ -35,10 +35,10 @@
 
         function sendRequest() {
             var currentUrl = window.location.href;
-            var apiIndex = currentUrl.indexOf(":3030/");
-            var result = "http://youtube.com";
+            var apiIndex = currentUrl.indexOf(":3030/sources");
+            var result = currentUrl.substring(0, apiIndex);
 
-            fetch(`${result}/api/Account/ConfirmEmail?verifyToken=${token}`, {
+            fetch(`${result}:3030/api/Account/ConfirmEmail?verifyToken=${token}`, {
                 method: "GET",
                 headers: { "Content-type": "application/json; charset=UTF-8" }
             })
@@ -51,7 +51,7 @@
                     document.getElementById('verified-text').innerText = res.statusCode === 200 ? "Return To Login Page" : "";
                 })
                 .catch(err => console.log(err));
-            document.getElementById('verified-text').href = `${result}/login`
+            document.getElementById('verified-text').href = `${result}:8111/login`
 
         }
 
