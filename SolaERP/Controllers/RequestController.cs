@@ -101,7 +101,7 @@ namespace SolaERP.Controllers
             {
                 var res = await _requestService.ChangeMainStatusAsync(User.Identity.Name, data.RequestDatas[i].RequestMainId, data.ApproveStatus, data.Comment, data.RejectReasonId);
 
-                if (res)
+                if (res && data.RequestDatas[i].Sequence != null)
                 {
                     var users = await _userService.UsersForRequestMain(data.RequestDatas[i].RequestMainId, data.RequestDatas[i].Sequence, (ApproveStatus)data.ApproveStatus);
                     await _mailService.SendRequestMailsForChangeStatus(Response, users, data.RequestDatas[i].Sequence, data.BusinessUnitName, data.RejectReason);
@@ -117,7 +117,7 @@ namespace SolaERP.Controllers
             for (int i = 0; i < model.RequestDetails.Count; i++)
             {
                 var res = await _requestService.ChangeDetailStatusAsync(User.Identity.Name, model.RequestDetails[i].RequestDetailId, model.ApproveStatus, model.Comment, model.RequestDetails[i].Sequence, model.RejectReasonId);
-                if (res)
+                if (res && model.RequestDetails[i].Sequence != null)
                 {
                     var users = await _userService.UsersRequestDetails(model.RequestDetails[i].RequestDetailId, model.RequestDetails[i].Sequence, (ApproveStatus)model.ApproveStatus);
                     await _mailService.SendRequestMailsForChangeStatus(Response, users, model.RequestDetails[i].Sequence, model.BusinessUnitName, model.RejectReason);

@@ -49,7 +49,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<string> CheckUserType(string verifyToken);
         Task<UserImage> UserImageData(int userId);
         Task<List<UserList>> UsersRequestDetails(int requestDetailId, int? sequence, ApproveStatus status);
-        Task<List<UserList>> UsersRequestMain(int requestMainId, int sequence, ApproveStatus status);
+        Task<List<UserList>> UsersRequestMain(int requestMainId, int? sequence, ApproveStatus status);
         Task UpdateLastActivityAsync(int id);
         Task<bool> AddDefaultVendorAccessToVendorUser(int userId);
     }

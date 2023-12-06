@@ -553,7 +553,7 @@ namespace SolaERP.Persistence.Services
             return dto;
         }
 
-        public async Task<List<Application.Dtos.User.UserList>> UsersForRequestMain(int requestMainId, int sequence,
+        public async Task<List<Application.Dtos.User.UserList>> UsersForRequestMain(int requestMainId, int? sequence,
             ApproveStatus status)
         {
             var users = await _userRepository.UsersRequestMain(requestMainId, sequence, status);

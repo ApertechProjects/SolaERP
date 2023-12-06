@@ -706,7 +706,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             return users;
         }
 
-        public async Task<List<UserList>> UsersRequestMain(int requestMainId, int sequence, ApproveStatus status)
+        public async Task<List<UserList>> UsersRequestMain(int requestMainId, int? sequence, ApproveStatus status)
         {
             List<UserList> users = new List<UserList>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)

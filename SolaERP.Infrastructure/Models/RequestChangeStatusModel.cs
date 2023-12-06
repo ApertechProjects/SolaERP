@@ -14,7 +14,7 @@
     {
         public int RequestMainId { get; set; }
         public string RequestNo { get; set; }
-        public int Sequence { get; set; }
+        public int? Sequence { get; set; }
     }
 
 }
