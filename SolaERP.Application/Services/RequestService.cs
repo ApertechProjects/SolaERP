@@ -226,7 +226,7 @@ namespace SolaERP.Persistence.Services
         }
 
         public async Task<bool> ChangeDetailStatusAsync(string name, int requestDetailId, int approveStatusId,
-            string comment, int sequence, int rejectReasonId)
+            string comment, int? sequence, int rejectReasonId)
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var res = await _requestDetailRepository.RequestDetailChangeStatusAsync(requestDetailId, userId,

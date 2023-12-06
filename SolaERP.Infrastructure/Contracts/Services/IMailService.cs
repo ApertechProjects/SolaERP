@@ -16,8 +16,8 @@ namespace SolaERP.Application.Contracts.Services
         Task<bool> SendUsingTemplate<T>(string subject, T viewModel, string templateName, string imageName, List<string> tos);
         Task SendRequestToMailService(MailModel mailModel);
 
-        Task SendMailForRequest(HttpResponse response, List<EmailTemplateData> templates, List<UserList> users, EmailTemplateKey key, int sequence, string businessUnitName, string rejectReason = "");
-        Task SendRequestMailsForChangeStatus(HttpResponse response, List<UserList> users, int sequence, string businessUnitName, string rejectReason);
+        Task SendMailForRequest(HttpResponse response, List<EmailTemplateData> templates, List<UserList> users, EmailTemplateKey key, int? sequence, string businessUnitName, string rejectReason = "");
+        Task SendRequestMailsForChangeStatus(HttpResponse response, List<UserList> users, int? sequence, string businessUnitName, string rejectReason);
     }
 
 }

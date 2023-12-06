@@ -21,7 +21,7 @@ namespace SolaERP.Application.ViewModels
             _configuration = builder.Build();
         }
         public string RequestNo { get; set; }
-        public int Sequence { get; set; }
+        public int? Sequence { get; set; }
         public string FullName { get; set; }
         public string Subject { get; set; }
         public string ReasonDescription { get; set; }

@@ -361,7 +361,7 @@ namespace SolaERP.Infrastructure.Services
             }
         }
 
-        public async Task SendMailForRequest(HttpResponse response, List<EmailTemplateData> templates, List<UserList> users, EmailTemplateKey key, int sequence, string businessUnitName, string rejectReason = "")
+        public async Task SendMailForRequest(HttpResponse response, List<EmailTemplateData> templates, List<UserList> users, EmailTemplateKey key, int? sequence, string businessUnitName, string rejectReason = "")
         {
             for (int i = 0; i < users.Count; i++)
             {
@@ -389,7 +389,7 @@ namespace SolaERP.Infrastructure.Services
 
         }
 
-        public async Task SendRequestMailsForChangeStatus(HttpResponse response, List<UserList> users, int sequence, string businessUnitName, string rejectReason)
+        public async Task SendRequestMailsForChangeStatus(HttpResponse response, List<UserList> users, int? sequence, string businessUnitName, string rejectReason)
         {
             var userREQP = users.Where(x => x.TemplateKey == EmailTemplateKey.REQP.ToString()).ToList();
             if (userREQP.Count > 0)
