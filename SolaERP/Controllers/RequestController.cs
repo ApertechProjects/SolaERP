@@ -114,13 +114,13 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeDetailStatus(RequestDetailApproveModel model)
         {
-            for (int i = 0; i < model.RequestDetailIds.Count; i++)
+            for (int i = 0; i < model.RequestDetails.Count; i++)
             {
-                var res = await _requestService.ChangeDetailStatusAsync(User.Identity.Name, model.RequestDetailIds[i], model.ApproveStatus, model.Comment, model.Sequence, model.RejectReasonId);
+                var res = await _requestService.ChangeDetailStatusAsync(User.Identity.Name, model.RequestDetails[i].RequestDetailId, model.ApproveStatus, model.Comment, model.RequestDetails[i].Sequence, model.RejectReasonId);
                 if (res)
                 {
-                    var users = await _userService.UsersRequestDetails(model.RequestDetailIds[0], model.Sequence, (ApproveStatus)model.ApproveStatus);
-                    await _mailService.SendRequestMailsForChangeStatus(Response, users, model.Sequence, model.BusinessUnitName, model.RejectReason);
+                    var users = await _userService.UsersRequestDetails(model.RequestDetails[i].RequestDetailId, model.RequestDetails[i].Sequence, (ApproveStatus)model.ApproveStatus);
+                    await _mailService.SendRequestMailsForChangeStatus(Response, users, model.RequestDetails[i].Sequence, model.BusinessUnitName, model.RejectReason);
                 }
             }
 
