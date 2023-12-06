@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using MediatR;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos;
 using SolaERP.Application.Dtos.Invoice;
 using SolaERP.Application.Dtos.Shared;
-using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
@@ -227,6 +225,8 @@ namespace SolaERP.Persistence.Services
             SaveResultModel resultModel = new SaveResultModel();
             int userId = await _userRepository.ConvertIdentity(userName);
             var data = await _invoiceRepository.SaveInvoiceMatchingMain(model.Main, userId);
+            if (data == 0)
+                data = model.Main.InvoiceMatchingMainId;
             if (data > 0)
             {
                 var dataTable = model.Details.ConvertListOfCLassToDataTable();
