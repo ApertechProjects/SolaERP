@@ -49,6 +49,9 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<BaseAndReportCurrencyRate>> GetBaseAndReportCurrencyRateAsync(DateTime date,
             string currency, int businessUnitId)
         {
+            //{06.12.2023 15:25:38}
+            //{06.12.2023 0:00:00}
+            date = date.Date;
             var convDtoList = await _generalRepository.GetConvRateList(businessUnitId);
             var businessUnit = (await _businessUnitRepository.GetAllAsync())
                 .SingleOrDefault(x => x.BusinessUnitId == businessUnitId);
