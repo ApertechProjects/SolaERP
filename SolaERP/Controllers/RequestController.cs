@@ -93,13 +93,10 @@ namespace SolaERP.Controllers
 
             return CreateActionResult(ApiResponse<bool>.Success(200));
         }
-        //=> CreateActionResult(await _requestService.SendToApproveAsync(User.Identity.Name, sendToApprove.RequestMainIds));
 
         [HttpPost]
         public async Task<IActionResult> ChangeMainStatus(RequestChangeStatusModel data)
         {
-            var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQP);
-
             for (int i = 0; i < data.RequestDatas.Count; i++)
             {
                 var res = await _requestService.ChangeMainStatusAsync(User.Identity.Name, data.RequestDatas[i].RequestMainId, data.ApproveStatus, data.Comment, data.RejectReasonId);

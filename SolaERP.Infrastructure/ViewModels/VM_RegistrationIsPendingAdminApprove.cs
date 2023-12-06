@@ -11,7 +11,7 @@ namespace SolaERP.Infrastructure.ViewModels
         {
             string appsettingsFileName = AppSettingsHelper.GetAppSettingsFileName();
             IConfigurationBuilder builder = new ConfigurationBuilder()
-            .AddJsonFile(appsettingsFileName, optional: true, reloadOnChange: true);
+            .AddJsonFile(appsettingsFileName, optional: true, reloadOnChange: false);
 
             _configuration = builder.Build();
         }
