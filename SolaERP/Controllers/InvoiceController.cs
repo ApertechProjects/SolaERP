@@ -49,7 +49,7 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _invoiceService.RegisterChangeStatus(model, User.Identity.Name));
 
         [HttpPost]
-        public async Task<IActionResult> Save(InvoiceRegisterSave model)
+        public async Task<IActionResult> Save(List<InvoiceRegisterSaveModel> model)
             => CreateActionResult(await _invoiceService.Save(model, User.Identity.Name));
 
 

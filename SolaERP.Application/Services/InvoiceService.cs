@@ -100,13 +100,13 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<RegisterWFADto>>.Success(dto);
         }
 
-        public async Task<ApiResponse<bool>> Save(InvoiceRegisterSave model, string name)
+        public async Task<ApiResponse<bool>> Save(List<InvoiceRegisterSaveModel> model, string name)
         {
             int userId = await _userRepository.ConvertIdentity(name);
-            for (int i = 0; i < model.invoiceRegisters.Count; i++)
+            for (int i = 0; i < model.Count; i++)
             {
-                var data = await _invoiceRepository.Save(model.invoiceRegisters[i], userId);
-                await _attachmentService.SaveAttachmentAsync(model.invoiceRegisters[i].Attachments, SourceType.INV, data);
+                var data = await _invoiceRepository.Save(model[i], userId);
+                await _attachmentService.SaveAttachmentAsync(model[i].Attachments, SourceType.INV, data);
             }
 
             await _unitOfWork.SaveChangesAsync();
