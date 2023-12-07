@@ -549,7 +549,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return orders;
         }
 
-        public async Task<List<InvoiceRegisterServiceDetailsLoad>> InvoiceRegisterDetailsLoad(InvoiceRegisterLoadModel model)
+        public async Task<List<InvoiceRegisterServiceDetailsLoad>> InvoiceRegisterDetailsLoad(InvoiceRegisterServiceLoadModel model)
         {
             List<InvoiceRegisterServiceDetailsLoad> invoices = new List<InvoiceRegisterServiceDetailsLoad>();
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
@@ -579,6 +579,25 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             while (await reader.ReadAsync())
                 invoices.Add(reader.Get<int>("InvoiceMatchingDetailId"));
+
+            return invoices;
+        }
+
+        public async Task<List<InvoiceMatchDetailsLoad>> InvoiceRegisterGrnDetailsLoad(InvoiceRegisterGRNLoadModel model)
+        {
+            List<InvoiceMatchDetailsLoad> invoices = new List<InvoiceMatchDetailsLoad>();
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            string grns = string.Join(",", model.Grns);
+            command.CommandText = @"exec SP_InvoiceRegisterDetailsLoad @businessUnitId,@grns,@orderMainId,@date";
+            command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
+            command.Parameters.AddWithValue(command, "@grns", grns);
+            command.Parameters.AddWithValue(command, "@orderMainId", model.OrderMainId);
+            command.Parameters.AddWithValue(command, "@date", model.Date);
+
+            await using var reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+                invoices.Add(reader.GetByEntityStructure<InvoiceMatchDetailsLoad>());
 
             return invoices;
         }

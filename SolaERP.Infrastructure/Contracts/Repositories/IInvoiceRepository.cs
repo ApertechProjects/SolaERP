@@ -38,6 +38,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<int>> GetDetailIds(int invoiceMatchingMainId);
         Task<bool> InvoiceIUD(int businessUnitId, int invoiceRegisterId, int userId);
         Task<InvoiceRegisterByOrderMainId> InvoiceRegisterList(int orderMainId);
-        Task<List<InvoiceRegisterServiceDetailsLoad>> InvoiceRegisterDetailsLoad(InvoiceRegisterLoadModel model);
+        Task<List<InvoiceRegisterServiceDetailsLoad>> InvoiceRegisterDetailsLoad(InvoiceRegisterServiceLoadModel model);
+        Task<List<InvoiceMatchDetailsLoad>> InvoiceRegisterGrnDetailsLoad(InvoiceRegisterGRNLoadModel model);
     }
 }

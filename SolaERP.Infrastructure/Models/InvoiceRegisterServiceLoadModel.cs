@@ -6,11 +6,20 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Models
 {
-    public class InvoiceRegisterLoadModel
+    public class InvoiceRegisterServiceLoadModel
     {
         public int BusinessUnitId { get; set; }
         public int OrderMainId { get; set; }
         public DateTime Date { get; set; }
         public decimal TotalAmount { get; set; }
+    }
+
+
+    public class InvoiceRegisterGRNLoadModel
+    {
+        public int BusinessUnitId { get; set; }
+        public List<string> Grns { get; set; }
+        public int OrderMainId { get; set; }
+        public DateTime Date { get; set; }
     }
 }

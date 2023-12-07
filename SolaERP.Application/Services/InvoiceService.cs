@@ -278,7 +278,7 @@ namespace SolaERP.Persistence.Services
 
         }
 
-        public async Task<ApiResponse<List<InvoiceRegisterServiceDetailsLoadDto>>> InvoiceRegisterDetailsLoad(InvoiceRegisterLoadModel model)
+        public async Task<ApiResponse<List<InvoiceRegisterServiceDetailsLoadDto>>> InvoiceRegisterServiceDetailsLoad(InvoiceRegisterServiceLoadModel model)
         {
             var data = await _invoiceRepository.InvoiceRegisterDetailsLoad(model);
             var dto = _mapper.Map<List<InvoiceRegisterServiceDetailsLoadDto>>(data);
@@ -288,5 +288,11 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<InvoiceRegisterServiceDetailsLoadDto>>.Fail("Please, enter valid parameters", 400);
         }
 
+        public async Task<ApiResponse<List<InvoiceMatchDetailsLoadDto>>> InvoiceRegisterGrnDetailsLoad(InvoiceRegisterGRNLoadModel model)
+        {
+            var data = await _invoiceRepository.InvoiceRegisterGrnDetailsLoad(model);
+            var dto = _mapper.Map<List<InvoiceMatchDetailsLoadDto>>(data);
+            return ApiResponse<List<InvoiceMatchDetailsLoadDto>>.Success(dto);
+        }
     }
 }

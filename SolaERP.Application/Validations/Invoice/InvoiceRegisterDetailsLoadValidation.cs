@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Persistence.Validations.Invoice
 {
-    public class InvoiceRegisterDetailsLoadValidation : AbstractValidator<InvoiceRegisterLoadModel>
+    public class InvoiceRegisterDetailsLoadValidation : AbstractValidator<InvoiceRegisterServiceLoadModel>
     {
         public InvoiceRegisterDetailsLoadValidation()
         {

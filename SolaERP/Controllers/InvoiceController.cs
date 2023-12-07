@@ -103,7 +103,7 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> GetAdvanceInvoicesList(int orderMainId)
             => CreateActionResult(await _invoiceService.GetAdvanceInvoicesList(orderMainId));
 
-      
+
         [HttpPost]
         public async Task<IActionResult> SaveInvoiceMatching(SaveInvoiceMatchingModel model)
         {
@@ -128,7 +128,11 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _invoiceService.InvoiceRegisterList(orderMainId));
 
         [HttpPost]
-        public async Task<IActionResult> InvoiceRegisterDetailsLoad(InvoiceRegisterLoadModel model)
-            => CreateActionResult(await _invoiceService.InvoiceRegisterDetailsLoad(model));
+        public async Task<IActionResult> InvoiceRegisterServiceDetailsLoad(InvoiceRegisterServiceLoadModel model)
+            => CreateActionResult(await _invoiceService.InvoiceRegisterServiceDetailsLoad(model));
+
+        [HttpPost]
+        public async Task<IActionResult> InvoiceRegisterGrnDetailsLoad(InvoiceRegisterGRNLoadModel model)
+          => CreateActionResult(await _invoiceService.InvoiceRegisterGrnDetailsLoad(model));
     }
 }
