@@ -27,6 +27,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<int> GetDefaultApprovalStage(string keyCode, int businessUnitId);
         Task<List<RequestCategory>> CategoryList();
         Task<List<int>> GetDetailIds(int requestMainId);
-
+        Task<List<BuyersAssignment>> GetBuyersAssignment(RequestWFAGetModel model, int userId);
     }
 }

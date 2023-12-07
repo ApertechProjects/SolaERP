@@ -630,5 +630,28 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return datas;
         }
+
+        public async Task<List<BuyersAssignment>> GetBuyersAssignment(RequestWFAGetModel model, int userId)
+        {
+            string itemCode = string.Join(',', model.ItemCode);
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainBuyersAssignment]",
+                    new ReplaceParams { ParamName = "APT", Value = model.BusinessUnitCode });
+
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", model.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@ItemCode", itemCode == "All" ? "%" : itemCode);
+                command.Parameters.AddWithValue(command, "@DateFrom", model.DateFrom);
+                command.Parameters.AddWithValue(command, "@DateTo", model.DateTo);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                List<BuyersAssignment> mainDrafts = new List<BuyersAssignment>();
+                while (reader.Read())
+                    mainDrafts.Add(reader.GetByEntityStructure<BuyersAssignment>());
+                return mainDrafts;
+            }
+        }
     }
 }

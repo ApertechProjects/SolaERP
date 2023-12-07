@@ -71,6 +71,10 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _requestService.GetDraftsAsync(model));
 
         [HttpPost]
+        public async Task<IActionResult> BuyersAssignment(RequestWFAGetModel model)
+            => CreateActionResult(await _requestService.GetBuyersAssignment(model, User.Identity.Name));
+
+        [HttpPost]
         public async Task<IActionResult> Save(RequestSaveModel model)
         => CreateActionResult(await _requestService.AddOrUpdateAsync(User.Identity.Name, model));
 

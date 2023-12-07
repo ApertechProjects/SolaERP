@@ -24,4 +24,9 @@
         public string ReasonAdditionalDescription { get; set; }
         public List<AttachmentSaveModel> Attachments { get; set; }
     }
+
+    public class InvoiceRegisterSave
+    {
+        public List<InvoiceRegisterSaveModel> invoiceRegisters { get; set; }
+    }
 }
