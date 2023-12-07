@@ -207,22 +207,6 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<AdvanceInvoiceDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<int>> SaveInvoiceMatchingMain(InvoiceMathcingMain request, int userId)
-        {
-            var data = await _invoiceRepository.SaveInvoiceMatchingMain(request, userId);
-            await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<int>.Success(data, 200);
-        }
-
-        public async Task<ApiResponse<bool>> SaveInvoiceMatchingDetails(InvoiceMatchingDetail request)
-        {
-            var dataTable = request.InvoicesMatchingDetailsTypeList.ConvertListToDataTable();
-            await _invoiceRepository.SaveInvoiceMatchingDetails(request.InvoiceMatchingMainid, dataTable);
-            await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<bool>.Success(true);
-        }
-
-
         public async Task<ApiResponse<SaveResultModel>> SaveInvoiceMatching(SaveInvoiceMatchingModel model, string userName)
         {
             SaveResultModel resultModel = new SaveResultModel();
@@ -232,9 +216,12 @@ namespace SolaERP.Persistence.Services
                 data = model.Main.InvoiceMatchingMainId;
             if (data > 0)
             {
+                var advanceTable = model.AdvanceInvoicesMatchingTypeList.ConvertListOfCLassToDataTable();
+                var advanceSave = await _invoiceRepository.SaveInvoiceMatchingAdvances(model.Main.InvoiceRegisterId, model.Main.InvoiceMatchingMainId, advanceTable);
+
                 var dataTable = model.Details.ConvertListOfCLassToDataTable();
                 var result = await _invoiceRepository.SaveInvoiceMatchingDetails(data, dataTable);
-                if (result)
+                if (result & advanceSave)
                 {
                     await _unitOfWork.SaveChangesAsync();
                     resultModel.MainId = data;

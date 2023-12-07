@@ -11,5 +11,11 @@ namespace SolaERP.Application.Models
     {
         public InvoiceMathcingMain Main { get; set; }
         public List<InvoicesMatchingDetailsType> Details { get; set; }
+        public List<AdvanceInvoicesMatchingType> AdvanceInvoicesMatchingTypeList { get; set; }
+    }
+
+    public class SaveInvoiceMatchingGRNModel
+    {
+        public InvoiceMathcingMain Main { get; set; }
     }
 }
