@@ -77,8 +77,8 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> GetMatchingMain([FromQuery] int orderMainId)
             => CreateActionResult(await _invoiceService.GetMatchingMain(orderMainId));
 
-        [HttpGet]
-        public async Task<IActionResult> GetDetails([FromQuery] InvoiceGetDetailsModel model)
+        [HttpPost]
+        public async Task<IActionResult> GetDetails(InvoiceGetDetailsModel model)
         {
             string keyCode = await _invoiceService.GetKeyCode(model.OrderMainId);
             if (keyCode == "PO")
@@ -124,11 +124,6 @@ namespace SolaERP.API.Controllers
         [HttpPost]
         public async Task<IActionResult> InvoiceRegisterServiceDetailsLoad(InvoiceRegisterServiceLoadModel model)
             => CreateActionResult(await _invoiceService.InvoiceRegisterServiceDetailsLoad(model));
-
-        [HttpPost]
-        public async Task<IActionResult> InvoiceRegisterGrnDetailsLoad(InvoiceRegisterGRNLoadModel model)
-          => CreateActionResult(await _invoiceService.InvoiceRegisterGrnDetailsLoad(model));
-
 
      
     }

@@ -637,7 +637,6 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<BuyersAssignment, BuyersAssignmentDto>().ReverseMap();
 
-            CreateMap<InvoiceMatchDetailsLoad, InvoiceMatchDetailsLoadDto>().ReverseMap();
         }
     }
 }

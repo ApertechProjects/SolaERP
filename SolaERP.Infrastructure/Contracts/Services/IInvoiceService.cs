@@ -37,6 +37,5 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<InvoiceRegisterByOrderMainIdDto>> InvoiceRegisterList(int orderMainId);
         Task<ApiResponse<List<InvoiceRegisterServiceDetailsLoadDto>>> InvoiceRegisterServiceDetailsLoad(InvoiceRegisterServiceLoadModel model);
         Task<ApiResponse<SaveResultModel>> SaveInvoiceMatching(SaveInvoiceMatchingModel model, string userName);
-        Task<ApiResponse<List<InvoiceMatchDetailsLoadDto>>> InvoiceRegisterGrnDetailsLoad(InvoiceRegisterGRNLoadModel model);
     }
 }
