@@ -106,7 +106,8 @@ namespace SolaERP.Persistence.Services
             for (int i = 0; i < model.Count; i++)
             {
                 var data = await _invoiceRepository.Save(model[i], userId);
-                await _attachmentService.SaveAttachmentAsync(model[i].Attachments, SourceType.INV, data);
+                if (model[i].Attachments != null)
+                    await _attachmentService.SaveAttachmentAsync(model[i].Attachments, SourceType.INV, data);
             }
 
             await _unitOfWork.SaveChangesAsync();

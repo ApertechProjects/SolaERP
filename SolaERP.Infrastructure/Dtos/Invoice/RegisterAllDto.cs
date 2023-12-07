@@ -8,6 +8,7 @@
         public int Status { get; set; }
         public string ApproveStatusName { get; set; }
         public string StatusName { get; set; }
+        public int BusinessUnitId { get; set; }
         public int InvoiceType { get; set; }
         public DateTime InvoiceDate { get; set; }
         public DateTime InvoiceReceivedDate { get; set; }

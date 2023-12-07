@@ -170,7 +170,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@SystemInvoiceNo", model.SystemInvoiceNo);
 
-                command.Parameters.AddWithValue(command, "@OrderType", model.OrderType);
+                command.Parameters.AddWithValue(command, "@OrderType", model.OrderTypeId);
 
                 command.Parameters.AddWithValue(command, "@OrderMainId", model.OrderMainId);
 

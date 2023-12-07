@@ -3,6 +3,7 @@
     public class RegisterWFA : BaseEntity
     {
         public int InvoiceRegisterId { get; set; }
+        public int BusinessUnitId { get; set; }
         public string ApproveStatusName { get; set; }
         public string StatusName { get; set; }
         public int ApproveStatus { get; set; }
