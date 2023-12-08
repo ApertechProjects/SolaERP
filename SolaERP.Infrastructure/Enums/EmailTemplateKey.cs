@@ -8,6 +8,10 @@
         REQP, //Request is pending
         REQA, //Request is approved
         REQR, //Request is rejected
-        REQH //Request is held
+        REQH, //Request is held
+        UP, //User is pending
+        UA, //User Approved
+        UR, //User Reject
+        UH //User Held
     }
 }
