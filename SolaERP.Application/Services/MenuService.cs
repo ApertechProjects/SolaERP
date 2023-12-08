@@ -27,7 +27,8 @@ namespace SolaERP.Persistence.Services
             var menusWithPrivilages = await _menuRepository.GetUserMenuWithPrivilegesAsync(
                 await _userRepository.ConvertIdentity(name));
 
-            var parentMenusWithPrivilages = menusWithPrivilages.Where(m => m.ParentId == 0).ToList();//For getting ParentMenus
+            var parentMenusWithPrivilages =
+                menusWithPrivilages.Where(m => m.ParentId == 0).ToList(); //For getting ParentMenus
 
             List<ParentMenuDto> menus = new List<ParentMenuDto>();
             foreach (var parent in parentMenusWithPrivilages)
@@ -58,24 +59,31 @@ namespace SolaERP.Persistence.Services
                         ReadAccess = child.ReadAccess
                     });
                 }
+
                 menus.Add(parentMenu);
             }
+
             if (menus.Count > 0)
                 return ApiResponse<List<ParentMenuDto>>.Success(menus, 200);
 
             return ApiResponse<List<ParentMenuDto>>.Fail("This user doesn't have any privileges in our system", 400);
         }
+
         public async Task<ApiResponse<List<MenuWithPrivilagesDto>>> GetUserMenusWithPrivilegesAsync(string name)
         {
-            var menus = await _menuRepository.GetUserMenuWithPrivilegesAsync(await _userRepository.ConvertIdentity(name));
+            var menus =
+                await _menuRepository.GetUserMenuWithPrivilegesAsync(await _userRepository.ConvertIdentity(name));
             var menusDto = _mapper.Map<List<MenuWithPrivilagesDto>>(menus);
 
             if (menusDto != null)
                 return ApiResponse<List<MenuWithPrivilagesDto>>.Success(menusDto, 200);
 
-            return ApiResponse<List<MenuWithPrivilagesDto>>.Fail("This user doesn't have any privileges in our system", 400);
+            return ApiResponse<List<MenuWithPrivilagesDto>>.Fail("This user doesn't have any privileges in our system",
+                400);
         }
-        public async Task<ApiResponse<GroupMenuResponseDto>> GetGroupMenuWithPrivilegeListByGroupIdAsync(string name, int groupId)
+
+        public async Task<ApiResponse<GroupMenuResponseDto>> GetGroupMenuWithPrivilegeListByGroupIdAsync(string name,
+            int groupId)
         {
             var userId = await _userRepository.ConvertIdentity(name);
             var menus = await _menuRepository.GetUserMenuWithPrivilegesAsync(userId);
@@ -102,6 +110,7 @@ namespace SolaERP.Persistence.Services
                     }
                 }
             }
+
             response.PrivillageList = groupMenusWithPrivList;
             return ApiResponse<GroupMenuResponseDto>.Success(response, 200);
         }
@@ -116,37 +125,41 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<MenuWithPrivilege>>> GetMenuWithPrivilegeListByGroupIdAsync(int groupId)
         {
-            List<MenuWithPrivilege> menuWithPrivileges = new List<MenuWithPrivilege>();
-            var menus = await _menuRepository.GetMenuWithPrivilegesAsync(groupId);
-            var dto = _mapper.Map<List<MenuWithPrivilagesDto>>(menus);
-            var ttt = dto.GroupBy(x => x.ParentId).ToList();
-
-            for (int i = 1; i < ttt.Count; i++)
+            try
             {
-                IGrouping<int, MenuWithPrivilagesDto> item = ttt[i];
-                bool createAccessValue = true;
-                bool editAccessValue = true;
-                bool deleteAccessValue = true;
-                bool exportAccessValue = true;
-                bool readAccessValue = true;
-                foreach (var data in item)
+                List<MenuWithPrivilege> menuWithPrivileges = new List<MenuWithPrivilege>();
+                var menus = await _menuRepository.GetMenuWithPrivilegesAsync(groupId);
+                var dto = _mapper.Map<List<MenuWithPrivilagesDto>>(menus);
+                var ttt = dto.GroupBy(x => x.ParentId).ToList();
+                ttt = ttt.OrderBy(x => x.Key).ToList();
+
+                for (int i = 1; i < ttt.Count; i++)
                 {
-                    createAccessValue = createAccessValue && data.CreateAccess;
-                    editAccessValue = editAccessValue && data.EditAccess;
-                    deleteAccessValue = deleteAccessValue && data.DeleteAccess;
-                    exportAccessValue = exportAccessValue && data.ExportAccess;
-                    readAccessValue = readAccessValue && data.ReadAccess;
-                }
-                menuWithPrivileges.Add(new MenuWithPrivilege
-                {
-                    MenuId = item.Key,
-                    MenuName = ttt[0].Where(x => x.ParentId == 0).ToList()[i - 1].MenuName,
-                    CreateAccess = createAccessValue,
-                    DeleteAccess = deleteAccessValue,
-                    EditAccess = editAccessValue,
-                    ExportAccess = exportAccessValue,
-                    ReadAccess = readAccessValue,
-                    Details = item.Select(x => new MenuWithPrivilegeDetail
+                    IGrouping<int, MenuWithPrivilagesDto> item = ttt[i];
+                    bool createAccessValue = true;
+                    bool editAccessValue = true;
+                    bool deleteAccessValue = true;
+                    bool exportAccessValue = true;
+                    bool readAccessValue = true;
+                    foreach (var data in item)
+                    {
+                        createAccessValue = createAccessValue && data.CreateAccess;
+                        editAccessValue = editAccessValue && data.EditAccess;
+                        deleteAccessValue = deleteAccessValue && data.DeleteAccess;
+                        exportAccessValue = exportAccessValue && data.ExportAccess;
+                        readAccessValue = readAccessValue && data.ReadAccess;
+                    }
+
+                    var privilege = new MenuWithPrivilege();
+                    privilege.MenuId = item.Key;
+                    var a = ttt[0].Where(x => x.ParentId == 0).ToList();
+                    privilege.MenuName = ttt[0].Where(x => x.ParentId == 0).ToList()[i - 1].MenuName;
+                    privilege.CreateAccess = createAccessValue;
+                    privilege.DeleteAccess = deleteAccessValue;
+                    privilege.EditAccess = editAccessValue;
+                    privilege.ExportAccess = exportAccessValue;
+                    privilege.ReadAccess = readAccessValue;
+                    privilege.Details = item.Select(x => new MenuWithPrivilegeDetail
                     {
                         MenuId = x.MenuId,
                         MenuName = x.MenuName,
@@ -159,12 +172,17 @@ namespace SolaERP.Persistence.Services
                         DeleteAccess = x.DeleteAccess,
                         ExportAccess = x.ExportAccess,
                         ReactIcon = x.ReactIcon,
-                    }).ToList()
-                });
+                    }).ToList();
+                    menuWithPrivileges.Add(privilege);
+                }
+
+                return ApiResponse<List<MenuWithPrivilege>>.Success(menuWithPrivileges, 200);
             }
-
-            return ApiResponse<List<MenuWithPrivilege>>.Success(menuWithPrivileges, 200);
-
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }
