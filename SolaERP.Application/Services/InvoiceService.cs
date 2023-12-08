@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MediatR;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos;
@@ -208,7 +209,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<AdvanceInvoiceDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<SaveResultModel>> SaveInvoiceMatching(SaveInvoiceMatchingModel model, string userName)
+        public async Task<ApiResponse<SaveResultModel>> SaveInvoiceMatchingForService(SaveInvoiceMatchingModel model, string userName)
         {
             SaveResultModel resultModel = new SaveResultModel();
             int userId = await _userRepository.ConvertIdentity(userName);
@@ -276,5 +277,39 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<InvoiceRegisterServiceDetailsLoadDto>>.Fail("Please, enter valid parameters", 400);
         }
 
+        public async Task<ApiResponse<SaveResultModel>> SaveInvoiceMatchingForGRN(SaveInvoiceMatchingGRNModel model, string userName)
+        {
+            SaveResultModel resultModel = new SaveResultModel();
+            int userId = await _userRepository.ConvertIdentity(userName);
+            var data = await _invoiceRepository.SaveInvoiceMatchingMain(model.Main, userId);
+            if (data == 0)
+                data = model.Main.InvoiceMatchingMainId;
+            if (data > 0)
+            {
+                var advanceTable = model.AdvanceInvoicesMatchingTypeList.ConvertListOfCLassToDataTable();
+                var advanceSave = await _invoiceRepository.SaveInvoiceMatchingAdvances(model.Main.InvoiceRegisterId, model.Main.InvoiceMatchingMainId, advanceTable);
+
+                var grnTable = model.RNEInvoicesMatchingTypeList.ConvertListToDataTable();
+                var grnSave = await _invoiceRepository.SaveInvoiceMatchingGRNs(model.Main.InvoiceMatchingMainId, grnTable);
+
+                var dataTable = model.Details.ConvertListOfCLassToDataTable();
+                var result = await _invoiceRepository.SaveInvoiceMatchingDetails(data, dataTable);
+                if (result & advanceSave & grnSave)
+                {
+                    await _unitOfWork.SaveChangesAsync();
+                    resultModel.MainId = data;
+                    resultModel.DetailIds = await _invoiceRepository.GetDetailIds(data);
+                    return ApiResponse<SaveResultModel>.Success(resultModel, 200);
+                }
+                else
+                {
+                    return ApiResponse<SaveResultModel>.Fail("Data can not be saved for details", 400);
+                }
+            }
+            else
+            {
+                return ApiResponse<SaveResultModel>.Fail("Data can not be saved for main", 400);
+            }
+        }
     }
 }
