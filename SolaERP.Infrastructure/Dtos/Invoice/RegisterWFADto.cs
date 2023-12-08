@@ -32,5 +32,6 @@
         public long LineNo { get; set; }
         public string LinkedGRNsServices { get; set; }
         public bool InMaxSequence { get; set; }
+        public bool HasAttachments { get; set; }
     }
 }

@@ -32,6 +32,7 @@
         public long LineNo { get; set; }
         public string GRNList { get; set; }
         public bool InMaxSequence { get; set; }
+        public bool HasAttachments { get; set; }
 
     }
 }
