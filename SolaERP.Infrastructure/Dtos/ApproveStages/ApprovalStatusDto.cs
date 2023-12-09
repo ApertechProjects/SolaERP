@@ -2,6 +2,7 @@
 {
     public class ApprovalStatusDto
     {
-        public string ApproveStageDetailsName { get; set; }
+        public int ApprovalStatusId { get; set; }
+        public string ApprovalStatusName { get; set; }
     }
 }
