@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using MediatR;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos;
@@ -106,6 +105,10 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.ConvertIdentity(name);
             for (int i = 0; i < model.Count; i++)
             {
+                var check = await _invoiceRepository.CheckInvoiceRegister(model[i].InvoiceRegisterId, model[i].BusinessUnitId, model[i].VendorCode, model[i].VendorCode);
+                if (check)
+                    return ApiResponse<bool>.Fail("Vendor code and invoice can not be duplicate for the same business unit", 400);
+
                 if (model[i].InvoiceRegisterId < 0) model[i].InvoiceRegisterId = 0;
                 var data = await _invoiceRepository.Save(model[i], userId);
                 if (model[i].Attachments != null)
@@ -310,6 +313,15 @@ namespace SolaERP.Persistence.Services
             {
                 return ApiResponse<SaveResultModel>.Fail("Data can not be saved for main", 400);
             }
+        }
+
+        public async Task<ApiResponse<bool>> CheckInvoiceRegister(int invocieRegisterId, int businessUnitId, string vendorCode, string invoiceNo)
+        {
+            var data = await _invoiceRepository.CheckInvoiceRegister(invocieRegisterId, businessUnitId, vendorCode, invoiceNo);
+
+            if (data)
+                return ApiResponse<bool>.Success(true);
+            return ApiResponse<bool>.Fail(false, 400);
         }
     }
 }

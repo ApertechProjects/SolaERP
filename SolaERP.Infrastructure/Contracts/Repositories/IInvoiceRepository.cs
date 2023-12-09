@@ -1,7 +1,7 @@
-﻿using System.Data;
-using SolaERP.Application.Dtos.Invoice;
+﻿using SolaERP.Application.Dtos.Invoice;
 using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Models;
+using System.Data;
 
 namespace SolaERP.Application.Contracts.Repositories
 {
@@ -39,5 +39,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> InvoiceIUD(int businessUnitId, int invoiceRegisterId, int userId);
         Task<InvoiceRegisterByOrderMainId> InvoiceRegisterList(int orderMainId);
         Task<List<InvoiceRegisterServiceDetailsLoad>> InvoiceRegisterDetailsLoad(InvoiceRegisterServiceLoadModel model);
+        Task<bool> CheckInvoiceRegister(int invoiceRegisterId, int businessUnit, string vendorCode, string invoiceNo);
     }
 }

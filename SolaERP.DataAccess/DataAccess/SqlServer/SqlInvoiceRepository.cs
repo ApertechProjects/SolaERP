@@ -1,9 +1,5 @@
-﻿using MediatR;
-using Microsoft.Win32;
-using SolaERP.Application.Contracts.Repositories;
+﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Invoice;
-using SolaERP.Application.Entities.Auth;
-using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Helper;
 using SolaERP.Application.Models;
@@ -12,7 +8,6 @@ using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -583,5 +578,32 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return invoices;
         }
 
+        public async Task<bool> CheckInvoiceRegister(int invoiceRegisterId, int businessUnit, string vendorCode, string invoiceNo)
+        {
+            int result = 0;
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"select InvoiceRegisterId from Finance.InvoiceRegister 
+                                    where InvoiceRegisterId = @invoiceRegisterId
+                                    and   BusinessUnitId = @businessUnitId
+                                    and   VendorCode = @vendorCode
+                                    and   InvoiceNo = @invoiceNo";
+            command.Parameters.AddWithValue(command, "@invoiceRegisterId", invoiceRegisterId);
+            command.Parameters.AddWithValue(command, "@businessUnitId", businessUnit);
+            command.Parameters.AddWithValue(command, "@vendorCode", vendorCode);
+            command.Parameters.AddWithValue(command, "@invoiceNo", invoiceNo);
+
+            await using var reader = await command.ExecuteReaderAsync();
+
+            if (await reader.ReadAsync())
+                result = reader.Get<int>("InvoiceRegisterId");
+
+            if (result == 0)
+                return true;
+
+            if (result == invoiceRegisterId)
+                return false;
+
+            return false;
+        }
     }
 }
