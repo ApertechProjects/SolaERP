@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Application.Entities.Invoice
+﻿namespace SolaERP.Application.Entities.Invoice
 {
     public class InvoiceRegisterServiceDetailsLoad : BaseEntity
     {
@@ -27,6 +21,7 @@ namespace SolaERP.Application.Entities.Invoice
         public decimal BaseTotal { get; set; }
         public decimal ReportingTotal { get; set; }
         public string Description { get; set; }
+        public int CatId { get; set; }
         public int AnalysisCode1Id { get; set; }
         public int AnalysisCode2Id { get; set; }
         public int AnalysisCode3Id { get; set; }
