@@ -598,12 +598,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 result = reader.Get<int>("InvoiceRegisterId");
 
             if (result == 0)
-                return true;
+                return false;
 
             if (result == invoiceRegisterId)
                 return false;
 
-            return false;
+            return true;
         }
     }
 }
