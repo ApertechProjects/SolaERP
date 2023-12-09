@@ -9,4 +9,5 @@ public class OrderListApproved : BaseEntity
     public string Currency { get; set; }
     public string VendorCode { get; set; }
     public int AgingDays { get; set; }
+    public string VendorName { get; set; }
 }
