@@ -1,17 +1,11 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Dtos.General;
 using SolaERP.Application.Entities.General;
 using SolaERP.Application.Entities.Status;
 using SolaERP.Application.Entities.SupplierEvaluation;
-using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
-using System;
-using System.Collections.Generic;
 using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SolaERP.Application.Dtos.General;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -64,6 +58,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "select * from VW_RejectReasons";
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                {
+                    rejectReasons.Add(reader.GetByEntityStructure<RejectReason>());
+                }
+
+                return rejectReasons;
+            }
+        }
+
+        public async Task<List<RejectReason>> RejectReasonsForInvoice()
+        {
+            List<RejectReason> rejectReasons = new();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "select * from VW_RejectReasons where RejectReasonID IN(1,2)";
                 using var reader = await command.ExecuteReaderAsync();
 
                 while (reader.Read())

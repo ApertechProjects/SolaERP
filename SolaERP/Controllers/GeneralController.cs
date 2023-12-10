@@ -22,6 +22,11 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _generalService.RejectReasons());
 
         [HttpGet]
+        public async Task<IActionResult> RejectReasonsForInvoiceAsync()
+          => CreateActionResult(await _generalService.RejectReasonsForInvoice());
+
+
+        [HttpGet]
         public async Task<IActionResult> GetStatusAsync()
             => CreateActionResult(await _generalService.GetStatus());
 
@@ -36,5 +41,5 @@ namespace SolaERP.Controllers
             [BindRequired] int businessUnitId) =>
             CreateActionResult(await _generalService.GetBaseAndReportCurrencyRateAsync(date, currency, businessUnitId));
     }
-    
+
 }

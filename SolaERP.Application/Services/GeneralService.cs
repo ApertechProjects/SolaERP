@@ -36,6 +36,16 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<StatusDto>>.Success(dto, 200);
         }
 
+        public async Task<ApiResponse<List<RejectReasonDto>>> RejectReasonsForInvoice()
+        {
+            var data = await _generalRepository.RejectReasonsForInvoice();
+            var dto = _mapper.Map<List<RejectReasonDto>>(data);
+
+            if (dto.Count > 0)
+                return ApiResponse<List<RejectReasonDto>>.Success(dto, 200);
+            return ApiResponse<List<RejectReasonDto>>.Fail("Data not found", 404);
+        }
+
         public async Task<ApiResponse<List<RejectReasonDto>>> RejectReasons()
         {
             var data = await _generalRepository.RejectReasons();
@@ -73,8 +83,8 @@ namespace SolaERP.Persistence.Services
             if (singleResultBase is null || singleResultReport is null)
             {
                 var dateStringFormatted = date.ToString("dd/MM/yyyy");
-                 string message =
-                     $"There is no currency rate at date {dateStringFormatted}, please contact the finance department.";
+                string message =
+                    $"There is no currency rate at date {dateStringFormatted}, please contact the finance department.";
                 return ApiResponse<BaseAndReportCurrencyRate>.Fail(message, 444);
             }
 
