@@ -24,6 +24,7 @@ namespace SolaERP.Persistence.Services
         private readonly ISupplierEvaluationRepository _evaluationRepository;
         private readonly IGeneralRepository _generalRepository;
         private readonly IAttachmentService _attachmentService;
+        private readonly IUserRepository _userRepository;
 
         public RfqService(IUnitOfWork unitOfWork,
             IRfqRepository repository,
@@ -31,7 +32,8 @@ namespace SolaERP.Persistence.Services
             ISupplierEvaluationRepository evaluationRepository,
             IBusinessUnitRepository bURepository,
             IGeneralRepository generalRepository,
-            IAttachmentService attachmentService)
+            IAttachmentService attachmentService,
+            IUserRepository userRepository)
         {
             _unitOfWork = unitOfWork;
             _repository = repository;
@@ -40,6 +42,7 @@ namespace SolaERP.Persistence.Services
             _bURepository = bURepository;
             _generalRepository = generalRepository;
             _attachmentService = attachmentService;
+            _userRepository = userRepository;
         }
 
 
@@ -161,9 +164,10 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<BusinessCategory>>.Success(data, 200);
         }
 
-        public async Task<ApiResponse<List<RfqDraftDto>>> GetDraftsAsync(RfqFilter filter)
+        public async Task<ApiResponse<List<RfqDraftDto>>> GetDraftsAsync(RfqFilter filter, string userName)
         {
-            var rfqDrafts = await _repository.GetDraftsAsync(filter);
+            int userId = await _userRepository.ConvertIdentity(userName);
+            var rfqDrafts = await _repository.GetDraftsAsync(filter, userId);
             var dto = _mapper.Map<List<RfqDraftDto>>(rfqDrafts);
 
             return ApiResponse<List<RfqDraftDto>>.Success(dto, 200);
@@ -241,9 +245,10 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<RFQMainDto>.Success(mainRFQDto, 200);
         }
 
-        public async Task<ApiResponse<List<RFQInProgressDto>>> GetInProgressAsync(RFQFilterBase filter)
+        public async Task<ApiResponse<List<RFQInProgressDto>>> GetInProgressAsync(RFQFilterBase filter, string userName)
         {
-            var inProgressRFQS = await _repository.GetInProgressesAsync(filter);
+            int userId = await _userRepository.ConvertIdentity(userName);
+            var inProgressRFQS = await _repository.GetInProgressesAsync(filter, userId);
             var dto = _mapper.Map<List<RFQInProgressDto>>(inProgressRFQS);
             return ApiResponse<List<RFQInProgressDto>>.Success(dto, 200);
         }

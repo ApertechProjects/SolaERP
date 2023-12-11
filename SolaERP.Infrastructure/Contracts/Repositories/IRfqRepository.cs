@@ -6,13 +6,13 @@ namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IRfqRepository
     {
-        Task<List<RfqDraft>> GetDraftsAsync(RfqFilter filter);
+        Task<List<RfqDraft>> GetDraftsAsync(RfqFilter filter, int userId);
         Task<List<RfqAll>> GetAllAsync(RfqAllFilter filter);
         Task<List<SingleSourceReasonModel>> GetSingleSourceReasonsAsync();
         Task<List<RfqVendorToSend>> GetVendorsForRfqAync(int businessCategoryId);
         Task<List<RFQSingleSourceReasonsLoad>> GetSingleSourceReasons(int rfqMainId);
 
-        Task<List<RFQInProgress>> GetInProgressesAsync(RFQFilterBase filter);
+        Task<List<RFQInProgress>> GetInProgressesAsync(RFQFilterBase filter, int userId);
 
         Task<RFQMain> GetRFQMainAsync(int rfqMainId);
         Task<List<RFQDetail>> GetRFQDetailsAsync(int rfqMainId);
@@ -27,8 +27,8 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> RFQRequestDetailsIUDAsync(List<RfqRequestDetailSaveModel> details);
         Task<List<RequestForRFQ>> GetRequestsForRfq(RFQRequestModel model);
         Task<bool> ChangeRFQStatusAsync(RfqChangeStatusModel model, int userId);
-        Task<Application.Entities.UOM.Conversion> GetConversionAsync(int bussinessUnit, string itemCode);
-        Task<List<Application.Entities.RFQ.UOM>> GetPUOMAsync(int businessUnitId, string itemCodes);
+        Task<Entities.UOM.Conversion> GetConversionAsync(int bussinessUnit, string itemCode);
+        Task<List<UOM>> GetPUOMAsync(int businessUnitId, string itemCodes);
         Task<bool> RFQVendorIUDAsync(RFQVendorIUD vendorIUD, int userId);
 
     }
