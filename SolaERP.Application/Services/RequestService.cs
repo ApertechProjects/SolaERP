@@ -256,13 +256,10 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<RequestWFADto>>.Success(mainRequestDto);
         }
 
-        public async Task<ApiResponse<bool>> UpdateBuyerAsync(List<RequestSetBuyer> requestSetBuyer)
+        public async Task<ApiResponse<bool>> UpdateBuyerAsync(RequestSetBuyer requestSetBuyer)
         {
             var data = false;
-            for (int i = 0; i < requestSetBuyer.Count; i++)
-            {
-                data = await _requestMainRepository.UpdateBuyerAsync(requestSetBuyer[0]);
-            }
+            data = await _requestMainRepository.UpdateBuyerAsync(requestSetBuyer[0]);
 
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(data);
