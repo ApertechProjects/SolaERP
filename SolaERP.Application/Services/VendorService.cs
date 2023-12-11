@@ -330,6 +330,7 @@ namespace SolaERP.Persistence.Services
                 ? null
                 : Convert.ToInt32(vendorDto.WithHoldingTaxId);
             vendor.TaxesId = vendorDto.Tax == "null" ? null : Convert.ToInt32(vendorDto.Tax);
+            vendor.OtherProducts = vendorDto.OtherProducts == "null" ? null : vendorDto.OtherProducts;
 
             CheckNullForFormData(vendor);
 
