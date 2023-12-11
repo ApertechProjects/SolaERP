@@ -8,7 +8,7 @@
         public string Email { get; set; }
         public string UserSignature { get; set; }
         public string FullName { get; set; }
-        public string ApprovalStatus { get; set; }
+        public string ApprovalStatusName { get; set; }
         public Int64 RowNum { get; set; }
         public string Status { get; set; }
         public DateTime? LastActivity { get; set; }
