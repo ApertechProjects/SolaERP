@@ -130,8 +130,8 @@ namespace SolaERP.Persistence.Services
                 List<MenuWithPrivilege> menuWithPrivileges = new List<MenuWithPrivilege>();
                 var menus = await _menuRepository.GetMenuWithPrivilegesAsync(groupId);
                 var dto = _mapper.Map<List<MenuWithPrivilagesDto>>(menus);
-                var ttt = dto.GroupBy(x => x.ParentId).ToList();
-                ttt = ttt.OrderBy(x => x.Key).ToList();
+                var ttt = dto.OrderBy(x=>x.MenuId)
+                    .GroupBy(x => x.ParentId).ToList();
 
                 for (int i = 1; i < ttt.Count; i++)
                 {
@@ -175,7 +175,7 @@ namespace SolaERP.Persistence.Services
                     }).ToList();
                     menuWithPrivileges.Add(privilege);
                 }
-
+                
                 return ApiResponse<List<MenuWithPrivilege>>.Success(menuWithPrivileges, 200);
             }
             catch (Exception e)
