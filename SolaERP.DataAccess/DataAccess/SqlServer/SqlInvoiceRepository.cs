@@ -605,5 +605,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return true;
         }
+
+        public async Task<List<RegisterDraft>> RegisterDraft(InvoiceRegisterGetModel model, int userId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_InvoiceRegisterDraft @businessUnitId,@dateFrom,@dateTo,@userId";
+            command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
+            command.Parameters.AddWithValue(command, "@dateFrom", model.DateFrom);
+            command.Parameters.AddWithValue(command, "@dateTo", model.DateTo);
+            command.Parameters.AddWithValue(command, "@userId", userId);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<RegisterDraft> list = new List<RegisterDraft>();
+            while (reader.Read())
+                list.Add(reader.GetByEntityStructure<RegisterDraft>());
+
+            return list;
+        }
     }
 }

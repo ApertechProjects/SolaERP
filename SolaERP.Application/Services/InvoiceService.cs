@@ -320,5 +320,13 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<bool>.Success(true);
             return ApiResponse<bool>.Fail(false, 400);
         }
+
+        public async Task<ApiResponse<List<RegisterDraftDto>>> RegisterDraft(InvoiceRegisterGetModel model, string name)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            var data = await _invoiceRepository.RegisterDraft(model, userId);
+            var dto = _mapper.Map<List<RegisterDraftDto>>(data);
+            return ApiResponse<List<RegisterDraftDto>>.Success(dto);
+        }
     }
 }
