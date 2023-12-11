@@ -259,7 +259,7 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> UpdateBuyerAsync(RequestSetBuyer requestSetBuyer)
         {
             var data = false;
-            data = await _requestMainRepository.UpdateBuyerAsync(requestSetBuyer[0]);
+            data = await _requestMainRepository.UpdateBuyerAsync(requestSetBuyer);
 
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(data);
