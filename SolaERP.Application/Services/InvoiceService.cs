@@ -227,7 +227,7 @@ namespace SolaERP.Persistence.Services
 
                 var dataTable = model.Details.ConvertListOfCLassToDataTable();
                 var result = await _invoiceRepository.SaveInvoiceMatchingDetails(mainId, dataTable);
-                if (result & advanceSave)
+                if (result)
                 {
                     await _unitOfWork.SaveChangesAsync();
                     resultModel.MainId = mainId;
@@ -287,14 +287,14 @@ namespace SolaERP.Persistence.Services
             if (mainId > 0)
             {
                 var advanceTable = model.AdvanceInvoicesMatchingTypeList.ConvertListOfCLassToDataTable();
-                var advanceSave = await _invoiceRepository.SaveInvoiceMatchingAdvances(model.Main.InvoiceRegisterId, model.Main.InvoiceMatchingMainId, advanceTable);
+                var advanceSave = await _invoiceRepository.SaveInvoiceMatchingAdvances(model.Main.InvoiceRegisterId, mainId, advanceTable);
 
-                var grnTable = model.RNEInvoicesMatchingTypeList.ConvertListToDataTable();
-                var grnSave = await _invoiceRepository.SaveInvoiceMatchingGRNs(model.Main.InvoiceMatchingMainId, grnTable);
+                var grnTable = model.RNEInvoicesMatchingTypeList.ConvertListOfCLassToDataTable();
+                var grnSave = await _invoiceRepository.SaveInvoiceMatchingGRNs(mainId, grnTable);
 
                 var dataTable = model.Details.ConvertListOfCLassToDataTable();
                 var result = await _invoiceRepository.SaveInvoiceMatchingDetails(mainId, dataTable);
-                if (result & advanceSave & grnSave)
+                if (result)
                 {
                     await _unitOfWork.SaveChangesAsync();
                     resultModel.MainId = mainId;
