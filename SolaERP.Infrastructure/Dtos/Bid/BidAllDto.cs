@@ -16,7 +16,7 @@
         public string PaymentTerms { get; set; }
         public decimal ExpectedCost { get; set; }
         public string Status { get; set; }
-        public string ApproveStatus { get; set; }
+        public string ApproveStatusName { get; set; }
         public int Emergency { get; set; }
         public string ComparisonNo { get; set; }
         public string EnteredBy { get; set; }
