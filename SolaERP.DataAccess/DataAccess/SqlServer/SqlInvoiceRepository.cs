@@ -193,7 +193,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@ReasonAdditionalDescription", model.ReasonAdditionalDescription);
 
                 command.Parameters.AddWithValue(command, "@AccountCode",
-                    model.AccountCode);
+                    model.Account_Code);
 
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
