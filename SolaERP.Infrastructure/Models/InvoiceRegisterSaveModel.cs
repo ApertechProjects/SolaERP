@@ -19,7 +19,7 @@
         public int AgingDays { get; set; }
         public int ProblematicInvoiceReasonId { get; set; }
         public string? AccountCode { get; set; }
-        public string ReasonAdditionalDescription { get; set; }
+        //public string ReasonAdditionalDescription { get; set; }
         public List<AttachmentSaveModel> Attachments { get; set; }
     }
 
