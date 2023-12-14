@@ -619,7 +619,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             List<RegisterDraft> list = new List<RegisterDraft>();
             while (reader.Read())
-                list.Add(reader.GetByEntityStructure<RegisterDraft>());
+                list.Add(reader.GetByEntityStructure<RegisterDraft>("Attachments"));
 
             return list;
         }

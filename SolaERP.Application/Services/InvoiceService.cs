@@ -2,8 +2,10 @@
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos;
+using SolaERP.Application.Dtos.Attachment;
 using SolaERP.Application.Dtos.Invoice;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.Attachment;
 using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
@@ -326,6 +328,11 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.ConvertIdentity(name);
             var data = await _invoiceRepository.RegisterDraft(model, userId);
             var dto = _mapper.Map<List<RegisterDraftDto>>(data);
+            for (int i = 0; i < dto.Count; i++)
+            {
+                var attachment = await _attachmentService.GetAttachmentsAsync(data[i].InvoiceRegisterId, SourceType.INV, Modules.Invoices);
+                dto[i].Attachments = attachment;
+            }
             return ApiResponse<List<RegisterDraftDto>>.Success(dto);
         }
     }

@@ -30,5 +30,6 @@ namespace SolaERP.Application.Entities.Invoice
         public DateTime DueDate { get; set; }
         public int AgingDays { get; set; }
         public bool HasAttachments { get; set; }
+        //public List<Attachment.Attachment> Attachments { get; set; }
     }
 }
