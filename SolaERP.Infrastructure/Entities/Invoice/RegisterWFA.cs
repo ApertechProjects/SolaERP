@@ -9,6 +9,7 @@
         public int ApproveStatus { get; set; }
         public int Status { get; set; }
         public int InvoiceType { get; set; }
+        public string InvoiceTypeName { get; set; }
         public DateTime InvoiceDate { get; set; }
         public DateTime InvoiceReceivedDate { get; set; }
         public string InvoiceNo { get; set; }
