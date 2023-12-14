@@ -11,11 +11,13 @@ namespace SolaERP.Application.Entities.Invoice
         public int InvoiceRegisterId { get; set; }
         public long LineNo { get; set; }
         public int InvoiceType { get; set; }
+        public string InvoiceTypeName { get; set; }
         public int BusinessUnitId { get; set; }
         public DateTime InvoiceDate { get; set; }
         public string AccountCode { get; set; }
         public string AccountName { get; set; }
         public DateTime InvoiceReceivedDate { get; set; }
+        public string ReasonAdditionalDescription { get; set; }
         public string InvoiceNo { get; set; }
         public int OrderTypeId { get; set; }
         public string OrderType { get; set; }
@@ -30,6 +32,5 @@ namespace SolaERP.Application.Entities.Invoice
         public DateTime DueDate { get; set; }
         public int AgingDays { get; set; }
         public bool HasAttachments { get; set; }
-        //public List<Attachment.Attachment> Attachments { get; set; }
     }
 }
