@@ -144,11 +144,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                   @InvoiceType,
                                                   @InvoiceDate,
                                                   @InvoiceReceivedDate,
-                                                  @InvoiceNo, @SystemInvoiceNo,@OrderType,@OrderMainId,
-                    @ReferenceDocNo,@InvoiceAmount,@CurrencyCode, 
-                    @LineDescription,@VendorCode,@DueDate,@AgingDays,
-                    @ProblematicInvoiceReasonId,@Status,@ApproveStatus, @ReasonAdditionalDescription,@AccountCode
-                    ,@UserId,@NewInvoiceRegisterId = @NewInvoiceRegisterId OUTPUT select @NewInvoiceRegisterId as NewInvoiceRegisterId";
+                                                  @InvoiceNo, 
+                                                  @SystemInvoiceNo,
+                                                  @OrderType,
+                                                  @OrderMainId,
+                                                  @ReferenceDocNo,
+                                                  @InvoiceAmount,
+                                                  @CurrencyCode, 
+                                                  @LineDescription,
+                                                  @VendorCode,
+                                                  @DueDate,
+                                                  @AgingDays,
+                                                  @ProblematicInvoiceReasonId,
+                                                  @ReasonAdditionalDescription,
+                                                  @AccountCode,
+                                                  @UserId,
+                                                  @NewInvoiceRegisterId = @NewInvoiceRegisterId OUTPUT 
+                                                  select @NewInvoiceRegisterId as NewInvoiceRegisterId";
 
 
                 command.Parameters.AddWithValue(command, "@InvoiceRegisterId", model.InvoiceRegisterId);
@@ -185,10 +197,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@ProblematicInvoiceReasonId",
                     model.ProblematicInvoiceReasonId);
-
-                command.Parameters.AddWithValue(command, "@Status", model.Status);
-
-                command.Parameters.AddWithValue(command, "@ApproveStatus", model.ApproveStatus);
 
                 command.Parameters.AddWithValue(command, "@ReasonAdditionalDescription", model.ReasonAdditionalDescription);
 
@@ -583,8 +591,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             int result = 0;
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = @"select InvoiceRegisterId from Finance.InvoiceRegister 
-                                    where InvoiceRegisterId = @invoiceRegisterId
-                                    and   BusinessUnitId = @businessUnitId
+                                    where BusinessUnitId = @businessUnitId
                                     and   VendorCode = @vendorCode
                                     and   InvoiceNo = @invoiceNo";
             command.Parameters.AddWithValue(command, "@invoiceRegisterId", invoiceRegisterId);
@@ -596,6 +603,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             if (await reader.ReadAsync())
                 result = reader.Get<int>("InvoiceRegisterId");
+
 
             if (result == 0)
                 return false;
