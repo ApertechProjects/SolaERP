@@ -42,7 +42,11 @@ namespace SolaERP.API.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Info(int invoiceRegisterId)
-            => CreateActionResult(await _invoiceService.Info(invoiceRegisterId));
+            => CreateActionResult(await _invoiceService.Info(invoiceRegisterId, User.Identity.Name));
+
+        [HttpGet]
+        public async Task<IActionResult> ApprovalInfo(int invoiceRegisterId)
+        => CreateActionResult(await _invoiceService.ApprovalInfos(invoiceRegisterId, User.Identity.Name));
 
         [HttpGet]
         public async Task<IActionResult> RegisterLoadGRN(int orderMainId)

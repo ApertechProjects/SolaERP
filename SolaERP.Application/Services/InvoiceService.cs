@@ -11,6 +11,7 @@ using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
+using System.Xml.Linq;
 
 namespace SolaERP.Persistence.Services
 {
@@ -73,10 +74,9 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<RegisterLoadGRNDto>>.Success(dto);
         }
 
-        public async Task<ApiResponse<RegisterMainLoadDto>> Info(int invoiceRegisterId)
+        public async Task<ApiResponse<RegisterMainLoadDto>> Info(int invoiceRegisterId, string name)
         {
             var dataMain = await _invoiceRepository.RegisterMainLoad(invoiceRegisterId);
-
             var dto = _mapper.Map<RegisterMainLoadDto>(dataMain);
             return ApiResponse<RegisterMainLoadDto>.Success(dto);
         }
@@ -347,6 +347,15 @@ namespace SolaERP.Persistence.Services
                 dto[i].Attachments = attachment;
             }
             return ApiResponse<List<RegisterHeldDto>>.Success(dto);
+        }
+
+        public async Task<ApiResponse<List<ApprovalInfoDto>>> ApprovalInfos(int invoiceRegisterId, string name)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            var data = await _invoiceRepository.ApprovalInfos(invoiceRegisterId, userId);
+            var dto = _mapper.Map<List<ApprovalInfoDto>>(data);
+          
+            return ApiResponse<List<ApprovalInfoDto>>.Success(dto);
         }
     }
 }

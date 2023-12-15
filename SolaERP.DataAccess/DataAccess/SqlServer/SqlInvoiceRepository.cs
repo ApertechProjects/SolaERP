@@ -1,5 +1,6 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Invoice;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Helper;
 using SolaERP.Application.Models;
@@ -8,6 +9,7 @@ using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -646,6 +648,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             List<RegisterHeld> list = new List<RegisterHeld>();
             while (reader.Read())
                 list.Add(reader.GetByEntityStructure<RegisterHeld>());
+
+            return list;
+        }
+
+        public async Task<List<ApprovalInfo>> ApprovalInfos(int invoiceRegisterId, int userId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_InvoiceApprovalInfo @registerId,@userId";
+            command.Parameters.AddWithValue(command, "@registerId", invoiceRegisterId);
+            command.Parameters.AddWithValue(command, "@userId", userId);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<ApprovalInfo> list = new List<ApprovalInfo>();
+            while (reader.Read())
+                list.Add(reader.GetByEntityStructure<ApprovalInfo>());
 
             return list;
         }

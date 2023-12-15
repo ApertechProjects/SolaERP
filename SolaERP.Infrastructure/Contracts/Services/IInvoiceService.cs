@@ -12,7 +12,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> RegisterChangeStatus(InvoiceRegisterApproveModel model, string name);
         Task<ApiResponse<List<RegisterListByOrderDto>>> RegisterListByOrder(int orderMainId);
         Task<ApiResponse<List<RegisterLoadGRNDto>>> RegisterLoadGRN(int orderMainId);
-        Task<ApiResponse<RegisterMainLoadDto>> Info(int invoiceRegisterId);
+        Task<ApiResponse<RegisterMainLoadDto>> Info(int invoiceRegisterId, string name);
         Task<ApiResponse<bool>> RegisterSendToApprove(InvoiceSendToApproveModel model, string name);
         Task<ApiResponse<List<RegisterWFADto>>> RegisterWFA(InvoiceRegisterGetModel model, string name);
         Task<ApiResponse<bool>> Save(List<InvoiceRegisterSaveModel> model, string name);
@@ -42,5 +42,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> CheckInvoiceRegister(int invocieRegisterId, int businessUnitId, string vendorCode, string invoiceNo);
         Task<ApiResponse<List<RegisterDraftDto>>> RegisterDraft(InvoiceRegisterGetModel model, string name);
         Task<ApiResponse<List<RegisterHeldDto>>> RegisterHeld(InvoiceRegisterGetModel model, string name);
+        Task<ApiResponse<List<ApprovalInfoDto>>> ApprovalInfos(int invoiceRegisterId, string name);
     }
 }
