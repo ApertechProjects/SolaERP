@@ -34,6 +34,8 @@
         public string GRNList { get; set; }
         public bool InMaxSequence { get; set; }
         public bool HasAttachments { get; set; }
+        public string AccountCode { get; set; }
+        public string AccountName { get; set; }
 
     }
 }
