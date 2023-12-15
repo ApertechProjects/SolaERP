@@ -96,7 +96,7 @@ namespace SolaERP.Persistence.Services
             {
                 if (attachment.Type == 2)
                 {
-                    await DeleteAttachmentAsync(attachment.AttachmentId);
+                    await DeleteAttachmentAsync(attachment.AttachmentId,sourceType);
                     continue;
                 }
 
