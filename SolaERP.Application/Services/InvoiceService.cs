@@ -48,7 +48,7 @@ namespace SolaERP.Persistence.Services
             for (int i = 0; i < model.InvoiceRegisterIds.Count; i++)
             {
                 await _invoiceRepository.ChangeStatus(model.InvoiceRegisterIds[i].InvoiceRegisterId,
-                    model.InvoiceRegisterIds[i].Sequence, model.ApproveStatus, model.Comment, userId);
+                    model.InvoiceRegisterIds[i].Sequence, model.ApproveStatus, model.Comment, userId, model.RejectReasonId);
 
                 if (model.InvoiceRegisterIds[i].InMaxSequence && model.InvoiceRegisterIds[i].InvoiceTypeId == 2)
                 {
@@ -354,7 +354,7 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.ConvertIdentity(name);
             var data = await _invoiceRepository.ApprovalInfos(invoiceRegisterId, userId);
             var dto = _mapper.Map<List<ApprovalInfoDto>>(data);
-          
+
             return ApiResponse<List<ApprovalInfoDto>>.Success(dto);
         }
     }

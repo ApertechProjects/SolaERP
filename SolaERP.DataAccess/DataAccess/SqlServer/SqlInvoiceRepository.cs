@@ -25,18 +25,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
         public async Task<bool> ChangeStatus(int invoiceRegisterId, int sequence, int approveStatus, string comment,
-            int userId)
+            int userId,int rejectReasonId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText =
-                    "SET NOCOUNT OFF EXEC SP_InvoiceRegisterApprove @invoiceRegisterId,@sequence,@approveStatus,@userId,@comment";
+                    "SET NOCOUNT OFF EXEC SP_InvoiceRegisterApprove @invoiceRegisterId,@sequence,@approveStatus,@userId,@comment,@rejectReeasonId";
 
                 command.Parameters.AddWithValue(command, "@invoiceRegisterId", invoiceRegisterId);
                 command.Parameters.AddWithValue(command, "@sequence", sequence);
                 command.Parameters.AddWithValue(command, "@approveStatus", approveStatus);
                 command.Parameters.AddWithValue(command, "@userId", userId);
                 command.Parameters.AddWithValue(command, "@comment", comment);
+                command.Parameters.AddWithValue(command, "@rejectReeasonId", rejectReasonId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
