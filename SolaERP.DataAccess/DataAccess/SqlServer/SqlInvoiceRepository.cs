@@ -631,5 +631,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return list;
         }
+
+        public async Task<List<RegisterHeld>> RegisterHeld(InvoiceRegisterGetModel model, int userId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_InvoiceRegisterHeld @businessUnitId,@dateFrom,@dateTo,@userId";
+            command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
+            command.Parameters.AddWithValue(command, "@dateFrom", model.DateFrom);
+            command.Parameters.AddWithValue(command, "@dateTo", model.DateTo);
+            command.Parameters.AddWithValue(command, "@userId", userId);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<RegisterHeld> list = new List<RegisterHeld>();
+            while (reader.Read())
+                list.Add(reader.GetByEntityStructure<RegisterHeld>());
+
+            return list;
+        }
     }
 }

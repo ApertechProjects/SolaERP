@@ -335,5 +335,18 @@ namespace SolaERP.Persistence.Services
             }
             return ApiResponse<List<RegisterDraftDto>>.Success(dto);
         }
+
+        public async Task<ApiResponse<List<RegisterHeldDto>>> RegisterHeld(InvoiceRegisterGetModel model, string name)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            var data = await _invoiceRepository.RegisterHeld(model, userId);
+            var dto = _mapper.Map<List<RegisterHeldDto>>(data);
+            for (int i = 0; i < dto.Count; i++)
+            {
+                var attachment = await _attachmentService.GetAttachmentsAsync(data[i].InvoiceRegisterId, SourceType.INV, Modules.Invoices);
+                dto[i].Attachments = attachment;
+            }
+            return ApiResponse<List<RegisterHeldDto>>.Success(dto);
+        }
     }
 }

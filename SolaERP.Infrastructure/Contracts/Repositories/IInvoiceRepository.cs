@@ -41,5 +41,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<InvoiceRegisterServiceDetailsLoad>> InvoiceRegisterDetailsLoad(InvoiceRegisterServiceLoadModel model);
         Task<bool> CheckInvoiceRegister(int invoiceRegisterId, int businessUnit, string vendorCode, string invoiceNo);
         Task<List<RegisterDraft>> RegisterDraft(InvoiceRegisterGetModel model, int userId);
+        Task<List<RegisterHeld>> RegisterHeld(InvoiceRegisterGetModel model, int userId);
     }
 }
