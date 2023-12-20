@@ -59,12 +59,12 @@ namespace SolaERP.Controllers
             var result = await _userService.SendResetPasswordEmail(email);
             if (result.StatusCode == 200)
             {
-                Response.OnCompleted(async () =>
-                {
-                    await _mailService.SendPasswordResetMailAsync(email, result.Data);
-                });
+                //Response.OnCompleted(async () =>
+                //{
+                //    await _mailService.SendPasswordResetMailAsync(email, result.Data);
+                //});
 
-                return CreateActionResult(ApiResponse<bool>.Success(true));
+                return CreateActionResult(ApiResponse<bool>.Success(result.Data));
             }
             return CreateActionResult(result);
         }
