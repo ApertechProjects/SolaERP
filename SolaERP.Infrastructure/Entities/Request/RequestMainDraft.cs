@@ -12,6 +12,8 @@
         public string BuyerName { get; set; }
         public Int64 RowNum { get; set; }
         public string RequestType { get; set; }
+        public string KeyCode { get; set; }
+
         public string RequestNo { get; set; }
         public DateTime EntryDate { get; set; }
         public DateTime RequestDate { get; set; }
