@@ -257,7 +257,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText =
-                    "EXEC SP_InvoiceRegister_IUD @InvoiceRegisterId,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,@UserId,@NewInvoiceRegisterId = @NewInvoiceRegisterId OUTPUT select @NewInvoiceRegisterId as NewInvoiceRegisterId";
+                    @"EXEC SP_InvoiceRegister_IUD @InvoiceRegisterId,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,
+                            @UserId,@NewInvoiceRegisterId = @NewInvoiceRegisterId OUTPUT select @NewInvoiceRegisterId as NewInvoiceRegisterId";
 
 
                 command.Parameters.AddWithValue(command, "@InvoiceRegisterId", item);
