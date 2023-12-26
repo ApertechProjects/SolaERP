@@ -18,6 +18,9 @@
         BID_COMP = 19,
         ORDER = 20,
         BID_COMM = 22,
-        INV = 23
+        INV = 23,
+        REQD = 24,
+        BIDD = 25,
+        RFQD = 26,
     }
 }

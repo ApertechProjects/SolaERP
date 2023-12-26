@@ -64,7 +64,7 @@ namespace SolaERP.Persistence.Services
             var dtos = _mapper.Map<List<BidDetailsLoadDto>>(details);
             foreach (var item in dtos)
             {
-                item.Attachments = await _attachmentService.GetAttachmentsAsync(item.BidDetailId, SourceType.BID, Modules.Bid);
+                item.Attachments = await _attachmentService.GetAttachmentsAsync(item.BidDetailId, SourceType.BIDD, Modules.Bid);
             }
             model.Details = dtos;
             model.RFQMain = _mapper.Map<RFQMainDto>(await _rfqRepository.GetRFQMainAsync(model.RFQMainId));
@@ -113,7 +113,7 @@ namespace SolaERP.Persistence.Services
             {
                 BidDetailDto item = bidMain.BidDetails[i];
                 item.BidDetailId = detailIds[i];
-                await _attachmentService.SaveAttachmentAsync(item.Attachments, SourceType.BID, item.BidDetailId);
+                await _attachmentService.SaveAttachmentAsync(item.Attachments, SourceType.BIDD, item.BidDetailId);
             }
 
             saveResponse.BidDetailIds = detailIds;

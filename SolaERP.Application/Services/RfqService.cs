@@ -62,7 +62,19 @@ namespace SolaERP.Persistence.Services
 
 
             if (request.Details is not null && request.Details.Count > 0)
+            {
                 await _repository.DetailsIUDAsync(request.Details, response.Id);
+                var detailIds = await _repository.GetDetailIds(request.Id);
+
+                for (int i = 0; i < request.Details.Count; i++)
+                {
+                    RfqDetailSaveModel item = request.Details[i];
+                    item.Id = detailIds[i];
+                    await _attachmentService.SaveAttachmentAsync(item.Attachments, SourceType.RFQD, item.Id);
+
+                    response.DetailIds = detailIds;
+                }
+            }
 
             if (combinedRequestDetails is not null && combinedRequestDetails.Count > 0)
                 await _repository.RFQRequestDetailsIUDAsync(combinedRequestDetails);
@@ -242,6 +254,11 @@ namespace SolaERP.Persistence.Services
             });
 
             mainRFQDto.Details = mainDetailsDto;
+            foreach (var item in mainRFQDto.Details)
+            {
+                item.Attachments = await _attachmentService.GetAttachmentsAsync(item.Id, SourceType.RFQD, Modules.Bid);
+            }
+
             return ApiResponse<RFQMainDto>.Success(mainRFQDto, 200);
         }
 

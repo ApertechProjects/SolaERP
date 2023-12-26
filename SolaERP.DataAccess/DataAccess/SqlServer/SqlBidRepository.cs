@@ -282,7 +282,7 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
         public async Task<List<int>> GetDetailIds(int id)
         {
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"select BidDetailId from Procurement.BidDetails where BidMainId = ";
+            command.CommandText = @"select BidDetailId from Procurement.BidDetails where BidMainId = @BidDetailId";
             command.Parameters.AddWithValue(command, "@BidDetailId", id);
 
             await using DbDataReader reader = await command.ExecuteReaderAsync();

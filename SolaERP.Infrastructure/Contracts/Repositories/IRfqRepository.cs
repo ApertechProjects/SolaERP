@@ -30,6 +30,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<Entities.UOM.Conversion> GetConversionAsync(int bussinessUnit, string itemCode);
         Task<List<UOM>> GetPUOMAsync(int businessUnitId, string itemCodes);
         Task<bool> RFQVendorIUDAsync(RFQVendorIUD vendorIUD, int userId);
-
+        Task<List<int>> GetDetailIds(int id);
     }
 }

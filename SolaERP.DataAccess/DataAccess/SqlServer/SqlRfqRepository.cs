@@ -612,6 +612,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<List<int>> GetDetailIds(int id)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"select RFQDetailId from Procurement.RFQDetails where RFQMainId = @RfqmainId";
+            command.Parameters.AddWithValue(command, "@RfqmainId", id);
+
+            await using DbDataReader reader = await command.ExecuteReaderAsync();
+            List<int> datas = new();
+            while (await reader.ReadAsync())
+            {
+                datas.Add(reader.Get<int>("RfqmainId"));
+            }
+
+            return datas;
+        }
+
         #endregion
     }
 }
