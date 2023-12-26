@@ -1,5 +1,6 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.Bid;
+using SolaERP.Application.Entities.Request;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data;
@@ -276,6 +277,22 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
             await _unitOfWork.SaveChangesAsync();
 
             await command.ExecuteNonQueryAsync();
+        }
+
+        public async Task<List<int>> GetDetailIds(int id)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"select BidDetailId from Procurement.BidDetails where BidMainId = ";
+            command.Parameters.AddWithValue(command, "@BidDetailId", id);
+
+            await using DbDataReader reader = await command.ExecuteReaderAsync();
+            List<int> datas = new();
+            while (await reader.ReadAsync())
+            {
+                datas.Add(reader.Get<int>("BidDetailId"));
+            }
+
+            return datas;
         }
     }
 }

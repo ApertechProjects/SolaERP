@@ -12,5 +12,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> SaveBidDetailsAsync(List<BidDetail> details);
         Task<List<BidRFQListLoad>> GetRFQListForBidAsync(BidRFQListFilter filter);
         Task OrderCreateFromApproveBidAsync(int bidMainId, int userId);
+        Task<List<int>> GetDetailIds(int id);
     }
 }
