@@ -28,7 +28,8 @@ namespace SolaERP.Application.Dtos.RFQ
         public int Responded { get; set; }
         public int Rejected { get; set; }
         public int NoResponse { get; set; }
-        public BusinessCategory BusinessCategory { get; set; }
+        public int BusinessCategoryId { get; set; }
+        public string BusinessCategoryName { get; set; }
         public bool HasAttachments { get; set; }
     }
 }

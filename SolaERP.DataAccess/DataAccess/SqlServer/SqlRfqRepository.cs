@@ -102,11 +102,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 rfqBase.HasAttachments = false;
             }
 
-            rfqBase.BusinessCategory = new()
-            {
-                Id = reader.Get<int>("BusinessCategoryId"),
-                Name = reader.Get<string>("BusinessCategoryName")
-            };
+            rfqBase.BusinessCategoryId = reader.Get<int>("BusinessCategoryId");
+            rfqBase.BusinessCategoryName = reader.Get<string>("BusinessCategoryName");
         }
 
         private RfqDraft GetRFQDraftFromReader(IDataReader reader)
