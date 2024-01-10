@@ -17,5 +17,7 @@ namespace SolaERP.Application.Dtos.Invoice
         public decimal InvoiceAmount { get; set; }
         public decimal AdvanceAmount { get; set; }
         public decimal GRNAmount { get; set; }
+        public string Currency { get; set; }
+
     }
 }
