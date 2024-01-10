@@ -640,6 +640,8 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<RegisterDraft, RegisterDraftDto>().ReverseMap();
             CreateMap<RegisterHeld, RegisterHeldDto>().ReverseMap();
             CreateMap<ApprovalInfo, ApprovalInfoDto>().ReverseMap();
+
+            CreateMap<InvoiceMatchingMainGRN, InvoiceMatchingMainGRNDto>().ReverseMap();
         }
     }
 }

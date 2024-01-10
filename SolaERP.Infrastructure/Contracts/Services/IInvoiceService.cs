@@ -43,5 +43,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<RegisterDraftDto>>> RegisterDraft(InvoiceRegisterGetModel model, string name);
         Task<ApiResponse<List<RegisterHeldDto>>> RegisterHeld(InvoiceRegisterGetModel model, string name);
         Task<ApiResponse<List<ApprovalInfoDto>>> ApprovalInfos(int invoiceRegisterId, string name);
+        Task<ApiResponse<List<InvoiceMatchingMainGRNDto>>> MatchingMainGRNList(InvoiceMatchingMainModel model);
     }
 }

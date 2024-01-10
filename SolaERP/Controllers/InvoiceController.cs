@@ -83,6 +83,10 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _invoiceService.MatchingMainGRN(model));
 
         [HttpGet]
+        public async Task<IActionResult> MatchingMainGRNList([FromQuery] InvoiceMatchingMainModel model)
+          => CreateActionResult(await _invoiceService.MatchingMainGRNList(model));
+
+        [HttpGet]
         public async Task<IActionResult> MatchingMainService([FromQuery] InvoiceMatchingGRNModel model)
             => CreateActionResult(await _invoiceService.MatchingMainService(model));
 

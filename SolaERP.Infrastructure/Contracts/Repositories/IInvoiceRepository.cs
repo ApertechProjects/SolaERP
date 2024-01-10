@@ -7,7 +7,7 @@ namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IInvoiceRepository
     {
-        Task<bool> ChangeStatus(int invoiceRegisterId, int sequence, int approveStatus, string comment, int userId,int? rejectReasonId);
+        Task<bool> ChangeStatus(int invoiceRegisterId, int sequence, int approveStatus, string comment, int userId, int? rejectReasonId);
         Task<List<RegisterAll>> RegisterAll(InvoiceRegisterGetModel model, int userId);
         Task<List<RegisterListByOrder>> RegisterListByOrder(int orderMainId);
         Task<List<RegisterLoadGRN>> RegisterLoadGRN(int invoiceRegisterId);
@@ -43,5 +43,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> CheckInvoiceRegister(int invoiceRegisterId, int businessUnit, string vendorCode, string invoiceNo);
         Task<List<RegisterDraft>> RegisterDraft(InvoiceRegisterGetModel model, int userId);
         Task<List<RegisterHeld>> RegisterHeld(InvoiceRegisterGetModel model, int userId);
+        Task<List<InvoiceMatchingMainGRN>> MatchingMainGRNList(InvoiceMatchingMainModel model);
     }
 }

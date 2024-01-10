@@ -669,5 +669,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return list;
         }
+
+        public async Task<List<InvoiceMatchingMainGRN>> MatchingMainGRNList(InvoiceMatchingMainModel model)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_InvoiceMatchingMainList @businessUnitId,@dateFrom,@dateTo";
+            command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
+            command.Parameters.AddWithValue(command, "@dateFrom", model.DateFrom);
+            command.Parameters.AddWithValue(command, "@dateTo", model.DateTo);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<InvoiceMatchingMainGRN> list = new List<InvoiceMatchingMainGRN>();
+            while (reader.Read())
+                list.Add(reader.GetByEntityStructure<InvoiceMatchingMainGRN>());
+
+            return list;
+        }
     }
 }

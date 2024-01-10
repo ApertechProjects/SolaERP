@@ -357,5 +357,12 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<List<ApprovalInfoDto>>.Success(dto);
         }
+
+        public async Task<ApiResponse<List<InvoiceMatchingMainGRNDto>>> MatchingMainGRNList(InvoiceMatchingMainModel model)
+        {
+            var data = await _invoiceRepository.MatchingMainGRNList(model);
+            var dto = _mapper.Map<List<InvoiceMatchingMainGRNDto>>(data);
+            return ApiResponse<List<InvoiceMatchingMainGRNDto>>.Success(dto, 200);
+        }
     }
 }
