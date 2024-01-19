@@ -1,5 +1,4 @@
-﻿using AngleSharp.Io;
-using FluentEmail.Core;
+﻿using FluentEmail.Core;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +11,6 @@ using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
 using SolaERP.Application.ViewModels;
-using SolaERP.Persistence.Services;
 using System.Net;
 using System.Net.Mail;
 using System.Text.Json;
@@ -213,16 +211,16 @@ namespace SolaERP.Infrastructure.Services
             }
         }
 
-        public async Task SendManualMailsAsync(string email, string password, string host, int port, string to)
+        public async Task SendManualMailsAsync(string to)
         {
             if (!string.IsNullOrEmpty(to))
             {
                 using (SmtpClient smtpClient = new SmtpClient())
                 {
-                    var basicCredential = new NetworkCredential(email, password);
+                    var basicCredential = new NetworkCredential(_configuration["Mail:Email"], _configuration["Mail:Password"]);
 
-                    smtpClient.Host = host;
-                    smtpClient.Port = port;
+                    smtpClient.Host = _configuration["Mail:Host"];
+                    smtpClient.Port = Convert.ToInt16(_configuration["Mail:Port"]);
                     smtpClient.EnableSsl = Convert.ToBoolean(_configuration["Mail:EnableSSL"]);
                     smtpClient.UseDefaultCredentials = false;
                     smtpClient.Credentials = basicCredential;
@@ -230,7 +228,7 @@ namespace SolaERP.Infrastructure.Services
                     using (MailMessage message = new MailMessage())
                     {
 
-                        message.From = new MailAddress(email, "");
+                        message.From = new MailAddress(_configuration["Mail:Email"], _configuration["Mail:Alias"]);
                         message.Subject = "Subject";
                         message.IsBodyHtml = true;
                         message.Body = "Test Mail";

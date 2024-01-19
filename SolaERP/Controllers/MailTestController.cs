@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
-using SolaERP.Application.Dtos.Shared;
-using SolaERP.Application.Models;
-using SolaERP.Controllers;
 
 namespace SolaERP.API.Controllers
 {
     [Route("api/[controller]/[action]")]
+    [Authorize]
     [ApiController]
     public class MailTestController : ControllerBase
     {
@@ -17,11 +15,11 @@ namespace SolaERP.API.Controllers
             _mailService = mailService;
         }
         [HttpGet]
-        public async Task<string> SendMail([FromQuery] MailProperty mailProperty)
+        public async Task<string> SendMail()
         {
             try
             {
-                await _mailService.SendManualMailsAsync(mailProperty.Email, mailProperty.Password, mailProperty.Host, mailProperty.Port, mailProperty.To);
+                await _mailService.SendManualMailsAsync("hulya.garibli@apertech.net");
                 return "Operation Successful";
             }
             catch (Exception ex)
