@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Application.Dtos.Invoice
+﻿namespace SolaERP.Application.Dtos.Invoice
 {
     public class MatchingMainServiceDto
     {
@@ -12,6 +6,8 @@ namespace SolaERP.Application.Dtos.Invoice
         public long LineNo { get; set; }
         public string OrderNo { get; set; }
         public decimal OrderTotal { get; set; }
+        public string OrderType { get; set; }
+        public decimal AdvanceAmount { get; set; }
         public string VendorCode { get; set; }
         public string VendorName { get; set; }
         public string CurrencyCode { get; set; }
