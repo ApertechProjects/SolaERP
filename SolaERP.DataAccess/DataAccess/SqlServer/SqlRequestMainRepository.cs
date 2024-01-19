@@ -269,7 +269,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 LogisticsTotal = reader.Get<decimal>("LogisticsTotal"),
                 Priority = reader.Get<int>("Priority"),
                 HasAttachments = reader.Get<bool>("HasAttachments"),
-                Sequence = reader.Get<int>("Sequence")
+                Sequence = reader.Get<int>("Sequence"),
+                KeyCode = reader.Get<string>("KeyCode")
             };
         }
 
@@ -387,7 +388,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Status = reader.Get<int>("Status"),
                 StatusName = reader.Get<string>("StatusName"),
                 Priority = reader.Get<int>("Priority"),
-                HasAttachments = reader.Get<bool>("HasAttachments")
+                HasAttachments = reader.Get<bool>("HasAttachments"),
+                KeyCode = reader.Get<string>("KeyCode")
             };
         }
 

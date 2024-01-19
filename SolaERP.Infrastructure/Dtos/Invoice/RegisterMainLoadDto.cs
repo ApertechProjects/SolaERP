@@ -1,4 +1,6 @@
-﻿namespace SolaERP.Application.Dtos.Invoice
+﻿using SolaERP.Application.Entities.Invoice;
+
+namespace SolaERP.Application.Dtos.Invoice
 {
 
 

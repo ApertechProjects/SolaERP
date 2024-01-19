@@ -148,7 +148,7 @@ namespace SolaERP.Persistence.Services
             var userExsist = await _userRepository.GetByEmailAsync(email);
 
             Random random = new Random();
-            var stringCode = random.Next(0, 999999).ToString();
+            var stringCode = random.Next(100000, 999999).ToString();
 
             if (userExsist == null)
                 return ApiResponse<string>.Fail($"We can't found this email: {email}", 404);

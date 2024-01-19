@@ -62,6 +62,10 @@ namespace SolaERP.Persistence.Services
 
             var details = await _bidRepository.GetBidDetailsAsync(new BidDetailsFilter { BidMainId = bidMainId });
             var dtos = _mapper.Map<List<BidDetailsLoadDto>>(details);
+            foreach (var item in dtos)
+            {
+                item.Attachments = await _attachmentService.GetAttachmentsAsync(item.BidDetailId, SourceType.BIDD, Modules.Bid);
+            }
             model.Details = dtos;
             model.RFQMain = _mapper.Map<RFQMainDto>(await _rfqRepository.GetRFQMainAsync(model.RFQMainId));
             model.Attachments = await _attachmentService.GetAttachmentsAsync(bidMainId, SourceType.BID, Modules.Bid);
@@ -104,6 +108,15 @@ namespace SolaERP.Persistence.Services
 
             await _bidRepository.SaveBidDetailsAsync(details);
 
+            var detailIds = await _bidRepository.GetDetailIds(saveResponse.Id);
+            for (int i = 0; i < bidMain.BidDetails.Count; i++)
+            {
+                BidDetailDto item = bidMain.BidDetails[i];
+                item.BidDetailId = detailIds[i];
+                await _attachmentService.SaveAttachmentAsync(item.Attachments, SourceType.BIDD, item.BidDetailId);
+            }
+
+            saveResponse.BidDetailIds = detailIds;
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<BidIUDResponse>.Success(saveResponse, 200);
         }

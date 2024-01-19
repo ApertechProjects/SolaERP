@@ -20,7 +20,8 @@ namespace SolaERP.Application.Dtos.RFQ
         public string Buyer { get; set; }
         public bool SingleUnitPrice { get; set; }
         public string PlaceOfDelivery { get; set; }
-        public int BusinessCategoryid { get; set; }
+        public int BusinessCategoryId { get; set; }
+        public string BusinessCategoryName { get; set; }
         public bool HasAttachments { get; set; }
         public string EnteredBy { get; set; }
         public DateTime EntryDate { get; set; }

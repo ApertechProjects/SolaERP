@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SolaERP.Application.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,5 +30,6 @@ namespace SolaERP.Application.Dtos.Bid
         public decimal DiscountedAmount { get; set; }
         public decimal ConvertedQTY { get; set; }
         public decimal ConvertedUnitPrice { get; set; }
+        public List<AttachmentSaveModel> Attachments { get; set; }
     }
 }

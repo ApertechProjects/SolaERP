@@ -30,11 +30,11 @@ namespace SolaERP.API.Controllers
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetInProgress([FromQuery] RFQFilterBase filter)
-            => CreateActionResult(await _service.GetInProgressAsync(filter));
+            => CreateActionResult(await _service.GetInProgressAsync(filter, User.Identity.Name));
 
         [HttpGet]
         public async Task<IActionResult> GetDrafts([FromQuery] RfqFilter filter)
-            => CreateActionResult(await _service.GetDraftsAsync(filter));
+            => CreateActionResult(await _service.GetDraftsAsync(filter, User.Identity.Name));
 
         [HttpGet("[action]/{rfqMainId}")]
         public async Task<IActionResult> Get(int rfqMainId)

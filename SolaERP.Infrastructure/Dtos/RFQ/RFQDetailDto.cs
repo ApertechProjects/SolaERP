@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Entities.RFQ;
+﻿using SolaERP.Application.Dtos.Attachment;
+using SolaERP.Application.Entities.RFQ;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Enums;
 
@@ -22,5 +23,6 @@ namespace SolaERP.Application.Dtos.RFQ
         public string Description { get; set; }
         public Guid GUID { get; set; }
         public List<RFQRequestDetailDto> RequestDetails { get; set; }
+        public List<AttachmentDto> Attachments { get; set; }
     }
 }

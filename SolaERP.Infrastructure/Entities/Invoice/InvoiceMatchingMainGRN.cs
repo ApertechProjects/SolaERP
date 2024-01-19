@@ -6,19 +6,17 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Entities.Invoice
 {
-    public class MatchingMainGRN : BaseEntity
+    public class InvoiceMatchingMainGRN : BaseEntity
     {
-        public int OrderMainId { get; set; }
         public long LineNo { get; set; }
+        public int InvoiceMatchingMainId { get; set; }
         public string OrderNo { get; set; }
-        public decimal OrderTotal { get; set; }
+        public decimal OrderAmount { get; set; }
         public string VendorCode { get; set; }
         public string VendorName { get; set; }
-        public string CurrencyCode { get; set; }
-        public decimal InvoiceTotal { get; set; }
-        public decimal RNETotal { get; set; }
-        public decimal UnmatchedAmount { get; set; }
-        public string MatchStatus { get; set; }
+        public decimal InvoiceAmount { get; set; }
         public decimal AdvanceAmount { get; set; }
+        public decimal GRNAmount { get; set; }
+        public string Currency { get; set; }
     }
 }

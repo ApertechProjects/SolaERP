@@ -93,7 +93,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Description = reader.Get<string>("Description"),
                 LongDescription = reader.Get<string>("LongDescription"),
                 UnitOfPurch = reader.Get<string>("UnitOfPurch"),
-                ItemDescriptionAze = reader.Get<string>("ItemDescriptionAze")
+                ItemDescriptionAze = reader.Get<string>("ItemDescriptionAze"),
+                AccountCode = reader.Get<string>("AccountCode"),
+                AccountName = reader.Get<string>("AccountName")
             };
         }
     }

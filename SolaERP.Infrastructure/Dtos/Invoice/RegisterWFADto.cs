@@ -9,6 +9,7 @@
         public int ApproveStatus { get; set; }
         public int Status { get; set; }
         public int InvoiceType { get; set; }
+        public string InvoiceTypeName { get; set; }
         public DateTime InvoiceDate { get; set; }
         public DateTime InvoiceReceivedDate { get; set; }
         public string InvoiceNo { get; set; }
@@ -33,5 +34,7 @@
         public string LinkedGRNsServices { get; set; }
         public bool InMaxSequence { get; set; }
         public bool HasAttachments { get; set; }
+        public string AccountCode { get; set; }
+        public string AccountName { get; set; }
     }
 }

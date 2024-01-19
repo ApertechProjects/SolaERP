@@ -1,22 +1,24 @@
-﻿namespace SolaERP.Application.Entities.Invoice
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SolaERP.Application.Dtos.Invoice
 {
-    public class RegisterAll : BaseEntity
+    public class RegisterDraftDto
     {
         public int InvoiceRegisterId { get; set; }
         public long LineNo { get; set; }
-        public int ApproveStatus { get; set; }
-        public int Status { get; set; }
-        public string ApproveStatusName { get; set; }
-        public string StatusName { get; set; }
-        public int BusinessUnitId { get; set; }
-        public string AccountCode { get; set; }
-        public string AccountName { get; set; }
         public int InvoiceType { get; set; }
         public string InvoiceTypeName { get; set; }
+        public int BusinessUnitId { get; set; }
         public DateTime InvoiceDate { get; set; }
+        public string AccountCode { get; set; }
+        public string AccountName { get; set; }
         public DateTime InvoiceReceivedDate { get; set; }
+        public string ReasonAdditionalDescription { get; set; }
         public string InvoiceNo { get; set; }
-        public string SystemInvoiceNo { get; set; }
         public int OrderTypeId { get; set; }
         public string OrderType { get; set; }
         public int OrderMainId { get; set; }
@@ -29,9 +31,7 @@
         public string VendorName { get; set; }
         public DateTime DueDate { get; set; }
         public int AgingDays { get; set; }
-        public int MatchedAmount { get; set; }
-        public int ProblematicInvoiceReasonId { get; set; }
-        public string ReasonAdditionalDescription { get; set; }
         public bool HasAttachments { get; set; }
+        public List<Attachment.AttachmentDto> Attachments { get; set; }
     }
 }

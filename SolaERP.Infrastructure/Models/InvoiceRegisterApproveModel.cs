@@ -6,6 +6,7 @@
         public int ApproveStatus { get; set; }
         public string Comment { get; set; }
         public int BusinessUnitId { get; set; }
+        public int? RejectReasonId { get; set; }
 
     }
 

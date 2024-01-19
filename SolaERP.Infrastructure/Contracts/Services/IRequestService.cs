@@ -25,7 +25,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> DeleteAsync(string name, int requestMainId);
         Task<ApiResponse<List<RequestDetailApprovalInfoDto>>> GetDetailApprvalInfoAsync(int requestDetaildId);
         Task<bool> ChangeDetailStatusAsync(string name, int requestDetailId, int approveStatusId, string comment, int? sequence, int rejectReasonId);
-        Task<ApiResponse<bool>> UpdateBuyerAsync(List<RequestSetBuyer> requestSetBuyer);
+        Task<ApiResponse<bool>> UpdateBuyerAsync(RequestSetBuyer requestSetBuyer);
         Task<ApiResponse<List<RequestFollowDto>>> GetFollowUsersAsync(int requestMainId);
         Task<ApiResponse<bool>> SaveFollowUserAsync(RequestFollowSaveModel saveModel);
         Task<ApiResponse<bool>> DeleteFollowUserAsync(int requestFollowId);

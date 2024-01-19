@@ -132,7 +132,7 @@ namespace SolaERP.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateBuyer(List<RequestSetBuyer> requestSetBuyer)
+        public async Task<IActionResult> UpdateBuyer(RequestSetBuyer requestSetBuyer)
             => CreateActionResult(await _requestService.UpdateBuyerAsync(requestSetBuyer));
 
         [HttpPost]

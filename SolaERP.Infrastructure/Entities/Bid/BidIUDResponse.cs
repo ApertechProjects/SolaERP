@@ -10,5 +10,6 @@ namespace SolaERP.Application.Entities.Bid
     {
         public int Id { get; set; }
         public string BidNo { get; set; }
+        public List<int> BidDetailIds { get; set; }
     }
 }

@@ -8,7 +8,10 @@
         public string BusinessUnitCode { get; set; }
         public string BusinessUnitName { get; set; }
         public int RequestTypeId { get; set; }
+
         public string RequestType { get; set; }
+        public string KeyCode { get; set; }
+
         public string RequestNo { get; set; }
         public DateTime EntryDate { get; set; }
         public DateTime RequestDate { get; set; }

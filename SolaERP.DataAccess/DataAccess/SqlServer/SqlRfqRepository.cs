@@ -21,7 +21,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         private readonly IUnitOfWork _unitOfWork;
         public SqlRfqRepository(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public async Task<List<RfqDraft>> GetDraftsAsync(RfqFilter filter)
+        public async Task<List<RfqDraft>> GetDraftsAsync(RfqFilter filter, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -31,7 +31,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                          @DateFrom,
                                                          @DateTo,
                                                          @RFQType,
-                                                         @ProcurementType";
+                                                         @ProcurementType,
+                                                         @UserId";
 
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", filter.BusinessUnitId);
@@ -41,6 +42,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@DateTo", filter.DateTo);
                 command.Parameters.AddWithValue(command, "@RFQType", filter.RFQType);
                 command.Parameters.AddWithValue(command, "@ProcurementType", filter.ProcurementType);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 List<RfqDraft> rfqDrafts = new();
                 using var reader = await command.ExecuteReaderAsync();
@@ -100,11 +102,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 rfqBase.HasAttachments = false;
             }
 
-            rfqBase.BusinessCategory = new()
-            {
-                Id = reader.Get<int>("BusinessCategoryId"),
-                Name = reader.Get<string>("BusinessCategoryName")
-            };
+            rfqBase.BusinessCategoryId = reader.Get<int>("BusinessCategoryId");
+            rfqBase.BusinessCategoryName = reader.Get<string>("BusinessCategoryName");
         }
 
         private RfqDraft GetRFQDraftFromReader(IDataReader reader)
@@ -536,12 +535,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<RFQInProgress>> GetInProgressesAsync(RFQFilterBase filter)
+        public async Task<List<RFQInProgress>> GetInProgressesAsync(RFQFilterBase filter, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText =
-                    @"EXEC SP_RFQInProgress @BusinessUnitId,@ItemCode,@Emergency,@RFQType,@ProcurementType";
+                    @"EXEC SP_RFQInProgress @BusinessUnitId,@ItemCode,@Emergency,@RFQType,@ProcurementType,@UserId";
 
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", filter.BusinessUnitId);
@@ -549,6 +548,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Emergency", filter.Emergency);
                 command.Parameters.AddWithValue(command, "@RFQType", filter.RFQType);
                 command.Parameters.AddWithValue(command, "@ProcurementType", filter.ProcurementType);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 List<RFQInProgress> inProgressRFQs = new();
                 using var reader = await command.ExecuteReaderAsync();
@@ -607,6 +607,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
+        }
+
+        public async Task<List<int>> GetDetailIds(int id)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"select RFQDetailId from Procurement.RFQDetails where RFQMainId = @RfqmainId";
+            command.Parameters.AddWithValue(command, "@RfqmainId", id);
+
+            await using DbDataReader reader = await command.ExecuteReaderAsync();
+            List<int> datas = new();
+            while (await reader.ReadAsync())
+            {
+                datas.Add(reader.Get<int>("RfqmainId"));
+            }
+
+            return datas;
         }
 
         #endregion
