@@ -1,6 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Invoice;
-using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Helper;
 using SolaERP.Application.Models;
@@ -9,7 +8,6 @@ using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -25,7 +23,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
         public async Task<bool> ChangeStatus(int invoiceRegisterId, int sequence, int approveStatus, string comment,
-            int userId,int? rejectReasonId)
+            int userId, int? rejectReasonId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -353,11 +351,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             string grns = string.Join(',', model.GRNs);
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_InvoiceRegisterDetailsLoad @businessUnitId,@grns,@orderMainId,@date";
+            command.CommandText = @"exec dbo.SP_InvoiceRegisterDetailsLoad @businessUnitId,@grns,@orderMainId,@date,@advanceAmount";
             command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@grns", string.IsNullOrEmpty(grns) ? "-1" : grns);
             command.Parameters.AddWithValue(command, "@orderMainId", model.OrderMainId);
             command.Parameters.AddWithValue(command, "@date", model.Date);
+            command.Parameters.AddWithValue(command, "@advanceAmount", model.AdvanceAmount);
 
             using var reader = await command.ExecuteReaderAsync();
 
@@ -372,11 +371,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             string grns = model.GRNs is null ? "-1" : string.Join(',', model.GRNs);
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_InvoiceRegisterDetailsLoad @businessUnitId,@grns,@orderMainId,@date";
+            command.CommandText = @"exec dbo.SP_InvoiceRegisterDetailsLoad @businessUnitId,@grns,@orderMainId,@date,@advanceAmount";
             command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@grns", string.IsNullOrEmpty(grns) ? "-1" : grns);
             command.Parameters.AddWithValue(command, "@orderMainId", model.OrderMainId);
             command.Parameters.AddWithValue(command, "@date", model.Date);
+            command.Parameters.AddWithValue(command, "@advanceAmount", model.AdvanceAmount);
 
             using var reader = await command.ExecuteReaderAsync();
 

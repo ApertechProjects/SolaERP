@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Application.Models
+﻿namespace SolaERP.Application.Models
 {
     public class InvoiceGetDetailsModel
     {
@@ -12,5 +6,6 @@ namespace SolaERP.Application.Models
         public int OrderMainId { get; set; }
         public DateTime? Date { get; set; }
         public List<string> GRNs { get; set; }
+        public decimal AdvanceAmount { get; set; }
     }
 }

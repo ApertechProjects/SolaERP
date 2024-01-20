@@ -1,9 +1,4 @@
 ﻿using SolaERP.Application.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.Application.Dtos.Invoice
 {
@@ -43,6 +38,7 @@ namespace SolaERP.Application.Dtos.Invoice
         public string ItemName { get; set; }
         public decimal UnitPrice { get; set; }
         public string Description { get; set; }
+        public decimal AdvanceAmount { get; set; }
         public int AnalysisCode1Id { get; set; }
         public int AnalysisCode2Id { get; set; }
         public int AnalysisCode3Id { get; set; }
