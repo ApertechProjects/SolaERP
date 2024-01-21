@@ -4,7 +4,7 @@
     {
         public string GRNNo { get; set; }
         public int GRNLine { get; set; }
-        public decimal GRNQTY { get; set; }
+        public decimal Quantity { get; set; }
         public decimal Total { get; set; }
         public decimal BaseAmount { get; set; }
         public decimal ReportingAmount { get; set; }
