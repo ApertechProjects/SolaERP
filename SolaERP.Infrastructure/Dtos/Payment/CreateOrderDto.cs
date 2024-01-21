@@ -2,7 +2,7 @@
 
 namespace SolaERP.Application.Dtos.Payment
 {
-    public class CreateOrderDto 
+    public class CreateOrderDto
     {
         public string TransactionReference { get; set; }
         public string SystemInvoiceNo { get; set; }
@@ -24,5 +24,6 @@ namespace SolaERP.Application.Dtos.Payment
         public string PaymentTermsName { get; set; }
         public int AgingDays { get; set; }
         public decimal PaidAmount { get; set; }
+        public string Department { get; set; }
     }
 }
