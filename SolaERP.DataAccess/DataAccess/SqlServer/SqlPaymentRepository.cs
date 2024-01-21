@@ -1119,6 +1119,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     instance.POSTER_ID = reader.Get<string>("POSTER_ID");
                     instance.ALLOC_ID = reader.Get<string>("ALLOC_ID");
                     instance.JNL_REVERSAL_TYPE = reader.Get<int?>("JNL_REVERSAL_TYPE");
+                    instance.InvoiceNo = reader.Get<string>("InvoiceNo");
+                    instance.Reference = reader.Get<string>("Reference");
                     datas.Add(instance);
                 }
 
