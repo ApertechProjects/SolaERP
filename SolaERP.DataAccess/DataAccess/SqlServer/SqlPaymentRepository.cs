@@ -2,13 +2,13 @@
 using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Entities.Payment;
 using SolaERP.Application.Enums;
+using SolaERP.Application.Helper;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using SolaERP.Application.Helper;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -593,7 +593,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentDocumentDetails_IUD @Data";
-                command.Parameters.AddTableValue(command, "@Data", "PaymentDocumentDetailsType", model);
+                command.Parameters.AddTableValue(command, "@Data", "PaymentDocumentDetailsType_2", model);
                 var value = await command.ExecuteNonQueryAsync();
                 return value > 0;
             }
