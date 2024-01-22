@@ -563,11 +563,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             List<InvoiceRegisterServiceDetailsLoad> invoices = new List<InvoiceRegisterServiceDetailsLoad>();
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText =
-                @"exec dbo.SP_InvoiceRegisterServiceDetailsLoad @businessUnitId,@orderMainId,@date,@totalAmount";
+                @"exec dbo.SP_InvoiceRegisterServiceDetailsLoad @businessUnitId,@orderMainId,@date,@totalAmount,@advanceAmount";
             command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@orderMainId", model.OrderMainId);
             command.Parameters.AddWithValue(command, "@date", model.Date);
             command.Parameters.AddWithValue(command, "@totalAmount", model.TotalAmount);
+            command.Parameters.AddWithValue(command, "@advanceAmount", model.AdvanceAmount);
 
             await using var reader = await command.ExecuteReaderAsync();
 

@@ -11,6 +11,7 @@
         public string ItemName { get; set; }
         public string AccountCode { get; set; }
         public string LineDescription { get; set; }
+        public decimal AdvanceAmount { get; set; }
         public string MWP { get; set; }
         public decimal Quantity { get; set; }
         public decimal UnitPrice { get; set; }
