@@ -55,22 +55,30 @@ namespace SolaERP.Persistence.Services
             if (request.Id <= 0) response = await _repository.AddMainAsync(request);
             else response = await _repository.UpdateMainAsync(request);
 
-            await _attachmentService.SaveAttachmentAsync(request.Attachments, SourceType.RFQ, response.Id);
+            if (request.Attachments != null)
+                await _attachmentService.SaveAttachmentAsync(request.Attachments, SourceType.RFQ, response.Id);
 
             CombineWithDeletedDetails(request);
             var combinedRequestDetails = CombineDeletedRequestsWithAll(request.Details);
 
+           
+            for (int i = 0; i < request.Details.Count; i++)
+            {
+                if (request.Details[i].Id < 0)
+                    request.Details[i].Id = 0;
+            }
 
             if (request.Details is not null && request.Details.Count > 0)
             {
-                await _repository.DetailsIUDAsync(request.Details, response.Id);
-                var detailIds = await _repository.GetDetailIds(request.Id);
+                var res = await _repository.DetailsIUDAsync(request.Details, response.Id);
+                var detailIds = await _repository.GetDetailIds(response.Id);
 
                 for (int i = 0; i < request.Details.Count; i++)
                 {
                     RfqDetailSaveModel item = request.Details[i];
                     item.Id = detailIds[i];
-                    await _attachmentService.SaveAttachmentAsync(item.Attachments, SourceType.RFQD, item.Id);
+                    if (item.Attachments != null)
+                        await _attachmentService.SaveAttachmentAsync(item.Attachments, SourceType.RFQD, item.Id);
 
                     response.DetailIds = detailIds;
                 }

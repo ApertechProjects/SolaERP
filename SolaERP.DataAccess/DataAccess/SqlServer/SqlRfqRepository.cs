@@ -619,7 +619,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             List<int> datas = new();
             while (await reader.ReadAsync())
             {
-                datas.Add(reader.Get<int>("RfqmainId"));
+                datas.Add(reader.Get<int>("RFQDetailId"));
             }
 
             return datas;
