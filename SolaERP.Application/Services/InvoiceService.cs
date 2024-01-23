@@ -234,10 +234,15 @@ namespace SolaERP.Persistence.Services
                 var advanceSave = await _invoiceRepository.SaveInvoiceMatchingAdvances(mainId, advanceTable);
 
                 var dataTable = model.Details.ConvertListOfCLassToDataTable();
+                
                 var result = await _invoiceRepository.SaveInvoiceMatchingDetails(mainId, dataTable);
+                   
+                await _unitOfWork.SaveChangesAsync();
+                
+                await _invoiceRepository.InvoiceIUDIntegration(model.Main.BusinessUnitId, mainId, userId);
+                
                 if (result)
                 {
-                    await _unitOfWork.SaveChangesAsync();
                     resultModel.MainId = mainId;
                     resultModel.DetailIds = await _invoiceRepository.GetDetailIds(mainId);
                     return ApiResponse<SaveResultModel>.Success(resultModel, 200);
@@ -309,11 +314,12 @@ namespace SolaERP.Persistence.Services
                 var dataTable = details.ConvertListOfCLassToDataTable();
                 var result = await _invoiceRepository.SaveInvoiceMatchingDetails(mainId, dataTable);
 
+                await _unitOfWork.SaveChangesAsync();
+                
                 await _invoiceRepository.InvoiceIUDIntegration(model.Main.BusinessUnitId, mainId, userId);
                 
                 if (result)
                 {
-                    await _unitOfWork.SaveChangesAsync();
                     resultModel.MainId = mainId;
                     resultModel.DetailIds = await _invoiceRepository.GetDetailIds(mainId);
                     return ApiResponse<SaveResultModel>.Success(resultModel, 200);
