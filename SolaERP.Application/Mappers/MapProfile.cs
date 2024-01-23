@@ -644,6 +644,10 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<ApprovalInfo, ApprovalInfoDto>().ReverseMap();
 
             CreateMap<InvoiceMatchingMainGRN, InvoiceMatchingMainGRNDto>().ReverseMap();
+
+            CreateMap<InvoicesMatchingDetailsTypeDto, InvoicesMatchingDetailsType>()
+                .ForMember(x=>x.AdvanceTotal,y=>y.MapFrom(x=>x.AdvanceAmount))
+                .ReverseMap();
         }
     }
 }

@@ -304,7 +304,9 @@ namespace SolaERP.Persistence.Services
                 var grnTable = model.RNEInvoicesMatchingTypeList.ConvertListOfCLassToDataTable();
                 var grnSave = await _invoiceRepository.SaveInvoiceMatchingGRNs(mainId, grnTable);
 
-                var dataTable = model.Details.ConvertListOfCLassToDataTable();
+
+                var details = _mapper.Map<List<InvoicesMatchingDetailsType>>(model.Details);
+                var dataTable = details.ConvertListOfCLassToDataTable();
                 var result = await _invoiceRepository.SaveInvoiceMatchingDetails(mainId, dataTable);
 
                 await _invoiceRepository.InvoiceIUDIntegration(model.Main.BusinessUnitId, mainId, userId);
