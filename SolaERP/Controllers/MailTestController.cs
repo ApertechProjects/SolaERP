@@ -5,7 +5,6 @@ using SolaERP.Application.Contracts.Services;
 namespace SolaERP.API.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [Authorize]
     [ApiController]
     public class MailTestController : ControllerBase
     {
@@ -15,16 +14,16 @@ namespace SolaERP.API.Controllers
             _mailService = mailService;
         }
         [HttpGet]
-        public async Task<string> SendMail()
+        public async Task<string> SendMail(string to)
         {
             try
             {
-                await _mailService.SendManualMailsAsync("hulya.garibli@apertech.net");
+                await _mailService.SendManualMailsAsync(to);
                 return "Operation Successful";
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                return ex.StackTrace;
             }
         }
     }

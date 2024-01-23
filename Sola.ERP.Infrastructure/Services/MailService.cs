@@ -217,18 +217,18 @@ namespace SolaERP.Infrastructure.Services
             {
                 using (SmtpClient smtpClient = new SmtpClient())
                 {
-                    var basicCredential = new NetworkCredential(_configuration["Mail:Email"], _configuration["Mail:Password"]);
+                    var basicCredential = new NetworkCredential("erpsyteline@stp.az", "Re@cti10&*(");
 
-                    smtpClient.Host = _configuration["Mail:Host"];
-                    smtpClient.Port = Convert.ToInt16(_configuration["Mail:Port"]);
-                    smtpClient.EnableSsl = Convert.ToBoolean(_configuration["Mail:EnableSSL"]);
+                    smtpClient.Host = "mail.stp.az";
+                    smtpClient.Port = 5225;
+                    smtpClient.EnableSsl = true;
                     smtpClient.UseDefaultCredentials = false;
                     smtpClient.Credentials = basicCredential;
 
                     using (MailMessage message = new MailMessage())
                     {
 
-                        message.From = new MailAddress(_configuration["Mail:Email"], _configuration["Mail:Alias"]);
+                        message.From = new MailAddress("erpsyteline@stp.az", _configuration["Mail:Alias"]);
                         message.Subject = "Subject";
                         message.IsBodyHtml = true;
                         message.Body = "Test Mail";
