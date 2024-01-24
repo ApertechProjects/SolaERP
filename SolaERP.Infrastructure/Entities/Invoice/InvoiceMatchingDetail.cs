@@ -41,9 +41,9 @@ public class InvoicesMatchingDetailsTypeDto
     public string GRNNo { get; set; }
     public int GRNLine { get; set; }
     public string MWP { get; set; }
-    public decimal Quantity { get; set; }
+    public decimal ServiceAmount { get; set; }
     public decimal UnitPrice { get; set; }
-    public decimal Total { get; set; }
+    public decimal InvoiceAmount { get; set; }
     public string Description { get; set; }
     public int AnalysisCode1Id { get; set; }
     public int AnalysisCode2Id { get; set; }

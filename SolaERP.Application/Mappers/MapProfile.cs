@@ -647,6 +647,8 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<InvoicesMatchingDetailsTypeDto, InvoicesMatchingDetailsType>()
                 .ForMember(x=>x.AdvanceTotal,y=>y.MapFrom(x=>x.AdvanceAmount))
+                .ForMember(x=>x.Quantity,y=>y.MapFrom(x=>x.ServiceAmount)) 
+                .ForMember(x=>x.Total, y=>y.MapFrom(x=>x.InvoiceAmount))
                 .ReverseMap();
         }
     }
