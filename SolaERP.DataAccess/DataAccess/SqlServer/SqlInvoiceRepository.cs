@@ -351,7 +351,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             string grns = string.Join(',', model.GRNs);
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_InvoiceRegisterDetailsLoad @businessUnitId,@grns,@orderMainId,@date,@advanceAmount";
+            command.CommandText =
+                @"exec dbo.SP_InvoiceRegisterDetailsLoad @businessUnitId,@grns,@orderMainId,@date,@advanceAmount";
             command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@grns", string.IsNullOrEmpty(grns) ? "-1" : grns);
             command.Parameters.AddWithValue(command, "@orderMainId", model.OrderMainId);
@@ -371,7 +372,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             string grns = model.GRNs is null ? "-1" : string.Join(',', model.GRNs);
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_InvoiceRegisterDetailsLoad @businessUnitId,@grns,@orderMainId,@date,@advanceAmount";
+            command.CommandText =
+                @"exec dbo.SP_InvoiceRegisterDetailsLoad @businessUnitId,@grns,@orderMainId,@date,@advanceAmount";
             command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@grns", string.IsNullOrEmpty(grns) ? "-1" : grns);
             command.Parameters.AddWithValue(command, "@orderMainId", model.OrderMainId);
@@ -466,7 +468,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@InvoiceMatchingMainId", request.InvoiceMatchingMainId);
             command.Parameters.AddWithValue(command, "@BusinessUnitId", request.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@OrderMainId", request.OrderMainId);
-            command.Parameters.AddWithValue(command, "@InvoiceRegisterId", request.InvoiceRegisterId);
+            command.Parameters.AddWithValue(command, "@InvoiceRegisterId",
+                request.InvoiceRegisterId == 0 ? null : request.InvoiceRegisterId);
             command.Parameters.AddWithValue(command, "@WHT", request.WHT);
             command.Parameters.AddWithValue(command, "@Comment", request.Comment);
             command.Parameters.AddWithValue(command, "@TransactionDate", request.TransactionDate);
@@ -497,17 +500,15 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return value > 0;
         }
 
-        public async Task<bool> SaveInvoiceMatchingAdvances(int requestInvoiceRegisterId, int requestMatchingId,
+        public async Task<bool> SaveInvoiceMatchingAdvances(int requestMatchingId,
             DataTable dataTable)
         {
             await using var command = _unitOfWork.CreateCommand() as SqlCommand;
             command.CommandText = @"EXEC SP_InvoiceMatchingAdvances_IUD
                                     @InvoiceMatchingMainId,
-                                    @InvoiceRegisterId,
                                     @AdvanceInvoicesMatchingType";
 
             command.Parameters.AddWithValue(command, "@InvoiceMatchingMainId", requestMatchingId);
-            command.Parameters.AddWithValue(command, "@InvoiceRegisterId", requestInvoiceRegisterId);
             command.Parameters.AddTableValue(command, "@AdvanceInvoicesMatchingType", "AdvanceInvoicesMatchingType",
                 dataTable);
             var value = await command.ExecuteNonQueryAsync();
@@ -536,6 +537,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
             command.Parameters.AddWithValue(command, "@InvoiceRegisterId", invoiceRegisterId);
             command.Parameters.AddWithValue(command, "@UserId", userId);
+            await _unitOfWork.SaveChangesAsync();
             return await command.ExecuteNonQueryAsync() > 0;
         }
 
@@ -556,15 +558,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return orders;
         }
 
-        public async Task<List<InvoiceRegisterServiceDetailsLoad>> InvoiceRegisterDetailsLoad(InvoiceRegisterServiceLoadModel model)
+        public async Task<List<InvoiceRegisterServiceDetailsLoad>> InvoiceRegisterDetailsLoad(
+            InvoiceRegisterServiceLoadModel model)
         {
             List<InvoiceRegisterServiceDetailsLoad> invoices = new List<InvoiceRegisterServiceDetailsLoad>();
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_InvoiceRegisterServiceDetailsLoad @businessUnitId,@orderMainId,@date,@totalAmount";
+            command.CommandText =
+                @"exec dbo.SP_InvoiceRegisterServiceDetailsLoad @businessUnitId,@orderMainId,@date,@totalAmount,@advanceAmount";
             command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
             command.Parameters.AddWithValue(command, "@orderMainId", model.OrderMainId);
             command.Parameters.AddWithValue(command, "@date", model.Date);
             command.Parameters.AddWithValue(command, "@totalAmount", model.TotalAmount);
+            command.Parameters.AddWithValue(command, "@advanceAmount", model.AdvanceAmount);
 
             await using var reader = await command.ExecuteReaderAsync();
 
@@ -579,7 +584,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             List<int> invoices = new List<int>();
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"select InvoiceMatchingDetailId from Finance.InvoiceMatchingDetails where InvoiceMatchingMainid = @id";
+            command.CommandText =
+                @"select InvoiceMatchingDetailId from Finance.InvoiceMatchingDetails where InvoiceMatchingMainid = @id";
             command.Parameters.AddWithValue(command, "@id", invoiceMatchingMainId);
 
             await using var reader = await command.ExecuteReaderAsync();
@@ -590,7 +596,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return invoices;
         }
 
-        public async Task<bool> CheckInvoiceRegister(int invoiceRegisterId, int businessUnit, string vendorCode, string invoiceNo)
+        public async Task<bool> CheckInvoiceRegister(int invoiceRegisterId, int businessUnit, string vendorCode,
+            string invoiceNo)
         {
             int result = 0;
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
@@ -686,5 +693,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return list;
         }
+
+        public async Task InvoiceIUDIntegration(int businessUnitId, int invoiceMatchingMainId, int userId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = _businessUnitHelper.BuildQueryForIntegration(businessUnitId,
+                "SP_M_Invoice_IUD @BusinessUnitId, @InvoiceMatchingMainId, @UserId");
+
+            command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+            command.Parameters.AddWithValue(command, "@InvoiceMatchingMainId", invoiceMatchingMainId);
+            command.Parameters.AddWithValue(command, "@UserId", userId);
+            await _unitOfWork.SaveChangesAsync();
+            await command.ExecuteNonQueryAsync();
+        }   
     }
 }

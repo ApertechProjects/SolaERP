@@ -7,7 +7,9 @@ namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IInvoiceRepository
     {
-        Task<bool> ChangeStatus(int invoiceRegisterId, int sequence, int approveStatus, string comment, int userId, int? rejectReasonId);
+        Task<bool> ChangeStatus(int invoiceRegisterId, int sequence, int approveStatus, string comment, int userId,
+            int? rejectReasonId);
+
         Task<List<RegisterAll>> RegisterAll(InvoiceRegisterGetModel model, int userId);
         Task<List<RegisterListByOrder>> RegisterListByOrder(int orderMainId);
         Task<List<RegisterLoadGRN>> RegisterLoadGRN(int invoiceRegisterId);
@@ -32,8 +34,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<int> SaveInvoiceMatchingMain(InvoiceMathcingMain request, int userId);
         Task<bool> SaveInvoiceMatchingGRNs(int requestInvoiceMatchingMainId, DataTable dataTable);
 
-        Task<bool> SaveInvoiceMatchingAdvances(int requestInvoiceRegisterId, int requestMatchingId,
-            DataTable dataTable);
+        Task<bool> SaveInvoiceMatchingAdvances(int requestMatchingId, DataTable dataTable);
 
         Task<bool> SaveInvoiceMatchingDetails(int requestInvoiceMatchingMainid, DataTable dataTable);
         Task<List<int>> GetDetailIds(int invoiceMatchingMainId);
@@ -44,5 +45,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<RegisterDraft>> RegisterDraft(InvoiceRegisterGetModel model, int userId);
         Task<List<RegisterHeld>> RegisterHeld(InvoiceRegisterGetModel model, int userId);
         Task<List<InvoiceMatchingMainGRN>> MatchingMainGRNList(InvoiceMatchingMainModel model);
+        Task InvoiceIUDIntegration(int businessUnitId, int invoiceMatchingMainId, int userId);
     }
 }

@@ -28,5 +28,6 @@ namespace SolaERP.Application.Entities.Payment
         public string PaymentTermsName { get; set; }
         public int AgingDays { get; set; }
         public decimal PaidAmount { get; set; }
+        public string Department { get; set; }
     }
 }

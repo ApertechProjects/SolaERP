@@ -18,6 +18,7 @@ namespace SolaERP.Application.Entities.RFQ
         public int Condition { get; set; }
         public bool AlternativeItem { get; set; }
         public decimal ConversionRate { get; set; }
+        [NotInclude]
         public List<AttachmentSaveModel> Attachments { get; set; }
         [NotInclude]
         public List<int> DeletedRequestDetailIds { get; set; }

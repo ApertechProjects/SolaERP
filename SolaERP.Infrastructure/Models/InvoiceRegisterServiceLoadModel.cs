@@ -12,6 +12,7 @@ namespace SolaERP.Application.Models
         public int OrderMainId { get; set; }
         public DateTime Date { get; set; }
         public decimal TotalAmount { get; set; }
+        public decimal AdvanceAmount { get; set; }
     }
 
 

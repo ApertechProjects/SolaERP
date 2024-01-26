@@ -132,6 +132,7 @@ namespace SolaERP.Extensions
 
         public static void UseValidationExtension(this WebApplicationBuilder builder)
         {
+            builder.Services.AddValidatorsFromAssemblyContaining<OrderSaveValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<UserValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<AttachmentValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<RequestMainValidation>();

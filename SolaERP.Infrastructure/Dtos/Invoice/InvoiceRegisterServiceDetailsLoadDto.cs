@@ -20,6 +20,7 @@
         public decimal ReportingRate { get; set; }
         public decimal BaseTotal { get; set; }
         public decimal ReportingTotal { get; set; }
+        public decimal AdvanceAmount { get; set; }
         public string Description { get; set; }
         public int CatId { get; set; }
         public int AnalysisCode1Id { get; set; }
