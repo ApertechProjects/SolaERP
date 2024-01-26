@@ -833,7 +833,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<Application.Entities.Vendors.VendorRepresentedProduct> GetRepresentedProductAsync(
+        public async Task<VendorRepresentedProduct> GetRepresentedProductAsync(
             int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
