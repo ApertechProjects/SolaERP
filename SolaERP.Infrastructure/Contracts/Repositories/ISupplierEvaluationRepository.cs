@@ -1,6 +1,5 @@
 ﻿using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Entities.SupplierEvaluation;
-using SolaERP.Application.Entities.VendorDueDiligence;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
@@ -17,6 +16,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<Country>> GetCountriesAsync();
         Task<List<PrequalificationCategory>> GetPrequalificationCategoriesAsync();
         Task<List<ProductService>> GetProductServicesAsync();
+        Task<List<BusinessSector>> GetBusinessSectorAsync();
         Task<List<PaymentTerms>> GetPaymentTermsAsync();
         Task<List<DeliveryTerms>> GetDeliveryTermsAsync();
         Task<List<Currency>> GetCurrenciesAsync();
@@ -57,6 +57,8 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> DeletePrequalificationCategoryAsync(int vendorId);
         Task<bool> AddVendorBusinessCategoryAsync(VendorBusinessCategoryData data);
         Task<bool> DeleteVendorBusinessCategoryAsync(int vendorId);
+        Task<bool> AddVendorBusinessSectorAsync(VendorBusinessSectorData data);
+        Task<bool> DeleteVendorBusinessSectorAsync(int vendorId);
         Task<bool> AddRepresentedCompany(Models.VendorRepresentedCompany data);
         Task<bool> DeleteRepresentedCompanyAsync(int vendorId);
         Task<bool> AddRepresentedProductAsync(RepresentedProductData data);

@@ -8,5 +8,6 @@ namespace SolaERP.Application.Entities.SupplierEvaluation
         public int Id { get; set; }
         [DbColumn("BusinessCategoryName")]
         public string Name { get; set; }
+        public int BusinessSectorId { get; set; }
     }
 }
