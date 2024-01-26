@@ -1,15 +1,8 @@
-﻿using SolaERP.DataAccess.Extensions;
-using SolaERP.Application.Contracts.Repositories;
-using SolaERP.Application.Entities.BusinessUnits;
+﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.UOM;
-using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
-using System;
-using System.Collections.Generic;
+using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -48,11 +41,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             throw new NotImplementedException();
         }
 
-        public async Task<List<UOM>> GetUOMListBusinessUnitCode(string businessUnitCode)
+        public async Task<List<UOM>> GetUOMListBusinessUnitCode(int businessUnitId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = ReplaceQuery("[dbo].[VW_UNI_UOM_List]", new ReplaceParams { ParamName = "APT", Value = businessUnitCode });
+                command.CommandText = "exec dbo.SP_UOMList @businessUnitId";
+                command.Parameters.AddWithValue(command, "@businessUnitId", businessUnitId);
                 using var reader = await command.ExecuteReaderAsync();
 
                 List<UOM> UOMs = new List<UOM>();

@@ -22,7 +22,7 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> UOM(int businessUnitId)
         {
             var businessUnitCode = await _businessUnitService.GetBusinessUnitCode(businessUnitId);
-            return CreateActionResult(await _uomService.GetUOMListBusinessUnitCode(businessUnitCode));
+            return CreateActionResult(await _uomService.GetUOMListBusinessUnitCode(businessUnitId));
         }
     }
 }
