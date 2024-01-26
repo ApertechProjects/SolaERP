@@ -17,6 +17,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<PrequalificationCategory>> GetPrequalificationCategoriesAsync();
         Task<List<ProductService>> GetProductServicesAsync();
         Task<List<BusinessSector>> GetBusinessSectorAsync();
+        Task<List<VendorBusinessSector>> GetBusinessSectorAsync(int vendorId);
         Task<List<PaymentTerms>> GetPaymentTermsAsync();
         Task<List<DeliveryTerms>> GetDeliveryTermsAsync();
         Task<List<Currency>> GetCurrenciesAsync();

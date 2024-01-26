@@ -69,6 +69,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public bool AgreeWithDefaultDays { get; set; }
         public string Other { get; set; }
         public List<ProductService> Services { get; set; }
+        public List<VendorBusinessSector> BusinessSectors { get; set; }
         public List<PrequalificationCategory> PrequalificationTypes { get; set; }
         public List<BusinessCategory> BusinessCategories { get; set; }
         public List<AttachmentDto> CompanyLogo { get; set; }

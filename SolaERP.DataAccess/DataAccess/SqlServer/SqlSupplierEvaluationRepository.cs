@@ -998,5 +998,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return resultList;
             }
         }
+
+        public async Task<List<VendorBusinessSector>> GetBusinessSectorAsync(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec [dbo].[SP_VendorBusinessSector_Load] @vendorId";
+                command.Parameters.AddWithValue(command, "@vendorId", vendorId);
+
+                List<VendorBusinessSector> resultList = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<VendorBusinessSector>());
+
+                return resultList;
+            }
+        }
     }
 }

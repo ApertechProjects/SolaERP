@@ -591,6 +591,7 @@ namespace SolaERP.Persistence.Services
             var businessCategoriesTask = await _generalRepository.BusinessCategories();
             var businessSectorTask = await _repository.GetBusinessSectorAsync();
             var vendorRepresentedProduct = await _repository.GetRepresentedProductAsync(vendor);
+            var vendorBusinessSector = await _repository.GetBusinessSectorAsync(vendor);
             var vendorBusinessCategoriesTask = await _repository.GetVendorBuCategoriesAsync(vendor);
             var companyInfoTask = await _repository.GetCompanyInfoAsync(vendor);
             if (vendor == 0)
@@ -629,7 +630,7 @@ namespace SolaERP.Persistence.Services
             companyInfo.City ??= "";
             companyInfo.RepresentedProducts = vendorRepresentedProduct?.RepresentedProductName?.Split(",");
             companyInfo.RepresentedCompanies = vendorRepresentedCompany?.RepresentedCompanyName?.Split(",");
-
+            companyInfo.BusinessSectors = vendorBusinessSector;
             companyInfo.Services = matchedProductServices;
             var contactPerson = _mapper.Map<ContactPersonDto>(user);
             contactPerson.ContactPerson ??= "";
