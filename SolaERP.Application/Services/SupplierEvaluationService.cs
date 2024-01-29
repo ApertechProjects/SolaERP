@@ -140,7 +140,7 @@ namespace SolaERP.Persistence.Services
                 #region ProductServices
 
                 await _repository.DeleteProductServiceAsync(vendorId);
-                foreach (var item in command.CompanyInformation.BusinessCategories)
+                foreach (var item in command.CompanyInformation.Services)
                 {
                     await _repository.AddProductServiceAsync(new ProductServiceData
                     {
