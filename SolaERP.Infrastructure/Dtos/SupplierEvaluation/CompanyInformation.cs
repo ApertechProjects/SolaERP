@@ -1,6 +1,7 @@
 ﻿using SolaERP.Application.Dtos.Attachment;
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.SupplierEvaluation;
+using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Dtos.SupplierEvaluation
@@ -40,10 +41,11 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public List<ProductService> Services { get; set; }
         public List<PrequalificationCategory> PrequalificationTypes { get; set; }
         public List<BusinessCategory> BusinessCategories { get; set; }
+        public List<BusinessSector> BusinessSectors { get; set; }
         public List<AttachmentSaveModel> CompanyLogo { get; set; }
         public List<AttachmentSaveModel> Attachments { get; set; }
     }
-    
+
     public class CompanyInfoViewDto
     {
         public int? VendorId { get; set; }
@@ -67,6 +69,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public bool AgreeWithDefaultDays { get; set; }
         public string Other { get; set; }
         public List<ProductService> Services { get; set; }
+        public List<VendorBusinessSector> BusinessSectors { get; set; }
         public List<PrequalificationCategory> PrequalificationTypes { get; set; }
         public List<BusinessCategory> BusinessCategories { get; set; }
         public List<AttachmentDto> CompanyLogo { get; set; }

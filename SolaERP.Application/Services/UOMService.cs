@@ -27,9 +27,9 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<UOMDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<List<UOMDto>>> GetUOMListBusinessUnitCode(string businessUnitCode)
+        public async Task<ApiResponse<List<UOMDto>>> GetUOMListBusinessUnitCode(int businessUnitId)
         {
-            var uoms = await _uomRepository.GetUOMListBusinessUnitCode(businessUnitCode);
+            var uoms = await _uomRepository.GetUOMListBusinessUnitCode(businessUnitId);
             var dto = _mapper.Map<List<UOMDto>>(uoms);
             return ApiResponse<List<UOMDto>>.Success(dto, 200);
         }

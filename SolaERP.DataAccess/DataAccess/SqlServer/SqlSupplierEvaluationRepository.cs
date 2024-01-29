@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using SolaERP.Application.Contracts.Repositories;
+﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
@@ -9,7 +8,6 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
-using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -386,7 +384,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
         public async Task<bool> DeleteCOBCAsync(int vendorId)
-            => await ModifyCOBC(new() { VendorId  = vendorId});
+            => await ModifyCOBC(new() { VendorId = vendorId });
 
         private async Task<bool> ModifyCOBC(VendorCOBC cobc)
         {
@@ -725,12 +723,33 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<bool> AddVendorBusinessSectorAsync(VendorBusinessSectorData data)
+         => await ModifyVendorBusinessSectorSaveAsync(data);
+
+        public async Task<bool> DeleteVendorBusinessSectorAsync(int vendorId)
+            => await ModifyVendorBusinessSectorSaveAsync(new VendorBusinessSectorData { VendorId = vendorId });
+
+        public async Task<bool> ModifyVendorBusinessSectorSaveAsync(VendorBusinessSectorData data)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorBusinessSector_ID @VendorId,
+                                                                          @BusinessSectorId";
+
+
+                command.Parameters.AddWithValue(command, "@VendorId", data.VendorId);
+                command.Parameters.AddWithValue(command, "@BusinessSectorId", data.BusinessSectorId);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
+
         public async Task<bool> AddRepresentedCompany(Application.Models.VendorRepresentedCompany data)
             => await ModifyRepresentedCategorySaveAsync(data);
 
         public async Task<bool> DeleteRepresentedCompanyAsync(int vendorId)
             => await ModifyRepresentedCategorySaveAsync(new Application.Models.VendorRepresentedCompany
-                { VendorId = vendorId });
+            { VendorId = vendorId });
 
         public async Task<bool> ModifyRepresentedCategorySaveAsync(Application.Models.VendorRepresentedCompany data)
         {
@@ -814,7 +833,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<Application.Entities.Vendors.VendorRepresentedProduct> GetRepresentedProductAsync(
+        public async Task<VendorRepresentedProduct> GetRepresentedProductAsync(
             int vendorId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -961,6 +980,39 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     resultList.Add(reader.GetByEntityStructure<VendorBankDetail>());
 
                 return resultList.Count > 0;
+            }
+        }
+
+        public async Task<List<BusinessSector>> GetBusinessSectorAsync()
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SELECT * FROM [dbo].[VW_BusinessSectorList]";
+
+                List<BusinessSector> resultList = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<BusinessSector>());
+
+                return resultList;
+            }
+        }
+
+        public async Task<List<VendorBusinessSector>> GetBusinessSectorAsync(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec [dbo].[SP_VendorBusinessSector_Load] @vendorId";
+                command.Parameters.AddWithValue(command, "@vendorId", vendorId);
+
+                List<VendorBusinessSector> resultList = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<VendorBusinessSector>());
+
+                return resultList;
             }
         }
     }

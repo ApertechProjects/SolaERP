@@ -537,6 +537,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
             command.Parameters.AddWithValue(command, "@InvoiceRegisterId", invoiceRegisterId);
             command.Parameters.AddWithValue(command, "@UserId", userId);
+            await _unitOfWork.SaveChangesAsync();
             return await command.ExecuteNonQueryAsync() > 0;
         }
 

@@ -51,7 +51,7 @@ namespace SolaERP.Persistence.Services
                     model.InvoiceRegisterIds[i].Sequence, model.ApproveStatus, model.Comment, userId,
                     model.RejectReasonId);
 
-                if (model.InvoiceRegisterIds[i].InMaxSequence && model.InvoiceRegisterIds[i].InvoiceTypeId == 2)
+                if (model.InvoiceRegisterIds[i].InMaxSequence && model.InvoiceRegisterIds[i].InvoiceTypeId == 1)
                 {
                     var data = await _invoiceRepository.InvoiceIUD(model.BusinessUnitId,
                         model.InvoiceRegisterIds[i].InvoiceRegisterId, userId);
@@ -233,11 +233,17 @@ namespace SolaERP.Persistence.Services
                 var advanceTable = model.AdvanceInvoicesMatchingTypeList.ConvertListOfCLassToDataTable();
                 var advanceSave = await _invoiceRepository.SaveInvoiceMatchingAdvances(mainId, advanceTable);
 
-                var dataTable = model.Details.ConvertListOfCLassToDataTable();
+                var detailsData = _mapper.Map<List<InvoicesMatchingDetailsType>>(model.Details);
+                var dataTable = detailsData.ConvertListOfCLassToDataTable();
+
                 var result = await _invoiceRepository.SaveInvoiceMatchingDetails(mainId, dataTable);
+
+                await _unitOfWork.SaveChangesAsync();
+
+                await _invoiceRepository.InvoiceIUDIntegration(model.Main.BusinessUnitId, mainId, userId);
+
                 if (result)
                 {
-                    await _unitOfWork.SaveChangesAsync();
                     resultModel.MainId = mainId;
                     resultModel.DetailIds = await _invoiceRepository.GetDetailIds(mainId);
                     return ApiResponse<SaveResultModel>.Success(resultModel, 200);
@@ -304,14 +310,16 @@ namespace SolaERP.Persistence.Services
                 var grnTable = model.RNEInvoicesMatchingTypeList.ConvertListOfCLassToDataTable();
                 var grnSave = await _invoiceRepository.SaveInvoiceMatchingGRNs(mainId, grnTable);
 
+
                 var dataTable = model.Details.ConvertListOfCLassToDataTable();
                 var result = await _invoiceRepository.SaveInvoiceMatchingDetails(mainId, dataTable);
 
+                await _unitOfWork.SaveChangesAsync();
+
                 await _invoiceRepository.InvoiceIUDIntegration(model.Main.BusinessUnitId, mainId, userId);
-                
+
                 if (result)
                 {
-                    await _unitOfWork.SaveChangesAsync();
                     resultModel.MainId = mainId;
                     resultModel.DetailIds = await _invoiceRepository.GetDetailIds(mainId);
                     return ApiResponse<SaveResultModel>.Success(resultModel, 200);

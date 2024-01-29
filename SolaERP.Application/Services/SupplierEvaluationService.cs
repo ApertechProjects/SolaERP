@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Http;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Attachment;
@@ -117,6 +116,20 @@ namespace SolaERP.Persistence.Services
                     {
                         VendorId = vendorId,
                         BusinessCategoryId = item.Id
+                    });
+                }
+
+                #endregion
+
+                #region BusinessSector
+
+                await _repository.DeleteVendorBusinessSectorAsync(vendorId);
+                foreach (var item in command.CompanyInformation.BusinessSectors)
+                {
+                    await _repository.AddVendorBusinessSectorAsync(new VendorBusinessSectorData
+                    {
+                        VendorId = vendorId,
+                        BusinessSectorId = item.BusinessSectorId
                     });
                 }
 
@@ -576,7 +589,9 @@ namespace SolaERP.Persistence.Services
             var vendorPrequalificationTask = await _repository.GetVendorPrequalificationAsync(vendor);
             var prequalificationTypesTask = await _repository.GetPrequalificationCategoriesAsync();
             var businessCategoriesTask = await _generalRepository.BusinessCategories();
+            var businessSectorTask = await _repository.GetBusinessSectorAsync();
             var vendorRepresentedProduct = await _repository.GetRepresentedProductAsync(vendor);
+            var vendorBusinessSector = await _repository.GetBusinessSectorAsync(vendor);
             var vendorBusinessCategoriesTask = await _repository.GetVendorBuCategoriesAsync(vendor);
             var companyInfoTask = await _repository.GetCompanyInfoAsync(vendor);
             if (vendor == 0)
@@ -615,7 +630,7 @@ namespace SolaERP.Persistence.Services
             companyInfo.City ??= "";
             companyInfo.RepresentedProducts = vendorRepresentedProduct?.RepresentedProductName?.Split(",");
             companyInfo.RepresentedCompanies = vendorRepresentedCompany?.RepresentedCompanyName?.Split(",");
-
+            companyInfo.BusinessSectors = vendorBusinessSector;
             companyInfo.Services = matchedProductServices;
             var contactPerson = _mapper.Map<ContactPersonDto>(user);
             contactPerson.ContactPerson ??= "";
@@ -630,6 +645,7 @@ namespace SolaERP.Persistence.Services
                 Services = await _repository.GetProductServicesAsync(),
                 ContactPerson = contactPerson,
                 Countries = countries,
+                BusinessSectors = businessSectorTask
             };
 
             return ApiResponse<VM_GET_InitalRegistration>.Success(viewModel, 200);
