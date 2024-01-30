@@ -23,4 +23,10 @@ namespace SolaERP.Application.Models
         public List<InvoiceMatchAdvance> InvoiceMatchAdvances { get; set; }
         public List<InvoiceMatchGRN> InvoiceMatchGRN { get; set; }
     }
+
+    public class InvoiceMatchGetModel
+    {
+        public int InvoiceMatchingId { get; set; }
+        public int BusinessUnitId { get; set; }
+    }
 }
