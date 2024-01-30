@@ -140,9 +140,9 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> InvoiceRegisterServiceDetailsLoad(InvoiceRegisterServiceLoadModel model)
             => CreateActionResult(await _invoiceService.InvoiceRegisterServiceDetailsLoad(model));
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetInvoiceMatchData(int invoiceMatchingId,int businessUnitId)
-        //    =>CreateActionResult(await )
+        [HttpGet("{invoiceMatchingMainId}/{businessUnitId}")]
+        public async Task<IActionResult> GetInvoiceMatchData(int invoiceMatchingMainId, int businessUnitId)
+            => CreateActionResult(await _invoiceService.GetInvoiceMatchData(invoiceMatchingMainId, businessUnitId));
 
 
     }

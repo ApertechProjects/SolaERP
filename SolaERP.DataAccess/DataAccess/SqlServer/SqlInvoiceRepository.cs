@@ -8,6 +8,7 @@ using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -705,6 +706,78 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@UserId", userId);
             await _unitOfWork.SaveChangesAsync();
             await command.ExecuteNonQueryAsync();
-        }   
+        }
+
+        public async Task<InvoiceMatchResultModel> GetInvoiceMatchData(int invoiceMatchingMainId, int businessUnitId)
+        {
+            InvoiceMatchResultModel resultModel = new InvoiceMatchResultModel();
+            resultModel.InvoiceMatchMainData = await InvoiceMatchMainData(invoiceMatchingMainId);
+            resultModel.InvoiceMatchDetailDatas = await InvoiceMatchDetailData(invoiceMatchingMainId, businessUnitId);
+            resultModel.InvoiceMatchAdvances = await InvoiceMatchAdvance(invoiceMatchingMainId);
+            resultModel.InvoiceMatchGRN = await InvoiceMatchGRN(invoiceMatchingMainId);
+            return resultModel;
+
+        }
+
+        public async Task<InvoiceMatchMainData> InvoiceMatchMainData(int invoiceMatchMainId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_InvoiceMatchingMainLoad @invoiceMatchingMainId";
+            command.Parameters.AddWithValue(command, "@invoiceMatchingMainId", invoiceMatchMainId);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            InvoiceMatchMainData mainData = new InvoiceMatchMainData();
+            if (reader.Read())
+                mainData = reader.GetByEntityStructure<InvoiceMatchMainData>();
+
+            return mainData;
+        }
+
+        public async Task<List<InvoiceMatchDetailData>> InvoiceMatchDetailData(int invoiceMatchMainId, int businessUnitId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_InvoiceMatchingDetailsLoad @invoiceMatchingMainId,@businessUnitId";
+            command.Parameters.AddWithValue(command, "@invoiceMatchingMainId", invoiceMatchMainId);
+            command.Parameters.AddWithValue(command, "@businessUnitId", businessUnitId);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<InvoiceMatchDetailData> detailData = new List<InvoiceMatchDetailData>();
+            while (reader.Read())
+                detailData.Add(reader.GetByEntityStructure<InvoiceMatchDetailData>());
+
+            return detailData;
+        }
+
+        public async Task<List<InvoiceMatchAdvance>> InvoiceMatchAdvance(int invoiceMatchMainId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_InvoiceMatchingAdvancesLoad @invoiceMatchingMainId";
+            command.Parameters.AddWithValue(command, "@invoiceMatchingMainId", invoiceMatchMainId);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<InvoiceMatchAdvance> advanceData = new List<InvoiceMatchAdvance>();
+            while (reader.Read())
+                advanceData.Add(reader.GetByEntityStructure<InvoiceMatchAdvance>());
+
+            return advanceData;
+        }
+
+        public async Task<List<InvoiceMatchGRN>> InvoiceMatchGRN(int invoiceMatchMainId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_InvoiceMatchingGRNLoad @invoiceMatchingMainId";
+            command.Parameters.AddWithValue(command, "@invoiceMatchingMainId", invoiceMatchMainId);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<InvoiceMatchGRN> grnData = new List<InvoiceMatchGRN>();
+            while (reader.Read())
+                grnData.Add(reader.GetByEntityStructure<InvoiceMatchGRN>());
+
+            return grnData;
+        }
     }
 }

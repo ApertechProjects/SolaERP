@@ -394,5 +394,16 @@ namespace SolaERP.Persistence.Services
             var dto = _mapper.Map<List<InvoiceMatchingMainGRNDto>>(data);
             return ApiResponse<List<InvoiceMatchingMainGRNDto>>.Success(dto, 200);
         }
+
+        public async Task<ApiResponse<InvoiceMatchResultModelDto>> GetInvoiceMatchData(int invoiceMatchingMainId, int businessUnitId)
+        {
+            var data = await _invoiceRepository.GetInvoiceMatchData(invoiceMatchingMainId, businessUnitId);
+            InvoiceMatchResultModelDto resultModel = new InvoiceMatchResultModelDto();
+            resultModel.InvoiceMatchMainData = _mapper.Map<InvoiceMatchMainDataDto>(data.InvoiceMatchMainData);
+            resultModel.InvoiceMatchDetailDatas = _mapper.Map<List<InvoiceMatchDetailDataDto>>(data.InvoiceMatchDetailDatas);
+            resultModel.InvoiceMatchAdvances = _mapper.Map<List<InvoiceMatchAdvanceDto>>(data.InvoiceMatchAdvances);
+            resultModel.InvoiceMatchGRN = _mapper.Map<List<InvoiceMatchGRNDto>>(data.InvoiceMatchGRN);
+            return ApiResponse<InvoiceMatchResultModelDto>.Success(resultModel);
+        }
     }
 }
