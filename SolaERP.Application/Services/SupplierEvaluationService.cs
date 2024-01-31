@@ -605,7 +605,7 @@ namespace SolaERP.Persistence.Services
             companyInfo.BusinessSectors = vendorBusinessSector;
             companyInfo.Services = matchedProductServices;
 
-            return ApiResponse<CompanyInfoViewDto>.Success(200);
+            return ApiResponse<CompanyInfoViewDto>.Success(companyInfo);
         }
 
         public async Task<ApiResponse<VM_GET_InitalRegistration>> GetInitRegistrationAsync(string userIdentity,
