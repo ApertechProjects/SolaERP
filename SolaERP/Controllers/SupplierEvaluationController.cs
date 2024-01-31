@@ -24,9 +24,9 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> InitReg(int? vendorId = null)
             => CreateActionResult(await _service.GetInitRegistrationAsync(User.Identity.Name, vendorId));
 
-        //[HttpGet]
-        //public async Task<IActionResult> CompanyInformation(int vendorId)
-        //    => CreateActionResult(await _service.CompanyInformation(vendorId));
+        [HttpGet("[action]")]
+        public async Task<IActionResult> CompanyInformation(int vendorId)
+            => CreateActionResult(await _service.CompanyInformation(vendorId));
 
         [HttpGet("[action]")]
         public async Task<IActionResult> NonDisclosureAgreement(int? vendorId = null)
