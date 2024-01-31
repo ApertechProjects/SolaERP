@@ -29,5 +29,6 @@ namespace SolaERP.Application.Contracts.Services
             bool isRevise);
 
         Task<ApiResponse<bool>> UpdateVendor(string name, string taxId);
+        Task<ApiResponse<CompanyInfoViewDto>> CompanyInformation(int vendorId);
     }
 }

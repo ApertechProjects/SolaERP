@@ -17,6 +17,7 @@ using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Infrastructure.ViewModels;
 using SolaERP.Persistence.Utils;
+using System.Numerics;
 using PrequalificationGridData = SolaERP.Application.Entities.SupplierEvaluation.PrequalificationGridData;
 
 namespace SolaERP.Persistence.Services
@@ -135,8 +136,6 @@ namespace SolaERP.Persistence.Services
 
                 #endregion
 
-                //
-
                 #region ProductServices
 
                 await _repository.DeleteProductServiceAsync(vendorId);
@@ -150,8 +149,6 @@ namespace SolaERP.Persistence.Services
                 }
 
                 #endregion
-
-                //
 
                 #region PrequalificationCategory
 
@@ -167,16 +164,12 @@ namespace SolaERP.Persistence.Services
 
                 #endregion
 
-                //
-
                 #region Company Information Logo
 
                 await _attachmentService.SaveAttachmentAsync(command?.CompanyInformation?.CompanyLogo,
                     SourceType.VEN_LOGO, vendorId);
 
                 #endregion
-
-                //
 
                 #region Company Information Attachments
 
@@ -185,8 +178,6 @@ namespace SolaERP.Persistence.Services
 
                 #endregion
 
-                //
-
                 #region Setting Vendor Ids (COBC,NDA,Bank Accounts)
 
                 command?.CodeOfBuConduct?.ForEach(x => x.VendorId = vendorId);
@@ -194,9 +185,6 @@ namespace SolaERP.Persistence.Services
                 command?.BankAccounts?.ForEach(x => x.VendorId = vendorId);
 
                 #endregion
-
-                //
-
 
                 #region NDA
 
@@ -220,7 +208,6 @@ namespace SolaERP.Persistence.Services
                 }
 
                 #endregion
-
 
                 #region COBC
 
@@ -279,7 +266,6 @@ namespace SolaERP.Persistence.Services
                 }
 
                 #endregion
-
 
                 #region DueDiligence
 
@@ -466,7 +452,6 @@ namespace SolaERP.Persistence.Services
 
                 #endregion
 
-
                 if (processSelector.IsCreate && user.UserTypeId == 0)
                 {
                     user.VendorId = vendorId;
@@ -579,6 +564,49 @@ namespace SolaERP.Persistence.Services
             => ApiResponse<List<DueDiligenceDesignDto>>.Success(await GetDueDesignsAsync(userIdentity, Language.en,
                 vendorId));
 
+        public async Task<ApiResponse<CompanyInfoViewDto>> CompanyInformation(int vendor)
+        {
+            var productServicesTask = await _repository.GetProductServicesAsync();
+            var vendorProductsTask = await _repository.GetVendorProductServices(vendor);
+            var companyInfoTask = await _repository.GetCompanyInfoAsync(vendor);
+            var businessCategoriesTask = await _generalRepository.BusinessCategories();
+            var vendorBusinessCategoriesTask = await _repository.GetVendorBuCategoriesAsync(vendor);
+            var vendorPrequalificationTask = await _repository.GetVendorPrequalificationAsync(vendor);
+            var prequalificationTypesTask = await _repository.GetPrequalificationCategoriesAsync();
+            var vendorRepresentedProduct = await _repository.GetRepresentedProductAsync(vendor);
+            var vendorBusinessSector = await _repository.GetBusinessSectorAsync(vendor);
+
+            var venLogoAttachmentTask =
+             await _attachmentService.GetAttachmentsAsync(vendor, SourceType.VEN_LOGO, Modules.Vendors);
+            var venOletAttachmentTask =
+                await _attachmentService.GetAttachmentsAsync(vendor, SourceType.VEN_OLET, Modules.EvaluationForm);
+            var matchedPrequalificationTypes = prequalificationTypesTask
+               .Where(x => vendorPrequalificationTask.Select(y => y.PrequalificationCategoryId).Contains(x.Id))
+               .ToList();
+
+            var matchedBuCategories = businessCategoriesTask
+                .Where(x => vendorBusinessCategoriesTask.Select(y => y.BusinessCategoryId).Contains(x.Id))
+                .ToList();
+
+            var matchedProductServices = productServicesTask
+             .Where(x => vendorProductsTask.Select(y => y.ProductServiceId).Contains(x.Id))
+            .ToList();
+
+            var vendorRepresentedCompany = await _repository.GetRepresentedCompanyAsync(vendor);
+
+            var companyInfo = _mapper.Map<CompanyInfoViewDto>(companyInfoTask);
+            companyInfo.PrequalificationTypes = matchedPrequalificationTypes;
+            companyInfo.BusinessCategories = matchedBuCategories;
+            companyInfo.CompanyLogo = venLogoAttachmentTask;
+            companyInfo.Attachments = venOletAttachmentTask;
+            companyInfo.City ??= "";
+            companyInfo.RepresentedProducts = vendorRepresentedProduct?.RepresentedProductName?.Split(",");
+            companyInfo.RepresentedCompanies = vendorRepresentedCompany?.RepresentedCompanyName?.Split(",");
+            companyInfo.BusinessSectors = vendorBusinessSector;
+            companyInfo.Services = matchedProductServices;
+
+            return ApiResponse<CompanyInfoViewDto>.Success(companyInfo);
+        }
 
         public async Task<ApiResponse<VM_GET_InitalRegistration>> GetInitRegistrationAsync(string userIdentity,
             int? revisedVendorId = null)
@@ -1143,5 +1171,7 @@ namespace SolaERP.Persistence.Services
                 .GetRevisionNumberByVendorCode(command.CompanyInformation.VendorCode).Result;
             command.CompanyInformation.ReviseNo = resviseNo + 1;
         }
+
+
     }
 }
