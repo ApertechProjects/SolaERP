@@ -566,13 +566,17 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<CompanyInfoViewDto>> CompanyInformation(int vendor)
         {
+            var companyInfoTask = await _repository.GetCompanyInfoAsync(vendor);
+
             var productServicesTask = await _repository.GetProductServicesAsync();
             var vendorProductsTask = await _repository.GetVendorProductServices(vendor);
-            var companyInfoTask = await _repository.GetCompanyInfoAsync(vendor);
+
             var businessCategoriesTask = await _generalRepository.BusinessCategories();
             var vendorBusinessCategoriesTask = await _repository.GetVendorBuCategoriesAsync(vendor);
-            var vendorPrequalificationTask = await _repository.GetVendorPrequalificationAsync(vendor);
+
             var prequalificationTypesTask = await _repository.GetPrequalificationCategoriesAsync();
+            var vendorPrequalificationTask = await _repository.GetVendorPrequalificationAsync(vendor);
+
             var vendorRepresentedProduct = await _repository.GetRepresentedProductAsync(vendor);
             var vendorBusinessSector = await _repository.GetBusinessSectorAsync(vendor);
 
@@ -580,6 +584,7 @@ namespace SolaERP.Persistence.Services
              await _attachmentService.GetAttachmentsAsync(vendor, SourceType.VEN_LOGO, Modules.Vendors);
             var venOletAttachmentTask =
                 await _attachmentService.GetAttachmentsAsync(vendor, SourceType.VEN_OLET, Modules.EvaluationForm);
+
             var matchedPrequalificationTypes = prequalificationTypesTask
                .Where(x => vendorPrequalificationTask.Select(y => y.PrequalificationCategoryId).Contains(x.Id))
                .ToList();
