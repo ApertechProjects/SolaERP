@@ -12,7 +12,7 @@ namespace SolaERP.Application.Entities.RFQ
         public decimal RequestQuantity { get; set; }
         public decimal OutStandingQTY { get; set; }
         public string ItemCode { get; set; }
-        public BusinessCategory BusinessCategory { get; set; }
+        public BusinessCategoryForRFQ BusinessCategory { get; set; }
         public int Condition { get; set; }
         public bool AlternativeItem { get; set; }
         public string ItemName1 { get; set; }
