@@ -115,12 +115,12 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<GroupMenuResponseDto>.Success(response, 200);
         }
 
-        public async Task<ApiResponse<AdditionalPrivilegeAccessDto>> GetAdditionalPrivilegeAccessAsync(string name)
+        public async Task<ApiResponse<List<AdditionalPrivilegeAccessDto>>> GetAdditionalPrivilegeAccessAsync(string name)
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var users = await _menuRepository.GetAdditionalPrivilegeAccessAsync(userId);
-            var dto = _mapper.Map<AdditionalPrivilegeAccessDto>(users);
-            return ApiResponse<AdditionalPrivilegeAccessDto>.Success(dto, 200);
+            var dto = _mapper.Map<List<AdditionalPrivilegeAccessDto>>(users);
+            return ApiResponse<List<AdditionalPrivilegeAccessDto>>.Success(dto, 200);
         }
 
         public async Task<ApiResponse<List<MenuWithPrivilege>>> GetMenuWithPrivilegeListByGroupIdAsync(int groupId)

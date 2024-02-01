@@ -57,7 +57,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
      
 
-        public async Task<AdditionalPrivilegeAccess> GetAdditionalPrivilegeAccessAsync(int userId)
+        public async Task<List<AdditionalPrivilegeAccess>> GetAdditionalPrivilegeAccessAsync(int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -65,10 +65,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 using var reader = await command.ExecuteReaderAsync();
 
-                AdditionalPrivilegeAccess user = new AdditionalPrivilegeAccess();
-                if (reader.Read())
+                List<AdditionalPrivilegeAccess> user = new List<AdditionalPrivilegeAccess>();
+                while (reader.Read())
                 {
-                    user = reader.GetByEntityStructure<AdditionalPrivilegeAccess>();
+                    user.Add(reader.GetByEntityStructure<AdditionalPrivilegeAccess>());
                 }
                 return user;
             }

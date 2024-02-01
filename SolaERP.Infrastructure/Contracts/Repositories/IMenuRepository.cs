@@ -7,7 +7,7 @@ namespace SolaERP.Application.Contracts.Repositories
     {
         Task<List<MenuWithPrivilages>> GetUserMenuWithPrivilegesAsync(int userId);
         Task<List<GroupMenu>> GetGroupMenusByGroupIdAsync(int groupId);
-        Task<AdditionalPrivilegeAccess> GetAdditionalPrivilegeAccessAsync(int userId);
+        Task<List<AdditionalPrivilegeAccess>> GetAdditionalPrivilegeAccessAsync(int userId);
         Task<List<MenuWithPrivilages>> GetMenuWithPrivilegesAsync(int groupId);
     }
 }
