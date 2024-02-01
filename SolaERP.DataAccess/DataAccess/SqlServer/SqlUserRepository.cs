@@ -149,6 +149,15 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public async Task<int> SaveUserAsync(User entity)
         {
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             string query = @"SET NOCOUNT OFF Exec SP_AppUser_IUD @Id,@FullName,@ChangePassword,@Theme,@UserName
                                                                 ,@Email,@PasswordHash,@PhoneNumber ,@UserTypeId
                                                                 ,@VendorId,@UserToken,@Gender,@Buyer,@Description

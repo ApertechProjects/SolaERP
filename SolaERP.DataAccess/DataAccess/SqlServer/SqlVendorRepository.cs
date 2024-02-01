@@ -112,9 +112,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         private async Task<int> ModifyBankDetailsAsync(int userId, VendorBankDetail bankDetail)
         {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            try
             {
-                command.CommandText = @"DECLARE	 @NewVendorBankId int
+
+                using (var command = _unitOfWork.CreateCommand() as DbCommand)
+                {
+                    command.CommandText = @"DECLARE	 @NewVendorBankId int
                                         SET NOCOUNT OFF EXEC SP_VendorBankDetails_IUD @VendorBankDetailId,
                                                                       @VendorId,
                                                                       @Beneficiary,
@@ -132,28 +135,35 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                       SELECT @NewVendorBankId as N'@NewVendorBankId'";
 
 
-                command.Parameters.AddWithValue(command, "@VendorBankDetailId", bankDetail.Id);
-                command.Parameters.AddWithValue(command, "@VendorId", bankDetail.VendorId);
-                command.Parameters.AddWithValue(command, "@Beneficiary", bankDetail.Beneficiary);
-                command.Parameters.AddWithValue(command, "@BeneficiaruTaxId", bankDetail.BeneficiaruTaxId);
-                command.Parameters.AddWithValue(command, "@Address", bankDetail.Address);
-                command.Parameters.AddWithValue(command, "@AccountNumber", bankDetail.AccountNumber);
-                command.Parameters.AddWithValue(command, "@Bank", bankDetail.Bank);
-                command.Parameters.AddWithValue(command, "@SWIFT", bankDetail.SWIFT);
-                command.Parameters.AddWithValue(command, "@BankCode", bankDetail.BankCode);
-                command.Parameters.AddWithValue(command, "@Currency", bankDetail.Currency);
-                command.Parameters.AddWithValue(command, "@BankTaxId", bankDetail.BankTaxId);
-                command.Parameters.AddWithValue(command, "@CoresspondentAccount", bankDetail.CorrespondentAccount);
-                command.Parameters.AddWithValue(command, "@UserId", userId);
+                    command.Parameters.AddWithValue(command, "@VendorBankDetailId", bankDetail.Id);
+                    command.Parameters.AddWithValue(command, "@VendorId", bankDetail.VendorId);
+                    command.Parameters.AddWithValue(command, "@Beneficiary", bankDetail.Beneficiary);
+                    command.Parameters.AddWithValue(command, "@BeneficiaruTaxId", bankDetail.BeneficiaruTaxId);
+                    command.Parameters.AddWithValue(command, "@Address", bankDetail.Address);
+                    command.Parameters.AddWithValue(command, "@AccountNumber", bankDetail.AccountNumber);
+                    command.Parameters.AddWithValue(command, "@Bank", bankDetail.Bank);
+                    command.Parameters.AddWithValue(command, "@SWIFT", bankDetail.SWIFT);
+                    command.Parameters.AddWithValue(command, "@BankCode", bankDetail.BankCode);
+                    command.Parameters.AddWithValue(command, "@Currency", bankDetail.Currency);
+                    command.Parameters.AddWithValue(command, "@BankTaxId", bankDetail.BankTaxId);
+                    command.Parameters.AddWithValue(command, "@CoresspondentAccount", bankDetail.CorrespondentAccount);
+                    command.Parameters.AddWithValue(command, "@UserId", userId);
 
-                using var reader = await command.ExecuteReaderAsync();
+                    using var reader = await command.ExecuteReaderAsync();
 
-                int id = 0;
-                if (reader.Read())
-                    id = reader.Get<int>("@NewVendorBankId");
+                    int id = 0;
+                    if (reader.Read())
+                        id = reader.Get<int>("@NewVendorBankId");
 
 
-                return id;
+                    return id;
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
 

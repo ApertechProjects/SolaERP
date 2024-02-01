@@ -1147,6 +1147,15 @@ namespace SolaERP.Persistence.Services
             command.CompanyInformation.ReviseNo = resviseNo + 1;
         }
 
+        private DateTime? SetRevisionDate(bool isSubmitted, bool isCreate)
+        {
+            if (isSubmitted && !isCreate)
+            {
+                return DateTime.UtcNow.AddHours(4);
+            }
+            return null;
+        }
+
         public async Task<ApiResponse<int>> SaveAsync(string userIdentity, SupplierRegisterCommand2 command)
         {
             try
@@ -1161,37 +1170,33 @@ namespace SolaERP.Persistence.Services
                 SetRevisionNumber(command, processSelector, command.IsSubmitted);
 
                 Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
-                if (command.IsSubmitted && !processSelector.IsCreate)
-                {
-                    vendor.ReviseDate = DateTime.UtcNow.AddHours(4);
-                }
 
                 int vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
 
+                vendor.ReviseDate = SetRevisionDate(command.IsSubmitted, processSelector.IsCreate);
                 vendor.RegistrationDate = vendor.RegistrationDate.ConvertDateToValidDate();
 
-                #region Represented Company & Represented Products
-
-                await _repository.DeleteRepresentedProductAsync(vendorId);
+                #region Represented Company
                 await _repository.DeleteRepresentedCompanyAsync(vendorId);
-
                 if (command?.CompanyInformation?.RepresentedCompanies != null)
                     await _repository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany
                     {
                         VendorId = vendorId,
                         RepresentedCompanyName = string.Join(",", command?.CompanyInformation?.RepresentedCompanies)
                     });
+                #endregion
+
+                #region Represented Products
+                await _repository.DeleteRepresentedProductAsync(vendorId);
                 if (command?.CompanyInformation?.RepresentedProducts != null)
                     await _repository.AddRepresentedProductAsync(new RepresentedProductData
                     {
                         VendorId = vendorId,
                         RepresentedProductName = string.Join(",", command?.CompanyInformation?.RepresentedProducts)
                     });
-
                 #endregion
 
                 #region BusinessCategory
-
                 await _repository.DeleteVendorBusinessCategoryAsync(vendorId);
                 foreach (var item in command.CompanyInformation.BusinessCategories)
                 {
@@ -1201,11 +1206,9 @@ namespace SolaERP.Persistence.Services
                         BusinessCategoryId = item.Id
                     });
                 }
-
                 #endregion
 
                 #region BusinessSector
-
                 await _repository.DeleteVendorBusinessSectorAsync(vendorId);
                 foreach (var item in command.CompanyInformation.BusinessSectors)
                 {
@@ -1215,11 +1218,9 @@ namespace SolaERP.Persistence.Services
                         BusinessSectorId = item.BusinessSectorId
                     });
                 }
-
                 #endregion
 
                 #region ProductServices
-
                 await _repository.DeleteProductServiceAsync(vendorId);
                 foreach (var item in command.CompanyInformation.Services)
                 {
@@ -1233,7 +1234,6 @@ namespace SolaERP.Persistence.Services
                 #endregion
 
                 #region PrequalificationCategory
-
                 await _repository.DeletePrequalificationCategoryAsync(vendorId);
                 foreach (var item in command.CompanyInformation.PrequalificationTypes)
                 {
@@ -1243,7 +1243,6 @@ namespace SolaERP.Persistence.Services
                         PrequalificationCategoryId = item.Id
                     });
                 }
-
                 #endregion
 
                 #region Company Information Logo
@@ -1269,7 +1268,6 @@ namespace SolaERP.Persistence.Services
                 #endregion
 
                 #region NDA
-
                 if (command.NonDisclosureAgreement is not null)
                 {
                     if (command.NonDisclosureAgreement.Count > 0)
@@ -1288,11 +1286,9 @@ namespace SolaERP.Persistence.Services
                         }
                     }
                 }
-
                 #endregion
 
                 #region COBC
-
                 if (command.CodeOfBuConduct is not null)
                 {
                     if (command.CodeOfBuConduct.Count > 0)
@@ -1314,7 +1310,6 @@ namespace SolaERP.Persistence.Services
                 #endregion
 
                 #region Bank Accounts
-
                 if (command.BankAccounts is not null)
                 {
                     for (var i = 0; i < command.BankAccounts.Count; i++)
@@ -1329,11 +1324,6 @@ namespace SolaERP.Persistence.Services
                         else
                         {
                             x.VendorId = vendorId;
-
-                            // if (await _repository.HasBankDetailByAccountNumberAsync(x.AccountNumber))
-                            // {
-                            //     throw new Exception("The Account Number must be unique.");
-                            // }
 
                             var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id,
                                 _mapper.Map<VendorBankDetail>(x));
