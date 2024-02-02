@@ -564,54 +564,6 @@ namespace SolaERP.Persistence.Services
             => ApiResponse<List<DueDiligenceDesignDto>>.Success(await GetDueDesignsAsync(userIdentity, Language.en,
                 vendorId));
 
-        public async Task<ApiResponse<CompanyInfoViewDto>> CompanyInformation(int vendor)
-        {
-            var companyInfoTask = await _repository.GetCompanyInfoAsync(vendor);
-
-            var productServicesTask = await _repository.GetProductServicesAsync();
-            var vendorProductsTask = await _repository.GetVendorProductServices(vendor);
-
-            var businessCategoriesTask = await _generalRepository.BusinessCategories();
-            var vendorBusinessCategoriesTask = await _repository.GetVendorBuCategoriesAsync(vendor);
-
-            var prequalificationTypesTask = await _repository.GetPrequalificationCategoriesAsync();
-            var vendorPrequalificationTask = await _repository.GetVendorPrequalificationAsync(vendor);
-
-            var vendorRepresentedProduct = await _repository.GetRepresentedProductAsync(vendor);
-            var vendorBusinessSector = await _repository.GetBusinessSectorAsync(vendor);
-
-            var venLogoAttachmentTask =
-             await _attachmentService.GetAttachmentsAsync(vendor, SourceType.VEN_LOGO, Modules.Vendors);
-            var venOletAttachmentTask =
-                await _attachmentService.GetAttachmentsAsync(vendor, SourceType.VEN_OLET, Modules.EvaluationForm);
-
-            var matchedPrequalificationTypes = prequalificationTypesTask
-               .Where(x => vendorPrequalificationTask.Select(y => y.PrequalificationCategoryId).Contains(x.Id))
-               .ToList();
-
-            var matchedBuCategories = businessCategoriesTask
-                .Where(x => vendorBusinessCategoriesTask.Select(y => y.BusinessCategoryId).Contains(x.Id))
-                .ToList();
-
-            var matchedProductServices = productServicesTask
-             .Where(x => vendorProductsTask.Select(y => y.ProductServiceId).Contains(x.Id))
-            .ToList();
-
-            var vendorRepresentedCompany = await _repository.GetRepresentedCompanyAsync(vendor);
-
-            var companyInfo = _mapper.Map<CompanyInfoViewDto>(companyInfoTask);
-            companyInfo.PrequalificationTypes = matchedPrequalificationTypes;
-            companyInfo.BusinessCategories = matchedBuCategories;
-            companyInfo.CompanyLogo = venLogoAttachmentTask;
-            companyInfo.Attachments = venOletAttachmentTask;
-            companyInfo.City ??= "";
-            companyInfo.RepresentedProducts = vendorRepresentedProduct?.RepresentedProductName?.Split(",");
-            companyInfo.RepresentedCompanies = vendorRepresentedCompany?.RepresentedCompanyName?.Split(",");
-            companyInfo.BusinessSectors = vendorBusinessSector;
-            companyInfo.Services = matchedProductServices;
-
-            return ApiResponse<CompanyInfoViewDto>.Success(companyInfo);
-        }
 
         public async Task<ApiResponse<VM_GET_InitalRegistration>> GetInitRegistrationAsync(string userIdentity,
             int? revisedVendorId = null)
@@ -665,10 +617,11 @@ namespace SolaERP.Persistence.Services
             companyInfo.RepresentedCompanies = vendorRepresentedCompany?.RepresentedCompanyName?.Split(",");
             companyInfo.BusinessSectors = vendorBusinessSector;
             companyInfo.Services = matchedProductServices;
-            var contactPerson = _mapper.Map<ContactPersonDto>(user);
-            contactPerson.ContactPerson ??= "";
-            contactPerson.Email ??= "";
-            contactPerson.PhoneNo ??= "";
+            companyInfo.PhoneNo = user.PhoneNumber;
+            companyInfo.ContactPerson = user.FullName;
+            companyInfo.Email = user.Email;
+            companyInfo.CreditDays = companyInfoTask.CreditDays;
+
             VM_GET_InitalRegistration viewModel = new()
             {
                 CompanyInformation = companyInfo,
@@ -676,7 +629,6 @@ namespace SolaERP.Persistence.Services
                 PaymentTerms = await _repository.GetPaymentTermsAsync(),
                 PrequalificationTypes = prequalificationTypesTask,
                 Services = await _repository.GetProductServicesAsync(),
-                ContactPerson = contactPerson,
                 Countries = countries,
                 BusinessSectors = businessSectorTask
             };
@@ -1177,6 +1129,416 @@ namespace SolaERP.Persistence.Services
             command.CompanyInformation.ReviseNo = resviseNo + 1;
         }
 
+        private void SetRevisionNumber(SupplierRegisterCommand2 command, ProcessSelectorDto processSelector,
+            bool isSubmitted)
+        {
+            if (processSelector.IsCreate)
+            {
+                command.CompanyInformation.ReviseNo = 0;
+                return;
+            }
+
+            if (!isSubmitted) return;
+
+            if (!processSelector.IsRevise) return;
+
+            var resviseNo = _vendorRepository
+                .GetRevisionNumberByVendorCode(command.CompanyInformation.VendorCode).Result;
+            command.CompanyInformation.ReviseNo = resviseNo + 1;
+        }
+
+        private DateTime? SetRevisionDate(bool isSubmitted, bool isCreate)
+        {
+            if (isSubmitted && !isCreate)
+            {
+                return DateTime.UtcNow.AddHours(4);
+            }
+            return null;
+        }
+
+        public async Task<ApiResponse<int>> SaveAsync(string userIdentity, SupplierRegisterCommand2 command)
+        {
+            try
+            {
+                User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
+                command.CompanyInformation.VendorCode = command.CompanyInformation.VendorCode == ""
+                    ? null
+                    : command.CompanyInformation.VendorCode;
+
+                var processSelector = GetProcessSelector(command.CompanyInformation.VendorId, command.IsRevise);
+
+                SetRevisionNumber(command, processSelector, command.IsSubmitted);
+
+                Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
+
+                int vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
+
+                vendor.ReviseDate = SetRevisionDate(command.IsSubmitted, processSelector.IsCreate);
+                vendor.RegistrationDate = vendor.RegistrationDate.ConvertDateToValidDate();
+
+                #region Represented Company
+                await _repository.DeleteRepresentedCompanyAsync(vendorId);
+                if (command?.CompanyInformation?.RepresentedCompanies != null)
+                    await _repository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany
+                    {
+                        VendorId = vendorId,
+                        RepresentedCompanyName = string.Join(",", command?.CompanyInformation?.RepresentedCompanies)
+                    });
+                #endregion
+
+                #region Represented Products
+                await _repository.DeleteRepresentedProductAsync(vendorId);
+                if (command?.CompanyInformation?.RepresentedProducts != null)
+                    await _repository.AddRepresentedProductAsync(new RepresentedProductData
+                    {
+                        VendorId = vendorId,
+                        RepresentedProductName = string.Join(",", command?.CompanyInformation?.RepresentedProducts)
+                    });
+                #endregion
+
+                #region BusinessCategory
+                await _repository.DeleteVendorBusinessCategoryAsync(vendorId);
+                foreach (var item in command.CompanyInformation.BusinessCategories)
+                {
+                    await _repository.AddVendorBusinessCategoryAsync(new VendorBusinessCategoryData
+                    {
+                        VendorId = vendorId,
+                        BusinessCategoryId = item.Id
+                    });
+                }
+                #endregion
+
+                #region BusinessSector
+                await _repository.DeleteVendorBusinessSectorAsync(vendorId);
+                foreach (var item in command.CompanyInformation.BusinessSectors)
+                {
+                    await _repository.AddVendorBusinessSectorAsync(new VendorBusinessSectorData
+                    {
+                        VendorId = vendorId,
+                        BusinessSectorId = item.BusinessSectorId
+                    });
+                }
+                #endregion
+
+                #region ProductServices
+                await _repository.DeleteProductServiceAsync(vendorId);
+                foreach (var item in command.CompanyInformation.Services)
+                {
+                    await _repository.AddProductServiceAsync(new ProductServiceData
+                    {
+                        VendorId = vendorId,
+                        ProductServiceId = item.Id
+                    });
+                }
+
+                #endregion
+
+                #region PrequalificationCategory
+                await _repository.DeletePrequalificationCategoryAsync(vendorId);
+                foreach (var item in command.CompanyInformation.PrequalificationTypes)
+                {
+                    await _repository.AddPrequalificationCategoryAsync(new PrequalificationCategoryData
+                    {
+                        VendorId = vendorId,
+                        PrequalificationCategoryId = item.Id
+                    });
+                }
+                #endregion
+
+                #region Company Information Logo
+
+                await _attachmentService.SaveAttachmentAsync(command?.CompanyInformation?.CompanyLogo,
+                    SourceType.VEN_LOGO, vendorId);
+
+                #endregion
+
+                #region Company Information Attachments
+
+                await _attachmentService.SaveAttachmentAsync(command?.CompanyInformation?.Attachments,
+                    SourceType.VEN_OLET, vendorId);
+
+                #endregion
+
+                #region Setting Vendor Ids (COBC,NDA,Bank Accounts)
+
+                command?.CodeOfBuConduct?.ForEach(x => x.VendorId = vendorId);
+                command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
+                command?.BankAccounts?.ForEach(x => x.VendorId = vendorId);
+
+                #endregion
+
+                #region NDA
+                if (command.NonDisclosureAgreement is not null)
+                {
+                    if (command.NonDisclosureAgreement.Count > 0)
+                    {
+                        await _repository.DeleteNDAAsync(vendorId);
+                    }
+
+                    for (int i = 0; i < command.NonDisclosureAgreement.Count; i++)
+                    {
+                        command.NonDisclosureAgreement[i].VendorId = vendorId;
+
+                        if (command.NonDisclosureAgreement[i].Type != 2)
+                        {
+                            var mappedNDA = _mapper.Map<VendorNDA>(command.NonDisclosureAgreement[i]);
+                            await _repository.AddNDAAsync(mappedNDA);
+                        }
+                    }
+                }
+                #endregion
+
+                #region COBC
+                if (command.CodeOfBuConduct is not null)
+                {
+                    if (command.CodeOfBuConduct.Count > 0)
+                    {
+                        await _repository.DeleteCOBCAsync(vendorId);
+                    }
+
+                    for (int i = 0; i < command.CodeOfBuConduct.Count; i++)
+                    {
+                        command.CodeOfBuConduct[i].VendorId = vendorId;
+
+                        if (command.CodeOfBuConduct[i].Type != 2)
+                        {
+                            await _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(command.CodeOfBuConduct[i]));
+                        }
+                    }
+                }
+
+                #endregion
+
+                #region Bank Accounts
+                if (command.BankAccounts is not null)
+                {
+                    for (var i = 0; i < command.BankAccounts.Count; i++)
+                    {
+                        var x = command.BankAccounts[i];
+
+                        if (x.Type == 2)
+                        {
+                            await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
+                        }
+
+                        else
+                        {
+                            x.VendorId = vendorId;
+
+                            var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id,
+                                _mapper.Map<VendorBankDetail>(x));
+
+                            if (x.AccountVerificationLetter != null)
+                            {
+                                await _attachmentService.SaveAttachmentAsync(x.AccountVerificationLetter,
+                                    SourceType.VEN_BNK, detaildId);
+                            }
+                        }
+                    }
+                }
+
+                #endregion
+
+                #region DueDiligence
+
+                if (command.DueDiligence is not null)
+                {
+                    foreach (var designSaveDto in command.DueDiligence)
+                    {
+                        foreach (var item in designSaveDto.Childs)
+                        {
+                            if (item.HasCheckBox == false)
+                            {
+                                item.CheckboxValue = false;
+                            }
+
+                            if (item.HasRadioBox == false)
+                            {
+                                item.RadioboxValue = false;
+                            }
+
+                            if (item.HasDateTime == false)
+                            {
+                                item.DateTimeValue = null;
+                            }
+
+                            if (item.TextareaValue == "null" || string.IsNullOrEmpty(item.TextareaValue))
+                            {
+                                item.TextareaValue = "";
+                            }
+
+                            if (item.TextboxValue == "null" || string.IsNullOrEmpty(item.TextboxValue))
+                            {
+                                item.TextboxValue = "";
+                            }
+
+                            var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
+                            dueInputModel.VendorId = vendorId;
+
+                            if (!string.IsNullOrEmpty(item.DateTimeValue) && item.DateTimeValue != "null")
+                            {
+                                try
+                                {
+                                    dueInputModel.DateTimeValue = Convert.ToDateTime(item.DateTimeValue);
+                                }
+                                catch (Exception e)
+                                {
+                                    dueInputModel.DateTimeValue = null;
+                                }
+                            }
+                            else
+                            {
+                                dueInputModel.DateTimeValue = null;
+                            }
+
+                            await _repository.UpdateDueAsync(dueInputModel);
+
+                            if (item?.HasDataGrid == true)
+                            {
+                                foreach (var gridData in item?.GridDatas)
+                                {
+                                    if (gridData.Type == 2)
+                                    {
+                                        await _repository.DeleteDueDesignGrid(gridData.Id);
+                                        continue;
+                                    }
+
+                                    var gridDatas = _mapper.Map<DueDiligenceGridModel>(gridData);
+                                    gridDatas.DueDesignId = item.DesignId;
+                                    gridDatas.VendorId = vendorId;
+
+                                    await _repository.UpdateDueDesignGrid(gridDatas);
+                                }
+                            }
+
+                            if (item.Attachments != null)
+                            {
+                                item.Attachments.ForEach(x => x.AttachmentTypeId = item.DesignId);
+                                await _attachmentService.SaveAttachmentAsync(item.Attachments, SourceType.VEN_DUE,
+                                    vendorId);
+                            }
+                        }
+                    }
+                }
+
+                #endregion
+
+                #region Prequalification
+
+                if (command.Prequalification is not null)
+                {
+                    for (int i = 0; i < command.Prequalification.Count; i++)
+                    {
+                        for (int j = 0; j < command.Prequalification[i].Prequalifications.Count; j++)
+                        {
+                            foreach (var item in command?.Prequalification?[i].Prequalifications[j]?.Childs)
+                            {
+                                if (item.HasCheckbox == false)
+                                {
+                                    item.CheckboxValue = false;
+                                }
+
+                                if (item.HasRadiobox == false)
+                                {
+                                    item.RadioboxValue = false;
+                                }
+
+                                if (item.HasDateTime == false &&
+                                    string.IsNullOrEmpty(item.DateTimeValue))
+                                {
+                                    item.DateTimeValue = null;
+                                }
+
+                                if (item.TextareaValue == "null" ||
+                                    string.IsNullOrEmpty(item.TextareaValue))
+                                {
+                                    item.TextareaValue = "";
+                                }
+
+                                if (item.TextboxValue == "null" ||
+                                    string.IsNullOrEmpty(item.TextboxValue))
+                                {
+                                    item.TextboxValue = "";
+                                }
+
+                                var prequalificationValue =
+                                    _mapper.Map<VendorPrequalificationValues>(item);
+                                if (!string.IsNullOrEmpty(item.DateTimeValue) &&
+                                    item.DateTimeValue != "null")
+                                {
+                                    try
+                                    {
+                                        prequalificationValue.DateTimeValue =
+                                            Convert.ToDateTime(item.DateTimeValue);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        prequalificationValue.DateTimeValue = null;
+                                    }
+                                }
+                                else
+                                {
+                                    prequalificationValue.DateTimeValue = null;
+                                }
+
+                                prequalificationValue.VendorId = vendorId;
+
+
+                                await _repository.UpdatePrequalification(prequalificationValue);
+
+
+                                if (item?.Attachments is not null)
+                                {
+                                    item.Attachments.ForEach(x => x.AttachmentTypeId = item.DesignId);
+                                    await _attachmentService.SaveAttachmentAsync(item.Attachments, SourceType.VEN_PREQ,
+                                        vendorId);
+                                }
+
+
+                                if (item.HasGrid == true)
+                                {
+                                    if (item.GridDatas != null)
+                                    {
+                                        foreach (var gridData in item.GridDatas)
+                                        {
+                                            var gridDatas =
+                                                _mapper.Map<PrequalificationGridData>(gridData);
+                                            if (gridData.Type == 2)
+                                            {
+                                                await _repository.DeletePreGridAsync(gridDatas
+                                                    .PreqqualificationGridDataId);
+                                                continue;
+                                            }
+
+                                            gridDatas.PreqqualificationDesignId = item.DesignId;
+                                            gridDatas.VendorId = vendorId;
+
+                                            await _repository.UpdatePreGridAsync(gridDatas);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                #endregion
+
+                if (processSelector.IsCreate && user.UserTypeId == 0)
+                {
+                    user.VendorId = vendorId;
+                    await _userRepository.SaveUserAsync(user);
+                }
+
+                await _unitOfWork.SaveChangesAsync();
+
+                return ApiResponse<int>.Success(vendorId, 200);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
     }
 }

@@ -24,9 +24,6 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> InitReg(int? vendorId = null)
             => CreateActionResult(await _service.GetInitRegistrationAsync(User.Identity.Name, vendorId));
 
-        [HttpGet("[action]")]
-        public async Task<IActionResult> CompanyInformation(int vendorId)
-            => CreateActionResult(await _service.CompanyInformation(vendorId));
 
         [HttpGet("[action]")]
         public async Task<IActionResult> NonDisclosureAgreement(int? vendorId = null)
@@ -59,6 +56,10 @@ namespace SolaERP.API.Controllers
             var token = _tokenHandler.GetAccessToken();
             return CreateActionResult(await _service.AddAsync(User.Identity.Name, token, command, isRevise));
         }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Save([FromBody] SupplierRegisterCommand2 command)
+            => CreateActionResult(await _service.SaveAsync(User.Identity.Name, command));
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Submit([FromBody] SupplierRegisterCommand command,

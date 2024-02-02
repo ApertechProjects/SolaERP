@@ -6,7 +6,6 @@ namespace SolaERP.Application.Models
 {
     public class VM_GET_InitalRegistration
     {
-        public ContactPersonDto ContactPerson { get; set; }
         public CompanyInfoViewDto CompanyInformation { get; set; }
         public List<BusinessCategory> BusinessCategories { get; set; }
         public List<BusinessSector> BusinessSectors { get; set; }
