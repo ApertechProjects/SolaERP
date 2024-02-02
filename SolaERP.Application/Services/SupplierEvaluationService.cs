@@ -617,10 +617,11 @@ namespace SolaERP.Persistence.Services
             companyInfo.RepresentedCompanies = vendorRepresentedCompany?.RepresentedCompanyName?.Split(",");
             companyInfo.BusinessSectors = vendorBusinessSector;
             companyInfo.Services = matchedProductServices;
-            var contactPerson = _mapper.Map<ContactPersonDto>(user);
-            contactPerson.ContactPerson ??= "";
-            contactPerson.Email ??= "";
-            contactPerson.PhoneNo ??= "";
+            companyInfo.PhoneNo = user.PhoneNumber;
+            companyInfo.ContactPerson = user.FullName;
+            companyInfo.Email = user.Email;
+            companyInfo.CreditDays = companyInfoTask.CreditDays;
+
             VM_GET_InitalRegistration viewModel = new()
             {
                 CompanyInformation = companyInfo,
@@ -628,7 +629,6 @@ namespace SolaERP.Persistence.Services
                 PaymentTerms = await _repository.GetPaymentTermsAsync(),
                 PrequalificationTypes = prequalificationTypesTask,
                 Services = await _repository.GetProductServicesAsync(),
-                ContactPerson = contactPerson,
                 Countries = countries,
                 BusinessSectors = businessSectorTask
             };
