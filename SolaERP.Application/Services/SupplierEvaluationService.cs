@@ -198,12 +198,8 @@ namespace SolaERP.Persistence.Services
                     for (int i = 0; i < command.NonDisclosureAgreement.Count; i++)
                     {
                         command.NonDisclosureAgreement[i].VendorId = vendorId;
-
-                        //if (command.NonDisclosureAgreement[i].Type != 2)
-                        //{
                         var mappedNDA = _mapper.Map<VendorNDA>(command.NonDisclosureAgreement[i]);
                         await _repository.AddNDAAsync(mappedNDA);
-                        //}
                     }
                 }
 
@@ -221,11 +217,7 @@ namespace SolaERP.Persistence.Services
                     for (int i = 0; i < command.CodeOfBuConduct.Count; i++)
                     {
                         command.CodeOfBuConduct[i].VendorId = vendorId;
-
-                        if (command.CodeOfBuConduct[i].Type != 2)
-                        {
-                            await _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(command.CodeOfBuConduct[i]));
-                        }
+                        await _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(command.CodeOfBuConduct[i]));
                     }
                 }
 
