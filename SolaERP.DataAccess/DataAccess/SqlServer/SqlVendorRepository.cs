@@ -205,17 +205,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<int> DeleteAsync(int userId, int id)
             => await ModifyVendorAsync(userId, new() { VendorId = id });
 
-        public async Task<bool> ChangeStatusAsync(int vendorId, int status, int userId)
+        public async Task<bool> ChangeStatusAsync(int vendorId, int status, int sequence, string comment, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorsChangeStatus @VendorId,
-                                                                                    @UserId,
-                                                                                    @Status";
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_VendorApprove @VendorId,
+                                                                              @UserId,
+                                                                              @ApproveStatusId,
+                                                                              @Comment,
+                                                                              @Sequence";
 
                 command.Parameters.AddWithValue(command, "@VendorId", vendorId);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
-                command.Parameters.AddWithValue(command, "@Status", status);
+                command.Parameters.AddWithValue(command, "@ApproveStatusId", status);
+                command.Parameters.AddWithValue(command, "@Sequence", sequence);
+                command.Parameters.AddWithValue(command, "@Comment", comment);
 
                 await _unitOfWork.SaveChangesAsync();
 

@@ -8,7 +8,9 @@ namespace SolaERP.Application.Models
 {
     public class VendorStatusModel
     {
-        public List<string> VendorIds { get; set; }
+        public List<int> VendorIds { get; set; }
         public int Status { get; set; }
+        public string Comment { get; set; }
+        public int Sequence { get; set; }
     }
 }

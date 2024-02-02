@@ -62,8 +62,7 @@ namespace SolaERP.Persistence.Services
             int counter = 0;
             for (int i = 0; i < taxModel.VendorIds.Count; i++)
             {
-                var taxId = await GetByTaxIdAsync(taxModel.VendorIds[i]);
-                var result = await _repository.ChangeStatusAsync(taxId, taxModel.Status, userId);
+                var result = await _repository.ChangeStatusAsync(taxModel.VendorIds[i], taxModel.Status, taxModel.Sequence, taxModel.Comment, userId);
                 if (result)
                     counter++;
             }
@@ -345,9 +344,9 @@ namespace SolaERP.Persistence.Services
             await _supplierRepository.DeleteRepresentedCompanyAsync(vendorId);
 
             await _supplierRepository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany
-                { VendorId = vendorId, RepresentedCompanyName = string.Join(",", vendor?.RepresentedCompanies) });
+            { VendorId = vendorId, RepresentedCompanyName = string.Join(",", vendor?.RepresentedCompanies) });
             await _supplierRepository.AddRepresentedProductAsync(new RepresentedProductData
-                { VendorId = vendorId, RepresentedProductName = string.Join(",", vendor?.RepresentedProducts) });
+            { VendorId = vendorId, RepresentedProductName = string.Join(",", vendor?.RepresentedProducts) });
 
             string vendorLogo = await _repository.GetVendorLogo(vendorId);
             vendor.Logo = await _fileUploadService.GetLinkForEntity(vendorDto.Logo, Modules.Vendors,

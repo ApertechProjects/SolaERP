@@ -794,7 +794,7 @@ namespace SolaERP.Persistence.Services
                 var vendor = await _vendorRepository.GetHeader(vendorId);
                 if (vendor.ReviseNo == 0)
                 {
-                    await _vendorRepository.ChangeStatusAsync(vendorId, 1, user.Id);
+                    await _vendorRepository.ChangeStatusAsync(vendorId, 1, 1, null, user.Id);
                 }
 
                 List<Task> emails = new List<Task>();
