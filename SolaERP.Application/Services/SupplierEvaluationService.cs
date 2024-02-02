@@ -190,20 +190,20 @@ namespace SolaERP.Persistence.Services
 
                 if (command.NonDisclosureAgreement is not null)
                 {
-                    //if (command.NonDisclosureAgreement.Count > 0)
-                    //{
-                    //    await _repository.DeleteNDAAsync(vendorId);
-                    //}
+                    if (command.NonDisclosureAgreement.Count > 0)
+                    {
+                        await _repository.DeleteNDAAsync(vendorId);
+                    }
 
                     for (int i = 0; i < command.NonDisclosureAgreement.Count; i++)
                     {
                         command.NonDisclosureAgreement[i].VendorId = vendorId;
 
-                        if (command.NonDisclosureAgreement[i].Type != 2)
-                        {
-                            var mappedNDA = _mapper.Map<VendorNDA>(command.NonDisclosureAgreement[i]);
-                            await _repository.AddNDAAsync(mappedNDA);
-                        }
+                        //if (command.NonDisclosureAgreement[i].Type != 2)
+                        //{
+                        var mappedNDA = _mapper.Map<VendorNDA>(command.NonDisclosureAgreement[i]);
+                        await _repository.AddNDAAsync(mappedNDA);
+                        //}
                     }
                 }
 
