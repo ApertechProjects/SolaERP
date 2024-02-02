@@ -30,8 +30,8 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _service.GetNDAAsync(User.Identity.Name, vendorId));
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> CodeOfBuConduct()
-            => CreateActionResult(await _service.GetCOBCAsync(User.Identity.Name));
+        public async Task<IActionResult> CodeOfBuConduct(int? vendorId = null)
+            => CreateActionResult(await _service.GetCOBCAsync(User.Identity.Name, vendorId));
 
         [HttpGet("[action]")]
         public async Task<IActionResult> BankDetails(int? vendorId = null)

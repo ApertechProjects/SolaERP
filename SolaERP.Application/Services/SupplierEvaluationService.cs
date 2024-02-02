@@ -518,9 +518,10 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<VM_GET_VendorBankDetails>.Success(bankDetails, 200);
         }
 
-        public async Task<ApiResponse<List<CodeOfBuConduct>>> GetCOBCAsync(string userIdentity)
+        public async Task<ApiResponse<List<CodeOfBuConduct>>> GetCOBCAsync(string userIdentity, int? revisedVendorId = null)
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
+            int vendorId = revisedVendorId ?? user.VendorId;
             List<VendorCOBC> cobc = await _repository.GetCOBCAsync(user.VendorId);
 
             var buUnits = await _buRepository.GetAllAsync();

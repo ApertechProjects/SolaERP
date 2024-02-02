@@ -17,7 +17,7 @@ namespace SolaERP.Application.Contracts.Services
 
         Task<ApiResponse<VM_GET_VendorBankDetails>> GetBankDetailsAsync(string userIdentity, int? vendorId = null);
         Task<ApiResponse<List<NonDisclosureAgreement>>> GetNDAAsync(string userIdentity, int? vendorId = null);
-        Task<ApiResponse<List<CodeOfBuConduct>>> GetCOBCAsync(string userIdentity);
+        Task<ApiResponse<List<CodeOfBuConduct>>> GetCOBCAsync(string userIdentity, int? vendorId = null);
 
         Task<ApiResponse<List<PrequalificationWithCategoryDto>>> GetPrequalificationAsync(string userIdentity,
             List<int> categoryIds, string acceptlang, int? vendorId = null);
