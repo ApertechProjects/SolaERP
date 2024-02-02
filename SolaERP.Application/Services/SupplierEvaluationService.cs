@@ -572,22 +572,23 @@ namespace SolaERP.Persistence.Services
             int vendor = revisedVendorId ?? user.VendorId;
 
             var vendorPrequalificationTask = await _repository.GetVendorPrequalificationAsync(vendor);
-            var prequalificationTypesTask = await _repository.GetPrequalificationCategoriesAsync();
-            var businessCategoriesTask = await _generalRepository.BusinessCategories();
-            var businessSectorTask = await _repository.GetBusinessSectorAsync();
             var vendorRepresentedProduct = await _repository.GetRepresentedProductAsync(vendor);
             var vendorBusinessSector = await _repository.GetBusinessSectorAsync(vendor);
             var vendorBusinessCategoriesTask = await _repository.GetVendorBuCategoriesAsync(vendor);
-            var companyInfoTask = await _repository.GetCompanyInfoAsync(vendor);
-            if (vendor == 0)
-            {
-                companyInfoTask.CompanyRegistrationDate = null;
-                companyInfoTask.CreditDays = 60;
-                companyInfoTask.AgreeWithDefaultDays = 1;
-            }
-
             var vendorProductsTask = await _repository.GetVendorProductServices(vendor);
             var vendorRepresentedCompany = await _repository.GetRepresentedCompanyAsync(vendor);
+
+            var companyInfoTask = await _repository.GetCompanyInfoAsync(vendor);
+            companyInfoTask.CompanyRegistrationDate = vendor == 0 ? null : companyInfoTask.CompanyRegistrationDate;
+            companyInfoTask.CreditDays = vendor == 0 ? 60 : companyInfoTask.CreditDays;
+            companyInfoTask.AgreeWithDefaultDays = vendor == 0 ? 1 : companyInfoTask.AgreeWithDefaultDays;
+
+            var prequalificationTypesTask = await _repository.GetPrequalificationCategoriesAsync();
+            var businessCategoriesTask = await _generalRepository.BusinessCategories();
+            var businessSectorTask = await _repository.GetBusinessSectorAsync();
+            var productServices = await _repository.GetProductServicesAsync();
+            var paymentTerms = await _repository.GetPaymentTermsAsync();
+
             var venLogoAttachmentTask =
                 await _attachmentService.GetAttachmentsAsync(vendor, SourceType.VEN_LOGO, Modules.Vendors);
             var venOletAttachmentTask =
@@ -626,9 +627,9 @@ namespace SolaERP.Persistence.Services
             {
                 CompanyInformation = companyInfo,
                 BusinessCategories = businessCategoriesTask,
-                PaymentTerms = await _repository.GetPaymentTermsAsync(),
+                PaymentTerms = paymentTerms,
                 PrequalificationTypes = prequalificationTypesTask,
-                Services = await _repository.GetProductServicesAsync(),
+                Services = productServices,
                 Countries = countries,
                 BusinessSectors = businessSectorTask
             };
