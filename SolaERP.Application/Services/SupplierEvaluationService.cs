@@ -236,7 +236,7 @@ namespace SolaERP.Persistence.Services
                             await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
                         }
 
-                        else
+                        else if (x.Type != 2)
                         {
                             x.VendorId = vendorId;
 
