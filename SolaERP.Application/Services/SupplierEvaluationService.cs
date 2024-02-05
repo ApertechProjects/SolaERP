@@ -1312,7 +1312,8 @@ namespace SolaERP.Persistence.Services
 
                         if (x.Type == 2)
                         {
-                            await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
+                            if (x.Id != 0)
+                                await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
                         }
 
                         else
