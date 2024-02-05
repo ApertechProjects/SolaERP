@@ -53,20 +53,14 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Post([FromBody] SupplierRegisterCommand command,
             [FromQuery] bool isRevise = false)
         {
-            var token = _tokenHandler.GetAccessToken();
-            return CreateActionResult(await _service.AddAsync(User.Identity.Name, token, command, isRevise));
+            return CreateActionResult(await _service.AddAsync(User.Identity.Name, command, isRevise));
         }
-
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Save([FromBody] SupplierRegisterCommand2 command)
-            => CreateActionResult(await _service.SaveAsync(User.Identity.Name, command));
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Submit([FromBody] SupplierRegisterCommand command,
             [FromQuery] bool isRevise = false)
         {
-            var token = _tokenHandler.GetAccessToken();
-            return CreateActionResult(await _service.SubmitAsync(User.Identity.Name, token, command, isRevise));
+            return CreateActionResult(await _service.SubmitAsync(User.Identity.Name, command, isRevise));
         }
 
         [HttpPost("[action]")]

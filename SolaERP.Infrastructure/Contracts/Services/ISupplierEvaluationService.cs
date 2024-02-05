@@ -22,12 +22,10 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<PrequalificationWithCategoryDto>>> GetPrequalificationAsync(string userIdentity,
             List<int> categoryIds, string acceptlang, int? vendorId = null);
 
-        Task<ApiResponse<int>> AddAsync(string userIdentity, string Token, SupplierRegisterCommand command,
+        Task<ApiResponse<EvaluationResultModel>> AddAsync(string userIdentity, SupplierRegisterCommand command,
             bool isSubmitted = false, bool isRevise = false);
 
-        Task<ApiResponse<int>> SaveAsync(string userIdentity, SupplierRegisterCommand2 command);
-
-        Task<ApiResponse<int>> SubmitAsync(string userIdentity, string Token, SupplierRegisterCommand command,
+        Task<ApiResponse<EvaluationResultModel>> SubmitAsync(string userIdentity, SupplierRegisterCommand command,
             bool isRevise);
 
         Task<ApiResponse<bool>> UpdateVendor(string name, string taxId);
