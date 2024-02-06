@@ -312,17 +312,20 @@ namespace SolaERP.Persistence.Services
                             {
                                 foreach (var gridData in item?.GridDatas)
                                 {
-                                    if (gridData.Type == 2)
+                                    if (gridData.Type == 2 && gridData.Id > 0)
                                     {
                                         await _repository.DeleteDueDesignGrid(gridData.Id);
                                         continue;
                                     }
+                                    else if (gridData.Type != 2)
+                                    {
+                                        var gridDatas = _mapper.Map<DueDiligenceGridModel>(gridData);
 
-                                    var gridDatas = _mapper.Map<DueDiligenceGridModel>(gridData);
-                                    gridDatas.DueDesignId = item.DesignId;
-                                    gridDatas.VendorId = vendorId;
+                                        gridDatas.DueDesignId = item.DesignId;
+                                        gridDatas.VendorId = vendorId;
 
-                                    await _repository.UpdateDueDesignGrid(gridDatas);
+                                        await _repository.UpdateDueDesignGrid(gridDatas);
+                                    }
                                 }
                             }
 
