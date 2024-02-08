@@ -1049,7 +1049,7 @@ namespace SolaERP.Persistence.Services
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
             int vendorId = revisedVendorId ?? user.VendorId;
-            List<VendorCOBC> cobc = await _repository.GetCOBCAsync(user.VendorId);
+            List<VendorCOBC> cobc = await _repository.GetCOBCAsync(vendorId);
 
             var buUnits = await _buRepository.GetAllAsync();
             var matchingBuUnitsIds = cobc.Select(x => x.BusinessUnitId).ToList();
