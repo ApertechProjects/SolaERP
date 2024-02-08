@@ -1138,7 +1138,7 @@ namespace SolaERP.Persistence.Services
             companyInfo.RepresentedCompanies = vendorRepresentedCompany?.RepresentedCompanyName?.Split(",");
             companyInfo.BusinessSectors = vendorBusinessSector;
             companyInfo.Services = matchedProductServices;
-            companyInfo.PhoneNo = user.PhoneNumber;
+            companyInfo.PhoneNo = companyInfoTask.PhoneNo;
             companyInfo.ContactPerson = user.FullName;
             companyInfo.Email = user.Email;
             companyInfo.CreditDays = companyInfoTask.CreditDays;
