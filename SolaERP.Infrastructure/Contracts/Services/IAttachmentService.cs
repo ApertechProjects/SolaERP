@@ -14,6 +14,7 @@ namespace SolaERP.Application.Contracts.Services
 
         Task SaveAttachmentAsync(AttachmentSaveModel model, SourceType sourceType, int sourceId);
         Task SaveAttachmentAsync(List<AttachmentSaveModel> attachments, SourceType sourceType, int sourceId);
+        Task SaveAttachmentAsync2(List<AttachmentSaveModel> attachments, SourceType sourceType, int sourceId);
         Task<bool> DeleteAttachmentAsync(int attachmentId);
         Task<bool> DeleteAttachmentAsync(int sourceId, SourceType sourceType);
     }

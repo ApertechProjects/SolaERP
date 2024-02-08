@@ -42,6 +42,7 @@ namespace SolaERP.Persistence.Services
             return result;
         }
 
+
         public async Task<List<AttachmentDto>> GetAttachmentsAsync(int sourceId, SourceType sourceType, Modules module,
             int attachmentTypeId = 0, string reference = null, bool isDownloadLink = true)
         {
@@ -97,6 +98,25 @@ namespace SolaERP.Persistence.Services
                 if (attachment.Type == 2)
                 {
                     await DeleteAttachmentAsync(attachment.SourceId, sourceType);
+                    continue;
+                }
+
+                if (attachment.AttachmentId > 0) continue;
+
+                await SaveAttachmentAsync(attachment, sourceType, sourceId);
+            }
+        }
+
+
+        public async Task SaveAttachmentAsync2(List<AttachmentSaveModel> attachments,
+        SourceType sourceType,
+        int sourceId)
+        {
+            foreach (var attachment in attachments)
+            {
+                if (attachment.Type == 2 && attachment.AttachmentId > 0)
+                {
+                    await DeleteAttachmentAsync(attachment.AttachmentId);
                     continue;
                 }
 

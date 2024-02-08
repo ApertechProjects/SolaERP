@@ -174,7 +174,7 @@ namespace SolaERP.Persistence.Services
 
                 #region Company Information Attachments
 
-                await _attachmentService.SaveAttachmentAsync(command?.CompanyInformation?.Attachments,
+                await _attachmentService.SaveAttachmentAsync2(command?.CompanyInformation?.Attachments,
                     SourceType.VEN_OLET, vendorId);
 
                 #endregion
