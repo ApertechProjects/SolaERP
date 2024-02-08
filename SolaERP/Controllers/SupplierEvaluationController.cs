@@ -53,29 +53,29 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Post([FromBody] SupplierRegisterCommand command,
             [FromQuery] bool isRevise = false)
         {
-            return CreateActionResult(await _service.AddAsync(User.Identity.Name, command, isRevise));
+            return CreateActionResult(await _service.AddAsync(User.Identity.Name, "", command, isRevise));
         }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Submit([FromBody] SupplierRegisterCommand command,
             [FromQuery] bool isRevise = false)
         {
-            return CreateActionResult(await _service.SubmitAsync(User.Identity.Name, command, isRevise));
+            return CreateActionResult(await _service.SubmitAsync(User.Identity.Name, "", command, isRevise));
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         [RequestSizeLimit(100_000_000)]
         public async Task<IActionResult> Post2([FromBody] SupplierRegisterCommand command,
          [FromQuery] bool isRevise = false)
         {
-            return CreateActionResult(await _service.AddAsync(User.Identity.Name, command, isRevise));
+            return CreateActionResult(await _service.AddAsync2(User.Identity.Name, command, isRevise));
         }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Submit2([FromBody] SupplierRegisterCommand command,
             [FromQuery] bool isRevise = false)
         {
-            return CreateActionResult(await _service.SubmitAsync(User.Identity.Name, command, isRevise));
+            return CreateActionResult(await _service.SubmitAsync2(User.Identity.Name, command, isRevise));
         }
 
         [HttpPost("[action]")]
