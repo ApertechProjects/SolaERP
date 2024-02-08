@@ -226,6 +226,7 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.TaxOffice, opt => opt.MapFrom(src => src.TaxOffice))
                 //.ForMember(dest => dest.BusinessCategoryId, opt => opt.MapFrom(src => src.VendorBusinessCategoryId))
                 .ForMember(dest => dest.PaymentTerms, opt => opt.MapFrom(src => src.PaymentTerms))
+                .ForMember(dest => dest.PhoneNo, opt => opt.MapFrom(src => src.PhoneNo))
                 .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Location))
                 .ForMember(dest => dest.CompanyAdress, opt => opt.MapFrom(src => src.CompanyAddress))
                 .ForMember(dest => dest.RegistrationDate, opt => opt.MapFrom(src => src.CompanyRegistrationDate))
@@ -646,9 +647,9 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<InvoiceMatchingMainGRN, InvoiceMatchingMainGRNDto>().ReverseMap();
 
             CreateMap<InvoicesMatchingDetailsTypeDto, InvoicesMatchingDetailsType>()
-                .ForMember(x=>x.AdvanceTotal,y=>y.MapFrom(x=>x.AdvanceAmount))
-                .ForMember(x=>x.Quantity,y=>y.MapFrom(x=>x.ServiceAmount)) 
-                .ForMember(x=>x.Total, y=>y.MapFrom(x=>x.InvoiceAmount))
+                .ForMember(x => x.AdvanceTotal, y => y.MapFrom(x => x.AdvanceAmount))
+                .ForMember(x => x.Quantity, y => y.MapFrom(x => x.ServiceAmount))
+                .ForMember(x => x.Total, y => y.MapFrom(x => x.InvoiceAmount))
                 .ReverseMap();
 
             CreateMap<InvoiceMatchMainData, InvoiceMatchMainDataDto>().ReverseMap();
