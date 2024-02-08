@@ -28,6 +28,8 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<EvaluationResultModel>> SubmitAsync(string userIdentity, SupplierRegisterCommand command,
             bool isRevise);
 
+
+
         Task<ApiResponse<bool>> UpdateVendor(string name, string taxId);
     }
 }

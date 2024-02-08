@@ -64,7 +64,7 @@ namespace SolaERP.Persistence.Services
             _attachmentService = attachmentService;
         }
 
-        public async Task<ApiResponse<EvaluationResultModel>> AddAsync(string useridentity,
+        public async Task<ApiResponse<EvaluationResultModel>> AddAsync2(string useridentity,
             SupplierRegisterCommand command, bool isSubmitted = false, bool isRevise = false)
         {
             try
@@ -463,6 +463,76 @@ namespace SolaERP.Persistence.Services
             }
         }
 
+        public async Task<ApiResponse<EvaluationResultModel>> SubmitAsync2(string userIdentity,
+          SupplierRegisterCommand command, bool isRevise)
+        {
+            try
+            {
+                var result = (await AddAsync2(userIdentity, command, true, isRevise)).Data;
+                User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
+
+                var vendor = await _vendorRepository.GetHeader(result.VendorId);
+                if (vendor.ReviseNo == 0)
+                {
+                    await _vendorRepository.ChangeStatusAsync(result.VendorId, 1, 1, null, user.Id);
+                }
+
+                List<Task> emails = new List<Task>();
+                Language language = "en".GetLanguageEnumValue();
+                var companyName = await _emailNotificationService.GetCompanyName(user.Email);
+                var templateDataForRegistrationPending =
+                    await _emailNotificationService.GetEmailTemplateData(language, EmailTemplateKey.RGA);
+                VM_RegistrationPending registrationPending = new VM_RegistrationPending()
+                {
+                    FullName = user.FullName,
+                    UserName = user.UserName,
+                    Header = templateDataForRegistrationPending.Header,
+                    Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, user.FullName)),
+                    Language = language,
+                    CompanyName = command.CompanyInformation.CompanyName,
+                };
+
+                Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject,
+                    registrationPending,
+                    registrationPending.TemplateName(),
+                    registrationPending.ImageName(),
+                    new List<string> { user.Email });
+                emails.Add(VerEmail);
+
+                var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
+                foreach (var lang in Enum.GetValues<Language>())
+                {
+                    var sendUserMails = await _userService.GetAdminUserMailsAsync(1, lang);
+                    if (sendUserMails.Count > 0)
+                    {
+                        var templateData = templates.First(x => x.Language == lang.ToString());
+                        VM_RegistrationIsPendingAdminApprove adminApprove = GetVM(command, user, templateData);
+                        Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove,
+                            adminApprove.TemplateName, adminApprove.ImageName, sendUserMails);
+                        emails.Add(RegEmail);
+                    }
+                }
+
+                await Task.Run(() => { Task.WhenAll(emails); });
+
+
+                return ApiResponse<EvaluationResultModel>.Success(result, 200);
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<EvaluationResultModel>.Fail(ex.Message, 400);
+            }
+        }
+
+        public Task<ApiResponse<int>> AddAsync(string userIdentity, SupplierRegisterCommand command, bool isSubmitted = false, bool isRevise = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApiResponse<int>> SubmitAsync(string userIdentity, SupplierRegisterCommand command, bool isRevise)
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task<ApiResponse<VM_GET_SupplierEvaluation>> GetAllAsync(SupplierEvaluationGETModel model)
         {
@@ -785,66 +855,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<PrequalificationWithCategoryDto>>.Success(response, 200);
         }
 
-        public async Task<ApiResponse<EvaluationResultModel>> SubmitAsync(string userIdentity,
-            SupplierRegisterCommand command, bool isRevise)
-        {
-            try
-            {
-                var result = (await AddAsync(userIdentity, command, true, isRevise)).Data;
-                User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
-
-                var vendor = await _vendorRepository.GetHeader(result.VendorId);
-                if (vendor.ReviseNo == 0)
-                {
-                    await _vendorRepository.ChangeStatusAsync(result.VendorId, 1, 1, null, user.Id);
-                }
-
-                List<Task> emails = new List<Task>();
-                Language language = "en".GetLanguageEnumValue();
-                var companyName = await _emailNotificationService.GetCompanyName(user.Email);
-                var templateDataForRegistrationPending =
-                    await _emailNotificationService.GetEmailTemplateData(language, EmailTemplateKey.RGA);
-                VM_RegistrationPending registrationPending = new VM_RegistrationPending()
-                {
-                    FullName = user.FullName,
-                    UserName = user.UserName,
-                    Header = templateDataForRegistrationPending.Header,
-                    Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, user.FullName)),
-                    Language = language,
-                    CompanyName = command.CompanyInformation.CompanyName,
-                };
-
-                Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject,
-                    registrationPending,
-                    registrationPending.TemplateName(),
-                    registrationPending.ImageName(),
-                    new List<string> { user.Email });
-                emails.Add(VerEmail);
-
-                var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
-                foreach (var lang in Enum.GetValues<Language>())
-                {
-                    var sendUserMails = await _userService.GetAdminUserMailsAsync(1, lang);
-                    if (sendUserMails.Count > 0)
-                    {
-                        var templateData = templates.First(x => x.Language == lang.ToString());
-                        VM_RegistrationIsPendingAdminApprove adminApprove = GetVM(command, user, templateData);
-                        Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove,
-                            adminApprove.TemplateName, adminApprove.ImageName, sendUserMails);
-                        emails.Add(RegEmail);
-                    }
-                }
-
-                await Task.Run(() => { Task.WhenAll(emails); });
-
-
-                return ApiResponse<EvaluationResultModel>.Success(result, 200);
-            }
-            catch (Exception ex)
-            {
-                return ApiResponse<EvaluationResultModel>.Fail(ex.Message, 400);
-            }
-        }
+      
 
         private static VM_RegistrationIsPendingAdminApprove GetVM(SupplierRegisterCommand command, User user,
             EmailTemplateData templateData)
@@ -1160,5 +1171,6 @@ namespace SolaERP.Persistence.Services
             return null;
         }
 
+      
     }
 }
