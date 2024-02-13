@@ -1303,6 +1303,116 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<PrequalificationWithCategoryDto>>.Success(response, 200);
         }
 
+        public async Task<ApiResponse<List<PrequalificationWithCategoryDto>>> GetPrequalificationAsync(
+         string userIdentity, int id, string acceptLang, int? revisedVendorId = null)
+        {
+            User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
+            int vendorId = revisedVendorId ?? user.VendorId;
+
+            List<VendorPrequalificationValues> prequalificationValues =
+                await _repository.GetPrequalificationValuesAsync(vendorId);
+            var responseModel = new List<PrequalificationWithCategoryDto>();
+
+            var gridDatas = await _repository.GetPrequalificationGridAsync(vendorId);
+
+
+            List<PrequalificationDesign> prequalificationDesigns =
+                await _repository.GetPrequalificationDesignsAsync(id, Language.en);
+            var category = await _repository.GetPrequalificationCategoriesAsync();
+            var matchedCategory = category.FirstOrDefault(x => x.Id == id);
+
+            var categoryDto = new PrequalificationWithCategoryDto
+            {
+                Id = id,
+                Name = matchedCategory?.Category ?? "Unknown",
+                Prequalifications = new List<VM_GET_Prequalification>()
+            };
+
+            var titleGroups = prequalificationDesigns.GroupBy(x => x.Title);
+            foreach (var titleGroup in titleGroups)
+            {
+                var prequalificationTasks = titleGroup.Select(async design =>
+                {
+                    var attachments = _mapper.Map<List<AttachmentDto>>(
+                        await _attachmentService.GetAttachmentsAsync(vendorId, SourceType.VEN_PREQ,
+                            Modules.EvaluationForm, design.PrequalificationDesignId));
+
+                    var correspondingValue = prequalificationValues.FirstOrDefault(v =>
+                        v.PrequalificationDesignId == design.PrequalificationDesignId);
+                    var calculationResult =
+                        CalculateScoring(correspondingValue, design, gridDatas, attachments?.Count > 0);
+
+
+                    return new PrequalificationDto
+                    {
+                        VendorPrequalificationId = correspondingValue?.VendorPrequalificationId ?? 0,
+                        DesignId = design.PrequalificationDesignId,
+                        LineNo = design.LineNo,
+                        Discipline = design.Discipline,
+                        Questions = design.Questions,
+                        HasTextbox = design.HasTextbox > 0,
+                        HasTextarea = design.HasTextarea > 0,
+                        HasCheckbox = design.HasCheckbox > 0,
+                        HasRadiobox = design.HasRadiobox > 0,
+                        HasInt = design.HasInt > 0,
+                        HasDecimal = design.HasDecimal > 0,
+                        HasDateTime = design.HasDateTime > 0,
+                        HasAttachment = design.HasAttachment > 0,
+                        Title = design.Title,
+                        HasGrid = design.HasGrid > 0,
+                        DataGridPoint = design.HasGrid,
+                        GridRowLimit = design.GridRowLimit,
+                        GridColumnCount = design.GridColumnCount,
+                        GridColumns = new[]
+                        {
+                                design.Column1Alias,
+                                design.Column2Alias,
+                                design.Column3Alias,
+                                design.Column4Alias,
+                                design.Column5Alias
+                        }.Where(col => col != null).ToArray(),
+                        TextboxPoint = design.HasTextbox,
+                        TextareaPoint = design.HasTextarea,
+                        CheckboxPoint = design.HasCheckbox,
+                        RadioboxPoint = design.HasRadiobox,
+                        IntPoint = design.HasInt,
+                        DecimalPoint = design.HasDecimal,
+                        DateTimePoint = design.HasDateTime,
+                        Attachmentpoint = design.HasAttachment,
+                        TextboxValue = correspondingValue?.TextboxValue,
+                        TextareaValue = correspondingValue?.TextareaValue,
+                        CheckboxValue = Convert.ToBoolean(correspondingValue?.CheckboxValue),
+                        RadioboxValue = Convert.ToBoolean(correspondingValue?.RadioboxValue),
+                        IntValue = Convert.ToInt32(correspondingValue?.IntValue),
+                        DecimalValue = Convert.ToDecimal(correspondingValue?.DecimalValue),
+                        DateTimeValue = correspondingValue?.DateTimeValue == DateTime.MinValue
+                            ? null
+                            : correspondingValue?.DateTimeValue,
+                        Attachments = attachments,
+                        Weight = design.Weight,
+                        Outcome = calculationResult.Outcome,
+                        Scoring = calculationResult.Scoring,
+                        AllPoint = calculationResult.AllPoint,
+                        Disabled = design.Disabled,
+                    };
+                });
+
+                var prequalificationDtos = await Task.WhenAll(prequalificationTasks);
+                var prequalificationDto = new VM_GET_Prequalification
+                {
+                    Title = titleGroup.Key,
+                    Childs = prequalificationDtos.ToList()
+                };
+
+                categoryDto.Prequalifications.Add(prequalificationDto);
+            }
+
+            responseModel.Add(categoryDto);
+
+            var response = await SetGridDatasAsync(responseModel, gridDatas, vendorId);
+            return ApiResponse<List<PrequalificationWithCategoryDto>>.Success(response, 200);
+        }
+
 
 
         private static VM_RegistrationIsPendingAdminApprove GetVM(SupplierRegisterCommand command, User user,
