@@ -1303,7 +1303,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<PrequalificationWithCategoryDto>>.Success(response, 200);
         }
 
-        public async Task<ApiResponse<List<PrequalificationWithCategoryDto>>> GetPrequalificationAsync(
+        public async Task<ApiResponse<List<PrequalificationWithCategoryDto2>>> GetPrequalificationAsync2(
          string userIdentity, int id, string acceptLang, int? revisedVendorId = null)
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
@@ -1311,7 +1311,7 @@ namespace SolaERP.Persistence.Services
 
             List<VendorPrequalificationValues> prequalificationValues =
                 await _repository.GetPrequalificationValuesAsync(vendorId);
-            var responseModel = new List<PrequalificationWithCategoryDto>();
+            var responseModel = new List<PrequalificationWithCategoryDto2>();
 
             var gridDatas = await _repository.GetPrequalificationGridAsync(vendorId);
 
@@ -1321,11 +1321,11 @@ namespace SolaERP.Persistence.Services
             var category = await _repository.GetPrequalificationCategoriesAsync();
             var matchedCategory = category.FirstOrDefault(x => x.Id == id);
 
-            var categoryDto = new PrequalificationWithCategoryDto
+            var categoryDto = new PrequalificationWithCategoryDto2
             {
                 Id = id,
                 Name = matchedCategory?.Category ?? "Unknown",
-                Prequalifications = new List<VM_GET_Prequalification>()
+                Prequalifications = new List<VM_GET_Prequalification2>()
             };
 
             var titleGroups = prequalificationDesigns.GroupBy(x => x.Title);
@@ -1343,17 +1343,17 @@ namespace SolaERP.Persistence.Services
                         CalculateScoring(correspondingValue, design, gridDatas, attachments?.Count > 0);
 
 
-                    return new PrequalificationDto
+                    return new PrequalificationDto2
                     {
                         VendorPrequalificationId = correspondingValue?.VendorPrequalificationId ?? 0,
                         DesignId = design.PrequalificationDesignId,
                         LineNo = design.LineNo,
                         Discipline = design.Discipline,
-                        Questions = design.Questions,
-                        HasTextbox = design.HasTextbox > 0,
-                        HasTextarea = design.HasTextarea > 0,
+                        Question = design.Questions,
+                        HasTextBox = design.HasTextbox > 0,
+                        HasTexarea = design.HasTextarea > 0,
                         HasCheckbox = design.HasCheckbox > 0,
-                        HasRadiobox = design.HasRadiobox > 0,
+                        HasRadioBox = design.HasRadiobox > 0,
                         HasInt = design.HasInt > 0,
                         HasDecimal = design.HasDecimal > 0,
                         HasDateTime = design.HasDateTime > 0,
@@ -1398,7 +1398,7 @@ namespace SolaERP.Persistence.Services
                 });
 
                 var prequalificationDtos = await Task.WhenAll(prequalificationTasks);
-                var prequalificationDto = new VM_GET_Prequalification
+                var prequalificationDto = new VM_GET_Prequalification2
                 {
                     Title = titleGroup.Key,
                     Childs = prequalificationDtos.ToList()
@@ -1409,8 +1409,8 @@ namespace SolaERP.Persistence.Services
 
             responseModel.Add(categoryDto);
 
-            var response = await SetGridDatasAsync(responseModel, gridDatas, vendorId);
-            return ApiResponse<List<PrequalificationWithCategoryDto>>.Success(response, 200);
+            var response = await SetGridDatasAsync2(responseModel, gridDatas, vendorId);
+            return ApiResponse<List<PrequalificationWithCategoryDto2>>.Success(response, 200);
         }
 
 
@@ -1653,6 +1653,39 @@ namespace SolaERP.Persistence.Services
 
             return preualification;
         }
+
+        private async Task<List<PrequalificationWithCategoryDto2>> SetGridDatasAsync2(
+          List<PrequalificationWithCategoryDto2> preualification, List<PrequalificationGridData> allGridData,
+          int vendorId)
+        {
+            //var allGridData = await _repository.GetPrequalificationGridAsync(vendorId);
+            var mappedGridData =
+                _mapper.Map<List<Application.Dtos.SupplierEvaluation.PrequalificationGridData>>(allGridData);
+
+
+            Parallel.For(0, preualification.Count, i =>
+            {
+                Parallel.For(0, preualification[Convert.ToInt32(i)].Prequalifications.Count, j =>
+                {
+                    Parallel.For(0,
+                        preualification[Convert.ToInt32(i)].Prequalifications[Convert.ToInt32(j)].Childs.Count, k =>
+                        {
+                            if (preualification[Convert.ToInt32(i)].Prequalifications[Convert.ToInt32(j)]
+                                    .Childs[Convert.ToInt32(k)].HasGrid != null)
+                            {
+                                int childDesignId = preualification[Convert.ToInt32(i)]
+                                    .Prequalifications[Convert.ToInt32(j)].Childs[k].DesignId;
+                                var gridDatas = mappedGridData.Where(x => x.DesignId == childDesignId).ToList();
+                                preualification[Convert.ToInt32(i)].Prequalifications[Convert.ToInt32(j)]
+                                    .Childs[Convert.ToInt32(k)].GridDatas = gridDatas;
+                            }
+                        });
+                });
+            });
+
+            return preualification;
+        }
+
 
         public async Task<ApiResponse<bool>> UpdateVendor(string name, string taxId)
         {

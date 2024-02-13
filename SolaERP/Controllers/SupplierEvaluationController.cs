@@ -50,7 +50,7 @@ namespace SolaERP.API.Controllers
 
         [HttpGet("[action]")]
         public async Task<IActionResult> Prequalification(int id, int? vendorId = null)
-          => CreateActionResult(await _service.GetPrequalificationAsync(User.Identity.Name, id,
+          => CreateActionResult(await _service.GetPrequalificationAsync2(User.Identity.Name, id,
               Request.Headers.AcceptLanguage, vendorId));
 
         [HttpPost]
