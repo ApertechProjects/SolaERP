@@ -97,6 +97,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public string Website { get; set; }
         public string RepresentedCompanies { get; set; }
         public string RepresentedProducts { get; set; }
+        public string CompanyLogoFile { get; set; }
         public int CreditDays { get; set; }
         public string PaymentTerms { get; set; }
         public int AgreeWithDefaultDays { get; set; }
