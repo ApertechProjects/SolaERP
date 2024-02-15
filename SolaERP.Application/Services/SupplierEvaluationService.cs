@@ -67,7 +67,7 @@ namespace SolaERP.Persistence.Services
         }
 
         public async Task<ApiResponse<EvaluationResultModel>> AddAsync2(string useridentity,
-            SupplierRegisterCommand2 command, bool isSubmitted = false, bool isRevise = false)
+            SupplierRegisterCommand2 command, bool isSubmitted = false)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace SolaERP.Persistence.Services
                     ? null
                     : command.CompanyInformation.VendorCode;
 
-                var processSelector = GetProcessSelector(command.CompanyInformation.VendorId, isRevise);
+                var processSelector = GetProcessSelector(command.CompanyInformation.VendorId, command.IsRevise);
 
                 SetRevisionNumber(command, processSelector, isSubmitted);
 
@@ -87,7 +87,7 @@ namespace SolaERP.Persistence.Services
                 }
 
                 string companyLogoFile = await _vendorRepository.GetCompanyLogoFileAsync(vendor.VendorId);
-                vendor.CompanyLogoFile =  await _fileUploadService.GetLinkForEntity(command?.CompanyInformation?.CompanyLogoFile, Modules.EvaluationForm, command.CompanyInformation.CompanyLogoFileIsDeleted,
+                vendor.CompanyLogoFile = await _fileUploadService.GetLinkForEntity(command?.CompanyInformation?.CompanyLogoFile, Modules.EvaluationForm, command.CompanyInformation.CompanyLogoFileIsDeleted,
                    companyLogoFile);
 
                 int vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
@@ -471,11 +471,11 @@ namespace SolaERP.Persistence.Services
         }
 
         public async Task<ApiResponse<EvaluationResultModel>> SubmitAsync2(string userIdentity,
-          SupplierRegisterCommand2 command, bool isRevise)
+          SupplierRegisterCommand2 command)
         {
             try
             {
-                var result = (await AddAsync2(userIdentity, command, true, isRevise)).Data;
+                var result = (await AddAsync2(userIdentity, command, true)).Data;
                 User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
                 var vendor = await _vendorRepository.GetHeader(result.VendorId);
