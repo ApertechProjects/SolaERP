@@ -617,7 +617,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = $"select CompanyLogoFile from Procurement.Vendors where Id = @vendorId";
+                command.CommandText = $"select CompanyLogoFile from Procurement.Vendors where VendorId = @vendorId";
                 command.Parameters.AddWithValue(command, "@vendorId", vendorId);
                 using var reader = await command.ExecuteReaderAsync();
 
