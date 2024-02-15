@@ -40,5 +40,6 @@
         public bool IsNewVendor() => VendorId <= 0;
         public string Logo { get; set; }
         public string VendorCode { get; set; }
+        public string CompanyLogoFile { get; set; }
     }
 }

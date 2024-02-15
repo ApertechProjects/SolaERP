@@ -70,14 +70,14 @@ namespace SolaERP.API.Controllers
 
         [HttpPost("[action]")]
         [RequestSizeLimit(100_000_000)]
-        public async Task<IActionResult> Post2([FromBody] SupplierRegisterCommand command,
+        public async Task<IActionResult> Post2([FromBody] SupplierRegisterCommand2 command,
          [FromQuery] bool isRevise = false)
         {
             return CreateActionResult(await _service.AddAsync2(User.Identity.Name, command, isRevise));
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Submit2([FromBody] SupplierRegisterCommand command,
+        public async Task<IActionResult> Submit2([FromBody] SupplierRegisterCommand2 command,
             [FromQuery] bool isRevise = false)
         {
             return CreateActionResult(await _service.SubmitAsync2(User.Identity.Name, command, isRevise));

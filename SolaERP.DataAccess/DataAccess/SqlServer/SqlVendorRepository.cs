@@ -8,6 +8,8 @@ using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
 using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Helper;
+using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Entities.User;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -62,6 +64,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                             @WithHoldingTaxId,
                                                             @TaxesId,
                                                             @ShipmentId,
+                                                            @CompanyLogoFile,
                                                             @NewVendorId = @NewVendorId OUTPUT
                                                             SELECT	@NewVendorId as [@NewVendorId]";
 
@@ -99,6 +102,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@ShipmentId", vendor.ShipmentId);
                 command.Parameters.AddWithValue(command, "@TaxesId", vendor.TaxesId);
                 command.Parameters.AddWithValue(command, "@DeliveryTermId", vendor.DeliveryTermId);
+                command.Parameters.AddWithValue(command, "@CompanyLogoFile", vendor.CompanyLogoFile);
 
                 int newVendorId = 0;
 
@@ -607,6 +611,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@UserId", request.UserId);
             await _unitOfWork.SaveChangesAsync();
             return await command.ExecuteNonQueryAsync() > 0;
+        }
+
+        public async Task<string> GetCompanyLogoFileAsync(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = $"select CompanyLogoFile from Procurement.Vendors where Id = @vendorId";
+                command.Parameters.AddWithValue(command, "@vendorId", vendorId);
+                using var reader = await command.ExecuteReaderAsync();
+
+                string image = string.Empty;
+                if (reader.Read())
+                    image = reader.Get<string>("CompanyLogoFile");
+
+                return image;
+            }
         }
     }
 }

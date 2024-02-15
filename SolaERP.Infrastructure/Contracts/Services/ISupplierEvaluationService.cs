@@ -31,10 +31,10 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<int>> SubmitAsync(string userIdentity, string token, SupplierRegisterCommand command,
             bool isRevise);
 
-        Task<ApiResponse<EvaluationResultModel>> AddAsync2(string userIdentity, SupplierRegisterCommand command,
+        Task<ApiResponse<EvaluationResultModel>> AddAsync2(string userIdentity, SupplierRegisterCommand2 command,
          bool isSubmitted = false, bool isRevise = false);
 
-        Task<ApiResponse<EvaluationResultModel>> SubmitAsync2(string userIdentity, SupplierRegisterCommand command,
+        Task<ApiResponse<EvaluationResultModel>> SubmitAsync2(string userIdentity, SupplierRegisterCommand2 command,
             bool isRevise);
 
         Task<ApiResponse<bool>> UpdateVendor(string name, string taxId);

@@ -13,6 +13,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<int> DeleteBankDetailsAsync(int userId, int id);
         Task<int> AddAsync(int userId, Vendor vendor);
         Task<int> UpdateAsync(int userId, Vendor vendor);
+        Task<string> GetCompanyLogoFileAsync(int vendorId);
         Task<int> DeleteAsync(int userId, int id);
         Task<VendorInfo> GetByTaxAsync(string taxId);
         Task<bool> ChangeStatusAsync(int vendorId, int status, int sequence, string comment, int userId);

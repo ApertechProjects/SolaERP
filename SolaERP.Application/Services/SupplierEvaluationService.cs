@@ -11,6 +11,7 @@ using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Entities.SupplierEvaluation;
+using SolaERP.Application.Entities.User;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
@@ -66,7 +67,7 @@ namespace SolaERP.Persistence.Services
         }
 
         public async Task<ApiResponse<EvaluationResultModel>> AddAsync2(string useridentity,
-            SupplierRegisterCommand command, bool isSubmitted = false, bool isRevise = false)
+            SupplierRegisterCommand2 command, bool isSubmitted = false, bool isRevise = false)
         {
             try
             {
@@ -84,6 +85,10 @@ namespace SolaERP.Persistence.Services
                 {
                     vendor.ReviseDate = DateTime.UtcNow.AddHours(4);
                 }
+
+                string companyLogoFile = await _vendorRepository.GetCompanyLogoFileAsync(vendor.VendorId);
+                vendor.CompanyLogoFile =  await _fileUploadService.GetLinkForEntity(command?.CompanyInformation?.CompanyLogoFile, Modules.EvaluationForm, command.CompanyInformation.CompanyLogoFileIsDeleted,
+                   companyLogoFile);
 
                 int vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
 
@@ -166,11 +171,12 @@ namespace SolaERP.Persistence.Services
                 #endregion
 
                 #region Company Information Logo
-
-                await _attachmentService.SaveAttachmentAsync(command?.CompanyInformation?.CompanyLogo,
-                    SourceType.VEN_LOGO, vendorId);
+                if (command?.CompanyInformation?.CompanyLogo != null)
+                    await _attachmentService.SaveAttachmentAsync(command?.CompanyInformation?.CompanyLogo,
+                        SourceType.VEN_LOGO, vendorId);
 
                 #endregion
+
 
                 #region Company Information Attachments
 
@@ -465,7 +471,7 @@ namespace SolaERP.Persistence.Services
         }
 
         public async Task<ApiResponse<EvaluationResultModel>> SubmitAsync2(string userIdentity,
-          SupplierRegisterCommand command, bool isRevise)
+          SupplierRegisterCommand2 command, bool isRevise)
         {
             try
             {
@@ -1416,6 +1422,20 @@ namespace SolaERP.Persistence.Services
 
 
         private static VM_RegistrationIsPendingAdminApprove GetVM(SupplierRegisterCommand command, User user,
+            EmailTemplateData templateData)
+        {
+            return new()
+            {
+                Body = new HtmlString(templateData.Body),
+                CompanyName = command.CompanyInformation.CompanyName,
+                Header = templateData.Header,
+                UserName = user.UserName,
+                CompanyOrVendorName = command.CompanyInformation.CompanyName,
+                Language = templateData.Language.GetLanguageEnumValue(),
+            };
+        }
+
+        private static VM_RegistrationIsPendingAdminApprove GetVM(SupplierRegisterCommand2 command, User user,
             EmailTemplateData templateData)
         {
             return new()
