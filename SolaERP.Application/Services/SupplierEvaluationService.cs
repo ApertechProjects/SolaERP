@@ -479,10 +479,10 @@ namespace SolaERP.Persistence.Services
                 User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
                 var vendor = await _vendorRepository.GetHeader(result.VendorId);
-                if (vendor.ReviseNo == 0)
-                {
-                    await _vendorRepository.ChangeStatusAsync(result.VendorId, 0, 1, null, user.Id);
-                }
+                //if (vendor.ReviseNo == 0)
+                //{
+                //    await _vendorRepository.ChangeStatusAsync(result.VendorId, 0, 1, null, user.Id);
+                //}
 
                 List<Task> emails = new List<Task>();
                 Language language = "en".GetLanguageEnumValue();
