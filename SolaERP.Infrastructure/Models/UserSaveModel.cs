@@ -5,7 +5,7 @@ namespace SolaERP.Application.Models
 {
     public class UserSaveModel
     {
-        public int Id { get; set; } = 0;
+        public int? Id { get; set; } = 0;
         public string FullName { get; set; }
         public bool ChangePassword { get; set; }
         public int StatusId { get; set; }
