@@ -47,7 +47,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<string>> GetAdminUserMailsAsync(int sequence, Language language);
         Task<bool> CheckUserVerifyByVendor(string email);
         Task<string> CheckUserType(string verifyToken);
-        Task<UserImage> UserImageData(int userId);
+        Task<UserImage> UserImageData(int? userId);
         Task<List<UserList>> UsersRequestDetails(int requestDetailId, int? sequence, ApproveStatus status);
         Task<List<UserList>> UsersRequestMain(int requestMainId, int? sequence, ApproveStatus status);
         Task UpdateLastActivityAsync(int id);

@@ -677,7 +677,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<UserImage> UserImageData(int userId)
+        public async Task<UserImage> UserImageData(int? userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
