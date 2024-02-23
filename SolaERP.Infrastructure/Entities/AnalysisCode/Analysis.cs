@@ -16,8 +16,8 @@ namespace SolaERP.Application.Entities.AnalysisCode
         public string AdditionalDescription { get; set; }
         public string AdditionalDescription2 { get; set; }
         public int Status { get; set; }
-        public DateTime Date1 { get; set; }
-        public DateTime Date2 { get; set; }
+        public DateTime? Date1 { get; set; }
+        public DateTime? Date2 { get; set; }
         public int LinkedAnalysisDimensionid { get; set; }
         public bool IsLinked { get; set; }
     }
