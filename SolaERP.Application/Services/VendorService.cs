@@ -26,7 +26,6 @@ namespace SolaERP.Persistence.Services
         private readonly IAttachmentService _attachmentService;
         private readonly IFileUploadService _fileUploadService;
         private readonly IGeneralRepository _generalRepository;
-        private readonly IVendorRepository _vendorRepository;
 
         public VendorService(IVendorRepository vendorRepository,
             IUserRepository userRepository,
@@ -46,7 +45,6 @@ namespace SolaERP.Persistence.Services
             _fileUploadService = fileUploadService;
             _generalRepository = generalRepository;
             _attachmentService = attachmentService;
-            _vendorRepository = vendorRepository;
         }
 
         public async Task<ApiResponse<bool>> ApproveAsync(string userIdentity, VendorApproveModel model)
@@ -366,14 +364,14 @@ namespace SolaERP.Persistence.Services
 
                     if (x.Type == 2)
                     {
-                        await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
+                        await _repository.DeleteBankDetailsAsync(user.Id, x.Id);
                     }
 
                     else
                     {
                         x.VendorId = vendorId;
 
-                        var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id,
+                        var detaildId = await _repository.UpdateBankDetailsAsync(user.Id,
                             _mapper.Map<VendorBankDetail>(x));
 
                         if (x.AccountVerificationLetter != null)
