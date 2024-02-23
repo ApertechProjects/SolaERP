@@ -26,6 +26,7 @@ namespace SolaERP.Persistence.Services
         private readonly IAttachmentService _attachmentService;
         private readonly IFileUploadService _fileUploadService;
         private readonly IGeneralRepository _generalRepository;
+        private readonly IVendorRepository _vendorRepository;
 
         public VendorService(IVendorRepository vendorRepository,
             IUserRepository userRepository,
@@ -34,7 +35,8 @@ namespace SolaERP.Persistence.Services
             IUnitOfWork unitOfWork,
             IFileUploadService fileUploadService,
             IGeneralRepository generalRepository,
-            IAttachmentService attachmentService)
+            IAttachmentService attachmentService,
+            IVendorRepository _vendorRepository)
         {
             _repository = vendorRepository;
             _userRepository = userRepository;
@@ -44,6 +46,7 @@ namespace SolaERP.Persistence.Services
             _fileUploadService = fileUploadService;
             _generalRepository = generalRepository;
             _attachmentService = attachmentService;
+            _vendorRepository = vendorRepository;
         }
 
         public async Task<ApiResponse<bool>> ApproveAsync(string userIdentity, VendorApproveModel model)
@@ -352,6 +355,37 @@ namespace SolaERP.Persistence.Services
             vendor.Logo = await _fileUploadService.GetLinkForEntity(vendorDto.Logo, Modules.Vendors,
                 vendorDto.CheckLogoIsDeleted, vendorLogo);
 
+
+            #region Bank Accounts
+
+            if (vendorDto.BankAccounts is not null)
+            {
+                for (var i = 0; i < vendorDto.BankAccounts.Count; i++)
+                {
+                    var x = vendorDto.BankAccounts[i];
+
+                    if (x.Type == 2)
+                    {
+                        await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
+                    }
+
+                    else
+                    {
+                        x.VendorId = vendorId;
+
+                        var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id,
+                            _mapper.Map<VendorBankDetail>(x));
+
+                        if (x.AccountVerificationLetter != null)
+                        {
+                            await _attachmentService.SaveAttachmentAsync(x.AccountVerificationLetter,
+                                SourceType.VEN_BNK, detaildId);
+                        }
+                    }
+                }
+            }
+
+            #endregion
 
             await _attachmentService.DeleteAttachmentAsync(vendorId, SourceType.VEN_LOGO);
 
