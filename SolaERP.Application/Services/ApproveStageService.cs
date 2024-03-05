@@ -113,8 +113,6 @@ namespace SolaERP.Persistence.Services
 
             if (counter == model.stageIds.Count)
                 return ApiResponse<bool>.Success(data, 200);
-            else if (model.stageIds.Count == 1 && counter == 0)
-                return ApiResponse<bool>.Fail("data can not be deleted", 400);
             else
                 return ApiResponse<bool>.Success("some datas can not be deleted");
         }

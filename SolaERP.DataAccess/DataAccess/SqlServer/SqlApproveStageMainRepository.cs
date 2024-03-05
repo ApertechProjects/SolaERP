@@ -47,7 +47,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 using (var command = _unitOfWork.CreateCommand() as SqlCommand)
                 {
-                    command.CommandText = $"SET NOCOUNT OFF exec SP_ApproveStagesMain_IUD @Id,@NewApproveStageMainId = @NewApproveStageMainId OUTPUT select @NewApproveStageMainId as NewApproveStageMainId";
+                    command.CommandText = $"SET NOCOUNT OFF exec SP_ApproveStagesMain_IUD @Id,@NewApproveStageMainId = @NewApproveStageMainId " +
+                        $"OUTPUT select @NewApproveStageMainId as NewApproveStageMainId";
                     IDbDataParameter dbDataParameter = command.CreateParameter();
                     dbDataParameter.ParameterName = "@Id";
                     dbDataParameter.Value = approveStageMainId;

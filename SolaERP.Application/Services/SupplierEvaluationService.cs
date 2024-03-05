@@ -327,6 +327,8 @@ namespace SolaERP.Persistence.Services
                                     else if (gridData.Type != 2)
                                     {
                                         var gridDatas = _mapper.Map<DueDiligenceGridModel>(gridData);
+                                        if (gridDatas.Id < 0)
+                                            gridDatas.Id = 0;
 
                                         gridDatas.DueDesignId = item.DesignId;
                                         gridDatas.VendorId = vendorId;
@@ -428,17 +430,22 @@ namespace SolaERP.Persistence.Services
                                         {
                                             var gridDatas =
                                                 _mapper.Map<PrequalificationGridData>(gridData);
-                                            if (gridData.Type == 2)
+                                            if (gridData.Type == 2 && gridData.Id > 0)
                                             {
                                                 await _repository.DeletePreGridAsync(gridDatas
                                                     .PreqqualificationGridDataId);
                                                 continue;
                                             }
+                                            else if (gridData.Type != 2)
+                                            {
+                                                if (gridDatas.PreqqualificationGridDataId < 0)
+                                                    gridDatas.PreqqualificationGridDataId = 0;
+                                                gridDatas.PreqqualificationDesignId = item.DesignId;
+                                                gridDatas.VendorId = vendorId;
 
-                                            gridDatas.PreqqualificationDesignId = item.DesignId;
-                                            gridDatas.VendorId = vendorId;
+                                                await _repository.UpdatePreGridAsync(gridDatas);
+                                            }
 
-                                            await _repository.UpdatePreGridAsync(gridDatas);
                                         }
                                     }
                                 }
