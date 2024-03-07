@@ -273,6 +273,7 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.RepresentedProducts, opt => opt.MapFrom(src => src.RepresentedProducts))
                 .ForMember(dest => dest.CreditDays, opt => opt.MapFrom(src => src.CreditDays))
                 .ForMember(dest => dest.PaymentTerms, opt => opt.MapFrom(src => src.PaymentTerms))
+                .ForMember(dest => dest.OtherProducts, opt => opt.MapFrom(src => src.Other))
                 .ForMember(dest => dest.AgreeWithDefaultDays, opt => opt.MapFrom(src => src.AgreeWithDefaultDays))
                 .ReverseMap();
 
