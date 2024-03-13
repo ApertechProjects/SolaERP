@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SolaERP.Application.Dtos.SupplierEvaluation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,6 @@ namespace SolaERP.Application.Models
     {
         public int VendorId { get; set; }
         public VM_GET_VendorBankDetails BankDetails { get; set; }
+        public CompanyInfoDto CompanyInformation { get; set; }
     }
 }

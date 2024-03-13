@@ -78,7 +78,7 @@ namespace SolaERP.Persistence.Services
 
                 var processSelector = GetProcessSelector(command.CompanyInformation.VendorId, command.IsRevise);
 
-                SetRevisionNumber(command, processSelector, isSubmitted);
+                SetRevisionNumber(command, processSelector, isSubmitted); 
 
                 Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
                 if (isSubmitted && !processSelector.IsCreate)

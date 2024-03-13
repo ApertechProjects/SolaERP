@@ -71,7 +71,7 @@ namespace SolaERP.Persistence.Services
 
             if (analysisListDtos.Count == 0)
                 return ApiResponse<List<AnalysisListDto>>.Fail("Data not found", 404);
-            return ApiResponse<List<AnalysisListDto>>.Success(analysisListDtos);
+            return ApiResponse<List<AnalysisListDto>>.Success(analysisListDtos.OrderBy(x => x.AnalysisCode).ToList());
         }
 
         public async Task<ApiResponse<AnalysisCodeModel>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest)
