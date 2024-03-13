@@ -466,7 +466,8 @@ namespace SolaERP.Persistence.Services
                 EvaluationResultModel resultModel = new EvaluationResultModel()
                 {
                     VendorId = vendorId,
-                    BankDetails = await GetBankDetail(useridentity)
+                    BankDetails = await GetBankDetail(useridentity),
+                    CompanyInformation = await GetCompanyInformation(useridentity),
                 };
 
                 return ApiResponse<EvaluationResultModel>.Success(resultModel, 200);
@@ -1166,6 +1167,62 @@ namespace SolaERP.Persistence.Services
             };
 
             return ApiResponse<VM_GET_InitalRegistration>.Success(viewModel, 200);
+        }
+
+        public async Task<CompanyInfoViewDto> GetCompanyInformation(string userIdentity)
+        {
+            var user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
+            int vendor = user.VendorId;
+
+            var vendorPrequalificationTask = await _repository.GetVendorPrequalificationAsync(vendor);
+            var vendorRepresentedProduct = await _repository.GetRepresentedProductAsync(vendor);
+            var vendorBusinessSector = await _repository.GetBusinessSectorAsync(vendor);
+            var vendorBusinessCategoriesTask = await _repository.GetVendorBuCategoriesAsync(vendor);
+            var vendorProductsTask = await _repository.GetVendorProductServices(vendor);
+            var vendorRepresentedCompany = await _repository.GetRepresentedCompanyAsync(vendor);
+
+            var companyInfoTask = await _repository.GetCompanyInfoAsync(vendor);
+            companyInfoTask.CompanyRegistrationDate = vendor == 0 ? null : companyInfoTask.CompanyRegistrationDate;
+            companyInfoTask.CreditDays = vendor == 0 ? 60 : companyInfoTask.CreditDays;
+            companyInfoTask.AgreeWithDefaultDays = vendor == 0 ? 1 : companyInfoTask.AgreeWithDefaultDays;
+
+            var prequalificationTypesTask = await _repository.GetPrequalificationCategoriesAsync();
+            var businessCategoriesTask = await _generalRepository.BusinessCategories();
+
+            var venLogoAttachmentTask =
+                await _attachmentService.GetAttachmentsAsync(vendor, SourceType.VEN_LOGO, Modules.Vendors);
+            var venOletAttachmentTask =
+                await _attachmentService.GetAttachmentsAsync(vendor, SourceType.VEN_OLET, Modules.EvaluationForm);
+            var productServicesTask = await _repository.GetProductServicesAsync();
+
+            var matchedPrequalificationTypes = prequalificationTypesTask
+                .Where(x => vendorPrequalificationTask.Select(y => y.PrequalificationCategoryId).Contains(x.Id))
+                .ToList();
+
+            var matchedBuCategories = businessCategoriesTask
+                .Where(x => vendorBusinessCategoriesTask.Select(y => y.BusinessCategoryId).Contains(x.Id))
+                .ToList();
+
+            var matchedProductServices = productServicesTask
+                .Where(x => vendorProductsTask.Select(y => y.ProductServiceId).Contains(x.Id))
+                .ToList();
+
+            var companyInfo = _mapper.Map<CompanyInfoViewDto>(companyInfoTask);
+            companyInfo.PrequalificationTypes = matchedPrequalificationTypes;
+            companyInfo.BusinessCategories = matchedBuCategories;
+            companyInfo.CompanyLogo = venLogoAttachmentTask;
+            companyInfo.Attachments = venOletAttachmentTask;
+            companyInfo.City ??= "";
+            companyInfo.RepresentedProducts = vendorRepresentedProduct?.RepresentedProductName?.Split(",");
+            companyInfo.RepresentedCompanies = vendorRepresentedCompany?.RepresentedCompanyName?.Split(",");
+            companyInfo.BusinessSectors = vendorBusinessSector;
+            companyInfo.Services = matchedProductServices;
+            companyInfo.PhoneNo = companyInfoTask.PhoneNo;
+            companyInfo.ContactPerson = user.FullName;
+            companyInfo.Email = user.Email;
+            companyInfo.CreditDays = companyInfoTask.CreditDays;
+
+            return companyInfo;
         }
 
         public async Task<ApiResponse<List<NonDisclosureAgreement>>> GetNDAAsync(string userIdentity,

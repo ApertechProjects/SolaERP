@@ -11,6 +11,6 @@ namespace SolaERP.Application.Models
     {
         public int VendorId { get; set; }
         public VM_GET_VendorBankDetails BankDetails { get; set; }
-        public CompanyInfoDto CompanyInformation { get; set; }
+        public CompanyInfoViewDto CompanyInformation { get; set; }
     }
 }
