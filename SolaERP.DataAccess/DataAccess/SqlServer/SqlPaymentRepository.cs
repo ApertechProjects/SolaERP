@@ -866,9 +866,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<List<PaymentRequest>> PaymentRequest(PaymentRequestGetModel model)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_PaymentDocumentCreateDocuments @vendorCode,@currencyCode";
+            command.CommandText = @"exec dbo.SP_PaymentDocumentCreateDocuments @vendorCode, @currencyCode, @businessUnitId";
+            
             command.Parameters.AddWithValue(command, "@vendorCode", model.VendorCode);
             command.Parameters.AddWithValue(command, "@currencyCode", model.CurrencyCode);
+            command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
 
             using var reader = await command.ExecuteReaderAsync();
 
