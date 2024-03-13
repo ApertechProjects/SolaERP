@@ -66,6 +66,17 @@ namespace SolaERP.Persistence.Services
             _attachmentService = attachmentService;
         }
 
+        private void SetAttachmentIdToZeroWhenIsRevise(bool isRevise, List<AttachmentSaveModel> saveModels)
+        {
+            if (isRevise)
+            {
+                foreach (var item in saveModels)
+                {
+                    item.AttachmentId = 0;
+                }
+            }
+        }
+
         public async Task<ApiResponse<EvaluationResultModel>> AddAsync2(string useridentity,
             SupplierRegisterCommand2 command, bool isSubmitted = false)
         {
@@ -78,7 +89,7 @@ namespace SolaERP.Persistence.Services
 
                 var processSelector = GetProcessSelector(command.CompanyInformation.VendorId, command.IsRevise);
 
-                SetRevisionNumber(command, processSelector, isSubmitted); 
+                SetRevisionNumber(command, processSelector, isSubmitted);
 
                 Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
                 if (isSubmitted && !processSelector.IsCreate)
@@ -172,14 +183,18 @@ namespace SolaERP.Persistence.Services
 
                 #region Company Information Logo
                 if (command?.CompanyInformation?.CompanyLogo != null)
+                {
+                    SetAttachmentIdToZeroWhenIsRevise(command.IsRevise, command?.CompanyInformation?.CompanyLogo);
                     await _attachmentService.SaveAttachmentAsync(command?.CompanyInformation?.CompanyLogo,
                         SourceType.VEN_LOGO, vendorId);
+                }
 
                 #endregion
 
 
                 #region Company Information Attachments
 
+                SetAttachmentIdToZeroWhenIsRevise(command.IsRevise, command?.CompanyInformation?.Attachments);
                 await _attachmentService.SaveAttachmentAsync2(command?.CompanyInformation?.Attachments,
                     SourceType.VEN_OLET, vendorId);
 
@@ -252,6 +267,7 @@ namespace SolaERP.Persistence.Services
 
                             if (x.AccountVerificationLetter != null)
                             {
+                                SetAttachmentIdToZeroWhenIsRevise(command.IsRevise, x.AccountVerificationLetter);
                                 await _attachmentService.SaveAttachmentAsync(x.AccountVerificationLetter,
                                     SourceType.VEN_BNK, detaildId);
                             }
