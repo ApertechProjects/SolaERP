@@ -98,7 +98,7 @@ namespace SolaERP.Persistence.Services
                 }
 
                 string companyLogoFile = await _vendorRepository.GetCompanyLogoFileAsync(vendor.VendorId);
-                vendor.CompanyLogoFile = await _fileUploadService.GetLinkForEntity(command?.CompanyInformation?.CompanyLogoFile, Modules.EvaluationForm, command.CompanyInformation.CompanyLogoFileIsDeleted,
+                vendor.CompanyLogoFile = await _fileUploadService.GetLinkForEntity(command?.CompanyInformation?.CompanyLogoFile, Modules.Vendors, command.CompanyInformation.CompanyLogoFileIsDeleted,
                    companyLogoFile);
 
                 int vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
@@ -1058,7 +1058,7 @@ namespace SolaERP.Persistence.Services
             foreach (var item in bankAccount)
             {
                 var attachment =
-                    await _attachmentService.GetAttachmentsAsync(item.Id, SourceType.VEN_BNK, Modules.EvaluationForm);
+                    await _attachmentService.GetAttachmentsAsync(item.Id, SourceType.VEN_BNK, Modules.Vendors);
                 attachment = attachment.Count > 0 ? attachment : Enumerable.Empty<AttachmentDto>().ToList();
                 item.AccountVerificationLetter = attachment;
             }
@@ -1140,7 +1140,7 @@ namespace SolaERP.Persistence.Services
             var venLogoAttachmentTask =
                 await _attachmentService.GetAttachmentsAsync(vendor, SourceType.VEN_LOGO, Modules.Vendors);
             var venOletAttachmentTask =
-                await _attachmentService.GetAttachmentsAsync(vendor, SourceType.VEN_OLET, Modules.EvaluationForm);
+                await _attachmentService.GetAttachmentsAsync(vendor, SourceType.VEN_OLET, Modules.Vendors);
             var productServicesTask = await _repository.GetProductServicesAsync();
             var countries = await _repository.GetCountriesAsync();
 
@@ -1208,7 +1208,7 @@ namespace SolaERP.Persistence.Services
             var venLogoAttachmentTask =
                 await _attachmentService.GetAttachmentsAsync(vendor, SourceType.VEN_LOGO, Modules.Vendors);
             var venOletAttachmentTask =
-                await _attachmentService.GetAttachmentsAsync(vendor, SourceType.VEN_OLET, Modules.EvaluationForm);
+                await _attachmentService.GetAttachmentsAsync(vendor, SourceType.VEN_OLET, Modules.Vendors);
             var productServicesTask = await _repository.GetProductServicesAsync();
 
             var matchedPrequalificationTypes = prequalificationTypesTask
@@ -1308,7 +1308,7 @@ namespace SolaERP.Persistence.Services
                     {
                         var attachments = _mapper.Map<List<AttachmentDto>>(
                             await _attachmentService.GetAttachmentsAsync(vendorId, SourceType.VEN_PREQ,
-                                Modules.EvaluationForm, design.PrequalificationDesignId));
+                                Modules.Vendors, design.PrequalificationDesignId));
 
                         var correspondingValue = prequalificationValues.FirstOrDefault(v =>
                             v.PrequalificationDesignId == design.PrequalificationDesignId);
@@ -1419,7 +1419,7 @@ namespace SolaERP.Persistence.Services
                 {
                     var attachments = _mapper.Map<List<AttachmentDto>>(
                         await _attachmentService.GetAttachmentsAsync(vendorId, SourceType.VEN_PREQ,
-                            Modules.EvaluationForm, design.PrequalificationDesignId));
+                            Modules.Vendors, design.PrequalificationDesignId));
 
                     var correspondingValue = prequalificationValues.FirstOrDefault(v =>
                         v.PrequalificationDesignId == design.PrequalificationDesignId);
@@ -1552,7 +1552,7 @@ namespace SolaERP.Persistence.Services
                     {
                         attachments = _mapper.Map<List<AttachmentDto>>(
                             await _attachmentService.GetAttachmentsAsync(vendorId, SourceType.VEN_DUE,
-                                Modules.EvaluationForm,
+                                Modules.Vendors,
                                 d.DesignId));
                     }
 

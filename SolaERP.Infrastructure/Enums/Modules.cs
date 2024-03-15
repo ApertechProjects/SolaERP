@@ -5,7 +5,6 @@
         Users,
         BidComparison,
         Bid,
-        EvaluationForm,
         Orders,
         Request,
         Rfqs,
