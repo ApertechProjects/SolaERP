@@ -82,8 +82,8 @@ namespace SolaERP.API.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Save2(VendorCardDto vendor)
-           => CreateActionResult(await _service.SaveAsync(User.Identity.Name, vendor));
+        public async Task<IActionResult> Save2(VendorCardDto2 vendor)
+           => CreateActionResult(await _service.SaveAsync2(User.Identity.Name, vendor));
 
         [Authorize]
         [HttpPost]

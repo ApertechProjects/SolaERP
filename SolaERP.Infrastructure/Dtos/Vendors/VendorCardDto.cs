@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using SolaERP.Application.Dtos.SupplierEvaluation;
+using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Dtos.Vendors
 {
@@ -40,8 +41,6 @@ namespace SolaERP.Application.Dtos.Vendors
         public string Phone_Mobile { get; set; }
         public string ContactPerson { get; set; }
 
-
-        //public int VendorType { get; set; }
         public string? ShipVia { get; set; }
         public string? DeliveryTerms { get; set; }
         public string PaymentTerms { get; set; }
@@ -58,10 +57,70 @@ namespace SolaERP.Application.Dtos.Vendors
         public int BusinessUnitId { get; set; }
         public string BusinessUnitCode { get; set; }
         public string OtherProducts { get; set; }
-        //public int ApproveStageMainId { get; set; }
         public DateTime CompanyRegistrationDate { get; set; }
         public string TaxOffice { get; set; }
         public IFormFile Logo { get; set; }
+        public bool CheckLogoIsDeleted { get; set; }
+        public List<VendorBankDetailDto> BankAccounts { get; set; }
+    }
+
+
+    public class VendorCardDto2
+    {
+        public int VendorId { get; set; }
+
+        public int BlackList { get; set; }
+        public string BlackListDescription { get; set; }
+
+
+        public decimal Rating { get; set; }
+        public int ReviseNo { get; set; }
+        public DateTime ReviseDate { get; set; }
+
+
+        public int ApproveStatus { get; set; }
+        public int Status { get; set; }
+
+
+        public string VendorCode { get; set; }
+        public string TaxId { get; set; }
+        public string Country { get; set; }
+        public string City { get; set; }
+
+
+        public string VendorName { get; set; }
+        public string Description { get; set; }
+        public string Address1 { get; set; }
+
+        public string Postal_ZIP { get; set; }
+
+        public string EmailAddress { get; set; }
+
+        public string DefaultCurrency { get; set; }
+        public string Website { get; set; }
+        public string Address2 { get; set; }
+        public string Phone_Mobile { get; set; }
+        public string ContactPerson { get; set; }
+
+        public string? ShipVia { get; set; }
+        public string? DeliveryTerms { get; set; }
+        public string PaymentTerms { get; set; }
+
+
+        public string? WithHoldingTaxId { get; set; }
+        public string? Tax { get; set; }
+
+
+        public string RepresentedProducts { get; set; }
+        public string RepresentedCompanies { get; set; }
+        public int CreditDays { get; set; }
+        public bool _60DaysPayment { get; set; }
+        public int BusinessUnitId { get; set; }
+        public string BusinessUnitCode { get; set; }
+        public string OtherProducts { get; set; }
+        public DateTime CompanyRegistrationDate { get; set; }
+        public string TaxOffice { get; set; }
+        public AttachmentSaveModel Logo { get; set; }
         public bool CheckLogoIsDeleted { get; set; }
         public List<VendorBankDetailDto> BankAccounts { get; set; }
     }

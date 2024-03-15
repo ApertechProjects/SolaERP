@@ -318,6 +318,7 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<VendorWFADto>>.Fail("Data not found", 404);
         }
 
+
         public async Task<ApiResponse<bool>> SaveAsync(string userIdentity, VendorCardDto vendorDto)
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
@@ -402,7 +403,7 @@ namespace SolaERP.Persistence.Services
             return vendorId > 0 ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Success(false, 400);
         }
 
-        public async Task<ApiResponse<bool>> SaveAsync2(string userIdentity, VendorCardDto vendorDto)
+        public async Task<ApiResponse<bool>> SaveAsync2(string userIdentity, VendorCardDto2 vendorDto)
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
             List<Task<bool>> tasks = new();
@@ -433,10 +434,17 @@ namespace SolaERP.Persistence.Services
             await _supplierRepository.AddRepresentedProductAsync(new RepresentedProductData
             { VendorId = vendorId, RepresentedProductName = string.Join(",", vendor?.RepresentedProducts) });
 
-            string vendorLogo = await _repository.GetVendorLogo(vendorId);
-            vendor.Logo = await _fileUploadService.GetLinkForEntity(vendorDto.Logo, Modules.Vendors,
-                vendorDto.CheckLogoIsDeleted, vendorLogo);
+            #region Company Information Logo
+            if (vendorDto.Logo != null)
+            {
+                List<AttachmentSaveModel> attachmentSaveModels = new List<AttachmentSaveModel>();
+                attachmentSaveModels.Add(vendorDto.Logo);
 
+                await _attachmentService.SaveAttachmentAsync(attachmentSaveModels,
+                    SourceType.VEN_LOGO, vendorId);
+            }
+
+            #endregion
 
             #region Bank Accounts
 
@@ -570,5 +578,7 @@ namespace SolaERP.Persistence.Services
                 ? ""
                 : vendor.Description;
         }
+
+    
     }
 }
