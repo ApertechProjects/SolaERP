@@ -402,6 +402,89 @@ namespace SolaERP.Persistence.Services
             return vendorId > 0 ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Success(false, 400);
         }
 
+        public async Task<ApiResponse<bool>> SaveAsync2(string userIdentity, VendorCardDto vendorDto)
+        {
+            User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
+            List<Task<bool>> tasks = new();
+            Vendor vendor = _mapper.Map<Vendor>(vendorDto);
+
+            vendor.ShipmentId = vendorDto.ShipVia == "null" ? null : Convert.ToInt32(vendorDto.ShipVia);
+            vendor.DeliveryTermId = vendorDto.DeliveryTerms == "null" ? null : Convert.ToInt32(vendorDto.DeliveryTerms);
+            vendor.WithHoldingTaxId = vendorDto.WithHoldingTaxId == "null"
+                ? null
+                : Convert.ToInt32(vendorDto.WithHoldingTaxId);
+            vendor.TaxesId = vendorDto.Tax == "null" ? null : Convert.ToInt32(vendorDto.Tax);
+            vendor.OtherProducts = vendorDto.OtherProducts == "null" ? null : vendorDto.OtherProducts;
+
+            CheckNullForFormData(vendor);
+
+            int userId = Convert.ToInt32(userIdentity);
+            int vendorId = 0;
+
+            vendorId = vendor.IsNewVendor()
+                ? await _repository.AddAsync(userId, vendor)
+                : await _repository.UpdateAsync(userId, vendor);
+
+            await _supplierRepository.DeleteRepresentedProductAsync(vendorId);
+            await _supplierRepository.DeleteRepresentedCompanyAsync(vendorId);
+
+            await _supplierRepository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany
+            { VendorId = vendorId, RepresentedCompanyName = string.Join(",", vendor?.RepresentedCompanies) });
+            await _supplierRepository.AddRepresentedProductAsync(new RepresentedProductData
+            { VendorId = vendorId, RepresentedProductName = string.Join(",", vendor?.RepresentedProducts) });
+
+            string vendorLogo = await _repository.GetVendorLogo(vendorId);
+            vendor.Logo = await _fileUploadService.GetLinkForEntity(vendorDto.Logo, Modules.Vendors,
+                vendorDto.CheckLogoIsDeleted, vendorLogo);
+
+
+            #region Bank Accounts
+
+            if (vendorDto.BankAccounts is not null)
+            {
+                for (var i = 0; i < vendorDto.BankAccounts.Count; i++)
+                {
+                    var x = vendorDto.BankAccounts[i];
+
+                    if (x.Type == 2)
+                    {
+                        await _repository.DeleteBankDetailsAsync(user.Id, x.Id);
+                    }
+
+                    else
+                    {
+                        x.VendorId = vendorId;
+
+                        var detaildId = await _repository.UpdateBankDetailsAsync(user.Id,
+                            _mapper.Map<VendorBankDetail>(x));
+
+                        if (x.AccountVerificationLetter != null)
+                        {
+                            await _attachmentService.SaveAttachmentAsync(x.AccountVerificationLetter,
+                                SourceType.VEN_BNK, detaildId);
+                        }
+                    }
+                }
+            }
+
+            #endregion
+
+            await _attachmentService.DeleteAttachmentAsync(vendorId, SourceType.VEN_LOGO);
+
+            if (!vendorDto.CheckLogoIsDeleted)
+            {
+                AttachmentSaveModel attachmentSaveModel = new AttachmentSaveModel
+                {
+                    FileLink = vendor.Logo
+                };
+                await _attachmentService.SaveAttachmentAsync(attachmentSaveModel, SourceType.VEN_LOGO, vendorId);
+            }
+
+            await Task.WhenAll(tasks);
+
+            await _unitOfWork.SaveChangesAsync();
+            return vendorId > 0 ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Success(false, 400);
+        }
         public async Task<ApiResponse<bool>> SendToApproveAsync(VendorSendToApproveRequest request)
         {
             bool isSuccessFull = await _repository.SendToApprove(request);

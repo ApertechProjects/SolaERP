@@ -123,7 +123,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 {
                     command.CommandText = @"DECLARE	 @NewVendorBankId int
                                         SET NOCOUNT OFF EXEC SP_VendorBankDetails_IUD @VendorBankDetailId,
-                                                                      @VendorId,
+                                                                      2896,
                                                                       @Beneficiary,
                                                                       @BeneficiaruTaxId,
                                                                       @Address,
@@ -140,7 +140,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 
                     command.Parameters.AddWithValue(command, "@VendorBankDetailId", bankDetail.Id);
-                    command.Parameters.AddWithValue(command, "@VendorId", bankDetail.VendorId);
+                    //command.Parameters.AddWithValue(command, "@VendorId", 2896);
                     command.Parameters.AddWithValue(command, "@Beneficiary", bankDetail.Beneficiary);
                     command.Parameters.AddWithValue(command, "@BeneficiaruTaxId", bankDetail.BeneficiaruTaxId);
                     command.Parameters.AddWithValue(command, "@Address", bankDetail.Address);
@@ -152,6 +152,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     command.Parameters.AddWithValue(command, "@BankTaxId", bankDetail.BankTaxId);
                     command.Parameters.AddWithValue(command, "@CoresspondentAccount", bankDetail.CorrespondentAccount);
                     command.Parameters.AddWithValue(command, "@UserId", userId);
+
+                    //command.CommandText = @$"DECLARE	 @NewVendorBankId int
+                    //                    SET NOCOUNT OFF EXEC SP_VendorBankDetails_IUD {bankDetail.Id},
+                    //                                                  {bankDetail.VendorId},
+                    //                                                  '{bankDetail.Beneficiary}',
+                    //                                                  '{bankDetail.BeneficiaruTaxId}',
+                    //                                                  '{bankDetail.Address}',
+                    //                                                  '{bankDetail.AccountNumber}',
+                    //                                                  '{bankDetail.Bank}',
+                    //                                                  '{bankDetail.SWIFT}',
+                    //                                                  '{bankDetail.BankCode}',
+                    //                                                  '{bankDetail.Currency}',
+                    //                                                  '{bankDetail.BankTaxId}',
+                    //                                                  '{bankDetail.CorrespondentAccount}',
+                    //                                                  1922,
+                    //                                                  @NewVendorBankId = @NewVendorBankId OUTPUT
+                    //                                                  SELECT @NewVendorBankId as N'@NewVendorBankId'";
 
                     using var reader = await command.ExecuteReaderAsync();
 
