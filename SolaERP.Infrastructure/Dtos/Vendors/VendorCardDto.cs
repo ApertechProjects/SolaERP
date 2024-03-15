@@ -104,7 +104,7 @@ namespace SolaERP.Application.Dtos.Vendors
 
         public int? ShipVia { get; set; }
         public int? DeliveryTerms { get; set; }
-        public int? PaymentTerms { get; set; }
+        public string? PaymentTerms { get; set; }
 
 
         public int? WithHoldingTaxId { get; set; }
