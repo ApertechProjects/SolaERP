@@ -409,12 +409,10 @@ namespace SolaERP.Persistence.Services
             List<Task<bool>> tasks = new();
             Vendor vendor = _mapper.Map<Vendor>(vendorDto);
 
-            vendor.ShipmentId = vendorDto.ShipVia == "null" ? null : Convert.ToInt32(vendorDto.ShipVia);
-            vendor.DeliveryTermId = vendorDto.DeliveryTerms == "null" ? null : Convert.ToInt32(vendorDto.DeliveryTerms);
-            vendor.WithHoldingTaxId = vendorDto.WithHoldingTaxId == "null"
-                ? null
-                : Convert.ToInt32(vendorDto.WithHoldingTaxId);
-            vendor.TaxesId = vendorDto.Tax == "null" ? null : Convert.ToInt32(vendorDto.Tax);
+            vendor.ShipmentId = vendorDto.ShipVia;
+            vendor.DeliveryTermId = vendorDto.DeliveryTerms;
+            vendor.WithHoldingTaxId = vendorDto.WithHoldingTaxId;
+            vendor.TaxesId = vendorDto.Tax;
             vendor.OtherProducts = vendorDto.OtherProducts == "null" ? null : vendorDto.OtherProducts;
 
             CheckNullForFormData(vendor);

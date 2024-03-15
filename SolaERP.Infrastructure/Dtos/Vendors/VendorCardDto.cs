@@ -102,13 +102,13 @@ namespace SolaERP.Application.Dtos.Vendors
         public string Phone_Mobile { get; set; }
         public string ContactPerson { get; set; }
 
-        public string? ShipVia { get; set; }
-        public string? DeliveryTerms { get; set; }
-        public string PaymentTerms { get; set; }
+        public int? ShipVia { get; set; }
+        public int? DeliveryTerms { get; set; }
+        public int? PaymentTerms { get; set; }
 
 
-        public string? WithHoldingTaxId { get; set; }
-        public string? Tax { get; set; }
+        public int? WithHoldingTaxId { get; set; }
+        public int? Tax { get; set; }
 
 
         public string RepresentedProducts { get; set; }
