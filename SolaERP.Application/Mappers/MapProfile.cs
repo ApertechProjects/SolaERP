@@ -452,6 +452,23 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.WithHoldingTaxId, opt => opt.Ignore())
                 .ForMember(dest => dest.AgreeWithDefaultDays, opt => opt.MapFrom(src => src._60DaysPayment));
 
+            CreateMap<VendorCardDto2, Vendor>()
+             .ForMember(dest => dest.RepresentedProducts, opt => opt.MapFrom(src => src.RepresentedProducts))
+             .ForMember(dest => dest.CompanyAdress, opt => opt.MapFrom(src => src.Address1))
+             .ForMember(dest => dest.RepresentedCompanies, opt => opt.MapFrom(src => src.RepresentedCompanies))
+             .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.VendorName))
+             .ForMember(dest => dest.RegistrationDate, opt => opt.MapFrom(src => src.CompanyRegistrationDate))
+             .ForMember(dest => dest.Postal, opt => opt.MapFrom(src => src.Postal_ZIP))
+             .ForMember(dest => dest.PhoneNo, opt => opt.MapFrom(src => src.Phone_Mobile))
+             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.EmailAddress))
+             .ForMember(dest => dest.ShipmentId, opt => opt.Ignore())
+             .ForMember(dest => dest.PaymentTerms, opt => opt.MapFrom(src => src.PaymentTerms))
+             .ForMember(dest => dest.TaxId, opt => opt.MapFrom(src => src.TaxId))
+             .ForMember(dest => dest.DeliveryTermId, opt => opt.Ignore())
+             .ForMember(dest => dest.TaxesId, opt => opt.Ignore())
+             .ForMember(dest => dest.WithHoldingTaxId, opt => opt.Ignore())
+             .ForMember(dest => dest.AgreeWithDefaultDays, opt => opt.MapFrom(src => src._60DaysPayment));
+
             CreateMap<RfqDraft, RfqDraftDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RFQMainId)).ReverseMap();
 
