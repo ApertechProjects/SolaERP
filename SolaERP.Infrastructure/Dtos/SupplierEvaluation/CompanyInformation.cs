@@ -90,6 +90,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public string Email { get; set; }
         public string ContactPerson { get; set; }
         public string TaxId { get; set; }
+        public string Other { get; set; }
         public string TaxOffice { get; set; }
         public string Location { get; set; }
         public string Country { get; set; }
