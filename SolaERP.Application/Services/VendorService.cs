@@ -434,10 +434,10 @@ namespace SolaERP.Persistence.Services
             { VendorId = vendorId, RepresentedProductName = string.Join(",", vendor?.RepresentedProducts) });
 
             #region Company Information Logo
-            if (vendorDto.Logo != null)
+            if (vendorDto.AttachmentLogo != null)
             {
                 List<AttachmentSaveModel> attachmentSaveModels = new List<AttachmentSaveModel>();
-                attachmentSaveModels.Add(vendorDto.Logo);
+                attachmentSaveModels.Add(vendorDto.AttachmentLogo);
 
                 await _attachmentService.SaveAttachmentAsync(attachmentSaveModels,
                     SourceType.VEN_LOGO, vendorId);

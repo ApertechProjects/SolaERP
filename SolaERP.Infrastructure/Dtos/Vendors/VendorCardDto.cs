@@ -120,7 +120,7 @@ namespace SolaERP.Application.Dtos.Vendors
         public string OtherProducts { get; set; }
         public DateTime CompanyRegistrationDate { get; set; }
         public string TaxOffice { get; set; }
-        public AttachmentSaveModel Logo { get; set; }
+        public AttachmentSaveModel AttachmentLogo { get; set; }
         public bool CheckLogoIsDeleted { get; set; }
         public List<VendorBankDetailDto> BankAccounts { get; set; }
     }
