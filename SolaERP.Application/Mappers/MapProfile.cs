@@ -144,7 +144,8 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FileName))
                 .ForMember(dest => dest.LastModifiedDate, opt => opt.MapFrom(src => src.UploadDateTime))
                 .ReverseMap();
-            CreateMap<Attachment, AttachmentDto>().ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FileName))
+            CreateMap<Attachment, AttachmentDto>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FileName))
                 .ForMember(dest => dest.LastModifiedDate, opt => opt.MapFrom(src => src.UploadDateTime))
                 .ReverseMap();
             CreateMap<UOM, UOMDto>().ReverseMap();

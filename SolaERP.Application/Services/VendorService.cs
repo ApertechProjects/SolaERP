@@ -436,6 +436,8 @@ namespace SolaERP.Persistence.Services
             #region Company Information Logo
             if (vendorDto.AttachmentLogo != null)
             {
+                await _attachmentService.DeleteAttachmentAsync(vendorId, SourceType.VEN_LOGO);
+
                 List<AttachmentSaveModel> attachmentSaveModels = new List<AttachmentSaveModel>();
                 attachmentSaveModels.Add(vendorDto.AttachmentLogo);
 
@@ -476,17 +478,7 @@ namespace SolaERP.Persistence.Services
 
             #endregion
 
-            await _attachmentService.DeleteAttachmentAsync(vendorId, SourceType.VEN_LOGO);
-
-            if (!vendorDto.CheckLogoIsDeleted)
-            {
-                AttachmentSaveModel attachmentSaveModel = new AttachmentSaveModel
-                {
-                    FileLink = vendor.Logo
-                };
-                await _attachmentService.SaveAttachmentAsync(attachmentSaveModel, SourceType.VEN_LOGO, vendorId);
-            }
-
+          
             await Task.WhenAll(tasks);
 
             await _unitOfWork.SaveChangesAsync();

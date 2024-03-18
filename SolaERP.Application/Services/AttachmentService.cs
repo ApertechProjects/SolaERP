@@ -128,7 +128,7 @@ namespace SolaERP.Persistence.Services
 
         private void SetDownloadLink(AttachmentDto attachmentDto, Modules module)
         {
-            attachmentDto.FileLink = _fileUploadService.GetDownloadFileLink(attachmentDto.FileLink, module);
+            attachmentDto.FileLink = _fileUploadService.GetDownloadFileLink(attachmentDto.Name, module);
         }
 
         private void SetDownloadLink(List<AttachmentDto> attachmentList, Modules module)
