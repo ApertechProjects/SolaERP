@@ -242,6 +242,7 @@ namespace SolaERP.Persistence.Services
             if (logo is { Count: > 0 })
             {
                 header.Logo = logo[0].FileLink;
+                header.AttachmentLogo = logo[0];
             }
 
             var paymentTerms = _supplierRepository.GetPaymentTermsAsync();

@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Dtos.SupplierEvaluation;
+﻿using SolaERP.Application.Dtos.Attachment;
+using SolaERP.Application.Dtos.SupplierEvaluation;
 
 namespace SolaERP.Application.Dtos.Vendors
 {
@@ -43,5 +44,6 @@ namespace SolaERP.Application.Dtos.Vendors
         public string TaxOffice { get; set; }
         public string Logo { get; set; }
         public List<VendorBankDetailDto> BankAccounts { get; set; }
+        public AttachmentDto AttachmentLogo { get; set; }
     }
 }
