@@ -1,13 +1,13 @@
-version: '3.1'
+version: '3.9'
 
 services:
   app:
     build: .
-    image: sola-erp-api-image
+    image: sola-erp-api-image-${PORT:-3030}
     container_name: sola-erp-api-old
     restart: always
     ports:
-      - "3030:80"
+      - "${PORT:-3030}:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Development}
     volumes:
