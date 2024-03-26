@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Application.Entities.BidComparison
+﻿namespace SolaERP.Application.Entities.BidComparison
 {
     public class BidComparisonBidHeaderLoad
     {
@@ -26,5 +20,8 @@ namespace SolaERP.Application.Entities.BidComparison
         public decimal ReportingAmount { get; set; }
         public string BaseCurrencyCode { get; set; }
         public string ReportingCurrencyCode { get; set; }
+        public decimal BaseTotalWithRate { get; set; }
+        public decimal ConvertedGross { get; set; }
+        public decimal Margins { get; set; }
     }
 }

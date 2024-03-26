@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Application.Entities.BidComparison
+﻿namespace SolaERP.Application.Entities.BidComparison
 {
     public class BidComparisonRFQDetailsLoad
     {
@@ -15,5 +9,7 @@ namespace SolaERP.Application.Entities.BidComparison
         public decimal Budget { get; set; }
         public decimal RemainingBudget { get; set; }
         public int RFQDetailId { get; set; }
+        public string Brand { get; set; }
+        public decimal CurrentPrice { get; set; }
     }
 }
