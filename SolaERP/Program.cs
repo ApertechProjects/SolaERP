@@ -155,15 +155,12 @@ IConfiguration? configuration = builder.Configuration;
 var app = builder.Build();
 
 
-if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        string swaggerJsonBasePath = string.IsNullOrWhiteSpace(c.RoutePrefix) ? "." : "..";
-        c.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/v1/swagger.json", "Web API");
-    });
-}
+    string swaggerJsonBasePath = string.IsNullOrWhiteSpace(c.RoutePrefix) ? "." : "..";
+    c.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/v1/swagger.json", "Web API");
+});
 
 app.UseHttpLogging();
 // app.UseDevExpressControls();
