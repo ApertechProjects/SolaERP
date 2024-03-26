@@ -24,6 +24,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 _transaction = _connection.BeginTransaction(IsolationLevel.ReadCommitted);
 
             command.Transaction = _transaction;
+            command.CommandTimeout = 120;
             //command.Transaction.IsolationLevel = IsolationLevel.ReadCommitted;
 
             return command;
