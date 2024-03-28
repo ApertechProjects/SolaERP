@@ -211,7 +211,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     Quantity = reader.Get<decimal>("Quantity"),
                     TotalAmount = reader.Get<decimal>("TotalAmount"),
                     UnitPrice = reader.Get<decimal>("UnitPrice"),
-                    RFQDetailId = reader.Get<int>("RFQDetailId")
+                    RFQDetailId = reader.Get<int>("RFQDetailId"),
+                    BaseTotalWithRate = reader.Get<decimal>("BaseTotalWithRate"),
+                    ConvertedGross = reader.Get<decimal>("ConvertedGross"),
+                    Margins = reader.Get<decimal>("Margins")
                 });
                 ;
             }
@@ -240,7 +243,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     Description = reader.Get<string>("Description"),
                     RemainingBudget = reader.Get<decimal>("RemainingBudget"),
                     UOM = reader.Get<string>("UOM"),
-                    RFQDetailId = reader.Get<int>("RFQDetailId")
+                    RFQDetailId = reader.Get<int>("RFQDetailId"),
+                    Brand = reader.Get<string>("Brand"),
+                    CurrentPrice = reader.Get<decimal>("CurrentPrice")
                 });
             }
 
@@ -278,7 +283,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     ReportingAmount = reader.Get<decimal>("ReportingAmount"),
                     ReportingCurrencyCode = reader.Get<string>("ReportingCurrencyCode"),
                     Total = reader.Get<decimal>("Total"),
-                    VendorName = reader.Get<string>("VendorName")
+                    VendorName = reader.Get<string>("VendorName"),
+                    BaseTotalWithRate = reader.Get<decimal>("BaseTotalWithRate"),
+                    ConvertedGross = reader.Get<decimal>("ConvertedGross"),
+                    Margins = reader.Get<decimal>("Margins")
                 });
             }
 
