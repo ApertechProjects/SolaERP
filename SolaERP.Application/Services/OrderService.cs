@@ -203,7 +203,11 @@ public class OrderService : IOrderService
         await _orderRepository.SendToApproveAsync(correctOrders, userId);
         await _unitOfWork.SaveChangesAsync();
 
-        return ApiResponse<List<string>>.Success(errorDatas, 200);
+        if (errorDatas.Count > 0)
+            return ApiResponse<List<string>>.Fail(errorDatas, 200);
+
+        return ApiResponse<List<string>>.Success(200);
+
     }
 
     public async Task<ApiResponse<OrderHeadLoaderDto>> GetHeaderLoadAsync(int orderMainId)
