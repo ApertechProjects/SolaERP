@@ -204,7 +204,7 @@ public class OrderService : IOrderService
         await _unitOfWork.SaveChangesAsync();
 
         if (errorDatas.Count > 0)
-            return ApiResponse<List<string>>.Fail(errorDatas, 200);
+            return ApiResponse<List<string>>.Fail(errorDatas, 400);
 
         return ApiResponse<List<string>>.Success(200);
 
