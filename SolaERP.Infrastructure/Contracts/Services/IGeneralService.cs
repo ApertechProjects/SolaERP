@@ -15,5 +15,10 @@ namespace SolaERP.Application.Contracts.Services
             DateTime date,
             string currency,
             int businessUnitId);
+
+        Task<bool> DailyCurrencyIsExist(
+           DateTime date,
+           string currency,
+           int businessUnitId);
     }
 }

@@ -1,3 +1,4 @@
+using AutoMapper;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Order;
@@ -24,11 +25,12 @@ public class OrderService : IOrderService
     private readonly IAttachmentService _attachmentService;
     private readonly IVendorService _vendorService;
     private readonly IUserRepository _userRepository;
+    private readonly IMapper _mapper;
 
     public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork,
         ISupplierEvaluationRepository supplierRepository, IGeneralService generalService,
         IVendorRepository vendorRepository, IAttachmentService attachmentService, IVendorService vendorService,
-        IUserRepository userRepository)
+        IUserRepository userRepository, IMapper mapper)
     {
         _orderRepository = orderRepository;
         _unitOfWork = unitOfWork;
@@ -38,6 +40,7 @@ public class OrderService : IOrderService
         _attachmentService = attachmentService;
         _vendorService = vendorService;
         _userRepository = userRepository;
+        _mapper = mapper;
     }
 
     public async Task<ApiResponse<List<OrderTypeLoadDto>>> GetTypesAsync(int businessUnitId)
@@ -175,12 +178,32 @@ public class OrderService : IOrderService
         return ApiResponse<bool>.Success(true);
     }
 
-    public async Task<ApiResponse<bool>> SendToApproveAsync(List<int> orderMainIdList, string identityName)
+    public async Task<List<OrderMainBaseReportInfoDto>> GetOrderMainBaseReportInfo(List<int> orderMainIds)
     {
+        var data = await _orderRepository.GetOrderMainBaseReportInfos(orderMainIds);
+        var dto = _mapper.Map<List<OrderMainBaseReportInfoDto>>(data);
+        return dto;
+    }
+
+    public async Task<ApiResponse<List<string>>> SendToApproveAsync(List<int> orderMainIdList, string identityName)
+    {
+        List<string> errorDatas = new List<string>();
+        List<int> correctOrders = new List<int>();
         int userId = Convert.ToInt32(identityName);
-        await _orderRepository.SendToApproveAsync(orderMainIdList, userId);
+        var orderInfo = await GetOrderMainBaseReportInfo(orderMainIdList);
+        foreach (var item in orderInfo)
+        {
+            var checkCurrency = await _generalService.DailyCurrencyIsExist(item.Date, item.Currency, item.BusinessUnitId);
+            if (!checkCurrency)
+                errorDatas.Add(item.OrderNo);
+            else
+                correctOrders.Add(item.OrderMainId);
+        }
+
+        await _orderRepository.SendToApproveAsync(correctOrders, userId);
         await _unitOfWork.SaveChangesAsync();
-        return ApiResponse<bool>.Success(true);
+
+        return ApiResponse<List<string>>.Success(errorDatas, 200);
     }
 
     public async Task<ApiResponse<OrderHeadLoaderDto>> GetHeaderLoadAsync(int orderMainId)
@@ -268,4 +291,6 @@ public class OrderService : IOrderService
         var result = await _orderRepository.GetAnalysis(model.BusinessUnitId, data);
         return ApiResponse<List<AnalysisCodeIds>>.Success(result);
     }
+
+
 }

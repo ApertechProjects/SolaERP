@@ -856,4 +856,27 @@ public class SqlOrderRepository : IOrderRepository
 
         await command.ExecuteNonQueryAsync();
     }
+
+    public async Task<List<OrderMainBaseReportInfo>> GetOrderMainBaseReportInfos(List<int> orderMainIds)
+    {
+        string joinList = string.Join(",", orderMainIds)?.ToString();
+        await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = @$"select OrderMainId,BusinessUnitId,Currency,OrderDate, OrderNo from Procurement.OrderMain where OrderMainId In({joinList})";
+
+        using var reader = await command.ExecuteReaderAsync();
+        List<OrderMainBaseReportInfo> infos = new List<OrderMainBaseReportInfo>();
+        while (await reader.ReadAsync())
+        {
+            infos.Add(new OrderMainBaseReportInfo
+            {
+                BusinessUnitId = reader.Get<int>("BusinessUnitId"),
+                Currency = reader.Get<string>("Currency"),
+                Date = reader.Get<DateTime>("OrderDate"),
+                OrderNo = reader.Get<string>("OrderNo"),
+                OrderMainId = reader.Get<int>("OrderMainId")
+            });
+        }
+
+        return infos;
+    }
 }

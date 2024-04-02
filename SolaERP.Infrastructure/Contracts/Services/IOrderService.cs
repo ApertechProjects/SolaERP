@@ -23,7 +23,8 @@ public interface IOrderService
     Task<ApiResponse<OrderIUDResponse>> AddAsync(OrderMainDto orderMainDto, string identityName);
     Task<ApiResponse<bool>> DeleteAsync(List<int> orderMainIdList, string identityName);
     Task<ApiResponse<bool>> ChangeOrderMainStatusAsync(ChangeOrderMainStatusDto statusDto, string identityName);
-    Task<ApiResponse<bool>> SendToApproveAsync(List<int> orderMainIdList, string identityName);
+    Task<ApiResponse<List<string>>> SendToApproveAsync(List<int> orderMainIdList, string identityName);
+    Task<List<OrderMainBaseReportInfoDto>> GetOrderMainBaseReportInfo(List<int> orderMainIds);
     Task<ApiResponse<OrderHeadLoaderDto>> GetHeaderLoadAsync(int orderMainId);
     Task<ApiResponse<List<OrderCreateRequestListDto>>> GetOrderCreateListForRequestAsync(OrderCreateListRequest dto);
     Task<ApiResponse<List<OrderCreateBidListDto>>> GetOrderCreateListForBidsAsync(OrderCreateListRequest dto);

@@ -4,6 +4,8 @@ using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.General;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.Status;
+using SolaERP.Application.Entities.BusinessUnits;
+using SolaERP.Application.Entities.Currency;
 using SolaERP.Application.Entities.SupplierEvaluation;
 
 namespace SolaERP.Persistence.Services
@@ -66,21 +68,9 @@ namespace SolaERP.Persistence.Services
             var businessUnit = (await _businessUnitRepository.GetAllAsync())
                 .SingleOrDefault(x => x.BusinessUnitId == businessUnitId);
 
-            var singleResultBase = convDtoList.SingleOrDefault(x =>
-                x.EffFromDateTime <= date
-                && x.EffToDateTime >= date
-                && x.CurrCodeFrom == currency + "  "
-                && x.CurrCodeTo == businessUnit.BaseCurrencyCode + "  "
-            );
+            var singleResultResult = await GetConvRateDtoAsync(convDtoList, date, currency, businessUnit);
 
-            var singleResultReport = convDtoList.SingleOrDefault(x =>
-                x.EffFromDateTime <= date
-                && x.EffToDateTime >= date
-                && x.CurrCodeFrom == businessUnit.BaseCurrencyCode + "  "
-                && x.CurrCodeTo == businessUnit.ReportingCurrencyCode + "  "
-            );
-
-            if (singleResultBase is null || singleResultReport is null)
+            if (singleResultResult.singleResultBaseRes is null || singleResultResult.singleResultReportRes is null)
             {
                 var dateStringFormatted = date.ToString("dd/MM/yyyy");
                 string message =
@@ -90,14 +80,51 @@ namespace SolaERP.Persistence.Services
 
             var result = new BaseAndReportCurrencyRate
             {
-                BaseRate = singleResultBase.ConvRate,
-                ReportRate = singleResultReport.ConvRate,
-                BaseMultiplyOrDivide = singleResultBase.MultiplyDivide,
-                ReportMultiplyOrDivide = singleResultReport.MultiplyDivide,
+                BaseRate = singleResultResult.singleResultBaseRes.ConvRate,
+                ReportRate = singleResultResult.singleResultReportRes.ConvRate,
+                BaseMultiplyOrDivide = singleResultResult.singleResultBaseRes.MultiplyDivide,
+                ReportMultiplyOrDivide = singleResultResult.singleResultReportRes.MultiplyDivide,
                 IsReportEqualsDisCount = currency == businessUnit.ReportingCurrencyCode
             };
 
             return ApiResponse<BaseAndReportCurrencyRate>.Success(result);
         }
+
+        public async Task<bool> DailyCurrencyIsExist(DateTime date, string currency, int businessUnitId)
+        {
+            var convDtoList = await _generalRepository.GetConvRateList(businessUnitId);
+
+            var businessUnit = (await _businessUnitRepository.GetAllAsync())
+             .SingleOrDefault(x => x.BusinessUnitId == businessUnitId);
+
+            var result = await GetConvRateDtoAsync(convDtoList, date, currency, businessUnit);
+
+            if (result.singleResultBaseRes is null || result.singleResultReportRes is null)
+                return false;
+
+            return true;
+        }
+
+        private async Task<(ConvRateDto singleResultBaseRes, ConvRateDto singleResultReportRes)> GetConvRateDtoAsync(List<ConvRateDto> convDtoList, DateTime date, string currency, BusinessUnits businessUnit)
+        {
+            var singleResultBase = convDtoList.SingleOrDefault(x =>
+             x.EffFromDateTime <= date
+            && x.EffToDateTime >= date
+             && x.CurrCodeFrom == currency + "  "
+             && x.CurrCodeTo == businessUnit.BaseCurrencyCode + "  "
+            );
+
+            var singleResultReport = convDtoList.SingleOrDefault(x =>
+             x.EffFromDateTime <= date
+             && x.EffToDateTime >= date
+             && x.CurrCodeFrom == businessUnit.BaseCurrencyCode + "  "
+             && x.CurrCodeTo == businessUnit.ReportingCurrencyCode + "  "
+               );
+
+            return (singleResultBase, singleResultReport);
+
+        }
+
+
     }
 }

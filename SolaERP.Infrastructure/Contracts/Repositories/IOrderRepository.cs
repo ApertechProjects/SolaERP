@@ -29,6 +29,7 @@ public interface IOrderRepository
     Task<bool> CreateOrderIntegration(int businessUnitId, int orderMainId, int userId);
     Task<bool> Retrieve(int id, int userId);
     Task<List<AnalysisCodeIds>> GetAnalysis(int businessUnitId, DataTable data);
+    Task<List<OrderMainBaseReportInfo>> GetOrderMainBaseReportInfos(List<int> orderMainIds);
     Task<List<int>> GetDetailIds(int orderMainId);
     Task DeleteDetailsNotIncludes(List<int> orderDetailIdList, int orderMaindId);
 }
