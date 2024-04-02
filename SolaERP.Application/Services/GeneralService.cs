@@ -68,9 +68,16 @@ namespace SolaERP.Persistence.Services
             var businessUnit = (await _businessUnitRepository.GetAllAsync())
                 .SingleOrDefault(x => x.BusinessUnitId == businessUnitId);
 
-            var singleResultResult = await GetConvRateDtoAsync(convDtoList, date, currency, businessUnit);
+            var singleResultBaseResult = await GetConvRateDtoAsync(convDtoList, date, currency, businessUnit);
 
-            if (singleResultResult.singleResultBaseRes is null || singleResultResult.singleResultReportRes is null)
+            var singleResultReport = convDtoList.SingleOrDefault(x =>
+                x.EffFromDateTime <= date
+                && x.EffToDateTime >= date
+                && x.CurrCodeFrom == businessUnit.BaseCurrencyCode + "  "
+                && x.CurrCodeTo == businessUnit.ReportingCurrencyCode + "  "
+             );
+
+            if (singleResultBaseResult is null || singleResultReport is null)
             {
                 var dateStringFormatted = date.ToString("dd/MM/yyyy");
                 string message =
@@ -80,10 +87,10 @@ namespace SolaERP.Persistence.Services
 
             var result = new BaseAndReportCurrencyRate
             {
-                BaseRate = singleResultResult.singleResultBaseRes.ConvRate,
-                ReportRate = singleResultResult.singleResultReportRes.ConvRate,
-                BaseMultiplyOrDivide = singleResultResult.singleResultBaseRes.MultiplyDivide,
-                ReportMultiplyOrDivide = singleResultResult.singleResultReportRes.MultiplyDivide,
+                BaseRate = singleResultBaseResult.ConvRate,
+                ReportRate = singleResultReport.ConvRate,
+                BaseMultiplyOrDivide = singleResultBaseResult.MultiplyDivide,
+                ReportMultiplyOrDivide = singleResultReport.MultiplyDivide,
                 IsReportEqualsDisCount = currency == businessUnit.ReportingCurrencyCode
             };
 
@@ -99,13 +106,13 @@ namespace SolaERP.Persistence.Services
 
             var result = await GetConvRateDtoAsync(convDtoList, date, currency, businessUnit);
 
-            if (result.singleResultBaseRes is null || result.singleResultReportRes is null)
+            if (result is null)
                 return false;
 
             return true;
         }
 
-        private async Task<(ConvRateDto singleResultBaseRes, ConvRateDto singleResultReportRes)> GetConvRateDtoAsync(List<ConvRateDto> convDtoList, DateTime date, string currency, BusinessUnits businessUnit)
+        private async Task<ConvRateDto> GetConvRateDtoAsync(List<ConvRateDto> convDtoList, DateTime date, string currency, BusinessUnits businessUnit)
         {
             var singleResultBase = convDtoList.SingleOrDefault(x =>
              x.EffFromDateTime <= date
@@ -114,14 +121,9 @@ namespace SolaERP.Persistence.Services
              && x.CurrCodeTo == businessUnit.BaseCurrencyCode + "  "
             );
 
-            var singleResultReport = convDtoList.SingleOrDefault(x =>
-             x.EffFromDateTime <= date
-             && x.EffToDateTime >= date
-             && x.CurrCodeFrom == businessUnit.BaseCurrencyCode + "  "
-             && x.CurrCodeTo == businessUnit.ReportingCurrencyCode + "  "
-               );
 
-            return (singleResultBase, singleResultReport);
+
+            return singleResultBase;
 
         }
 
