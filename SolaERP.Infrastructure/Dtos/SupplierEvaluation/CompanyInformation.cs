@@ -44,7 +44,6 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public List<BusinessCategory> BusinessCategories { get; set; }
         public List<BusinessSector> BusinessSectors { get; set; }
         public List<AttachmentSaveModel> CompanyLogo { get; set; }
-        public IFormFile CompanyLogoFile { get; set; }
         public bool CompanyLogoFileIsDeleted { get; set; }
         public List<AttachmentSaveModel> Attachments { get; set; }
     }

@@ -98,10 +98,11 @@ namespace SolaERP.Persistence.Services
                 }
 
                 string companyLogoFile = await _vendorRepository.GetCompanyLogoFileAsync(vendor.VendorId);
-                vendor.CompanyLogoFile = await _fileUploadService.GetLinkForEntity(command?.CompanyInformation?.CompanyLogoFile, Modules.Vendors, command.CompanyInformation.CompanyLogoFileIsDeleted,
-                   companyLogoFile);
+            
 
                 int vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
+
+                await _attachmentService.SaveAttachmentAsync(command.CompanyInformation.CompanyLogo, SourceType.VEN_LOGO, vendorId);
 
                 vendor.RegistrationDate = vendor.RegistrationDate.ConvertDateToValidDate();
 
