@@ -95,7 +95,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 UnitOfPurch = reader.Get<string>("UnitOfPurch"),
                 ItemDescriptionAze = reader.Get<string>("ItemDescriptionAze"),
                 AccountCode = reader.Get<string>("AccountCode"),
-                AccountName = reader.Get<string>("AccountName")
+                AccountName = reader.Get<string>("AccountName"),
+                BusinessCategoryKey = reader.Get<string>("BusinessCategoryKey")
             };
         }
     }

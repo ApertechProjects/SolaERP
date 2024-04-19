@@ -11,5 +11,6 @@ namespace SolaERP.Application.Dtos
         public string ItemDescriptionAze { get; set; }
         public string AccountCode { get; set; }
         public string AccountName { get; set; }
+        public string BusinessCategoryKey { get; set; }
     }
 }
