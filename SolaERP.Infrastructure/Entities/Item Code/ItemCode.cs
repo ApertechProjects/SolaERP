@@ -4,7 +4,7 @@ namespace SolaERP.Application.Entities.Item_Code
 {
     public class ItemCode : BaseEntity
     {
-        [DbColumn("ItemCode")]
+        [DbColumn("ItemCode")] 
         public string Item_Code { get; set; }
         public string Description { get; set; }
         public string LongDescription { get; set; }
@@ -12,5 +12,6 @@ namespace SolaERP.Application.Entities.Item_Code
         public string ItemDescriptionAze { get; set; }
         public string AccountCode { get; set; }
         public string AccountName { get; set; }
+        public string BusinessCategoryKey { get; set; }
     }
 }
