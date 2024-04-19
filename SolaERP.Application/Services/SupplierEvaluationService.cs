@@ -102,7 +102,7 @@ namespace SolaERP.Persistence.Services
 
                 int vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
 
-                await _attachmentService.SaveAttachmentAsync(command.CompanyInformation.CompanyLogo, SourceType.VEN_LOGO, vendorId);
+              
 
                 vendor.RegistrationDate = vendor.RegistrationDate.ConvertDateToValidDate();
 
