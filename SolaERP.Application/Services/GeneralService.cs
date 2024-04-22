@@ -28,6 +28,7 @@ namespace SolaERP.Persistence.Services
         {
             var status = await _generalRepository.BusinessCategories();
             var dto = _mapper.Map<List<BusinessCategory>>(status);
+            dto.ForEach(x => { x.Code = x.Code.Trim(); });
             return ApiResponse<List<BusinessCategory>>.Success(dto, 200);
         }
 
@@ -75,7 +76,7 @@ namespace SolaERP.Persistence.Services
                 && x.EffToDateTime >= date
                 && x.CurrCodeFrom == businessUnit.BaseCurrencyCode + "  "
                 && x.CurrCodeTo == businessUnit.ReportingCurrencyCode + "  "
-             );
+            );
 
             if (singleResultBaseResult is null || singleResultReport is null)
             {
@@ -102,7 +103,7 @@ namespace SolaERP.Persistence.Services
             var convDtoList = await _generalRepository.GetConvRateList(businessUnitId);
 
             var businessUnit = (await _businessUnitRepository.GetAllAsync())
-             .SingleOrDefault(x => x.BusinessUnitId == businessUnitId);
+                .SingleOrDefault(x => x.BusinessUnitId == businessUnitId);
 
             var result = await GetConvRateDtoAsync(convDtoList, date, currency, businessUnit);
 
@@ -112,21 +113,18 @@ namespace SolaERP.Persistence.Services
             return true;
         }
 
-        private async Task<ConvRateDto> GetConvRateDtoAsync(List<ConvRateDto> convDtoList, DateTime date, string currency, BusinessUnits businessUnit)
+        private async Task<ConvRateDto> GetConvRateDtoAsync(List<ConvRateDto> convDtoList, DateTime date,
+            string currency, BusinessUnits businessUnit)
         {
             var singleResultBase = convDtoList.SingleOrDefault(x =>
-             x.EffFromDateTime <= date
-            && x.EffToDateTime >= date
-             && x.CurrCodeFrom == currency + "  "
-             && x.CurrCodeTo == businessUnit.BaseCurrencyCode + "  "
+                x.EffFromDateTime <= date
+                && x.EffToDateTime >= date
+                && x.CurrCodeFrom == currency + "  "
+                && x.CurrCodeTo == businessUnit.BaseCurrencyCode + "  "
             );
 
 
-
             return singleResultBase;
-
         }
-
-
     }
 }
