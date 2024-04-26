@@ -22,7 +22,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SELECT * FROM VW_BusinessCategory";
+                command.CommandText = @"SELECT BusinessCategoryId, 
+                    BusinessCategoryName,
+                    BusinessSectorId,
+                    BusinessCategoryCode
+                    FROM Register.BusinessCategory";
 
                 List<BusinessCategory> resultList = new();
                 using var reader = await command.ExecuteReaderAsync();
