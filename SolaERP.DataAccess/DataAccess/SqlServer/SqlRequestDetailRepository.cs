@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Dtos.Request;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
@@ -13,6 +14,26 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public SqlRequestDetailRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+        }
+
+        public async Task<bool> SaveRequestByFromStock(RequestDetail requestDetail)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"Exec SP_RequestDetailsFromStock_U  @RequestDetailId, 
+                                                                    @Quantity, 
+                                                                    @AvailableQuantity, 
+                                                                    @QuantityFromStock, 
+                                                                    @OriginalQuantity";
+
+                command.Parameters.AddWithValue(command, "@RequestDetailId", requestDetail.RequestDetailId);
+                command.Parameters.AddWithValue(command, "@Quantity", requestDetail.Quantity);
+                command.Parameters.AddWithValue(command, "@AvailableQuantity", requestDetail.AvailableInMainStock);
+                command.Parameters.AddWithValue(command, "@QuantityFromStock", requestDetail.QuantityFromStock);
+                command.Parameters.AddWithValue(command, "@OriginalQuantity", requestDetail.OriginalQuantity);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
         }
 
         public async Task<bool> AddAsync(RequestDetail entity)
@@ -203,5 +224,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             await command.ExecuteNonQueryAsync();
         }
+
+
     }
 }

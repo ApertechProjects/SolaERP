@@ -2,23 +2,18 @@
 
 namespace SolaERP.Application.Dtos.Request
 {
-    public class RequestDetailDto
+    public class RequestDetailDto : RequestDetailForFromStockDto
     {
-        public int RequestDetailId { get; set; }
         public int RequestMainId { get; set; }
         public string LineNo { get; set; }
         public DateTime RequestDate { get; set; }
         public DateTime RequestDeadline { get; set; }
         public DateTime RequestedDate { get; set; }
         public string ItemCode { get; set; }
-        public decimal AvailableInMainStock { get; set; }
-        public decimal Quantity { get; set; }
         public string RUOM { get; set; }
         public string Description { get; set; }
         public string Location { get; set; }
         public string Buyer { get; set; }
-        public decimal QuantityFromStock { get; set; }
-        public decimal OriginalQuantity { get; set; }
         public decimal TotalBudget { get; set; }
         public decimal RemainingBudget { get; set; }
         public decimal Amount { get; set; }
@@ -43,5 +38,15 @@ namespace SolaERP.Application.Dtos.Request
         public int? AnalysisCode9Id { get; set; }
         public int? AnalysisCode10Id { get; set; }
         public int CatId { get; set; }
+    }
+
+
+    public class RequestDetailForFromStockDto
+    {
+        public int RequestDetailId { get; set; }
+        public decimal AvailableInMainStock { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal QuantityFromStock { get; set; }
+        public decimal OriginalQuantity { get; set; }
     }
 }

@@ -59,6 +59,14 @@ namespace SolaERP.Persistence.Services
             return requestDetails;
         }
 
+        public async Task<bool> SaveRequestDetailsForStockAsync(RequestDetailForFromStockDto requestDetailDto)
+        {
+            var entity = _mapper.Map<RequestDetail>(requestDetailDto);
+            var requestDetails = await _requestDetailRepository.SaveRequestByFromStock(entity);
+            await _unitOfWork.SaveChangesAsync();
+            return requestDetails;
+        }
+
         public async Task<ApiResponse<List<RequestTypesDto>>> GetTypesAsync(int businessUnitId)
         {
             var entity = await _requestMainRepository.GetRequestTypesByBusinessUnitIdAsync(businessUnitId);
@@ -189,11 +197,22 @@ namespace SolaERP.Persistence.Services
             {
                 var detailIdList = model.Details.Select(x => x.RequestDetailId).ToList();
                 await _requestDetailRepository.DeleteDetailsNotIncludes(detailIdList, resultModel.RequestMainId);
-                foreach (var detail in model.Details)
+                if (model.FromStockChanged)
                 {
-                    var requestDetailDto = detail;
-                    requestDetailDto.RequestMainId = resultModel.RequestMainId;
-                    await SaveRequestDetailsAsync(requestDetailDto);
+                    foreach (var detail in model.Details)
+                    {
+                        var requestDetailDto = detail;
+                        requestDetailDto.RequestMainId = resultModel.RequestMainId;
+                        await SaveRequestDetailsAsync(requestDetailDto);
+                    }
+                }
+                else
+                {
+                    foreach (var detail in model.Details)
+                    {
+                        var requestDetailDto = detail;
+                        await SaveRequestDetailsForStockAsync(requestDetailDto);
+                    }
                 }
 
                 var detailIds = await _requestMainRepository.GetDetailIds(resultModel.RequestMainId);

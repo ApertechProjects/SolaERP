@@ -27,5 +27,6 @@ namespace SolaERP.Application.Models
         public string RequestNo { get; set; }
         public List<RequestDetailDto> Details { get; set; }
         public List<AttachmentSaveModel> Attachments { get; set; }
+        public bool FromStockChanged { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Entities.Request;
+﻿using SolaERP.Application.Dtos.Request;
+using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Contracts.Repositories
@@ -10,5 +11,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> RequestDetailChangeStatusAsync(int requestDetailId, int userId, int approveStatusid, string comment, int? sequence, int rejectReasonId);
         Task<List<RequestCardAnalysis>> GetAnalysis(int requestMainId);
         Task DeleteDetailsNotIncludes(List<int> requestDetailIdList, int requestMainId);
+        Task<bool> SaveRequestByFromStock(RequestDetail requestDetail);
     }
 }
