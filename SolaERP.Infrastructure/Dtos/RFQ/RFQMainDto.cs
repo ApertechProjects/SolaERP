@@ -27,7 +27,7 @@ namespace SolaERP.Application.Dtos.RFQ
         public string PlaceOfDelivery { get; set; }
         public string Comment { get; set; }
         public string OtherReasons { get; set; }
-        public BusinessCategory BusinessCategory { get; set; }
+        public Entities.SupplierEvaluation.BusinessCategory BusinessCategory { get; set; }
         public List<SingleSourceReasonModel> SingleSourceReasons { get; set; }
         public BiddingType BiddingType { get; set; }
         public List<RFQDetailDto> Details { get; set; }

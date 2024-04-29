@@ -5,6 +5,7 @@ using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Attachment;
 using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.BusinessUnit;
+using SolaERP.Application.Dtos.Country;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Entities.Auth;
@@ -98,11 +99,11 @@ namespace SolaERP.Persistence.Services
                 }
 
                 string companyLogoFile = await _vendorRepository.GetCompanyLogoFileAsync(vendor.VendorId);
-            
+
 
                 int vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
 
-              
+
 
                 vendor.RegistrationDate = vendor.RegistrationDate.ConvertDateToValidDate();
 
@@ -1017,7 +1018,7 @@ namespace SolaERP.Persistence.Services
             {
                 BusinessCategories = await _generalRepository.BusinessCategories(),
                 PaymentTerms = await _repository.GetPaymentTermsAsync(),
-                Countries = await _repository.GetCountriesAsync(),
+                Countries = _mapper.Map<List<CountryDto>>(await _repository.GetCountriesAsync()),
                 PrequalificationTypes = await _repository.GetPrequalificationCategoriesAsync(),
                 Services = await _repository.GetProductServicesAsync(),
             };

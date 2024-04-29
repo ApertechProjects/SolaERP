@@ -10,9 +10,12 @@ using SolaERP.Application.Dtos.ApproveStages;
 using SolaERP.Application.Dtos.Attachment;
 using SolaERP.Application.Dtos.Bid;
 using SolaERP.Application.Dtos.BidComparison;
+using SolaERP.Application.Dtos.BusinessCategory;
 using SolaERP.Application.Dtos.BusinessUnit;
 using SolaERP.Application.Dtos.Buyer;
+using SolaERP.Application.Dtos.Country;
 using SolaERP.Application.Dtos.Currency;
+using SolaERP.Application.Dtos.DeliveryTerm;
 using SolaERP.Application.Dtos.Email;
 using SolaERP.Application.Dtos.General;
 using SolaERP.Application.Dtos.GridLayout;
@@ -26,17 +29,22 @@ using SolaERP.Application.Dtos.LogInfo;
 using SolaERP.Application.Dtos.Menu;
 using SolaERP.Application.Dtos.Order;
 using SolaERP.Application.Dtos.Payment;
+using SolaERP.Application.Dtos.PaymentTerm;
 using SolaERP.Application.Dtos.Procedure;
 using SolaERP.Application.Dtos.Request;
 using SolaERP.Application.Dtos.RFQ;
+using SolaERP.Application.Dtos.Score;
+using SolaERP.Application.Dtos.Shipment;
 using SolaERP.Application.Dtos.Status;
 using SolaERP.Application.Dtos.Supplier;
 using SolaERP.Application.Dtos.SupplierEvaluation;
+using SolaERP.Application.Dtos.TaxDto;
 using SolaERP.Application.Dtos.Translate;
 using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Dtos.UserDto;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Dtos.Venndors;
+using SolaERP.Application.Dtos.WithHoldingTax;
 using SolaERP.Application.Entities.AccountCode;
 using SolaERP.Application.Entities.AnalysisCode;
 using SolaERP.Application.Entities.AnalysisDimension;
@@ -193,6 +201,9 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<AnalysisWithBu, AnalysisWithBuDto>().ReverseMap();
             CreateMap<BuAnalysisDimension, BuAnalysisDimensionDto>().ReverseMap();
             CreateMap<AnalysisStructure, AnalysisStructureDto>().ReverseMap();
+            CreateMap<PaymentTerms, PaymentTermDto>().ReverseMap();
+            CreateMap<DeliveryTerms, DeliveryTermDto>().ReverseMap();
+            CreateMap<VendorUser, VendorUserDto>().ReverseMap();
 
             CreateMap<DueDiligenceDesign, DueDiligenceChildDto>()
                 .ForMember(dest => dest.TextBoxPoint, opt => opt.MapFrom(src => src.HasTextBox))
@@ -680,8 +691,18 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<InvoiceMatchGRN, InvoiceMatchGRNDto>().ReverseMap();
 
             CreateMap<OrderMainBaseReportInfo, OrderMainBaseReportInfoDto>().ReverseMap();
+            CreateMap<Score, ScoreDto>().ReverseMap();
+            CreateMap<Shipment, ShipmentDto>().ReverseMap();
+            CreateMap<WithHoldingTaxData, WithHoldingTaxDto>().ReverseMap();
+            CreateMap<TaxData, TaxDto>().ReverseMap();
+            CreateMap<Country, CountryDto>().ReverseMap();
 
-
+            CreateMap<BusinessCategory, BusinessCategoryDto>()
+             .ForMember(dest => dest.BusinessCategoryCode, opt => opt.MapFrom(src => src.Code))
+             .ForMember(dest => dest.BusinessCategoryId, opt => opt.MapFrom(src => src.Id))
+             .ForMember(dest => dest.BusinessCategoryName, opt => opt.MapFrom(src => src.Name))
+             .ForMember(dest => dest.BusinessSectorId, opt => opt.MapFrom(src => src.BusinessSectorId))
+             .ReverseMap();
         }
     }
 }

@@ -16,7 +16,7 @@ namespace SolaERP.Application.Dtos.RFQ
         public string ItemName1 { get; set; }
         public string ItemName2 { get; set; }
         public decimal Quantity { get; set; }
-        public BusinessCategory BusinessCategory { get; set; }
+        public Entities.SupplierEvaluation.BusinessCategory BusinessCategory { get; set; }
         public string UOM { get; set; }
         public string DefaultUOM { get; set; }
         public int CONV_ID { get; set; }

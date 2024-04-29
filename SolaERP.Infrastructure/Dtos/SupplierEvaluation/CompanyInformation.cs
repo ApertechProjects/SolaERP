@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using SolaERP.Application.Dtos.Attachment;
+using SolaERP.Application.Dtos.Country;
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
@@ -10,10 +11,10 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
     public class CompanyInformation
     {
         public CompanyInfoDto CompanyInfo { get; set; }
-        public List<BusinessCategory> BusinessCategories { get; set; }
+        public List<Entities.SupplierEvaluation.BusinessCategory> BusinessCategories { get; set; }
         public List<PrequalificationCategory> PrequalificationTypes { get; set; }
         public List<PaymentTerms> PaymentTerms { get; set; }
-        public List<Country> Countries { get; set; }
+        public List<CountryDto> Countries { get; set; }
         public List<ProductService> Services { get; set; }
     }
 
@@ -41,7 +42,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public string Other { get; set; }
         public List<ProductService> Services { get; set; }
         public List<PrequalificationCategory> PrequalificationTypes { get; set; }
-        public List<BusinessCategory> BusinessCategories { get; set; }
+        public List<Entities.SupplierEvaluation.BusinessCategory> BusinessCategories { get; set; }
         public List<BusinessSector> BusinessSectors { get; set; }
         public List<AttachmentSaveModel> CompanyLogo { get; set; }
         public bool CompanyLogoFileIsDeleted { get; set; }
@@ -73,7 +74,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public List<ProductService> Services { get; set; }
         public List<VendorBusinessSector> BusinessSectors { get; set; }
         public List<PrequalificationCategory> PrequalificationTypes { get; set; }
-        public List<BusinessCategory> BusinessCategories { get; set; }
+        public List<Entities.SupplierEvaluation.BusinessCategory> BusinessCategories { get; set; }
         public List<AttachmentDto> CompanyLogo { get; set; }
         public List<AttachmentDto> Attachments { get; set; }
     }

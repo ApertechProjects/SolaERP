@@ -1,11 +1,20 @@
 ﻿using AutoMapper;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.BusinessCategory;
+using SolaERP.Application.Dtos.Country;
+using SolaERP.Application.Dtos.Currency;
+using SolaERP.Application.Dtos.DeliveryTerm;
 using SolaERP.Application.Dtos.Payment;
+using SolaERP.Application.Dtos.PaymentTerm;
+using SolaERP.Application.Dtos.Score;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.Shipment;
 using SolaERP.Application.Dtos.SupplierEvaluation;
+using SolaERP.Application.Dtos.TaxDto;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Dtos.Venndors;
+using SolaERP.Application.Dtos.WithHoldingTax;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
@@ -14,6 +23,7 @@ using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Application.ViewModels;
 using SolaERP.DataAccess.Extensions;
+using System.Collections.Generic;
 
 namespace SolaERP.Persistence.Services
 {
@@ -228,15 +238,16 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<VendorWFADto>>.Fail("Data not found", 404);
         }
 
-        public async Task<ApiResponse<VM_VendorCard>> GetAsync(int vendorId)
+        public async Task<VendorLoadDto> GetVendorHeader(int vendorId)
         {
             var header = _mapper.Map<VendorLoadDto>(await _repository.GetHeader(vendorId));
-            if (vendorId == 0)
-            {
-                header.CompanyRegistrationDate = null;
-            }
+            if (vendorId == 0) header.CompanyRegistrationDate = null;
 
             header.RevisionVendorId = await _repository.GetRevisionVendorIdByVendorCode(header.VendorCode);
+            header.WithHoldingTaxId = header.WithHoldingTaxId == 0 ? null : header.WithHoldingTaxId;
+            header.ShipVia = header.ShipVia == 0 ? null : header.ShipVia;
+            header.DeliveryTerms = header.DeliveryTerms == 0 ? null : header.DeliveryTerms;
+            header.Tax = header.Tax == 0 ? null : header.Tax;
 
             var logo = await _attachmentService.GetAttachmentsAsync(header.VendorId,
                 SourceType.VEN_LOGO, Modules.Vendors);
@@ -246,18 +257,16 @@ namespace SolaERP.Persistence.Services
                 header.AttachmentLogo = logo[0];
             }
 
+            return header;
+        }
+
+        public async Task<ApiResponse<VM_VendorCard>> GetAsync(int vendorId)
+        {
+            var header = await GetVendorHeader(vendorId);
             var paymentTerms = _supplierRepository.GetPaymentTermsAsync();
             var deliveryTerms = _supplierRepository.GetDeliveryTermsAsync();
             var currency = _supplierRepository.GetCurrenciesAsync();
-            var bankDetails = await _supplierRepository.GetVendorBankDetailsAsync(vendorId);
-
-            var bankDetailDto = _mapper.Map<List<VendorBankDetailViewDto>>(bankDetails);
-            for (int i = 0; i < bankDetailDto.Count; i++)
-            {
-                bankDetailDto[i].AccountVerificationLetter = await _attachmentService.GetAttachmentsAsync(bankDetailDto[i].Id,
-                SourceType.VEN_BNK, Modules.Vendors);
-            }
-
+            var bankDetails = _supplierRepository.GetVendorBankDetailsAsync(vendorId);
             var vendorBuCategories = _supplierRepository.GetVendorBuCategoriesAsync(vendorId);
             var buCategories = _generalRepository.BusinessCategories();
             var users = _supplierRepository.GetVendorUsers(vendorId);
@@ -275,6 +284,7 @@ namespace SolaERP.Persistence.Services
                 users,
                 shipment,
                 withHoldingTax,
+                bankDetails,
                 tax,
                 users,
                 currency,
@@ -291,23 +301,25 @@ namespace SolaERP.Persistence.Services
             VM_VendorCard vendorModel = new VM_VendorCard()
             {
                 Header = header,
-                Currencies = currency.Result,
-                PaymentTerms = paymentTerms.Result,
-                DeliveryTerms = deliveryTerms.Result,
-                VendorBankDetails = bankDetailDto,
-                VendorUsers = users.Result,
-                ItemCategories = matchedBuCategories,
-                Score = score.Result,
-                Shipments = shipment.Result,
-                WithHoldingTaxDatas = withHoldingTax.Result,
-                TaxDatas = tax.Result,
-                Countries = countries.Result,
+                Currencies = _mapper.Map<List<CurrencyDto>>(currency.Result),
+                PaymentTerms = _mapper.Map<List<PaymentTermDto>>(paymentTerms.Result),
+                DeliveryTerms = _mapper.Map<List<DeliveryTermDto>>(deliveryTerms.Result),
+                VendorBankDetails = _mapper.Map<List<VendorBankDetailViewDto>>(bankDetails.Result),
+                VendorUsers = _mapper.Map<List<VendorUserDto>>(users.Result),
+                ItemCategories = _mapper.Map<List<BusinessCategoryDto>>(matchedBuCategories),
+                Score = _mapper.Map<List<ScoreDto>>(score.Result),
+                Shipments = _mapper.Map<List<ShipmentDto>>(shipment.Result),
+                WithHoldingTaxDatas = _mapper.Map<List<WithHoldingTaxDto>>(withHoldingTax.Result),
+                TaxDatas = _mapper.Map<List<TaxDto>>(tax.Result),
+                Countries = _mapper.Map<List<CountryDto>>(countries.Result),
             };
 
-            header.WithHoldingTaxId = header.WithHoldingTaxId == 0 ? null : header.WithHoldingTaxId;
-            header.ShipVia = header.ShipVia == 0 ? null : header.ShipVia;
-            header.DeliveryTerms = header.DeliveryTerms == 0 ? null : header.DeliveryTerms;
-            header.Tax = header.Tax == 0 ? null : header.Tax;
+            for (int i = 0; i < vendorModel.VendorBankDetails.Count; i++)
+            {
+                vendorModel.VendorBankDetails[i].AccountVerificationLetter = await _attachmentService.GetAttachmentsAsync(vendorModel.VendorBankDetails[i].Id,
+                SourceType.VEN_BNK, Modules.Vendors);
+            }
+
 
             return ApiResponse<VM_VendorCard>.Success(vendorModel);
         }
@@ -316,14 +328,12 @@ namespace SolaERP.Persistence.Services
         {
             List<VendorWFA> vendorWFAs = await _repository.GetWFAAsync(Convert.ToInt32(userIdentity), filter);
 
-            if (!string.IsNullOrEmpty(filter.Text?.ToString()))
-            {
-                vendorWFAs = vendorWFAs.GetDataByFilter(filter.Text);
-            }
+            if (!string.IsNullOrEmpty(filter.Text?.ToString())) vendorWFAs = vendorWFAs.GetDataByFilter(filter.Text);
 
             List<VendorWFADto> vendorAllDtos = _mapper.Map<List<VendorWFADto>>(vendorWFAs);
-            if (vendorWFAs.Count > 0)
-                return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
+
+            if (vendorWFAs.Count > 0) return ApiResponse<List<VendorWFADto>>.Success(vendorAllDtos, 200);
+
             return ApiResponse<List<VendorWFADto>>.Fail("Data not found", 404);
         }
 

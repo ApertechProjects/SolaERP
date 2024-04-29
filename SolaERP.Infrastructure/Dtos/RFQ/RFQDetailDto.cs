@@ -13,7 +13,7 @@ namespace SolaERP.Application.Dtos.RFQ
         public string ItemCode { get; set; }
         public string ItemName1 { get; set; }
         public string ItemName2 { get; set; }
-        public BusinessCategory BusinessCategory { get; set; }
+        public Application.Entities.SupplierEvaluation.BusinessCategory BusinessCategory { get; set; }
         public Condition Condition { get; set; } = Condition.Any;
         public bool AlternativeItem { get; set; }
         public string UOM { get; set; }
