@@ -11,7 +11,7 @@ namespace SolaERP.Application.Models
         public List<Currency> Currencies { get; set; }
         public List<PaymentTerms> PaymentTerms { get; set; }
         public List<DeliveryTerms> DeliveryTerms { get; set; }
-        public List<VendorBankDetail> VendorBankDetails { get; set; }
+        public List<VendorBankDetailViewDto> VendorBankDetails { get; set; }
         public List<VendorUser> VendorUsers { get; set; }
         public List<BusinessCategory> ItemCategories { get; set; }
         public List<Score> Score { get; set; }

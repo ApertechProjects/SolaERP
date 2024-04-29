@@ -3,6 +3,7 @@ using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Dtos.Venndors;
 using SolaERP.Application.Entities.Auth;
@@ -248,7 +249,15 @@ namespace SolaERP.Persistence.Services
             var paymentTerms = _supplierRepository.GetPaymentTermsAsync();
             var deliveryTerms = _supplierRepository.GetDeliveryTermsAsync();
             var currency = _supplierRepository.GetCurrenciesAsync();
-            var bankDetails = _supplierRepository.GetVendorBankDetailsAsync(vendorId);
+            var bankDetails = await _supplierRepository.GetVendorBankDetailsAsync(vendorId);
+
+            var bankDetailDto = _mapper.Map<List<VendorBankDetailViewDto>>(bankDetails);
+            for (int i = 0; i < bankDetailDto.Count; i++)
+            {
+                bankDetailDto[i].AccountVerificationLetter = await _attachmentService.GetAttachmentsAsync(bankDetailDto[i].Id,
+                SourceType.VEN_BNK, Modules.Vendors);
+            }
+
             var vendorBuCategories = _supplierRepository.GetVendorBuCategoriesAsync(vendorId);
             var buCategories = _generalRepository.BusinessCategories();
             var users = _supplierRepository.GetVendorUsers(vendorId);
@@ -263,7 +272,6 @@ namespace SolaERP.Persistence.Services
             (
                 paymentTerms,
                 deliveryTerms,
-                bankDetails,
                 users,
                 shipment,
                 withHoldingTax,
@@ -286,7 +294,7 @@ namespace SolaERP.Persistence.Services
                 Currencies = currency.Result,
                 PaymentTerms = paymentTerms.Result,
                 DeliveryTerms = deliveryTerms.Result,
-                VendorBankDetails = bankDetails.Result,
+                VendorBankDetails = bankDetailDto,
                 VendorUsers = users.Result,
                 ItemCategories = matchedBuCategories,
                 Score = score.Result,
@@ -478,7 +486,7 @@ namespace SolaERP.Persistence.Services
 
             #endregion
 
-          
+
             await Task.WhenAll(tasks);
 
             await _unitOfWork.SaveChangesAsync();
@@ -570,6 +578,6 @@ namespace SolaERP.Persistence.Services
                 : vendor.Description;
         }
 
-    
+
     }
 }
