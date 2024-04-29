@@ -202,8 +202,7 @@ namespace SolaERP.Persistence.Services
                     foreach (var detail in model.Details)
                     {
                         var requestDetailDto = detail;
-                        requestDetailDto.RequestMainId = resultModel.RequestMainId;
-                        await SaveRequestDetailsAsync(requestDetailDto);
+                        await SaveRequestDetailsForStockAsync(requestDetailDto);
                     }
                 }
                 else
@@ -211,7 +210,8 @@ namespace SolaERP.Persistence.Services
                     foreach (var detail in model.Details)
                     {
                         var requestDetailDto = detail;
-                        await SaveRequestDetailsForStockAsync(requestDetailDto);
+                        requestDetailDto.RequestMainId = resultModel.RequestMainId;
+                        await SaveRequestDetailsAsync(requestDetailDto);
                     }
                 }
 
