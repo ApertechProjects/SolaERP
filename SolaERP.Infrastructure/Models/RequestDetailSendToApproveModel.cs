@@ -17,7 +17,7 @@ namespace SolaERP.Application.Models
 
     public class RequestDetailIds
     {
-        public int RequestDetailId { get; set; }
+        public int? RequestDetailId { get; set; }
         public int? Sequence { get; set; }
     }
 }

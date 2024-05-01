@@ -170,7 +170,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> RequestDetailChangeStatusAsync(int requestDetailId, int userId, int approveStatusId,
+        public async Task<bool> RequestDetailChangeStatusAsync(int? requestDetailId, int userId, int approveStatusId,
             string comment, int? sequence, int rejectReasonId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -214,7 +214,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task DeleteDetailsNotIncludes(List<int> requestDetailIdList, int requestMainId)
+        public async Task DeleteDetailsNotIncludes(List<int?> requestDetailIdList, int requestMainId)
         {
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
             string result = $"({string.Join(",", requestDetailIdList)})";

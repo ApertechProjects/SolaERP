@@ -545,7 +545,7 @@ namespace SolaERP.Persistence.Services
             userDto.UserPhoto = _fileUploadService.GetFileLink(userDto.UserPhoto, Modules.Users);
         }
 
-        public async Task<List<Application.Dtos.User.UserList>> UsersRequestDetails(int requestDetailId, int? sequence,
+        public async Task<List<Application.Dtos.User.UserList>> UsersRequestDetails(int? requestDetailId, int? sequence,
             ApproveStatus status)
         {
             var users = await _userRepository.UsersRequestDetails(requestDetailId, sequence, status);

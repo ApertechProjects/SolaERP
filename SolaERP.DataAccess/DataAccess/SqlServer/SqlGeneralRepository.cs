@@ -1,5 +1,6 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.General;
+using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.General;
 using SolaERP.Application.Entities.Status;
 using SolaERP.Application.Entities.SupplierEvaluation;
@@ -112,6 +113,24 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
 
             return resultList;
+        }
+
+        public async Task<RejectReason> GetRejectReasonByCode(string code)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SELECT *
+                    FROM Register.RejectReasons where ReasonCode = @code";
+                command.Parameters.AddWithValue(command, "@code", code);
+
+                RejectReason resultList = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                if (reader.Read())
+                    resultList = reader.GetByEntityStructure<RejectReason>();
+
+                return resultList;
+            }
         }
     }
 }

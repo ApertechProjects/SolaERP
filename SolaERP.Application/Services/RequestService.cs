@@ -9,6 +9,7 @@ using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
 using SolaERP.Application.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace SolaERP.Persistence.Services
 {
@@ -19,12 +20,21 @@ namespace SolaERP.Persistence.Services
         private readonly IRequestMainRepository _requestMainRepository;
         private readonly IRequestDetailRepository _requestDetailRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IUserService _userService;
         private readonly IMailService _mailService;
         private readonly IAttachmentService _attachmentService;
+        private readonly IBusinessUnitService _businessUnitService;
+        private readonly IGeneralService _generalService;
 
-        public RequestService(IUnitOfWork unitOfWork, IMapper mapper, IRequestMainRepository requestMainRepository,
-            IRequestDetailRepository requestDetailRepository, IUserRepository userRepository, IMailService mailService,
-            IAttachmentService attachmentService)
+        public RequestService(IUnitOfWork unitOfWork,
+                              IMapper mapper,
+                              IRequestMainRepository requestMainRepository,
+                              IRequestDetailRepository requestDetailRepository,
+                              IUserRepository userRepository,
+                              IMailService mailService,
+                              IAttachmentService attachmentService,
+                              IBusinessUnitService businessUnitService,
+                              IGeneralService generalService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -33,6 +43,8 @@ namespace SolaERP.Persistence.Services
             _userRepository = userRepository;
             _mailService = mailService;
             _attachmentService = attachmentService;
+            _businessUnitService = businessUnitService;
+            _generalService = generalService;
         }
 
         public async Task<bool> RemoveDetailAsync(int requestDetailId)
@@ -185,7 +197,7 @@ namespace SolaERP.Persistence.Services
                 : ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>.Fail("Request details is empty", 404);
         }
 
-        public async Task<ApiResponse<RequestSaveResultModel>> AddOrUpdateAsync(string name, RequestSaveModel model)
+        public async Task<ApiResponse<RequestSaveResultModel>> AddOrUpdateAsync(string name, HttpResponse response, RequestSaveModel model)
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var resultModel = await _requestMainRepository
@@ -196,24 +208,41 @@ namespace SolaERP.Persistence.Services
             if (resultModel != null)
             {
                 var detailIdList = model.Details.Select(x => x.RequestDetailId).ToList();
-                await _requestDetailRepository.DeleteDetailsNotIncludes(detailIdList, resultModel.RequestMainId);
-                if (model.FromStockChanged)
+                var data = detailIdList.Select(x => x == null ? 0 : x).ToList();
+                await _requestDetailRepository.DeleteDetailsNotIncludes(data, resultModel.RequestMainId);
+                foreach (var detail in model.Details)
                 {
-                    foreach (var detail in model.Details)
+                    var requestDetailDto = detail;
+                    if (model.FromStockChanged)
                     {
-                        var requestDetailDto = detail;
                         await SaveRequestDetailsForStockAsync(requestDetailDto);
                     }
-                }
-                else
-                {
-                    foreach (var detail in model.Details)
+                    else
                     {
-                        var requestDetailDto = detail;
                         requestDetailDto.RequestMainId = resultModel.RequestMainId;
                         await SaveRequestDetailsAsync(requestDetailDto);
                     }
+
+
+                    //if (model.RequestMainId == 0)
+                    //    detail.Sequence = 1;
+
+                    //if (detail.Quantity == 0 && detail.QuantityFromStock > 0)
+                    //{
+                    //    var rejectReason = await _generalService.GetRejectReasonByCode("INSTOCK");
+                    //    await ChangeDetailStatusAndSendMail(name, response, new RequestDetailApproveModel
+                    //    {
+                    //        ApproveStatus = 2,
+                    //        BusinessUnitName = _businessUnitService.GetBusinessUnitName(model.BusinessUnitId)?.ToString(),
+                    //        RejectReasonId = rejectReason.RejectReasonId,
+                    //        RejectReason = rejectReason.ReasonName,
+                    //        UserId = userId,
+                    //        RequestDetails = new List<RequestDetailIds> { new RequestDetailIds { RequestDetailId = detail.RequestDetailId, Sequence = detail.Sequence } }
+                    //    });
+                    //}
+
                 }
+
 
                 var detailIds = await _requestMainRepository.GetDetailIds(resultModel.RequestMainId);
 
@@ -244,7 +273,9 @@ namespace SolaERP.Persistence.Services
                 : ApiResponse<List<RequestDetailApprovalInfoDto>>.Success(new List<RequestDetailApprovalInfoDto>());
         }
 
-        public async Task<bool> ChangeDetailStatusAsync(string name, int requestDetailId, int approveStatusId,
+
+
+        public async Task<bool> ChangeDetailStatusAsync(string name, int? requestDetailId, int approveStatusId,
             string comment, int? sequence, int rejectReasonId)
         {
             int userId = await _userRepository.ConvertIdentity(name);
@@ -355,6 +386,19 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<List<BuyersAssignmentDto>>.Success(mainRequestDto);
 
             return ApiResponse<List<BuyersAssignmentDto>>.Success(mainRequestDto);
+        }
+
+        public async Task ChangeDetailStatusAndSendMail(string userName, HttpResponse response, RequestDetailApproveModel model)
+        {
+            for (int i = 0; i < model.RequestDetails.Count; i++)
+            {
+                var res = await ChangeDetailStatusAsync(userName, model.RequestDetails[i].RequestDetailId, model.ApproveStatus, model.Comment, model.RequestDetails[i].Sequence, model.RejectReasonId);
+                if (res && model.RequestDetails[i].Sequence != null)
+                {
+                    var users = await _userService.UsersRequestDetails(model.RequestDetails[i].RequestDetailId, model.RequestDetails[i].Sequence, (ApproveStatus)model.ApproveStatus);
+                    await _mailService.SendRequestMailsForChangeStatus(response, users, model.RequestDetails[i].Sequence, model.BusinessUnitName, model.RejectReason);
+                }
+            }
         }
     }
 }

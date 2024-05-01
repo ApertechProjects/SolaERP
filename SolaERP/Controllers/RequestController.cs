@@ -76,7 +76,7 @@ namespace SolaERP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Save(RequestSaveModel model)
-        => CreateActionResult(await _requestService.AddOrUpdateAsync(User.Identity.Name, model));
+        => CreateActionResult(await _requestService.AddOrUpdateAsync(User.Identity.Name,Response, model));
 
         [HttpPost]
         public async Task<IActionResult> SendToApprove(RequestSendToApproveDto sendToApprove)
@@ -118,22 +118,15 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeDetailStatus(RequestDetailApproveModel model)
         {
-            for (int i = 0; i < model.RequestDetails.Count; i++)
-            {
-                var res = await _requestService.ChangeDetailStatusAsync(User.Identity.Name, model.RequestDetails[i].RequestDetailId, model.ApproveStatus, model.Comment, model.RequestDetails[i].Sequence, model.RejectReasonId);
-                if (res && model.RequestDetails[i].Sequence != null)
-                {
-                    var users = await _userService.UsersRequestDetails(model.RequestDetails[i].RequestDetailId, model.RequestDetails[i].Sequence, (ApproveStatus)model.ApproveStatus);
-                    await _mailService.SendRequestMailsForChangeStatus(Response, users, model.RequestDetails[i].Sequence, model.BusinessUnitName, model.RejectReason);
-                }
-            }
-
+            await _requestService.ChangeDetailStatusAndSendMail(User.Identity.Name, Response, model);
             return CreateActionResult(ApiResponse<bool>.Success(200));
         }
+
 
         [HttpPost]
         public async Task<IActionResult> UpdateBuyer(RequestSetBuyer requestSetBuyer)
             => CreateActionResult(await _requestService.UpdateBuyerAsync(requestSetBuyer));
+
 
         [HttpPost]
         public async Task<IActionResult> CreateFollowUser(RequestFollowSaveModel saveModel)
