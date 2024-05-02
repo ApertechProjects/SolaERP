@@ -20,7 +20,10 @@ namespace SolaERP.Controllers
         private readonly IUserService _userService;
         private readonly IBusinessUnitService _businessUnitService;
         private IMailService _mailService;
-        public RequestController(IRequestService requestService, IFileUploadService fileUploadService, IEmailNotificationService emailNotificationService, IUserService userService, IBusinessUnitService businessUnitService, IMailService mailService)
+
+        public RequestController(IRequestService requestService, IFileUploadService fileUploadService,
+            IEmailNotificationService emailNotificationService, IUserService userService,
+            IBusinessUnitService businessUnitService, IMailService mailService)
         {
             _requestService = requestService;
             _fileUploadService = fileUploadService;
@@ -48,7 +51,7 @@ namespace SolaERP.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Info(int requestMainId, int businessUnitId)
-           => CreateActionResult(await _requestService.GetByMainId(User.Identity.Name, requestMainId, businessUnitId));
+            => CreateActionResult(await _requestService.GetByMainId(User.Identity.Name, requestMainId, businessUnitId));
 
         [HttpPost]
         public async Task<IActionResult> WaitingForApproval(RequestWFAGetModel requestWFAGetParametersDto)
@@ -60,11 +63,12 @@ namespace SolaERP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Held(RequestWFAGetModel requestMainParameters)
-         => CreateActionResult(await _requestService.GetHeldAsync(requestMainParameters));
+            => CreateActionResult(await _requestService.GetHeldAsync(requestMainParameters));
 
         [HttpPost]
         public async Task<IActionResult> ChangeApproval(RequestApproveAmendmentModel requestParametersDto)
-            => CreateActionResult(await _requestService.GetChangeApprovalAsync(User.Identity.Name, requestParametersDto));
+            => CreateActionResult(
+                await _requestService.GetChangeApprovalAsync(User.Identity.Name, requestParametersDto));
 
         [HttpPost]
         public async Task<IActionResult> Draft(RequestMainDraftModel model)
@@ -76,7 +80,7 @@ namespace SolaERP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Save(RequestSaveModel model)
-        => CreateActionResult(await _requestService.AddOrUpdateAsync(User.Identity.Name, model));
+            => CreateActionResult(await _requestService.AddOrUpdateAsync(User.Identity.Name, model));
 
         [HttpPost]
         public async Task<IActionResult> SendToApprove(RequestSendToApproveDto sendToApprove)
@@ -90,7 +94,8 @@ namespace SolaERP.Controllers
 
                 if (res)
                 {
-                    var users = await _userService.UsersForRequestMain(sendToApprove.RequestMainIds[i], 0, ApproveStatus.Approved);
+                    var users = await _userService.UsersForRequestMain(sendToApprove.RequestMainIds[i], 0,
+                        ApproveStatus.Approved);
                     await _mailService.SendRequestMailsForChangeStatus(Response, users, 1, businessUnit, null);
                 }
             }
@@ -103,12 +108,15 @@ namespace SolaERP.Controllers
         {
             for (int i = 0; i < data.RequestDatas.Count; i++)
             {
-                var res = await _requestService.ChangeMainStatusAsync(User.Identity.Name, data.RequestDatas[i].RequestMainId, data.ApproveStatus, data.Comment, data.RejectReasonId);
+                var res = await _requestService.ChangeMainStatusAsync(User.Identity.Name,
+                    data.RequestDatas[i].RequestMainId, data.ApproveStatus, data.Comment, data.RejectReasonId);
 
                 if (res && data.RequestDatas[i].Sequence != null)
                 {
-                    var users = await _userService.UsersForRequestMain(data.RequestDatas[i].RequestMainId, data.RequestDatas[i].Sequence, (ApproveStatus)data.ApproveStatus);
-                    await _mailService.SendRequestMailsForChangeStatus(Response, users, data.RequestDatas[i].Sequence, data.BusinessUnitName, data.RejectReason);
+                    var users = await _userService.UsersForRequestMain(data.RequestDatas[i].RequestMainId,
+                        data.RequestDatas[i].Sequence, (ApproveStatus)data.ApproveStatus);
+                    await _mailService.SendRequestMailsForChangeStatus(Response, users, data.RequestDatas[i].Sequence,
+                        data.BusinessUnitName, data.RejectReason);
                 }
             }
 
@@ -120,11 +128,15 @@ namespace SolaERP.Controllers
         {
             for (int i = 0; i < model.RequestDetails.Count; i++)
             {
-                var res = await _requestService.ChangeDetailStatusAsync(User.Identity.Name, model.RequestDetails[i].RequestDetailId, model.ApproveStatus, model.Comment, model.RequestDetails[i].Sequence, model.RejectReasonId);
+                var res = await _requestService.ChangeDetailStatusAsync(User.Identity.Name,
+                    model.RequestDetails[i].RequestDetailId, model.ApproveStatus, model.Comment,
+                    model.RequestDetails[i].Sequence, model.RejectReasonId);
                 if (res && model.RequestDetails[i].Sequence != null)
                 {
-                    var users = await _userService.UsersRequestDetails(model.RequestDetails[i].RequestDetailId, model.RequestDetails[i].Sequence, (ApproveStatus)model.ApproveStatus);
-                    await _mailService.SendRequestMailsForChangeStatus(Response, users, model.RequestDetails[i].Sequence, model.BusinessUnitName, model.RejectReason);
+                    var users = await _userService.UsersRequestDetails(model.RequestDetails[i].RequestDetailId,
+                        model.RequestDetails[i].Sequence, (ApproveStatus)model.ApproveStatus);
+                    await _mailService.SendRequestMailsForChangeStatus(Response, users,
+                        model.RequestDetails[i].Sequence, model.BusinessUnitName, model.RejectReason);
                 }
             }
 
@@ -148,14 +160,12 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _requestService.DeleteFollowUserAsync(requestFollowId));
 
         [HttpGet("{keyCode}/{businessUnitId}")]
-        public async Task<IActionResult> GetDefaultApprovalStage(string keyCode, int businessUnitId) //return data by Request Type(SR/LR/PR/RR)
+        public async Task<IActionResult>
+            GetDefaultApprovalStage(string keyCode, int businessUnitId) //return data by Request Type(SR/LR/PR/RR)
             => CreateActionResult(await _requestService.GetDefaultApprovalStage(keyCode, businessUnitId));
 
         [HttpGet]
-        public async Task<IActionResult> CategoryList()
-            => CreateActionResult(await _requestService.CategoryList());
-
-
+        public async Task<IActionResult> CategoryList(int businessUnitId, string keyCode)
+            => CreateActionResult(await _requestService.CategoryList(businessUnitId, keyCode));
     }
 }
-

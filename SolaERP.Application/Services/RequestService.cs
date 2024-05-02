@@ -326,9 +326,9 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<int>.Success(data);
         }
 
-        public async Task<ApiResponse<List<RequestCategory>>> CategoryList()
+        public async Task<ApiResponse<List<RequestCategory>>> CategoryList(int businessUnitId, string keyCode)
         {
-            var data = await _requestMainRepository.CategoryList();
+            var data = await _requestMainRepository.CategoryList(businessUnitId, keyCode);
             if (data.Count > 0)
                 return ApiResponse<List<RequestCategory>>.Success(data);
             return ApiResponse<List<RequestCategory>>.Fail("Data not found", 404);
@@ -345,7 +345,8 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<RequestHeldDto>>.Success(mainRequestDto);
         }
 
-        public async Task<ApiResponse<List<BuyersAssignmentDto>>> GetBuyersAssignment(RequestWFAGetModel model, string userName)
+        public async Task<ApiResponse<List<BuyersAssignmentDto>>> GetBuyersAssignment(RequestWFAGetModel model,
+            string userName)
         {
             int userId = await _userRepository.ConvertIdentity(userName);
             var mainreq = await _requestMainRepository.GetBuyersAssignment(model, userId);

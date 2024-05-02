@@ -579,12 +579,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<RequestCategory>> CategoryList()
+        public async Task<List<RequestCategory>> CategoryList(int businessUnitId, string keyCode)
         {
             List<RequestCategory> list = new List<RequestCategory>();
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = $"exec dbo.SP_RequestCatList";
+                command.CommandText = $"exec dbo.SP_CatList @businessUnitId, @keyCode";
+                command.Parameters.AddWithValue(command, "@keyCode", keyCode);
+                command.Parameters.AddWithValue(command, "@businessUnitId", businessUnitId);
                 using var reader = await command.ExecuteReaderAsync();
                 while (reader.Read())
                     list.Add(reader.GetByEntityStructure<RequestCategory>());
@@ -620,7 +622,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<List<int>> GetDetailIds(int requestMainId)
         {
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"select RequestDetailId from Procurement.RequestDetails where RequestMainId = @RequestMainId";
+            command.CommandText =
+                @"select RequestDetailId from Procurement.RequestDetails where RequestMainId = @RequestMainId";
             command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
 
             await using DbDataReader reader = await command.ExecuteReaderAsync();

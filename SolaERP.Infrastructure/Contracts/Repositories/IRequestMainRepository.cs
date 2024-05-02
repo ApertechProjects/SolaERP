@@ -16,16 +16,22 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<RequestCardMain> GetRequesMainHeaderAsync(int requestMainId, int userId);
         Task<bool> SendRequestToApproveAsync(int userId, int requestMainId);
         Task<List<RequestApprovalInfo>> GetRequestApprovalInfoAsync(int requestMainId, int userId);
-        Task<List<RequestAmendment>> GetApproveAmendmentRequestsAsync(int userId, RequestApproveAmendmentModel requestParametersDto);
+
+        Task<List<RequestAmendment>> GetApproveAmendmentRequestsAsync(int userId,
+            RequestApproveAmendmentModel requestParametersDto);
+
         Task<RequestSaveResultModel> AddOrUpdateRequestAsync(int userId, RequestMainSaveModel model);
         Task<bool> UpdateBuyerAsync(RequestSetBuyer setBuyers);
         Task<List<RequestFollow>> RequestFollowUserLoadAsync(int requestMainId);
         Task<bool> RequestFollowSaveAsync(RequestFollowSaveModel saveModel);
         Task<bool> RequestFollowDeleteAsync(int requestFollowId);
-        Task<bool> RequestMainChangeStatusAsync(int userId, int requestMainId, int approveStatus, string comment, int rejectReasonId);
+
+        Task<bool> RequestMainChangeStatusAsync(int userId, int requestMainId, int approveStatus, string comment,
+            int rejectReasonId);
+
         Task<bool> RequestFollowCheckUserExistAsync(RequestFollowSaveModel saveModel);
         Task<int> GetDefaultApprovalStage(string keyCode, int businessUnitId);
-        Task<List<RequestCategory>> CategoryList();
+        Task<List<RequestCategory>> CategoryList(int businessUnitId, string keyCode);
         Task<List<int>> GetDetailIds(int requestMainId);
         Task<List<BuyersAssignment>> GetBuyersAssignment(RequestWFAGetModel model, int userId);
     }
