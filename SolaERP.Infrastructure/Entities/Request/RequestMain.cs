@@ -17,7 +17,7 @@
         public DateTime RequestDate { get; set; }
         public DateTime RequestDeadline { get; set; }
         public int UserId { get; set; }
-        public int Requester { get; set; }
+        public string Requester { get; set; }
         public int Priority { get; set; }
         public int Status { get; set; }
         public string StatusName { get; set; }

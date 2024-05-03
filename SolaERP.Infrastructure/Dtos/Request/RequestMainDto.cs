@@ -13,7 +13,7 @@
         public DateTime RequestDeadline { get; set; }
         public string BuyerCode { get; set; }
         public string BuyerName { get; set; }
-        public int Requester { get; set; }
+        public string Requester { get; set; }
         public int Priority { get; set; }
         public string RequestComment { get; set; }
         public string OperatorComment { get; set; }
