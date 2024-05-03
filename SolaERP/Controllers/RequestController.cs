@@ -80,7 +80,7 @@ namespace SolaERP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Save(RequestSaveModel model)
-        => CreateActionResult(await _requestService.AddOrUpdateAsync(User.Identity.Name, model));
+        => CreateActionResult(await _requestService.AddOrUpdateAsync(User.Identity.Name, Response, model));
 
         [HttpPost]
         public async Task<IActionResult> SendToApprove(RequestSendToApproveDto sendToApprove)
@@ -135,7 +135,8 @@ namespace SolaERP.Controllers
                     await _mailService.SendRequestMailsForChangeStatus(Response, users, model.RequestDetails[i].Sequence, model.BusinessUnitName, model.RejectReason);
                 }
             }
-
+            return CreateActionResult(ApiResponse<bool>.Success(200));
+        }
 
         [HttpPost]
         public async Task<IActionResult> UpdateBuyer(RequestSetBuyer requestSetBuyer)
