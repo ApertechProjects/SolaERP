@@ -2,6 +2,7 @@
 {
     public class RequestApprovalInfoDto
     {
+        public int RequestApprovalId { get; set; }
         public int Sequence { get; set; }
         public DateTime? ApproveDate { get; set; }
         public int UserId { get; set; }
