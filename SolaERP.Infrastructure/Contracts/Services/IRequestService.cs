@@ -14,10 +14,16 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<RequestWFADto>>> GetWFAAsync(string name, RequestWFAGetModel requestWFAGetParametersDto);
         Task<bool> RemoveDetailAsync(int requestDetailId);
         Task<ApiResponse<List<RequestTypesDto>>> GetTypesAsync(int businessUnitId);
-        Task<bool> ChangeMainStatusAsync(string name, int requestMainId, int approveStatus, string comment, int rejectReasonId);
+
+        Task<bool> ChangeMainStatusAsync(string name, int requestMainId, int approveStatus, string comment,
+            int rejectReasonId);
+
         Task<bool> SendToApproveAsync(string name, List<int> requestMainIds);
         Task<ApiResponse<List<RequestMainDraftDto>>> GetDraftsAsync(RequestMainDraftModel getMainDraftParameters);
-        Task<ApiResponse<List<RequestAmendmentDto>>> GetChangeApprovalAsync(string name, RequestApproveAmendmentModel requestParametersDto);
+
+        Task<ApiResponse<List<RequestAmendmentDto>>> GetChangeApprovalAsync(string name,
+            RequestApproveAmendmentModel requestParametersDto);
+
         Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId, int businessUnitId);
         Task<ApiResponse<List<RequestApprovalInfoDto>>> GetApprovalInfoAsync(string name, int requestMainId);
         Task<ApiResponse<RequestMainDto>> GetHeaderAsync(string name, int requestMainId);
@@ -33,6 +39,8 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> DeleteFollowUserAsync(int requestFollowId);
         Task<ApiResponse<int>> GetDefaultApprovalStage(string keyCode, int businessUnitId);
         Task<ApiResponse<List<RequestCategory>>> CategoryList();
+        Task<ApiResponse<List<BuyersAssignmentDto>>> GetBuyersAssignment(RequestWFAGetModel model, string userName);
+        Task<ApiResponse<List<RequestCategory>>> CategoryList(int businessUnitId, string keyCode);
         Task<ApiResponse<List<BuyersAssignmentDto>>> GetBuyersAssignment(RequestWFAGetModel model, string userName);
     }
 }
