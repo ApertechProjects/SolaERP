@@ -10,6 +10,8 @@ public class OrderHeadLoaderDto : BaseEntity
     public int OrderTypeId { get; set; }
     public string OrderNo { get; set; }
     public DateTime? OrderDate { get; set; }
+    public DateTime? StartDate { get; set; }
+    public DateTime? EndDate { get; set; }
     public int Emergency { get; set; }
     public DateTime? EntryDate { get; set; }
     public string EnteredBy { get; set; }

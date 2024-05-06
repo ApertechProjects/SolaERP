@@ -654,6 +654,8 @@ public class SqlOrderRepository : IOrderRepository
             OrderTypeId = reader.Get<int>("OrderTypeId"),
             OrderNo = reader.Get<string>("OrderNo"),
             OrderDate = reader.Get<DateTime?>("OrderDate"),
+            StartDate = reader.GetDate<DateTime?>("StartDate"),
+            EndDate = reader.GetDate<DateTime?>("EndDate"),
             Emergency = reader.Get<int>("Emergency"),
             EntryDate = reader.Get<DateTime?>("EntryDate"),
             EnteredBy = reader.Get<string>("EnteredBy"),
