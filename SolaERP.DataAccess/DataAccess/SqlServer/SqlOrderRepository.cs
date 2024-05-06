@@ -37,6 +37,7 @@ public class SqlOrderRepository : IOrderRepository
             {
                 OrderType = reader.Get<string>("Ordertype"),
                 OrderTypeId = reader.Get<int>("OrderTypeId"),
+                KeyCode = reader.Get<string>("KeyCode"),
                 ApproveStageMainId = reader.Get<int>("ApproveStageMainId")
             });
 
