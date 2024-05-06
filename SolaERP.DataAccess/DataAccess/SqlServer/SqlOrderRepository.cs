@@ -264,6 +264,8 @@ public class SqlOrderRepository : IOrderRepository
                                 @BudgetYear,
                                 @OrderNotes,
                                 @DestinationPoint,
+                                @StartDate,
+                                @EndDate,
                                 @NewOrderMainId = @NewOrderMainId OUTPUT,
 		                        @NewOrderNo = @NewOrderNo OUTPUT
                                         

@@ -8,6 +8,8 @@ public class OrderMainDto
     public int? BusinessUnitId { get; set; }
     public int? OrderTypeId { get; set; }
     public DateTime? OrderDate { get; set; }
+    public DateTime? StartDate { get; set; }
+    public DateTime? EndDate { get; set; }
     public int? Emergency { get; set; }
     public string Buyer { get; set; }
     public int? ApproveStageMainId { get; set; }
