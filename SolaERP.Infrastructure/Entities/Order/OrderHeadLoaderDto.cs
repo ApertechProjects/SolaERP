@@ -66,6 +66,7 @@ public class OrderHeadLoaderDto : BaseEntity
     public string OrderNotes { get; set; }
     public int BudgetYear { get; set; }
     public string DestinationPoint { get; set; }
+    public string KeyCode { get; set; }
 
     public List<OrderDetailLoadDto> OrderDetails { get; set; }
     public List<AttachmentDto> Attachments { get; set; }

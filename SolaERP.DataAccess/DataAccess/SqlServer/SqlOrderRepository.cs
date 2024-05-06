@@ -695,7 +695,9 @@ public class SqlOrderRepository : IOrderRepository
             OrderPrint = reader.Get<bool>("OrderPrint"),
             BudgetYear = reader.Get<int>("BudgetYear"),
             DestinationPoint = reader.Get<string>("DestinationPoint"),
-            OrderNotes = reader.Get<string>("OrderNotes")
+            OrderNotes = reader.Get<string>("OrderNotes"),
+            KeyCode = reader.Get<string>("KeyCode"),
+
         };
     }
 
