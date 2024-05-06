@@ -13,7 +13,6 @@ namespace SolaERP.Persistence.Validations.Order
         public OrderSaveValidation()
         {
             RuleFor(x => x.DeliveryTermId).NotEmpty().WithMessage("Please, enter Delivery Term");
-            RuleFor(x => x.DeliveryDate).NotEmpty().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.Currency).NotEmpty().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.PaymentTermId).NotEmpty().WithMessage("Please, enter Payment Term");
         }
