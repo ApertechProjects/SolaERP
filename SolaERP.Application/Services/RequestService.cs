@@ -169,9 +169,7 @@ namespace SolaERP.Persistence.Services
             var approvalInfo = await _requestMainRepository.GetRequestApprovalInfoAsync(requestMainId, userId);
             var approvalInfoResult = _mapper.Map<List<RequestApprovalInfoDto>>(approvalInfo);
 
-            return approvalInfoResult.Count > 0
-                ? ApiResponse<List<RequestApprovalInfoDto>>.Success(approvalInfoResult)
-                : ApiResponse<List<RequestApprovalInfoDto>>.Fail("Bad Request Approval info is empty", 404);
+            return ApiResponse<List<RequestApprovalInfoDto>>.Success(approvalInfoResult);
         }
 
         public async Task<ApiResponse<RequestMainDto>> GetHeaderAsync(string name, int requestMainId)
