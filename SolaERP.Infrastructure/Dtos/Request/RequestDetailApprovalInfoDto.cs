@@ -2,6 +2,7 @@
 {
     public class RequestDetailApprovalInfoDto
     {
+        public int RequestApprovalId { get; set; }
         public string ApproveStageDetailsName { get; set; }
         public int Sequence { get; set; }
         public string ApprovedBy { get; set; }
