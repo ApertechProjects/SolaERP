@@ -31,13 +31,14 @@ namespace SolaERP.Persistence.Services
             {
                 ApproveStatus = approveStatus,
                 Link = _configuration["Mail:ServerUrlUI"],
-                EmailTemplateKey = emailTemplateKey,
+                EmailTemplateKey = emailTemplateKey.ToString(),
                 Persons = persons,
                 Sequence = sequence,
                 ReferenceNo = referenceNo,
+                CompanyName = "Apertech"
             };
 
-            string topicName = MailTopic.Procurement.ToString();
+            string topicName = MailTopic.commerceTopic.ToString();
 
             var config = new ProducerConfig { BootstrapServers = "38.242.216.187:9092" };
 

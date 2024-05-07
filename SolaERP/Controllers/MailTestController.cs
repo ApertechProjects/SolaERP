@@ -27,7 +27,8 @@ namespace SolaERP.API.Controllers
         {
             List<Person> persons = new List<Person>()
             {
-                new Person{Email = "hulya.garibli@apertech.net",UserName = "Hulya Garibli"}
+                new Person{Email = "hulya.garibli@apertech.net",UserName = "Hulya Garibli"},
+                new Person{Email = "isgender.detroit@gmail.com",UserName = "Isgandar Detroit"}
             };
 
             await _kafkaMailService.SendMail(EmailTemplate.RequestApproved, ApproveStatus.Approved, persons, 1, "PR-2343-92342");
