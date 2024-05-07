@@ -39,7 +39,7 @@ namespace SolaERP.Persistence.Services
 
             string topicName = MailTopic.Procurement.ToString();
 
-            var config = new ProducerConfig { BootstrapServers = "localhost:9092" };
+            var config = new ProducerConfig { BootstrapServers = "38.242.216.187:9092" };
 
             using (var producer = new ProducerBuilder<string, string>(config).Build())
             {
