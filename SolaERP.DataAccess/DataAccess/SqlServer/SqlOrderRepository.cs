@@ -297,6 +297,8 @@ public class SqlOrderRepository : IOrderRepository
         command.Parameters.AddWithValue(command, "@BudgetYear", orderMainDto.BudgetYear);
         command.Parameters.AddWithValue(command, "@OrderNotes", orderMainDto.OrderNotes);
         command.Parameters.AddWithValue(command, "@DestinationPoint", orderMainDto.DestinationPoint);
+        command.Parameters.AddWithValue(command, "@StartDate", orderMainDto.StartDate);
+        command.Parameters.AddWithValue(command, "@EndDate", orderMainDto.EndDate);
 
         await using var reader = await command.ExecuteReaderAsync();
         if (await reader.ReadAsync())
