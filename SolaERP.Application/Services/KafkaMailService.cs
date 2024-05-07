@@ -37,7 +37,7 @@ namespace SolaERP.Persistence.Services
                 ReferenceNo = referenceNo,
             };
 
-            string topicName = MailTopic.Procurement.ToString();
+            string topicName = MailTopic.commerceTopic.ToString();
 
             var config = new ProducerConfig { BootstrapServers = "38.242.216.187:9092" };
 
@@ -46,9 +46,11 @@ namespace SolaERP.Persistence.Services
                 try
                 {
                     string jsonString = JsonConvert.SerializeObject(emailModel);
+
+                    var daat = JsonConvert.DeserializeObject<KafkaEmail>(jsonString);
                     var deliveryResult = await producer.ProduceAsync(topicName, new Message<string, string> { Value = jsonString });
                 }
-                catch (ProduceException<string, string> ex)
+                catch (ProduceException<string, KafkaEmail> ex)
                 {
                     Console.WriteLine($"Failed to deliver message: {ex.Message} [{ex.Error.Code}]");
                 }

@@ -8,6 +8,7 @@ namespace SolaERP.Application.Enums
 {
     public enum MailTopic
     {
-        Procurement
+        Procurement,
+        commerceTopic
     }
 }
