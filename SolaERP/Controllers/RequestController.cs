@@ -147,9 +147,9 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> CreateFollowUser(RequestFollowSaveModel saveModel)
             => CreateActionResult(await _requestService.SaveFollowUserAsync(saveModel));
 
-        [HttpDelete("{requestMainId}")]
-        public async Task<IActionResult> Delete(int requestMainId)
-            => CreateActionResult(await _requestService.DeleteAsync(User.Identity.Name, requestMainId));
+        [HttpDelete]
+        public async Task<IActionResult> Delete(List<int> requestMainIds)
+            => CreateActionResult(await _requestService.DeleteAsync(User.Identity.Name, requestMainIds));
 
         [HttpDelete("{requestFollowId}")]
         public async Task<IActionResult> DeleteFollowUser(int requestFollowId)

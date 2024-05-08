@@ -29,7 +29,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<RequestMainDto>> GetHeaderAsync(string name, int requestMainId);
         Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetDetails(int requestmainId, int businessUnitId);
         Task<ApiResponse<RequestSaveResultModel>> AddOrUpdateAsync(string name, HttpResponse response, RequestSaveModel model);
-        Task<ApiResponse<bool>> DeleteAsync(string name, int requestMainId);
+        Task<ApiResponse<bool>> DeleteAsync(string name, List<int> requestMainIds);
         Task<ApiResponse<List<RequestDetailApprovalInfoDto>>> GetDetailApprvalInfoAsync(int requestDetaildId);
         Task<bool> ChangeDetailStatusAsync(string name, int? requestDetailId, int approveStatusId, string comment, int? sequence, int rejectReasonId);
         Task ChangeDetailStatusAndSendMail(string userName, HttpResponse response, RequestDetailApproveModel model);

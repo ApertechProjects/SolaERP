@@ -252,10 +252,13 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<RequestSaveResultModel>.Fail("Not Found", 404);
         }
 
-        public async Task<ApiResponse<bool>> DeleteAsync(string name, int requestMainId)
+        public async Task<ApiResponse<bool>> DeleteAsync(string name, List<int> requestMainIds)
         {
             int userId = await _userRepository.ConvertIdentity(name);
-            int requestId = await _requestMainRepository.DeleteAsync(userId, requestMainId);
+            foreach (var item in requestMainIds)
+            {
+                await _requestMainRepository.DeleteAsync(userId, item);
+            }
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }
