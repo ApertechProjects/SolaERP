@@ -13,6 +13,7 @@ public class OrderCreateRequestListDto
     public string ItemName1 { get; set; }
     public string ItemName2 { get; set; }
     public string UOM { get; set; }
+    public string Requester { get; set; }
     public decimal RequestQuantity { get; set; }
     public decimal RFQQuantity { get; set; }
     public decimal OrderQuantity { get; set; }
