@@ -295,7 +295,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 OperatorComment = reader.Get<string>("OperatorComment"),
                 QualityRequired = reader.Get<string>("QualityRequired"),
                 Priority = reader.Get<int>("Priority"),
-                HasAttachments = reader.Get<bool>("HasAttachments")
+                HasAttachments = reader.Get<bool>("HasAttachments"),
+                Sequence = reader.Get<int>("Sequence")
             };
         }
 

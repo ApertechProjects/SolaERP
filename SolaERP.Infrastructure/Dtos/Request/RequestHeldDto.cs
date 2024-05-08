@@ -19,5 +19,6 @@
         public string OperatorComment { get; set; }
         public string QualityRequired { get; set; }
         public bool HasAttachments { get; set; }
+        public int Sequence { get; set; }
     }
 }
