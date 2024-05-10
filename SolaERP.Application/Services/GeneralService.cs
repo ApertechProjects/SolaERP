@@ -129,7 +129,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<RejectReasonDto> GetRejectReasonByCode(string code)
         {
-            var rejectReason = _generalRepository.GetRejectReasonByCode(code);
+            var rejectReason = await _generalRepository.GetRejectReasonByCode(code);
             var dto = _mapper.Map<RejectReasonDto>(rejectReason);
             return dto;
         }

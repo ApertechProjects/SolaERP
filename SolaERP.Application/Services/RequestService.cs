@@ -10,6 +10,8 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
 using SolaERP.Application.Enums;
 using Microsoft.AspNetCore.Http;
+using SolaERP.Application.Entities.General;
+using System.Xml.Linq;
 
 namespace SolaERP.Persistence.Services
 {
@@ -222,25 +224,18 @@ namespace SolaERP.Persistence.Services
                     }
 
 
-                    //if (model.RequestMainId == 0)
-                    //    detail.Sequence = 1;
+                    if (model.RequestMainId == 0)
+                        detail.Sequence = 1;
 
-                    //if (detail.Quantity == 0 && detail.QuantityFromStock > 0)
-                    //{
-                    //    var rejectReason = await _generalService.GetRejectReasonByCode("INSTOCK");
-                    //    await ChangeDetailStatusAndSendMail(name, response, new RequestDetailApproveModel
-                    //    {
-                    //        ApproveStatus = 2,
-                    //        BusinessUnitName = _businessUnitService.GetBusinessUnitName(model.BusinessUnitId)?.ToString(),
-                    //        RejectReasonId = rejectReason.RejectReasonId,
-                    //        RejectReason = rejectReason.ReasonName,
-                    //        UserId = userId,
-                    //        RequestDetails = new List<RequestDetailIds> { new RequestDetailIds { RequestDetailId = detail.RequestDetailId, Sequence = detail.Sequence } }
-                    //    });
-                    //}
+                    if (detail.Quantity == 0 && detail.QuantityFromStock > 0)
+                    {
+                        var rejectReason = await _generalService.GetRejectReasonByCode("INSTOCK");
+                        var res = await _requestDetailRepository.RequestDetailChangeStatusAsync(detail.RequestDetailId, userId,
+                         2, null, detail.Sequence, rejectReason.RejectReasonId);
+                    }
 
                 }
-
+                await _unitOfWork.SaveChangesAsync();
 
                 var detailIds = await _requestMainRepository.GetDetailIds(resultModel.RequestMainId);
 
@@ -395,11 +390,11 @@ namespace SolaERP.Persistence.Services
             for (int i = 0; i < model.RequestDetails.Count; i++)
             {
                 var res = await ChangeDetailStatusAsync(userName, model.RequestDetails[i].RequestDetailId, model.ApproveStatus, model.Comment, model.RequestDetails[i].Sequence, model.RejectReasonId);
-                if (res && model.RequestDetails[i].Sequence != null)
-                {
-                    var users = await _userService.UsersRequestDetails(model.RequestDetails[i].RequestDetailId, model.RequestDetails[i].Sequence, (ApproveStatus)model.ApproveStatus);
-                    await _mailService.SendRequestMailsForChangeStatus(response, users, model.RequestDetails[i].Sequence, model.BusinessUnitName, model.RejectReason);
-                }
+                //if (res && model.RequestDetails[i].Sequence != null)
+                //{
+                //    var users = await _userService.UsersRequestDetails(model.RequestDetails[i].RequestDetailId, model.RequestDetails[i].Sequence, (ApproveStatus)model.ApproveStatus);
+                //    await _mailService.SendRequestMailsForChangeStatus(response, users, model.RequestDetails[i].Sequence, model.BusinessUnitName, model.RejectReason);
+                //}
             }
         }
     }
