@@ -37,7 +37,7 @@ public class OrderDetailDto
     public int Status { get; set; }
     public int ApproveStatus { get; set; }
     public int CatId { get; set; }
-    public string Requester { get; set; }
+    public int Requester { get; set; }
     public int? AnalysisCode1Id { get; set; }
     public int? AnalysisCode2Id { get; set; }
     public int? AnalysisCode3Id { get; set; }

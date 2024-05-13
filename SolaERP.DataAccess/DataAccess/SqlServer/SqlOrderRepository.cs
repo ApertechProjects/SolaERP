@@ -518,7 +518,7 @@ public class SqlOrderRepository : IOrderRepository
             RequestQuantity = reader.Get<decimal>("RequestQuantity"),
             OrderAnalysisId = reader.Get<int>("OrderAnalysisId"),
             CatId = reader.Get<int>("CatId"),
-            Requester = reader.Get<string>("Requester"),
+            Requester = reader.Get<int>("Requester"),
             AnalysisCode1Id = reader.Get<int>("AnalysisCode1Id"),
             AnalysisCode2Id = reader.Get<int>("AnalysisCode2Id"),
             AnalysisCode3Id = reader.Get<int>("AnalysisCode3Id"),
