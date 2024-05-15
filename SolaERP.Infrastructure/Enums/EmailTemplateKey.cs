@@ -18,7 +18,8 @@
 
     public enum EmailTemplate
     {
-        Verification,  //verification Email
+        EmailConfirmPage,
+        EmailVerification,  //verification Email
         RegistrationPendingForApproval, //Registration Pending For Approval for single user
         RequestPending, //Request is pending
         RequestApproved, //Request is approved

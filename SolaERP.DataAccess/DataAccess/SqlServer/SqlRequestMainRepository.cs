@@ -81,7 +81,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<RequestMainDraft>> GetMainRequestDraftsAsync(RequestMainDraftModel requestMain)
+        public async Task<List<RequestMainDraft>> GetMainRequestDraftsAsync(RequestMainDraftModel requestMain, int userId)
         {
             string itemCode = string.Join(',', requestMain.ItemCode);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -93,6 +93,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@ItemCode", itemCode == "All" ? "%" : itemCode);
                 command.Parameters.AddWithValue(command, "@DateFrom", requestMain.DateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", requestMain.DateTo);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 using var reader = await command.ExecuteReaderAsync();
 
@@ -455,8 +456,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<RequestMainAll>> GetAllAsync(RequestMainGetModel requestMain)
+        public async Task<List<RequestMainAll>> GetAllAsync(RequestMainGetModel requestMain, int userId)
         {
+
             string itemCode = string.Join(',', requestMain.ItemCode);
             string approveStatus = string.Join(',', requestMain.ApproveStatus);
             string status = string.Join(',', requestMain.Status);
@@ -470,6 +472,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@ItemCode", itemCode == "All" ? "%" : itemCode);
                 command.Parameters.AddWithValue(command, "@DateFrom", requestMain.DateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", requestMain.DateTo);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@ApproveStatus",
                     approveStatus == "-1" ? "%" : approveStatus);
                 command.Parameters.AddWithValue(command, "@Status", status == "-1" ? "%" : status);
@@ -595,7 +598,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<RequestHeld>> GetHeldAsync(RequestWFAGetModel requestMain)
+        public async Task<List<RequestHeld>> GetHeldAsync(RequestWFAGetModel requestMain, int userId)
         {
             string itemCode = string.Join(',', requestMain.ItemCode);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -606,6 +609,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", requestMain.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@DateFrom", requestMain.DateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", requestMain.DateTo);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@ItemCode", itemCode == "All" ? "%" : itemCode);
 
                 using var reader = await command.ExecuteReaderAsync();

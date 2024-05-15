@@ -38,7 +38,7 @@ namespace SolaERP.Persistence.Services
                 CompanyName = "Apertech"
             };
 
-            string topicName = MailTopic.commerceTopic.ToString();
+            string topicName =" MailTopic.commerceTopic.ToString()";
 
             var config = new ProducerConfig { BootstrapServers = "38.242.216.187:9092" };
 

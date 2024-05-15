@@ -57,9 +57,10 @@ namespace SolaERP.Persistence.Services
             return result;
         }
 
-        public async Task<ApiResponse<List<RequestMainDto>>> GetAllAsync(RequestMainGetModel model)
+        public async Task<ApiResponse<List<RequestMainDto>>> GetAllAsync(RequestMainGetModel model, string name)
         {
-            var mainRequest = await _requestMainRepository.GetAllAsync(model);
+            int userId = await _userRepository.ConvertIdentity(name);
+            var mainRequest = await _requestMainRepository.GetAllAsync(model, userId);
             var mainRequestDto = _mapper.Map<List<RequestMainDto>>(mainRequest);
             return ApiResponse<List<RequestMainDto>>.Success(mainRequestDto);
         }
@@ -147,9 +148,11 @@ namespace SolaERP.Persistence.Services
         }
 
         public async Task<ApiResponse<List<RequestMainDraftDto>>> GetDraftsAsync(
-            RequestMainDraftModel getMainDraftParameters)
+            RequestMainDraftModel getMainDraftParameters, string name)
         {
-            var mainDraftEntites = await _requestMainRepository.GetMainRequestDraftsAsync(getMainDraftParameters);
+            int userId = await _userRepository.ConvertIdentity(name);
+
+            var mainDraftEntites = await _requestMainRepository.GetMainRequestDraftsAsync(getMainDraftParameters, userId);
             var mainDraftDto = _mapper.Map<List<RequestMainDraftDto>>(mainDraftEntites);
             return ApiResponse<List<RequestMainDraftDto>>.Success(mainDraftDto);
         }
@@ -361,9 +364,10 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<RequestCategory>>.Fail("Data not found", 404);
         }
 
-        public async Task<ApiResponse<List<RequestHeldDto>>> GetHeldAsync(RequestWFAGetModel requestMainGet)
+        public async Task<ApiResponse<List<RequestHeldDto>>> GetHeldAsync(RequestWFAGetModel requestMainGet, string name)
         {
-            var mainreq = await _requestMainRepository.GetHeldAsync(requestMainGet);
+            int userId = await _userRepository.ConvertIdentity(name);
+            var mainreq = await _requestMainRepository.GetHeldAsync(requestMainGet, userId);
 
             var mainRequestDto = _mapper.Map<List<RequestHeldDto>>(mainreq);
             if (mainRequestDto != null && mainRequestDto.Count > 0)

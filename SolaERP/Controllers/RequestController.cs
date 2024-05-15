@@ -59,11 +59,11 @@ namespace SolaERP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> All(RequestMainGetModel requestMainParameters)
-            => CreateActionResult(await _requestService.GetAllAsync(requestMainParameters));
+            => CreateActionResult(await _requestService.GetAllAsync(requestMainParameters, User.Identity.Name));
 
         [HttpPost]
         public async Task<IActionResult> Held(RequestWFAGetModel requestMainParameters)
-            => CreateActionResult(await _requestService.GetHeldAsync(requestMainParameters));
+            => CreateActionResult(await _requestService.GetHeldAsync(requestMainParameters, User.Identity.Name));
 
         [HttpPost]
         public async Task<IActionResult> ChangeApproval(RequestApproveAmendmentModel requestParametersDto)
@@ -72,7 +72,7 @@ namespace SolaERP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Draft(RequestMainDraftModel model)
-            => CreateActionResult(await _requestService.GetDraftsAsync(model));
+            => CreateActionResult(await _requestService.GetDraftsAsync(model, User.Identity.Name));
 
         [HttpPost]
         public async Task<IActionResult> BuyersAssignment(RequestWFAGetModel model)
