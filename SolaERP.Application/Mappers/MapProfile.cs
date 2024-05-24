@@ -150,7 +150,11 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<Location, LocationDto>().ReverseMap();
             CreateMap<AccountCode, AccountCodeDto>().ReverseMap();
             CreateMap<RequestSaveModel, RequestMainSaveModel>().ReverseMap();
-            CreateMap<SolaERP.Application.Entities.SupplierEvaluation.Currency, CurrencyDto>().ReverseMap();
+
+            CreateMap<Application.Entities.Currency.Currency, Application.Dtos.Currency.CurrencyDto>()
+                  .ForMember(dest => dest.CurrencyCode, opt => opt.MapFrom(src => src.CurrCode))
+                  .ReverseMap();
+
             CreateMap<Attachment, AttachmentWithFileDto>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FileName))
                 .ForMember(dest => dest.LastModifiedDate, opt => opt.MapFrom(src => src.UploadDateTime))
@@ -646,7 +650,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<ProblematicInvoiceReason, ProblematicInvoiceReasonDto>()
                 .ForMember(x => x.ProblematicInvoiceReason, y => y.MapFrom(x => x.ProblematicInvoiceReasin))
                 .ReverseMap();
-            CreateMap<Currency, CurrencyDto>().ReverseMap();
+           
 
             CreateMap<MatchingMainGRN, MatchingMainGRNDto>().ReverseMap();
             CreateMap<MatchingMainService, MatchingMainServiceDto>().ReverseMap();
