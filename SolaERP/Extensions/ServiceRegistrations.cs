@@ -28,7 +28,9 @@ using SolaERP.Persistence.Validations.Order;
 using SolaERP.Persistence.Validations.Supplier;
 using SolaERP.Persistence.Validations.UserValidation;
 using SolaERP.Persistence.Validations.Vendor;
+using SolaERP.Job;
 using UserValidation = SolaERP.Application.Validations.UserValidation.UserValidation;
+using IBackgroundMailService = SolaERP.Job.IBackgroundMailService;
 
 namespace SolaERP.Extensions
 {
@@ -57,6 +59,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IProcedureService, ProcedureService>();
             builder.Services.AddScoped<IRequestService, RequestService>();
             builder.Services.AddScoped<IMailService, MailService>();
+            builder.Services.AddScoped<IBackgroundMailService, BackgroundMailService>();
             builder.Services.AddScoped<IItemService, ItemService>();
             builder.Services.AddScoped<ILogInformationService, LogInformationService>();
             builder.Services.AddScoped<IAnalysisCodeService, AnalysisCodeService>();

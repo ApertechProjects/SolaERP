@@ -49,6 +49,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Sola.ERP.Infrastructure\SolaERP.Infrastructure.csproj" />
     <ProjectReference Include="..\SolaERP.Application\SolaERP.Persistence.csproj" />
+    <ProjectReference Include="..\SolaERP.Job\SolaERP.Job.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -11,13 +11,9 @@ using SolaERP.Persistence.Mappers;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
-// using DevExpress.AspNetCore;
-// using DevExpress.AspNetCore.Reporting;
-// using DevExpress.DashboardAspNetCore;
-// using DevExpress.DashboardWeb;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.FileProviders;
-using SolaERP.Application.Helper;
+using SolaERP.Job;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,10 +22,6 @@ builder.Services.AddControllers(options =>
         options.Filters.Add(new ValidationFilter());
         options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
     }).AddJsonOptions(options => { options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; })
-//.AddNewtonsoftJson(options =>
-//{
-//    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-//})
     .Services
     .AddFluentValidationAutoValidation()
     .AddFluentValidationClientsideAdapters();
@@ -42,6 +34,7 @@ builder.Services.AddTransient(sp => new ConnectionFactory()
     Uri = new(builder.Configuration["FileOptions:URI"])
 });
 
+//builder.Services.AddInfrastructure();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MapProfile));

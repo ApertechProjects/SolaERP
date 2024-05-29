@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SolaERP.DataAccess\SolaERP.DataAccess.csproj" />
+    <ProjectReference Include="..\SolaERP.Job\SolaERP.Job.csproj" />
   </ItemGroup>
 
   <ItemGroup>

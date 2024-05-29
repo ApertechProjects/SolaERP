@@ -86,6 +86,7 @@ using AttachmentDto = SolaERP.Application.Dtos.Attachment.AttachmentDto;
 using Currency = SolaERP.Application.Entities.Currency.Currency;
 using UOM = SolaERP.Application.Entities.UOM.UOM;
 using UOMDto = SolaERP.Application.Dtos.UOM.UOMDto;
+using SolaERP.Job;
 
 namespace SolaERP.Persistence.Mappers
 {
@@ -707,6 +708,9 @@ namespace SolaERP.Persistence.Mappers
              .ForMember(dest => dest.BusinessCategoryName, opt => opt.MapFrom(src => src.Name))
              .ForMember(dest => dest.BusinessSectorId, opt => opt.MapFrom(src => src.BusinessSectorId))
              .ReverseMap();
+
+            CreateMap<RowInfo, RowInfoDraft>().ReverseMap();
+
         }
     }
 }

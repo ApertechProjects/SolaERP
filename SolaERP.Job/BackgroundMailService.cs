@@ -1,22 +1,26 @@
 ﻿using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Helper;
+using SolaERP.Application.UnitOfWork;
+using SolaERP.Job.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EmailTemplateKey = SolaERP.Job.Enums.EmailTemplateKey;
+using MailTopic = SolaERP.Job.Enums.MailTopic;
 
-namespace SolaERP.Persistence.Services
+namespace SolaERP.Job
 {
-    public class KafkaMailService : IKafkaMailService
+    public class BackgroundMailService : IBackgroundMailService
     {
         private readonly IConfiguration _configuration;
-        public KafkaMailService()
+        private readonly IUnitOfWork _unitOfWork;
+        public BackgroundMailService()
         {
             string appsettingsFileName = AppSettingsHelper.GetAppSettingsFileName();
             IConfigurationBuilder builder = new ConfigurationBuilder()
@@ -24,21 +28,19 @@ namespace SolaERP.Persistence.Services
 
             _configuration = builder.Build();
         }
-
-        public async Task SendMail(EmailTemplate emailTemplateKey, ApproveStatus approveStatus, List<Person> persons, int sequence, string referenceNo)
+        public async Task SendMail(List<RowInfo> rowInfos, Person person)
         {
-            KafkaEmail emailModel = new KafkaEmail
+            MailInfo emailModel = new MailInfo
             {
-                ApproveStatus = approveStatus,
-                Link = _configuration["Mail:ServerUrlUI"],
-                EmailTemplateKey = emailTemplateKey.ToString(),
-                Persons = persons,
-                Sequence = sequence,
-                ReferenceNo = referenceNo,
-                CompanyName = "Apertech"
+                link = _configuration["Mail:ServerUrlUI"],
+                emailTemplateKey = EmailTemplateKey.ALL_TYPES_ALL_STATUSES.ToString(),
+                rowInfos = rowInfos,
+                referenceNo = "",
+                companyName = "Apertech",
+                persons = new List<Person> { person }
             };
 
-            string topicName = "MailTopic.commerceTopic.ToString()";
+            string topicName = MailTopic.kafka.ToString();
 
             var config = new ProducerConfig { BootstrapServers = "38.242.216.187:9092" };
 
@@ -55,6 +57,5 @@ namespace SolaERP.Persistence.Services
                 }
             }
         }
-
     }
 }

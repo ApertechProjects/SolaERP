@@ -8,6 +8,7 @@ namespace SolaERP.Application.Enums
 {
     public enum ApproveStatus
     {
+        Pending = 0,
         Approved = 1,
         Rejected = 2,
         Hold = 3
