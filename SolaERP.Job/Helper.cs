@@ -29,35 +29,67 @@ namespace SolaERP.Job
             IsSent2 = 1,
             IsSent3 = 2,
         }
-        public string GetCommandString(IsSentValue isSentValue)
+        public string GetRowInfoCommandString(IsSentValue isSentValue)
         {
             switch (isSentValue)
             {
                 case IsSentValue.IsSent1:
                     return " AND IsSent = 0 ";
                 case IsSentValue.IsSent2:
-                    return " AND IsSent = 1 and IsSent2 = 0 ";
+                    return " AND IsSent = 1 and IsSent2 = 0 and Sent2WillSend = @date";
                 case IsSentValue.IsSent3:
-                    return " AND IsSent = 1 and IsSent2 = 1 and IsSent3 = 0 ";
+                    return " AND IsSent = 1 and IsSent2 = 1 and IsSent3 = 0 and Sent3WillSend = @date";
                 default:
                     return "";
             }
         }
 
-        public async Task<HashSet<RowInfoDraft>> GetOperationCommand(Procedure procedure, int userId, IsSentValue isSentValue)
+        public string RowInfoCommandText()
+        {
+            var text = "select NotificationSenderId, ISNULL(ST.ApprovalStatusName,'In Approve Stage') ApproveStatus," +
+                       "IsSent,IsSent2,IsSent3,NS.SourceId,RM.RequestNo,au.FullName Requester," +
+                       "ISNULL(RM.RequestComment,'') Comment,P.ProcedureName,L.ActionId,L.Date LocalDateTime " +
+                       "from Config.NotificationSender NS " +
+                       "INNER JOIN Config.Procedures P ON NS.ProcedureId = P.ProcedureId " +
+                       "INNER JOIN Register.Logs L ON L.SourceId = NS.SourceId " +
+                       "INNER JOIN Register.LogTypes LT ON L.LogTypeId = LT.LogTypeId " +
+                       "INNER JOIN Procurement.RequestMain RM ON NS.SourceId = RM.RequestMainId " +
+                       "INNER JOIN Config.AppUser au on RM.Requester = au.Id " +
+                       "LEFT JOIN Register.ApprovalStatus ST ON NS.ApproveStatusId = ST.ApprovalStatusId " +
+                       $"where L.ActionId = 1  and NS.ProcedureId = @procedureId and NS.UserId = @userId";
+            return text;
+        }
+
+        public string UserCommandString(IsSentValue isSentValue)
+        {
+            switch (isSentValue)
+            {
+                case IsSentValue.IsSent1:
+                    return " AND IsSent = 0 ";
+                case IsSentValue.IsSent2:
+                    return " AND IsSent = 1 and IsSent2 = 0";
+                case IsSentValue.IsSent3:
+                    return " AND IsSent = 1 and IsSent2 = 1 and IsSent3 = 0";
+                default:
+                    return "";
+            }
+        }
+
+        public string UserCommandText()
+        {
+            var text = "select distinct UserId,AU.Email,AU.FullName,AU.Language from " +
+                       "Config.NotificationSender NS INNER JOIN Config.AppUser AU ON NS.UserId = AU.Id " +
+                       "where ProcedureId = @procedureId ";
+            return text;
+        }
+
+        public async Task<HashSet<RowInfoDraft>> GetRowInfosForIsSent(Procedure procedure, int userId)
         {
             HashSet<RowInfoDraft> rows = new HashSet<RowInfoDraft>();
 
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "select NotificationSenderId," +
-                                      "ISNULL(ST.ApprovalStatusName,'In Approve Stage') ApproveStatus," +
-                                      "IsSent,IsSent2,IsSent3,NS.SourceId,RM.RequestNo,au.FullName Requester,ISNULL(RM.RequestComment,'') Comment,P.ProcedureName,L.ActionId,L.Date LocalDateTime" +
-                                      " from Config.NotificationSender NS INNER JOIN Config.Procedures P ON NS.ProcedureId = P.ProcedureId INNER JOIN Register.Logs L ON " +
-                                      "L.SourceId = NS.SourceId INNER JOIN Register.LogTypes LT ON L.LogTypeId = LT.LogTypeId INNER JOIN Procurement.RequestMain RM ON" +
-                                      " NS.SourceId = RM.RequestMainId INNER JOIN Config.AppUser au on RM.Requester = au.Id " +
-                                      "LEFT JOIN Register.ApprovalStatus ST ON\r\nNS.ApproveStatusId = ST.ApprovalStatusId" +
-                                      $" where L.ActionId = 1  and NS.ProcedureId = @procedureId and NS.UserId = @userId {GetCommandString(isSentValue)}";
+                command.CommandText = RowInfoCommandText() + GetRowInfoCommandString(IsSentValue.IsSent1);
 
                 command.Parameters.AddWithValue(command, "@procedureId", procedure);
                 command.Parameters.AddWithValue(command, "@userId", userId);
@@ -70,21 +102,86 @@ namespace SolaERP.Job
             }
         }
 
-        public async Task<HashSet<RowInfoDraft>> GetRowInfosForIsSent(Procedure procedure, int userId, IsSentValue isSentValue)
+        public async Task<HashSet<RowInfoDraft>> GetRowInfosForIsSent2(Procedure procedure, int userId)
         {
-            return await GetOperationCommand(procedure, userId, isSentValue);
+            HashSet<RowInfoDraft> rows = new HashSet<RowInfoDraft>();
+
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = RowInfoCommandText() + GetRowInfoCommandString(IsSentValue.IsSent2);
+
+                command.Parameters.AddWithValue(command, "@procedureId", procedure);
+                command.Parameters.AddWithValue(command, "@userId", userId);
+                command.Parameters.AddWithValue(command, "@date", DateTime.Now.ToShortDateString());
+
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    rows.Add(GetFromReaderForRowInfo(reader));
+                }
+                return rows;
+            }
         }
 
+        public async Task<HashSet<RowInfoDraft>> GetRowInfosForIsSent3(Procedure procedure, int userId)
+        {
+            HashSet<RowInfoDraft> rows = new HashSet<RowInfoDraft>();
 
-        public async Task<List<PersonDraft>> GetUsers(Procedure procedure)
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = RowInfoCommandText() + GetRowInfoCommandString(IsSentValue.IsSent3);
+
+                command.Parameters.AddWithValue(command, "@procedureId", procedure);
+                command.Parameters.AddWithValue(command, "@userId", userId);
+                command.Parameters.AddWithValue(command, "@date", DateTime.Now.ToShortDateString());
+
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    rows.Add(GetFromReaderForRowInfo(reader));
+                }
+                return rows;
+            }
+        }
+
+        public async Task<List<PersonDraft>> GetUsersIsSent(Procedure procedure)
         {
             List<PersonDraft> users = new List<PersonDraft>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "select distinct UserId,AU.Email,AU.FullName,AU.Language from " +
-                                      "Config.NotificationSender NS INNER JOIN Config.AppUser AU ON NS.UserId = AU.Id " +
-                                      "where ProcedureId = @procedureId and IsSent = 0";
+                command.CommandText = UserCommandText() + UserCommandString(IsSentValue.IsSent1);
+                command.Parameters.AddWithValue(command, "@procedureId", procedure);
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    users.Add(GetFromReaderForPerson(reader));
+                }
+                return users;
+            }
+        }
 
+        public async Task<List<PersonDraft>> GetUsersIsSent2(Procedure procedure)
+        {
+            List<PersonDraft> users = new List<PersonDraft>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = UserCommandText() + UserCommandString(IsSentValue.IsSent2);
+                command.Parameters.AddWithValue(command, "@procedureId", procedure);
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    users.Add(GetFromReaderForPerson(reader));
+                }
+                return users;
+            }
+        }
+
+        public async Task<List<PersonDraft>> GetUsersIsSent3(Procedure procedure)
+        {
+            List<PersonDraft> users = new List<PersonDraft>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = UserCommandText() + UserCommandString(IsSentValue.IsSent3);
                 command.Parameters.AddWithValue(command, "@procedureId", procedure);
                 using var reader = await command.ExecuteReaderAsync();
                 while (reader.Read())
@@ -123,13 +220,58 @@ namespace SolaERP.Job
             };
         }
 
-        public async Task<bool> UpdateIsSent(int[] ids)
+        public async Task<bool> UpdateIsSent1(int[] ids)
         {
             var idsRes = string.Join(",", ids);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @$"set nocount off update Config.NotificationSender set IsSent = 1 where NotificationSenderId IN({idsRes})";
+                command.CommandText = @$"set nocount off update Config.NotificationSender set IsSent = 1,Sent2WillSend = @sendDate where NotificationSenderId IN({idsRes})";
                 command.Parameters.AddWithValue(command, "@ids", idsRes);
+                command.Parameters.AddWithValue(command, "@sendDate", DateTime.Now.AddDays(3).ToShortDateString());
+                try
+                {
+                    var res = await command.ExecuteNonQueryAsync() > 0;
+                    return res;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+
+
+            }
+        }
+
+        public async Task<bool> UpdateIsSent2(int[] ids)
+        {
+            var idsRes = string.Join(",", ids);
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @$"set nocount off update Config.NotificationSender set IsSent2 = 1,Sent3WillSend = @sendDate where NotificationSenderId IN({idsRes})";
+                command.Parameters.AddWithValue(command, "@ids", idsRes);
+                command.Parameters.AddWithValue(command, "@sendDate", DateTime.Now.AddDays(3).ToShortDateString());
+                try
+                {
+                    var res = await command.ExecuteNonQueryAsync() > 0;
+                    return res;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+
+
+            }
+        }
+
+        public async Task<bool> UpdateIsSent3(int[] ids)
+        {
+            var idsRes = string.Join(",", ids);
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @$"set nocount off update Config.NotificationSender set IsSent3 = 1 where NotificationSenderId IN({idsRes})";
+                command.Parameters.AddWithValue(command, "@ids", idsRes);
+                command.Parameters.AddWithValue(command, "@sendDate", DateTime.Now.AddDays(3).ToShortDateString());
                 try
                 {
                     var res = await command.ExecuteNonQueryAsync() > 0;

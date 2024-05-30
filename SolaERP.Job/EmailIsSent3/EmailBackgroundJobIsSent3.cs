@@ -10,18 +10,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Job
+namespace SolaERP.Job.EmailIsSent3
 {
 
     [DisallowConcurrentExecution]
-    public class EmailBackgroundJobIsSent2 : IJob
+    public class EmailBackgroundJobIsSent3 : IJob
     {
-        private readonly ILogger<EmailBackgroundJobIsSent> _logger;
+        private readonly ILogger<EmailBackgroundJobIsSent3> _logger;
         private readonly IBackgroundMailService _mailService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public EmailBackgroundJobIsSent2(ILogger<EmailBackgroundJobIsSent> logger,
+        public EmailBackgroundJobIsSent3(ILogger<EmailBackgroundJobIsSent3> logger,
                                          IUnitOfWork unitOfWork,
                                          IBackgroundMailService mailService,
                                          IMapper mapper)
@@ -35,19 +35,22 @@ namespace SolaERP.Job
         public async Task Execute(IJobExecutionContext context)
         {
             Helper helper = new Helper(_unitOfWork);
-            var requestUsers = await helper.GetUsers(Procedure.Request);
+            var requestUsers = await helper.GetUsersIsSent3(Procedure.Request);
 
             if (requestUsers != null && requestUsers.Count > 0)
             {
                 foreach (var user in requestUsers)
                 {
-                    var rowInfoDrafts = await helper.GetRowInfosForIsSent(Procedure.Request, user.UserId, Helper.IsSentValue.IsSent2);
+                    var rowInfoDrafts = await helper.GetRowInfosForIsSent3(Procedure.Request, user.UserId);
                     var rowInfos = _mapper.Map<HashSet<RowInfo>>(rowInfoDrafts);
-                    await _mailService.SendMail(rowInfos, new Person { email = user.Email, lang = user.Language, userName = user.UserName });
-                    Debug.WriteLine($"sended to {user.UserName}");
-                    int[] ids = rowInfoDrafts.Select(x => x.notificationSenderId).ToArray();
-                    await helper.UpdateIsSent(ids);
-                    await _unitOfWork.SaveChangesAsync();
+                    if (rowInfos.Count > 0)
+                    {
+                        await _mailService.SendMail(rowInfos, new Person { email = user.Email, lang = user.Language, userName = user.UserName });
+                        Debug.WriteLine($"sended to {user.UserName}");
+                        int[] ids = rowInfoDrafts.Select(x => x.notificationSenderId).ToArray();
+                        await helper.UpdateIsSent3(ids);
+                        await _unitOfWork.SaveChangesAsync();
+                    }
                 }
 
             }

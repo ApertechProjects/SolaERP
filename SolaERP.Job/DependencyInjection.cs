@@ -1,10 +1,15 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Quartz;
+using SolaERP.Job.EmailIsSent;
+using SolaERP.Job.EmailIsSent2;
+using SolaERP.Job.EmailIsSent3;
 
 namespace SolaERP.Job
 {
     public static class DependencyInjection
     {
+      
+
         public static void AddRequestMailsForIsSent(this IServiceCollection services)
         {
             services.AddQuartz(options =>
@@ -20,19 +25,35 @@ namespace SolaERP.Job
             services.ConfigureOptions<EmailBackgroundJobSetupIsSent>();
         }
 
-        //public static void AddRequestMailsForIsSent2(this IServiceCollection services)
-        //{
-        //    services.AddQuartz(options =>
-        //    {
-        //        options.UseMicrosoftDependencyInjectionJobFactory();
-        //    });
+        public static void AddRequestMailsForIsSent2(this IServiceCollection services)
+        {
+            services.AddQuartz(options =>
+            {
+                options.UseMicrosoftDependencyInjectionJobFactory();
+            });
 
-        //    services.AddQuartzHostedService(options =>
-        //    {
-        //        options.WaitForJobsToComplete = true;
-        //    });
+            services.AddQuartzHostedService(options =>
+            {
+                options.WaitForJobsToComplete = true;
+            });
 
-        //    services.ConfigureOptions<EmailBackgroundJobSetupIsSent>();
-        //}
+            services.ConfigureOptions<EmailBackgroundJobSetupIsSent2>();
+        }
+
+
+        public static void AddRequestMailsForIsSent3(this IServiceCollection services)
+        {
+            services.AddQuartz(options =>
+            {
+                options.UseMicrosoftDependencyInjectionJobFactory();
+            });
+
+            services.AddQuartzHostedService(options =>
+            {
+                options.WaitForJobsToComplete = true;
+            });
+
+            services.ConfigureOptions<EmailBackgroundJobSetupIsSent3>();
+        }
     }
 }

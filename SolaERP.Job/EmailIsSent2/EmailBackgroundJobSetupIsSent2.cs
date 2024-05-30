@@ -6,19 +6,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Job
+namespace SolaERP.Job.EmailIsSent2
 {
     internal class EmailBackgroundJobSetupIsSent2 : IConfigureOptions<QuartzOptions>
     {
         public void Configure(QuartzOptions options)
         {
             var jobKey = JobKey.Create(nameof(EmailBackgroundJobIsSent2));
+
             options.AddJob<EmailBackgroundJobIsSent2>(jobBuilder => jobBuilder.WithIdentity(jobKey))
                    .AddTrigger(trigger => trigger
-                   .ForJob(jobKey));
-                   //.StartAt());
-                   //.WithSimpleSchedule(schedule =>
-                   //schedule.WithIntervalInMinutes(30).WithRepeatCount(14)));
+                   .ForJob(jobKey)
+                   .WithSimpleSchedule(schedule =>
+                   schedule.WithIntervalInHours(1).WithRepeatCount(3)));
+
         }
     }
 }
