@@ -28,7 +28,7 @@ namespace SolaERP.Job
 
             _configuration = builder.Build();
         }
-        public async Task SendMail(List<RowInfo> rowInfos, Person person)
+        public async Task SendMail(HashSet<RowInfo> rowInfos, Person person)
         {
             MailInfo emailModel = new MailInfo
             {

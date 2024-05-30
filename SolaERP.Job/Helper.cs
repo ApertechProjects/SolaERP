@@ -21,9 +21,9 @@ namespace SolaERP.Job
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<List<RowInfoDraft>> GetRowInfos(Procedure procedure, int userId)
+        public async Task<HashSet<RowInfoDraft>> GetRowInfos(Procedure procedure, int userId)
         {
-            List<RowInfoDraft> rows = new List<RowInfoDraft>();
+            HashSet<RowInfoDraft> rows = new HashSet<RowInfoDraft>();
 
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {

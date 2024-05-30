@@ -13,7 +13,7 @@ namespace SolaERP.Job
         public string referenceNo { get; set; }
         public string link { get; set; }
         public string companyName { get; set; }
-        public List<RowInfo> rowInfos { get; set; }
+        public HashSet<RowInfo> rowInfos { get; set; }
 
     }
 

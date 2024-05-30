@@ -37,11 +37,12 @@ namespace SolaERP.Job
                 foreach (var user in requestUsers)
                 {
                     var rowInfoDrafts = await helper.GetRowInfos(Procedure.Request, user.UserId);
-                    var rowInfos = _mapper.Map<List<RowInfo>>(rowInfoDrafts);
+                    var rowInfos = _mapper.Map<HashSet<RowInfo>>(rowInfoDrafts);
                     await _mailService.SendMail(rowInfos, new Person { email = user.Email, lang = user.Language, userName = user.UserName });
                     Debug.WriteLine($"sended to {user.UserName}");
                     int[] ids = rowInfoDrafts.Select(x => x.notificationSenderId).ToArray();
                     await helper.UpdateIsSent(ids);
+                    await _unitOfWork.SaveChangesAsync();
                 }
 
             }
