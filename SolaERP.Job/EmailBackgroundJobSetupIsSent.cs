@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Job
 {
-    public class EmailBackgroundJobSetup : IConfigureOptions<QuartzOptions>
+    public class EmailBackgroundJobSetupIsSent : IConfigureOptions<QuartzOptions>
     {
         public void Configure(QuartzOptions options)
         {
-            var jobKey = JobKey.Create(nameof(EmailBackgroundJob));
-            options.AddJob<EmailBackgroundJob>(jobBuilder=>jobBuilder.WithIdentity(jobKey))
+            var jobKey = JobKey.Create(nameof(EmailBackgroundJobIsSent));
+            options.AddJob<EmailBackgroundJobIsSent>(jobBuilder=>jobBuilder.WithIdentity(jobKey))
                    .AddTrigger(trigger => trigger
                    .ForJob(jobKey)
                    .WithSimpleSchedule(schedule =>
-                   schedule.WithIntervalInMinutes(30).WithRepeatCount(14)));
+                   schedule.WithIntervalInHours(1).WithRepeatCount(8)));
         }
     }
 }

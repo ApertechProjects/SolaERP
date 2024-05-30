@@ -12,14 +12,19 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Job
 {
+
     [DisallowConcurrentExecution]
-    public class EmailBackgroundJob : IJob
+    public class EmailBackgroundJobIsSent2 : IJob
     {
-        private readonly ILogger<EmailBackgroundJob> _logger;
+        private readonly ILogger<EmailBackgroundJobIsSent> _logger;
         private readonly IBackgroundMailService _mailService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public EmailBackgroundJob(ILogger<EmailBackgroundJob> logger, IUnitOfWork unitOfWork, IBackgroundMailService mailService, IMapper mapper)
+
+        public EmailBackgroundJobIsSent2(ILogger<EmailBackgroundJobIsSent> logger,
+                                         IUnitOfWork unitOfWork,
+                                         IBackgroundMailService mailService,
+                                         IMapper mapper)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
@@ -36,7 +41,7 @@ namespace SolaERP.Job
             {
                 foreach (var user in requestUsers)
                 {
-                    var rowInfoDrafts = await helper.GetRowInfos(Procedure.Request, user.UserId);
+                    var rowInfoDrafts = await helper.GetRowInfosForIsSent(Procedure.Request, user.UserId, Helper.IsSentValue.IsSent2);
                     var rowInfos = _mapper.Map<HashSet<RowInfo>>(rowInfoDrafts);
                     await _mailService.SendMail(rowInfos, new Person { email = user.Email, lang = user.Language, userName = user.UserName });
                     Debug.WriteLine($"sended to {user.UserName}");

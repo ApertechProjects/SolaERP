@@ -34,7 +34,7 @@ builder.Services.AddTransient(sp => new ConnectionFactory()
     Uri = new(builder.Configuration["FileOptions:URI"])
 });
 
-builder.Services.AddInfrastructure();
+builder.Services.AddRequestMailsForIsSent();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MapProfile));
