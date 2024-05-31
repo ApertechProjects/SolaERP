@@ -16,8 +16,9 @@ namespace SolaERP.Job.EmailIsSent
             options.AddJob<EmailBackgroundJobIsSent>(jobBuilder => jobBuilder.WithIdentity(jobKey))
                    .AddTrigger(trigger => trigger
                    .ForJob(jobKey)
+                   .WithCronSchedule("0 0 15 * * ?")
                    .WithSimpleSchedule(schedule =>
-                   schedule.WithIntervalInHours(1).WithRepeatCount(8)));
+                   schedule.WithIntervalInMinutes(30).WithRepeatCount(14)));
         }
     }
 }
