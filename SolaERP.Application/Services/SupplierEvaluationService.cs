@@ -6,10 +6,12 @@ using SolaERP.Application.Dtos.Attachment;
 using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.BusinessUnit;
 using SolaERP.Application.Dtos.Country;
+using SolaERP.Application.Dtos.Currency;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.SupplierEvaluation;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.BusinessUnits;
+using SolaERP.Application.Entities.Currency;
 using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.User;
@@ -1022,9 +1024,12 @@ namespace SolaERP.Persistence.Services
                 PrequalificationTypes = await _repository.GetPrequalificationCategoriesAsync(),
                 Services = await _repository.GetProductServicesAsync(),
             };
+
+            var mapCurrency = _mapper.Map<List<CurrencyDto>>(await _repository.GetCurrenciesAsync());
+
             BankCodesDto bankCodes = new()
             {
-                Currencies = await _repository.GetCurrenciesAsync(),
+                Currencies = mapCurrency,
                 BankDetails = await _repository.GetVendorBankDetailsAsync(model.VendorId),
             };
             List<BusinessUnits> buUnits = await _buRepository.GetAllAsync();
@@ -1053,6 +1058,7 @@ namespace SolaERP.Persistence.Services
             int vendorId = revisedVendorId ?? user.VendorId;
 
             var currencyTask = await _repository.GetCurrenciesAsync();
+            var mapCurrency = _mapper.Map<List<CurrencyDto>>(currencyTask);
             var bankDetailsTask = await _repository.GetVendorBankDetailsAsync(vendorId);
 
             var bankAccount = _mapper.Map<List<VendorBankDetailViewDto>>(bankDetailsTask);
@@ -1068,7 +1074,7 @@ namespace SolaERP.Persistence.Services
 
             VM_GET_VendorBankDetails bankDetails = new()
             {
-                Currencies = currencyTask,
+                Currencies = mapCurrency,
                 BankDetails = bankAccount,
             };
 

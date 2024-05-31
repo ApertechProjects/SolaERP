@@ -1,5 +1,6 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.SupplierEvaluation;
+using SolaERP.Application.Entities.Currency;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;

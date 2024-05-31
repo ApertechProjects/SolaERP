@@ -5,7 +5,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
 {
     public class BankCodesDto
     {
-        public List<Entities.SupplierEvaluation.Currency> Currencies { get; set; }
+        public List<Currency.CurrencyDto> Currencies { get; set; }
         public List<VendorBankDetail> BankDetails { get; set; }
     }
 }
