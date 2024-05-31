@@ -2,6 +2,7 @@ using AutoMapper;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Country;
+using SolaERP.Application.Dtos.Currency;
 using SolaERP.Application.Dtos.Order;
 using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Dtos.Shared;
@@ -245,10 +246,11 @@ public class OrderService : IOrderService
 
     public async Task<ApiResponse<OrderMainGetDto>> GetOrderCardAsync()
     {
+        var mapCurrency = _mapper.Map<List<CurrencyDto>>(await _supplierRepository.GetCurrenciesAsync());
         return ApiResponse<OrderMainGetDto>.Success(new OrderMainGetDto
         {
             Countries = _mapper.Map<List<CountryDto>>(await _supplierRepository.GetCountriesAsync()),
-            Currencies = await _supplierRepository.GetCurrenciesAsync(),
+            Currencies = mapCurrency,
             DeliveryTerms = await _supplierRepository.GetDeliveryTermsAsync(),
             PaymentTerms = await _supplierRepository.GetPaymentTermsAsync(),
             RejectReasons = (await _generalService.RejectReasons()).Data,
