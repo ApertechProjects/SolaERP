@@ -12,12 +12,21 @@ namespace SolaERP.Job.EmailIsSent
     {
         public void Configure(QuartzOptions options)
         {
-            var jobKey = JobKey.Create(nameof(EmailBackgroundJobIsSent));
-            options.AddJob<EmailBackgroundJobIsSent>(jobBuilder => jobBuilder.WithIdentity(jobKey))
-                   .AddTrigger(trigger => trigger
-                   .ForJob(jobKey)
-                   .WithCronSchedule("0 0/30 9-18 * * ?")
-                   .Build());
+            try
+            {
+                var jobKey = JobKey.Create(nameof(EmailBackgroundJobIsSent));
+                options.AddJob<EmailBackgroundJobIsSent>(jobBuilder => jobBuilder.WithIdentity(jobKey))
+                       .AddTrigger(trigger => trigger
+                       .ForJob(jobKey)
+                       .WithCronSchedule("0 0/30 9-18 * * ?")
+                       .Build());
+
+                
+            }
+            catch (Exception ex)
+            {
+                
+            }
         }
     }
 }
