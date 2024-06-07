@@ -60,38 +60,38 @@ public class OrderService : IOrderService
         );
     }
 
-    public async Task<ApiResponse<List<OrderAllDto>>> GetWFAAsync(OrderWFAFilterDto filterDto,
+    public async Task<ApiResponse<List<OrderTab>>> GetWFAAsync(OrderWFAFilterDto filterDto,
         string identityName)
     {
         int userId = Convert.ToInt32(identityName);
-        return ApiResponse<List<OrderAllDto>>.Success(
+        return ApiResponse<List<OrderTab>>.Success(
             await _orderRepository.GetWFAAsync(filterDto, userId)
         );
     }
 
-    public async Task<ApiResponse<List<OrderAllDto>>> GetChangeApprovalAsync(OrderChangeApprovalFilterDto filterDto,
+    public async Task<ApiResponse<List<OrderTab>>> GetChangeApprovalAsync(OrderChangeApprovalFilterDto filterDto,
         string identityName)
     {
         int userId = Convert.ToInt32(identityName);
-        return ApiResponse<List<OrderAllDto>>.Success(
+        return ApiResponse<List<OrderTab>>.Success(
             await _orderRepository.GetChangeApprovalAsync(filterDto, userId)
         );
     }
 
-    public async Task<ApiResponse<List<OrderAllDto>>> GetHeldAsync(OrderHeldFilterDto filterDto,
+    public async Task<ApiResponse<List<OrderTab>>> GetHeldAsync(OrderHeldFilterDto filterDto,
         string identityName)
     {
         int userId = Convert.ToInt32(identityName);
-        return ApiResponse<List<OrderAllDto>>.Success(
+        return ApiResponse<List<OrderTab>>.Success(
             await _orderRepository.GetHeldAsync(filterDto, userId)
         );
     }
 
-    public async Task<ApiResponse<List<OrderAllDto>>> GetRejectedAsync(OrderRejectedFilterDto filterDto,
+    public async Task<ApiResponse<List<OrderTab>>> GetRejectedAsync(OrderRejectedFilterDto filterDto,
         string identityName)
     {
         int userId = Convert.ToInt32(identityName);
-        return ApiResponse<List<OrderAllDto>>.Success(
+        return ApiResponse<List<OrderTab>>.Success(
             await _orderRepository.GetRejectedAsync(filterDto, userId)
         );
     }

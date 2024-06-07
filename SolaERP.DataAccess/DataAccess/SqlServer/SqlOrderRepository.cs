@@ -81,7 +81,7 @@ public class SqlOrderRepository : IOrderRepository
         return data;
     }
 
-    public async Task<List<OrderAllDto>> GetWFAAsync(OrderWFAFilterDto dto, int userId)
+    public async Task<List<OrderTab>> GetWFAAsync(OrderWFAFilterDto dto, int userId)
     {
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
         command.CommandText = @"EXEC dbo.SP_OrderWFA @BusinessUnitId, @ItemCode, @OrderTypeId, @UserId";
@@ -101,7 +101,7 @@ public class SqlOrderRepository : IOrderRepository
         command.Parameters.AddWithValue(command, "@UserId", userId);
 
         await using DbDataReader reader = await command.ExecuteReaderAsync();
-        List<OrderAllDto> data = new();
+        List<OrderTab> data = new();
         while (await reader.ReadAsync())
         {
             data.Add(MapFromReaderForOrderWFADto(reader));
@@ -110,7 +110,7 @@ public class SqlOrderRepository : IOrderRepository
         return data;
     }
 
-    public async Task<List<OrderAllDto>> GetChangeApprovalAsync(OrderChangeApprovalFilterDto dto, int userId)
+    public async Task<List<OrderTab>> GetChangeApprovalAsync(OrderChangeApprovalFilterDto dto, int userId)
     {
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
         command.CommandText = @"EXEC dbo.SP_OrderChangeApprovals @BusinessUnitId, @ItemCode, @OrderTypeId, @UserId";
@@ -130,16 +130,16 @@ public class SqlOrderRepository : IOrderRepository
         command.Parameters.AddWithValue(command, "@UserId", userId);
 
         await using DbDataReader reader = await command.ExecuteReaderAsync();
-        List<OrderAllDto> data = new();
+        List<OrderTab> data = new();
         while (await reader.ReadAsync())
         {
-            data.Add(MapFromReaderForOrderAllDto(reader));
+            data.Add(MapFromReaderForOrderChangeApprovalDto(reader));
         }
 
         return data;
     }
 
-    public async Task<List<OrderAllDto>> GetHeldAsync(OrderHeldFilterDto dto, int userId)
+    public async Task<List<OrderTab>> GetHeldAsync(OrderHeldFilterDto dto, int userId)
     {
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
         command.CommandText =
@@ -162,7 +162,7 @@ public class SqlOrderRepository : IOrderRepository
         command.Parameters.AddWithValue(command, "@DateTo", dto.DateTo);
 
         await using DbDataReader reader = await command.ExecuteReaderAsync();
-        List<OrderAllDto> data = new();
+        List<OrderTab> data = new();
         while (await reader.ReadAsync())
         {
             data.Add(MapFromReaderForOrderHeldDto(reader));
@@ -171,7 +171,7 @@ public class SqlOrderRepository : IOrderRepository
         return data;
     }
 
-    public async Task<List<OrderAllDto>> GetRejectedAsync(OrderRejectedFilterDto dto, int userId)
+    public async Task<List<OrderTab>> GetRejectedAsync(OrderRejectedFilterDto dto, int userId)
     {
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
         command.CommandText =
@@ -194,10 +194,10 @@ public class SqlOrderRepository : IOrderRepository
         command.Parameters.AddWithValue(command, "@DateTo", dto.DateTo);
 
         await using DbDataReader reader = await command.ExecuteReaderAsync();
-        List<OrderAllDto> data = new();
+        List<OrderTab> data = new();
         while (await reader.ReadAsync())
         {
-            data.Add(MapFromReaderForOrderAllDto(reader));
+            data.Add(MapFromReaderForOrderRejectedDto(reader));
         }
 
         return data;
@@ -718,9 +718,9 @@ public class SqlOrderRepository : IOrderRepository
         };
     }
 
-    private static OrderAllDto MapFromReaderForOrderHeldDto(IDataReader reader)
+    private static OrderTab MapFromReaderForOrderHeldDto(IDataReader reader)
     {
-        return new OrderAllDto
+        return new OrderTab
         {
             OrderMainId = reader.Get<int>("OrderMainId"),
             OrderNo = reader.Get<string>("OrderNo"),
@@ -742,6 +742,59 @@ public class SqlOrderRepository : IOrderRepository
     private static OrderAllDto MapFromReaderForOrderAllDto(IDataReader reader)
     {
         return new OrderAllDto
+        {
+            OrderMainId = reader.Get<int>("OrderMainId"),
+            OrderType = reader.Get<string>("Ordertype"),
+            LineNo = reader.Get<long>("LineNo"),
+            VendorCode = reader.Get<string>("VendorCode"),
+            ApproveStatus = reader.Get<string>("ApproveStatus"),
+            Comment = reader.Get<string>("Comment"),
+            Currency = reader.Get<string>("Currency"),
+            Sequence = reader.Get<int>("Sequence"),
+            Status = reader.Get<string>("Status"),
+            BidNo = reader.Get<string>("BidNo"),
+            ComparisonNo = reader.Get<string>("ComparisonNo"),
+            EnteredBy = reader.Get<string>("EnteredBy"),
+            EnteredDate = reader.Get<DateTime?>("EnteredDate"),
+            OrderNo = reader.Get<string>("OrderNo"),
+            VendorName = reader.Get<string>("VendorName"),
+            ApproveStageDetailsName = reader.Get<string>("ApproveStageDetailsName"),
+            RFQNo = reader.Get<string>("RFQNo"),
+            HasAttachments = reader.Get<bool>("HasAttachments"),
+            Buyer = reader.Get<string>("Buyer"),
+            Total = reader.Get<decimal>("Total"),
+
+        };
+    }
+
+    private static OrderTab MapFromReaderForOrderRejectedDto(IDataReader reader)
+    {
+        return new OrderTab
+        {
+            OrderMainId = reader.Get<int>("OrderMainId"),
+            OrderType = reader.Get<string>("Ordertype"),
+            LineNo = reader.Get<long>("LineNo"),
+            VendorCode = reader.Get<string>("VendorCode"),
+            ApproveStatus = reader.Get<string>("ApproveStatus"),
+            Comment = reader.Get<string>("Comment"),
+            Currency = reader.Get<string>("Currency"),
+            Sequence = reader.Get<int>("Sequence"),
+            Status = reader.Get<string>("Status"),
+            BidNo = reader.Get<string>("BidNo"),
+            ComparisonNo = reader.Get<string>("ComparisonNo"),
+            EnteredBy = reader.Get<string>("EnteredBy"),
+            EnteredDate = reader.Get<DateTime?>("EnteredDate"),
+            OrderNo = reader.Get<string>("OrderNo"),
+            VendorName = reader.Get<string>("VendorName"),
+            ApproveStageDetailsName = reader.Get<string>("ApproveStageDetailsName"),
+            RFQNo = reader.Get<string>("RFQNo"),
+            HasAttachments = reader.Get<bool>("HasAttachments")
+        };
+    }
+
+    private static OrderTab MapFromReaderForOrderChangeApprovalDto(IDataReader reader)
+    {
+        return new OrderTab
         {
             OrderMainId = reader.Get<int>("OrderMainId"),
             OrderType = reader.Get<string>("Ordertype"),

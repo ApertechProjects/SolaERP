@@ -1,25 +1,7 @@
 namespace SolaERP.Application.Entities.Order;
 
-public class OrderAllDto : BaseEntity
+public class OrderAllDto : OrderTab
 {
-    public int OrderMainId { get; set; }
-    public string OrderNo { get; set; }
-
-    public long LineNo { get; set; }
-
-    public string VendorCode { get; set; }
-    public string OrderType { get; set; }
-    public string VendorName { get; set; }
-    public string Currency { get; set; }
-    public string RFQNo { get; set; }
-    public string BidNo { get; set; }
-    public string ComparisonNo { get; set; }
-    public string Comment { get; set; }
-    public string EnteredBy { get; set; }
-    public DateTime? EnteredDate { get; set; }
-    public string ApproveStageDetailsName { get; set; }
-    public int Sequence { get; set; }
-    public string Status { get; set; }
-    public string ApproveStatus { get; set; }
-    public bool HasAttachments { get; set; }
+    public string Buyer { get; set; }
+    public decimal Total { get; set; }
 }
