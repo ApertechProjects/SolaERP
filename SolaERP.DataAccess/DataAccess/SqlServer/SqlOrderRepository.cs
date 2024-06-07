@@ -856,7 +856,9 @@ public class SqlOrderRepository : IOrderRepository
             OrderNo = reader.Get<string>("OrderNo"),
             VendorName = reader.Get<string>("VendorName"),
             RFQNo = reader.Get<string>("RFQNo"),
-            HasAttachments = reader.Get<bool>("HasAttachments")
+            HasAttachments = reader.Get<bool>("HasAttachments"),
+            Buyer = reader.Get<string>("Buyer"),
+            Total = reader.Get<decimal>("Total"),
         };
     }
 
