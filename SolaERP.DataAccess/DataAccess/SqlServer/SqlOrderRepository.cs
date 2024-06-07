@@ -44,7 +44,7 @@ public class SqlOrderRepository : IOrderRepository
         return data;
     }
 
-    public async Task<List<OrderAllDto>> GetAllAsync(OrderFilterDto dto, int userId)
+    public async Task<List<OrderWFAAndAllDto>> GetAllAsync(OrderFilterDto dto, int userId)
     {
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
         command.CommandText = @"EXEC dbo.SP_OrderAll @BusinessUnitId, @ItemCode, @OrderTypeId, 
@@ -72,7 +72,7 @@ public class SqlOrderRepository : IOrderRepository
         command.Parameters.AddWithValue(command, "@DateTo", dto.DateTo);
 
         await using DbDataReader reader = await command.ExecuteReaderAsync();
-        List<OrderAllDto> data = new();
+        List<OrderWFAAndAllDto> data = new();
         while (await reader.ReadAsync())
         {
             data.Add(MapFromReaderForOrderAllDto(reader));
@@ -81,7 +81,7 @@ public class SqlOrderRepository : IOrderRepository
         return data;
     }
 
-    public async Task<List<OrderTab>> GetWFAAsync(OrderWFAFilterDto dto, int userId)
+    public async Task<List<OrderWFAAndAllDto>> GetWFAAsync(OrderWFAFilterDto dto, int userId)
     {
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
         command.CommandText = @"EXEC dbo.SP_OrderWFA @BusinessUnitId, @ItemCode, @OrderTypeId, @UserId";
@@ -101,7 +101,7 @@ public class SqlOrderRepository : IOrderRepository
         command.Parameters.AddWithValue(command, "@UserId", userId);
 
         await using DbDataReader reader = await command.ExecuteReaderAsync();
-        List<OrderTab> data = new();
+        List<OrderWFAAndAllDto> data = new();
         while (await reader.ReadAsync())
         {
             data.Add(MapFromReaderForOrderWFADto(reader));
@@ -739,9 +739,9 @@ public class SqlOrderRepository : IOrderRepository
         };
     }
 
-    private static OrderAllDto MapFromReaderForOrderAllDto(IDataReader reader)
+    private static OrderWFAAndAllDto MapFromReaderForOrderAllDto(IDataReader reader)
     {
-        return new OrderAllDto
+        return new OrderWFAAndAllDto
         {
             OrderMainId = reader.Get<int>("OrderMainId"),
             OrderType = reader.Get<string>("Ordertype"),
@@ -839,9 +839,9 @@ public class SqlOrderRepository : IOrderRepository
         };
     }
 
-    private OrderAllDto MapFromReaderForOrderWFADto(DbDataReader reader)
+    private OrderWFAAndAllDto MapFromReaderForOrderWFADto(DbDataReader reader)
     {
-        return new OrderAllDto()
+        return new OrderWFAAndAllDto()
         {
             //LineNo = reader.Get<long>("LineNo"),
             OrderMainId = reader.Get<int>("OrderMainId"),
