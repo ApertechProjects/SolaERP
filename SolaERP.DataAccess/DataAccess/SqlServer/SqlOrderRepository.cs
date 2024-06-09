@@ -734,6 +734,8 @@ public class SqlOrderRepository : IOrderRepository
             EnteredBy = reader.Get<string>("EnteredBy"),
             ApproveStatus = reader.Get<string>("ApproveStatus"),
             Status = reader.Get<string>("Status"),
+            Buyer = reader.Get<string>("Buyer"),
+            Total = reader.Get<decimal>("Total"),
             HasAttachments = reader.Get<bool>("HasAttachments")
         };
     }
