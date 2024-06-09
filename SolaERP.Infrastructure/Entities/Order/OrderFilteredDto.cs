@@ -16,5 +16,7 @@ public class OrderFilteredDto
     public DateTime EnteredDate { get; set; }
     public string Status { get; set; }
     public string ApproveStatus { get; set; }
+    public string Buyer { get; set; }
+    public decimal Total { get; set; }
     public bool HasAttachments { get; set; }
 }

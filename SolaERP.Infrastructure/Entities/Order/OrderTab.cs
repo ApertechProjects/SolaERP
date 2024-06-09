@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolaERP.Application.Entities.Order
+﻿namespace SolaERP.Application.Entities.Order
 {
     public class OrderTab : BaseEntity
     {
@@ -27,6 +21,8 @@ namespace SolaERP.Application.Entities.Order
         public int Sequence { get; set; }
         public string Status { get; set; }
         public string ApproveStatus { get; set; }
+        public string Buyer { get; set; }
+        public decimal Total { get; set; }
         public bool HasAttachments { get; set; }
     }
 }

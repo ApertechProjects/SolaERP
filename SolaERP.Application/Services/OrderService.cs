@@ -52,19 +52,19 @@ public class OrderService : IOrderService
         );
     }
 
-    public async Task<ApiResponse<List<OrderWFAAndAllDto>>> GetAllAsync(OrderFilterDto filterDto, string identityName)
+    public async Task<ApiResponse<List<OrderTab>>> GetAllAsync(OrderFilterDto filterDto, string identityName)
     {
         int userId = Convert.ToInt32(identityName);
-        return ApiResponse<List<OrderWFAAndAllDto>>.Success(
+        return ApiResponse<List<OrderTab>>.Success(
             await _orderRepository.GetAllAsync(filterDto, userId)
         );
     }
 
-    public async Task<ApiResponse<List<OrderWFAAndAllDto>>> GetWFAAsync(OrderWFAFilterDto filterDto,
+    public async Task<ApiResponse<List<OrderTab>>> GetWFAAsync(OrderWFAFilterDto filterDto,
         string identityName)
     {
         int userId = Convert.ToInt32(identityName);
-        return ApiResponse<List<OrderWFAAndAllDto>>.Success(
+        return ApiResponse<List<OrderTab>>.Success(
             await _orderRepository.GetWFAAsync(filterDto, userId)
         );
     }

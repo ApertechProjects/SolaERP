@@ -11,8 +11,8 @@ namespace SolaERP.Application.Contracts.Services;
 public interface IOrderService
 {
     Task<ApiResponse<List<OrderTypeLoadDto>>> GetTypesAsync(int businessUnitId);
-    Task<ApiResponse<List<OrderWFAAndAllDto>>> GetAllAsync(OrderFilterDto filterDto, string identityName);
-    Task<ApiResponse<List<OrderWFAAndAllDto>>> GetWFAAsync(OrderWFAFilterDto filterDto, string identityName);
+    Task<ApiResponse<List<OrderTab>>> GetAllAsync(OrderFilterDto filterDto, string identityName);
+    Task<ApiResponse<List<OrderTab>>> GetWFAAsync(OrderWFAFilterDto filterDto, string identityName);
 
     Task<ApiResponse<List<OrderTab>>> GetChangeApprovalAsync(OrderChangeApprovalFilterDto filterDto,
         string identityName);

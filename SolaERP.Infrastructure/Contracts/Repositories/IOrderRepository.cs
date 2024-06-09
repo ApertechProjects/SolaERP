@@ -9,8 +9,8 @@ namespace SolaERP.Application.Contracts.Repositories;
 public interface IOrderRepository
 {
     Task<List<OrderTypeLoadDto>> GetAllOrderTypesByBusinessIdAsync(int businessUnitId);
-    Task<List<OrderWFAAndAllDto>> GetAllAsync(OrderFilterDto dto, int userId);
-    Task<List<OrderWFAAndAllDto>> GetWFAAsync(OrderWFAFilterDto filterDto, int userId);
+    Task<List<OrderTab>> GetAllAsync(OrderFilterDto dto, int userId);
+    Task<List<OrderTab>> GetWFAAsync(OrderWFAFilterDto filterDto, int userId);
     Task<List<OrderTab>> GetChangeApprovalAsync(OrderChangeApprovalFilterDto filterDto, int userId);
     Task<List<OrderTab>> GetHeldAsync(OrderHeldFilterDto filterDto, int userId);
     Task<List<OrderTab>> GetRejectedAsync(OrderRejectedFilterDto filterDto, int userId);
