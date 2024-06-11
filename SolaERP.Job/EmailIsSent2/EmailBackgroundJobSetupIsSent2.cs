@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Job.EmailIsSent2
 {
-    internal class EmailBackgroundJobSetupIsSent2 : IConfigureOptions<QuartzOptions>
+    public class EmailBackgroundJobSetupIsSent2 : IConfigureOptions<QuartzOptions>
     {
         public void Configure(QuartzOptions options)
         {
@@ -17,7 +17,7 @@ namespace SolaERP.Job.EmailIsSent2
             options.AddJob<EmailBackgroundJobIsSent2>(jobBuilder => jobBuilder.WithIdentity(jobKey))
                    .AddTrigger(trigger => trigger
                    .ForJob(jobKey)
-                   .WithCronSchedule("0 0/45 9-18 * * ?")
+                   .WithCronSchedule("0 0/1 9-18 * * ?")
                    .Build());
 
         }
