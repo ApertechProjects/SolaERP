@@ -850,7 +850,6 @@ public class SqlOrderRepository : IOrderRepository
     {
         return new OrderTab()
         {
-            //LineNo = reader.Get<long>("LineNo"),
             OrderMainId = reader.Get<int>("OrderMainId"),
             OrderType = reader.Get<string>("Ordertype"),
             Comment = reader.Get<string>("Comment"),
