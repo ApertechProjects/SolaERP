@@ -30,32 +30,28 @@ namespace SolaERP.Job.EmailIsSent
             _mapper = mapper;
         }
 
-        public async Task Execute(IJobExecutionContext context)
+        public Task Execute(IJobExecutionContext context)
         {
             try
             {
-                _logger.LogInformation("Email background job is running.");
                 Helper helper = new Helper(_unitOfWork);
-                var requestUsers = await helper.GetUsersIsSent(Procedure.Request);
-
-                await Console.Out.WriteLineAsync("request user sayi: " + requestUsers.Count);
+                var requestUsers = helper.GetUsersIsSent(Procedure.Request);
                 if (requestUsers != null && requestUsers.Count > 0)
                 {
+
                     foreach (var user in requestUsers)
                     {
-                        await Console.Out.WriteLineAsync("user data: " + user.UserName);
-                        var rowInfoDrafts = await helper.GetRowInfosForIsSent(Procedure.Request, user.UserId);
+                        Console.WriteLine(user.UserName);
+                        var rowInfoDrafts = helper.GetRowInfosForIsSent(Procedure.Request, user.UserId);
 
-                        await Console.Out.WriteLineAsync("row Info Draft count: " + rowInfoDrafts.Count);
                         var rowInfos = _mapper.Map<HashSet<RowInfo>>(rowInfoDrafts);
-                        await Console.Out.WriteLineAsync("row Info count: " + rowInfos.Count);
                         if (rowInfos.Count > 0)
                         {
-                            await _mailService.SendMail(rowInfos, new Person { email = user.Email, lang = user.Language, userName = user.UserName });
+                            _mailService.SendMail(rowInfos, new Person { email = user.Email, lang = user.Language, userName = user.UserName });
                             Debug.WriteLine($"sended to {user.UserName}");
                             int[] ids = rowInfoDrafts.Select(x => x.notificationSenderId).ToArray();
-                            await helper.UpdateIsSent1(ids);
-                            await _unitOfWork.SaveChangesAsync();
+                            helper.UpdateIsSent1(ids);
+                           _unitOfWork.SaveChanges();
                         }
                         Console.WriteLine("methodun icinde mesaj getdi");
                     }
@@ -67,6 +63,8 @@ namespace SolaERP.Job.EmailIsSent
                 _logger.LogError(ex, "An error occurred while executing the email background job.");
                 Console.WriteLine("methodun icinin xetasi: " + ex.Message);
             }
+            return Task.CompletedTask;
+
         }
     }
 }

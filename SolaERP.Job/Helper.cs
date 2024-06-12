@@ -83,7 +83,7 @@ namespace SolaERP.Job
             return text;
         }
 
-        public async Task<HashSet<RowInfoDraft>> GetRowInfosForIsSent(Procedure procedure, int userId)
+        public HashSet<RowInfoDraft> GetRowInfosForIsSent(Procedure procedure, int userId)
         {
             HashSet<RowInfoDraft> rows = new HashSet<RowInfoDraft>();
 
@@ -93,7 +93,7 @@ namespace SolaERP.Job
 
                 command.Parameters.AddWithValue(command, "@procedureId", procedure);
                 command.Parameters.AddWithValue(command, "@userId", userId);
-                using var reader = await command.ExecuteReaderAsync();
+                using var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
                     rows.Add(GetFromReaderForRowInfo(reader));
@@ -144,14 +144,14 @@ namespace SolaERP.Job
             }
         }
 
-        public async Task<List<PersonDraft>> GetUsersIsSent(Procedure procedure)
+        public List<PersonDraft> GetUsersIsSent(Procedure procedure)
         {
             List<PersonDraft> users = new List<PersonDraft>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = UserCommandText() + UserCommandString(IsSentValue.IsSent1);
                 command.Parameters.AddWithValue(command, "@procedureId", procedure);
-                using var reader = await command.ExecuteReaderAsync();
+                using var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
                     users.Add(GetFromReaderForPerson(reader));
@@ -220,7 +220,7 @@ namespace SolaERP.Job
             };
         }
 
-        public async Task<bool> UpdateIsSent1(int[] ids)
+        public bool UpdateIsSent1(int[] ids)
         {
             var idsRes = string.Join(",", ids);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -230,7 +230,7 @@ namespace SolaERP.Job
                 command.Parameters.AddWithValue(command, "@sendDate", DateTime.Now.AddDays(3).ToShortDateString());
                 try
                 {
-                    var res = await command.ExecuteNonQueryAsync() > 0;
+                    var res = command.ExecuteNonQuery() > 0;
                     return res;
                 }
                 catch (Exception ex)

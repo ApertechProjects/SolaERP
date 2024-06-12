@@ -28,7 +28,7 @@ namespace SolaERP.Job
 
             _configuration = builder.Build();
         }
-        public async Task SendMail(HashSet<RowInfo> rowInfos, Person person)
+        public void SendMail(HashSet<RowInfo> rowInfos, Person person)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace SolaERP.Job
                     try
                     {
                         string jsonString = JsonConvert.SerializeObject(emailModel);
-                        var deliveryResult = await producer.ProduceAsync(topicName, new Message<string, string> { Value = jsonString });
+                        producer.Produce(topicName, new Message<string, string> { Value = jsonString });
                     }
                     catch (ProduceException<string, string> ex)
                     {
@@ -61,7 +61,6 @@ namespace SolaERP.Job
             }
             catch (Exception ex)
             {
-                await Console.Out.WriteLineAsync("send mail xeta: " + ex.Message);
             }
         }
     }
