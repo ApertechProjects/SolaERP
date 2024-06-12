@@ -22,7 +22,7 @@ namespace SolaERP.Job.EmailIsSent
                        .WithCronSchedule("0 0/3 9-18 * * ?")
                        .Build());
 
-                Console.WriteLine("job run oldu");
+                Console.WriteLine("job run oldu" + DateTime.Now);
             }
             catch (Exception ex)
             {
