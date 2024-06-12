@@ -39,12 +39,17 @@ namespace SolaERP.Job.EmailIsSent
                 Helper helper = new Helper(_unitOfWork);
                 var requestUsers = await helper.GetUsersIsSent(Procedure.Request);
 
+                await Console.Out.WriteLineAsync("request user sayi: " + requestUsers.Count);
                 if (requestUsers != null && requestUsers.Count > 0)
                 {
                     foreach (var user in requestUsers)
                     {
+                        await Console.Out.WriteLineAsync("user data: " + user.UserName);
                         var rowInfoDrafts = await helper.GetRowInfosForIsSent(Procedure.Request, user.UserId);
+
+                        await Console.Out.WriteLineAsync("row Info Draft count: " + rowInfoDrafts.Count);
                         var rowInfos = _mapper.Map<HashSet<RowInfo>>(rowInfoDrafts);
+                        await Console.Out.WriteLineAsync("row Info count: " + rowInfos.Count);
                         if (rowInfos.Count > 0)
                         {
                             await _mailService.SendMail(rowInfos, new Person { email = user.Email, lang = user.Language, userName = user.UserName });

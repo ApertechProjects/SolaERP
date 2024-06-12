@@ -19,14 +19,14 @@ namespace SolaERP.Job.EmailIsSent
                 options.AddJob<EmailBackgroundJobIsSent>(jobBuilder => jobBuilder.WithIdentity(jobKey))
                        .AddTrigger(trigger => trigger
                        .ForJob(jobKey)
-                       .WithCronSchedule("0 0/5 9-18 * * ?")
+                       .WithCronSchedule("0 0/2 9-18 * * ?")
                        .Build());
 
-                Console.WriteLine("mesaj getdi");
+                Console.WriteLine("job run oldu");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Mesaj getmedi: " + ex.Message);
+                Console.WriteLine("job xetasi: " + ex.Message);
             }
         }
     }
