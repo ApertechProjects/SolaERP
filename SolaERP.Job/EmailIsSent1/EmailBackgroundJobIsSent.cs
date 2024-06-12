@@ -34,8 +34,6 @@ namespace SolaERP.Job.EmailIsSent
         {
             try
             {
-
-
                 Helper helper = new Helper(_unitOfWork);
                 var requestUsers = await helper.GetUsersIsSent(Procedure.Request);
 
