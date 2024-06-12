@@ -34,6 +34,7 @@ namespace SolaERP.Job.EmailIsSent
         {
             try
             {
+                _logger.LogInformation("Email background job is running.");
                 Helper helper = new Helper(_unitOfWork);
                 var requestUsers = await helper.GetUsersIsSent(Procedure.Request);
 
@@ -63,6 +64,7 @@ namespace SolaERP.Job.EmailIsSent
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred while executing the email background job.");
                 Console.WriteLine("methodun icinin xetasi: " + ex.Message);
             }
         }
