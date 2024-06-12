@@ -41,27 +41,25 @@ namespace SolaERP.Job.EmailIsSent
 
                     foreach (var user in requestUsers)
                     {
-                        Console.WriteLine(user.UserName);
+                        Console.WriteLine("sended to " + user.UserName);
                         var rowInfoDrafts = helper.GetRowInfosForIsSent(Procedure.Request, user.UserId);
 
                         var rowInfos = _mapper.Map<HashSet<RowInfo>>(rowInfoDrafts);
                         if (rowInfos.Count > 0)
                         {
                             _mailService.SendMail(rowInfos, new Person { email = user.Email, lang = user.Language, userName = user.UserName });
-                            Debug.WriteLine($"sended to {user.UserName}");
                             int[] ids = rowInfoDrafts.Select(x => x.notificationSenderId).ToArray();
                             helper.UpdateIsSent1(ids);
                            _unitOfWork.SaveChanges();
                         }
-                        Console.WriteLine("methodun icinde mesaj getdi");
                     }
 
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while executing the email background job.");
-                Console.WriteLine("methodun icinin xetasi: " + ex.Message);
+                _logger.LogError(ex, "An error occurred while executing the email background job 1.");
+                Console.WriteLine("Exception: " + ex.Message);
             }
             return Task.CompletedTask;
 

@@ -102,7 +102,7 @@ namespace SolaERP.Job
             }
         }
 
-        public async Task<HashSet<RowInfoDraft>> GetRowInfosForIsSent2(Procedure procedure, int userId)
+        public HashSet<RowInfoDraft> GetRowInfosForIsSent2(Procedure procedure, int userId)
         {
             HashSet<RowInfoDraft> rows = new HashSet<RowInfoDraft>();
 
@@ -114,7 +114,7 @@ namespace SolaERP.Job
                 command.Parameters.AddWithValue(command, "@userId", userId);
                 command.Parameters.AddWithValue(command, "@date", DateTime.Now.ToShortDateString());
 
-                using var reader = await command.ExecuteReaderAsync();
+                using var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
                     rows.Add(GetFromReaderForRowInfo(reader));
@@ -123,7 +123,7 @@ namespace SolaERP.Job
             }
         }
 
-        public async Task<HashSet<RowInfoDraft>> GetRowInfosForIsSent3(Procedure procedure, int userId)
+        public HashSet<RowInfoDraft> GetRowInfosForIsSent3(Procedure procedure, int userId)
         {
             HashSet<RowInfoDraft> rows = new HashSet<RowInfoDraft>();
 
@@ -135,7 +135,7 @@ namespace SolaERP.Job
                 command.Parameters.AddWithValue(command, "@userId", userId);
                 command.Parameters.AddWithValue(command, "@date", DateTime.Now.ToShortDateString());
 
-                using var reader = await command.ExecuteReaderAsync();
+                using var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
                     rows.Add(GetFromReaderForRowInfo(reader));
@@ -160,14 +160,14 @@ namespace SolaERP.Job
             }
         }
 
-        public async Task<List<PersonDraft>> GetUsersIsSent2(Procedure procedure)
+        public List<PersonDraft> GetUsersIsSent2(Procedure procedure)
         {
             List<PersonDraft> users = new List<PersonDraft>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = UserCommandText() + UserCommandString(IsSentValue.IsSent2);
                 command.Parameters.AddWithValue(command, "@procedureId", procedure);
-                using var reader = await command.ExecuteReaderAsync();
+                using var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
                     users.Add(GetFromReaderForPerson(reader));
@@ -176,14 +176,14 @@ namespace SolaERP.Job
             }
         }
 
-        public async Task<List<PersonDraft>> GetUsersIsSent3(Procedure procedure)
+        public List<PersonDraft> GetUsersIsSent3(Procedure procedure)
         {
             List<PersonDraft> users = new List<PersonDraft>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = UserCommandText() + UserCommandString(IsSentValue.IsSent3);
                 command.Parameters.AddWithValue(command, "@procedureId", procedure);
-                using var reader = await command.ExecuteReaderAsync();
+                using var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
                     users.Add(GetFromReaderForPerson(reader));
@@ -242,7 +242,7 @@ namespace SolaERP.Job
             }
         }
 
-        public async Task<bool> UpdateIsSent2(int[] ids)
+        public bool UpdateIsSent2(int[] ids)
         {
             var idsRes = string.Join(",", ids);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -252,7 +252,7 @@ namespace SolaERP.Job
                 command.Parameters.AddWithValue(command, "@sendDate", DateTime.Now.AddDays(3).ToShortDateString());
                 try
                 {
-                    var res = await command.ExecuteNonQueryAsync() > 0;
+                    var res = command.ExecuteNonQuery() > 0;
                     return res;
                 }
                 catch (Exception ex)
@@ -264,7 +264,7 @@ namespace SolaERP.Job
             }
         }
 
-        public async Task<bool> UpdateIsSent3(int[] ids)
+        public bool UpdateIsSent3(int[] ids)
         {
             var idsRes = string.Join(",", ids);
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -274,7 +274,7 @@ namespace SolaERP.Job
                 command.Parameters.AddWithValue(command, "@sendDate", DateTime.Now.AddDays(3).ToShortDateString());
                 try
                 {
-                    var res = await command.ExecuteNonQueryAsync() > 0;
+                    var res = command.ExecuteNonQuery() > 0;
                     return res;
                 }
                 catch (Exception ex)

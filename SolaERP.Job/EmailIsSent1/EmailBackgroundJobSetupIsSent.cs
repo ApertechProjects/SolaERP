@@ -22,11 +22,11 @@ namespace SolaERP.Job.EmailIsSent
                        .WithCronSchedule("0 0/1 9-18 * * ?")
                        .Build());
 
-                Console.WriteLine("job run oldu" + DateTime.Now);
+                Console.WriteLine("Job Run" + DateTime.Now);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("job xetasi: " + ex.Message);
+                Console.WriteLine("Job run fail: " + ex.Message);
             }
         }
     }
