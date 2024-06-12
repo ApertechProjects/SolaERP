@@ -2,6 +2,7 @@
 using Quartz;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,11 +22,11 @@ namespace SolaERP.Job.EmailIsSent
                        .WithCronSchedule("0 0/5 9-18 * * ?")
                        .Build());
 
-                
+                Console.WriteLine("mesaj getdi");
             }
             catch (Exception ex)
             {
-                
+                Console.WriteLine("Mesaj getmedi: " + ex.Message);
             }
         }
     }
