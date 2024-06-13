@@ -34,6 +34,7 @@ namespace SolaERP.Job
 
     public class RowInfo
     {
+        public int id { get; set; }
         public string number { get; set; }
         public string name { get; set; }
         public string localDateTime { get; set; }
@@ -46,6 +47,7 @@ namespace SolaERP.Job
 
     public class RowInfoDraft
     {
+        public int id { get; set; }
         public int notificationSenderId { get; set; }
         public string number { get; set; }
         public string name { get; set; }

@@ -46,7 +46,7 @@ namespace SolaERP.Job
 
         public string RowInfoCommandText()
         {
-            var text = "select NotificationSenderId, ISNULL(ST.ApprovalStatusName,'In Approve Stage') ApproveStatus," +
+            var text = "select NS.SourceId,NotificationSenderId, ISNULL(ST.ApprovalStatusName,'In Approve Stage') ApproveStatus," +
                        "IsSent,IsSent2,IsSent3,NS.SourceId,RM.RequestNo,au.FullName Requester," +
                        "ISNULL(RM.RequestComment,'') Comment,P.ProcedureName,L.ActionId,L.Date LocalDateTime " +
                        "from Config.NotificationSender NS " +
@@ -196,6 +196,7 @@ namespace SolaERP.Job
         {
             return new RowInfoDraft
             {
+                id = reader.Get<int>("SourceId"),
                 notificationSenderId = reader.Get<int>("NotificationSenderId"),
                 approveStatus = reader.Get<string>("ApproveStatus"),
                 comment = reader.Get<string>("Comment"),
