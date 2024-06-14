@@ -1,22 +1,22 @@
-﻿using Microsoft.Extensions.Options;
-using Quartz;
+﻿using Quartz;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SolaERP.Job.EmailIsSent;
 
-namespace SolaERP.Job.EmailIsSent
+namespace SolaERP.Job.Cbar
 {
-    public class EmailBackgroundJobSetupIsSent : IConfigureOptions<QuartzOptions>
+    public class CbarBackgroundJobSetup : IConfigureOptions<QuartzOptions>
     {
         public void Configure(QuartzOptions options)
         {
             try
             {
-                var jobKey = JobKey.Create(nameof(EmailBackgroundJobIsSent));
-                options.AddJob<EmailBackgroundJobIsSent>(jobBuilder => jobBuilder.WithIdentity(jobKey))
+                var jobKey = JobKey.Create(nameof(CbarBackgroundJob));
+                options.AddJob<CbarBackgroundJob>(jobBuilder => jobBuilder.WithIdentity(jobKey))
                        .AddTrigger(trigger => trigger
                        .ForJob(jobKey)
                        .WithCronSchedule("0 0/1 9-18 * * ?")

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Quartz;
+using SolaERP.Job.Cbar;
 using SolaERP.Job.EmailIsSent;
 using SolaERP.Job.EmailIsSent2;
 using SolaERP.Job.EmailIsSent3;
@@ -8,7 +9,7 @@ namespace SolaERP.Job
 {
     public static class DependencyInjection
     {
-      
+
 
         public static void AddRequestMailsForIsSent(this IServiceCollection services)
         {
@@ -54,6 +55,21 @@ namespace SolaERP.Job
             });
 
             services.ConfigureOptions<EmailBackgroundJobSetupIsSent3>();
+        }
+
+        public static void AddCbarData(this IServiceCollection services)
+        {
+            services.AddQuartz(options =>
+            {
+                options.UseMicrosoftDependencyInjectionJobFactory();
+            });
+
+            services.AddQuartzHostedService(options =>
+            {
+                options.WaitForJobsToComplete = true;
+            });
+
+            services.ConfigureOptions<CbarBackgroundJobSetup>();
         }
     }
 }

@@ -13,6 +13,8 @@ using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.ApproveRole;
 using SolaERP.Application.Entities.Procedure;
 using Procedure = SolaERP.Job.Enums.Procedure;
+using SolaERP.Application.Attributes;
+using System.Reflection;
 namespace SolaERP.Job
 {
     public class Helper
@@ -228,7 +230,7 @@ namespace SolaERP.Job
             {
                 command.CommandText = @$"set nocount off update Config.NotificationSender set IsSent = 1,Sent2WillSend = @sendDate where NotificationSenderId IN({idsRes})";
                 command.Parameters.AddWithValue(command, "@ids", idsRes);
-                command.Parameters.AddWithValue(command, "@sendDate", DateTime.Now.AddDays(3).ToShortDateString());
+                command.Parameters.AddWithValue(command, "@sendDate", DateTime.Now.AddDays(3).Date);
                 try
                 {
                     var res = command.ExecuteNonQuery() > 0;
@@ -286,5 +288,6 @@ namespace SolaERP.Job
 
             }
         }
+
     }
 }
