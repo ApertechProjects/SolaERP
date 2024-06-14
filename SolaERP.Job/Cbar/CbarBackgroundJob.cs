@@ -15,6 +15,11 @@ using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using SolaERP.Application.Helper;
 using System.Configuration;
+using static SolaERP.Job.Cbar.CbarBackgroundJob;
+using System.Data.Common;
+using SolaERP.DataAccess.Extensions;
+using System.Collections;
+using System.Data;
 
 
 namespace SolaERP.Job.Cbar
@@ -35,36 +40,97 @@ namespace SolaERP.Job.Cbar
             _unitOfWork = unitOfWork;
             _mapper = mapper;
 
-            string appsettingsFileName = AppSettingsHelper.GetAppSettingsFileName();
+            string appsettingsFileName = "appsettings.Production.json";
             IConfigurationBuilder builder = new ConfigurationBuilder()
             .AddJsonFile(appsettingsFileName, optional: true, reloadOnChange: false);
 
             _configuration = builder.Build();
         }
 
+        private readonly DateTime date = DateTime.Now;
+
+        private async Task<bool> CheckDataIsExist()
+        {
+            string commandText = @$"select * from Register.DailyRates where Date = @date";
+
+            using (SqlConnection cn = new SqlConnection(_configuration["ConnectionStrings:DevelopmentConnectionString"]))
+            using (SqlCommand cmd = new SqlCommand(commandText, cn))
+            {
+                cmd.Parameters.AddWithValue(cmd, "@date", DateTime.Now.ToString("yyyy-MM-dd"));
+
+                cn.Open();
+                var res = await cmd.ExecuteReaderAsync();
+                if (await res.ReadAsync())
+                {
+                    cn.Close();
+                    return true;
+
+                }
+                cn.Close();
+                return false;
+            }
+
+        }
+
         public Task Execute(IJobExecutionContext context)
         {
-            string url = $"https://www.cbar.az/currencies/{DateTime.Now.ToString("dd.MM.yyyy")}.xml";
+            if (CheckDataIsExist().GetAwaiter().GetResult())
+            {
+                string url = $"https://www.cbar.az/currencies/{date.ToString("dd.MM.yyyy")}.xml";
 
-            // Fetch XML data from URL
-            string xmlData = FetchXmlDataAsync(url).GetAwaiter().GetResult();
+                // Fetch XML data from URL
+                string xmlData = FetchXmlDataAsync(url).GetAwaiter().GetResult();
+                if (xmlData.Contains(date.ToString("dd.MM.yyyy")))
+                {
+                    // Parse XML data
+                    var valutes = ParseXmlData(xmlData);
 
-            // Parse XML data
-            var valutes = ParseXmlData(xmlData);
+                    BulkInsert(valutes).GetAwaiter().GetResult();
+                    RunDailyCurrencyRate().GetAwaiter().GetResult();
+                }
+            }
+            return Task.CompletedTask;
 
-            using var bulkCopy = new SqlBulkCopy("Server=10.1.1.14;Database=SolaERP;User Id=sa;Password=D1g1t@l1z32000;MultipleActiveResultSets=True");
+        }
+
+        private async Task BulkInsert(List<Valute> valutes)
+        {
+            using var bulkCopy = new SqlBulkCopy(_configuration["ConnectionStrings:DevelopmentConnectionString"]);
 
             bulkCopy.DestinationTableName = "Register.DailyRates";
 
+            bulkCopy.ColumnMappings.Add(nameof(Valute.Date), "Date");
             bulkCopy.ColumnMappings.Add(nameof(Valute.CurrencyCode), "CurrencyCode");
             bulkCopy.ColumnMappings.Add(nameof(Valute.Rate), "Rate");
 
-
-            bulkCopy.WriteToServer(valutes.ConvertListOfCLassToDataTable());
-            return Task.CompletedTask;
+            var data = valutes.ConvertListOfCLassToDataTable();
+            await bulkCopy.WriteToServerAsync(data);
         }
 
-        static async Task<string> FetchXmlDataAsync(string url)
+        private async Task RunDailyCurrencyRate()
+        {
+            string commandText = @$"exec SP_RunDailyCurrencyRates_I '{date.ToString("yyyy-MM-dd")}'";
+            try
+            {
+                using (SqlConnection cn = new SqlConnection(_configuration["ConnectionStrings:DevelopmentConnectionString"]))
+                using (SqlCommand cmd = new SqlCommand(commandText, cn))
+                {
+                    //cmd.Parameters.AddWithValue(cmd, "@date", );
+
+                    cn.Open();
+                    var res = await cmd.ExecuteNonQueryAsync();
+
+                    cn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
+
+        private async Task<string> FetchXmlDataAsync(string url)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -74,7 +140,7 @@ namespace SolaERP.Job.Cbar
             }
         }
 
-        static List<Valute> ParseXmlData(string xmlData)
+        private List<Valute> ParseXmlData(string xmlData)
         {
             // Load the XML data into an XDocument
             XDocument xdoc = XDocument.Parse(xmlData);
@@ -104,7 +170,7 @@ namespace SolaERP.Job.Cbar
                             value = value / nominal;
                         }
 
-                        valute.Add(new Valute { CurrencyCode = code, Rate = value, Date = DateTime.Today.Date });
+                        valute.Add(new Valute { CurrencyCode = code, Rate = value, Date = date.ToString("yyyy-MM-dd") });
                     }
                     break;
                 }
@@ -113,9 +179,9 @@ namespace SolaERP.Job.Cbar
             return valute;
         }
 
-        public class Valute
+        private class Valute
         {
-            public DateTime Date { get; set; }
+            public string Date { get; set; }
             public string CurrencyCode { get; set; }
             public decimal Rate { get; set; }
         }
