@@ -29,7 +29,7 @@ namespace SolaERP.Application.Models
         public bool InActive { get; set; }
         public int? DefaultBusinessUnitId { get; set; }
         public string VerifyToken { get; set; }
-
+        public string HomePageReportFileId { get; set; }
 
     }
 }

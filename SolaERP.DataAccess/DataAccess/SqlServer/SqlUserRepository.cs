@@ -1,9 +1,11 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Dtos.UserReport;
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Groups;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Entities.User;
+using SolaERP.Application.Entities.UserReport;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
@@ -149,20 +151,12 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public async Task<int> SaveUserAsync(User entity)
         {
-            try
-            {
 
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
             string query = @"SET NOCOUNT OFF Exec SP_AppUser_IUD @Id,@FullName,@ChangePassword,@Theme,@UserName
                                                                 ,@Email,@PasswordHash,@PhoneNumber ,@UserTypeId
                                                                 ,@VendorId,@UserToken,@Gender,@Buyer,@Description
                                                                 ,@ERPUser,@UserPhoto,@SignaturePhoto,@Inactive  
-                                                                ,@ChangeUserId,@VerifyToken,@Language,@DefaultBusinessUnitId,@NewId output";
+                                                                ,@ChangeUserId,@VerifyToken,@Language,@DefaultBusinessUnitId,@HomePageReportFileId,@NewId output";
 
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -187,8 +181,9 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@Inactive", entity.InActive);
                 command.Parameters.AddWithValue(command, "@ChangeUserId", entity.UserId);
                 command.Parameters.AddWithValue(command, "@VerifyToken", entity.VerifyToken);
-                command.Parameters.AddWithValue(command, "@Language", Application.Enums.Language.en.ToString());
+                command.Parameters.AddWithValue(command, "@Language", Language.en.ToString());
                 command.Parameters.AddWithValue(command, "@DefaultBusinessUnitId", entity.DefaultBusinessUnitId);
+                command.Parameters.AddWithValue(command, "@HomePageReportFileId", entity.HomePageReportFileId);
                 command.Parameters.AddOutPutParameter(command, "@NewId");
                 await command.ExecuteNonQueryAsync();
                 var result = Convert.ToInt32(command.Parameters["@NewId"].Value);
@@ -748,6 +743,79 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
+        public async Task<List<UserReportHasAccessDto>> GetUserReportAccess(string fileId)
+        {
+            List<UserReportHasAccessDto> fileAccesses = new List<UserReportHasAccessDto>();
+            var users = await GetUsers();
+            var reports = await GetUserFileAccess(fileId);
+            foreach (var item in users)
+            {
+                if (item.UserId == 1922)
+                {
+
+                }
+                var data = reports.Where(x => x.UserId == item.UserId).FirstOrDefault();
+                if (data == null)
+                {
+                    fileAccesses.Add(new UserReportHasAccessDto
+                    {
+                        UserId = item.UserId,
+                        FullName = item.FullName,
+                        UserName = item.UserName,
+                        HasAccess = false,
+                    });
+                }
+                else
+                {
+                    fileAccesses.Add(new UserReportHasAccessDto
+                    {
+                        UserId = item.UserId,
+                        FullName = item.FullName,
+                        UserName = item.UserName,
+                        HasAccess = true,
+                    });
+                }
+            }
+
+            return fileAccesses;
+        }
+
+        public async Task<List<UserReportList>> GetUsers()
+        {
+            List<UserReportList> users = new List<UserReportList>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "select Id UserId,UserName,FullName from Config.AppUser";
+
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    while (reader.Read())
+                    {
+                        users.Add(reader.GetByEntityStructure<UserReportList>());
+                    }
+                }
+            }
+            return users;
+        }
+
+        public async Task<List<UserReportFileAccess>> GetUserFileAccess(string fileId)
+        {
+            List<UserReportFileAccess> users = new List<UserReportFileAccess>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "select * from Config.UserReportFileAccesses where ReportFileId = @reportFileId";
+                command.Parameters.AddWithValue(command, "@reportFileId", fileId);
+
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    while (reader.Read())
+                    {
+                        users.Add(reader.GetByEntityStructure<UserReportFileAccess>());
+                    }
+                }
+            }
+            return users;
+        }
         #endregion
     }
 }

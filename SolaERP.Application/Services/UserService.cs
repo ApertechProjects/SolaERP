@@ -8,6 +8,7 @@ using SolaERP.Application.Dtos.Group;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Dtos.UserDto;
+using SolaERP.Application.Dtos.UserReport;
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Request;
@@ -574,5 +575,13 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<bool>.Fail("resetPasswordCode", $"You entered wrong Code", 422);
             return ApiResponse<bool>.Success(true, 200);
         }
+
+        public async Task<ApiResponse<List<UserReportHasAccessDto>>> GetUserReportAccess(string fileId)
+        {
+            var data = await _userRepository.GetUserReportAccess(fileId);
+            return ApiResponse<List<UserReportHasAccessDto>>.Success(data, 200);
+        }
+
+     
     }
 }

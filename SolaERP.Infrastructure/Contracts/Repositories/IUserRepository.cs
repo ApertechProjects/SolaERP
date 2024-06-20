@@ -1,7 +1,9 @@
-﻿using SolaERP.Application.Entities;
+﻿using SolaERP.Application.Dtos.UserReport;
+using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Groups;
 using SolaERP.Application.Entities.User;
+using SolaERP.Application.Entities.UserReport;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using System.Data;
@@ -52,6 +54,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<UserList>> UsersRequestMain(int requestMainId, int? sequence, ApproveStatus status);
         Task UpdateLastActivityAsync(int id);
         Task<bool> AddDefaultVendorAccessToVendorUser(int userId);
+        Task<List<UserReportHasAccessDto>> GetUserReportAccess(string reportFileId);
     }
 
     public enum Filetype

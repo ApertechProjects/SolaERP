@@ -51,5 +51,6 @@ namespace SolaERP.Application.Entities.Auth
         public Enums.Language Language { get; set; }
         public int? DefaultBusinessUnitId { get; set; }
         public string BusinessUnitCode { get; set; }
+        public string HomePageReportFileId { get; set; }
     }
 }

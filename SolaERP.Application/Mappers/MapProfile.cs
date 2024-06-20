@@ -87,6 +87,8 @@ using Currency = SolaERP.Application.Entities.Currency.Currency;
 using UOM = SolaERP.Application.Entities.UOM.UOM;
 using UOMDto = SolaERP.Application.Dtos.UOM.UOMDto;
 using SolaERP.Job;
+using SolaERP.Application.Entities.UserReport;
+using SolaERP.Application.Dtos.UserReport;
 
 namespace SolaERP.Persistence.Mappers
 {
@@ -651,7 +653,7 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<ProblematicInvoiceReason, ProblematicInvoiceReasonDto>()
                 .ForMember(x => x.ProblematicInvoiceReason, y => y.MapFrom(x => x.ProblematicInvoiceReasin))
                 .ReverseMap();
-           
+
 
             CreateMap<MatchingMainGRN, MatchingMainGRNDto>().ReverseMap();
             CreateMap<MatchingMainService, MatchingMainServiceDto>().ReverseMap();
@@ -711,6 +713,8 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<RowInfo, RowInfoDraft>().ReverseMap();
 
+
+            CreateMap<UserReportFileAccess, UserReportFileAccessDto>().ReverseMap();
         }
     }
 }

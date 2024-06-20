@@ -89,6 +89,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IInvoiceService, InvoiceService>();
             builder.Services.AddScoped<IKafkaMailService, KafkaMailService>();
+            builder.Services.AddScoped<IUserReportService, UserReportService>();
             builder.Services.AddScoped<BusinessUnitHelper>();
         }
 
@@ -132,6 +133,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IUserApprovalRepository, SqlUserApprovalRepository>();
             builder.Services.AddScoped<IUserApprovalService, UserApprovalService>();
             builder.Services.AddScoped<IInvoiceRepository, SqlInvoiceRepository>();
+            builder.Services.AddScoped<IUserReportRepository, SqlUserReportRepository>();
         }
 
         public static void UseValidationExtension(this WebApplicationBuilder builder)

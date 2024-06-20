@@ -143,5 +143,6 @@ namespace SolaERP.Controllers
             return CreateActionResult(await _userService.GetUserByNameAsync(User.Identity.Name, token));
         }
 
+     
     }
 }

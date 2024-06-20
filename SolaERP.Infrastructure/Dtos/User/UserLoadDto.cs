@@ -31,6 +31,7 @@ namespace SolaERP.Application.Dtos.User
         public int Sequence { get; set; }
         public bool InActive { get; set; }
         public int DefaultBusinessUnitId { get; set; }
+        public int HomePageReportFieldId { get; set; }
 
     }
 }

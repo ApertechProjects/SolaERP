@@ -25,6 +25,7 @@
         public bool InActive { get; set; }
         public int Sequence { get; set; }
         public int DefaultBusinessUnitId { get; set; }
+        public string HomePageReportFileId { get; set; }
 
     }
 }
