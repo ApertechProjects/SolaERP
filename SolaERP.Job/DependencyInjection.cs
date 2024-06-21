@@ -9,8 +9,7 @@ namespace SolaERP.Job
 {
     public static class DependencyInjection
     {
-
-
+        [Obsolete]
         public static void AddRequestMailsForIsSent(this IServiceCollection services)
         {
             services.AddQuartz(options =>

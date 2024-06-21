@@ -27,11 +27,11 @@ namespace SolaERP.Job.EmailIsSent
         {
 
             _logger = logger;
-            _logger.LogInformation("constructor started");
+            Console.WriteLine("constructor started");
             _unitOfWork = unitOfWork;
             _mailService = mailService;
             _mapper = mapper;
-            _logger.LogInformation("constructor finsihed");
+            Console.WriteLine("constructor finsihed");
 
         }
 
@@ -39,7 +39,7 @@ namespace SolaERP.Job.EmailIsSent
         {
             try
             {
-                _logger.LogInformation("Execute started");
+                Console.WriteLine("Execute started");
                 Helper helper = new Helper(_unitOfWork);
                 var requestUsers = helper.GetUsersIsSent(Procedure.Request);
                 if (requestUsers != null && requestUsers.Count > 0)
