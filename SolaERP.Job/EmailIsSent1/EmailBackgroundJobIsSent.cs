@@ -28,10 +28,12 @@ namespace SolaERP.Job.EmailIsSent
 
             _logger = logger;
             Console.WriteLine("constructor started");
+            Debug.WriteLine("constructor started");
             _unitOfWork = unitOfWork;
             _mailService = mailService;
             _mapper = mapper;
             Console.WriteLine("constructor finsihed");
+            Debug.WriteLine("constructor finsihed");
 
         }
 

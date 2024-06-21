@@ -14,6 +14,7 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.FileProviders;
 using SolaERP.Job;
+using Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,7 @@ builder.Services.AddTransient(sp => new ConnectionFactory()
 {
     Uri = new(builder.Configuration["FileOptions:URI"])
 });
+
 
 builder.Services.AddRequestMailsForIsSent();
 //builder.Services.AddRequestMailsForIsSent2();

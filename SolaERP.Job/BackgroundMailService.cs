@@ -19,7 +19,6 @@ namespace SolaERP.Job
     public class BackgroundMailService : IBackgroundMailService
     {
         private readonly IConfiguration _configuration;
-        private readonly IUnitOfWork _unitOfWork;
         public BackgroundMailService()
         {
             string appsettingsFileName = AppSettingsHelper.GetAppSettingsFileName();
@@ -62,6 +61,7 @@ namespace SolaERP.Job
             }
             catch (Exception ex)
             {
+                Console.WriteLine("error");
             }
             
         }
