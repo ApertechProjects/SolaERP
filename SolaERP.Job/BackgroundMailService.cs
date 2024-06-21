@@ -42,7 +42,7 @@ namespace SolaERP.Job
                     persons = new List<Person> { person }
                 };
 
-                string topicName = MailTopic.kafka.ToString();
+                string topicName = MailTopic.kafkatest.ToString();
 
                 var config = new ProducerConfig { BootstrapServers = "38.242.216.187:9092" };
 

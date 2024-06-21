@@ -8,6 +8,7 @@ namespace SolaERP.Job.Enums
 {
     public enum MailTopic
     {
-        kafka
+        kafka,
+        kafkatest,
     }
 }
