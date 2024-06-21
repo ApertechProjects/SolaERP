@@ -35,8 +35,8 @@ builder.Services.AddTransient(sp => new ConnectionFactory()
 });
 
 builder.Services.AddRequestMailsForIsSent();
-builder.Services.AddRequestMailsForIsSent2();
-builder.Services.AddRequestMailsForIsSent3();
+//builder.Services.AddRequestMailsForIsSent2();
+//builder.Services.AddRequestMailsForIsSent3();
 builder.Services.AddCbarData();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
