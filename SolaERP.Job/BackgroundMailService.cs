@@ -28,11 +28,10 @@ namespace SolaERP.Job
 
             _configuration = builder.Build();
         }
-        public Task SendMailAsync(HashSet<RowInfo> rowInfos, Person person)
+        public async Task SendMailAsync(HashSet<RowInfo> rowInfos, Person person)
         {
             try
             {
-                Object o = new Object();
                 MailInfo emailModel = new MailInfo
                 {
                     link = _configuration["Mail:ServerUrlUI"],
@@ -52,8 +51,8 @@ namespace SolaERP.Job
                     try
                     {
                         string jsonString = JsonConvert.SerializeObject(emailModel);
-                        Thread.Sleep(1000);
-                        producer.ProduceAsync(topicName, new Message<string, string> { Value = jsonString });
+                        await producer.ProduceAsync(topicName, new Message<string, string> { Value = jsonString });
+
                     }
                     catch (ProduceException<string, string> ex)
                     {
@@ -64,7 +63,7 @@ namespace SolaERP.Job
             catch (Exception ex)
             {
             }
-            return Task.CompletedTask;
+            
         }
 
     }
