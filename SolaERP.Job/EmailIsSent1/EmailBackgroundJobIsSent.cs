@@ -25,17 +25,21 @@ namespace SolaERP.Job.EmailIsSent
                                   IBackgroundMailService mailService,
                                   IMapper mapper)
         {
+
             _logger = logger;
+            _logger.LogInformation("constructor started");
             _unitOfWork = unitOfWork;
             _mailService = mailService;
             _mapper = mapper;
+            _logger.LogInformation("constructor finsihed");
+
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
             try
             {
-                Console.WriteLine("Execute run ");
+                _logger.LogInformation("Execute started");
                 Helper helper = new Helper(_unitOfWork);
                 var requestUsers = helper.GetUsersIsSent(Procedure.Request);
                 if (requestUsers != null && requestUsers.Count > 0)
