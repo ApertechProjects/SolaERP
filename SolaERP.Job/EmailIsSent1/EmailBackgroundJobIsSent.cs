@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Quartz;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Job.Enums;
 using System;
@@ -34,6 +35,7 @@ namespace SolaERP.Job.EmailIsSent
         {
             try
             {
+                Console.WriteLine("Execute run ");
                 Helper helper = new Helper(_unitOfWork);
                 var requestUsers = helper.GetUsersIsSent(Procedure.Request);
                 if (requestUsers != null && requestUsers.Count > 0)

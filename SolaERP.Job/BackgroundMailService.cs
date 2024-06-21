@@ -54,9 +54,9 @@ namespace SolaERP.Job
                         await producer.ProduceAsync(topicName, new Message<string, string> { Value = jsonString });
 
                     }
-                    catch (ProduceException<string, string> ex)
+                    catch (Exception ex)
                     {
-                        Console.WriteLine($"Failed to deliver message: {ex.Message} [{ex.Error.Code}]");
+                        Console.WriteLine($"Failed to deliver message: {ex.Message} ");
                     }
                 }
             }
