@@ -60,7 +60,6 @@ namespace SolaERP.Job.EmailIsSent
                             await _unitOfWork.SaveChangesAsync();
                         }
                     }
-
                 }
             }
             catch (Exception ex)
