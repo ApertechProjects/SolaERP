@@ -30,9 +30,8 @@ namespace SolaERP.Job.EmailIsSent
             _mapper = mapper;
         }
 
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
-
             try
             {
                 Helper helper = new Helper(_unitOfWork);
@@ -47,8 +46,8 @@ namespace SolaERP.Job.EmailIsSent
                         var rowInfos = _mapper.Map<HashSet<RowInfo>>(rowInfoDrafts);
                         if (rowInfos.Count > 0)
                         {
-                            Thread.Sleep(100);
-                            _mailService.SendMailAsync(rowInfos, new Person { email = user.Email, lang = user.Language, userName = user.UserName }).GetAwaiter().GetResult();
+                           await _mailService.SendMailAsync(rowInfos, new Person { email = user.Email, lang = user.Language, userName = user.UserName });
+                            Console.WriteLine("Log: " + "Mail");
                             int[] ids = rowInfoDrafts.Select(x => x.notificationSenderId).ToArray();
                             helper.UpdateIsSent1(ids);
                             _unitOfWork.SaveChanges();
@@ -62,7 +61,7 @@ namespace SolaERP.Job.EmailIsSent
                 _logger.LogError(ex, "An error occurred while executing the email background job 1.");
                 Console.WriteLine("Exception: " + ex.Message);
             }
-            return Task.CompletedTask;
+            await Task.CompletedTask;
 
         }
     }
