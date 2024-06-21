@@ -58,7 +58,7 @@ namespace SolaERP.Job
                        "INNER JOIN Procurement.RequestMain RM ON NS.SourceId = RM.RequestMainId " +
                        "INNER JOIN Config.AppUser au on RM.Requester = au.Id " +
                        "LEFT JOIN Register.ApprovalStatus ST ON NS.ApproveStatusId = ST.ApprovalStatusId " +
-                       $"where L.ActionId = 1  and NS.ProcedureId = @procedureId and NS.UserId = @userId";
+                       $"where L.ActionId = 1  and NS.ProcedureId = @procedureId and NS.UserId = @userId and LT.LogTypeId = 7";
             return text;
         }
 
