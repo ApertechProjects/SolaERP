@@ -73,23 +73,23 @@ namespace SolaERP.Job.Cbar
 
         }
 
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             try
             {
-                if (!CheckDataIsExist().GetAwaiter().GetResult())
+                if (!await CheckDataIsExist())
                 {
                     string url = $"https://www.cbar.az/currencies/{date.ToString("dd.MM.yyyy")}.xml";
 
                     // Fetch XML data from URL
-                    string xmlData = FetchXmlDataAsync(url).GetAwaiter().GetResult();
+                    string xmlData = await FetchXmlDataAsync(url);
                     if (xmlData.Contains(date.ToString("dd.MM.yyyy")))
                     {
                         // Parse XML data
                         var valutes = ParseXmlData(xmlData);
 
-                        BulkInsert(valutes).GetAwaiter().GetResult();
-                        RunDailyCurrencyRate().GetAwaiter().GetResult();
+                        await BulkInsert(valutes);
+                        await RunDailyCurrencyRate();
                     }
                 }
             }
@@ -97,7 +97,6 @@ namespace SolaERP.Job.Cbar
             {
                 _logger.Log(LogLevel.Error, ex.Message);
             }
-            return Task.CompletedTask;
         }
 
         private async Task BulkInsert(List<Valute> valutes)

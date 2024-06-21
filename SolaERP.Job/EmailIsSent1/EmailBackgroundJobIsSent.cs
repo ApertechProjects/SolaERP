@@ -46,11 +46,11 @@ namespace SolaERP.Job.EmailIsSent
                         var rowInfos = _mapper.Map<HashSet<RowInfo>>(rowInfoDrafts);
                         if (rowInfos.Count > 0)
                         {
-                           await _mailService.SendMailAsync(rowInfos, new Person { email = user.Email, lang = user.Language, userName = user.UserName });
+                            await _mailService.SendMailAsync(rowInfos, new Person { email = user.Email, lang = user.Language, userName = user.UserName });
                             Console.WriteLine("Log: " + "Mail");
                             int[] ids = rowInfoDrafts.Select(x => x.notificationSenderId).ToArray();
                             helper.UpdateIsSent1(ids);
-                            _unitOfWork.SaveChanges();
+                            await _unitOfWork.SaveChangesAsync();
                         }
                     }
 
