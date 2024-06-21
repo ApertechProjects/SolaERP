@@ -41,6 +41,7 @@ namespace SolaERP.Job.EmailIsSent
                     foreach (var user in requestUsers)
                     {
                         Debug.WriteLine("sended to " + user.UserName);
+                        Console.WriteLine("sended to " + user.UserName);
                         var rowInfoDrafts = helper.GetRowInfosForIsSent(Procedure.Request, user.UserId);
 
                         var rowInfos = _mapper.Map<HashSet<RowInfo>>(rowInfoDrafts);
