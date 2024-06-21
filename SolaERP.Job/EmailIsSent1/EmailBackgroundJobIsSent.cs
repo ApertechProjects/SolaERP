@@ -32,13 +32,13 @@ namespace SolaERP.Job.EmailIsSent
 
         public Task Execute(IJobExecutionContext context)
         {
+
             try
             {
                 Helper helper = new Helper(_unitOfWork);
                 var requestUsers = helper.GetUsersIsSent(Procedure.Request);
                 if (requestUsers != null && requestUsers.Count > 0)
                 {
-
                     foreach (var user in requestUsers)
                     {
                         Debug.WriteLine("sended to " + user.UserName);
@@ -47,10 +47,11 @@ namespace SolaERP.Job.EmailIsSent
                         var rowInfos = _mapper.Map<HashSet<RowInfo>>(rowInfoDrafts);
                         if (rowInfos.Count > 0)
                         {
-                            _mailService.SendMail(rowInfos, new Person { email = user.Email, lang = user.Language, userName = user.UserName });
+
+                            _mailService.SendMailAsync(rowInfos, new Person { email = user.Email, lang = user.Language, userName = user.UserName }).GetAwaiter().GetResult();
                             int[] ids = rowInfoDrafts.Select(x => x.notificationSenderId).ToArray();
                             helper.UpdateIsSent1(ids);
-                           _unitOfWork.SaveChanges();
+                            _unitOfWork.SaveChanges();
                         }
                     }
 

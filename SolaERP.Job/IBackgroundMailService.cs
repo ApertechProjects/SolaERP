@@ -10,6 +10,6 @@ namespace SolaERP.Job
 {
     public interface IBackgroundMailService
     {
-        void SendMail(HashSet<RowInfo> rowInfos, Person person);
+        Task SendMailAsync(HashSet<RowInfo> rowInfos, Person person);
     }
 }

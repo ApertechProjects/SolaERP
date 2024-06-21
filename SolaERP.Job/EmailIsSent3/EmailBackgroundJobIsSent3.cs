@@ -47,7 +47,7 @@ namespace SolaERP.Job.EmailIsSent3
                         var rowInfos = _mapper.Map<HashSet<RowInfo>>(rowInfoDrafts);
                         if (rowInfos.Count > 0)
                         {
-                            _mailService.SendMail(rowInfos, new Person { email = user.Email, lang = user.Language, userName = user.UserName });
+                            _mailService.SendMailAsync(rowInfos, new Person { email = user.Email, lang = user.Language, userName = user.UserName });
                             int[] ids = rowInfoDrafts.Select(x => x.notificationSenderId).ToArray();
                             helper.UpdateIsSent3(ids);
                             _unitOfWork.SaveChanges();

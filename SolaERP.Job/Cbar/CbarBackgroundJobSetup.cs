@@ -22,7 +22,7 @@ namespace SolaERP.Job.Cbar
                 options.AddTrigger(trigger => trigger
                     .ForJob(jobKey)
                     .WithIdentity("trigger1", "group1")
-                    .WithCronSchedule("0 5 10 * * ?")
+                    .WithCronSchedule("0 05 10 * * ?")
                     .Build());
 
                 // Add trigger for 10:35 AM

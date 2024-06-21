@@ -135,19 +135,11 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSignalR();
 
-// builder.Services.AddDevExpressControls();
 builder.Services.AddControllers();
 
 
 IFileProvider? fileProvider = builder.Environment.ContentRootFileProvider;
 IConfiguration? configuration = builder.Configuration;
-// builder.Services.AddScoped<DashboardConfigurator>((IServiceProvider serviceProvider)
-//     => DevExpressDashboardUtils.CreateDashboardConfigurator(configuration, fileProvider));
-//
-// builder.Services.ConfigureReportingServices(configurator => {
-//     configurator.DisableCheckForCustomControllers();
-// });
-
 var app = builder.Build();
 
 
@@ -159,13 +151,11 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseHttpLogging();
-// app.UseDevExpressControls();
 app.UseCors();
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseGlobalExceptionHandlerMiddleware(app.Services.GetRequiredService<ILogger<Program>>());
-// app.MapDashboardRoute("api/dashboard", "DefaultDashboard");
 app.MapControllers();
 app.Run();

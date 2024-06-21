@@ -20,6 +20,7 @@ using System.Data.Common;
 using SolaERP.DataAccess.Extensions;
 using System.Collections;
 using System.Data;
+using Serilog;
 
 
 namespace SolaERP.Job.Cbar
@@ -27,11 +28,11 @@ namespace SolaERP.Job.Cbar
     [DisallowConcurrentExecution]
     public class CbarBackgroundJob : IJob
     {
-        private readonly ILogger<EmailBackgroundJobIsSent> _logger;
+        private readonly ILogger<CbarBackgroundJob> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
-        public CbarBackgroundJob(ILogger<EmailBackgroundJobIsSent> logger,
+        public CbarBackgroundJob(ILogger<CbarBackgroundJob> logger,
                                   IUnitOfWork unitOfWork,
                                   IMapper mapper
                                   )
@@ -74,23 +75,29 @@ namespace SolaERP.Job.Cbar
 
         public Task Execute(IJobExecutionContext context)
         {
-            if (CheckDataIsExist().GetAwaiter().GetResult())
+            try
             {
-                string url = $"https://www.cbar.az/currencies/{date.ToString("dd.MM.yyyy")}.xml";
-
-                // Fetch XML data from URL
-                string xmlData = FetchXmlDataAsync(url).GetAwaiter().GetResult();
-                if (xmlData.Contains(date.ToString("dd.MM.yyyy")))
+                if (!CheckDataIsExist().GetAwaiter().GetResult())
                 {
-                    // Parse XML data
-                    var valutes = ParseXmlData(xmlData);
+                    string url = $"https://www.cbar.az/currencies/{date.ToString("dd.MM.yyyy")}.xml";
 
-                    BulkInsert(valutes).GetAwaiter().GetResult();
-                    RunDailyCurrencyRate().GetAwaiter().GetResult();
+                    // Fetch XML data from URL
+                    string xmlData = FetchXmlDataAsync(url).GetAwaiter().GetResult();
+                    if (xmlData.Contains(date.ToString("dd.MM.yyyy")))
+                    {
+                        // Parse XML data
+                        var valutes = ParseXmlData(xmlData);
+
+                        BulkInsert(valutes).GetAwaiter().GetResult();
+                        RunDailyCurrencyRate().GetAwaiter().GetResult();
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, ex.Message);
+            }
             return Task.CompletedTask;
-
         }
 
         private async Task BulkInsert(List<Valute> valutes)
