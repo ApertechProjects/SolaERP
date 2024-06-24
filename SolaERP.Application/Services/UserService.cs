@@ -13,6 +13,7 @@ using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Entities.User;
+using SolaERP.Application.Entities.UserReport;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
@@ -582,6 +583,12 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<UserReportHasAccessDto>>.Success(data, 200);
         }
 
-     
+        public async Task<ApiResponse<List<UserReportFileAccess>>> GetUserReportAccessByCurrentUser(string name)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            var data = await _userRepository.GetUserReportAccessByCurrentUser(userId);
+            var map = _mapper.Map<List<UserReportFileAccess>>(data);
+            return ApiResponse<List<UserReportFileAccess>>.Success(map, 200);
+        }
     }
 }

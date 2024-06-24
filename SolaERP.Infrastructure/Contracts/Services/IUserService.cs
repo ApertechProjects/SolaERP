@@ -4,6 +4,7 @@ using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Dtos.UserDto;
 using SolaERP.Application.Dtos.UserReport;
 using SolaERP.Application.Entities;
+using SolaERP.Application.Entities.UserReport;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using UserList = SolaERP.Application.Dtos.User.UserList;
@@ -49,6 +50,7 @@ namespace SolaERP.Application.Contracts.Services
         Task UpdateUserLastActivity(int id);
         Task<ApiResponse<bool>> CheckVerifyCode(int verificationCode);
         Task<ApiResponse<List<UserReportHasAccessDto>>> GetUserReportAccess(string fileId);
+        Task<ApiResponse<List<UserReportFileAccess>>> GetUserReportAccessByCurrentUser(string name);
        
     }
 }

@@ -751,10 +751,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             var reports = await GetUserFileAccess(fileId);
             foreach (var item in users)
             {
-                if (item.UserId == 1922)
-                {
-
-                }
                 var data = reports.Where(x => x.UserId == item.UserId).FirstOrDefault();
                 if (data == null)
                 {
@@ -779,6 +775,25 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
 
             return fileAccesses;
+        }
+
+        public async Task<List<UserReportFileAccess>> GetUserReportAccessByCurrentUser(int userId)
+        {
+            List<UserReportFileAccess> users = new List<UserReportFileAccess>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "select * from Config.UserReportFileAccesses where UserId = @userId";
+                command.Parameters.AddWithValue(command, "@userId", userId);
+
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    while (reader.Read())
+                    {
+                        users.Add(reader.GetByEntityStructure<UserReportFileAccess>());
+                    }
+                }
+            }
+            return users;
         }
 
         public async Task<List<UserReportList>> GetUsers()

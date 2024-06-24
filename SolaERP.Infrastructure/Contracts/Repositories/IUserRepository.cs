@@ -55,6 +55,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task UpdateLastActivityAsync(int id);
         Task<bool> AddDefaultVendorAccessToVendorUser(int userId);
         Task<List<UserReportHasAccessDto>> GetUserReportAccess(string reportFileId);
+        Task<List<UserReportFileAccess>> GetUserReportAccessByCurrentUser(int userId);
     }
 
     public enum Filetype
