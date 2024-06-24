@@ -29,7 +29,7 @@ namespace SolaERP.Job.EmailIsSent
                 options.AddTrigger(trigger => trigger
                 .ForJob(jobKey)
                 .WithIdentity("when cron", "group1")
-                .WithCronSchedule("0 0/3 9-18 * * ?")
+                .WithCronSchedule("0 0/30 9-18 * * ?")
                 .Build());
               
                 Console.WriteLine("Job Run" + DateTime.Now);
