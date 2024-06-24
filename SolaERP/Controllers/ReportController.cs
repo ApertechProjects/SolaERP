@@ -24,7 +24,7 @@ namespace SolaERP.API.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetUserReportAccessByCurrentUser()
-    => CreateActionResult(await _userService.GetUserReportAccessByCurrentUser(User.Identity.Name));
+         => CreateActionResult(await _userService.GetUserReportAccessByCurrentUser(User.Identity.Name));
 
         [HttpPost]
         public async Task<IActionResult> SaveUserReportAccess(UserReportSaveDto data)
