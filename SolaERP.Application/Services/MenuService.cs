@@ -130,11 +130,17 @@ namespace SolaERP.Persistence.Services
                 List<MenuWithPrivilege> menuWithPrivileges = new List<MenuWithPrivilege>();
                 var menus = await _menuRepository.GetMenuWithPrivilegesAsync(groupId);
                 var dto = _mapper.Map<List<MenuWithPrivilagesDto>>(menus);
-                var ttt = dto.OrderBy(x=>x.MenuId)
+                var ttt = dto.OrderBy(x => x.MenuId)
                     .GroupBy(x => x.ParentId).ToList();
+
+                int parentIndex = 0;
+                var menuParentCount = ttt[0].Where(x => x.ParentId == 0).ToList().Count;
 
                 for (int i = 1; i < ttt.Count; i++)
                 {
+                    if (parentIndex >= menuParentCount)
+                        break;
+
                     IGrouping<int, MenuWithPrivilagesDto> item = ttt[i];
                     bool createAccessValue = true;
                     bool editAccessValue = true;
@@ -152,8 +158,9 @@ namespace SolaERP.Persistence.Services
 
                     var privilege = new MenuWithPrivilege();
                     privilege.MenuId = item.Key;
-                    var a = ttt[0].Where(x => x.ParentId == 0).ToList();
-                    privilege.MenuName = ttt[0].Where(x => x.ParentId == 0).ToList()[i - 1].MenuName;
+
+
+                    privilege.MenuName = ttt[0].Where(x => x.ParentId == 0).ToList()[parentIndex].MenuName;
                     privilege.CreateAccess = createAccessValue;
                     privilege.DeleteAccess = deleteAccessValue;
                     privilege.EditAccess = editAccessValue;
@@ -174,8 +181,9 @@ namespace SolaERP.Persistence.Services
                         ReactIcon = x.ReactIcon,
                     }).ToList();
                     menuWithPrivileges.Add(privilege);
+                    parentIndex++;
                 }
-                
+
                 return ApiResponse<List<MenuWithPrivilege>>.Success(menuWithPrivileges, 200);
             }
             catch (Exception e)
