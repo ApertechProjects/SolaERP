@@ -195,7 +195,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         {
             string query = @"SET NOCOUNT OFF Exec SP_AppUser_IUD @Id,@FullName,@ChangePassword,@Theme,@UserName,@Email
                                                                 ,@PasswordHash,@PhoneNumber,@UserTypeId,@VendorId,@UserToken
-                                                                ,@Gender,@Buyer,@Description,@ERPUser,NULL,NULL,0,0,@VerifyToken,@Language,@DefaultBusinessUnitId,@NewId output";
+                                                                ,@Gender,@Buyer,@Description,@ERPUser,NULL,NULL,0,0,@VerifyToken,@Language,@DefaultBusinessUnitId,@HomePageReportFileId,@NewId output";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = query;
@@ -217,6 +217,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@VerifyToken", entity.VerifyToken);
                 command.Parameters.AddWithValue(command, "@Language", entity.Language.ToString());
                 command.Parameters.AddWithValue(command, "@DefaultBusinessUnitId", entity.DefaultBusinessUnitId);
+                command.Parameters.AddWithValue(command, "@HomePageReportFileId", null);
                 command.Parameters.AddOutPutParameter(command, "@NewId");
                 await command.ExecuteNonQueryAsync();
                 var result = Convert.ToInt32(command.Parameters["@NewId"].Value);

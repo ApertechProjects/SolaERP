@@ -79,18 +79,18 @@ namespace SolaERP.Job.Cbar
             {
                 if (!await CheckDataIsExist())
                 {
-                    string url = $"https://www.cbar.az/currencies/{date.ToString("dd.MM.yyyy")}.xml";
+                    //string url = $"https://www.cbar.az/currencies/{date.ToString("dd.MM.yyyy")}.xml";
 
-                    // Fetch XML data from URL
-                    string xmlData = await FetchXmlDataAsync(url);
-                    if (xmlData.Contains(date.ToString("dd.MM.yyyy")))
-                    {
-                        // Parse XML data
-                        var valutes = ParseXmlData(xmlData);
+                    //// Fetch XML data from URL
+                    //string xmlData = await FetchXmlDataAsync(url);
+                    //if (xmlData.Contains(date.ToString("dd.MM.yyyy")))
+                    //{
+                    //    // Parse XML data
+                    //    var valutes = ParseXmlData(xmlData);
 
-                        await BulkInsert(valutes);
-                        await RunDailyCurrencyRate();
-                    }
+                    //    await BulkInsert(valutes);
+                    //    await RunDailyCurrencyRate();
+                    //}
                 }
             }
             catch (Exception ex)
