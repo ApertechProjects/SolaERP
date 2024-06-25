@@ -25,6 +25,7 @@ namespace SolaERP.Job
             services.ConfigureOptions<EmailBackgroundJobSetupIsSent>();
         }
 
+        [Obsolete]
         public static void AddRequestMailsForIsSent2(this IServiceCollection services)
         {
             services.AddQuartz(options =>
@@ -40,7 +41,7 @@ namespace SolaERP.Job
             services.ConfigureOptions<EmailBackgroundJobSetupIsSent2>();
         }
 
-
+        [Obsolete]
         public static void AddRequestMailsForIsSent3(this IServiceCollection services)
         {
             services.AddQuartz(options =>
