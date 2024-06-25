@@ -22,6 +22,7 @@ namespace SolaERP.Application.Entities.BidComparison
         public string Emergency { get; set; }
         public string EnteredBy { get; set; }
         public DateTime? Entrydate { get; set; }
+        public DateTime? SentDate { get; set; }
         public string ComparisonNo { get; set; }
         public DateTime? ComparisonDate { get; set; }
         public DateTime? Comparisondeadline { get; set; }

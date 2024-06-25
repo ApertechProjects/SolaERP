@@ -326,7 +326,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     RFQMainId = reader.Get<int>("RFQMainId"),
                     RFQNo = reader.Get<string>("RFQNo"),
                     SpecialistComment = reader.Get<string>("SpecialistComment"),
-                    Status = reader.Get<int>("Status")
+                    Status = reader.Get<int>("Status"),
+                    SentDate = reader.Get<DateTime>("SentDate")
                 };
             }
 

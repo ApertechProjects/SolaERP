@@ -98,6 +98,7 @@ namespace SolaERP.Persistence.Services
             var headerFilter = new BidComparisonHeaderFilter { RFQMainId = filter.RFQMainId, UserId = filter.UserId };
             var header = await _bidComparisonRepository.GetComparisonHeader(headerFilter);
             header.RequiredOnSiteDate = header.RequiredOnSiteDate.ConvertDateToValidDate();
+            header.SentDate = header.SentDate.ConvertDateToValidDate();
             header.RFQDate = header.RFQDate.ConvertDateToValidDate();
             header.DesiredDeliveryDate = header.DesiredDeliveryDate.ConvertDateToValidDate();
             header.ComparisonDate = header.ComparisonDate.ConvertDateToValidDate();
