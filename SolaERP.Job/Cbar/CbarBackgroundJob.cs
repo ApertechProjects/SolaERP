@@ -21,6 +21,7 @@ using SolaERP.DataAccess.Extensions;
 using System.Collections;
 using System.Data;
 using Serilog;
+using System.Diagnostics;
 
 
 namespace SolaERP.Job.Cbar

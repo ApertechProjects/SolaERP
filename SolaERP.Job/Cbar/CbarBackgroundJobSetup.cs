@@ -23,13 +23,14 @@ namespace SolaERP.Job.Cbar
                 //       .WithCronSchedule("0 0/30 10-13 * * ?")
                 //       .Build());
 
+
                 options.AddJob<CbarBackgroundJob>(jobBuilder => jobBuilder.WithIdentity(jobKey))
                     .AddTrigger(trigger => trigger.
                     ForJob(jobKey).
-                    WithCronSchedule("0 5,35 10,11,12,15 * * ?")
+                    WithCronSchedule("0 5,35 7,5,8 * * ?") //+4 timezone - 7,5,8
                     .Build());
 
-                Console.WriteLine("Job Run" + DateTime.Now);
+                Console.WriteLine("Job Run" + DateTime.Now.AddHours(4));
             }
             catch (Exception ex)
             {

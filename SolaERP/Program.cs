@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.FileProviders;
 using SolaERP.Job;
 using Quartz;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,8 +38,8 @@ builder.Services.AddTransient(sp => new ConnectionFactory()
 
 
 builder.Services.AddRequestMailsForIsSent();
-//builder.Services.AddRequestMailsForIsSent2();
-//builder.Services.AddRequestMailsForIsSent3();
+builder.Services.AddRequestMailsForIsSent2();
+builder.Services.AddRequestMailsForIsSent3();
 builder.Services.AddCbarData();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
@@ -64,6 +65,7 @@ builder.Services
     .AddFluentEmail(builder.Configuration["Mail:Mail"])
     .AddRazorRenderer()
     .AddSmtpSender(builder.Configuration["Mail:Host"], Convert.ToInt32(builder.Configuration["Mail:Port"]));
+
 
 builder.Services.Configure<ConnectionFactory>(option =>
 {
