@@ -41,9 +41,9 @@ namespace SolaERP.Job
                     persons = new List<Person> { person }
                 };
 
-                string topicName = MailTopic.kafka.ToString();
+                string topicName = "gl-mail-topic";
 
-                var config = new ProducerConfig { BootstrapServers = "38.242.216.187:9092" };
+                var config = new ProducerConfig { BootstrapServers = _configuration["Mail:KafkaUrl"] };
 
                 using (var producer = new ProducerBuilder<string, string>(config).Build())
                 {
@@ -63,7 +63,7 @@ namespace SolaERP.Job
             {
                 Console.WriteLine("error");
             }
-            
+
         }
 
     }
