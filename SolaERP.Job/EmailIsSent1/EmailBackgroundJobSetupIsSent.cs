@@ -17,12 +17,12 @@ namespace SolaERP.Job.EmailIsSent
             {
                 var jobKey = JobKey.Create(nameof(EmailBackgroundJobIsSent));
 
-                options.AddJob<EmailBackgroundJobIsSent>(jobBuilder => jobBuilder.WithIdentity(jobKey))
-                    .AddTrigger(trigger => trigger
-                    .WithIdentity("when start", "group1")
-                    .StartNow()
-                    .ForJob(jobKey)
-                    .Build());
+                //options.AddJob<EmailBackgroundJobIsSent>(jobBuilder => jobBuilder.WithIdentity(jobKey))
+                //    .AddTrigger(trigger => trigger
+                //    .WithIdentity("when start", "group1")
+                //    .StartNow()
+                //    .ForJob(jobKey)
+                //    .Build());
 
 
                 // Schedule the job with a cron trigger (every minute between 9 AM and 6 PM)
