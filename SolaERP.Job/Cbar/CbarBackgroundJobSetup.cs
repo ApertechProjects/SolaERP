@@ -17,13 +17,6 @@ namespace SolaERP.Job.Cbar
             {
                 var jobKey = JobKey.Create(nameof(CbarBackgroundJob));
 
-                //options.AddJob<CbarBackgroundJob>(jobBuilder => jobBuilder.WithIdentity(jobKey))
-                //       .AddTrigger(trigger => trigger
-                //       .ForJob(jobKey)
-                //       .WithCronSchedule("0 0/30 10-13 * * ?")
-                //       .Build());
-
-
                 options.AddJob<CbarBackgroundJob>(jobBuilder => jobBuilder.WithIdentity(jobKey))
                     .AddTrigger(trigger => trigger.
                     ForJob(jobKey).
