@@ -78,7 +78,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
                 if (reader.Read())
                     user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate",
-                        "VerifyToken", "Language", "DefaultBusinessUnitId", "BusinessUnitCode");
+                        "VerifyToken", "Language", "DefaultBusinessUnitId", "BusinessUnitCode", "HomePageReportFileId");
 
                 return user;
             }
