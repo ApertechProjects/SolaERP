@@ -8,6 +8,7 @@ namespace SolaERP.Job.Enums
 {
     public enum EmailTemplateKey
     {
-        ALL_TYPES_ALL_STATUSES
+        ALL_TYPES_ALL_STATUSES,
+        FORGOT_PASSWORD
     }
 }

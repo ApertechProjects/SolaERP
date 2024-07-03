@@ -41,7 +41,7 @@ namespace SolaERP.Job
                     persons = new List<Person> { person }
                 };
 
-                string topicName = "prod-mail-topic";
+                string topicName = "glmail";
 
                 var config = new ProducerConfig { BootstrapServers = _configuration["Mail:KafkaUrl"] };
 

@@ -25,7 +25,7 @@ namespace SolaERP.Job.EmailIsSent
                     .Build());
 
 
-                // Schedule the job with a cron trigger (every minute between 9 AM and 6 PM)
+              
                 options.AddTrigger(trigger => trigger
                 .ForJob(jobKey)
                 .WithIdentity("when cron", "group1")
