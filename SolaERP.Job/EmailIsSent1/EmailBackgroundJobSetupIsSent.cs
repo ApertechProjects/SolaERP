@@ -17,21 +17,28 @@ namespace SolaERP.Job.EmailIsSent
             {
                 var jobKey = JobKey.Create(nameof(EmailBackgroundJobIsSent));
 
+                //options.AddJob<EmailBackgroundJobIsSent>(jobBuilder => jobBuilder.WithIdentity(jobKey))
+                //    .AddTrigger(trigger => trigger
+                //    .WithIdentity("when start", "group1")
+                //    .StartNow()
+                //    .ForJob(jobKey)
+                //    .Build());
+
+
+
+                //options.AddTrigger(trigger => trigger
+                //.ForJob(jobKey)
+                //.WithIdentity("when cron", "group1")
+                //.WithCronSchedule("0 0/30 5-18 * * ?")
+                //.Build());
                 options.AddJob<EmailBackgroundJobIsSent>(jobBuilder => jobBuilder.WithIdentity(jobKey))
-                    .AddTrigger(trigger => trigger
-                    .WithIdentity("when start", "group1")
-                    .StartNow()
-                    .ForJob(jobKey)
-                    .Build());
-
-
-              
-                options.AddTrigger(trigger => trigger
+                .AddTrigger(trigger => trigger
                 .ForJob(jobKey)
-                .WithIdentity("when cron", "group1")
-                .WithCronSchedule("0 0/30 5-18 * * ?")
+                .WithIdentity("everyFiveMinutes", "group1")
+                .WithCronSchedule("0 0/3 * * * ?")
                 .Build());
-              
+
+
                 Console.WriteLine("Job Run" + DateTime.Now);
             }
             catch (Exception ex)
