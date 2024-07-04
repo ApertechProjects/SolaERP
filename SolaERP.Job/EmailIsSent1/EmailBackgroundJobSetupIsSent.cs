@@ -31,6 +31,7 @@ namespace SolaERP.Job.EmailIsSent
                 .WithIdentity("when cron", "group1")
                 .WithCronSchedule("0 0/30 5-18 * * ?")
                 .Build());
+
                 //options.AddJob<EmailBackgroundJobIsSent>(jobBuilder => jobBuilder.WithIdentity(jobKey))
                 //.AddTrigger(trigger => trigger
                 //.ForJob(jobKey)

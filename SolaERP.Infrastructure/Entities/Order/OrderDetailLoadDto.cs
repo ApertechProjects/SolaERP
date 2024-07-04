@@ -13,6 +13,8 @@ public class OrderDetailLoadDto
     public int? RFQRequestDetailId { get; set; }
     public DateTime OrderDate { get; set; }
     public string ItemCode { get; set; }
+    public string RequestNo { get; set; }
+    public string RequestLineNo { get; set; }
     public string ItemName1 { get; set; }
     public string ItemName2 { get; set; }
     public string ItemDescriptionAze { get; set; }

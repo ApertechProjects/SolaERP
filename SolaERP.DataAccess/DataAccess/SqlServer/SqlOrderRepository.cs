@@ -529,7 +529,9 @@ public class SqlOrderRepository : IOrderRepository
             AnalysisCode9Id = reader.Get<int>("AnalysisCode9Id"),
             AnalysisCode10Id = reader.Get<int>("AnalysisCode10Id"),
             StatusName = reader.Get<string>("StatusName"),
-            ApproveStatusName = reader.Get<string>("ApproveStatusName")
+            ApproveStatusName = reader.Get<string>("ApproveStatusName"),
+            RequestLineNo = reader.Get<string>("RequestLineNo"),
+            RequestNo = reader.Get<string>("RequestNo"),
         };
     }
 
