@@ -565,7 +565,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@BidMainId", entity.BidMainId);
             command.Parameters.AddWithValue(command, "@UserId", entity.UserId);
 
-            await _unitOfWork.SaveChangesAsync();
 
             return await command.ExecuteNonQueryAsync() > 0;
         }

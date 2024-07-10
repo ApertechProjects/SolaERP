@@ -54,30 +54,41 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> ApproveBidComparisonAsync(BidComparisonApproveDto bidComparisonApprove)
         {
-            var entity = _mapper.Map<BidComparisonApprove>(bidComparisonApprove);
-            var saveResponse = await _bidComparisonRepository.ApproveComparisonAsync(entity);
+            //var stageCount = await _approveStageMainRepository.StageCount(bidComparisonApprove.BusinessUnitId, "BID");
 
-            await _unitOfWork.SaveChangesAsync();
-            return ApiResponse<bool>.Success(saveResponse, 200);
+            //var entity = _mapper.Map<BidComparisonApprove>(bidComparisonApprove);
+            //var saveResponse = await _bidComparisonRepository.ApproveComparisonAsync(entity);
+            //await _unitOfWork.SaveChangesAsync();
+
+            //if (bidComparisonApprove.Sequence == stageCount)
+            //{
+            //    var createOrder = _bidComparisonRepository.OrderCreateFromApproveBid(new CreateOrderFromBidDto { BidMainId = bidComparisonApprove.BidMainId, UserId = Convert.ToInt32(bidComparisonApprove.UserId) });
+            //    await _unitOfWork.SaveChangesAsync();
+
+            //}
+
+            return ApiResponse<bool>.Success(true, 200);
         }
 
         public async Task<ApiResponse<bool>> ApproveBidComparisonsAsync(
             List<BidComparisonApproveDto> bidComparisonApproves, string userIdentity)
         {
-            var stages = await _approveStageMainRepository.Stages(bidComparisonApproves[0].BusinessUnitId, "BID");
-            int count = stages.Count();
+            var stageCount = await _approveStageMainRepository.StageCount(bidComparisonApproves[0].BusinessUnitId, "BID");
             foreach (var bidComparisonApprove in bidComparisonApproves)
             {
-                if (bidComparisonApprove.Sequence == count)
-                {
-                    var createOrder = _bidComparisonRepository.OrderCreateFromApproveBid(new CreateOrderFromBidDto { BidMainId = bidComparisonApprove.BidMainId, UserId = Convert.ToInt32(userIdentity) });
-                }
                 var entity = _mapper.Map<BidComparisonApprove>(bidComparisonApprove);
                 entity.UserId = Convert.ToInt32(userIdentity);
                 await _bidComparisonRepository.ApproveComparisonAsync(entity);
+
+            }
+            var bidMainIds = bidComparisonApproves.Where(x => x.Sequence == stageCount).Select(x => x.BidMainId).Distinct().ToList();
+            foreach (var item in bidMainIds)
+            {
+                var createOrder = await _bidComparisonRepository.OrderCreateFromApproveBid(new CreateOrderFromBidDto { BidMainId = item, UserId = Convert.ToInt32(userIdentity) });
             }
 
             await _unitOfWork.SaveChangesAsync();
+
 
             return ApiResponse<bool>.Success(true, 200);
         }

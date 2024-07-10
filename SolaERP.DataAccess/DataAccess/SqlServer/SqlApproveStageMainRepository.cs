@@ -1,6 +1,7 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Entities.ApproveStage;
 using SolaERP.Application.Entities.ApproveStages;
+using SolaERP.Application.Entities.Procedure;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
@@ -8,6 +9,7 @@ using System;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -169,6 +171,28 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     approveStagesMain.Add(reader.GetByEntityStructure<ApprovalStages>());
 
                 return approveStagesMain;
+            }
+        }
+
+
+        public async Task<int> StageCount(int businessUnitId, string procedureKey)
+        {
+            List<ApprovalStages> approveStagesMain = new List<ApprovalStages>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "select count(*)[count] from Config.ApproveStagesDetails " +
+                                      "where ApproveStageMainId = (select top 1 ApproveStageMainId " +
+                                      "from Config.ApproveStagesMain ASM INNER JOIN Config.Procedures P " +
+                                      "ON ASM.ProcedureId = P.ProcedureId where P.ProcedureKey = @procedureKey and BusinessUnitId = @businessUnitId)";
+                command.Parameters.AddWithValue(command, "@procedureKey", procedureKey);
+                command.Parameters.AddWithValue(command, "@businessUnitId", businessUnitId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                int res = 0;
+                if (reader.Read())
+                    res = reader.Get<int>("count");
+
+                return res;
             }
         }
 
