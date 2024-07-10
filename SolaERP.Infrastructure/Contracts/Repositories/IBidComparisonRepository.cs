@@ -15,6 +15,7 @@ namespace SolaERP.Application.Contracts.Repositories
     {
         Task<bool> AddComparisonAsync(BidComparisonIUD entity);
         Task<bool> ApproveComparisonAsync(BidComparisonApprove entity);
+        Task<bool> OrderCreateFromApproveBid(CreateOrderFromBidDto entity);
         Task<bool> SendComparisonToApprove(BidComparisonSendToApprove filter);
         Task<List<BidComparisonAll>> GetComparisonAll(BidComparisonAllFilter filter);
         Task<List<BidComparisonBidApprovalsLoad>> GetComparisonBidApprovals(BidComparisonBidApprovalsFilter filter);

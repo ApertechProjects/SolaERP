@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Validators;
+using MediatR;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.BidComparison;
 using SolaERP.Application.Entities.ApproveStages;
@@ -358,6 +359,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return data;
         }
 
+
         public async Task<List<BidComparisonWFALoad>> GetComparisonWFA(BidComparisonWFAFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
@@ -553,6 +555,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 HasAttachments = reader.Get<bool>("HasAttachments"),
                 Status = reader.Get<int>("Status")
             };
+        }
+
+        public async Task<bool> OrderCreateFromApproveBid(CreateOrderFromBidDto entity)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"EXEC SP_OrderCreateFromApprovedBid @BidMainId,@UserId";
+
+            command.Parameters.AddWithValue(command, "@BidMainId", entity.BidMainId);
+            command.Parameters.AddWithValue(command, "@UserId", entity.UserId);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return await command.ExecuteNonQueryAsync() > 0;
         }
     }
 }

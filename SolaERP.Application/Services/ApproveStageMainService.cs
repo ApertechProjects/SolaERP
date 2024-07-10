@@ -42,6 +42,12 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<ApprovalStagesMainDto>>.Success(dto, 200);
         }
 
+        public async Task<int> GetStageCount(int businessUnitId, string procedureKey)
+        {
+            var data = await _approveStageMainRepository.Stages(businessUnitId, procedureKey);
+            return data.Count;
+        }
+
         public Task<ApiResponse<bool>> RemoveAsync(int Id)
         {
             throw new NotImplementedException();
