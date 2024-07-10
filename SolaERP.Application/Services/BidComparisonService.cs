@@ -81,13 +81,15 @@ namespace SolaERP.Persistence.Services
                 await _bidComparisonRepository.ApproveComparisonAsync(entity);
 
             }
+            await _unitOfWork.SaveChangesAsync();
+
             var bidMainIds = bidComparisonApproves.Where(x => x.Sequence == stageCount).Select(x => x.BidMainId).Distinct().ToList();
             foreach (var item in bidMainIds)
             {
                 var createOrder = await _bidComparisonRepository.OrderCreateFromApproveBid(new CreateOrderFromBidDto { BidMainId = item, UserId = Convert.ToInt32(userIdentity) });
+                await _unitOfWork.SaveChangesAsync();
             }
 
-            await _unitOfWork.SaveChangesAsync();
 
 
             return ApiResponse<bool>.Success(true, 200);
