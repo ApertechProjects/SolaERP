@@ -13,7 +13,7 @@ namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IBidComparisonRepository
     {
-        Task<bool> AddComparisonAsync(BidComparisonIUD entity);
+        Task<int> AddComparisonAsync(BidComparisonIUD entity);
         Task<bool> ApproveComparisonAsync(BidComparisonApprove entity);
         Task<bool> OrderCreateFromApproveBid(CreateOrderFromBidDto entity);
         Task<bool> SendComparisonToApprove(BidComparisonSendToApprove filter);

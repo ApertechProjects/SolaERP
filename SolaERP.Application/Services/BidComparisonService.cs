@@ -49,27 +49,9 @@ namespace SolaERP.Persistence.Services
 
             await _attachmentService.SaveAttachmentAsync(bidComparison.Attachments,
                 SourceType.BID_COMP,
-                entity.BidComparisonId);
+                saveResponse);
 
             await _unitOfWork.SaveChangesAsync();
-
-            return ApiResponse<bool>.Success(saveResponse, 200);
-        }
-
-        public async Task<ApiResponse<bool>> ApproveBidComparisonAsync(BidComparisonApproveDto bidComparisonApprove)
-        {
-            //var stageCount = await _approveStageMainRepository.StageCount(bidComparisonApprove.BusinessUnitId, "BID");
-
-            //var entity = _mapper.Map<BidComparisonApprove>(bidComparisonApprove);
-            //var saveResponse = await _bidComparisonRepository.ApproveComparisonAsync(entity);
-            //await _unitOfWork.SaveChangesAsync();
-
-            //if (bidComparisonApprove.Sequence == stageCount)
-            //{
-            //    var createOrder = _bidComparisonRepository.OrderCreateFromApproveBid(new CreateOrderFromBidDto { BidMainId = bidComparisonApprove.BidMainId, UserId = Convert.ToInt32(bidComparisonApprove.UserId) });
-            //    await _unitOfWork.SaveChangesAsync();
-
-            //}
 
             return ApiResponse<bool>.Success(true, 200);
         }
@@ -96,7 +78,7 @@ namespace SolaERP.Persistence.Services
                     int i = 1;
                     var createOrder = await _bidComparisonRepository.OrderCreateFromApproveBid(new CreateOrderFromBidDto { BidMainId = item, UserId = Convert.ToInt32(userIdentity) });
                     await _unitOfWork.SaveChangesAsync();
-                    Console.WriteLine(i + " time worked");
+                    Debug.WriteLine(i + " time worked");
                     i++;
                 }
             }
@@ -138,7 +120,7 @@ namespace SolaERP.Persistence.Services
             header.RFQDeadline = header.RFQDeadline.ConvertDateToValidDate();
             header.Entrydate = header.Entrydate.ConvertDateToValidDate();
             header.Comparisondeadline = header.Comparisondeadline.ConvertDateToValidDate();
-            header.Attachments = await _attachmentService.GetAttachmentsAsync(header.BidComparisonId,
+            header.Attachments = await _attachmentService.GetAttachmentsAsync(header.RFQMainId,
                 SourceType.BID_COMP, Modules.BidComparison);
 
             comparison.BidComparisonHeader = _mapper.Map<BidComparisonHeaderLoadDto>(header);

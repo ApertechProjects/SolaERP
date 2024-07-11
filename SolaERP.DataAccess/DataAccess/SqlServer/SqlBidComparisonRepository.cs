@@ -30,9 +30,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         private readonly IUnitOfWork _unitOfWork;
         public SqlBidComparisonRepository(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public async Task<bool> AddComparisonAsync(BidComparisonIUD entity)
+        public async Task<int> AddComparisonAsync(BidComparisonIUD entity)
         {
-            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            using var command = _unitOfWork.CreateCommand() as SqlCommand;
             command.CommandText = @"SET NOCOUNT OFF  EXEC SP_BidComparison_IUD @BidComparisonId,
                                     @RFQMainId,
                                     @ComparisonNo,
@@ -41,7 +41,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                     @Comparisondeadline,
                                     @SpecialistComment,
                                     @SingleSourceReasonId,
-                                    @UserId";
+                                    @UserId,
+                                    @NewBidComparisonId = @NewBidComparisonId OUTPUT 
+                                    select @NewBidComparisonId as NewBidComparisonId";
 
             command.Parameters.AddWithValue(command, "@BidComparisonId", entity.BidComparisonId);
             command.Parameters.AddWithValue(command, "@RFQMainId", entity.RFQMainId);
@@ -55,7 +57,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             command.Parameters.AddWithValue(command, "@UserId", entity.UserId);
 
-            return await command.ExecuteNonQueryAsync() > 0;
+            command.Parameters.Add("@NewBidComparisonId", SqlDbType.Int);
+            command.Parameters["@NewBidComparisonId"].Direction = ParameterDirection.Output;
+
+            using var reader = await command.ExecuteReaderAsync();
+            int bidComparisonId = 0;
+            if (reader.Read())
+            {
+                bidComparisonId = reader.Get<int>("NewBidComparisonId");
+            }
+            return bidComparisonId;
         }
 
         public async Task<bool> ApproveComparisonAsync(BidComparisonApprove entity)
