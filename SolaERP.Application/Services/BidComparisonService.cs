@@ -59,7 +59,6 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> ApproveBidComparisonsAsync(
             List<BidComparisonApproveDto> bidComparisonApproves, string userIdentity)
         {
-            //var stageCount = await _approveStageMainRepository.StageCount(bidComparisonApproves[0].BusinessUnitId, "BID");
             foreach (var bidComparisonApprove in bidComparisonApproves)
             {
                 var entity = _mapper.Map<BidComparisonApprove>(bidComparisonApprove);
@@ -82,8 +81,6 @@ namespace SolaERP.Persistence.Services
                     i++;
                 }
             }
-
-
 
             return ApiResponse<bool>.Success(true, 200);
         }
