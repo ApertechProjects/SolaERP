@@ -81,7 +81,7 @@ namespace SolaERP.Persistence.Services
             {
                 var entity = _mapper.Map<BidComparisonApprove>(bidComparisonApprove);
                 entity.UserId = Convert.ToInt32(userIdentity);
-                await _bidComparisonRepository.ApproveComparisonAsync(entity);
+                await _bidComparisonRepository.ApproveComparisonAsync(entity); 
 
             }
             await _unitOfWork.SaveChangesAsync();
