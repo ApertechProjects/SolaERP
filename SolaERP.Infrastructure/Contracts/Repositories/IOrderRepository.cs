@@ -32,5 +32,5 @@ public interface IOrderRepository
     Task<List<OrderMainBaseReportInfo>> GetOrderMainBaseReportInfos(List<int> orderMainIds);
     Task<List<int>> GetDetailIds(int orderMainId);
     Task DeleteDetailsNotIncludes(List<int> orderDetailIdList, int orderMaindId);
-    Task<bool> CheckOrderIsExist(int bidMainId);
+    Task<bool> CheckOrderList(int bidMainId);
 }

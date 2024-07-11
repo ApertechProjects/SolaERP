@@ -76,21 +76,21 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<bool>> ApproveBidComparisonsAsync(
             List<BidComparisonApproveDto> bidComparisonApproves, string userIdentity)
         {
-            var stageCount = await _approveStageMainRepository.StageCount(bidComparisonApproves[0].BusinessUnitId, "BID");
+            //var stageCount = await _approveStageMainRepository.StageCount(bidComparisonApproves[0].BusinessUnitId, "BID");
             foreach (var bidComparisonApprove in bidComparisonApproves)
             {
                 var entity = _mapper.Map<BidComparisonApprove>(bidComparisonApprove);
                 entity.UserId = Convert.ToInt32(userIdentity);
-                await _bidComparisonRepository.ApproveComparisonAsync(entity); 
+                await _bidComparisonRepository.ApproveComparisonAsync(entity);
 
             }
             await _unitOfWork.SaveChangesAsync();
 
-            var bidMainIds = bidComparisonApproves.Where(x => x.Sequence == stageCount && x.ApproveStatus == 1).Select(x => x.BidMainId).Distinct().ToList();
+            var bidMainIds = bidComparisonApproves.Select(x => x.BidMainId).Distinct().ToList();
             foreach (var item in bidMainIds)
             {
-                var order = await _orderRepository.CheckOrderIsExist(item);
-                if (!order)
+                var order = await _orderRepository.CheckOrderList(item);
+                if (order)
                 {
                     var createOrder = await _bidComparisonRepository.OrderCreateFromApproveBid(new CreateOrderFromBidDto { BidMainId = item, UserId = Convert.ToInt32(userIdentity) });
                     await _unitOfWork.SaveChangesAsync();
