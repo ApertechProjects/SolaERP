@@ -952,4 +952,20 @@ public class SqlOrderRepository : IOrderRepository
 
         return infos;
     }
+
+    public async Task<bool> CheckOrderIsExist(int bidMainId)
+    {
+        await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = @"select Count(*) [count] from Procurement.OrderMain where RFQMAinId = (select RFQMainId from Procurement.BidMain where BidMainId = @BidMainId)";
+        command.Parameters.AddWithValue(command, "@BidMainId", bidMainId);
+
+        await using DbDataReader reader = await command.ExecuteReaderAsync();
+        int result = 0;
+        if (await reader.ReadAsync())
+        {
+            result = reader.Get<int>("count");
+        }
+
+        return result > 0;
+    }
 }

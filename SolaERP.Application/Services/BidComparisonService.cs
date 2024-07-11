@@ -17,6 +17,7 @@ namespace SolaERP.Persistence.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IBidComparisonRepository _bidComparisonRepository;
+        private readonly IOrderRepository _orderRepository;
         private readonly IApproveStageMainRepository _approveStageMainRepository;
         private readonly IRfqRepository _rfqRepository;
         private readonly IFileUploadService _fileUploadService;
@@ -24,6 +25,7 @@ namespace SolaERP.Persistence.Services
 
         public BidComparisonService(IUnitOfWork unitOfWork, IMapper mapper,
             IBidComparisonRepository bidComparisonRepository,
+            IOrderRepository orderRepository,
             IApproveStageMainRepository approveStageMainRepository,
             IRfqRepository rfqRepository,
             IFileUploadService fileUploadService,
@@ -31,6 +33,7 @@ namespace SolaERP.Persistence.Services
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _orderRepository = orderRepository;
             _bidComparisonRepository = bidComparisonRepository;
             _approveStageMainRepository = approveStageMainRepository;
             _rfqRepository = rfqRepository;
@@ -83,11 +86,15 @@ namespace SolaERP.Persistence.Services
             }
             await _unitOfWork.SaveChangesAsync();
 
-            var bidMainIds = bidComparisonApproves.Where(x => x.Sequence == stageCount).Select(x => x.BidMainId).Distinct().ToList();
+            var bidMainIds = bidComparisonApproves.Where(x => x.Sequence == stageCount && x.ApproveStatus == 1).Select(x => x.BidMainId).Distinct().ToList();
             foreach (var item in bidMainIds)
             {
-                var createOrder = await _bidComparisonRepository.OrderCreateFromApproveBid(new CreateOrderFromBidDto { BidMainId = item, UserId = Convert.ToInt32(userIdentity) });
-                await _unitOfWork.SaveChangesAsync();
+                var order = await _orderRepository.CheckOrderIsExist(item);
+                if (!order)
+                {
+                    var createOrder = await _bidComparisonRepository.OrderCreateFromApproveBid(new CreateOrderFromBidDto { BidMainId = item, UserId = Convert.ToInt32(userIdentity) });
+                    await _unitOfWork.SaveChangesAsync();
+                }
             }
 
 
