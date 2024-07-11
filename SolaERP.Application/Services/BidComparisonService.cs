@@ -8,6 +8,7 @@ using SolaERP.Application.Entities.BidComparison;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
 using SolaERP.Application.Enums;
+using System.Diagnostics;
 
 namespace SolaERP.Persistence.Services
 {
@@ -92,8 +93,11 @@ namespace SolaERP.Persistence.Services
                 var order = await _orderRepository.CheckOrderList(item);
                 if (order)
                 {
+                    int i = 1;
                     var createOrder = await _bidComparisonRepository.OrderCreateFromApproveBid(new CreateOrderFromBidDto { BidMainId = item, UserId = Convert.ToInt32(userIdentity) });
                     await _unitOfWork.SaveChangesAsync();
+                    Console.WriteLine(i + " time worked");
+                    i++;
                 }
             }
 
