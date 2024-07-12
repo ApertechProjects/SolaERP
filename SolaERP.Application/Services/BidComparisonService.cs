@@ -117,7 +117,7 @@ namespace SolaERP.Persistence.Services
             header.RFQDeadline = header.RFQDeadline.ConvertDateToValidDate();
             header.Entrydate = header.Entrydate.ConvertDateToValidDate();
             header.Comparisondeadline = header.Comparisondeadline.ConvertDateToValidDate();
-            header.Attachments = await _attachmentService.GetAttachmentsAsync(header.RFQMainId,
+            header.Attachments = await _attachmentService.GetAttachmentsAsync(header.BidComparisonId,
                 SourceType.BID_COMP, Modules.BidComparison);
 
             comparison.BidComparisonHeader = _mapper.Map<BidComparisonHeaderLoadDto>(header);
