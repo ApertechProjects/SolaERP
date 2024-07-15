@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Job.Enums
 {
-    public enum Procedure
+    public enum LogType
     {
-        Request = 3,
-        Bid = 5
+        Request = 7,
+        Bid = 16
     }
 }

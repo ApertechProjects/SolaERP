@@ -39,18 +39,26 @@ namespace SolaERP.Job.EmailIsSent
 
         public async Task Execute(IJobExecutionContext context)
         {
+            await ExecuteRequest(Procedure.Request, LogType.Request);
+            await ExecuteRequest(Procedure.Bid, LogType.Bid);
+
+        }
+
+
+        public async Task ExecuteRequest(Procedure procedure, LogType logType)
+        {
             try
             {
                 Console.WriteLine("Execute started");
                 Helper helper = new Helper(_unitOfWork);
-                var requestUsers = helper.GetUsersIsSent(Procedure.Request);
-                if (requestUsers != null && requestUsers.Count > 0)
+                var users = helper.GetUsersIsSent(procedure);
+                if (users != null && users.Count > 0)
                 {
-                    foreach (var user in requestUsers)
+                    foreach (var user in users)
                     {
                         Debug.WriteLine("sended to " + user.UserName);
                         Console.WriteLine("sended to " + user.UserName);
-                        var rowInfoDrafts = helper.GetRowInfosForIsSent(Procedure.Request, user.UserId);
+                        var rowInfoDrafts = helper.GetRowInfosForIsSent(procedure, logType, user.UserId);
 
                         var rowInfos = _mapper.Map<HashSet<RowInfo>>(rowInfoDrafts);
                         if (rowInfos.Count > 0)
@@ -69,8 +77,7 @@ namespace SolaERP.Job.EmailIsSent
                 _logger.LogError(ex, "An error occurred while executing the email background job 1.");
                 Console.WriteLine("Exception: " + ex.Message);
             }
-            await Task.CompletedTask;
-
         }
+
     }
 }

@@ -58,7 +58,7 @@ namespace SolaERP.Job
                        "INNER JOIN Procurement.RequestMain RM ON NS.SourceId = RM.RequestMainId " +
                        "INNER JOIN Config.AppUser au on RM.Requester = au.Id " +
                        "LEFT JOIN Register.ApprovalStatus ST ON NS.ApproveStatusId = ST.ApprovalStatusId " +
-                       $"where L.ActionId = 1  and NS.ProcedureId = @procedureId and NS.UserId = @userId and LT.LogTypeId = 7";
+                       $"where L.ActionId = 1  and NS.ProcedureId = @procedureId and NS.UserId = @userId and LT.LogTypeId = @logType";
             return text;
         }
 
@@ -85,7 +85,7 @@ namespace SolaERP.Job
             return text;
         }
 
-        public HashSet<RowInfoDraft> GetRowInfosForIsSent(Procedure procedure, int userId)
+        public HashSet<RowInfoDraft> GetRowInfosForIsSent(Procedure procedure, LogType logType, int userId)
         {
             HashSet<RowInfoDraft> rows = new HashSet<RowInfoDraft>();
 
@@ -95,6 +95,7 @@ namespace SolaERP.Job
 
                 command.Parameters.AddWithValue(command, "@procedureId", procedure);
                 command.Parameters.AddWithValue(command, "@userId", userId);
+                command.Parameters.AddWithValue(command, "@logType", logType);
                 using var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
@@ -104,7 +105,7 @@ namespace SolaERP.Job
             }
         }
 
-        public HashSet<RowInfoDraft> GetRowInfosForIsSent2(Procedure procedure, int userId)
+        public HashSet<RowInfoDraft> GetRowInfosForIsSent2(Procedure procedure, LogType logType, int userId)
         {
             HashSet<RowInfoDraft> rows = new HashSet<RowInfoDraft>();
 
@@ -114,6 +115,7 @@ namespace SolaERP.Job
 
                 command.Parameters.AddWithValue(command, "@procedureId", procedure);
                 command.Parameters.AddWithValue(command, "@userId", userId);
+                command.Parameters.AddWithValue(command, "@logType", logType);
                 command.Parameters.AddWithValue(command, "@date", DateTime.Now.ToShortDateString());
 
                 using var reader = command.ExecuteReader();

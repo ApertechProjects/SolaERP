@@ -63,5 +63,37 @@ namespace SolaERP.Job.EmailIsSent3
             }
             return Task.CompletedTask;
         }
-    }
+
+
+        public async Task ExecuteRequest(Procedure procedure, LogType logType)
+        {
+            try
+            {
+                Helper helper = new Helper(_unitOfWork);
+                var requestUsers = helper.GetUsersIsSent3(Procedure.Request);
+
+                if (requestUsers != null && requestUsers.Count > 0)
+                {
+                    foreach (var user in requestUsers)
+                    {
+                        var rowInfoDrafts = helper.GetRowInfosForIsSent3(Procedure.Request, user.UserId);
+                        var rowInfos = _mapper.Map<HashSet<RowInfo>>(rowInfoDrafts);
+                        if (rowInfos.Count > 0)
+                        {
+                            _mailService.SendMailAsync(rowInfos, new Person { email = user.Email, lang = user.Language, userName = user.UserName });
+                            int[] ids = rowInfoDrafts.Select(x => x.notificationSenderId).ToArray();
+                            helper.UpdateIsSent3(ids);
+                            _unitOfWork.SaveChanges();
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while executing the email background job 3.");
+                Console.WriteLine("Exception: " + ex.Message);
+            }
+            return Task.CompletedTask;
+        }
 }
