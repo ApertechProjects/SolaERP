@@ -654,6 +654,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@DateFrom", model.DateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", model.DateTo);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
+                command.Parameters.AddWithValue(command, "@NotAssigneds", model.NotAssigneds ? 1 : 0);
 
                 using var reader = await command.ExecuteReaderAsync();
 
