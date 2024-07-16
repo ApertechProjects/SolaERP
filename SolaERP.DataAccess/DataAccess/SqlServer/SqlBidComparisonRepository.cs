@@ -79,7 +79,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                         @UserId,
                                         @Comment,
                                         @RejectReasonId";
-
+        
 
             command.Parameters.AddWithValue(command, "@BidMainId", entity.BidMainId);
 

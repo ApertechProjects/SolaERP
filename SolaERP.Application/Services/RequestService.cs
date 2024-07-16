@@ -29,14 +29,14 @@ namespace SolaERP.Persistence.Services
         private readonly IGeneralService _generalService;
 
         public RequestService(IUnitOfWork unitOfWork,
-                              IMapper mapper,
-                              IRequestMainRepository requestMainRepository,
-                              IRequestDetailRepository requestDetailRepository,
-                              IUserRepository userRepository,
-                              IMailService mailService,
-                              IAttachmentService attachmentService,
-                              IBusinessUnitService businessUnitService,
-                              IGeneralService generalService)
+            IMapper mapper,
+            IRequestMainRepository requestMainRepository,
+            IRequestDetailRepository requestDetailRepository,
+            IUserRepository userRepository,
+            IMailService mailService,
+            IAttachmentService attachmentService,
+            IBusinessUnitService businessUnitService,
+            IGeneralService generalService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -133,13 +133,13 @@ namespace SolaERP.Persistence.Services
             return allSuccess;
         }
 
-        public async Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId,
-            int businessUnitId)
+        public async Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId)
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var requestMain = await _requestMainRepository.GetRequesMainHeaderAsync(requestMainId, userId);
             requestMain.requestCardDetails =
-                await _requestDetailRepository.GetRequestDetailsByMainIdAsync(requestMainId, businessUnitId);
+                await _requestDetailRepository.GetRequestDetailsByMainIdAsync(requestMainId,
+                    requestMain.BusinessUnitId);
             requestMain.requestCardAnalysis = await _requestDetailRepository.GetAnalysis(requestMainId);
             var requestDto = _mapper.Map<RequestCardMainDto>(requestMain);
             requestDto.Attachments = await _attachmentService.GetAttachmentsAsync(requestDto.RequestMainId,
@@ -152,7 +152,8 @@ namespace SolaERP.Persistence.Services
         {
             int userId = await _userRepository.ConvertIdentity(name);
 
-            var mainDraftEntites = await _requestMainRepository.GetMainRequestDraftsAsync(getMainDraftParameters, userId);
+            var mainDraftEntites =
+                await _requestMainRepository.GetMainRequestDraftsAsync(getMainDraftParameters, userId);
             var mainDraftDto = _mapper.Map<List<RequestMainDraftDto>>(mainDraftEntites);
             return ApiResponse<List<RequestMainDraftDto>>.Success(mainDraftDto);
         }
@@ -200,7 +201,8 @@ namespace SolaERP.Persistence.Services
                 : ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>.Fail("Request details is empty", 404);
         }
 
-        public async Task<ApiResponse<RequestSaveResultModel>> AddOrUpdateAsync(string name, HttpResponse response, RequestSaveModel model)
+        public async Task<ApiResponse<RequestSaveResultModel>> AddOrUpdateAsync(string name, HttpResponse response,
+            RequestSaveModel model)
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var resultModel = await _requestMainRepository
@@ -233,11 +235,12 @@ namespace SolaERP.Persistence.Services
                     if (detail.Quantity == 0 && detail.QuantityFromStock > 0)
                     {
                         var rejectReason = await _generalService.GetRejectReasonByCode("INSTOCK");
-                        var res = await _requestDetailRepository.RequestDetailChangeStatusAsync(detail.RequestDetailId, userId,
-                         2, null, detail.Sequence, rejectReason.RejectReasonId);
+                        var res = await _requestDetailRepository.RequestDetailChangeStatusAsync(detail.RequestDetailId,
+                            userId,
+                            2, null, detail.Sequence, rejectReason.RejectReasonId);
                     }
-
                 }
+
                 await _unitOfWork.SaveChangesAsync();
 
                 var detailIds = await _requestMainRepository.GetDetailIds(resultModel.RequestMainId);
@@ -257,6 +260,7 @@ namespace SolaERP.Persistence.Services
             {
                 await _requestMainRepository.DeleteAsync(userId, item);
             }
+
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(200);
         }
@@ -271,7 +275,6 @@ namespace SolaERP.Persistence.Services
                 ? ApiResponse<List<RequestDetailApprovalInfoDto>>.Success(result)
                 : ApiResponse<List<RequestDetailApprovalInfoDto>>.Success(new List<RequestDetailApprovalInfoDto>());
         }
-
 
 
         public async Task<bool> ChangeDetailStatusAsync(string name, int? requestDetailId, int approveStatusId,
@@ -364,7 +367,8 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<RequestCategory>>.Fail("Data not found", 404);
         }
 
-        public async Task<ApiResponse<List<RequestHeldDto>>> GetHeldAsync(RequestWFAGetModel requestMainGet, string name)
+        public async Task<ApiResponse<List<RequestHeldDto>>> GetHeldAsync(RequestWFAGetModel requestMainGet,
+            string name)
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var mainreq = await _requestMainRepository.GetHeldAsync(requestMainGet, userId);
@@ -389,11 +393,13 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<BuyersAssignmentDto>>.Success(mainRequestDto);
         }
 
-        public async Task ChangeDetailStatusAndSendMail(string userName, HttpResponse response, RequestDetailApproveModel model)
+        public async Task ChangeDetailStatusAndSendMail(string userName, HttpResponse response,
+            RequestDetailApproveModel model)
         {
             for (int i = 0; i < model.RequestDetails.Count; i++)
             {
-                var res = await ChangeDetailStatusAsync(userName, model.RequestDetails[i].RequestDetailId, model.ApproveStatus, model.Comment, model.RequestDetails[i].Sequence, model.RejectReasonId);
+                var res = await ChangeDetailStatusAsync(userName, model.RequestDetails[i].RequestDetailId,
+                    model.ApproveStatus, model.Comment, model.RequestDetails[i].Sequence, model.RejectReasonId);
                 //if (res && model.RequestDetails[i].Sequence != null)
                 //{
                 //    var users = await _userService.UsersRequestDetails(model.RequestDetails[i].RequestDetailId, model.RequestDetails[i].Sequence, (ApproveStatus)model.ApproveStatus);
