@@ -485,14 +485,15 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> UpdateBuyerAsync(RequestSetBuyer setBuyer)
+        public async Task<bool> UpdateBuyerAsync(RequestSetBuyer setBuyer, int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = @"SET NOCOUNT OFF exec SP_SET_BUYER @RequestNO,@BUYER";
+                command.CommandText = @"SET NOCOUNT OFF exec SP_SET_BUYER @RequestNO,@BUYER,@UserId";
 
                 command.Parameters.AddWithValue(command, "@RequestNO", setBuyer.RequestNo);
                 command.Parameters.AddWithValue(command, "@BUYER", setBuyer.Buyer);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }

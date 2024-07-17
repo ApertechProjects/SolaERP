@@ -50,8 +50,8 @@ namespace SolaERP.Controllers
             => CreateActionResult(await _requestService.GetFollowUsersAsync(requestMainId));
 
         [HttpGet]
-        public async Task<IActionResult> Info(int requestMainId,int businessUnitId)
-            => CreateActionResult(await _requestService.GetByMainId(User.Identity.Name, requestMainId,businessUnitId));
+        public async Task<IActionResult> Info(int requestMainId, int businessUnitId)
+            => CreateActionResult(await _requestService.GetByMainId(User.Identity.Name, requestMainId, businessUnitId));
 
         [HttpPost]
         public async Task<IActionResult> WaitingForApproval(RequestWFAGetModel requestWFAGetParametersDto)
@@ -80,7 +80,7 @@ namespace SolaERP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Save(RequestSaveModel model)
-        => CreateActionResult(await _requestService.AddOrUpdateAsync(User.Identity.Name, Response, model));
+            => CreateActionResult(await _requestService.AddOrUpdateAsync(User.Identity.Name, Response, model));
 
         [HttpPost]
         public async Task<IActionResult> SendToApprove(RequestSendToApproveDto sendToApprove)
@@ -128,19 +128,22 @@ namespace SolaERP.Controllers
         {
             for (int i = 0; i < model.RequestDetails.Count; i++)
             {
-                var res = await _requestService.ChangeDetailStatusAsync(User.Identity.Name, model.RequestDetails[i].RequestDetailId, model.ApproveStatus, model.Comment, model.RequestDetails[i].Sequence, model.RejectReasonId);
+                var res = await _requestService.ChangeDetailStatusAsync(User.Identity.Name,
+                    model.RequestDetails[i].RequestDetailId, model.ApproveStatus, model.Comment,
+                    model.RequestDetails[i].Sequence, model.RejectReasonId);
                 //if (res && model.RequestDetails[i].Sequence != null)
                 //{
                 //    var users = await _userService.UsersRequestDetails(model.RequestDetails[i].RequestDetailId, model.RequestDetails[i].Sequence, (ApproveStatus)model.ApproveStatus);
                 //    await _mailService.SendRequestMailsForChangeStatus(Response, users, model.RequestDetails[i].Sequence, model.BusinessUnitName, model.RejectReason);
                 //}
             }
+
             return CreateActionResult(ApiResponse<bool>.Success(200));
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateBuyer(RequestSetBuyer requestSetBuyer)
-            => CreateActionResult(await _requestService.UpdateBuyerAsync(requestSetBuyer));
+            => CreateActionResult(await _requestService.UpdateBuyerAsync(requestSetBuyer, User.Identity.Name));
 
 
         [HttpPost]
