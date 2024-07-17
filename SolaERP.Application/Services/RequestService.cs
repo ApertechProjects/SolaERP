@@ -133,10 +133,14 @@ namespace SolaERP.Persistence.Services
             return allSuccess;
         }
 
-        public async Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId)
+        public async Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId, int businessUnitId)
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var requestMain = await _requestMainRepository.GetRequesMainHeaderAsync(requestMainId, userId);
+
+            if (requestMainId == 0)
+                requestMain.BusinessUnitId = businessUnitId;
+
             requestMain.requestCardDetails =
                 await _requestDetailRepository.GetRequestDetailsByMainIdAsync(requestMainId,
                     requestMain.BusinessUnitId);

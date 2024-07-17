@@ -24,7 +24,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<RequestAmendmentDto>>> GetChangeApprovalAsync(string name,
             RequestApproveAmendmentModel requestParametersDto);
 
-        Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId);
+        Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId, int businessUnitId);
         Task<ApiResponse<List<RequestApprovalInfoDto>>> GetApprovalInfoAsync(string name, int requestMainId);
         Task<ApiResponse<RequestMainDto>> GetHeaderAsync(string name, int requestMainId);
         Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetDetails(int requestmainId, int businessUnitId);
