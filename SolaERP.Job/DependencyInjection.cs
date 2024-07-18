@@ -88,7 +88,24 @@ namespace SolaERP.Job
                 options.WaitForJobsToComplete = true;
             });
 
-            services.ConfigureOptions<EmailBackgroundJobSetupIsSent3>();
+            services.ConfigureOptions<EmailSetupIsSent3>();
+        }
+
+
+        [Obsolete]
+        public static void AddRequestMailsForIsSent3ForAssignedBuyer(this IServiceCollection services)
+        {
+            services.AddQuartz(options =>
+            {
+                options.UseMicrosoftDependencyInjectionJobFactory();
+            });
+
+            services.AddQuartzHostedService(options =>
+            {
+                options.WaitForJobsToComplete = true;
+            });
+
+            services.ConfigureOptions<EmailSetupIsSent3ForAssignedBuyer>();
         }
 
         public static void AddCbarData(this IServiceCollection services)

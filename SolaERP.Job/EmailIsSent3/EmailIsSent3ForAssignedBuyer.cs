@@ -10,15 +10,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Job.EmailIsSent2
+namespace SolaERP.Job.EmailIsSent3
 {
 
     [DisallowConcurrentExecution]
-    public class EmailIsSent2 : IJob
+    public class EmailIsSent3ForAssignedBuyer : IJob
     {
         private readonly ISend _send;
 
-        public EmailIsSent2(ISend send)
+        public EmailIsSent3ForAssignedBuyer(ISend send)
         {
             _send = send;
         }
@@ -27,6 +27,7 @@ namespace SolaERP.Job.EmailIsSent2
         {
             await _send.SendRequestMails(StatusType.Other);
         }
+
 
     }
 }

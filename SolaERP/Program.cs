@@ -42,6 +42,7 @@ builder.Services.AddRequestMailsForIsSentForAssignedBuyer();
 builder.Services.AddRequestMailsForIsSent2();
 builder.Services.AddRequestMailsForIsSent2ForAssignedBuyer();
 builder.Services.AddRequestMailsForIsSent3();
+builder.Services.AddRequestMailsForIsSent3ForAssignedBuyer();
 builder.Services.AddCbarData();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();

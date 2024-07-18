@@ -14,14 +14,14 @@ namespace SolaERP.Job.EmailIsSent3
 {
 
     [DisallowConcurrentExecution]
-    public class EmailBackgroundJobIsSent3 : IJob
+    public class EmailIsSent3 : IJob
     {
-        private readonly ILogger<EmailBackgroundJobIsSent3> _logger;
+        private readonly ILogger<EmailIsSent3> _logger;
         private readonly IBackgroundMailService _mailService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public EmailBackgroundJobIsSent3(ILogger<EmailBackgroundJobIsSent3> logger,
+        public EmailIsSent3(ILogger<EmailIsSent3> logger,
                                          IUnitOfWork unitOfWork,
                                          IBackgroundMailService mailService,
                                          IMapper mapper)
