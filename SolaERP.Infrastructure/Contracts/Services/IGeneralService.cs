@@ -11,6 +11,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<StatusDto>>> GetStatus();
         Task<ApiResponse<List<RejectReasonDto>>> RejectReasonsForInvoice();
         Task<ApiResponse<List<RejectReasonDto>>> RejectReasons();
+        Task<string> ReasonCode(int rejectReasonId);
         Task<ApiResponse<BaseAndReportCurrencyRate>> GetBaseAndReportCurrencyRateAsync(
             DateTime date,
             string currency,
@@ -21,6 +22,6 @@ namespace SolaERP.Application.Contracts.Services
            string currency,
            int businessUnitId);
 
-        Task<RejectReasonDto> GetRejectReasonByCode(string code);
+        Task<RejectReasonDto> GetRejectReasonByCode(string rejectReasonId);
     }
 }

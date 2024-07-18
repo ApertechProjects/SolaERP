@@ -19,17 +19,19 @@ namespace SolaERP.Controllers
         private readonly IEmailNotificationService _emailNotificationService;
         private readonly IUserService _userService;
         private readonly IBusinessUnitService _businessUnitService;
+        private readonly IGeneralService _generalService;
         private IMailService _mailService;
 
         public RequestController(IRequestService requestService, IFileUploadService fileUploadService,
             IEmailNotificationService emailNotificationService, IUserService userService,
-            IBusinessUnitService businessUnitService, IMailService mailService)
+            IBusinessUnitService businessUnitService, IMailService mailService, IGeneralService generalService)
         {
             _requestService = requestService;
             _fileUploadService = fileUploadService;
             _emailNotificationService = emailNotificationService;
             _userService = userService;
             _businessUnitService = businessUnitService;
+            _generalService = generalService;
             _mailService = mailService;
         }
 
@@ -107,6 +109,8 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeMainStatus(RequestChangeStatusModel data)
         {
+            var rejectReasonCode = _generalService.ReasonCode(data.RejectReasonId);
+
             for (int i = 0; i < data.RequestDatas.Count; i++)
             {
                 var res = await _requestService.ChangeMainStatusAsync(User.Identity.Name,

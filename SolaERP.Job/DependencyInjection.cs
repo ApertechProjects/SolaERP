@@ -2,6 +2,7 @@
 using Quartz;
 using SolaERP.Job.Cbar;
 using SolaERP.Job.EmailIsSent;
+using SolaERP.Job.EmailIsSent1;
 using SolaERP.Job.EmailIsSent2;
 using SolaERP.Job.EmailIsSent3;
 
@@ -22,7 +23,23 @@ namespace SolaERP.Job
                 options.WaitForJobsToComplete = true;
             });
 
-            services.ConfigureOptions<EmailBackgroundJobSetupIsSent>();
+            services.ConfigureOptions<EmailSetupIsSent>();
+        }
+
+        [Obsolete]
+        public static void AddRequestMailsForIsSentForAssignedBuyer(this IServiceCollection services)
+        {
+            services.AddQuartz(options =>
+            {
+                options.UseMicrosoftDependencyInjectionJobFactory();
+            });
+
+            services.AddQuartzHostedService(options =>
+            {
+                options.WaitForJobsToComplete = true;
+            });
+
+            services.ConfigureOptions<EmailSetupIsSentForAssignedBuyer>();
         }
 
         [Obsolete]

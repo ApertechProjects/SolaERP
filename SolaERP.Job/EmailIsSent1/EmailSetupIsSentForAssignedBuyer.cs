@@ -1,23 +1,22 @@
-﻿using Microsoft.Extensions.Options;
-using Quartz;
+﻿using Quartz;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Job.EmailIsSent
+namespace SolaERP.Job.EmailIsSent1
 {
-    public class EmailBackgroundJobSetupIsSent : IConfigureOptions<QuartzOptions>
+    public class EmailSetupIsSentForAssignedBuyer : IConfigureOptions<QuartzOptions>
     {
         public void Configure(QuartzOptions options)
         {
             try
             {
-                var jobKey = JobKey.Create(nameof(EmailBackgroundJobIsSent));
+                var jobKey = JobKey.Create(nameof(EmailIsSentForAssignedBuyer));
 
-                options.AddJob<EmailBackgroundJobIsSent>(jobBuilder => jobBuilder.WithIdentity(jobKey))
+                options.AddJob<EmailIsSentForAssignedBuyer>(jobBuilder => jobBuilder.WithIdentity(jobKey))
                     .AddTrigger(trigger => trigger
                     .WithIdentity("when start", "group1")
                     .StartNow()

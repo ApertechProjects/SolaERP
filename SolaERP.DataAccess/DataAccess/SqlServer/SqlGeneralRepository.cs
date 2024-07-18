@@ -74,6 +74,25 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<string> ReasonCode(int rejectReasonId)
+        {
+            List<RejectReason> rejectReasons = new();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "select ReasonCode from VW_RejectReasons where RejectReasonId = @rejectReasonId";
+                command.Parameters.AddWithValue(command, "@rejectReasonId", rejectReasonId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                string res = null;
+                while (reader.Read())
+                {
+                    res = reader.Get<string>("ReasonCode");
+                }
+
+                return res;
+            }
+        }
+
         public async Task<List<RejectReason>> RejectReasonsForInvoice()
         {
             List<RejectReason> rejectReasons = new();

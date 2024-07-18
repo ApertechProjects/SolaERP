@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Confluent.Kafka;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.General;
@@ -132,6 +133,13 @@ namespace SolaERP.Persistence.Services
             var rejectReason = await _generalRepository.GetRejectReasonByCode(code);
             var dto = _mapper.Map<RejectReasonDto>(rejectReason);
             return dto;
+        }
+
+
+        public async Task<string> ReasonCode(int rejectReasonId)
+        {
+            var rejectReason = await _generalRepository.ReasonCode(rejectReasonId);
+            return rejectReason;
         }
     }
 }

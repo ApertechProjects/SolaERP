@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
-using Quartz;
-using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.Job.EmailIsSent1;
 using SolaERP.Job.Enums;
 using System;
 using System.Collections.Generic;
@@ -11,21 +11,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Job.EmailIsSent
+namespace SolaERP.Job
 {
-    [DisallowConcurrentExecution]
-    public class EmailBackgroundJobIsSent : IJob
+    public class Send : ISend
     {
-        private readonly ILogger<EmailBackgroundJobIsSent> _logger;
+        private readonly ILogger<EmailIsSentForAssignedBuyer> _logger;
         private readonly IBackgroundMailService _mailService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public EmailBackgroundJobIsSent(ILogger<EmailBackgroundJobIsSent> logger,
+        public Send(ILogger<EmailIsSentForAssignedBuyer> logger,
                                   IUnitOfWork unitOfWork,
                                   IBackgroundMailService mailService,
                                   IMapper mapper)
         {
-
             _logger = logger;
             Console.WriteLine("constructor started");
             Debug.WriteLine("constructor started");
@@ -34,17 +32,8 @@ namespace SolaERP.Job.EmailIsSent
             _mapper = mapper;
             Console.WriteLine("constructor finsihed");
             Debug.WriteLine("constructor finsihed");
-
         }
-
-        public async Task Execute(IJobExecutionContext context)
-        {
-            await SendRequestMails(StatusType.Other);
-            await SendRequestMails(StatusType.AssignedBuyer);
-        }
-
-
-        private async Task SendRequestMails(StatusType statusType)
+        public async Task SendRequestMails(StatusType statusType)
         {
             try
             {
@@ -78,8 +67,5 @@ namespace SolaERP.Job.EmailIsSent
             }
             await Task.CompletedTask;
         }
-
-
-
     }
 }
