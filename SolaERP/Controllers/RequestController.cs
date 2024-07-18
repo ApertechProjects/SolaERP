@@ -109,8 +109,11 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeMainStatus(RequestChangeStatusModel data)
         {
-            var rejectReasonCode = _generalService.ReasonCode(data.RejectReasonId);
-
+            var rejectReasonCode = await _generalService.ReasonCode(data.RejectReasonId);
+            if (rejectReasonCode == "STOPPED")
+            {
+                data.ApproveStatus = 4;
+            }
             for (int i = 0; i < data.RequestDatas.Count; i++)
             {
                 var res = await _requestService.ChangeMainStatusAsync(User.Identity.Name,
