@@ -405,12 +405,19 @@ namespace SolaERP.Persistence.Services
             {
                 var res = await ChangeDetailStatusAsync(userName, model.RequestDetails[i].RequestDetailId,
                     model.ApproveStatus, model.Comment, model.RequestDetails[i].Sequence, model.RejectReasonId);
-                //if (res && model.RequestDetails[i].Sequence != null)
-                //{
-                //    var users = await _userService.UsersRequestDetails(model.RequestDetails[i].RequestDetailId, model.RequestDetails[i].Sequence, (ApproveStatus)model.ApproveStatus);
-                //    await _mailService.SendRequestMailsForChangeStatus(response, users, model.RequestDetails[i].Sequence, model.BusinessUnitName, model.RejectReason);
-                //}
+
             }
+        }
+
+        public async Task<ApiResponse<bool>> Retrieve(RequestRetrieveDto data, string name)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            for (int i = 0; i < data.RequestMainIds.Count; i++)
+            {
+                var res = await _requestMainRepository.Retrieve(data.RequestMainIds[i], userId);
+            }
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(true);
         }
     }
 }

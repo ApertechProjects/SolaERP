@@ -665,5 +665,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return mainDrafts;
             }
         }
+
+
+        public async Task<bool> Retrieve(int requestMainId, int userId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF EXEC  dbo.SP_RequestRetrieve @UserId, @RequestMainId";
+
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+
+                return await command.ExecuteNonQueryAsync() > 0;
+            }
+        }
     }
 }

@@ -91,15 +91,16 @@ namespace SolaERP.Controllers
             for (int i = 0; i < sendToApprove.RequestMainIds.Count; i++)
             {
                 var res = await _requestService.SendToApproveAsync(User.Identity.Name, sendToApprove.RequestMainIds);
-
-                //if (res)
-                //{
-                //    var users = await _userService.UsersForRequestMain(sendToApprove.RequestMainIds[i], 0,
-                //        ApproveStatus.Approved);
-                //    await _mailService.SendRequestMailsForChangeStatus(Response, users, 1, businessUnit, null);
-                //}
             }
 
+            return CreateActionResult(ApiResponse<bool>.Success(200));
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Retrieve(RequestRetrieveDto data)
+        {
+            var res = await _requestService.Retrieve(data, User.Identity.Name);
             return CreateActionResult(ApiResponse<bool>.Success(200));
         }
 
@@ -110,14 +111,6 @@ namespace SolaERP.Controllers
             {
                 var res = await _requestService.ChangeMainStatusAsync(User.Identity.Name,
                     data.RequestDatas[i].RequestMainId, data.ApproveStatus, data.Comment, data.RejectReasonId);
-
-                //if (res && data.RequestDatas[i].Sequence != null)
-                //{
-                //    var users = await _userService.UsersForRequestMain(data.RequestDatas[i].RequestMainId,
-                //        data.RequestDatas[i].Sequence, (ApproveStatus)data.ApproveStatus);
-                //    await _mailService.SendRequestMailsForChangeStatus(Response, users, data.RequestDatas[i].Sequence,
-                //        data.BusinessUnitName, data.RejectReason);
-                //}
             }
 
             return CreateActionResult(ApiResponse<bool>.Success(200));
@@ -131,13 +124,7 @@ namespace SolaERP.Controllers
                 var res = await _requestService.ChangeDetailStatusAsync(User.Identity.Name,
                     model.RequestDetails[i].RequestDetailId, model.ApproveStatus, model.Comment,
                     model.RequestDetails[i].Sequence, model.RejectReasonId);
-                //if (res && model.RequestDetails[i].Sequence != null)
-                //{
-                //    var users = await _userService.UsersRequestDetails(model.RequestDetails[i].RequestDetailId, model.RequestDetails[i].Sequence, (ApproveStatus)model.ApproveStatus);
-                //    await _mailService.SendRequestMailsForChangeStatus(Response, users, model.RequestDetails[i].Sequence, model.BusinessUnitName, model.RejectReason);
-                //}
             }
-
             return CreateActionResult(ApiResponse<bool>.Success(200));
         }
 

@@ -7,8 +7,8 @@ namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IRequestMainRepository : IDeleteableAsync, IReturnableRepoMethodAsync<RequestMainSaveModel>
     {
-        Task<List<RequestMainAll>> GetAllAsync(RequestMainGetModel requestMain,int userId);
-        Task<List<RequestHeld>> GetHeldAsync(RequestWFAGetModel requestMain,int userId);
+        Task<List<RequestMainAll>> GetAllAsync(RequestMainGetModel requestMain, int userId);
+        Task<List<RequestHeld>> GetHeldAsync(RequestWFAGetModel requestMain, int userId);
         Task<RequestMain> GetRequestByRequestMainIdAsync(int requestMainId);
         Task<List<RequestTypes>> GetRequestTypesByBusinessUnitIdAsync(int businessUnitId);
         Task<List<RequestMain>> GetWaitingForApprovalsAsync(int userId, RequestWFAGetModel requestWFA);
@@ -21,7 +21,7 @@ namespace SolaERP.Application.Contracts.Repositories
             RequestApproveAmendmentModel requestParametersDto);
 
         Task<RequestSaveResultModel> AddOrUpdateRequestAsync(int userId, RequestMainSaveModel model);
-        Task<bool> UpdateBuyerAsync(RequestSetBuyer setBuyer, int userId);
+        Task<bool> UpdateBuyerAsync(RequestSetBuyer setBuyers, int userId);
         Task<List<RequestFollow>> RequestFollowUserLoadAsync(int requestMainId);
         Task<bool> RequestFollowSaveAsync(RequestFollowSaveModel saveModel);
         Task<bool> RequestFollowDeleteAsync(int requestFollowId);
@@ -34,5 +34,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<RequestCategory>> CategoryList(int businessUnitId, string keyCode);
         Task<List<int>> GetDetailIds(int requestMainId);
         Task<List<BuyersAssignment>> GetBuyersAssignment(RequestWFAGetModel model, int userId);
+        Task<bool> Retrieve(int requestMainId, int userId);
     }
 }
