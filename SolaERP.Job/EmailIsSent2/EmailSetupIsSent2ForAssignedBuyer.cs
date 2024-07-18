@@ -6,17 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Job.EmailIsSent1
+namespace SolaERP.Job.EmailIsSent2
 {
-    public class EmailSetupIsSentForAssignedBuyer : IConfigureOptions<QuartzOptions>
+    public class EmailSetupIsSent2ForAssignedBuyer : IConfigureOptions<QuartzOptions>
     {
         public void Configure(QuartzOptions options)
         {
             try
             {
-                var jobKey = JobKey.Create(nameof(EmailIsSentForAssignedBuyer));
+                var jobKey = JobKey.Create(nameof(EmailIsSent2ForAssignedBuyer));
 
-                options.AddJob<EmailIsSentForAssignedBuyer>(jobBuilder => jobBuilder.WithIdentity(jobKey))
+                options.AddJob<EmailIsSent2ForAssignedBuyer>(jobBuilder => jobBuilder.WithIdentity(jobKey))
                     .AddTrigger(trigger => trigger
                     .WithIdentity("when start", "group2")
                     .StartNow()

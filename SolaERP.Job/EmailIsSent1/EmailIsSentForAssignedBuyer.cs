@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Job.EmailIsSent1
 {
+    [DisallowConcurrentExecution]
     public class EmailIsSentForAssignedBuyer : IJob
     {
         private readonly ISend _send;
