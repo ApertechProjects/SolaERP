@@ -133,7 +133,8 @@ namespace SolaERP.Persistence.Services
             return allSuccess;
         }
 
-        public async Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId, int businessUnitId)
+        public async Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId,
+            int businessUnitId)
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var requestMain = await _requestMainRepository.GetRequesMainHeaderAsync(requestMainId, userId);
@@ -312,10 +313,10 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<RequestWFADto>>.Success(mainRequestDto);
         }
 
-        public async Task<ApiResponse<bool>> UpdateBuyerAsync(RequestSetBuyer requestSetBuyer)
+        public async Task<ApiResponse<bool>> UpdateBuyerAsync(RequestSetBuyer requestSetBuyer, string name)
         {
-            var data = false;
-            data = await _requestMainRepository.UpdateBuyerAsync(requestSetBuyer);
+            int userId = await _userRepository.ConvertIdentity(name);
+            bool data = await _requestMainRepository.UpdateBuyerAsync(requestSetBuyer, userId);
 
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(data);

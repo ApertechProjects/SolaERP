@@ -19,7 +19,9 @@ namespace SolaERP.Application.Contracts.Services
             int rejectReasonId);
 
         Task<bool> SendToApproveAsync(string name, List<int> requestMainIds);
-        Task<ApiResponse<List<RequestMainDraftDto>>> GetDraftsAsync(RequestMainDraftModel getMainDraftParameters, string name);
+
+        Task<ApiResponse<List<RequestMainDraftDto>>> GetDraftsAsync(RequestMainDraftModel getMainDraftParameters,
+            string name);
 
         Task<ApiResponse<List<RequestAmendmentDto>>> GetChangeApprovalAsync(string name,
             RequestApproveAmendmentModel requestParametersDto);
@@ -28,12 +30,18 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<RequestApprovalInfoDto>>> GetApprovalInfoAsync(string name, int requestMainId);
         Task<ApiResponse<RequestMainDto>> GetHeaderAsync(string name, int requestMainId);
         Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetDetails(int requestmainId, int businessUnitId);
-        Task<ApiResponse<RequestSaveResultModel>> AddOrUpdateAsync(string name, HttpResponse response, RequestSaveModel model);
+
+        Task<ApiResponse<RequestSaveResultModel>> AddOrUpdateAsync(string name, HttpResponse response,
+            RequestSaveModel model);
+
         Task<ApiResponse<bool>> DeleteAsync(string name, List<int> requestMainIds);
         Task<ApiResponse<List<RequestDetailApprovalInfoDto>>> GetDetailApprvalInfoAsync(int requestDetaildId);
-        Task<bool> ChangeDetailStatusAsync(string name, int? requestDetailId, int approveStatusId, string comment, int? sequence, int rejectReasonId);
+
+        Task<bool> ChangeDetailStatusAsync(string name, int? requestDetailId, int approveStatusId, string comment,
+            int? sequence, int rejectReasonId);
+
         Task ChangeDetailStatusAndSendMail(string userName, HttpResponse response, RequestDetailApproveModel model);
-        Task<ApiResponse<bool>> UpdateBuyerAsync(RequestSetBuyer requestSetBuyer);
+        Task<ApiResponse<bool>> UpdateBuyerAsync(RequestSetBuyer requestSetBuyer, string name);
         Task<ApiResponse<List<RequestFollowDto>>> GetFollowUsersAsync(int requestMainId);
         Task<ApiResponse<bool>> SaveFollowUserAsync(RequestFollowSaveModel saveModel);
         Task<ApiResponse<bool>> DeleteFollowUserAsync(int requestFollowId);
