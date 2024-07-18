@@ -58,9 +58,25 @@ namespace SolaERP.Job
                        "INNER JOIN Procurement.RequestMain RM ON NS.SourceId = RM.RequestMainId " +
                        "INNER JOIN Config.AppUser au on RM.Requester = au.Id " +
                        "LEFT JOIN Register.ApprovalStatus ST ON NS.ApproveStatusId = ST.ApprovalStatusId " +
-                       $"where L.ActionId = 1  and NS.ProcedureId = @procedureId and NS.UserId = @userId and LT.LogTypeId = 7";
+                       $"where L.ActionId = 1  and NS.ProcedureId = @procedureId and NS.UserId = @userId and LT.LogTypeId = 7 and NS.ApproveStatusId!=99";
             return text;
         }
+
+        public string RowInfoCommandTextForAssignedToBuyer()
+        {
+            var text = "select NS.SourceId,NotificationSenderId,case NS.ApproveStatusId when 99 THEN 'Assigned Buyer' END ApproveStatus," +
+                 "IsSent,IsSent2,IsSent3,NS.SourceId,RM.RequestNo,au.FullName Requester," +
+                 "ISNULL(RM.RequestComment,'') Comment,P.ProcedureName,L.ActionId,L.Date LocalDateTime " +
+                 "from Config.NotificationSender NS " +
+                 "INNER JOIN Config.Procedures P ON NS.ProcedureId = P.ProcedureId " +
+                 "INNER JOIN Register.Logs L ON L.SourceId = NS.SourceId " +
+                 "INNER JOIN Register.LogTypes LT ON L.LogTypeId = LT.LogTypeId " +
+                 "INNER JOIN Procurement.RequestMain RM ON NS.SourceId = RM.RequestMainId " +
+                 "INNER JOIN Config.AppUser au on RM.Requester = au.Id " +
+                 $"where L.ActionId = 1  and NS.ProcedureId = @procedureId and NS.UserId = @userId and NS.ApproveStatusId = 99 and LT.LogTypeId = 7";
+            return text;
+        }
+
 
         public string UserCommandString(IsSentValue isSentValue)
         {
@@ -85,14 +101,15 @@ namespace SolaERP.Job
             return text;
         }
 
-        public HashSet<RowInfoDraft> GetRowInfosForIsSent(Procedure procedure, int userId)
+        public HashSet<RowInfoDraft> GetRowInfosForIsSent(Procedure procedure, int userId, StatusType statusType)
         {
+            StringBuilder stringBuilder = GetRowInfoCommandText(statusType);
+
             HashSet<RowInfoDraft> rows = new HashSet<RowInfoDraft>();
 
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = RowInfoCommandText() + GetRowInfoCommandString(IsSentValue.IsSent1);
-
+                command.CommandText = stringBuilder.Append(GetRowInfoCommandString(IsSentValue.IsSent1)).ToString();
                 command.Parameters.AddWithValue(command, "@procedureId", procedure);
                 command.Parameters.AddWithValue(command, "@userId", userId);
                 using var reader = command.ExecuteReader();
@@ -104,13 +121,26 @@ namespace SolaERP.Job
             }
         }
 
-        public HashSet<RowInfoDraft> GetRowInfosForIsSent2(Procedure procedure, int userId)
+        private StringBuilder GetRowInfoCommandText(StatusType statusType)
         {
+            StringBuilder stringBuilder = new StringBuilder();
+            if (statusType == StatusType.Other)
+                stringBuilder.Append(RowInfoCommandText());
+            else
+                stringBuilder.Append(RowInfoCommandTextForAssignedToBuyer());
+
+            return stringBuilder;
+        }
+
+        public HashSet<RowInfoDraft> GetRowInfosForIsSent2(Procedure procedure, int userId, StatusType statusType)
+        {
+            StringBuilder stringBuilder = GetRowInfoCommandText(statusType);
+
             HashSet<RowInfoDraft> rows = new HashSet<RowInfoDraft>();
 
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = RowInfoCommandText() + GetRowInfoCommandString(IsSentValue.IsSent2);
+                command.CommandText = stringBuilder.Append(GetRowInfoCommandString(IsSentValue.IsSent2)).ToString();
 
                 command.Parameters.AddWithValue(command, "@procedureId", procedure);
                 command.Parameters.AddWithValue(command, "@userId", userId);
@@ -125,13 +155,15 @@ namespace SolaERP.Job
             }
         }
 
-        public HashSet<RowInfoDraft> GetRowInfosForIsSent3(Procedure procedure, int userId)
+        public HashSet<RowInfoDraft> GetRowInfosForIsSent3(Procedure procedure, int userId, StatusType statusType)
         {
+            StringBuilder stringBuilder = GetRowInfoCommandText(statusType);
+
             HashSet<RowInfoDraft> rows = new HashSet<RowInfoDraft>();
 
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = RowInfoCommandText() + GetRowInfoCommandString(IsSentValue.IsSent3);
+                command.CommandText = stringBuilder.Append(GetRowInfoCommandString(IsSentValue.IsSent2)).ToString();
 
                 command.Parameters.AddWithValue(command, "@procedureId", procedure);
                 command.Parameters.AddWithValue(command, "@userId", userId);

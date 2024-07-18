@@ -32,14 +32,6 @@ namespace SolaERP.Job.EmailIsSent
                 .WithCronSchedule("0 0/30 5-18 * * ?")
                 .Build());
 
-                //options.AddJob<EmailBackgroundJobIsSent>(jobBuilder => jobBuilder.WithIdentity(jobKey))
-                //.AddTrigger(trigger => trigger
-                //.ForJob(jobKey)
-                //.WithIdentity("everyFiveMinutes", "group1")
-                //.WithCronSchedule("0 0/3 * * * ?")
-                //.Build());
-
-
                 Console.WriteLine("Job Run" + DateTime.Now);
             }
             catch (Exception ex)

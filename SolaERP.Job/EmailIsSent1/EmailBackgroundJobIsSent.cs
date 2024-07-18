@@ -39,6 +39,13 @@ namespace SolaERP.Job.EmailIsSent
 
         public async Task Execute(IJobExecutionContext context)
         {
+            await SendRequestMails(StatusType.Other);
+            await SendRequestMails(StatusType.AssignedBuyer);
+        }
+
+
+        private async Task SendRequestMails(StatusType statusType)
+        {
             try
             {
                 Console.WriteLine("Execute started");
@@ -50,7 +57,7 @@ namespace SolaERP.Job.EmailIsSent
                     {
                         Debug.WriteLine("sended to " + user.UserName);
                         Console.WriteLine("sended to " + user.UserName);
-                        var rowInfoDrafts = helper.GetRowInfosForIsSent(Procedure.Request, user.UserId);
+                        var rowInfoDrafts = helper.GetRowInfosForIsSent(Procedure.Request, user.UserId, statusType);
 
                         var rowInfos = _mapper.Map<HashSet<RowInfo>>(rowInfoDrafts);
                         if (rowInfos.Count > 0)
@@ -70,7 +77,9 @@ namespace SolaERP.Job.EmailIsSent
                 Console.WriteLine("Exception: " + ex.Message);
             }
             await Task.CompletedTask;
-
         }
+
+
+
     }
 }

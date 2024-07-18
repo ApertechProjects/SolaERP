@@ -32,7 +32,13 @@ namespace SolaERP.Job.EmailIsSent3
             _mapper = mapper;
         }
 
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
+        {
+            await SendMails(StatusType.Other);
+            await SendMails(StatusType.AssignedBuyer);
+        }
+
+        private async Task SendMails(StatusType statusType)
         {
             try
             {
@@ -43,7 +49,7 @@ namespace SolaERP.Job.EmailIsSent3
                 {
                     foreach (var user in requestUsers)
                     {
-                        var rowInfoDrafts = helper.GetRowInfosForIsSent3(Procedure.Request, user.UserId);
+                        var rowInfoDrafts = helper.GetRowInfosForIsSent3(Procedure.Request, user.UserId, statusType);
                         var rowInfos = _mapper.Map<HashSet<RowInfo>>(rowInfoDrafts);
                         if (rowInfos.Count > 0)
                         {
@@ -61,7 +67,7 @@ namespace SolaERP.Job.EmailIsSent3
                 _logger.LogError(ex, "An error occurred while executing the email background job 3.");
                 Console.WriteLine("Exception: " + ex.Message);
             }
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
     }
 }
