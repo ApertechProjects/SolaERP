@@ -466,9 +466,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = ReplaceQuery("[dbo].[SP_RequestMainAll]",
-                    new ReplaceParams { ParamName = "APT", Value = requestMain.BusinessUnitCode });
-
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_RequestMainAll @BusinessUnitId, @ItemCode, @DateFrom, @DateTo, @ApproveStatus, @Status, @Requester, @UserId";
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", requestMain.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@ItemCode", itemCode == "All" ? "%" : itemCode);
                 command.Parameters.AddWithValue(command, "@DateFrom", requestMain.DateFrom);
