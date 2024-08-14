@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.API.Methods;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Entities.Groups;
 using SolaERP.Application.Enums;
@@ -70,6 +71,10 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveUserAsync([FromForm] UserSaveModel userSaveModel, CancellationToken cancellationToken)
         {
+            var user = await _userService.GetUserByEmailAsync(userSaveModel.Email);
+            if (user is not null)
+                return CreateActionResult(ApiResponse<bool>.Fail("email", $" This mail is already in use", 422));
+
             userSaveModel.VerifyToken = Helper.GetVerifyToken(_tokenHandler.CreateRefreshToken());
 
             var result = await _userService.SaveUserAsync(userSaveModel, cancellationToken);
@@ -143,6 +148,6 @@ namespace SolaERP.Controllers
             return CreateActionResult(await _userService.GetUserByNameAsync(User.Identity.Name, token));
         }
 
-     
+
     }
 }

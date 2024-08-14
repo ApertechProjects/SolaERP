@@ -58,7 +58,8 @@ namespace SolaERP.Job
                        "INNER JOIN Procurement.RequestMain RM ON NS.SourceId = RM.RequestMainId " +
                        "INNER JOIN Config.AppUser au on RM.Requester = au.Id " +
                        "LEFT JOIN Register.ApprovalStatus ST ON NS.ApproveStatusId = ST.ApprovalStatusId " +
-                       $"where L.ActionId = 1  and NS.ProcedureId = @procedureId and NS.UserId = @userId and LT.LogTypeId = 7 and NS.ApproveStatusId!=99";
+                       $"where L.ActionId = 1  and NS.ProcedureId = @procedureId and NS.UserId = @userId and LT.LogTypeId = 7 " +
+                       $"and NS.ApproveStatusId!=99 AND au.IsDeleted = 0 and au.InActive = 0";
             return text;
         }
 
@@ -73,7 +74,8 @@ namespace SolaERP.Job
                  "INNER JOIN Register.LogTypes LT ON L.LogTypeId = LT.LogTypeId " +
                  "INNER JOIN Procurement.RequestMain RM ON NS.SourceId = RM.RequestMainId " +
                  "INNER JOIN Config.AppUser au on RM.Requester = au.Id " +
-                 $"where L.ActionId = 1  and NS.ProcedureId = @procedureId and NS.UserId = @userId and NS.ApproveStatusId = 99 and LT.LogTypeId = 7";
+                 $"where L.ActionId = 1  and NS.ProcedureId = @procedureId and NS.UserId = @userId and NS.ApproveStatusId = 99" +
+                 $" and LT.LogTypeId = 7  AND au.IsDeleted = 0 and au.InActive = 0";
             return text;
         }
 
