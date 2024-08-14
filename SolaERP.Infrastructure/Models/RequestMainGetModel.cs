@@ -9,5 +9,6 @@
         public DateTime DateTo { get; set; }
         public string[] ApproveStatus { get; set; }
         public int[] Status { get; set; }
+        public int[] Requester { get; set; }
     }
 }
