@@ -72,7 +72,7 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> SaveUserAsync([FromForm] UserSaveModel userSaveModel, CancellationToken cancellationToken)
         {
             var user = await _userService.GetUserByEmailAsync(userSaveModel.Email);
-            if (user is not null)
+            if (user is not null && (userSaveModel.Id == null || userSaveModel.Id == 0))
                 return CreateActionResult(ApiResponse<bool>.Fail("email", $" This mail is already in use", 422));
 
             userSaveModel.VerifyToken = Helper.GetVerifyToken(_tokenHandler.CreateRefreshToken());
