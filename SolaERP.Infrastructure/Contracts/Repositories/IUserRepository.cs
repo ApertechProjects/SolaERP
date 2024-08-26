@@ -53,7 +53,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<UserList>> UsersRequestDetails(int? requestDetailId, int? sequence, ApproveStatus status);
         Task<List<UserList>> UsersRequestMain(int requestMainId, int? sequence, ApproveStatus status);
         Task UpdateLastActivityAsync(int id);
-        Task<bool> AddDefaultVendorAccessToVendorUser(int userId);
+        Task<bool> AddDefaultVendorAccessToVendorUser(int groupId,int userId);
         Task<List<UserReportHasAccessDto>> GetUserReportAccess(string reportFileId);
         Task<List<UserReportFileAccess>> GetUserReportAccessByCurrentUser(int userId);
     }

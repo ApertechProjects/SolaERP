@@ -481,5 +481,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
+
+        public async Task<int> GetGroupIdByVendorAdmin()
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SELECT GroupId from Config.Groups where GroupName = 'Vendor Admin'";
+                using var reader = await command.ExecuteReaderAsync();
+
+                int id = 0;
+                if (await reader.ReadAsync())
+                {
+                    id = reader.GetInt32("GroupId");
+                }
+                return id;
+            }
+
+        }
     }
 }

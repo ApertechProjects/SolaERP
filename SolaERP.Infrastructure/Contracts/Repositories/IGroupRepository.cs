@@ -41,5 +41,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task DeleteEmailNotificationAsync(DataTable data, int groupId);
         Task AddEmailNotificationsAsync(DataTable data, int groupId);
         Task<List<BusinessUnitForGroup>> GetGroupBusinessUnitsAsync(int groupId);
+        Task<int> GetGroupIdByVendorAdmin();
     }
 }

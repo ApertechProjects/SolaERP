@@ -27,6 +27,7 @@ namespace SolaERP.Persistence.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IGroupRepository _groupRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMailService _mailService;
         private readonly IMapper _mapper;
@@ -37,6 +38,7 @@ namespace SolaERP.Persistence.Services
         private readonly IConfiguration _configuration;
 
         public UserService(IUserRepository userRepository,
+            IGroupRepository groupRepository,
             IUnitOfWork unitOfWork,
             IMapper mapper,
             IMailService mailService,
@@ -47,6 +49,7 @@ namespace SolaERP.Persistence.Services
             IConfiguration configuration)
         {
             _userRepository = userRepository;
+            _groupRepository = groupRepository;
             _unitOfWork = unitOfWork;
             _mailService = mailService;
             _mapper = mapper;
@@ -75,7 +78,9 @@ namespace SolaERP.Persistence.Services
             await _userRepository.UpdateLastActivityAsync(result);
             if (user.UserTypeId == 0)
             {
-                await _userRepository.AddDefaultVendorAccessToVendorUser(result);
+                var groupId = await _groupRepository.GetGroupIdByVendorAdmin();
+                if (groupId != 0)
+                    await _userRepository.AddDefaultVendorAccessToVendorUser(groupId,result);
             }
 
             await _unitOfWork.SaveChangesAsync();

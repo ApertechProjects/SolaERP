@@ -296,11 +296,12 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<bool> AddDefaultVendorAccessToVendorUser(int userId)
+        public async Task<bool> AddDefaultVendorAccessToVendorUser(int groupId,int userId)
         {
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = "INSERT INTO Config.GroupUsers (GroupId, UserId) VALUES (1785, @UserId)";
+            command.CommandText = "INSERT INTO Config.GroupUsers (GroupId, UserId) VALUES (@GroupId, @UserId)";
             command.Parameters.AddWithValue(command, "@UserId", userId);
+            command.Parameters.AddWithValue(command, "@GroupId", groupId);
             return await command.ExecuteNonQueryAsync() > 0;
         }
 
