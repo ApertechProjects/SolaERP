@@ -43,6 +43,7 @@ namespace SolaERP.Infrastructure.ViewModels
         {
 
             //return _configuration["Mail:ServerUrl"] + $"/EmailRedirectingPage/EmailVerified.html?verifyToken={Token}";
+            var data = _configuration["Mail:Url"] + $"sources/templates/EmailConfirmPage.html?verifyToken={Token}";
             return _configuration["Mail:Url"] + $"sources/templates/EmailConfirmPage.html?verifyToken={Token}";
         }
 

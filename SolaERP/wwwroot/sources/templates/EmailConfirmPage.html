@@ -35,10 +35,10 @@
 
         function sendRequest() {
             var currentUrl = window.location.href;
-            var apiIndex = currentUrl.indexOf(":3030/sources");
+            var apiIndex = currentUrl.indexOf("/sources");
             var result = currentUrl.substring(0, apiIndex);
 
-            fetch(`${result}:3030/api/Account/ConfirmEmail?verifyToken=${token}`, {
+            fetch(`${result}/api/Account/ConfirmEmail?verifyToken=${token}`, {
                 method: "GET",
                 headers: { "Content-type": "application/json; charset=UTF-8" }
             })

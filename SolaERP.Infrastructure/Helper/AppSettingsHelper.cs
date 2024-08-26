@@ -10,11 +10,17 @@ namespace SolaERP.Application.Helper
     {
         public static string GetAppSettingsFileName()
         {
-            bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
-            if (isDevelopment)
-                return "appsettings.Development.json";
-            else
-                return "appsettings.Production.json";
+            switch (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"))
+            {
+                case "Development":
+                    return "appsettings.Development.json";
+                case "Production":
+                    return "appsettings.Production.json";
+                case "GlDevelopment":
+                    return "appsettings.GlDevelopment.json";
+                default:
+                    return "appsettings.Development.json";
+            }
         }
 
         public static string GetApp()

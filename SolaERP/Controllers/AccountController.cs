@@ -119,7 +119,6 @@ namespace SolaERP.Controllers
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail([FromQuery] string verifyToken)
         {
-            List<Task> emails = new List<Task>();
             return CreateActionResult(await _userService.ConfirmEmail(verifyToken));
         }
 
