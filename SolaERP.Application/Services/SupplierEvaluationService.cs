@@ -525,28 +525,28 @@ namespace SolaERP.Persistence.Services
                     CompanyName = command.CompanyInformation.CompanyName,
                 };
 
-                Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject,
-                    registrationPending,
-                    registrationPending.TemplateName(),
-                    registrationPending.ImageName(),
-                    new List<string> { user.Email });
-                emails.Add(VerEmail);
+                //Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject,
+                //    registrationPending,
+                //    registrationPending.TemplateName(),
+                //    registrationPending.ImageName(),
+                //    new List<string> { user.Email });
+                //emails.Add(VerEmail);
 
-                var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
-                foreach (var lang in Enum.GetValues<Language>())
-                {
-                    var sendUserMails = await _userService.GetAdminUserMailsAsync(1, lang);
-                    if (sendUserMails.Count > 0)
-                    {
-                        var templateData = templates.First(x => x.Language == lang.ToString());
-                        VM_RegistrationIsPendingAdminApprove adminApprove = GetVM(command, user, templateData);
-                        Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove,
-                            adminApprove.TemplateName, adminApprove.ImageName, sendUserMails);
-                        emails.Add(RegEmail);
-                    }
-                }
+                //var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
+                //foreach (var lang in Enum.GetValues<Language>())
+                //{
+                //    var sendUserMails = await _userService.GetAdminUserMailsAsync(1, lang);
+                //    if (sendUserMails.Count > 0)
+                //    {
+                //        var templateData = templates.First(x => x.Language == lang.ToString());
+                //        VM_RegistrationIsPendingAdminApprove adminApprove = GetVM(command, user, templateData);
+                //        Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove,
+                //            adminApprove.TemplateName, adminApprove.ImageName, sendUserMails);
+                //        emails.Add(RegEmail);
+                //    }
+                //}
 
-                await Task.Run(() => { Task.WhenAll(emails); });
+                //await Task.Run(() => { Task.WhenAll(emails); });
 
 
                 return ApiResponse<EvaluationResultModel>.Success(result, 200);
