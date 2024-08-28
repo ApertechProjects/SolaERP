@@ -525,12 +525,12 @@ namespace SolaERP.Persistence.Services
                     CompanyName = command.CompanyInformation.CompanyName,
                 };
 
-                //Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject,
-                //    registrationPending,
-                //    registrationPending.TemplateName(),
-                //    registrationPending.ImageName(),
-                //    new List<string> { user.Email });
-                //emails.Add(VerEmail);
+                Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject,
+                    registrationPending,
+                    registrationPending.TemplateName(),
+                    registrationPending.ImageName(),
+                    new List<string> { user.Email });
+                emails.Add(VerEmail);
 
                 //var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
                 //foreach (var lang in Enum.GetValues<Language>())
@@ -546,7 +546,7 @@ namespace SolaERP.Persistence.Services
                 //    }
                 //}
 
-                //await Task.Run(() => { Task.WhenAll(emails); });
+                await Task.Run(() => { Task.WhenAll(emails); });
 
 
                 return ApiResponse<EvaluationResultModel>.Success(result, 200);
