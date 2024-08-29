@@ -462,9 +462,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             string itemCode = string.Join(',', requestMain.ItemCode);
             string approveStatus = string.Join(',', requestMain.ApproveStatus);
             string status = string.Join(',', requestMain.Status);
+            string requester = string.Join(',', requestMain.Requester);
+
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_RequestMainAll @BusinessUnitId, @ItemCode, @DateFrom, @DateTo, @ApproveStatus, @Status, @UserId";
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_RequestMainAll @BusinessUnitId, @ItemCode, @DateFrom, @DateTo, @ApproveStatus, @Status, @Requester, @UserId";
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", requestMain.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@ItemCode", itemCode == "All" ? "%" : itemCode);
                 command.Parameters.AddWithValue(command, "@DateFrom", requestMain.DateFrom);
@@ -472,6 +474,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@ApproveStatus", approveStatus == "-1" ? "%" : approveStatus);
                 command.Parameters.AddWithValue(command, "@Status", status == "-1" ? "%" : status);
+                command.Parameters.AddWithValue(command, "@Requester", requester == "-1" ? "%" : requester);
 
                 using var reader = await command.ExecuteReaderAsync();
                 List<RequestMainAll> mainRequests = new List<RequestMainAll>();
