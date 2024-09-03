@@ -56,6 +56,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> AddDefaultVendorAccessToVendorUser(int groupId,int userId);
         Task<List<UserReportHasAccessDto>> GetUserReportAccess(string reportFileId);
         Task<List<UserReportFileAccess>> GetUserReportAccessByCurrentUser(int userId);
+        Task<int> GetUserType(int userId);
     }
 
     public enum Filetype

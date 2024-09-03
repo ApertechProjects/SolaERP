@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Job.Enums
+namespace SolaERP.Application.Enums
 {
-    public enum Procedure
+    public enum Procedures
     {
         Request = 3,
         Users = 4

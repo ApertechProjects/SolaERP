@@ -36,6 +36,7 @@ namespace SolaERP.Persistence.Services
         private readonly IEmailNotificationService _emailNotificationService;
         private readonly IFileUploadService _fileUploadService;
         private readonly IConfiguration _configuration;
+        private readonly IApproveStageService _approveStageMainService;
 
         public UserService(IUserRepository userRepository,
             IGroupRepository groupRepository,
@@ -46,7 +47,8 @@ namespace SolaERP.Persistence.Services
             IEmailNotificationService emailNotificationService,
             IAttachmentRepository attachmentRepo,
             IFileUploadService fileUploadService,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IApproveStageService approveStageMainService)
         {
             _userRepository = userRepository;
             _groupRepository = groupRepository;
@@ -58,6 +60,7 @@ namespace SolaERP.Persistence.Services
             _attachmentRepo = attachmentRepo;
             _fileUploadService = fileUploadService;
             _configuration = configuration;
+            _approveStageMainService = approveStageMainService;
         }
 
 
@@ -80,7 +83,7 @@ namespace SolaERP.Persistence.Services
             {
                 var groupId = await _groupRepository.GetGroupIdByVendorAdmin();
                 if (groupId != 0)
-                    await _userRepository.AddDefaultVendorAccessToVendorUser(groupId,result);
+                    await _userRepository.AddDefaultVendorAccessToVendorUser(groupId, result);
             }
 
             await _unitOfWork.SaveChangesAsync();
@@ -277,6 +280,18 @@ namespace SolaERP.Persistence.Services
             var userId = await _userRepository.ConvertIdentity(name);
             var user = await _userRepository.UserChangeStatusAsync(userId, table);
             await _unitOfWork.SaveChangesAsync();
+            int userType = await _userRepository.GetUserType(userId);
+            int stageCount = await _approveStageMainService.GetStageCountAsync(Procedures.Users);
+
+            for (int i = 0; i < model.Count; i++)
+            {
+                if (userType == 0 && stageCount == model[i].Sequence)
+                {
+
+                }
+            }
+          
+
             if (user)
                 return ApiResponse<bool>.Success(true, 200);
             return ApiResponse<bool>.Fail("Problem detected", 400);

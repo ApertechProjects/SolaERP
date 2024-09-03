@@ -6,6 +6,7 @@ using SolaERP.Application.Dtos.ApproveStages;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Entities.ApproveStage;
 using SolaERP.Application.Entities.ApproveStages;
+using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 
@@ -143,6 +144,11 @@ namespace SolaERP.Persistence.Services
         {
             var data = await _approveStageMainRepository.Stages(businessUnitId, procedureKey);
             return ApiResponse<List<ApprovalStages>>.Success(data, 200);
+        }
+
+        public Task<int> GetStageCountAsync(Procedures users)
+        {
+            throw new NotImplementedException();
         }
     }
 }
