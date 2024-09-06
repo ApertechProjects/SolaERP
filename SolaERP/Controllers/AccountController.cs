@@ -74,14 +74,18 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> Login(LoginRequestModel dto)
         {
             var user = await _userManager.FindByNameAsync(dto.Email);
-            if (user == null)
-                return CreateActionResult(ApiResponse<bool>.Fail("email", $" {dto.Email} not found", 422));
+            var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
+
+            if (!signInResult.Succeeded)
+            {
+                return CreateActionResult(ApiResponse<bool>.Fail("email", $"email or password is incorrect", 422));
+            }
 
             if (user.IsDeleted)
                 return CreateActionResult(ApiResponse<bool>.Fail("email", "This user was deleted.", 422));
 
             var userdto = _mapper.Map<UserRegisterModel>(user);
-            var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
+
             var emailVerified = await _userService.CheckEmailIsVerified(dto.Email);
             if (!emailVerified)
                 return CreateActionResult(ApiResponse<bool>.Fail("email", "Please, verify your account", 422));
@@ -95,7 +99,7 @@ namespace SolaERP.Controllers
                 return CreateActionResult(ApiResponse<bool>.Fail("email", "Your user is inactive", 422));
             }
 
-            if (signInResult.Succeeded && emailVerified)
+            if (emailVerified)
             {
                 await _userService.UpdateSessionAsync(user.Id, 1);
                 await _userService.UpdateUserLastActivity(user.Id);
