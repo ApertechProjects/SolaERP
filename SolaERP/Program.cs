@@ -16,6 +16,8 @@ using Microsoft.Extensions.FileProviders;
 using SolaERP.Job;
 using Quartz;
 using System.Globalization;
+using AspNetCoreRateLimit;
+using SolaERP.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +50,15 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.Configure<ApiBehaviorOptions>(config => { config.SuppressModelStateInvalidFilter = true; });
+
+builder.Services.AddMemoryCache();
+
+builder.Services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+builder.Services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+builder.Services.AddInMemoryRateLimiting();
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(corsBuilder => corsBuilder
@@ -156,7 +167,8 @@ app.UseSwaggerUI(c =>
     string swaggerJsonBasePath = string.IsNullOrWhiteSpace(c.RoutePrefix) ? "." : "..";
     c.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/v1/swagger.json", "Web API");
 });
-
+//app.UseMiddleware<RequestLimitMiddleware>();
+app.UseIpRateLimiting();
 app.UseHttpLogging();
 app.UseCors();
 app.UseStaticFiles();
