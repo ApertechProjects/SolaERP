@@ -74,8 +74,13 @@ namespace SolaERP.Controllers
         public async Task<IActionResult> Login(LoginRequestModel dto)
         {
             var user = await _userManager.FindByNameAsync(dto.Email);
+            if(user == null)
+            {
+                return CreateActionResult(ApiResponse<bool>.Fail("email", $"email or password is incorrect", 422));
+            }
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
 
+            
             if (!signInResult.Succeeded)
             {
                 return CreateActionResult(ApiResponse<bool>.Fail("email", $"email or password is incorrect", 422));
