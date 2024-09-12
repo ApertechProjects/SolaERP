@@ -21,8 +21,11 @@ namespace SolaERP.API.Middlewares
 
         public async Task InvokeAsync(HttpContext context, ILogger<NoContentDto> _logger)
         {
-            // Sorğu başlığından 'Request-Name' başlığını oxuyun
-            string requestName = context.Request.Headers["Request-Name"].ToString();
+            string requestName = context.Request.Query["name"];
+            string routeName = context.Request.RouteValues["name"]?.ToString();
+
+            
+
             if (string.IsNullOrEmpty(requestName))
             {
                 requestName = "UnknownRequest"; // Əgər sorğu adı təyin olunmayıbsa, "UnknownRequest" olaraq təyin edin

@@ -73,6 +73,7 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequestModel dto)
         {
+          
             var user = await _userManager.FindByNameAsync(dto.Email);
             if(user == null)
             {
@@ -135,6 +136,7 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterModel dto)
         {
+
             var user = await _userManager.FindByNameAsync(dto.Email);
             if (user is not null)
                 return CreateActionResult(ApiResponse<bool>.Fail("email", $" This mail is already in use", 422));
