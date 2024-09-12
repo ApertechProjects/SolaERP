@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Confluent.Kafka;
 using Microsoft.AspNetCore.Html;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
@@ -87,7 +88,11 @@ namespace SolaERP.Persistence.Services
         {
             try
             {
-
+                //select * from  Config.DueDiligenceDesign DDD 
+                //left JOIN Config.DueDeligenceQuestions DQ
+                //ON DDD.[LineNo] = dq.[DueDeligenceLineNo] where IsMandatory = 1select * from  Config.DueDiligenceDesign DDD 
+                //left JOIN Config.DueDeligenceQuestions DQ
+                //ON DDD.[LineNo] = dq.[DueDeligenceLineNo] where IsMandatory = 1
                 //griddatas textboxval
 
 
