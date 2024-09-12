@@ -13,6 +13,7 @@ using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Currency;
 using SolaERP.Application.Entities.Email;
+using SolaERP.Application.Entities.Language;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.User;
 using SolaERP.Application.Entities.Vendors;
@@ -23,6 +24,7 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.Infrastructure.ViewModels;
 using SolaERP.Persistence.Utils;
 using System.Numerics;
+using Language = SolaERP.Application.Enums.Language;
 using PrequalificationGridData = SolaERP.Application.Entities.SupplierEvaluation.PrequalificationGridData;
 
 namespace SolaERP.Persistence.Services
@@ -85,6 +87,10 @@ namespace SolaERP.Persistence.Services
         {
             try
             {
+
+                //griddatas textboxval
+
+
                 User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
                 command.CompanyInformation.VendorCode = command.CompanyInformation.VendorCode == ""
                     ? null
@@ -155,11 +161,11 @@ namespace SolaERP.Persistence.Services
                 //    });
                 //}
 
-            //#endregion
+                //#endregion
 
                 #region ProductServices
 
-            await _repository.DeleteProductServiceAsync(vendorId);
+                await _repository.DeleteProductServiceAsync(vendorId);
                 foreach (var item in command.CompanyInformation.Services)
                 {
                     await _repository.AddProductServiceAsync(new ProductServiceData
@@ -1621,7 +1627,8 @@ namespace SolaERP.Persistence.Services
                             ? 100
                             : calculationResult.Scoring,
                         Outcome = calculationResult.Outcome,
-                        Disabled = d.Disabled
+                        Disabled = d.Disabled,
+                        IsMandatory = d.IsMandatory
                     };
 
                     dto.Childs.Add(childDto);

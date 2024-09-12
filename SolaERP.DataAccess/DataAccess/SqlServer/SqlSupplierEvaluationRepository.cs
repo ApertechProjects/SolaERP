@@ -310,7 +310,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Column4Alias = reader.Get<string>("Column4Alias"),
                 Column5Alias = reader.Get<string>("Column5Alias"),
                 Weight = reader.Get<decimal>("Weight"),
-                Disabled = reader.Get<bool>("Disabled")
+                Disabled = reader.Get<bool>("Disabled"),
+                IsMandatory = reader.Get<bool>("IsMandatory")
             };
         }
 
