@@ -143,23 +143,23 @@ namespace SolaERP.Persistence.Services
 
                 #endregion
 
-                #region BusinessSector
+                //#region BusinessSector
 
-                await _repository.DeleteVendorBusinessSectorAsync(vendorId);
-                foreach (var item in command.CompanyInformation.BusinessSectors)
-                {
-                    await _repository.AddVendorBusinessSectorAsync(new VendorBusinessSectorData
-                    {
-                        VendorId = vendorId,
-                        BusinessSectorId = item.BusinessSectorId
-                    });
-                }
+                //await _repository.DeleteVendorBusinessSectorAsync(vendorId);
+                //foreach (var item in command.CompanyInformation.BusinessSectors)
+                //{
+                //await _repository.AddVendorBusinessSectorAsync(new VendorBusinessSectorData
+                //    {
+                //        VendorId = vendorId,
+                //        BusinessSectorId = item.BusinessSectorId
+                //    });
+                //}
 
-                #endregion
+            //#endregion
 
                 #region ProductServices
 
-                await _repository.DeleteProductServiceAsync(vendorId);
+            await _repository.DeleteProductServiceAsync(vendorId);
                 foreach (var item in command.CompanyInformation.Services)
                 {
                     await _repository.AddProductServiceAsync(new ProductServiceData
@@ -196,13 +196,13 @@ namespace SolaERP.Persistence.Services
                 #endregion
 
 
-                #region Company Information Attachments
+                //#region Company Information Attachments
 
-                SetAttachmentIdToZeroWhenIsRevise(command.IsRevise, command?.CompanyInformation?.Attachments);
-                await _attachmentService.SaveAttachmentAsync2(command?.CompanyInformation?.Attachments,
-                    SourceType.VEN_OLET, vendorId);
+                //SetAttachmentIdToZeroWhenIsRevise(command.IsRevise, command?.CompanyInformation?.Attachments);
+                //await _attachmentService.SaveAttachmentAsync2(command?.CompanyInformation?.Attachments,
+                //    SourceType.VEN_OLET, vendorId);
 
-                #endregion
+                //#endregion
 
                 #region Setting Vendor Ids (COBC,NDA,Bank Accounts)
 
@@ -616,15 +616,15 @@ namespace SolaERP.Persistence.Services
 
                 #region BusinessSector
 
-                await _repository.DeleteVendorBusinessSectorAsync(vendorId);
-                foreach (var item in command.CompanyInformation.BusinessSectors)
-                {
-                    await _repository.AddVendorBusinessSectorAsync(new VendorBusinessSectorData
-                    {
-                        VendorId = vendorId,
-                        BusinessSectorId = item.BusinessSectorId
-                    });
-                }
+                //await _repository.DeleteVendorBusinessSectorAsync(vendorId);
+                //foreach (var item in command.CompanyInformation.BusinessSectors)
+                //{
+                //    await _repository.AddVendorBusinessSectorAsync(new VendorBusinessSectorData
+                //    {
+                //        VendorId = vendorId,
+                //        BusinessSectorId = item.BusinessSectorId
+                //    });
+                //}
 
                 #endregion
 
@@ -663,12 +663,12 @@ namespace SolaERP.Persistence.Services
 
                 #endregion
 
-                #region Company Information Attachments
+                //#region Company Information Attachments
 
-                await _attachmentService.SaveAttachmentAsync(command?.CompanyInformation?.Attachments,
-                    SourceType.VEN_OLET, vendorId);
+                //await _attachmentService.SaveAttachmentAsync(command?.CompanyInformation?.Attachments,
+                //    SourceType.VEN_OLET, vendorId);
 
-                #endregion
+                //#endregion
 
                 #region Setting Vendor Ids (COBC,NDA,Bank Accounts)
 

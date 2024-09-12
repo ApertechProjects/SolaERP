@@ -46,6 +46,9 @@ namespace SolaERP.Persistence.Validations.Supplier
             RuleFor(x => x.CompanyAdress).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.City).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
             RuleFor(x => x.Country).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}");
+            RuleFor(x => x.BusinessCategories).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}"); 
+            RuleFor(x => x.RepresentedProducts).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}"); 
+            RuleFor(x => x.RepresentedCompanies).NotNull().NotEmpty().WithMessage("Please, enter {PropertyName}"); 
         }
     }
 }

@@ -37,16 +37,16 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public string[] RepresentedCompanies { get; set; }
         public string[] RepresentedProducts { get; set; }
         public int CreditDays { get; set; }
-        public string PaymentTerms { get; set; }
+        //public string PaymentTerms { get; set; } deleted
         public bool AgreeWithDefaultDays { get; set; }
         public string Other { get; set; }
         public List<ProductService> Services { get; set; }
         public List<PrequalificationCategory> PrequalificationTypes { get; set; }
         public List<Entities.SupplierEvaluation.BusinessCategory> BusinessCategories { get; set; }
-        public List<BusinessSector> BusinessSectors { get; set; }
+        //public List<BusinessSector> BusinessSectors { get; set; }  deleted
         public List<AttachmentSaveModel> CompanyLogo { get; set; }
         public bool CompanyLogoFileIsDeleted { get; set; }
-        public List<AttachmentSaveModel> Attachments { get; set; }
+        //public List<AttachmentSaveModel> Attachments { get; set; } deleted
     }
 
     public class CompanyInfoViewDto
