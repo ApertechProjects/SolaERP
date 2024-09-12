@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using AngleSharp.Io;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Dtos.Shared;
 using System.Text.Json;
 
@@ -43,8 +45,17 @@ namespace SolaERP.API.Middlewares
                         _logger.LogError($"Request limit exceeded for {clientKey}. Please try again later.");
                         var result = ApiResponse<NoContentDto>.Fail($"Request limit exceeded for {clientKey}. Please try again later.", 429);
                         //var result = ApiResponse<NoContentDto>.Fail("request", $"Request limit exceeded for {clientKey}. Please try again later.", 422);
-                        await context.Response.WriteAsync(JsonSerializer.Serialize(result));
 
+                        var options = new JsonSerializerOptions
+                        {
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,  // Optional: Use camelCase for JSON properties
+                            WriteIndented = true // Optional: Pretty-print the JSON
+                        };
+
+                        //await context.Response.WriteAsync(JsonSerializer.Serialize(result));
+                        var data = new ObjectResult(result) { StatusCode = context.Response.StatusCode };
+                        await context.Response.WriteAsync(JsonSerializer.Serialize(result));
+                        return;
                     }
                     else
                     {
