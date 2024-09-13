@@ -50,7 +50,14 @@ namespace SolaERP.Application.Validator
 
         private bool IsFieldInvalid(DueDiligenceChildSaveDto item, bool isMandatory)
         {
-            return string.IsNullOrEmpty(item.TextboxValue) && (item.GridDatas == null || item.GridDatas.Count == 0) && item.DateTimeValue == null && isMandatory;
+            if (item.HasRadioBox)
+                return false;
+
+            return string.IsNullOrEmpty(item.TextboxValue) &&
+                   (item.GridDatas == null || item.GridDatas.Count == 0) &&
+                   item.DateTimeValue == null &&
+                   (item.Attachments == null || item.Attachments.Count == 0) &&
+                   isMandatory;
         }
     }
 }
