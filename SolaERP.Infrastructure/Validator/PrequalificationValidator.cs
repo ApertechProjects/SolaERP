@@ -1,7 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
-using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.SupplierEvaluation;
-using SolaERP.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,23 +8,25 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Validator
 {
-    public class DueDiligenceValidator
+    public class PrequalificationValidator
     {
         private readonly ISupplierEvaluationRepository _repository;
 
-        public DueDiligenceValidator(ISupplierEvaluationRepository repository)
+        public PrequalificationValidator(ISupplierEvaluationRepository repository)
         {
             _repository = repository;
         }
 
-        public async Task<string> ValidateDueDiligenceAsync(List<DueDiligenceDesignSaveDto> dueDiligence)
+        public async Task<string> ValidateDueDiligenceAsync(List<PrequalificationDesignListDto> prequalification)
         {
             StringBuilder resultItems = new StringBuilder();
             var mandatoryCheckForDueDiligence = await _repository.GetDueDiligenceMandatoryDatas();
-            List<DueDiligenceChildSaveDto> allChilds = dueDiligence
-                .Where(x => x.Childs != null)         // Ensure the Childs list is not null
-                .SelectMany(x => x.Childs)
-                .ToList();
+            List<PrequalificationChildSaveDto> allChilds = prequalification
+                    .Where(x => x.Prequalifications != null)   
+                    .SelectMany(x => x.Prequalifications)      
+                    .Where(p => p.Childs != null)              
+                    .SelectMany(p => p.Childs)                 
+                    .ToList();
 
             foreach (var item in allChilds)
             {
@@ -37,7 +37,8 @@ namespace SolaERP.Application.Validator
 
                 if (IsFieldInvalid(item, isMandatory))
                 {
-                    resultItems.Append(item.LineNo + ",");
+                    string res = resultItems.ToString().TrimEnd(',');
+                    return res;
                 }
             }
             if (resultItems.Length > 0)
@@ -48,8 +49,9 @@ namespace SolaERP.Application.Validator
             return null;
         }
 
-        private bool IsFieldInvalid(DueDiligenceChildSaveDto item, bool isMandatory)
+        private bool IsFieldInvalid(PrequalificationChildSaveDto item, bool isMandatory)
         {
+            // Check for invalid field conditions
             return string.IsNullOrEmpty(item.TextboxValue) && (item.GridDatas == null || item.GridDatas.Count == 0) && isMandatory;
         }
     }

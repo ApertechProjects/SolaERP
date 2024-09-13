@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Persistence.Exceptions
 {
-    public class DueDiligenceException : Exception
+    public class PrequalificationException : Exception
     {
-        public DueDiligenceException(string message) : base(message)
+        public PrequalificationException(string message) : base(message)
         {
 
         }

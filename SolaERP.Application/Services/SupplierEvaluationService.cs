@@ -90,14 +90,20 @@ namespace SolaERP.Persistence.Services
         {
             try
             {
-                var validator = new DueDiligenceValidator(_repository);
-                var validationResponse = await validator.ValidateDueDiligenceAsync(command.DueDiligence);
-                if (!validationResponse)
+                var validatorDue = new DueDiligenceValidator(_repository);
+                var validationDueResponse = await validatorDue.ValidateDueDiligenceAsync(command.DueDiligence);
+                if (!string.IsNullOrEmpty(validationDueResponse))
                 {
-                    throw new DueDiligenceException();
+                    throw new DueDiligenceException($"Some fields must be fill for due diligence : {validationDueResponse}");
                 }
 
-              
+                var validatorPre = new PrequalificationValidator(_repository);
+                var validationPreResponse = await validatorPre.ValidateDueDiligenceAsync(command.Prequalification);
+                if (!string.IsNullOrEmpty(validationPreResponse))
+                {
+                    throw new PrequalificationException($"Some fields must be fill for due diligence : {validationDueResponse}");
+                }
+
                 User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
                 command.CompanyInformation.VendorCode = command.CompanyInformation.VendorCode == ""
                     ? null
@@ -509,6 +515,10 @@ namespace SolaERP.Persistence.Services
             {
                 throw;
             }
+            catch (PrequalificationException ex)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
                 throw;
@@ -571,7 +581,11 @@ namespace SolaERP.Persistence.Services
             }
             catch (DueDiligenceException ex)
             {
-                return ApiResponse<EvaluationResultModel>.Fail("Some field must be fill for due diligence", 422);
+                return ApiResponse<EvaluationResultModel>.Fail(ex.Message, 422);
+            }
+            catch (PrequalificationException ex)
+            {
+                return ApiResponse<EvaluationResultModel>.Fail(ex.Message, 422);
             }
             catch (Exception ex)
             {

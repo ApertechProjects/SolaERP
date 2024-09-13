@@ -81,13 +81,17 @@ namespace SolaERP.API.Controllers
             }
             catch (DueDiligenceException ex)
             {
-                return CreateActionResult(ApiResponse<EvaluationResultModel>.Fail("Some field must be fill for due diligence", 422));
+                return CreateActionResult(ApiResponse<EvaluationResultModel>.Fail(ex.Message, 422));
+            }
+            catch (PrequalificationException ex)
+            {
+                return CreateActionResult(ApiResponse<EvaluationResultModel>.Fail(ex.Message, 422));
             }
             catch (Exception ex)
             {
                 return CreateActionResult(ApiResponse<EvaluationResultModel>.Fail(ex.Message, 400));
             }
-         
+
         }
 
         [HttpPost("[action]")]
