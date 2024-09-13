@@ -83,10 +83,6 @@ namespace SolaERP.API.Controllers
             {
                 return CreateActionResult(ApiResponse<EvaluationResultModel>.Fail(ex.Message, 422));
             }
-            catch (PrequalificationException ex)
-            {
-                return CreateActionResult(ApiResponse<EvaluationResultModel>.Fail(ex.Message, 422));
-            }
             catch (Exception ex)
             {
                 return CreateActionResult(ApiResponse<EvaluationResultModel>.Fail(ex.Message, 400));

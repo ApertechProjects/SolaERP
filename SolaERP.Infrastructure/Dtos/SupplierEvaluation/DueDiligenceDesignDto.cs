@@ -126,7 +126,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
             get
             {
                 if (_dateTimeValue?.Date == DateTime.MinValue)
-                    _dateTimeValue = DateTime.Now;
+                    _dateTimeValue = null;
                 return _dateTimeValue;
             }
             set => _dateTimeValue = value;

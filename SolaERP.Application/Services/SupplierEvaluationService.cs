@@ -97,13 +97,6 @@ namespace SolaERP.Persistence.Services
                     throw new DueDiligenceException($"Some fields must be fill for due diligence : {validationDueResponse}");
                 }
 
-                var validatorPre = new PrequalificationValidator(_repository);
-                var validationPreResponse = await validatorPre.ValidateDueDiligenceAsync(command.Prequalification);
-                if (!string.IsNullOrEmpty(validationPreResponse))
-                {
-                    throw new PrequalificationException($"Some fields must be fill for due diligence : {validationDueResponse}");
-                }
-
                 User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
                 command.CompanyInformation.VendorCode = command.CompanyInformation.VendorCode == ""
                     ? null
@@ -512,10 +505,6 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<EvaluationResultModel>.Success(resultModel, 200);
             }
             catch (DueDiligenceException ex)
-            {
-                throw;
-            }
-            catch (PrequalificationException ex)
             {
                 throw;
             }
@@ -1758,6 +1747,17 @@ namespace SolaERP.Persistence.Services
                         int childDesignId = dueDesign[i].Childs[j].DesignId;
                         var gridDatas = await _repository.GetDueDiligenceGridAsync(childDesignId, vendorId);
                         dueDesign[i].Childs[j].GridDatas = gridDatas;
+
+                        if (dueDesign[i].Childs[j].Question.Contains("3 fiscal years") && gridDatas.Count == 0) //there is no another way for this
+                        {
+                            List<DueDiligenceGrid> staticDatas = new List<DueDiligenceGrid>()
+                            {
+                                new DueDiligenceGrid {Column4 = DateTime.Now.AddYears(-1).Year.ToString()},
+                                new DueDiligenceGrid {Column4 = DateTime.Now.AddYears(-2).Year.ToString()},
+                                new DueDiligenceGrid {Column4 = DateTime.Now.AddYears(-3).Year.ToString()},
+                            };
+                            dueDesign[i].Childs[j].GridDatas = staticDatas;
+                        }
                     }
                 }
             }
