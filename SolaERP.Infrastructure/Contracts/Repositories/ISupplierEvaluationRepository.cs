@@ -79,5 +79,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<TaxData>> TaxDatas();
         Task<bool> UpdateVendor(int userId, string taxId);
         Task<bool> HasBankDetailByAccountNumberAsync(string acountNumber);
+        Task<List<DueDiligenceMandatory>> GetDueDiligenceMandatoryDatas();
     }
 }

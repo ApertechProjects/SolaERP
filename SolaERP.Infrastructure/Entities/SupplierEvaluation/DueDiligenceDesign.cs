@@ -29,5 +29,6 @@ namespace SolaERP.Application.Entities.SupplierEvaluation
         public string Column5Alias { get; set; }
         public decimal Weight { get; set; }
         public bool Disabled { get; set; }
+        public bool IsMandatory { get; set; }
     }
 }

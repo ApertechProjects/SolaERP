@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Confluent.Kafka;
 using Microsoft.AspNetCore.Html;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
@@ -13,6 +14,7 @@ using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Currency;
 using SolaERP.Application.Entities.Email;
+using SolaERP.Application.Entities.Language;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.User;
 using SolaERP.Application.Entities.Vendors;
@@ -20,9 +22,12 @@ using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.Application.Validator;
 using SolaERP.Infrastructure.ViewModels;
+using SolaERP.Persistence.Exceptions;
 using SolaERP.Persistence.Utils;
 using System.Numerics;
+using Language = SolaERP.Application.Enums.Language;
 using PrequalificationGridData = SolaERP.Application.Entities.SupplierEvaluation.PrequalificationGridData;
 
 namespace SolaERP.Persistence.Services
@@ -85,6 +90,35 @@ namespace SolaERP.Persistence.Services
         {
             try
             {
+                var validator = new DueDiligenceValidator(_repository);
+                var validationResponse = await validator.ValidateDueDiligenceAsync(command.DueDiligence);
+                if (!validationResponse)
+                {
+                    throw new DueDiligenceException();
+                }
+
+                //var mandatoryCheckForDueDiligence = await _repository.GetDueDiligenceMandatoryDatas();
+                //List<DueDiligenceChildSaveDto> allChilds = command.DueDiligence
+                //.Where(x => x.Childs != null)         // Ensure the Childs list is not null
+                //.SelectMany(x => x.Childs)
+                //.ToList();
+
+                //foreach (var item in allChilds)
+                //{
+                //    bool isMandatory = mandatoryCheckForDueDiligence.Where(x => x.DueDiligenceDesignId == item.DesignId).Select(x => x.IsMandatory).FirstOrDefault();
+                //    if (string.IsNullOrEmpty(item.TextboxValue) && (item.GridDatas.Count == 0 || item.GridDatas is null) && isMandatory)
+                //    {
+                //        return ApiResponse<EvaluationResultModel>.Fail("In Due Diligence some field must be fill", 422);
+                //    }
+                //}
+                //select * from  Config.DueDiligenceDesign DDD 
+                //left JOIN Config.DueDeligenceQuestions DQ
+                //ON DDD.[LineNo] = dq.[DueDeligenceLineNo] where IsMandatory = 1select * from  Config.DueDiligenceDesign DDD 
+                //left JOIN Config.DueDeligenceQuestions DQ
+                //ON DDD.[LineNo] = dq.[DueDeligenceLineNo] where IsMandatory = 1
+                //griddatas textboxval
+
+
                 User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
                 command.CompanyInformation.VendorCode = command.CompanyInformation.VendorCode == ""
                     ? null
@@ -143,19 +177,19 @@ namespace SolaERP.Persistence.Services
 
                 #endregion
 
-                #region BusinessSector
+                //#region BusinessSector
 
-                await _repository.DeleteVendorBusinessSectorAsync(vendorId);
-                foreach (var item in command.CompanyInformation.BusinessSectors)
-                {
-                    await _repository.AddVendorBusinessSectorAsync(new VendorBusinessSectorData
-                    {
-                        VendorId = vendorId,
-                        BusinessSectorId = item.BusinessSectorId
-                    });
-                }
+                //await _repository.DeleteVendorBusinessSectorAsync(vendorId);
+                //foreach (var item in command.CompanyInformation.BusinessSectors)
+                //{
+                //await _repository.AddVendorBusinessSectorAsync(new VendorBusinessSectorData
+                //    {
+                //        VendorId = vendorId,
+                //        BusinessSectorId = item.BusinessSectorId
+                //    });
+                //}
 
-                #endregion
+                //#endregion
 
                 #region ProductServices
 
@@ -196,13 +230,13 @@ namespace SolaERP.Persistence.Services
                 #endregion
 
 
-                #region Company Information Attachments
+                //#region Company Information Attachments
 
-                SetAttachmentIdToZeroWhenIsRevise(command.IsRevise, command?.CompanyInformation?.Attachments);
-                await _attachmentService.SaveAttachmentAsync2(command?.CompanyInformation?.Attachments,
-                    SourceType.VEN_OLET, vendorId);
+                //SetAttachmentIdToZeroWhenIsRevise(command.IsRevise, command?.CompanyInformation?.Attachments);
+                //await _attachmentService.SaveAttachmentAsync2(command?.CompanyInformation?.Attachments,
+                //    SourceType.VEN_OLET, vendorId);
 
-                #endregion
+                //#endregion
 
                 #region Setting Vendor Ids (COBC,NDA,Bank Accounts)
 
@@ -492,6 +526,10 @@ namespace SolaERP.Persistence.Services
 
                 return ApiResponse<EvaluationResultModel>.Success(resultModel, 200);
             }
+            catch (DueDiligenceException ex)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
                 throw;
@@ -504,6 +542,7 @@ namespace SolaERP.Persistence.Services
             try
             {
                 var result = (await AddAsync2(userIdentity, command, true)).Data;
+
                 User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
                 var vendor = await _vendorRepository.GetHeader(result.VendorId);
@@ -550,6 +589,10 @@ namespace SolaERP.Persistence.Services
 
 
                 return ApiResponse<EvaluationResultModel>.Success(result, 200);
+            }
+            catch (DueDiligenceException ex)
+            {
+                return ApiResponse<EvaluationResultModel>.Fail("Some field must be fill for due diligence", 422);
             }
             catch (Exception ex)
             {
@@ -616,15 +659,15 @@ namespace SolaERP.Persistence.Services
 
                 #region BusinessSector
 
-                await _repository.DeleteVendorBusinessSectorAsync(vendorId);
-                foreach (var item in command.CompanyInformation.BusinessSectors)
-                {
-                    await _repository.AddVendorBusinessSectorAsync(new VendorBusinessSectorData
-                    {
-                        VendorId = vendorId,
-                        BusinessSectorId = item.BusinessSectorId
-                    });
-                }
+                //await _repository.DeleteVendorBusinessSectorAsync(vendorId);
+                //foreach (var item in command.CompanyInformation.BusinessSectors)
+                //{
+                //    await _repository.AddVendorBusinessSectorAsync(new VendorBusinessSectorData
+                //    {
+                //        VendorId = vendorId,
+                //        BusinessSectorId = item.BusinessSectorId
+                //    });
+                //}
 
                 #endregion
 
@@ -663,12 +706,12 @@ namespace SolaERP.Persistence.Services
 
                 #endregion
 
-                #region Company Information Attachments
+                //#region Company Information Attachments
 
-                await _attachmentService.SaveAttachmentAsync(command?.CompanyInformation?.Attachments,
-                    SourceType.VEN_OLET, vendorId);
+                //await _attachmentService.SaveAttachmentAsync(command?.CompanyInformation?.Attachments,
+                //    SourceType.VEN_OLET, vendorId);
 
-                #endregion
+                //#endregion
 
                 #region Setting Vendor Ids (COBC,NDA,Bank Accounts)
 
@@ -1621,7 +1664,8 @@ namespace SolaERP.Persistence.Services
                             ? 100
                             : calculationResult.Scoring,
                         Outcome = calculationResult.Outcome,
-                        Disabled = d.Disabled
+                        Disabled = d.Disabled,
+                        IsMandatory = d.IsMandatory
                     };
 
                     dto.Childs.Add(childDto);

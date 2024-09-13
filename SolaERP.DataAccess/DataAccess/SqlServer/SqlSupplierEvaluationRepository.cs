@@ -310,7 +310,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Column4Alias = reader.Get<string>("Column4Alias"),
                 Column5Alias = reader.Get<string>("Column5Alias"),
                 Weight = reader.Get<decimal>("Weight"),
-                Disabled = reader.Get<bool>("Disabled")
+                Disabled = reader.Get<bool>("Disabled"),
+                IsMandatory = reader.Get<bool>("IsMandatory")
             };
         }
 
@@ -1088,6 +1089,25 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 while (reader.Read())
                     resultList.Add(reader.GetByEntityStructure<VendorBusinessSector>());
+
+                return resultList;
+            }
+        }
+
+        public async Task<List<DueDiligenceMandatory>> GetDueDiligenceMandatoryDatas()
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "select DueDiligenceDesignId,IsMandatory from " +
+                    "Config.DueDiligenceDesign DDD " +
+                    "left JOIN Config.DueDeligenceQuestions DQ " +
+                    "ON DDD.[LineNo] = dq.[DueDeligenceLineNo] ";
+
+                List<DueDiligenceMandatory> resultList = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<DueDiligenceMandatory>());
 
                 return resultList;
             }

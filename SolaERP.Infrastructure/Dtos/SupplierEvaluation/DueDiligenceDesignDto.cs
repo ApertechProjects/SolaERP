@@ -21,6 +21,7 @@ namespace SolaERP.Application.Dtos.SupplierEvaluation
         public string Question { get; set; }
 
         //
+        public bool IsMandatory { get; set; }
         public bool HasTextBox { get; set; }
 
         //
