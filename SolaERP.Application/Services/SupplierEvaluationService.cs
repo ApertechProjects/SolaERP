@@ -97,28 +97,7 @@ namespace SolaERP.Persistence.Services
                     throw new DueDiligenceException();
                 }
 
-                //var mandatoryCheckForDueDiligence = await _repository.GetDueDiligenceMandatoryDatas();
-                //List<DueDiligenceChildSaveDto> allChilds = command.DueDiligence
-                //.Where(x => x.Childs != null)         // Ensure the Childs list is not null
-                //.SelectMany(x => x.Childs)
-                //.ToList();
-
-                //foreach (var item in allChilds)
-                //{
-                //    bool isMandatory = mandatoryCheckForDueDiligence.Where(x => x.DueDiligenceDesignId == item.DesignId).Select(x => x.IsMandatory).FirstOrDefault();
-                //    if (string.IsNullOrEmpty(item.TextboxValue) && (item.GridDatas.Count == 0 || item.GridDatas is null) && isMandatory)
-                //    {
-                //        return ApiResponse<EvaluationResultModel>.Fail("In Due Diligence some field must be fill", 422);
-                //    }
-                //}
-                //select * from  Config.DueDiligenceDesign DDD 
-                //left JOIN Config.DueDeligenceQuestions DQ
-                //ON DDD.[LineNo] = dq.[DueDeligenceLineNo] where IsMandatory = 1select * from  Config.DueDiligenceDesign DDD 
-                //left JOIN Config.DueDeligenceQuestions DQ
-                //ON DDD.[LineNo] = dq.[DueDeligenceLineNo] where IsMandatory = 1
-                //griddatas textboxval
-
-
+              
                 User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
                 command.CompanyInformation.VendorCode = command.CompanyInformation.VendorCode == ""
                     ? null
@@ -177,7 +156,7 @@ namespace SolaERP.Persistence.Services
 
                 #endregion
 
-                //#region BusinessSector
+                #region BusinessSector
 
                 //await _repository.DeleteVendorBusinessSectorAsync(vendorId);
                 //foreach (var item in command.CompanyInformation.BusinessSectors)
@@ -189,7 +168,7 @@ namespace SolaERP.Persistence.Services
                 //    });
                 //}
 
-                //#endregion
+                #endregion
 
                 #region ProductServices
 
@@ -230,13 +209,13 @@ namespace SolaERP.Persistence.Services
                 #endregion
 
 
-                //#region Company Information Attachments
+                #region Company Information Attachments
 
                 //SetAttachmentIdToZeroWhenIsRevise(command.IsRevise, command?.CompanyInformation?.Attachments);
                 //await _attachmentService.SaveAttachmentAsync2(command?.CompanyInformation?.Attachments,
                 //    SourceType.VEN_OLET, vendorId);
 
-                //#endregion
+                #endregion
 
                 #region Setting Vendor Ids (COBC,NDA,Bank Accounts)
 
@@ -706,12 +685,12 @@ namespace SolaERP.Persistence.Services
 
                 #endregion
 
-                //#region Company Information Attachments
+                #region Company Information Attachments
 
                 //await _attachmentService.SaveAttachmentAsync(command?.CompanyInformation?.Attachments,
                 //    SourceType.VEN_OLET, vendorId);
 
-                //#endregion
+                #endregion
 
                 #region Setting Vendor Ids (COBC,NDA,Bank Accounts)
 

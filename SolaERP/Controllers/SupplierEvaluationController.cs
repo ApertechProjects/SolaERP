@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
+using SolaERP.Persistence.Exceptions;
 
 namespace SolaERP.API.Controllers
 {
@@ -72,7 +74,20 @@ namespace SolaERP.API.Controllers
         [RequestSizeLimit(100_000_000)]
         public async Task<IActionResult> Post2([FromBody] SupplierRegisterCommand2 command)
         {
-            return CreateActionResult(await _service.AddAsync2(User.Identity.Name, command, command.IsRevise));
+            try
+            {
+                var result = await _service.AddAsync2(User.Identity.Name, command, command.IsRevise);
+                return CreateActionResult(result);
+            }
+            catch (DueDiligenceException ex)
+            {
+                return CreateActionResult(ApiResponse<EvaluationResultModel>.Fail("Some field must be fill for due diligence", 422));
+            }
+            catch (Exception ex)
+            {
+                return CreateActionResult(ApiResponse<EvaluationResultModel>.Fail(ex.Message, 400));
+            }
+         
         }
 
         [HttpPost("[action]")]
