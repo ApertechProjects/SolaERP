@@ -19,14 +19,14 @@ namespace SolaERP.Application.Validator
             _repository = repository;
         }
 
-        public async Task<string> ValidateDueDiligenceAsync(List<DueDiligenceDesignSaveDto> dueDiligence)
+        public async Task<string> ValidateDueDiligenceAsync(List<DueDiligenceChildSaveDto> allChilds)
         {
             StringBuilder resultItems = new StringBuilder();
             var mandatoryCheckForDueDiligence = await _repository.GetDueDiligenceMandatoryDatas();
-            List<DueDiligenceChildSaveDto> allChilds = dueDiligence
-                .Where(x => x.Childs != null)         // Ensure the Childs list is not null
-                .SelectMany(x => x.Childs)
-                .ToList();
+            //List<DueDiligenceChildSaveDto> allChilds = dueDiligence
+            //    .Where(x => x.Childs != null)         // Ensure the Childs list is not null
+            //    .SelectMany(x => x.Childs)
+            //    .ToList();
 
             foreach (var item in allChilds)
             {
@@ -46,6 +46,26 @@ namespace SolaERP.Application.Validator
                 return res;
             }
             return null;
+        }
+
+        public async Task<bool> ValidateGridDatas(List<DueDiligenceChildSaveDto> allChilds)
+        {
+            foreach (var item in allChilds)
+            {
+                if (item.Question == "3 fiscal years")
+                {
+                    var emptyData = item.GridDatas.Where(x => string.IsNullOrEmpty(x.Column1) ||
+                                                              string.IsNullOrEmpty(x.Column2) ||
+                                                              string.IsNullOrEmpty(x.Column3) ||
+                                                              string.IsNullOrWhiteSpace(x.Column4));
+                    if (emptyData.Any())
+                    {
+                        return false;
+                    }
+                }
+            }
+            
+            return true;
         }
 
         private bool IsFieldInvalid(DueDiligenceChildSaveDto item, bool isMandatory)
