@@ -22,7 +22,9 @@ using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
+using SolaERP.Application.Validator;
 using SolaERP.Infrastructure.ViewModels;
+using SolaERP.Persistence.Exceptions;
 using SolaERP.Persistence.Utils;
 using System.Numerics;
 using Language = SolaERP.Application.Enums.Language;
@@ -88,6 +90,27 @@ namespace SolaERP.Persistence.Services
         {
             try
             {
+                var validator = new DueDiligenceValidator(_repository);
+                var validationResponse = await validator.ValidateDueDiligenceAsync(command.DueDiligence);
+                if (!validationResponse)
+                {
+                    throw new DueDiligenceException();
+                }
+
+                //var mandatoryCheckForDueDiligence = await _repository.GetDueDiligenceMandatoryDatas();
+                //List<DueDiligenceChildSaveDto> allChilds = command.DueDiligence
+                //.Where(x => x.Childs != null)         // Ensure the Childs list is not null
+                //.SelectMany(x => x.Childs)
+                //.ToList();
+
+                //foreach (var item in allChilds)
+                //{
+                //    bool isMandatory = mandatoryCheckForDueDiligence.Where(x => x.DueDiligenceDesignId == item.DesignId).Select(x => x.IsMandatory).FirstOrDefault();
+                //    if (string.IsNullOrEmpty(item.TextboxValue) && (item.GridDatas.Count == 0 || item.GridDatas is null) && isMandatory)
+                //    {
+                //        return ApiResponse<EvaluationResultModel>.Fail("In Due Diligence some field must be fill", 422);
+                //    }
+                //}
                 //select * from  Config.DueDiligenceDesign DDD 
                 //left JOIN Config.DueDeligenceQuestions DQ
                 //ON DDD.[LineNo] = dq.[DueDeligenceLineNo] where IsMandatory = 1select * from  Config.DueDiligenceDesign DDD 
@@ -503,6 +526,10 @@ namespace SolaERP.Persistence.Services
 
                 return ApiResponse<EvaluationResultModel>.Success(resultModel, 200);
             }
+            catch (DueDiligenceException ex)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
                 throw;
@@ -515,6 +542,7 @@ namespace SolaERP.Persistence.Services
             try
             {
                 var result = (await AddAsync2(userIdentity, command, true)).Data;
+
                 User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
                 var vendor = await _vendorRepository.GetHeader(result.VendorId);
@@ -561,6 +589,10 @@ namespace SolaERP.Persistence.Services
 
 
                 return ApiResponse<EvaluationResultModel>.Success(result, 200);
+            }
+            catch (DueDiligenceException ex)
+            {
+                return ApiResponse<EvaluationResultModel>.Fail("Some field must be fill for due diligence", 422);
             }
             catch (Exception ex)
             {

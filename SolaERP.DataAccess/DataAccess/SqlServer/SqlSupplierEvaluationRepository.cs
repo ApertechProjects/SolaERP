@@ -1093,5 +1093,24 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return resultList;
             }
         }
+
+        public async Task<List<DueDiligenceMandatory>> GetDueDiligenceMandatoryDatas()
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "select DueDiligenceDesignId,IsMandatory from " +
+                    "Config.DueDiligenceDesign DDD " +
+                    "left JOIN Config.DueDeligenceQuestions DQ " +
+                    "ON DDD.[LineNo] = dq.[DueDeligenceLineNo] ";
+
+                List<DueDiligenceMandatory> resultList = new();
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    resultList.Add(reader.GetByEntityStructure<DueDiligenceMandatory>());
+
+                return resultList;
+            }
+        }
     }
 }
