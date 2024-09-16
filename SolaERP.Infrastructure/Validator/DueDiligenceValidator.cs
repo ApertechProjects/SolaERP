@@ -52,7 +52,7 @@ namespace SolaERP.Application.Validator
         {
             foreach (var item in allChilds)
             {
-                if (item.Question == "3 fiscal years")
+                if (item.Question.Contains("3 fiscal years"))
                 {
                     var emptyData = item.GridDatas.Where(x => string.IsNullOrEmpty(x.Column1) ||
                                                               string.IsNullOrEmpty(x.Column2) ||

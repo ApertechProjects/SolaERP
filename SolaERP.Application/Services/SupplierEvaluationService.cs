@@ -103,7 +103,7 @@ namespace SolaERP.Persistence.Services
                 }
 
                 var validatorGridResponse = await validatorDue.ValidateGridDatas(dueDiligence);
-                if (validatorGridResponse)
+                if (!validatorGridResponse)
                 {
                     throw new DueDiligenceException($"Fill grid datas for Financial Status");
                 }
