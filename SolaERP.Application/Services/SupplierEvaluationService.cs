@@ -1575,10 +1575,11 @@ namespace SolaERP.Persistence.Services
         private async Task<List<DueDiligenceDesignDto>> GetDueDesignsAsync(string userIdentity, Language language,
             int? revisedVendorId = null)
         {
+
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
             int vendorId = revisedVendorId ?? user.VendorId;
 
-            List<DueDiligenceDesign> dueDiligence = await _repository.GetDueDiligencesDesignAsync(language);
+            List<DueDiligenceDesign> dueDiligence = await _repository.GetDueDiligencesDesignAsync(user.Language);
             List<DueDiligenceValue> dueDiligenceValues = await _repository.GetVendorDuesAsync(vendorId);
 
             var groupedList = dueDiligence.GroupBy(x => x.Title).ToList();
@@ -1760,7 +1761,7 @@ namespace SolaERP.Persistence.Services
                         var gridDatas = await _repository.GetDueDiligenceGridAsync(childDesignId, vendorId);
                         dueDesign[i].Childs[j].GridDatas = gridDatas;
 
-                        if (dueDesign[i].Childs[j].Question.Contains("3 fiscal years") && gridDatas.Count == 0) //there is no another way for this
+                        if ((dueDesign[i].Childs[j].Question.Contains("3 fiscal years") || (dueDesign[i].Childs[j].Question.Contains("3 il üçün"))) && gridDatas.Count == 0) //there is no another way for this
                         {
                             List<DueDiligenceGrid> staticDatas = new List<DueDiligenceGrid>()
                             {
