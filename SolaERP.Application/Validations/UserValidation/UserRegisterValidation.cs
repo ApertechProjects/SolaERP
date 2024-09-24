@@ -13,6 +13,10 @@ namespace SolaERP.Application.Validations.UserValidation
                         .NotEmpty()
                         .WithMessage("Please, enter {PropertyName}")
                         .When(x => x.UserTypeId == 0);
+            RuleFor(x => x.TaxId)
+                       .NotEmpty()
+                       .WithMessage("Please, enter {PropertyName}")
+                       .When(x => x.UserTypeId == 0);
             RuleFor(x => x.Email).NotEmpty().WithMessage("Please, enter {PropertyName}").EmailAddress().WithMessage("Please, enter valid {PropertyName}")
                 .Matches(@"^[^@\s]+@[^@\s]+\.[^@\s]+$").WithMessage("Please, enter valid {PropertyName}");
             RuleFor(x => x.Password).NotEmpty().WithMessage("Please, enter {PropertyName}").MinimumLength(7).WithMessage("Password minimum length must be 7 symbol"); ;
