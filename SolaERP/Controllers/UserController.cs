@@ -26,7 +26,12 @@ namespace SolaERP.Controllers
         private readonly ITokenHandler _tokenHandler;
         private readonly IEmailNotificationService _emailNotificationService;
         private readonly IMailService _mailService;
-        public UserController(IUserService userService, IFileUploadService fileService, IGroupService groupService, ITokenHandler tokenHandler, IEmailNotificationService emailNotificationService, IMailService mailService)
+        public UserController(IUserService userService,
+                              IFileUploadService fileService,
+                              IGroupService groupService, 
+                              ITokenHandler tokenHandler, 
+                              IEmailNotificationService emailNotificationService, 
+                              IMailService mailService)
         {
             _userService = userService;
             _fileService = fileService;

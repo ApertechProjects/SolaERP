@@ -14,6 +14,7 @@ using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Entities.User;
 using SolaERP.Application.Entities.UserReport;
+using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
@@ -37,6 +38,8 @@ namespace SolaERP.Persistence.Services
         private readonly IFileUploadService _fileUploadService;
         private readonly IConfiguration _configuration;
         private readonly IApproveStageService _approveStageMainService;
+        private readonly IVendorService _vendorService;
+        private readonly IApproveStageService _approveStageService;
 
         public UserService(IUserRepository userRepository,
             IGroupRepository groupRepository,
@@ -48,7 +51,8 @@ namespace SolaERP.Persistence.Services
             IAttachmentRepository attachmentRepo,
             IFileUploadService fileUploadService,
             IConfiguration configuration,
-            IApproveStageService approveStageMainService)
+            IApproveStageService approveStageMainService,
+            IVendorService vendorService)
         {
             _userRepository = userRepository;
             _groupRepository = groupRepository;
@@ -61,6 +65,7 @@ namespace SolaERP.Persistence.Services
             _fileUploadService = fileUploadService;
             _configuration = configuration;
             _approveStageMainService = approveStageMainService;
+            _vendorService = vendorService;
         }
 
 
@@ -78,17 +83,61 @@ namespace SolaERP.Persistence.Services
             user.PasswordHash = SecurityUtil.ComputeSha256Hash(model.Password);
 
             var result = await _userRepository.RegisterUserAsync(user);
+
             await _userRepository.UpdateLastActivityAsync(result);
+
             if (user.UserTypeId == 0)
             {
-                var groupId = await _groupRepository.GetGroupIdByVendorAdmin();
-                if (groupId != 0)
-                    await _userRepository.AddDefaultVendorAccessToVendorUser(groupId, result);
+                var companyInfo = await _vendorService.GetByTaxAsync(model.TaxId);
+                int groupId = 0;
+                if (companyInfo.VendorCode == null)
+                {
+                    groupId = await _groupRepository.GetGroupIdByVendorAdmin();
+                    if (groupId != 0)
+                        await _userRepository.AddDefaultVendorAccessToVendorUser(groupId, result);
+                }
+                else
+                {
+                    groupId = await _groupRepository.GetGroupIdByVendorUser();
+                    if (groupId != 0)
+                        await _userRepository.AddDefaultVendorAccessToVendorUser(groupId, result);
+                }
+              
+
+                await AutoApproveForSupplierUser(result, companyInfo);
+
+                await UpdateUserStatusAsync(result);
             }
 
             await _unitOfWork.SaveChangesAsync();
 
             return ApiResponse<int>.Success(result, 200);
+        }
+
+        private async Task AutoApproveForSupplierUser(int userId, VendorInfo companyInfo)
+        {
+            if (companyInfo != null)
+            {
+                var stageCount = await _approveStageMainService.GetStageCountAsync(Procedures.Users);
+                for (int i = 0; i < stageCount; i++)
+                {
+                    await UserChangeStatusAsync(userId.ToString(), new UserChangeStatusModel
+                    {
+                        ApproveStatus = 1,
+                        Comment = "auto approve",
+                        Id = userId,
+                        Sequence = 1,
+                    });
+                }
+                UpdateUserStatusAsync(userId);
+            }
+
+
+        }
+
+        private async Task UpdateUserStatusAsync(int userId)
+        {
+            await _userRepository.UpdateUserStatusAsync(userId);
         }
 
         public async Task<ApiResponse<List<UserDto>>> GetAllAsync()
@@ -280,17 +329,7 @@ namespace SolaERP.Persistence.Services
             var userId = await _userRepository.ConvertIdentity(name);
             var user = await _userRepository.UserChangeStatusAsync(userId, table);
             await _unitOfWork.SaveChangesAsync();
-            int userType = await _userRepository.GetUserType(userId);
-            int stageCount = await _approveStageMainService.GetStageCountAsync(Procedures.Users);
 
-            for (int i = 0; i < model.Count; i++)
-            {
-                if (userType == 0 && stageCount == model[i].Sequence)
-                {
-
-                }
-            }
-          
 
             if (user)
                 return ApiResponse<bool>.Success(true, 200);

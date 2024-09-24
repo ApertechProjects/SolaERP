@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.UserReport;
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
@@ -851,6 +852,17 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 }
             }
             return userType;
+        }
+
+        public async Task UpdateUserStatusAsync(int userId)
+        {
+            string query = "UPDATE Config.AppUser Set StatusId = 1 where Id = @userId";
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = query;
+                command.Parameters.AddWithValue(command, "@userId", userId);
+                var value = await command.ExecuteNonQueryAsync();
+            }
         }
         #endregion
     }

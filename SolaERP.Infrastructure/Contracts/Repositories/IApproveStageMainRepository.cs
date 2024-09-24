@@ -13,6 +13,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<int> SaveApproveStageMainAsync(ApproveStageMainInputModel entity, int userId);
         Task<bool> CheckVendorStage();
         Task<List<ApprovalStages>> Stages(int businessUnitId, string procedureKey);
-        Task<int> StageCount(int businessUnitId, string procedureKey);
+        Task<int> StageCount(string procedureKey);
+     
     }
 }

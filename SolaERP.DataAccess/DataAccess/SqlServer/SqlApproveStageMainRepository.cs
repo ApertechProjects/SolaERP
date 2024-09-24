@@ -175,7 +175,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
 
 
-        public async Task<int> StageCount(int businessUnitId, string procedureKey)
+        public async Task<int> StageCount(string procedureKey)
         {
             List<ApprovalStages> approveStagesMain = new List<ApprovalStages>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -183,9 +183,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = "select count(*)[count] from Config.ApproveStagesDetails " +
                                       "where ApproveStageMainId = (select top 1 ApproveStageMainId " +
                                       "from Config.ApproveStagesMain ASM INNER JOIN Config.Procedures P " +
-                                      "ON ASM.ProcedureId = P.ProcedureId where P.ProcedureKey = @procedureKey and BusinessUnitId = @businessUnitId)";
+                                      "ON ASM.ProcedureId = P.ProcedureId where P.ProcedureName = @procedureKey)";
                 command.Parameters.AddWithValue(command, "@procedureKey", procedureKey);
-                command.Parameters.AddWithValue(command, "@businessUnitId", businessUnitId);
 
                 using var reader = await command.ExecuteReaderAsync();
                 int res = 0;

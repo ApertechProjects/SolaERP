@@ -146,9 +146,9 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<ApprovalStages>>.Success(data, 200);
         }
 
-        public Task<int> GetStageCountAsync(Procedures users)
+        public async Task<int> GetStageCountAsync(Procedures procedure)
         {
-            throw new NotImplementedException();
+            return await _approveStageMainRepository.StageCount(procedure.ToString());
         }
     }
 }
