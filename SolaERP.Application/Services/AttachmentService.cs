@@ -45,7 +45,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<List<AttachmentDto>> GetAttachmentsAsync(int sourceId, SourceType sourceType, Modules module,
             int attachmentTypeId = 0, string reference = null, bool isDownloadLink = true)
-        {
+       {
             var entity = await _attachmentRepository.GetAttachmentsAsync(sourceId,
                 reference,
                 sourceType.ToString(),

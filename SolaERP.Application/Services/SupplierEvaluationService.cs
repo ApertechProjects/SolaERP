@@ -385,6 +385,7 @@ namespace SolaERP.Persistence.Services
                             if (item.Attachments != null)
                             {
                                 item.Attachments.ForEach(x => x.AttachmentTypeId = item.DesignId);
+                                SetAttachmentIdToZeroWhenIsRevise(command.IsRevise, item.Attachments);
                                 await _attachmentService.SaveAttachmentAsync(item.Attachments, SourceType.VEN_DUE,
                                     vendorId);
                             }
@@ -461,6 +462,7 @@ namespace SolaERP.Persistence.Services
                                 if (item?.Attachments is not null)
                                 {
                                     item.Attachments.ForEach(x => x.AttachmentTypeId = item.DesignId);
+                                    SetAttachmentIdToZeroWhenIsRevise(command.IsRevise, item.Attachments);
                                     await _attachmentService.SaveAttachmentAsync(item.Attachments, SourceType.VEN_PREQ,
                                         vendorId);
                                 }

@@ -95,6 +95,7 @@ namespace SolaERP.Persistence.Services
                     groupId = await _groupRepository.GetGroupIdByVendorAdmin();
                     if (groupId != 0)
                         await _userRepository.AddDefaultVendorAccessToVendorUser(groupId, result);
+                    await AutoApproveForSupplierUser(result, companyInfo);
                 }
                 else
                 {
@@ -102,9 +103,9 @@ namespace SolaERP.Persistence.Services
                     if (groupId != 0)
                         await _userRepository.AddDefaultVendorAccessToVendorUser(groupId, result);
                 }
-              
 
-                await AutoApproveForSupplierUser(result, companyInfo);
+
+
 
                 await UpdateUserStatusAsync(result);
             }
@@ -116,7 +117,7 @@ namespace SolaERP.Persistence.Services
 
         private async Task AutoApproveForSupplierUser(int userId, VendorInfo companyInfo)
         {
-            if (companyInfo != null)
+            if (companyInfo.VendorCode == null)
             {
                 var stageCount = await _approveStageMainService.GetStageCountAsync(Procedures.Users);
                 for (int i = 0; i < stageCount; i++)
@@ -126,10 +127,10 @@ namespace SolaERP.Persistence.Services
                         ApproveStatus = 1,
                         Comment = "auto approve",
                         Id = userId,
-                        Sequence = 1,
+                        Sequence = i + 1,
                     });
                 }
-                UpdateUserStatusAsync(userId);
+                await UpdateUserStatusAsync(userId);
             }
 
 

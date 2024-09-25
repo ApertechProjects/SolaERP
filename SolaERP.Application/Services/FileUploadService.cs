@@ -69,9 +69,9 @@ namespace SolaERP.Persistence.Services
 
         public string GetDownloadFileLink(string FileName, Modules module)
         {
-            if (!string.IsNullOrEmpty(FileName))
+            if (!string.IsNullOrEmpty(FileName) && !FileName.Contains(_configuration["FileOptions:BaseUrl"]))
                 return _configuration["FileOptions:BaseUrl"] + $"api/v1/home/module/{module}/fileName/{FileName}/download";
-            return null;
+            return FileName;
         }
 
         public async Task<(UploadFile, string)> UploadFile(List<IFormFile> files, Modules module)
