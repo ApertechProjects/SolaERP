@@ -196,7 +196,8 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         {
             string query = @"SET NOCOUNT OFF Exec SP_AppUser_IUD @Id,@FullName,@ChangePassword,@Theme,@UserName,@Email
                                                                 ,@PasswordHash,@PhoneNumber,@UserTypeId,@VendorId,@UserToken
-                                                                ,@Gender,@Buyer,@Description,@ERPUser,NULL,NULL,0,0,@VerifyToken,@Language,@DefaultBusinessUnitId,@HomePageReportFileId,@NewId output";
+                                                                ,@Gender,@Buyer,@Description,@ERPUser,NULL,NULL,0,0,@VerifyToken,
+                                                                 @Language,@DefaultBusinessUnitId,@HomePageReportFileId,@NewId output";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = query;

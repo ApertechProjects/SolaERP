@@ -1293,7 +1293,8 @@ namespace SolaERP.Persistence.Services
             int vendorId = revisedVendorId ?? user.VendorId;
 
             List<VendorNDA> nda = await _repository.GetNDAAsync(vendorId);
-            var buUnits = await _buRepository.GetAllAsync();
+            var bus = await _buRepository.GetAllAsync();
+            var buUnits = bus.Where(x => x.BusinessUnitCode == "GLT");
             var matchingBuUnitsIds = nda.Select(y => y.BusinessUnitId).ToList();
 
             var result = buUnits
