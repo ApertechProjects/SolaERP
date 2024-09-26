@@ -105,8 +105,6 @@ namespace SolaERP.Persistence.Services
                 }
 
 
-
-
                 await UpdateUserStatusAsync(result);
             }
 

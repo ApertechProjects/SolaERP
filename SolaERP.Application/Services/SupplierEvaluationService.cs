@@ -99,7 +99,7 @@ namespace SolaERP.Persistence.Services
                 var validationDueResponse = await validatorDue.ValidateDueDiligenceAsync(dueDiligence);
                 if (!string.IsNullOrEmpty(validationDueResponse))
                 {
-                    throw new DueDiligenceException($"Some fields must be fill for due diligence : {validationDueResponse}");
+                    throw new DueDiligenceException($"Please, fill all mandatory fields : {validationDueResponse}");
                 }
 
                 var validatorGridResponse = await validatorDue.ValidateGridDatas(dueDiligence);
@@ -538,8 +538,6 @@ namespace SolaERP.Persistence.Services
                 User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
                 var vendor = await _vendorRepository.GetHeader(result.VendorId);
-
-                //await _vendorRepository.ChangeStatusAsync(result.VendorId, 1, 1, null, user.Id);
 
                 List<Task> emails = new List<Task>();
                 Language language = "en".GetLanguageEnumValue();
