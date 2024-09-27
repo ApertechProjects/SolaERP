@@ -148,7 +148,8 @@ namespace SolaERP.Persistence.Services
 
         public async Task<int> GetStageCountAsync(Procedures procedure)
         {
-            return await _approveStageMainRepository.StageCount(procedure.ToString());
+            var count = await _approveStageMainRepository.StageCount(procedure.ToString());
+            return count;
         }
     }
 }

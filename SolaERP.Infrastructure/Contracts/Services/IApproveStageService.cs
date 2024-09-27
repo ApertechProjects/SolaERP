@@ -17,7 +17,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> DeleteApproveStageAsync(ApproveStageDeleteModel model);
         Task<ApiResponse<ApprovalStageDto>> GetApprovalStageAsync(int mainId);
         Task<ApiResponse<List<ApprovalStages>>> Stages(int businessUnitId, string procedureKey);
-        Task<int> GetStageCountAsync(Procedures users);
+        Task<int> GetStageCountAsync(Procedures procedures);
         #endregion
     }
 }

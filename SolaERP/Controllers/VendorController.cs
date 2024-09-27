@@ -73,7 +73,7 @@ namespace SolaERP.API.Controllers
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> ChangeStatus(VendorStatusModel model)
-            => CreateActionResult(await _service.ChangeStatusAsync(model, User.Identity.Name));
+            => CreateActionResult(await _service.ChangeStatusAsync(model, User.Identity.Name, Response));
 
         [Authorize]
         [HttpPost]
@@ -88,7 +88,7 @@ namespace SolaERP.API.Controllers
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Approve(VendorApproveModel model)
-            => CreateActionResult(await _service.ApproveAsync(User.Identity.Name, model));
+            => CreateActionResult(await _service.ApproveAsync(User.Identity.Name, model,Response));
 
         [Authorize]
         [HttpPost]
@@ -111,7 +111,7 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _service.RFQVendorResponseChangeStatus(
                 request.RFQMainId, request.Status, request.VendorCode
             ));
-        
+
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> TransferToIntegration(CreateVendorRequest request)

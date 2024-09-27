@@ -9,6 +9,7 @@ namespace SolaERP.Application.Enums
     public enum Procedures
     {
         Request = 3,
-        Users = 4
+        Users = 4,
+        Vendors = 2
     }
 }

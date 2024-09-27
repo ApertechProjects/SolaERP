@@ -53,12 +53,13 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<UserList>> UsersRequestDetails(int? requestDetailId, int? sequence, ApproveStatus status);
         Task<List<UserList>> UsersRequestMain(int requestMainId, int? sequence, ApproveStatus status);
         Task UpdateLastActivityAsync(int id);
-        Task<bool> AddDefaultVendorAccessToVendorUser(int groupId,int userId);
+        Task<bool> AddDefaultVendorAccessToVendorUser(int groupId, int userId);
         Task<List<UserReportHasAccessDto>> GetUserReportAccess(string reportFileId);
         Task<List<UserReportFileAccess>> GetUserReportAccessByCurrentUser(int userId);
-        Task<int> GetUserType(int userId);
         Task UpdateUserStatusAsync(int userId);
         Task<bool> ChangeUserLanguage(int userId, string language);
+        Task<string> GetUserLang(int userId);
+        Task<string> GetUserEmail(int vendorId);
     }
 
     public enum Filetype

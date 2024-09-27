@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Http;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.BusinessCategory;
@@ -23,7 +25,9 @@ using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Application.ViewModels;
 using SolaERP.DataAccess.Extensions;
+using SolaERP.Infrastructure.ViewModels;
 using System.Collections.Generic;
+using System.Web;
 
 namespace SolaERP.Persistence.Services
 {
@@ -37,6 +41,9 @@ namespace SolaERP.Persistence.Services
         private readonly IAttachmentService _attachmentService;
         private readonly IFileUploadService _fileUploadService;
         private readonly IGeneralRepository _generalRepository;
+        private readonly IApproveStageService _approveStageService;
+        private readonly IEmailNotificationService _emailNotificationService;
+        private readonly IMailService _mailService;
 
         public VendorService(IVendorRepository vendorRepository,
             IUserRepository userRepository,
@@ -46,7 +53,10 @@ namespace SolaERP.Persistence.Services
             IFileUploadService fileUploadService,
             IGeneralRepository generalRepository,
             IAttachmentService attachmentService,
-            IVendorRepository _vendorRepository)
+            IVendorRepository _vendorRepository,
+            IApproveStageService approveStageService,
+            IEmailNotificationService emailNotificationService,
+            IMailService mailService)
         {
             _repository = vendorRepository;
             _userRepository = userRepository;
@@ -56,19 +66,23 @@ namespace SolaERP.Persistence.Services
             _fileUploadService = fileUploadService;
             _generalRepository = generalRepository;
             _attachmentService = attachmentService;
+            _approveStageService = approveStageService;
+            _emailNotificationService = emailNotificationService;
+            _mailService = mailService;
         }
 
-        public async Task<ApiResponse<bool>> ApproveAsync(string userIdentity, VendorApproveModel model)
+        public async Task<ApiResponse<bool>> ApproveAsync(string userIdentity, VendorApproveModel model, HttpResponse response)
         {
             User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
             model.UserId = user.Id;
             var result = await _repository.ApproveAsync(model);
+            await CheckLastApproveStageAndSendMail(model.VendorId, model.Sequence, model.ApproveStatusId, response,model.UserId);
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(result, 200);
         }
 
-        public async Task<ApiResponse<bool>> ChangeStatusAsync(VendorStatusModel taxModel, string userIdentity)
+        public async Task<ApiResponse<bool>> ChangeStatusAsync(VendorStatusModel taxModel, string userIdentity, HttpResponse response)
         {
             var userId = await _userRepository.ConvertIdentity(userIdentity);
             int counter = 0;
@@ -76,7 +90,8 @@ namespace SolaERP.Persistence.Services
             {
                 var result = await _repository.ChangeStatusAsync(taxModel.VendorIds[i], taxModel.Status, taxModel.Sequence, taxModel.Comment, userId);
                 if (result)
-                    counter++;
+                    await CheckLastApproveStageAndSendMail(taxModel.VendorIds[i], taxModel.Sequence, taxModel.Status, response, userId);
+
             }
 
 
@@ -84,6 +99,45 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<bool>.Success(200);
             else
                 return ApiResponse<bool>.Fail("Problem detected", 400);
+        }
+
+        private async Task CheckLastApproveStageAndSendMail(int vendorId, int sequence, int approveStatus, HttpResponse response, int userId)
+        {
+            var stageCount = await _approveStageService.GetStageCountAsync(Procedures.Vendors);
+            if (stageCount == sequence && approveStatus == 1)
+            {
+                var userEmailForVendor = await _userRepository.GetUserEmail(vendorId);
+                if (!string.IsNullOrEmpty(userEmailForVendor))
+                {
+                    var language = await _userRepository.GetUserLang(userId);
+                    var companyName = await _emailNotificationService.GetCompanyName("");
+
+                    VM_VendorApprove vendorApprove = new VM_VendorApprove("az")
+                    {
+                        CompanyName = companyName,
+                        Language = (Language)Enum.Parse(typeof(Language), language)
+                    };
+
+
+                    response.OnCompleted(async () =>
+                    {
+                        await _mailService.SendUsingTemplate(GetSubject(language), vendorApprove,
+                        vendorApprove.TemplateName(), null,
+                        new List<string> { userEmailForVendor });
+                    });
+                }
+
+            }
+
+        }
+
+        private string GetSubject(string language)
+        {
+            return language switch
+            {
+                "az" => $@"Vendor təsdiqi",
+                "en" => $@"Vendor Approve"
+            };
         }
 
         public async Task<ApiResponse<bool>> DeleteAsync(string userIdentity, VendorDeleteModel model)

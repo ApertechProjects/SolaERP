@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Dtos.Payment;
+﻿using Microsoft.AspNetCore.Http;
+using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Dtos.Venndors;
@@ -19,9 +20,9 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<VendorAllDto>>> GetAllAsync(string userIdentity, VendorAllCommandRequest request);
         Task<ApiResponse<List<VendorWFADto>>> GetHeldAsync(string userIdentity, VendorFilter filter);
         Task<ApiResponse<List<VendorWFADto>>> GetRejectedAsync(string userIdentity, VendorFilter filter);
-        Task<ApiResponse<bool>> ChangeStatusAsync(VendorStatusModel taxModel, string userIdentity);
+        Task<ApiResponse<bool>> ChangeStatusAsync(VendorStatusModel taxModel, string userIdentity, HttpResponse response);
         Task<ApiResponse<VM_VendorCard>> GetAsync(int vendorId);
-        Task<ApiResponse<bool>> ApproveAsync(string userIdentity, VendorApproveModel model);
+        Task<ApiResponse<bool>> ApproveAsync(string userIdentity, VendorApproveModel model, HttpResponse response);
         Task<ApiResponse<bool>> SendToApproveAsync(VendorSendToApproveRequest request);
         Task<ApiResponse<bool>> SaveAsync(string userIdentity, VendorCardDto vendor);
         Task<ApiResponse<bool>> SaveAsync2(string userIdentity, VendorCardDto2 vendor);

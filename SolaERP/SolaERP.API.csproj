@@ -68,6 +68,9 @@
     <Content Update="appsettings.Development.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\sources\templates\VendorApprove.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\sources\templates\EmailVerification.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -183,8 +183,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText = "select count(*)[count] from Config.ApproveStagesDetails " +
                                       "where ApproveStageMainId = (select top 1 ApproveStageMainId " +
                                       "from Config.ApproveStagesMain ASM INNER JOIN Config.Procedures P " +
-                                      "ON ASM.ProcedureId = P.ProcedureId where P.ProcedureName = @procedureKey)";
-                command.Parameters.AddWithValue(command, "@procedureKey", procedureKey);
+                                      "ON ASM.ProcedureId = P.ProcedureId where P.ProcedureName = @procedureName)";
+                command.Parameters.AddWithValue(command, "@procedureName", procedureKey);
 
                 using var reader = await command.ExecuteReaderAsync();
                 int res = 0;

@@ -836,25 +836,6 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             return users;
         }
 
-        public async Task<int> GetUserType(int userId)
-        {
-            int userType = 0; //0 - vendor
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = "select UserTypeId from Config.Users where UserId = @userId";
-                command.Parameters.AddWithValue(command, "@userId", userId);
-
-                using (var reader = await command.ExecuteReaderAsync())
-                {
-                    if (reader.Read())
-                    {
-                        userType = reader.GetInt32("UserTypeId");
-                    }
-                }
-            }
-            return userType;
-        }
-
         public async Task UpdateUserStatusAsync(int userId)
         {
             string query = "UPDATE Config.AppUser Set StatusId = 1 where Id = @userId";
@@ -876,6 +857,41 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@language", language);
                 var value = await command.ExecuteNonQueryAsync();
                 return value > 0;
+            }
+        }
+
+        public async Task<string> GetUserLang(int userId)
+        {
+            string userLang = "az"; 
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "select Language from Config.AppUser where Id = @userId";
+                command.Parameters.AddWithValue(command, "@userId", userId);
+
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    if (reader.Read())
+                    {
+                        userLang = reader.GetString("Language");
+                    }
+                }
+            }
+            return userLang;
+        }
+
+        public async Task<string> GetUserEmail(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SELECT Email FROM Config.AppUser Where VendorId = @vendorId";
+                command.Parameters.AddWithValue(command, "@vendorId", vendorId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                string email = string.Empty;
+                if (reader.Read())
+                    email = reader.Get<string>("Email");
+
+                return email;
             }
         }
         #endregion
