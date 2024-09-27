@@ -865,6 +865,19 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 var value = await command.ExecuteNonQueryAsync();
             }
         }
+
+        public async Task<bool> ChangeUserLanguage(int userId, string language)
+        {
+            string query = "UPDATE Config.AppUser Set Language = @language where Id = @userId";
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = query;
+                command.Parameters.AddWithValue(command, "@userId", userId);
+                command.Parameters.AddWithValue(command, "@language", language);
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
+            }
+        }
         #endregion
     }
 }

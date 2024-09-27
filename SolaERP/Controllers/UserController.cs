@@ -28,9 +28,9 @@ namespace SolaERP.Controllers
         private readonly IMailService _mailService;
         public UserController(IUserService userService,
                               IFileUploadService fileService,
-                              IGroupService groupService, 
-                              ITokenHandler tokenHandler, 
-                              IEmailNotificationService emailNotificationService, 
+                              IGroupService groupService,
+                              ITokenHandler tokenHandler,
+                              IEmailNotificationService emailNotificationService,
                               IMailService mailService)
         {
             _userService = userService;
@@ -64,6 +64,10 @@ namespace SolaERP.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUserCompanyAsync([FromQuery] int userStatus)
             => CreateActionResult(await _userService.GetUserCompanyAsync(User.Identity.Name, userStatus));
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeUserLanguage(string language)
+            => CreateActionResult(await _userService.ChangeUserLanguage(User.Identity.Name, language));
 
         [HttpGet]
         public async Task<IActionResult> GetUserVendorAsync([FromQuery] int userStatus)

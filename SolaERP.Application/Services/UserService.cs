@@ -648,5 +648,13 @@ namespace SolaERP.Persistence.Services
             var map = _mapper.Map<List<UserReportFileAccess>>(data);
             return ApiResponse<List<UserReportFileAccess>>.Success(map, 200);
         }
+
+        public async Task<ApiResponse<bool>> ChangeUserLanguage(string name, string language)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            var changeLang = await _userRepository.ChangeUserLanguage(userId, language);
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(changeLang, 200);
+        }
     }
 }

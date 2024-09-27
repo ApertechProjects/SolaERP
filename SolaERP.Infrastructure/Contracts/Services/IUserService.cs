@@ -51,6 +51,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> CheckVerifyCode(int verificationCode);
         Task<ApiResponse<List<UserReportHasAccessDto>>> GetUserReportAccess(string fileId);
         Task<ApiResponse<List<UserReportFileAccess>>> GetUserReportAccessByCurrentUser(string name);
-       
+        Task<ApiResponse<bool>> ChangeUserLanguage(string name, string language);
     }
 }

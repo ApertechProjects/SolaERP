@@ -58,6 +58,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<UserReportFileAccess>> GetUserReportAccessByCurrentUser(int userId);
         Task<int> GetUserType(int userId);
         Task UpdateUserStatusAsync(int userId);
+        Task<bool> ChangeUserLanguage(int userId, string language);
     }
 
     public enum Filetype
