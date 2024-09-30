@@ -99,7 +99,7 @@ namespace SolaERP.Persistence.Services
                 var validationDueResponse = await validatorDue.ValidateDueDiligenceAsync(dueDiligence);
                 if (!string.IsNullOrEmpty(validationDueResponse))
                 {
-                    throw new DueDiligenceException($"Please, fill all mandatory fields : {validationDueResponse}");
+                    throw new DueDiligenceException($"Please, fill all mandatory fields");
                 }
 
                 var validatorGridResponse = await validatorDue.ValidateGridDatas(dueDiligence);
