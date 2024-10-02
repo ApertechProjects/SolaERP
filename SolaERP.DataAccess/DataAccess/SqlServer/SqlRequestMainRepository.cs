@@ -488,11 +488,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = @"SET NOCOUNT OFF exec SP_SET_BUYER @RequestNO,@BUYER,@UserId";
+                command.CommandText = @"SET NOCOUNT OFF exec SP_SET_BUYER @RequestNO,@BUYER,@UserId,@BusinessUnitId";
 
                 command.Parameters.AddWithValue(command, "@RequestNO", setBuyer.RequestNo);
                 command.Parameters.AddWithValue(command, "@BUYER", setBuyer.Buyer);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", setBuyer.BusinessUnitId);
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }

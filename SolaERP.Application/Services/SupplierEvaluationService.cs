@@ -564,7 +564,7 @@ namespace SolaERP.Persistence.Services
                 //var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
                 //foreach (var lang in Enum.GetValues<Language>())
                 //{
-                //    var sendUserMails = await _userService.GetAdminUserMailsAsync(1, lang);
+                //var sendUserMails = await _userService.GetAdminUserMailsAsync(1, lang);
                 //    if (sendUserMails.Count > 0)
                 //    {
                 //        var templateData = templates.First(x => x.Language == lang.ToString());
