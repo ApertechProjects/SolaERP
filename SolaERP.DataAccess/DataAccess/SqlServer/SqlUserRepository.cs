@@ -862,7 +862,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
         public async Task<string> GetUserLang(int userId)
         {
-            string userLang = "az"; 
+            string userLang = "az";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = "select Language from Config.AppUser where Id = @userId";
@@ -892,6 +892,18 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     email = reader.Get<string>("Email");
 
                 return email;
+            }
+        }
+
+        public async Task<bool> UserSendToApprove(int userId)
+        {
+            string query = "exec SP_AppUser_SendToApprove @userId";
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = query;
+                command.Parameters.AddWithValue(command, "@userId", userId);
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
             }
         }
         #endregion

@@ -60,6 +60,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> ChangeUserLanguage(int userId, string language);
         Task<string> GetUserLang(int userId);
         Task<string> GetUserEmail(int vendorId);
+        Task<bool> UserSendToApprove(int userId);
     }
 
     public enum Filetype

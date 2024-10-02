@@ -535,6 +535,8 @@ namespace SolaERP.Persistence.Services
             {
                 var result = (await AddAsync2(userIdentity, command, true)).Data;
 
+                await VendorSubmit(result.VendorId);
+
                 User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
                 var vendor = await _vendorRepository.GetHeader(result.VendorId);
@@ -592,6 +594,11 @@ namespace SolaERP.Persistence.Services
             {
                 return ApiResponse<EvaluationResultModel>.Fail(ex.Message, 400);
             }
+        }
+
+        private async Task VendorSubmit(int vendorId)
+        {
+            await _vendorRepository.VendorSubmit(vendorId);
         }
 
         public async Task<ApiResponse<int>> AddAsync(string userIdentity, string token, SupplierRegisterCommand command, bool isSubmitted = false, bool isRevise = false)
@@ -1762,7 +1769,7 @@ namespace SolaERP.Persistence.Services
                         var gridDatas = await _repository.GetDueDiligenceGridAsync(childDesignId, vendorId);
                         dueDesign[i].Childs[j].GridDatas = gridDatas;
 
-                        if ((dueDesign[i].Childs[j].Question.Contains("3 fiscal years") 
+                        if ((dueDesign[i].Childs[j].Question.Contains("3 fiscal years")
                             || dueDesign[i].Childs[j].Question.Contains("3 il üçün")
                             || dueDesign[i].Childs[j].Question.Contains("3 финансовых года")
                             ) && gridDatas.Count == 0) //there is no another way for this

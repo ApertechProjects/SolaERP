@@ -35,5 +35,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<int> GetRevisionVendorIdByVendorCode(string vendorCode);
         Task<int> GetRevisionNumberByVendorCode(string vendorCode);
         Task<bool> TransferToIntegration(CreateVendorRequest request);
+        Task VendorSubmit(int vendorId);
     }
 }

@@ -10,6 +10,7 @@ using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Helper;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.User;
+using System.Numerics;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -628,6 +629,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     image = reader.Get<string>("CompanyLogoFile");
 
                 return image;
+            }
+        }
+
+        public async Task VendorSubmit(int vendorId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"SET NOCOUNT OFF 
+                                        EXEC SP_VendorSubmit @VendorId"
+                ;
+
+                command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+
+                using var reader = await command.ExecuteReaderAsync();
             }
         }
     }

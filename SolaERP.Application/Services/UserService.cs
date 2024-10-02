@@ -656,5 +656,12 @@ namespace SolaERP.Persistence.Services
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(changeLang, 200);
         }
+
+        public async Task<ApiResponse<bool>> UserSendToApprove(string name)
+        {
+            int userId = await _userRepository.ConvertIdentity(name);
+            var res = await _userRepository.UserSendToApprove(userId);
+            return ApiResponse<bool>.Success(res, 200);
+        }
     }
 }
