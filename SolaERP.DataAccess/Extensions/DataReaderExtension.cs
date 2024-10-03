@@ -22,7 +22,7 @@ namespace SolaERP.DataAccess.Extensions
             {
                 return returnType;
             }
-          
+
             var value = reader[columnName];
 
             if (value != DBNull.Value && value != null)
@@ -153,10 +153,21 @@ namespace SolaERP.DataAccess.Extensions
             {
                 foreach (PropertyInfo property in properties)
                 {
-                    if (property.PropertyType == typeof(String) && property.GetValue(item, null).ToString().CheckNullAndApplyLower().Contains(filter))
+                    try
                     {
-                        values.Add(item);
+                        if (string.IsNullOrWhiteSpace(property.GetValue(item, null)?.ToString()))
+                            continue;
+
+                        if (property.PropertyType == typeof(String) && property.GetValue(item, null).ToString().CheckNullAndApplyLower().Contains(filter))
+                        {
+                            values.Add(item);
+                        }
                     }
+                    catch (Exception ex)
+                    {
+
+                    }
+
                 }
             }
             return values;

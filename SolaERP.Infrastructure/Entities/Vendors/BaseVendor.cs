@@ -6,7 +6,7 @@
         public string VendorCode { get; set; }
         public string VendorName { get; set; }
         public string TaxId { get; set; }
-        public string PrequalificationCategory { get; set; }
+        //public string PrequalificationCategory { get; set; }
         public string BusinessCategory { get; set; }
         public string ProductService { get; set; }
         public string Country { get; set; }

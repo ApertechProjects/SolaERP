@@ -254,7 +254,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = @"exec SP_VendorWFA @userId,
-                                      @PrequalificationCategoryId,
                                       @BusinessCategoryId,@ProductServiceId,@VendorTypeId";
 
 
@@ -263,8 +262,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@ProductServiceId",
                     string.Join(",", filter.ProductServiceId));
                 command.Parameters.AddWithValue(command, "@BusinessCategoryId",
-                    string.Join(",", filter.BusinessCategoryId));
-                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId",
                     string.Join(",", filter.BusinessCategoryId));
 
                 using var reader = await command.ExecuteReaderAsync();
@@ -281,7 +278,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = @"exec SP_VendorAll @userId, @PrequalificationCategoryId,
+                command.CommandText = @"exec SP_VendorAll @userId,
                                       @BusinessCategoryId,@ProductServiceId,@VendorTypeId,
                                       @status,@ApproveStatus";
 
@@ -292,8 +289,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     string.Join(",", request.ProductServiceId));
                 command.Parameters.AddWithValue(command, "@BusinessCategoryId",
                     string.Join(",", request.BusinessCategoryId));
-                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId",
-                    string.Join(",", request.PrequalificationCategoryId));
                 command.Parameters.AddWithValue(command, "@status", string.Join(",", request.Status));
                 command.Parameters.AddWithValue(command, "@ApproveStatus", string.Join(",", request.Approval));
 
@@ -329,7 +324,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = @"EXEC SP_VendorHeld @UserId,
-                                      @PrequalificationCategoryId,
                                       @BusinessCategoryId,
                                       @ProductServiceId,
                                       @VendorTypeId";
@@ -340,8 +334,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@ProductServiceId",
                     string.Join(",", filter.ProductServiceId));
                 command.Parameters.AddWithValue(command, "@BusinessCategoryId",
-                    string.Join(",", filter.BusinessCategoryId));
-                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId",
                     string.Join(",", filter.BusinessCategoryId));
 
                 List<VendorWFA> data = new List<VendorWFA>();
@@ -359,7 +351,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = @"EXEC SP_VendorDraft @UserId,
-                                         @PrequalificationCategoryId,
                                          @BusinessCategoryId,
                                          @ProductServiceId,
                                          @VendorTypeId";
@@ -370,8 +361,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@ProductServiceId",
                     string.Join(",", filter.ProductServiceId));
                 command.Parameters.AddWithValue(command, "@BusinessCategoryId",
-                    string.Join(",", filter.BusinessCategoryId));
-                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId",
                     string.Join(",", filter.BusinessCategoryId));
 
                 using var reader = await command.ExecuteReaderAsync();
@@ -436,7 +425,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText = @"EXEC SP_VendorRejected @UserId,
-                                            @PrequalificationCategoryId,
                                             @BusinessCategoryId,
                                             @ProductServiceId,
                                             @VendorTypeId";
@@ -446,8 +434,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@ProductServiceId",
                     string.Join(",", filter.ProductServiceId));
                 command.Parameters.AddWithValue(command, "@BusinessCategoryId",
-                    string.Join(",", filter.BusinessCategoryId));
-                command.Parameters.AddWithValue(command, "@PrequalificationCategoryId",
                     string.Join(",", filter.BusinessCategoryId));
 
                 using var reader = await command.ExecuteReaderAsync();
