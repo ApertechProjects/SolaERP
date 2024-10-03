@@ -11,6 +11,7 @@ using SolaERP.Application.Dtos.UserDto;
 using SolaERP.Application.Dtos.UserReport;
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Entities.User;
 using SolaERP.Application.Entities.UserReport;
@@ -657,10 +658,61 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(changeLang, 200);
         }
 
+        private static VM_RegistrationIsPendingAdminApprove GetVM(string companyName, User user,
+         EmailTemplateData templateData)
+        {
+            return new()
+            {
+                Body = new HtmlString(templateData.Body),
+                CompanyName = "",
+                Header = templateData.Header,
+                UserName = user.UserName,
+                CompanyOrVendorName = "",
+                Language = templateData.Language.GetLanguageEnumValue(),
+            };
+        }
+
         public async Task<ApiResponse<bool>> UserSendToApprove(string name)
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var res = await _userRepository.UserSendToApprove(userId);
+
+            User user = await _userRepository.GetByIdAsync(userId);
+            List<Task> emails = new List<Task>();
+            Language language = "en".GetLanguageEnumValue();
+            var companyName = await _emailNotificationService.GetCompanyName(user.Email);
+            var templateDataForRegistrationPending =
+                await _emailNotificationService.GetEmailTemplateData(language, EmailTemplateKey.RGA);
+            VM_RegistrationPending registrationPending = new VM_RegistrationPending()
+            {
+                FullName = user.FullName,
+                UserName = user.UserName,
+                Header = templateDataForRegistrationPending.Header,
+                Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, user.FullName)),
+                Language = language,
+                CompanyName = "",
+            };
+
+            Task VerEmail = _mailService.SendUsingTemplate(templateDataForRegistrationPending.Subject,
+                registrationPending,
+                registrationPending.TemplateName(),
+                registrationPending.ImageName(),
+                new List<string> { user.Email });
+            emails.Add(VerEmail);
+
+            var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
+            foreach (var lang in Enum.GetValues<Language>())
+            {
+                var sendUserMails = await GetAdminUserMailsAsync(1, lang);
+                if (sendUserMails.Count > 0)
+                {
+                    var templateData = templates.First(x => x.Language == lang.ToString());
+                    VM_RegistrationIsPendingAdminApprove adminApprove = GetVM("", user, templateData);
+                    Task RegEmail = _mailService.SendUsingTemplate(templateData.Subject, adminApprove,
+                        adminApprove.TemplateName, adminApprove.ImageName, sendUserMails);
+                    emails.Add(RegEmail);
+                }
+            }
             return ApiResponse<bool>.Success(res, 200);
         }
     }
