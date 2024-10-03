@@ -77,7 +77,7 @@ namespace SolaERP.Persistence.Services
 
             model.UserId = user.Id;
             var result = await _repository.ApproveAsync(model);
-            await CheckLastApproveStageAndSendMail(model.VendorId, model.Sequence, model.ApproveStatusId, response,model.UserId);
+            await CheckLastApproveStageAndSendMail(model.VendorId, model.Sequence, model.ApproveStatusId, response, model.UserId);
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(result, 200);
         }
@@ -112,7 +112,7 @@ namespace SolaERP.Persistence.Services
                     var language = await _userRepository.GetUserLang(userId);
                     var companyName = await _emailNotificationService.GetCompanyName("");
 
-                    VM_VendorApprove vendorApprove = new VM_VendorApprove("az")
+                    VM_VendorApprove vendorApprove = new VM_VendorApprove(language)
                     {
                         CompanyName = companyName,
                         Language = (Language)Enum.Parse(typeof(Language), language)
