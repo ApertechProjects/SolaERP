@@ -676,7 +676,7 @@ namespace SolaERP.Persistence.Services
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var res = await _userRepository.UserSendToApprove(userId);
-
+            await _unitOfWork.SaveChangesAsync();
             User user = await _userRepository.GetByIdAsync(userId);
             List<Task> emails = new List<Task>();
             Language language = "en".GetLanguageEnumValue();

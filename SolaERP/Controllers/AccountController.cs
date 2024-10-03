@@ -11,6 +11,7 @@ using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Helper;
 using SolaERP.Application.Models;
+using SolaERP.Application.UnitOfWork;
 using SolaERP.Infrastructure.ViewModels;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
@@ -30,6 +31,8 @@ namespace SolaERP.Controllers
         private readonly IMailService _mailService;
         private readonly IEmailNotificationService _emailNotificationService;
         private readonly IUserApprovalService _userApprovalService;
+        private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public AccountController(UserManager<Application.Entities.Auth.User> userManager,
             SignInManager<Application.Entities.Auth.User> signInManager,
@@ -39,7 +42,9 @@ namespace SolaERP.Controllers
             IMapper mapper,
             IMailService mailService,
             IEmailNotificationService emailNotificationService,
-            IUserApprovalService userApprovalService)
+            IUserApprovalService userApprovalService,
+            IUserRepository userRepository,
+            IUnitOfWork unitOfWork)
         {
             _userService = userService;
             _signInManager = signInManager;
@@ -50,6 +55,8 @@ namespace SolaERP.Controllers
             _mailService = mailService;
             _emailNotificationService = emailNotificationService;
             _userApprovalService = userApprovalService;
+            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
         }
 
 
@@ -73,15 +80,15 @@ namespace SolaERP.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequestModel dto)
         {
-          
+
             var user = await _userManager.FindByNameAsync(dto.Email);
-            if(user == null)
+            if (user == null)
             {
                 return CreateActionResult(ApiResponse<bool>.Fail("email", $"email or password is incorrect", 422));
             }
             var signInResult = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
 
-            
+
             if (!signInResult.Succeeded)
             {
                 return CreateActionResult(ApiResponse<bool>.Fail("email", $"email or password is incorrect", 422));
@@ -144,6 +151,12 @@ namespace SolaERP.Controllers
 
             dto.VendorId = await _vendorService.GetByTaxIdAsync(dto.TaxId);
             var response = await _userService.UserRegisterAsync(dto);
+            if (dto.VendorId > 0)
+            {
+                await _userRepository.UserSendToApprove(response.Data);
+                await _unitOfWork.SaveChangesAsync();
+                
+            }
             AccountResponseDto account = new();
             if (response.Data > 0)
             {
