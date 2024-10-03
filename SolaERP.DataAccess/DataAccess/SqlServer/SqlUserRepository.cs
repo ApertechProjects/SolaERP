@@ -4,6 +4,7 @@ using SolaERP.Application.Dtos.UserReport;
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Groups;
+using SolaERP.Application.Entities.Language;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Entities.User;
 using SolaERP.Application.Entities.UserReport;
@@ -182,7 +183,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 command.Parameters.AddWithValue(command, "@Inactive", entity.InActive);
                 command.Parameters.AddWithValue(command, "@ChangeUserId", entity.UserId);
                 command.Parameters.AddWithValue(command, "@VerifyToken", entity.VerifyToken);
-                command.Parameters.AddWithValue(command, "@Language", Language.en.ToString());
+                command.Parameters.AddWithValue(command, "@Language", Application.Enums.Language.en.ToString());
                 command.Parameters.AddWithValue(command, "@DefaultBusinessUnitId", entity.DefaultBusinessUnitId);
                 command.Parameters.AddWithValue(command, "@HomePageReportFileId", entity.HomePageReportFileId);
                 command.Parameters.AddOutPutParameter(command, "@NewId");
@@ -905,6 +906,36 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 var value = await command.ExecuteNonQueryAsync();
                 return value > 0;
             }
+        }
+
+        public async Task<int> GetVendorAdminGroupUserByUserId(int userId)
+        {
+            int groupUserId = 0;
+            string query = "select GroupUserId from Config.GroupUsers GU " +
+                "INNER JOIN Config.Groups G ON GU.GroupId = G.GroupId " +
+                "where UserId = @userId AND G.GroupName = 'Vendor Admin'";
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                using var reader = await command.ExecuteReaderAsync();
+                if (reader.Read())
+                    groupUserId = reader.Get<int>("GroupUserId");
+                return groupUserId;
+            }
+
+        }
+
+        public async Task<bool> RemoveUserFromVendorAdmin(int groupUserId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"DELETE FROM Config.GroupUsers where groupUserId = @groupUserId";
+
+                command.Parameters.AddWithValue(command, "@groupUserId", groupUserId);
+
+                await command.ExecuteNonQueryAsync();
+            }
+
+            return true;
         }
         #endregion
     }

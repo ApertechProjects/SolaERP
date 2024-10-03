@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using SolaERP.Application.Constants;
 using SolaERP.Application.Contracts.Repositories;
@@ -676,6 +677,18 @@ namespace SolaERP.Persistence.Services
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var res = await _userRepository.UserSendToApprove(userId);
+
+
+            int groupId = await _groupRepository.GetGroupIdByVendorUser();
+            if (groupId != 0)
+            {
+                await _userRepository.AddDefaultVendorAccessToVendorUser(groupId, userId);
+                await _userRepository.RemoveUserFromVendorAdmin(userId);
+                await _unitOfWork.SaveChangesAsync();
+            }
+
+
+
             await _unitOfWork.SaveChangesAsync();
             User user = await _userRepository.GetByIdAsync(userId);
             List<Task> emails = new List<Task>();
