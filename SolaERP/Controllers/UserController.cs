@@ -5,6 +5,7 @@ using SolaERP.API.Methods;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.User;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Groups;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
@@ -136,7 +137,7 @@ namespace SolaERP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> UserSendToApprove()
-          => CreateActionResult(await _userService.UserSendToApprove(5714.ToString()));
+          => CreateActionResult(await _userService.UserSendToApprove(User.Identity.Name.ToString()));
 
         [HttpDelete]
         public async Task<IActionResult> DeleteUserAsync(DeleteUser deleteUser)
