@@ -542,17 +542,17 @@ namespace SolaERP.Persistence.Services
                 var vendor = await _vendorRepository.GetHeader(result.VendorId);
 
                 List<Task> emails = new List<Task>();
-                Language language = "en".GetLanguageEnumValue();
+                //Language language = "en".GetLanguageEnumValue();
                 var companyName = await _emailNotificationService.GetCompanyName(user.Email);
                 var templateDataForRegistrationPending =
-                    await _emailNotificationService.GetEmailTemplateData(language, EmailTemplateKey.RGA);
+                    await _emailNotificationService.GetEmailTemplateData(user.Language, EmailTemplateKey.RGA);
                 VM_RegistrationPending registrationPending = new VM_RegistrationPending()
                 {
                     FullName = user.FullName,
                     UserName = user.UserName,
                     Header = templateDataForRegistrationPending.Header,
                     Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, user.FullName)),
-                    Language = language,
+                    Language = user.Language,
                     CompanyName = command.CompanyInformation.CompanyName,
                 };
 
