@@ -136,7 +136,7 @@ namespace SolaERP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> UserSendToApprove()
-          => CreateActionResult(await _userService.UserSendToApprove(User.Identity.Name));
+          => CreateActionResult(await _userService.UserSendToApprove(5714.ToString()));
 
         [HttpDelete]
         public async Task<IActionResult> DeleteUserAsync(DeleteUser deleteUser)

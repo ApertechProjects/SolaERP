@@ -916,6 +916,8 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                 "where UserId = @userId AND G.GroupName = 'Vendor Admin'";
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
+                command.CommandText = query;
+                command.Parameters.AddWithValue(command, "@userId", userId);
                 using var reader = await command.ExecuteReaderAsync();
                 if (reader.Read())
                     groupUserId = reader.Get<int>("GroupUserId");

@@ -678,12 +678,14 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.ConvertIdentity(name);
             var res = await _userRepository.UserSendToApprove(userId);
 
-
             int groupId = await _groupRepository.GetGroupIdByVendorAdmin();
             if (groupId != 0)
             {
-                await _userRepository.AddDefaultVendorAccessToVendorUser(groupId, userId);
-                await _userRepository.RemoveUserFromVendorAdmin(userId);
+                int groupIdVendorUser = await _groupRepository.GetGroupIdByVendorUser();
+                await _userRepository.AddDefaultVendorAccessToVendorUser(groupIdVendorUser, userId);
+
+                int groupuserIdByVendorAdmin = await _userRepository.GetVendorAdminGroupUserByUserId(userId);
+                await _userRepository.RemoveUserFromVendorAdmin(groupuserIdByVendorAdmin);
                 await _unitOfWork.SaveChangesAsync();
             }
 
