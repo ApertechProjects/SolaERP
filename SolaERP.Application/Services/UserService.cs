@@ -679,7 +679,7 @@ namespace SolaERP.Persistence.Services
             var res = await _userRepository.UserSendToApprove(userId);
 
 
-            int groupId = await _groupRepository.GetGroupIdByVendorUser();
+            int groupId = await _groupRepository.GetGroupIdByVendorAdmin();
             if (groupId != 0)
             {
                 await _userRepository.AddDefaultVendorAccessToVendorUser(groupId, userId);
