@@ -543,9 +543,9 @@ namespace SolaERP.Persistence.Services
 
                 List<Task> emails = new List<Task>();
 
-                await _mailService.SendRegistrationPendingMail(Convert.ToInt32(userIdentity), EmailTemplateKey.RGA);
+                await _mailService.SendRegistrationPendingMail(Convert.ToInt32(userIdentity));
 
-                await _mailService.SendMailToAdminstrationAboutRegistration(Convert.ToInt32(userIdentity), EmailTemplateKey.RP);
+                await _mailService.SendMailToAdminstrationAboutRegistration(Convert.ToInt32(userIdentity));
 
 
                 return ApiResponse<EvaluationResultModel>.Success(result, 200);
@@ -1189,8 +1189,8 @@ namespace SolaERP.Persistence.Services
             companyInfo.BusinessSectors = vendorBusinessSector;
             companyInfo.Services = matchedProductServices;
             companyInfo.PhoneNo = companyInfoTask.PhoneNo;
-            companyInfo.ContactPerson = user.FullName;
-            companyInfo.Email = user.Email;
+            companyInfo.ContactPerson = companyInfo.ContactPerson;
+            companyInfo.Email = companyInfo.Email;
             companyInfo.CreditDays = companyInfoTask.CreditDays;
 
             VM_GET_InitalRegistration viewModel = new()

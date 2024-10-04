@@ -1,4 +1,5 @@
-﻿using FluentEmail.Core;
+﻿using AngleSharp.Io;
+using FluentEmail.Core;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +19,7 @@ using SolaERP.Persistence.Services;
 using System.Net;
 using System.Net.Mail;
 using System.Text.Json;
+using System.Web;
 
 namespace SolaERP.Infrastructure.Services
 {
@@ -416,7 +418,7 @@ namespace SolaERP.Infrastructure.Services
             }
         }
 
-        public async Task SendRegistrationPendingMail(int userId, EmailTemplateKey emailTemplateKey)
+        public async Task SendRegistrationPendingMail(int userId)
         {
             User user = await _userRepository.GetByIdAsync(userId);
             var companyName = await _emailNotificationService.GetCompanyName(user.Email);
@@ -442,7 +444,7 @@ namespace SolaERP.Infrastructure.Services
 
         }
 
-        public async Task SendMailToAdminstrationAboutRegistration(int userId, EmailTemplateKey emailTemplateKey)
+        public async Task SendMailToAdminstrationAboutRegistration(int userId)
         {
             User user = await _userRepository.GetByIdAsync(userId);
             var companyName = await _emailNotificationService.GetCompanyName(user.Email);
@@ -495,6 +497,32 @@ namespace SolaERP.Infrastructure.Services
                 });
 
             }
+        }
+
+        public async Task SendEmailVerification(HttpResponse response, int userId)
+        {
+            User user = await _userRepository.GetByIdAsync(userId);
+            var templateDataForVerification =
+                  _emailNotificationService.GetEmailTemplateData(user.Language, EmailTemplateKey.VER).Result;
+            var companyName = _emailNotificationService.GetCompanyName(user.Email).Result;
+
+            VM_EmailVerification emailVerification = new VM_EmailVerification
+            {
+                Username = user.UserName,
+                Body = new HtmlString(string.Format(templateDataForVerification.Body, user.FullName)),
+                CompanyName = companyName,
+                Header = templateDataForVerification.Header,
+                Language = user.Language,
+                Subject = templateDataForVerification.Subject,
+                Token = HttpUtility.HtmlDecode(user.VerifyToken),
+            };
+
+            response.OnCompleted(async () =>
+            {
+                await SendUsingTemplate(templateDataForVerification.Subject, emailVerification,
+                    emailVerification.TemplateName(), emailVerification.ImageName(),
+                    new List<string> { user.Email });
+            });
         }
     }
 
