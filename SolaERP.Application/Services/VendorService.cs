@@ -77,7 +77,7 @@ namespace SolaERP.Persistence.Services
 
             model.UserId = user.Id;
             var result = await _repository.ApproveAsync(model);
-            await CheckLastApproveStageAndSendMail(model.VendorId, model.Sequence, model.ApproveStatusId, response, model.UserId);
+            await _mailService.CheckLastApproveStageAndSendMailToVendor(model.VendorId, model.Sequence, model.ApproveStatusId, response);
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(result, 200);
         }
@@ -90,7 +90,7 @@ namespace SolaERP.Persistence.Services
             {
                 var result = await _repository.ChangeStatusAsync(taxModel.VendorIds[i], taxModel.Status, taxModel.Sequence, taxModel.Comment, userId);
                 if (result)
-                    await CheckLastApproveStageAndSendMail(taxModel.VendorIds[i], taxModel.Sequence, taxModel.Status, response, userId);
+                    await _mailService.CheckLastApproveStageAndSendMailToVendor(taxModel.VendorIds[i], taxModel.Sequence, taxModel.Status, response);
 
             }
 
@@ -101,44 +101,40 @@ namespace SolaERP.Persistence.Services
                 return ApiResponse<bool>.Fail("Problem detected", 400);
         }
 
-        private async Task CheckLastApproveStageAndSendMail(int vendorId, int sequence, int approveStatus, HttpResponse response, int userId)
-        {
-            var stageCount = await _approveStageService.GetStageCountAsync(Procedures.Vendors);
-            if (stageCount == sequence && approveStatus == 1)
-            {
-                var userEmailForVendor = await _userRepository.GetUserEmail(vendorId);
-                if (!string.IsNullOrEmpty(userEmailForVendor))
-                {
-                    var language = await _userRepository.GetUserLang(userId);
-                    var companyName = await _emailNotificationService.GetCompanyName("");
+        //private async Task CheckLastApproveStageAndSendMail(int vendorId, int sequence, int approveStatus, HttpResponse response)
+        //{
+        //    var stageCount = await _approveStageService.GetStageCountAsync(Procedures.Vendors);
+        //    if (stageCount == sequence && approveStatus == 1)
+        //    {
+        //        var vendorUser = await _userRepository.GetUserByVendor(vendorId);
+        //        var companyName = await _emailNotificationService.GetCompanyName("");
 
-                    VM_VendorApprove vendorApprove = new VM_VendorApprove(language)
-                    {
-                        CompanyName = companyName,
-                        Language = (Language)Enum.Parse(typeof(Language), language)
-                    };
+        //        VM_VendorApprove vendorApprove = new VM_VendorApprove(vendorUser.Language.ToString())
+        //        {
+        //            CompanyName = companyName,
+        //            Language = (Language)Enum.Parse(typeof(Language), vendorUser.Language.ToString())
+        //        };
 
 
-                    response.OnCompleted(async () =>
-                    {
-                        await _mailService.SendUsingTemplate(GetSubject(language), vendorApprove,
-                        vendorApprove.TemplateName(), null,
-                        new List<string> { userEmailForVendor });
-                    });
-                }
+        //        response.OnCompleted(async () =>
+        //        {
+        //            await _mailService.SendUsingTemplate(GetSubject(vendorUser.Language.ToString()), vendorApprove,
+        //            vendorApprove.TemplateName(), null,
+        //            new List<string> { vendorUser.Email });
+        //        });
 
-            }
+        //    }
 
-        }
+        //}
 
-        private string GetSubject(string language)
-        {
-            return language switch
-            {
-                "az" => $@"Vendor təsdiqi",
-                "en" => $@"Vendor Approve"
-            };
-        }
+        //private string GetSubject(string language)
+        //{
+        //    return language switch
+        //    {
+        //        "az" => $@"Vendor təsdiqi",
+        //        "en" => $@"Vendor Approve"
+        //    };
+        //}
 
         public async Task<ApiResponse<bool>> DeleteAsync(string userIdentity, VendorDeleteModel model)
         {
@@ -317,6 +313,7 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<VM_VendorCard>> GetAsync(int vendorId)
         {
             var header = await GetVendorHeader(vendorId);
+            var headerPrevious = await GetVendorPreviousHeader(vendorId);
             var paymentTerms = _supplierRepository.GetPaymentTermsAsync();
             var deliveryTerms = _supplierRepository.GetDeliveryTermsAsync();
             var currency = _supplierRepository.GetCurrenciesAsync();
@@ -355,6 +352,7 @@ namespace SolaERP.Persistence.Services
             VM_VendorCard vendorModel = new VM_VendorCard()
             {
                 Header = header,
+                HeaderPrevious = headerPrevious,
                 Currencies = _mapper.Map<List<CurrencyDto>>(currency.Result),
                 PaymentTerms = _mapper.Map<List<PaymentTermDto>>(paymentTerms.Result),
                 DeliveryTerms = _mapper.Map<List<DeliveryTermDto>>(deliveryTerms.Result),
@@ -377,6 +375,8 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<VM_VendorCard>.Success(vendorModel);
         }
+
+
 
         public async Task<ApiResponse<List<VendorWFADto>>> GetWFAAsync(string userIdentity, VendorFilter filter)
         {
@@ -642,6 +642,11 @@ namespace SolaERP.Persistence.Services
                 : vendor.Description;
         }
 
-
+        public async Task<VendorLoadDto> GetVendorPreviousHeader(int vendorId)
+        {
+            var data = await _repository.GetVendorPreviousHeader(vendorId);
+            var map = _mapper.Map<VendorLoadDto>(data);
+            return map;
+        }
     }
 }

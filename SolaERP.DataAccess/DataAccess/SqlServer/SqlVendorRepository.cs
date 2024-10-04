@@ -631,5 +631,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 using var reader = await command.ExecuteReaderAsync();
             }
         }
+
+        public async Task<VendorLoad> GetVendorPreviousHeader(int vendorId)
+        {
+            VendorLoad data = new();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC GetVendorPreviousVersion @vendorId";
+                command.Parameters.AddWithValue(command, "@vendorId", vendorId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                    data = reader.GetByEntityStructure<VendorLoad>("VendorType","Logo");
+
+                return data;
+            }
+        }
     }
 }

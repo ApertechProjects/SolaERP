@@ -22,6 +22,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<VendorWFADto>>> GetRejectedAsync(string userIdentity, VendorFilter filter);
         Task<ApiResponse<bool>> ChangeStatusAsync(VendorStatusModel taxModel, string userIdentity, HttpResponse response);
         Task<ApiResponse<VM_VendorCard>> GetAsync(int vendorId);
+        Task<VendorLoadDto> GetVendorPreviousHeader(int vendorId);
         Task<ApiResponse<bool>> ApproveAsync(string userIdentity, VendorApproveModel model, HttpResponse response);
         Task<ApiResponse<bool>> SendToApproveAsync(VendorSendToApproveRequest request);
         Task<ApiResponse<bool>> SaveAsync(string userIdentity, VendorCardDto vendor);

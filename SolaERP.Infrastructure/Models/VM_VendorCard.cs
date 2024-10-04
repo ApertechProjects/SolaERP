@@ -17,6 +17,7 @@ namespace SolaERP.Application.Models
     public class VM_VendorCard
     {
         public VendorLoadDto Header { get; set; }
+        public VendorLoadDto HeaderPrevious { get; set; }
         public List<CurrencyDto> Currencies { get; set; }
         public List<PaymentTermDto> PaymentTerms { get; set; }
         public List<DeliveryTermDto> DeliveryTerms { get; set; }

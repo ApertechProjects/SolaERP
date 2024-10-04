@@ -55,20 +55,22 @@ namespace SolaERP.API.Controllers
           => CreateActionResult(await _service.GetPrequalificationAsync2(User.Identity.Name, id,
               Request.Headers.AcceptLanguage, vendorId));
 
-        [HttpPost]
-        [RequestSizeLimit(100_000_000)]
-        public async Task<IActionResult> Post([FromBody] SupplierRegisterCommand command,
-            [FromQuery] bool isRevise = false)
-        {
-            return CreateActionResult(await _service.AddAsync(User.Identity.Name, "", command, isRevise));
-        }
+        #region old
+        //[HttpPost]
+        //[RequestSizeLimit(100_000_000)]
+        //public async Task<IActionResult> Post([FromBody] SupplierRegisterCommand command,
+        //    [FromQuery] bool isRevise = false)
+        //{
+        //    return CreateActionResult(await _service.AddAsync(User.Identity.Name, "", command, isRevise));
+        //}
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Submit([FromBody] SupplierRegisterCommand command,
-            [FromQuery] bool isRevise = false)
-        {
-            return CreateActionResult(await _service.SubmitAsync(User.Identity.Name, "", command, isRevise));
-        }
+        //[HttpPost("[action]")]
+        //public async Task<IActionResult> Submit([FromBody] SupplierRegisterCommand command,
+        //    [FromQuery] bool isRevise = false)
+        //{
+        //    return CreateActionResult(await _service.SubmitAsync(User.Identity.Name, "", command, isRevise));
+        //}
+        #endregion
 
         [HttpPost("[action]")]
         [RequestSizeLimit(100_000_000)]

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.Extensions.Configuration;
+using SolaERP.Application.Entities.Language;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Helper;
 
@@ -20,7 +21,18 @@ namespace SolaERP.Infrastructure.ViewModels
         }
 
         public string? Token { get; set; }
-        public string? Subject { get; set; }
+        public string? Subject
+        {
+            get
+            {
+                return _lang switch
+                {
+                    "az" => "Vendor təsdiqi",
+                    "en" => "Vendor Approve",
+                    _ => "en"
+                };
+            }
+        }
         public string? Username { get; set; }
 
 

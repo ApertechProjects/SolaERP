@@ -4,13 +4,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RazorLight;
+using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.User;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
 using SolaERP.Application.ViewModels;
+using SolaERP.Infrastructure.ViewModels;
+using SolaERP.Persistence.Services;
 using System.Net;
 using System.Net.Mail;
 using System.Text.Json;
@@ -21,27 +25,23 @@ namespace SolaERP.Infrastructure.Services
     public class MailService : IMailService
     {
         private readonly IConfiguration _configuration;
-        private const string TemplatePath = @"SolaERP.API/wwwroot/sources/templates/RegistrationPending.cshtml";
-        private IFluentEmail _email;
-        private readonly ILogger<MailService> _logger;
         private readonly IEmailNotificationService _emailNotificationService;
+        private readonly IUserRepository _userRepository;
+        private readonly IApproveStageService _approveStageService;
         private readonly RazorLightEngine _razorEngine;
 
-        public MailService(IConfiguration configuration, IFluentEmail email, ILogger<MailService> logger, IEmailNotificationService emailNotificationService)
+        public MailService(IConfiguration configuration,
+                           IEmailNotificationService emailNotificationService,
+                           IUserRepository userRepository,
+                           IApproveStageService approveStageService)
         {
             _configuration = configuration;
-            _email = email;
-            _logger = logger;
             _emailNotificationService = emailNotificationService;
+            _userRepository = userRepository;
+            _approveStageService = approveStageService;
         }
 
 
-        private async Task<string> GetTemplateAsync(string templatePath) => await File.ReadAllTextAsync(templatePath);
-
-        public async Task SendMailAsync(string to, string subject, string body, bool isBodyHtml = true)
-        {
-            await SendMailAsync(new[] { to }, subject, body, isBodyHtml);
-        }
         public async Task SendMailAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
         {
             if (tos.Length != 0)
@@ -413,6 +413,87 @@ namespace SolaERP.Infrastructure.Services
             {
                 var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQH);
                 await SendMailForRequest(response, templates, userREQH, EmailTemplateKey.REQH, sequence, businessUnitName);
+            }
+        }
+
+        public async Task SendRegistrationPendingMail(int userId, EmailTemplateKey emailTemplateKey)
+        {
+            User user = await _userRepository.GetByIdAsync(userId);
+            var companyName = await _emailNotificationService.GetCompanyName(user.Email);
+
+            var templateDataForRegistrationPending =
+                await _emailNotificationService.GetEmailTemplateData(user.Language, EmailTemplateKey.RGA);
+
+            VM_RegistrationPending registrationPending = new VM_RegistrationPending()
+            {
+                FullName = user.FullName,
+                UserName = user.UserName,
+                Header = templateDataForRegistrationPending.Header,
+                Body = new HtmlString(string.Format(templateDataForRegistrationPending.Body, user.FullName)),
+                Language = user.Language,
+                CompanyName = companyName,
+            };
+
+            await SendUsingTemplate(templateDataForRegistrationPending.Subject,
+                   registrationPending,
+                   registrationPending.TemplateName(),
+                   registrationPending.ImageName(),
+                   new List<string> { user.Email });
+
+        }
+
+        public async Task SendMailToAdminstrationAboutRegistration(int userId, EmailTemplateKey emailTemplateKey)
+        {
+            User user = await _userRepository.GetByIdAsync(userId);
+            var companyName = await _emailNotificationService.GetCompanyName(user.Email);
+            List<Task> emails = new List<Task>();
+            var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
+            foreach (var lang in Enum.GetValues<Language>())
+            {
+                var sendUserMails = await _userRepository.GetAdminUserMailsAsync(1, lang);
+                if (sendUserMails.Count > 0)
+                {
+                    var templateData = templates.First(x => x.Language == lang.ToString());
+                    VM_RegistrationIsPendingAdminApprove adminApprove = new()
+                    {
+                        Body = new HtmlString(templateData.Body),
+                        CompanyName = companyName,
+                        Header = templateData.Header,
+                        UserName = user.UserName,
+                        CompanyOrVendorName = companyName,
+                        Language = templateData.Language.GetLanguageEnumValue(),
+                    };
+
+                    Task RegEmail = SendUsingTemplate(templateData.Subject, adminApprove,
+                        adminApprove.TemplateName, adminApprove.ImageName, sendUserMails);
+                    emails.Add(RegEmail);
+                }
+            }
+
+        }
+
+        public async Task CheckLastApproveStageAndSendMailToVendor(int vendorId, int sequence, int approveStatus, HttpResponse response)
+        {
+            var stageCount = await _approveStageService.GetStageCountAsync(Procedures.Vendors);
+            if (stageCount == sequence && approveStatus == 1)
+            {
+                var vendorUser = await _userRepository.GetUserByVendor(vendorId);
+                var companyName = await _emailNotificationService.GetCompanyName(vendorUser.Email);
+
+                VM_VendorApprove vendorApprove = new VM_VendorApprove(vendorUser.Language.ToString())
+                {
+                    CompanyName = companyName,
+                    Language = (Language)Enum.Parse(typeof(Language), vendorUser.Language.ToString())
+                };
+
+
+                response.OnCompleted(async () =>
+                {
+                    await SendUsingTemplate(vendorApprove.Subject, vendorApprove,
+                    vendorApprove.TemplateName(), null,
+                    new List<string> { vendorUser.Email });
+                });
+
             }
         }
     }
