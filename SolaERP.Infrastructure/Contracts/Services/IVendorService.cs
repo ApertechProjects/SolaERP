@@ -33,6 +33,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<VendorRFQListResponseDto>>> GetVendorRFQList(string vendorCode, string userIdentity);
         Task<ApiResponse<bool>> RFQVendorResponseChangeStatus(int rfqMainId, int status, string vendorCode);
         Task<ApiResponse<bool>> TransferToIntegration(CreateVendorRequest request);
-        Task<ApiResponse<VendorLoadDto>> CompareVendor(int oldVersionId, int newVersionId);
+        Task<ApiResponse<List<string>>> CompareVendor(int oldVersionId, int newVersionId);
     }
 }

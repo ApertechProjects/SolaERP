@@ -20,6 +20,7 @@ using SolaERP.Application.Entities.User;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
+using SolaERP.Application.Helper;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Application.Validator;
@@ -545,7 +546,15 @@ namespace SolaERP.Persistence.Services
 
                 await _mailService.SendRegistrationPendingMail(Convert.ToInt32(userIdentity));
 
-                await _mailService.SendMailToAdminstrationAboutRegistration(Convert.ToInt32(userIdentity));
+                var changedFields = new List<string>();
+                if (command.IsRevise)
+                {
+                    var previousVendorId = await _vendorRepository.GetVendorPreviousVendorId(result.VendorId);
+                    var vendorOld = await _vendorRepository.GetHeader(previousVendorId);
+                    var vendorCurrent = await _vendorRepository.GetHeader(result.VendorId);
+                    changedFields = Compare.CompareRow(vendorOld, vendorCurrent);
+                }
+                await _mailService.SendMailToAdminstrationAboutRegistration(Convert.ToInt32(userIdentity), changedFields);
 
 
                 return ApiResponse<EvaluationResultModel>.Success(result, 200);

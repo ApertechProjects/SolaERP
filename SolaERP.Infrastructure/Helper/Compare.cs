@@ -7,13 +7,14 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.PortableExecutable;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SolaERP.Application.Helper
 {
     public static class Compare
     {
-        public static T CompareRow<T>(T oldVersion, T newVersion) where T : class, new()
+        public static List<string> CompareRow<T>(T oldVersion, T newVersion) where T : class, new()
 
         {
             if (oldVersion == null || newVersion == null)
@@ -21,41 +22,62 @@ namespace SolaERP.Application.Helper
                 throw new ArgumentNullException("Objects cannot be null.");
             }
 
-            T differences = new T(); // Create a new instance of T
+            List<string> differences = new();
 
-            // Get the type of the generic class T
             Type type = typeof(T);
 
-            // Get all properties of the generic class T
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
             foreach (PropertyInfo property in properties)
             {
-                // Get the old and new values for each property
                 object oldValue = property.GetValue(oldVersion);
                 object newValue = property.GetValue(newVersion);
 
-                // Compare values (consider nulls)
                 if (oldValue == null && newValue == null)
                 {
-                    continue; // Skip if both are null
+                    continue;
                 }
                 if (!oldValue.Equals(newValue))
                 {
-                    // If there is a difference, set the new value in the differences object
-                    property.SetValue(differences, newValue);
+                    string propertyName = property.Name;
+
+                    if (propertyName.Contains("Status") ||
+                        propertyName == "VendorId")
+                        continue;
+
+                    if (propertyName.Contains("_"))
+                        propertyName = propertyName.Replace("_", "/");
+
+                    if (property.Name.EndsWith("Id"))
+                        propertyName = TrimEndWithWord(propertyName, "Id");
+
+                    differences.Add(SeparateWords(propertyName));
                 }
             }
 
             return differences;
         }
 
-        private static void CheckObjectResultAndSetToEntity(PropertyInfo property, object entity, object objectResult)
+        private static string SeparateWords(string input)
         {
-            if (objectResult != DBNull.Value && objectResult != null)
-                property.SetValue(entity, objectResult);
-            else
-                property.SetValue(entity, null);
+            // Regular expression to add a space before each uppercase letter (except the first one)
+            return Regex.Replace(input, "(?<!^)([A-Z])", " $1");
+        }
+
+        private static string TrimEndWithWord(string input, string cut)
+        {
+            ReadOnlySpan<char> inputSpan = input.AsSpan();
+            ReadOnlySpan<char> cutSpan = cut.AsSpan();
+
+            // Check if the input ends with the word to be trimmed
+            if (inputSpan.EndsWith(cutSpan))
+            {
+                // Trim the word by slicing the span and trimming any remaining spaces
+                return inputSpan.Slice(0, inputSpan.Length - cutSpan.Length).ToString().TrimEnd();
+            }
+
+            // If the word is not at the end, return the original string
+            return input;
         }
     }
 }

@@ -444,7 +444,7 @@ namespace SolaERP.Infrastructure.Services
 
         }
 
-        public async Task SendMailToAdminstrationAboutRegistration(int userId)
+        public async Task SendMailToAdminstrationAboutRegistration(int userId, List<string> details = null)
         {
             User user = await _userRepository.GetByIdAsync(userId);
             var companyName = await _emailNotificationService.GetCompanyName(user.Email);

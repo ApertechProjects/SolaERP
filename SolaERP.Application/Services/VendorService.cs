@@ -684,17 +684,16 @@ namespace SolaERP.Persistence.Services
             return map;
         }
 
-        public async Task<ApiResponse<VendorLoadDto>> CompareVendor(int oldVendorId, int currentVendorId)
+        public async Task<ApiResponse<List<string>>> CompareVendor(int oldVendorId, int currentVendorId)
         {
             var header = await GetVendorHeader(oldVendorId);
             var headerPrevious = await GetVendorHeader(currentVendorId);
             var data = Compare.CompareRow(header, headerPrevious);
-            var map = _mapper.Map<VendorLoadDto>(data);
-            if (map == null)
+            if (data == null)
             {
-                return ApiResponse<VendorLoadDto>.Success(map);
+                return ApiResponse<List<string>>.Success(data);
             }
-            return ApiResponse<VendorLoadDto>.Fail(map, 404);
+            return ApiResponse<List<string>>.Fail(data, 404);
         }
     }
 }
