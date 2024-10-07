@@ -21,6 +21,7 @@ using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
+using SolaERP.Application.Helper;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Application.ViewModels;
@@ -312,13 +313,25 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<VM_VendorCard>> GetAsync(int vendorId)
         {
+            var previousVendorId = await GetVendorPreviousVendorId(vendorId);
+            var headerPrevious = new VendorLoadDto();
+            var bankDetailsPrevious = new List<VendorBankDetail>();
+            var vendorBuCategoriesPrevious = new List<VendorBuCategory>();
+            var usersPrevious = new List<VendorUser>();
+            var scorePrevious = new List<Score>();
+            var matchedBuCategoriesPrevious = new List<BusinessCategory>();
+
+
             var header = await GetVendorHeader(vendorId);
-            var headerPrevious = await GetVendorPreviousHeader(vendorId);
+
             var paymentTerms = _supplierRepository.GetPaymentTermsAsync();
             var deliveryTerms = _supplierRepository.GetDeliveryTermsAsync();
             var currency = _supplierRepository.GetCurrenciesAsync();
+
             var bankDetails = _supplierRepository.GetVendorBankDetailsAsync(vendorId);
+
             var vendorBuCategories = _supplierRepository.GetVendorBuCategoriesAsync(vendorId);
+
             var buCategories = _generalRepository.BusinessCategories();
             var users = _supplierRepository.GetVendorUsers(vendorId);
             var score = _supplierRepository.Scores(vendorId);
@@ -327,6 +340,18 @@ namespace SolaERP.Persistence.Services
             var tax = _supplierRepository.TaxDatas();
             var itemCategories = _generalRepository.BusinessCategories();
             var countries = _supplierRepository.GetCountriesAsync();
+
+            if (previousVendorId > 0)
+            {
+                headerPrevious = await GetVendorHeader(previousVendorId);
+                bankDetailsPrevious = await _supplierRepository.GetVendorBankDetailsAsync(previousVendorId);
+                vendorBuCategoriesPrevious = await _supplierRepository.GetVendorBuCategoriesAsync(previousVendorId);
+                usersPrevious = await _supplierRepository.GetVendorUsers(previousVendorId);
+                scorePrevious = await _supplierRepository.Scores(previousVendorId);
+                matchedBuCategoriesPrevious = buCategories.Result
+                .Where(x => vendorBuCategoriesPrevious.Select(y => y.BusinessCategoryId).Contains(x.Id))
+                .ToList();
+            }
 
             await Task.WhenAll
             (
@@ -349,16 +374,22 @@ namespace SolaERP.Persistence.Services
                 .ToList();
 
 
+
+
             VM_VendorCard vendorModel = new VM_VendorCard()
             {
                 Header = header,
                 HeaderPrevious = headerPrevious,
+                ScorePrevious = _mapper.Map<List<ScoreDto>>(scorePrevious),
+                VendorBankDetailsPrevious = _mapper.Map<List<VendorBankDetailViewDto>>(bankDetailsPrevious),
+                VendorUsersPrevious = _mapper.Map<List<VendorUserDto>>(usersPrevious),
                 Currencies = _mapper.Map<List<CurrencyDto>>(currency.Result),
                 PaymentTerms = _mapper.Map<List<PaymentTermDto>>(paymentTerms.Result),
                 DeliveryTerms = _mapper.Map<List<DeliveryTermDto>>(deliveryTerms.Result),
                 VendorBankDetails = _mapper.Map<List<VendorBankDetailViewDto>>(bankDetails.Result),
                 VendorUsers = _mapper.Map<List<VendorUserDto>>(users.Result),
                 ItemCategories = _mapper.Map<List<BusinessCategoryDto>>(matchedBuCategories),
+                ItemCategoriesPrevious = _mapper.Map<List<BusinessCategoryDto>>(matchedBuCategoriesPrevious),
                 Score = _mapper.Map<List<ScoreDto>>(score.Result),
                 Shipments = _mapper.Map<List<ShipmentDto>>(shipment.Result),
                 WithHoldingTaxDatas = _mapper.Map<List<WithHoldingTaxDto>>(withHoldingTax.Result),
@@ -376,7 +407,11 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<VM_VendorCard>.Success(vendorModel);
         }
 
-
+        private async Task<int> GetVendorPreviousVendorId(int vendorId)
+        {
+            var id = await _repository.GetVendorPreviousVendorId(vendorId);
+            return id;
+        }
 
         public async Task<ApiResponse<List<VendorWFADto>>> GetWFAAsync(string userIdentity, VendorFilter filter)
         {
@@ -647,6 +682,19 @@ namespace SolaERP.Persistence.Services
             var data = await _repository.GetVendorPreviousHeader(vendorId);
             var map = _mapper.Map<VendorLoadDto>(data);
             return map;
+        }
+
+        public async Task<ApiResponse<VendorLoadDto>> CompareVendor(int oldVendorId, int currentVendorId)
+        {
+            var header = await GetVendorHeader(oldVendorId);
+            var headerPrevious = await GetVendorHeader(currentVendorId);
+            var data = Compare.CompareRow(header, headerPrevious);
+            var map = _mapper.Map<VendorLoadDto>(data);
+            if (map == null)
+            {
+                return ApiResponse<VendorLoadDto>.Success(map);
+            }
+            return ApiResponse<VendorLoadDto>.Fail(map, 404);
         }
     }
 }

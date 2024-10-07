@@ -119,5 +119,11 @@ namespace SolaERP.API.Controllers
             request.UserId = Convert.ToInt32(User.Identity.Name);
             return CreateActionResult(await _service.TransferToIntegration(request));
         }
+
+
+        //[Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Compare()
+         => CreateActionResult(await _service.CompareVendor(3951,4005));
     }
 }

@@ -22,9 +22,13 @@ namespace SolaERP.Application.Models
         public List<PaymentTermDto> PaymentTerms { get; set; }
         public List<DeliveryTermDto> DeliveryTerms { get; set; }
         public List<VendorBankDetailViewDto> VendorBankDetails { get; set; }
+        public List<VendorBankDetailViewDto> VendorBankDetailsPrevious { get; set; }
         public List<VendorUserDto> VendorUsers { get; set; }
+        public List<VendorUserDto> VendorUsersPrevious { get; set; }
         public List<BusinessCategoryDto> ItemCategories { get; set; }
+        public List<BusinessCategoryDto> ItemCategoriesPrevious { get; set; }
         public List<ScoreDto> Score { get; set; }
+        public List<ScoreDto> ScorePrevious { get; set; }
         public List<ShipmentDto> Shipments { get; set; }
         public List<WithHoldingTaxDto> WithHoldingTaxDatas { get; set; }
         public List<TaxDto> TaxDatas { get; set; }

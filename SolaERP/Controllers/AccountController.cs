@@ -158,7 +158,7 @@ namespace SolaERP.Controllers
 
             }
             AccountResponseDto account = new();
-            if (response.Data > 0)
+            if (response.Data > 0) 
             {
                 account.UserId = response.Data;
                 await _mailService.SendEmailVerification(Response, account.UserId);

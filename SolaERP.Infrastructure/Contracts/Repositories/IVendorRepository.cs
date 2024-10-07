@@ -37,5 +37,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> TransferToIntegration(CreateVendorRequest request);
         Task VendorSubmit(int vendorId);
         Task<VendorLoad> GetVendorPreviousHeader(int vendorId);
+        Task<int> GetVendorPreviousVendorId(int vendorId);
     }
 }
