@@ -1637,6 +1637,9 @@ namespace SolaERP.Persistence.Services
                         IsMandatory = d.IsMandatory
                     };
 
+                    if (childDto.LineNo == 3 || childDto.LineNo == 4)
+                        childDto.RadioboxValue = true;
+
                     dto.Childs.Add(childDto);
                 }
 
