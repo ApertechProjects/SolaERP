@@ -8,6 +8,7 @@ using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Application.Entities.User;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Helper;
 using SolaERP.Application.Models;
@@ -33,7 +34,7 @@ namespace SolaERP.Controllers
         private readonly IUserApprovalService _userApprovalService;
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
-
+        private readonly IVendorRepository _vendorRepository;
         public AccountController(UserManager<Application.Entities.Auth.User> userManager,
             SignInManager<Application.Entities.Auth.User> signInManager,
             IUserService userService,
@@ -44,7 +45,8 @@ namespace SolaERP.Controllers
             IEmailNotificationService emailNotificationService,
             IUserApprovalService userApprovalService,
             IUserRepository userRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IVendorRepository vendorRepository)
         {
             _userService = userService;
             _signInManager = signInManager;
@@ -57,22 +59,32 @@ namespace SolaERP.Controllers
             _userApprovalService = userApprovalService;
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
+            _vendorRepository = vendorRepository;
         }
 
 
         [HttpGet("{email}")]
         public async Task<IActionResult> SendResetPasswordEmail(string email)
         {
-            var result = await _userService.SendResetPasswordEmail(email);
-            if (result.StatusCode == 200)
+            var changedFields = new List<string>();
+            if (true)
             {
-                Response.OnCompleted(async () =>
-                {
-                    await _mailService.SendPasswordResetMailAsync(email, result.Data);
-                });
-
-                return CreateActionResult(ApiResponse<bool>.Success(true));
+                var previousVendorId = await _vendorRepository.GetVendorPreviousVendorId(4005);
+                var vendorOld = await _vendorRepository.GetHeader(previousVendorId);
+                var vendorCurrent = await _vendorRepository.GetHeader(4005);
+                changedFields = Compare.CompareRow(vendorOld, vendorCurrent);
             }
+            await _mailService.SendMailToAdminstrationAboutRegistration(Convert.ToInt32(1922), changedFields);
+            var result = await _userService.SendResetPasswordEmail(email);
+            //if (result.StatusCode == 200)
+            //{
+            //    Response.OnCompleted(async () =>
+            //    {
+            //        await _mailService.SendPasswordResetMailAsync(email, result.Data);
+            //    });
+
+            //    return CreateActionResult(ApiResponse<bool>.Success(true));
+            //}
             return CreateActionResult(result);
         }
 

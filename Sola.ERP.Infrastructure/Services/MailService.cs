@@ -456,7 +456,7 @@ namespace SolaERP.Infrastructure.Services
                 if (sendUserMails.Count > 0)
                 {
                     var templateData = templates.First(x => x.Language == lang.ToString());
-                    VM_RegistrationIsPendingAdminApprove adminApprove = new()
+                    VM_RegistrationIsPendingAdminApprove adminApprove = new(details)
                     {
                         Body = new HtmlString(templateData.Body),
                         CompanyName = companyName,

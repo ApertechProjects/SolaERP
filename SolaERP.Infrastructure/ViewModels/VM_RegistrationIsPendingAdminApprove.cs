@@ -56,7 +56,13 @@ namespace SolaERP.Infrastructure.ViewModels
             if (_changedFields == null)
                 return new HtmlString("");
 
+            var language = Language switch
+            {
+                Language.en => new HtmlString($"Changed fields : "),
+                Language.az => new HtmlString($"Dəyişdirilən dəyərlər : "),
+            };
             StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append(language);
             foreach (string field in _changedFields)
             {
                 stringBuilder.Append(field + ",");
