@@ -66,25 +66,16 @@ namespace SolaERP.Controllers
         [HttpGet("{email}")]
         public async Task<IActionResult> SendResetPasswordEmail(string email)
         {
-            var changedFields = new List<string>();
-            if (true)
-            {
-                var previousVendorId = await _vendorRepository.GetVendorPreviousVendorId(4005);
-                var vendorOld = await _vendorRepository.GetHeader(previousVendorId);
-                var vendorCurrent = await _vendorRepository.GetHeader(4005);
-                changedFields = Compare.CompareRow(vendorOld, vendorCurrent);
-            }
-            await _mailService.SendMailToAdminstrationAboutRegistration(Convert.ToInt32(1922), changedFields);
             var result = await _userService.SendResetPasswordEmail(email);
-            //if (result.StatusCode == 200)
-            //{
-            //    Response.OnCompleted(async () =>
-            //    {
-            //        await _mailService.SendPasswordResetMailAsync(email, result.Data);
-            //    });
+            if (result.StatusCode == 200)
+            {
+                Response.OnCompleted(async () =>
+                {
+                    await _mailService.SendPasswordResetMailAsync(email, result.Data);
+                });
 
-            //    return CreateActionResult(ApiResponse<bool>.Success(true));
-            //}
+                return CreateActionResult(ApiResponse<bool>.Success(true));
+            }
             return CreateActionResult(result);
         }
 
