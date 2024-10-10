@@ -444,7 +444,7 @@ namespace SolaERP.Infrastructure.Services
 
         }
 
-        public async Task SendMailToAdminstrationAboutRegistration(int userId, List<string> details = null)
+        public async Task SendMailToAdminstrationForApproveRegistration(int userId, List<string> details = null)
         {
             User user = await _userRepository.GetByIdAsync(userId);
             var companyName = await _emailNotificationService.GetCompanyName(user.Email);
@@ -523,6 +523,35 @@ namespace SolaERP.Infrastructure.Services
                     emailVerification.TemplateName(), emailVerification.ImageName(),
                     new List<string> { user.Email });
             });
+        }
+
+        public async Task SendMailToAdminstrationAboutRegistration(int userId)
+        {
+            User user = await _userRepository.GetByIdAsync(userId);
+            var companyName = await _emailNotificationService.GetCompanyName(user.Email);
+            List<Task> emails = new List<Task>();
+            var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.RP);
+            foreach (var lang in Enum.GetValues<Language>())
+            {
+                var sendUserMails = await _userRepository.GetAdminUserMailsAsync(1, lang);
+                if (sendUserMails.Count > 0)
+                {
+                    var templateData = templates.First(x => x.Language == lang.ToString());
+					VM_InformationAboutRegistrationForAdmin adminApprove = new()
+                    {
+                        Body = new HtmlString(templateData.Body),
+                        CompanyName = companyName,
+                        Header = templateData.Header,
+                        UserName = user.UserName,
+                        CompanyOrVendorName = companyName,
+                        Language = templateData.Language.GetLanguageEnumValue(),
+                    };
+
+                    Task RegEmail = SendUsingTemplate(templateData.Subject, adminApprove,
+                        adminApprove.TemplateName, adminApprove.ImageName, sendUserMails);
+                    emails.Add(RegEmail);
+                }
+            }
         }
     }
 

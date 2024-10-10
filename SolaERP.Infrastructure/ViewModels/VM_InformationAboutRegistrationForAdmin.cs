@@ -1,27 +1,30 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.Extensions.Configuration;
 using SolaERP.Application.Helper;
+using SolaERP.Infrastructure.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Language = SolaERP.Application.Enums.Language;
-namespace SolaERP.Infrastructure.ViewModels
+
+namespace SolaERP.Application.ViewModels
 {
-    public class VM_RegistrationIsPendingAdminApprove : VM_EmailTemplateBase
+    public class VM_InformationAboutRegistrationForAdmin : VM_EmailTemplateBase
     {
         private readonly IConfiguration _configuration;
-        List<string> _changedFields;
-        public VM_RegistrationIsPendingAdminApprove(List<string> changedFields = null)
+        public VM_InformationAboutRegistrationForAdmin()
         {
             string appsettingsFileName = AppSettingsHelper.GetAppSettingsFileName();
             IConfigurationBuilder builder = new ConfigurationBuilder()
             .AddJsonFile(appsettingsFileName, optional: true, reloadOnChange: false);
 
             _configuration = builder.Build();
-            _changedFields = changedFields;
         }
-
         public string UserName { get; set; }
         public string CompanyOrVendorName { get; set; }
-        public string TemplateName => @"RegistrationIsPendingAdminApprove.cshtml";
+        public string TemplateName => @"InformationAboutRegistrationForAdmin.cshtml";
 
         public string ImageName => @"registrationPending.png";
 
@@ -52,24 +55,5 @@ namespace SolaERP.Infrastructure.ViewModels
             };
         }
 
-        public HtmlString GetDetailsAboutChanges()
-        {
-            if (_changedFields == null)
-                return new HtmlString("");
-
-            var language = Language switch
-            {
-                Language.en => new HtmlString($"Changed fields : "),
-                Language.az => new HtmlString($"Dəyişdirilən dəyərlər : "),
-            };
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.Append(language);
-            foreach (string field in _changedFields)
-            {
-                stringBuilder.Append(field + ",");
-            }
-            string result = stringBuilder.ToString().TrimEnd(',');
-            return new HtmlString(result);
-        }
     }
 }

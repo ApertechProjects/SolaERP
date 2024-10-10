@@ -940,6 +940,22 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
             return true;
         }
+
+        public async Task<int> UserApprovalCount(int userId)
+        {
+            int count = 0;
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "SELECT Count(*) as Count FROM CONFIG.UserApproval WHERE UserId = @userId";
+                command.Parameters.AddWithValue(command, "@userId", userId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                if (reader.Read())
+                    count = reader.Get<int>("Count");
+            }
+
+            return count;
+        }
         #endregion
     }
 }

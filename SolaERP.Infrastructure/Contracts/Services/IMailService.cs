@@ -21,12 +21,12 @@ namespace SolaERP.Application.Contracts.Services
 
         Task SendRegistrationPendingMail(int userId);
 
-        Task SendMailToAdminstrationAboutRegistration(int userId, List<string> changedFields = null);
+        Task SendMailToAdminstrationForApproveRegistration(int userId, List<string> changedFields = null);
 
         Task CheckLastApproveStageAndSendMailToVendor(int vendorId, int sequence, int approveStatus, HttpResponse response);
 
         Task SendEmailVerification(HttpResponse response, int userId);
-
+        Task SendMailToAdminstrationAboutRegistration(int userId);
     }
 
 }

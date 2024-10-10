@@ -63,6 +63,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> UserSendToApprove(int userId);
         Task<int> GetVendorAdminGroupUserByUserId(int userId);
         Task<bool> RemoveUserFromVendorAdmin(int groupUserId);
+        Task<int> UserApprovalCount(int userId);
     }
 
     public enum Filetype

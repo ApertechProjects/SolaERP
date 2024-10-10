@@ -554,7 +554,7 @@ namespace SolaERP.Persistence.Services
                     var vendorCurrent = await _vendorRepository.GetHeader(result.VendorId);
                     changedFields = Compare.CompareRow(vendorOld, vendorCurrent);
                 }
-                await _mailService.SendMailToAdminstrationAboutRegistration(Convert.ToInt32(userIdentity), changedFields);
+                await _mailService.SendMailToAdminstrationForApproveRegistration(Convert.ToInt32(userIdentity), changedFields);
 
 
                 return ApiResponse<EvaluationResultModel>.Success(result, 200);
