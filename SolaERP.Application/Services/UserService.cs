@@ -487,25 +487,30 @@ namespace SolaERP.Persistence.Services
 
 			if (user)
 			{
-				var userType = await CheckUserType(verifyToken);
-				if (userType == "0")
-					return ApiResponse<bool>.Success(true, 200);
+				//var userType = await CheckUserType(verifyToken);
+				//if (userType == "0")
+				//	return ApiResponse<bool>.Success(true, 200);
+				//else
+				//{
+				UserData userData = await GetUserDataByVerifyTokenAsync(verifyToken);
+				var approvalCount = await UserApprovalCount(userData.Id);
+
+				#region RegistratedUser
+
+				#endregion
+
+				#region AdminUsers
+				if (approvalCount > 0)
+				{
+					await _mailService.SendRegistrationPendingMail(userData.Id);
+					await _mailService.SendMailToAdminstrationForApproveRegistration(userData.Id);
+				}
 				else
 				{
-					UserData userData = await GetUserDataByVerifyTokenAsync(verifyToken);
-					var approvalCount = await UserApprovalCount(userData.Id);
-
-					#region RegistratedUser
-					await _mailService.SendRegistrationPendingMail(userData.Id);
-					#endregion
-
-					#region AdminUsers
-					if (approvalCount > 0)
-						await _mailService.SendMailToAdminstrationForApproveRegistration(userData.Id);
-					else
-						await _mailService.SendMailToAdminstrationAboutRegistration(userData.Id);
-					#endregion
+					await _mailService.SendMailToAdminstrationAboutRegistration(userData.Id);
 				}
+				#endregion
+				//}
 			}
 
 			if (user)

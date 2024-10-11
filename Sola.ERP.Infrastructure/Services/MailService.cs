@@ -549,7 +549,7 @@ namespace SolaERP.Infrastructure.Services
 					};
 
 					Task RegEmail = SendUsingTemplate(templateData.Subject, adminApprove,
-						adminApprove.TemplateName, adminApprove.ImageName, new List<string> { "qeriblih@gmail.com"});
+						adminApprove.TemplateName, adminApprove.ImageName, sendUserMails);
 					emails.Add(RegEmail);
 				}
 			}
