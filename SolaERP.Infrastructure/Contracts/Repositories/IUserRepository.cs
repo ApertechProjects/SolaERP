@@ -16,6 +16,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<User> GetByUsernameAsync(string userName);
         Task<User> GetByEmailAsync(string email);
         Task<User> GetByIdAsync(int userId);
+        Task<User> GetByIdForRegAsync(int userId);
         Task<User> GetByEmailCode(int verifyCode);
         Task<bool> SetEmailCode(string token, int id);
         Task<int> ConvertIdentity(string name);

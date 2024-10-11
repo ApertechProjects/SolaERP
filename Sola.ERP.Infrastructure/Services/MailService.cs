@@ -501,7 +501,7 @@ namespace SolaERP.Infrastructure.Services
 
 		public async Task SendEmailVerification(HttpResponse response, int userId)
 		{
-			User user = await _userRepository.GetByIdAsync(userId);
+			User user = await _userRepository.GetByIdForRegAsync(userId);
 			var templateDataForVerification =
 				  _emailNotificationService.GetEmailTemplateData(user.Language, EmailTemplateKey.VER).Result;
 			var companyName = _emailNotificationService.GetCompanyName(user.Email).Result;

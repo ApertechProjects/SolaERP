@@ -152,7 +152,7 @@ namespace SolaERP.Controllers
 				return CreateActionResult(ApiResponse<bool>.Fail("email", $" This mail is already in use", 422));
 
 			dto.VerifyToken = Helper.GetVerifyToken(_tokenHandler.CreateRefreshToken());
-
+			
 			dto.VendorId = await _vendorService.GetByTaxIdAsync(dto.TaxId);
 			var response = await _userService.UserRegisterAsync(dto);
 			if (dto.VendorId > 0)
