@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.ComponentModel;
+using System.Net;
 using System.Runtime.InteropServices;
 
 namespace SolaERP.Persistence
@@ -33,6 +34,7 @@ namespace SolaERP.Persistence
 
             if (result != 0)
             {
+                throw new Win32Exception(result, "Failed to connect to network share.");
                 //System.Windows.Forms.MessageBox.Show("Problem detected", "Warning", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
                 //MailOperations.SendMail("User or password not correct");
                 //SqlOperations.ErrorLog(new Win32Exception(result));

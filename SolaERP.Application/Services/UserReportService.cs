@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -58,17 +60,15 @@ namespace SolaERP.Persistence.Services
 
         private async Task<bool> CopyFile(string dashboardId, string fileName)
         {
-            string serverPath = _configuration["FileOptions:DashboardUrl"];
+            string serverPath = _configuration["FileOptions:ServerUrl"];
             string sourceFilePath = serverPath + _configuration["FileOptions:ReportPath"] + "/" + dashboardId + ".xml";
             string destinationFilePath = serverPath + _configuration["FileOptions:ReportPath"] + "/" + fileName;
 
             try
             {
-                // Use the File.Copy method to copy the file
                 File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
-
-                return true;
             }
+
             catch (IOException ioEx)
             {
                 Console.WriteLine("An error occurred: " + ioEx.Message);
