@@ -1,4 +1,6 @@
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Order;
+using System.Text;
 
 namespace SolaERP.Application.Helper;
 
@@ -41,6 +43,22 @@ public class BusinessUnitHelper
     {
         var connectionData = GetConnectionData(businessUnitId).Result;
         return $"EXEC {connectionData.HostWithBrackets}.SolaERPIntegration.dbo.{queryWithoutExec}";
+    }
+
+
+    public string BuildQueryForCheckExistIntegrationData(List<OrderIntegrateCheckDto> orders)
+    {
+        int businessUnitId = orders[0].BusinessUnitId;
+        List<string> orderNos = orders.Select(x => x.OrderNo).ToList();
+        StringBuilder stringBuilder = new StringBuilder();
+        foreach (var item in orderNos)
+        {
+            stringBuilder.Append($"'{item}'" + ",");
+        }
+        string res = stringBuilder.ToString().TrimEnd(',');
+
+        var connectionData = GetConnectionData(businessUnitId).Result;
+        return $"select count(*) as [Count] from {connectionData.HostWithBrackets}.{connectionData.DbName}.{connectionData.Schema}.{connectionData.BusinessUnitNameWithUnderscore}PO where PO_TXN_REF IN({res})";
     }
 }
 

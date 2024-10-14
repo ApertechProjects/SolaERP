@@ -2,6 +2,7 @@ using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Order;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.AnalysisCode;
+using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Order;
 using SolaERP.Application.Helper;
 using SolaERP.Application.UnitOfWork;
@@ -372,6 +373,26 @@ public class SqlOrderRepository : IOrderRepository
         return data;
     }
 
+    public async Task<List<OrderIntegrateCheckDto>> GetOrderNos(List<int> orderMainIds)
+    {
+        string result = $"({string.Join(",", orderMainIds)})";
+        await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = @$"select BusinessUnitId,OrderNo from Procurement.OrderMain where OrderMainId IN {result}";
+
+        command.Parameters.AddWithValue(command, "@orderMainIds", result);
+
+        await using DbDataReader reader = await command.ExecuteReaderAsync();
+        List<OrderIntegrateCheckDto> datas = new();
+        while (await reader.ReadAsync())
+        {
+            int businessUnitId = reader.Get<int>("BusinessUnitId");
+            string orderNo = reader.Get<string>("OrderNo");
+            datas.Add(new OrderIntegrateCheckDto { OrderNo = orderNo, BusinessUnitId = businessUnitId });
+        }
+
+        return datas;
+    }
+
     public async Task<List<OrderCreateRequestListDto>> GetOrderCreateListForRequestAsync(OrderCreateListRequest dto)
     {
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
@@ -452,6 +473,22 @@ public class SqlOrderRepository : IOrderRepository
         await _unitOfWork.SaveChangesAsync();
         return await command.ExecuteNonQueryAsync() > 0;
     }
+
+    public async Task<int> GetAllIntegratedData(List<OrderIntegrateCheckDto> orders)
+    {
+        int count = 0;
+        await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = _businessUnitHelper.BuildQueryForCheckExistIntegrationData(orders);
+
+        await using DbDataReader reader = await command.ExecuteReaderAsync();
+        List<OrderDetailLoadDto> data = new();
+        while (await reader.ReadAsync())
+        {
+            count = reader.Get<int>("Count");
+        }
+        return count;
+    }
+
 
     private static OrderDetailLoadDto MapFromReaderForOrderDetailListDto(IDataReader reader)
     {

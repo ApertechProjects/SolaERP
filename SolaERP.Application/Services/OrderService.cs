@@ -14,6 +14,7 @@ using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
+using System.Text;
 
 namespace SolaERP.Persistence.Services;
 
@@ -268,8 +269,23 @@ public class OrderService : IOrderService
         );
     }
 
+    public async Task<bool> CheckIntegration(List<int> ids)
+    {
+        var orders = await _orderRepository.GetOrderNos(ids);
+
+        var data = await _orderRepository.GetAllIntegratedData(orders);
+        if (data > 0)
+            return false;
+        return true;
+    }
+
     public async Task<ApiResponse<bool>> Retrieve(List<int> ids, string name)
     {
+        if (!await CheckIntegration(ids))
+        {
+            return ApiResponse<bool>.Fail("Integration exist for this order", 400);
+        }
+
         int userId = await _userRepository.ConvertIdentity(name);
         int count = 0;
         string errorIds = string.Empty;

@@ -23,10 +23,12 @@ public interface IOrderRepository
 
     Task<bool> SendToApproveAsync(List<int> orderMainIdList, int userId);
     Task<OrderHeadLoaderDto> GetHeaderLoadAsync(int orderMainId);
+    Task<List<OrderIntegrateCheckDto>> GetOrderNos(List<int> orderMainIds);
     Task<List<OrderCreateRequestListDto>> GetOrderCreateListForRequestAsync(OrderCreateListRequest dto);
     Task<List<OrderCreateBidListDto>> GetOrderCreateListForBidsAsync(OrderCreateListRequest dto);
     Task<List<OrderDetailLoadDto>> GetAllDetailsAsync(int orderMainId);
     Task<bool> CreateOrderIntegration(int businessUnitId, int orderMainId, int userId);
+    Task<int> GetAllIntegratedData(List<OrderIntegrateCheckDto> orders);
     Task<bool> Retrieve(int id, int userId);
     Task<List<AnalysisCodeIds>> GetAnalysis(int businessUnitId, DataTable data);
     Task<List<OrderMainBaseReportInfo>> GetOrderMainBaseReportInfos(List<int> orderMainIds);

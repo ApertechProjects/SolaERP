@@ -31,5 +31,6 @@ public interface IOrderService
     Task<ApiResponse<OrderMainGetDto>> GetOrderCardAsync();
     Task<ApiResponse<WithHoldingTaxData>> WithHoldingTaxDatas(int vendorId);
     Task<ApiResponse<bool>> Retrieve(List<int> ids, string name);
+    Task<bool> CheckIntegration(List<int> ids);
     Task<ApiResponse<List<AnalysisCodeIds>>> GetAnalysis(GetAnalysisByCode model);
 }
