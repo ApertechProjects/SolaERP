@@ -121,9 +121,5 @@ namespace SolaERP.API.Controllers
         }
 
 
-        //[Authorize]
-        [HttpGet]
-        public async Task<IActionResult> Compare()
-         => CreateActionResult(await _service.CompareVendor(3951,4005));
     }
 }
