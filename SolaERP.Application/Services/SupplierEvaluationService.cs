@@ -545,6 +545,20 @@ namespace SolaERP.Persistence.Services
 
         }
 
+        private async Task<bool> CompareVendorBusinessSector(int oldVendorId, int currentVendorId)
+        {
+            var vendorOld = await _repository.GetBusinessSectorAsync(oldVendorId);
+            var vendorCurrent = await _repository.GetBusinessSectorAsync(currentVendorId);
+            List<int> oldBusinessSector = vendorOld.Select(x => x.BusinessSectorId).OrderBy(x => x).ToList();
+            List<int> currentBusinessSector = vendorCurrent.Select(x => x.BusinessSectorId).OrderBy(x => x).ToList();
+            string oldVersion = string.Join(",", oldBusinessSector);
+            string currentVersion = string.Join(",", currentBusinessSector);
+            if (oldVersion == currentVersion)
+                return true;
+            return false;
+
+        }
+
         public async Task<ApiResponse<EvaluationResultModel>> SubmitAsync2(string userIdentity,
           SupplierRegisterCommand2 command)
         {
@@ -570,7 +584,10 @@ namespace SolaERP.Persistence.Services
                     var vendorCurrent = await _vendorRepository.GetHeader(result.VendorId);
                     changedFields = Compare.CompareRow(vendorOld, vendorCurrent);
                     if (!await CompareVendorBusinessCategory(previousVendorId, result.VendorId))
-                        changedFields.Add("BusinessCategory");
+                        changedFields.Add("Business Category");
+                    if (!await CompareVendorBusinessSector(previousVendorId, result.VendorId))
+                        changedFields.Add("Business Sector");
+
                 }
                 await _mailService.SendMailToAdminstrationForApproveRegistration(Convert.ToInt32(userIdentity), changedFields);
 
