@@ -12,3 +12,4 @@ services:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Development}
     volumes:
       - /media:/media
+      - ${DASHBOARD_FILE_PATH}:/root/dashboard
