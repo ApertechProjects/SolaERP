@@ -283,7 +283,7 @@ public class OrderService : IOrderService
     {
         if (!await CheckIntegration(ids))
         {
-            return ApiResponse<bool>.Fail("Integration exist for this order", 400);
+            return ApiResponse<bool>.Fail("Integration exist for this order", 422);
         }
 
         int userId = await _userRepository.ConvertIdentity(name);
