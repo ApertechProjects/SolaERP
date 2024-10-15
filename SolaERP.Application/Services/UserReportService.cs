@@ -60,12 +60,12 @@ namespace SolaERP.Persistence.Services
 
         private async Task<bool> CopyFile(string dashboardId, string fileName)
         {
-
-            string sourceFilePath =  _configuration["FileOptions:ReportPath"] + "/" + dashboardId + ".xml";
-            string destinationFilePath =  _configuration["FileOptions:ReportPath"] + "/" + fileName;
-
             try
-            { 
+            {
+                string sourceFilePath = _configuration["FileOptions:ReportPath"] + "/" + dashboardId + ".xml";
+                string destinationFilePath = _configuration["FileOptions:ReportPath"] + "/" + fileName;
+
+
                 File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
             }
 
