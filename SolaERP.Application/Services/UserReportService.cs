@@ -72,14 +72,17 @@ namespace SolaERP.Persistence.Services
             catch (IOException ioEx)
             {
                 Console.WriteLine("An error occurred: " + ioEx.Message);
+                Debug.WriteLine("An error occurred: " + ioEx.Message);
             }
             catch (UnauthorizedAccessException uaEx)
             {
                 Console.WriteLine("Access error: " + uaEx.Message);
+                Debug.WriteLine("Access error: " + uaEx.Message);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("An unexpected error occurred: " + ex.Message);
+                Debug.WriteLine("An unexpected error occurred: " + ex.Message);
             }
             return false;
         }
