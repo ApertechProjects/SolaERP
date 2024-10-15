@@ -559,6 +559,30 @@ namespace SolaERP.Persistence.Services
 
         }
 
+        private async Task<bool> CompareVendorRepresentedCompany(int oldVendorId, int currentVendorId)
+        {
+            var vendorOld = await _repository.GetRepresentedCompanyAsync(oldVendorId);
+            var vendorCurrent = await _repository.GetRepresentedCompanyAsync(currentVendorId);
+            string oldVersion = vendorOld?.RepresentedCompanyName;
+            string currentVersion = vendorCurrent?.RepresentedCompanyName;
+            if (oldVersion == currentVersion)
+                return true;
+            return false;
+
+        }
+
+        private async Task<bool> CompareVendorRepresentedProduct(int oldVendorId, int currentVendorId)
+        {
+            var vendorOld = await _repository.GetRepresentedProductAsync(oldVendorId);
+            var vendorCurrent = await _repository.GetRepresentedProductAsync(currentVendorId);
+            string oldVersion = vendorOld?.RepresentedProductName;
+            string currentVersion = vendorCurrent?.RepresentedProductName;
+            if (oldVersion == currentVersion)
+                return true;
+            return false;
+
+        }
+
         public async Task<ApiResponse<EvaluationResultModel>> SubmitAsync2(string userIdentity,
           SupplierRegisterCommand2 command)
         {
@@ -587,6 +611,10 @@ namespace SolaERP.Persistence.Services
                         changedFields.Add("Business Category");
                     if (!await CompareVendorBusinessSector(previousVendorId, result.VendorId))
                         changedFields.Add("Business Sector");
+                    if (!await CompareVendorRepresentedCompany(previousVendorId, result.VendorId))
+                        changedFields.Add("Represented Company");
+                    if (!await CompareVendorRepresentedProduct(previousVendorId, result.VendorId))
+                        changedFields.Add("Represented Product");
 
                 }
                 await _mailService.SendMailToAdminstrationForApproveRegistration(Convert.ToInt32(userIdentity), changedFields);
@@ -1924,14 +1952,6 @@ namespace SolaERP.Persistence.Services
             command.CompanyInformation.ReviseNo = resviseNo + 1;
         }
 
-        private DateTime? SetRevisionDate(bool isSubmitted, bool isCreate)
-        {
-            if (isSubmitted && !isCreate)
-            {
-                return DateTime.UtcNow.AddHours(4);
-            }
-            return null;
-        }
 
 
     }
