@@ -61,8 +61,8 @@ namespace SolaERP.Persistence.Services
             UserReportSaveDto saveDto = new UserReportSaveDto
             {
                 Id = null,
-                ReportFileId = fileName,
-                ReportFileName = dashboardName.Substring(0, dashboardName.Length - 4),
+                ReportFileId = fileName.Substring(0, dashboardName.Length - 4),
+                ReportFileName = dashboardName,
                 Users = new List<int> { Convert.ToInt16(userName) }
             };
 
@@ -116,7 +116,7 @@ namespace SolaERP.Persistence.Services
                         throw new Exception("Save as is not permitted");
 
                     id = report.Id;
-                    var lastIndexString = id.Substring(id.Length - 1, 1);
+                    var lastIndexString = id.Substring(9, id.Length - 9);
                     var lastIndex = Convert.ToInt16(lastIndexString) + 1;
                     var fileName = $"dashboard{lastIndex}.xml";
                     return fileName;
