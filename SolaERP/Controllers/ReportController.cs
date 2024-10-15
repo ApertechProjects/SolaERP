@@ -7,7 +7,7 @@ using SolaERP.Controllers;
 namespace SolaERP.API.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [Authorize]
+    //[Authorize]
     public class ReportController : CustomBaseController
     {
         private readonly IUserService _userService;

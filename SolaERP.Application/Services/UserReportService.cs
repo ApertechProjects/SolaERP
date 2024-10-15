@@ -61,7 +61,7 @@ namespace SolaERP.Persistence.Services
             UserReportSaveDto saveDto = new UserReportSaveDto
             {
                 Id = null,
-                ReportFileId = fileName.Substring(0, dashboardName.Length - 4),
+                ReportFileId = fileName.Substring(0, fileName.Length - 4),
                 ReportFileName = dashboardName,
                 Users = new List<int> { Convert.ToInt16(userName) }
             };
@@ -111,14 +111,15 @@ namespace SolaERP.Persistence.Services
                     string responseBody = await response.Content.ReadAsStringAsync();
                     var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                     var reports = JsonSerializer.Deserialize<List<ReportDto>>(responseBody, options);
-                    var report = reports.OrderByDescending(x => x.Id).ToList().FirstOrDefault();
-                    if (report == null)
+
+                    //var report = reports.OrderByDescending(x => x.Id).ToList().FirstOrDefault();
+                    var dashboardIds = reports.Select(x => Convert.ToInt16(x.Id.Substring(9, x.Id.Length - 9))).ToList();
+
+                    if (dashboardIds == null)
                         throw new Exception("Save as is not permitted");
 
-                    id = report.Id;
-                    var lastIndexString = id.Substring(9, id.Length - 9);
-                    var lastIndex = Convert.ToInt16(lastIndexString) + 1;
-                    var fileName = $"dashboard{lastIndex}.xml";
+                    int maxId = dashboardIds.Max() + 1;
+                    var fileName = $"dashboard{maxId}.xml";
                     return fileName;
                 }
                 catch (HttpRequestException e)
