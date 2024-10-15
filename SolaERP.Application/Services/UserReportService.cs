@@ -15,6 +15,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Confluent.Kafka;
 
 namespace SolaERP.Persistence.Services
 {
@@ -51,7 +52,13 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> SaveAs(string dashboardId, string dashboardName, string userName)
         {
-            string fileName = await GetFileName();
+            var reports = await GetDashboards();
+            var reportNames = reports.Select(x => x.Name).ToList();
+            if (reportNames.Contains(dashboardName))
+            {
+                return ApiResponse<bool>.Fail("This dashboard name already exist in system", 422);
+            }
+            string fileName = await GetFileName(reports);
             bool result = await CopyFile(dashboardId, fileName);
             if (!result)
             {
@@ -96,7 +103,7 @@ namespace SolaERP.Persistence.Services
             return false;
         }
 
-        private async Task<string> GetFileName()
+        private async Task<List<ReportDto>> GetDashboards()
         {
             using (HttpClient client = new HttpClient())
             {
@@ -111,27 +118,27 @@ namespace SolaERP.Persistence.Services
                     string responseBody = await response.Content.ReadAsStringAsync();
                     var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                     var reports = JsonSerializer.Deserialize<List<ReportDto>>(responseBody, options);
-
-                    //var report = reports.OrderByDescending(x => x.Id).ToList().FirstOrDefault();
-                    var dashboardIds = reports.Select(x => Convert.ToInt16(x.Id.Substring(9, x.Id.Length - 9))).ToList();
-
-                    if (dashboardIds == null)
-                        throw new Exception("Save as is not permitted");
-
-                    int maxId = dashboardIds.Max() + 1;
-                    var fileName = $"dashboard{maxId}.xml";
-                    return fileName;
-                }
-                catch (HttpRequestException e)
-                {
-
+                    return reports;
                 }
                 catch (Exception ex)
                 {
 
                 }
-                return null;
+                return new();
             }
+
+        }
+
+        private async Task<string> GetFileName(List<ReportDto> reports)
+        {
+            var dashboardIds = reports.Select(x => Convert.ToInt16(x.Id.Substring(9, x.Id.Length - 9))).ToList();
+
+            if (dashboardIds == null)
+                throw new Exception("Save as is not permitted");
+
+            int maxId = dashboardIds.Max() + 1;
+            var fileName = $"dashboard{maxId}.xml";
+            return fileName;
         }
 
 

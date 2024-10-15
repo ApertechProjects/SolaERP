@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Confluent.Kafka;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Attachment;
@@ -529,6 +530,21 @@ namespace SolaERP.Persistence.Services
             }
         }
 
+
+        private async Task<bool> CompareVendorBusinessCategory(int oldVendorId, int currentVendorId)
+        {
+            var vendorOld = await _repository.GetVendorBuCategoriesAsync(oldVendorId);
+            var vendorCurrent = await _repository.GetVendorBuCategoriesAsync(currentVendorId);
+            List<int> oldCategories = vendorOld.Select(x => x.BusinessCategoryId).OrderBy(x => x).ToList();
+            List<int> currentCategories = vendorCurrent.Select(x => x.BusinessCategoryId).OrderBy(x => x).ToList();
+            string oldVersion = string.Join(",", oldCategories);
+            string currentVersion = string.Join(",", currentCategories);
+            if (oldVersion == currentVersion)
+                return true;
+            return false;
+
+        }
+
         public async Task<ApiResponse<EvaluationResultModel>> SubmitAsync2(string userIdentity,
           SupplierRegisterCommand2 command)
         {
@@ -553,6 +569,8 @@ namespace SolaERP.Persistence.Services
                     var vendorOld = await _vendorRepository.GetHeader(previousVendorId);
                     var vendorCurrent = await _vendorRepository.GetHeader(result.VendorId);
                     changedFields = Compare.CompareRow(vendorOld, vendorCurrent);
+                    if (!await CompareVendorBusinessCategory(previousVendorId, result.VendorId))
+                        changedFields.Add("BusinessCategory");
                 }
                 await _mailService.SendMailToAdminstrationForApproveRegistration(Convert.ToInt32(userIdentity), changedFields);
 
