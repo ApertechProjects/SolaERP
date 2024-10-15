@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Report;
 using SolaERP.Application.Dtos.UserReport;
 using SolaERP.Controllers;
 
@@ -31,7 +32,7 @@ namespace SolaERP.API.Controllers
          => CreateActionResult(await _userReportService.Save(data));
 
         [HttpPost]
-        public async Task<IActionResult> SaveAs(string dashboardId, string dashboardName)
-            => CreateActionResult(await _userReportService.SaveAs(dashboardId, dashboardName, User.Identity.Name));
+        public async Task<IActionResult> SaveAs(ReportSaveAsDto reportSave)
+            => CreateActionResult(await _userReportService.SaveAs(reportSave.DashboardId, reportSave.DashboardName, User.Identity.Name));
     }
 }
