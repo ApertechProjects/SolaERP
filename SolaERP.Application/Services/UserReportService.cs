@@ -62,7 +62,7 @@ namespace SolaERP.Persistence.Services
             {
                 Id = null,
                 ReportFileId = fileName,
-                ReportFileName = dashboardName,
+                ReportFileName = dashboardName.Substring(0, dashboardName.Length - 4),
                 Users = new List<int> { Convert.ToInt16(userName) }
             };
 
