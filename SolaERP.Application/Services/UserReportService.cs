@@ -61,7 +61,7 @@ namespace SolaERP.Persistence.Services
             UserReportSaveDto saveDto = new UserReportSaveDto
             {
                 Id = null,
-                ReportFileId = dashboardId,
+                ReportFileId = fileName,
                 ReportFileName = dashboardName,
                 Users = new List<int> { Convert.ToInt16(userName) }
             };
