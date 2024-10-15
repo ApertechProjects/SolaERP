@@ -37,7 +37,8 @@ namespace SolaERP.Application.Helper
                 {
                     continue;
                 }
-                if (oldValue != newValue)
+
+                if (oldValue.Equals(newValue))
                 {
                     string propertyName = property.Name;
 

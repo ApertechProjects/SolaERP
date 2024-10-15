@@ -281,6 +281,7 @@ public class OrderService : IOrderService
 
     public async Task<ApiResponse<bool>> Retrieve(List<int> ids, string name)
     {
+        return ApiResponse<bool>.Fail("Integration exist for this order", 422);
         if (!await CheckIntegration(ids))
         {
             return ApiResponse<bool>.Fail("Integration exist for this order", 422);

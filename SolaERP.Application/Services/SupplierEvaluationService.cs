@@ -1825,12 +1825,17 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> UpdateVendor(string name, string taxId)
         {
-            int userId = await _userRepository.ConvertIdentity(name);
-            var result = await _repository.UpdateVendor(userId, taxId);
-            await _unitOfWork.SaveChangesAsync();
-            if (result)
-                return ApiResponse<bool>.Success(result);
-            return ApiResponse<bool>.Fail(result, 400);
+            var previousVendorId = await _vendorRepository.GetVendorPreviousVendorId(4046);
+            var vendorOld = await _vendorRepository.GetHeader(previousVendorId);
+            var vendorCurrent = await _vendorRepository.GetHeader(4046);
+            List<string> changedFields = Compare.CompareRow(vendorOld, vendorCurrent);
+
+            //int userId = await _userRepository.ConvertIdentity(name);
+            //var result = await _repository.UpdateVendor(userId, taxId);
+            //await _unitOfWork.SaveChangesAsync();
+            //if (result)
+            //    return ApiResponse<bool>.Success(result);
+            return ApiResponse<bool>.Fail("result", 400);
         }
 
         private static ProcessSelectorDto GetProcessSelector(int? vendorId, bool isRevise)
