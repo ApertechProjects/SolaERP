@@ -49,13 +49,26 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(true);
         }
 
-        public async Task<ApiResponse<bool>> SaveAs(string dashboardId)
+        public async Task<ApiResponse<bool>> SaveAs(string dashboardId, string dashboardName, string userName)
         {
             string fileName = await GetFileName();
             bool result = await CopyFile(dashboardId, fileName);
-            if (result)
-                return ApiResponse<bool>.Success(true);
-            return ApiResponse<bool>.Fail("Error", 400);
+            if (!result)
+            {
+                return ApiResponse<bool>.Fail("Error", 400);
+            }
+
+            UserReportSaveDto saveDto = new UserReportSaveDto
+            {
+                Id = null,
+                ReportFileId = dashboardId,
+                ReportFileName = dashboardName,
+                Users = new List<int> { Convert.ToInt16(userName) }
+            };
+
+            await Save(saveDto);
+
+            return ApiResponse<bool>.Success(true);
         }
 
         private async Task<bool> CopyFile(string dashboardId, string fileName)
@@ -64,25 +77,21 @@ namespace SolaERP.Persistence.Services
             {
                 string sourceFilePath = _configuration["FileOptions:ReportPath"] + "/" + dashboardId + ".xml";
                 string destinationFilePath = _configuration["FileOptions:ReportPath"] + "/" + fileName;
-
-
                 File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
+                return true;
             }
 
             catch (IOException ioEx)
             {
                 Console.WriteLine("An error occurred: " + ioEx.Message);
-                Debug.WriteLine("An error occurred: " + ioEx.Message);
             }
             catch (UnauthorizedAccessException uaEx)
             {
                 Console.WriteLine("Access error: " + uaEx.Message);
-                Debug.WriteLine("Access error: " + uaEx.Message);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("An unexpected error occurred: " + ex.Message);
-                Debug.WriteLine("An unexpected error occurred: " + ex.Message);
             }
             return false;
         }

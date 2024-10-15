@@ -11,6 +11,6 @@ namespace SolaERP.Application.Contracts.Services
     public interface IUserReportService
     {
         Task<ApiResponse<bool>> Save(UserReportSaveDto data);
-        Task<ApiResponse<bool>> SaveAs(string dashboardId);
+        Task<ApiResponse<bool>> SaveAs(string dashboardId, string dashboardName, string userName);
     }
 }

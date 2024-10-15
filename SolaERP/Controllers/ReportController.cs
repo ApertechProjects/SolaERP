@@ -31,7 +31,7 @@ namespace SolaERP.API.Controllers
          => CreateActionResult(await _userReportService.Save(data));
 
         [HttpGet]
-        public async Task<IActionResult> SaveAs(string dashboardId)
-            => CreateActionResult(await _userReportService.SaveAs(dashboardId));
+        public async Task<IActionResult> SaveAs(string dashboardId, string dashboardName)
+            => CreateActionResult(await _userReportService.SaveAs(dashboardId, dashboardName, User.Identity.Name));
     }
 }
