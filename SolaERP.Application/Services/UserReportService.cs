@@ -61,9 +61,8 @@ namespace SolaERP.Persistence.Services
         private async Task<bool> CopyFile(string dashboardId, string fileName)
         {
 
-            string serverPath = _configuration["FileOptions:ServerUrl"];
-            string sourceFilePath = serverPath + _configuration["FileOptions:ReportPath"] + "/" + dashboardId + ".xml";
-            string destinationFilePath = serverPath + _configuration["FileOptions:ReportPath"] + "/" + fileName;
+            string sourceFilePath =  _configuration["FileOptions:ReportPath"] + "/" + dashboardId + ".xml";
+            string destinationFilePath =  _configuration["FileOptions:ReportPath"] + "/" + fileName;
 
             try
             { 
