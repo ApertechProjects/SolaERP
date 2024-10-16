@@ -530,6 +530,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     RFQStatus = reader.Get<int>("RFQStatus"),
                     RFQNo = reader.Get<string>("RFQNo"),
                     BusinessCategoryId = reader.Get<int>("BusinessCategoryId"),
+                    BusinessCategoryName = reader.Get<string>("BusinessCategoryName"),
                     RFQType = reader.Get<int>("RFQType"),
                     DesiredDeliveryDate = reader.Get<DateTime>("DesiredDeliveryDate"),
                     RFQDate = reader.Get<DateTime>("RFQDate"),

@@ -9,7 +9,8 @@ public class VendorRFQListResponseDto
     public string Emergency { get; set; }
     public string RFQStatus { get; set; }
     public string RFQNo { get; set; }
-    public string BusinessCategoryId { get; set; }
+    public int BusinessCategoryId { get; set; }
+    public string BusinessCategoryName { get; set; }
     public string RFQType { get; set; }
     public string BiddingType { get; set; }
     public DateTime DesiredDeliveryDate { get; set; }

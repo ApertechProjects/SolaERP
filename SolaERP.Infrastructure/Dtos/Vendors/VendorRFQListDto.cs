@@ -10,6 +10,7 @@ public class VendorRFQListDto
     public int RFQStatus { get; set; }
     public string RFQNo { get; set; }
     public int BusinessCategoryId { get; set; }
+    public string BusinessCategoryName { get; set; }
     public int RFQType { get; set; }
     public DateTime DesiredDeliveryDate { get; set; }
     public DateTime RFQDate { get; set; }

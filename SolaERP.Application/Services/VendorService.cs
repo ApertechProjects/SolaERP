@@ -185,7 +185,8 @@ namespace SolaERP.Persistence.Services
                     RFQDeadline = item.RFQDeadline,
                     RFQNo = item.RFQNo,
                     RFQType = item.RFQType == 1 ? "Purchasing" : "Information",
-                    BusinessCategoryId = GetBusinessCategoryById(item.BusinessCategoryId),
+                    BusinessCategoryId = item.BusinessCategoryId,
+                    BusinessCategoryName = item.BusinessCategoryName,
                     Emergency = GetEmergencyById(item.Emergency),
                     RFQStatus = GetRFQStatusById(item.RFQStatus),
                     BiddingType = item.BiddingType
