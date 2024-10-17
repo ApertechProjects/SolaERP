@@ -158,8 +158,7 @@ namespace SolaERP.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCurrentUserInfoAsync()
         {
-            string token = _tokenHandler.GetAccessToken();
-            return CreateActionResult(await _userService.GetUserByNameAsync(User.Identity.Name, token));
+            return CreateActionResult(await _userService.GetCurrentUserInfo(User.Identity.Name));
         }
 
 

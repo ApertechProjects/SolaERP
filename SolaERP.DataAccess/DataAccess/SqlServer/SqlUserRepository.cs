@@ -68,7 +68,33 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-		public async Task<User> GetByIdForRegAsync(int userId)
+
+        public async Task<User> GetCurrentUserInfo(int userId)
+        {
+            User user = null;
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "Select *,v.VendorCode,bu.BusinessUnitCode from " +
+                                      "Config.AppUser au\r\nLEFT JOIN Config.BusinessUnits bu " +
+                                      "ON au.DefaultBusinessUnitId = Bu.BusinessUnitId " +
+                                      "LEFT JOIN Procurement.Vendors v\r\nON au.VendorId = v.VendorId " +
+                                      "where Id = @Id";
+                command.Parameters.AddWithValue(command, "@Id", userId);
+
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    string languageString = reader.GetString("Language");
+                    user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate",
+                        "VerifyToken", "Language");
+                    user.Language = languageString.GetLanguageEnumValue();
+                }
+
+                return user;
+            }
+        }
+
+        public async Task<User> GetByIdForRegAsync(int userId)
 		{
 			User user = null;
 			using (var command = _unitOfWork.CreateCommand() as DbCommand)
