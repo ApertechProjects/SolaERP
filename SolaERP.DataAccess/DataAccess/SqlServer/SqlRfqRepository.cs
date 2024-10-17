@@ -36,7 +36,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", filter.BusinessUnitId);
-                command.Parameters.AddWithValue(command, "@ItemCode", filter.ItemCode);
+                command.Parameters.AddWithValue(command, "@ItemCode", filter.ItemCode == "All" ? "%" : filter.ItemCode);
                 command.Parameters.AddWithValue(command, "@Emergency", filter.Emergency);
                 command.Parameters.AddWithValue(command, "@DateFrom", filter.DateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", filter.DateTo);
@@ -139,7 +139,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", filter.BusinessUnitId);
-                command.Parameters.AddWithValue(command, "@ItemCode", filter.ItemCode);
+                command.Parameters.AddWithValue(command, "@ItemCode", filter.ItemCode == "All" ? "%" : filter.ItemCode);
                 command.Parameters.AddWithValue(command, "@Emergency", filter.Emergency);
                 command.Parameters.AddWithValue(command, "@DateFrom", filter.DateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", filter.DateTo);
@@ -544,7 +544,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", filter.BusinessUnitId);
-                command.Parameters.AddWithValue(command, "@ItemCode", filter.ItemCode);
+                command.Parameters.AddWithValue(command, "@ItemCode", filter.ItemCode=="All"?"%":filter.ItemCode);
                 command.Parameters.AddWithValue(command, "@Emergency", filter.Emergency);
                 command.Parameters.AddWithValue(command, "@RFQType", filter.RFQType);
                 command.Parameters.AddWithValue(command, "@ProcurementType", filter.ProcurementType);
