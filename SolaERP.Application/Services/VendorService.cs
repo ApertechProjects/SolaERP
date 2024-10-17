@@ -172,6 +172,7 @@ namespace SolaERP.Persistence.Services
             {
                 list.Add(new VendorRFQListResponseDto
                 {
+                    BusinessUnitId = item.BusinessUnitId,
                     BidMainId = item.BidMainId,
                     RFQMainId = item.RFQMainId,
                     CreatedDate = item.CreatedDate,

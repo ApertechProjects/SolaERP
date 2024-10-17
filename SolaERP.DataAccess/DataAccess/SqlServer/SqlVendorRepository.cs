@@ -522,6 +522,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 list.Add(new VendorRFQListDto
                 {
+                    BusinessUnitId = reader.Get<int>("BusinessUnitId"),
                     BidMainId = reader.Get<int>("BidMainId"),
                     RFQMainId = reader.Get<int>("RFQMainId"),
                     LineNo = reader.Get<long>("LineNo"),

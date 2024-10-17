@@ -2,6 +2,7 @@ namespace SolaERP.Application.Dtos.Vendors;
 
 public class VendorRFQListResponseDto
 {
+    public int BusinessUnitId { get; set; }
     public int BidMainId { get; set; }
     public int RFQMainId { get; set; }
     public long LineNo { get; set; }
