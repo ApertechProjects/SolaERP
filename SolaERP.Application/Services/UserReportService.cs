@@ -16,6 +16,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Confluent.Kafka;
+using System.Xml.Linq;
 
 namespace SolaERP.Persistence.Services
 {
@@ -78,13 +79,50 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(true);
         }
 
-        private async Task<bool> CopyFile(string dashboardId, string fileName)
+		private static void ReplaceWordInFile(string inputFile, string outputFile,string fileName)
+		{
+			try
+			{
+				XDocument xmlDoc = XDocument.Load(inputFile);
+				string titleText = string.Empty;
+				var titleElement = xmlDoc.Element("Root")?.Element("Title");
+				if (titleElement != null)
+				{
+					titleText = titleElement.Attribute("Text")?.Value;
+
+					Console.WriteLine($"Title Text: {titleText}");
+				}
+				else
+				{
+					Console.WriteLine("Title element not found.");
+				}
+
+				// Read the contents of the file
+				string fileContents = File.ReadAllText(inputFile);
+
+				// Replace the old word with the new word
+				string updatedContents = fileContents.Replace(titleText, fileName);
+
+				// Write the updated content to a new file
+				File.WriteAllText(outputFile, updatedContents);
+
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"An error occurred: {ex.Message}");
+			}
+		}
+
+		private async Task<bool> CopyFile(string dashboardId, string fileName)
         {
             try
             {
                 string sourceFilePath = _configuration["FileOptions:ReportPath"] + "/" + dashboardId + ".xml";
                 string destinationFilePath = _configuration["FileOptions:ReportPath"] + "/" + fileName;
-                File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
+				File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
+
+                ReplaceWordInFile(sourceFilePath, destinationFilePath, fileName);
+
                 return true;
             }
 
