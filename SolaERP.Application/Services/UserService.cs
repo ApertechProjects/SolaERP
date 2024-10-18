@@ -516,11 +516,11 @@ namespace SolaERP.Persistence.Services
                 if (approvalCount > 0)
                 {
                     await _mailService.SendRegistrationPendingMail(userData.Id);
-                    await _mailService.SendMailToAdminstrationForApproveRegistration(userData.Id);
+                    //await _mailService.SendMailToAdminstrationForApproveRegistration(userData.Id);
                 }
                 else
                 {
-                    await _mailService.SendMailToAdminstrationAboutRegistration(userData.Id);
+                    //await _mailService.SendMailToAdminstrationAboutRegistration(userData.Id);
                 }
                 #endregion
                 //}
@@ -664,7 +664,7 @@ namespace SolaERP.Persistence.Services
             await _unitOfWork.SaveChangesAsync();
 
             await _mailService.SendRegistrationPendingMail(userId);
-            await _mailService.SendMailToAdminstrationForApproveRegistration(userId);
+            //await _mailService.SendMailToAdminstrationForApproveRegistration(userId);
 
             return ApiResponse<bool>.Success(res, 200);
         }

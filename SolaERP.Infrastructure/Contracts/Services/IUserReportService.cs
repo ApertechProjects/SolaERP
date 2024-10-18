@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Dtos.Shared;
+﻿using SolaERP.Application.Dtos.Report;
+using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.UserReport;
 using System;
 using System.Collections.Generic;
@@ -13,5 +14,6 @@ namespace SolaERP.Application.Contracts.Services
 		Task<ApiResponse<bool>> Save(UserReportSaveDto data);
 		Task<ApiResponse<bool>> SaveAs(string dashboardId, string dashboardName, string userName);
 		Task<ApiResponse<bool>> Delete(string dashboardId);
-	}
+		Task<ApiResponse<List<ReportDto>>> GetDashboards();
+    }
 }
