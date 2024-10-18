@@ -60,7 +60,7 @@ namespace SolaERP.Persistence.Services
 				return ApiResponse<bool>.Fail("This dashboard name already exist in system", 422);
 			}
 			string fileName = await GetFileName(reports);
-			bool result = await CopyFile(dashboardId, fileName);
+			bool result = await CopyFile(dashboardId, dashboardName, fileName);
 			if (!result)
 			{
 				return ApiResponse<bool>.Fail("Error", 400);
@@ -112,7 +112,7 @@ namespace SolaERP.Persistence.Services
 			}
 		}
 
-		private async Task<bool> CopyFile(string dashboardId, string fileName)
+		private async Task<bool> CopyFile(string dashboardId,string dashboardName, string fileName)
 		{
 			try
 			{
@@ -120,7 +120,7 @@ namespace SolaERP.Persistence.Services
 				string destinationFilePath = _configuration["FileOptions:ReportPath"] + "/" + fileName;
 				File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
 
-				ReplaceWordInFile(sourceFilePath, destinationFilePath, fileName);
+				ReplaceWordInFile(sourceFilePath, destinationFilePath, dashboardName);
 
 				return true;
 			}
