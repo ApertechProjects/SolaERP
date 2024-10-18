@@ -69,28 +69,17 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<bool>> SaveAs(string dashboardId, string dashboardName, string userName)
         {
-            var reports = await GetDashboards();
-            var reportNames = reports.Data.Select(x => x.Name).ToList();
-            if (reportNames.Contains(dashboardName))
-            {
-                return ApiResponse<bool>.Fail("This dashboard name already exist in system", 422);
-            }
-            string fileName = await GetFileName(reports.Data);
-            bool result = await CopyFile(dashboardId, dashboardName, fileName);
-            if (!result)
-            {
-                return ApiResponse<bool>.Fail("Error", 400);
-            }
+            var delete = await _repository.Delete(dashboardId);
 
-            UserReportSaveDto saveDto = new UserReportSaveDto
+            UserReportFileAccess userReportSave = new UserReportFileAccess
             {
                 Id = null,
-                ReportFileId = fileName.Substring(0, fileName.Length - 4),
+                ReportFileId = dashboardId,
                 ReportFileName = dashboardName,
-                Users = new List<int> { Convert.ToInt16(userName) }
+                UserId = Convert.ToInt32(userName),
             };
-
-            await Save(saveDto);
+            var result = await _repository.Save(userReportSave);
+            _unitOfWork.SaveChanges();
 
             return ApiResponse<bool>.Success(true);
         }

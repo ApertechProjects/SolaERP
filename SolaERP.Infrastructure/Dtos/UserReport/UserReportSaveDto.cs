@@ -11,6 +11,6 @@ namespace SolaERP.Application.Dtos.UserReport
         public int? Id { get; set; }
         public string ReportFileName { get; set; }
         public string ReportFileId { get; set; }
-        public List<int> Users { get; set; }
+        public List<int>? Users { get; set; }
     }
 }
