@@ -32,6 +32,8 @@ namespace SolaERP.Persistence.Services
 			_configuration = configuration;
 		}
 
+
+
 		public async Task<ApiResponse<bool>> Save(UserReportSaveDto data)
 		{
 			var delete = await _repository.Delete(data.ReportFileId);
@@ -51,52 +53,22 @@ namespace SolaERP.Persistence.Services
 			return ApiResponse<bool>.Success(true);
 		}
 
-		public async Task<ApiResponse<bool>> SaveAs(UserReportSaveDto data, string name)
+		public async Task<ApiResponse<bool>> Delete(string dashboardId)
 		{
-			//var delete = await _repository.Delete(data.ReportFileId);
-			//int resultId = 0;
-
-			UserReportFileAccess userReportSave = new UserReportFileAccess
+			var reports = await GetDashboards();
+			var reportIds = reports.Select(x => x.Id).ToList();
+			if (!reportIds.Contains(dashboardId))
 			{
-				Id = null,
-				ReportFileId = data.ReportFileId,
-				ReportFileName = data.ReportFileName,
-				UserId = Convert.ToInt32(name),
-			};
-			await _repository.SaveTest(userReportSave);
-			_unitOfWork.SaveChanges();
-
-			//var getSavedFileName = _repository.GetFileNameByReportFileId(resultId);
-			////////////////////////////////////
-			//var reports = await GetDashboards();
-			//var reportNames = reports.Select(x => x.Name).ToList();
-			//if (reportNames.Contains(data.ReportFileName))
-			//{
-			//	return ApiResponse<bool>.Fail("This dashboard name already exist in system", 422);
-			//}
-			//string fileName = await GetFileName(reports);
-			//bool result = await CopyFile(data.ReportFileId, data.ReportFileName, fileName);
-			//if (!result)
-			//{
-			//	return ApiResponse<bool>.Fail("Error", 400);
-			//}
-
-			//UserReportSaveDto saveDto = new UserReportSaveDto
-			//{
-			//	Id = null,
-			//	ReportFileId = fileName.Substring(0, fileName.Length - 4),
-			//	ReportFileName = dashboardName,
-			//	Users = new List<int> { Convert.ToInt16(userName) }
-			//};
-
-			//await Save(saveDto);
-
+				return ApiResponse<bool>.Fail("This dashboard is not exist in system", 422);
+			}
+			string sourceFilePath = _configuration["FileOptions:ReportPath"] + "/" + dashboardId + ".xml";
+			File.Delete(sourceFilePath);
 			return ApiResponse<bool>.Success(true);
 		}
 
-		public async Task<ApiResponse<bool>> SaveAsTest(string dashboardId, string dashboardName, string userName)
-		{
 
+		public async Task<ApiResponse<bool>> SaveAs(string dashboardId, string dashboardName, string userName)
+		{
 			var reports = await GetDashboards();
 			var reportNames = reports.Select(x => x.Name).ToList();
 			if (reportNames.Contains(dashboardName))
@@ -221,7 +193,6 @@ namespace SolaERP.Persistence.Services
 			var fileName = $"dashboard{maxId}.xml";
 			return fileName;
 		}
-
 
 	}
 }
