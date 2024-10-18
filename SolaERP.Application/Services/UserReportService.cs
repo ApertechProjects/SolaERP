@@ -20,76 +20,75 @@ using System.Xml.Linq;
 
 namespace SolaERP.Persistence.Services
 {
-    public class UserReportService : IUserReportService
-    {
-        private readonly IUserReportRepository _repository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IConfiguration _configuration;
-        public UserReportService(IUserReportRepository repository, IUnitOfWork unitOfWork, IConfiguration configuration)
-        {
-            _repository = repository;
-            _unitOfWork = unitOfWork;
-            _configuration = configuration;
-        }
+	public class UserReportService : IUserReportService
+	{
+		private readonly IUserReportRepository _repository;
+		private readonly IUnitOfWork _unitOfWork;
+		private readonly IConfiguration _configuration;
+		public UserReportService(IUserReportRepository repository, IUnitOfWork unitOfWork, IConfiguration configuration)
+		{
+			_repository = repository;
+			_unitOfWork = unitOfWork;
+			_configuration = configuration;
+		}
 
-        public async Task<ApiResponse<bool>> Save(UserReportSaveDto data)
-        {
-            var delete = await _repository.Delete(data.ReportFileId);
-            foreach (var item in data.Users)
-            {
-                UserReportFileAccess userReportSave = new UserReportFileAccess
-                {
-                    Id = data.Id,
-                    ReportFileId = data.ReportFileId,
-                    ReportFileName = data.ReportFileName,
-                    UserId = item,
-                };
-                var result = await _repository.Save(userReportSave);
-            }
-            _unitOfWork.SaveChanges();
+		public async Task<ApiResponse<bool>> Save(UserReportSaveDto data)
+		{
+			var delete = await _repository.Delete(data.ReportFileId);
+			foreach (var item in data.Users)
+			{
+				UserReportFileAccess userReportSave = new UserReportFileAccess
+				{
+					Id = data.Id,
+					ReportFileId = data.ReportFileId,
+					ReportFileName = data.ReportFileName,
+					UserId = item,
+				};
+				var result = await _repository.Save(userReportSave);
+			}
+			_unitOfWork.SaveChanges();
 
-            return ApiResponse<bool>.Success(true);
-        }
+			return ApiResponse<bool>.Success(true);
+		}
 
-        public async Task<ApiResponse<bool>> SaveAs(string dashboardId, string dashboardName, string userName)
-        {
-            var reports = await GetDashboards();
-            var reportNames = reports.Select(x => x.Name).ToList();
-            if (reportNames.Contains(dashboardName))
-            {
-                return ApiResponse<bool>.Fail("This dashboard name already exist in system", 422);
-            }
-            string fileName = await GetFileName(reports);
-            bool result = await CopyFile(dashboardId, fileName);
-            if (!result)
-            {
-                return ApiResponse<bool>.Fail("Error", 400);
-            }
+		public async Task<ApiResponse<bool>> SaveAs(string dashboardId, string dashboardName, string userName)
+		{
+			var reports = await GetDashboards();
+			var reportNames = reports.Select(x => x.Name).ToList();
+			if (reportNames.Contains(dashboardName))
+			{
+				return ApiResponse<bool>.Fail("This dashboard name already exist in system", 422);
+			}
+			string fileName = await GetFileName(reports);
+			bool result = await CopyFile(dashboardId, fileName);
+			if (!result)
+			{
+				return ApiResponse<bool>.Fail("Error", 400);
+			}
 
-            UserReportSaveDto saveDto = new UserReportSaveDto
-            {
-                Id = null,
-                ReportFileId = fileName.Substring(0, fileName.Length - 4),
-                ReportFileName = dashboardName,
-                Users = new List<int> { Convert.ToInt16(userName) }
-            };
+			UserReportSaveDto saveDto = new UserReportSaveDto
+			{
+				Id = null,
+				ReportFileId = fileName.Substring(0, fileName.Length - 4),
+				ReportFileName = dashboardName,
+				Users = new List<int> { Convert.ToInt16(userName) }
+			};
 
-            await Save(saveDto);
+			await Save(saveDto);
 
-            return ApiResponse<bool>.Success(true);
-        }
+			return ApiResponse<bool>.Success(true);
+		}
 
-		private static void ReplaceWordInFile(string inputFile, string outputFile,string fileName)
+		private static void ReplaceWordInFile(string inputFile, string outputFile, string fileName)
 		{
 			try
 			{
 				XDocument xmlDoc = XDocument.Load(inputFile);
 				string titleText = string.Empty;
-				var titleElement = xmlDoc.Element("Root")?.Element("Title");
+				var titleElement = xmlDoc.Element("Dashboard")?.Element("Title");
 				if (titleElement != null)
 				{
 					titleText = titleElement.Attribute("Text")?.Value;
-
 					Console.WriteLine($"Title Text: {titleText}");
 				}
 				else
@@ -114,71 +113,71 @@ namespace SolaERP.Persistence.Services
 		}
 
 		private async Task<bool> CopyFile(string dashboardId, string fileName)
-        {
-            try
-            {
-                string sourceFilePath = _configuration["FileOptions:ReportPath"] + "/" + dashboardId + ".xml";
-                string destinationFilePath = _configuration["FileOptions:ReportPath"] + "/" + fileName;
+		{
+			try
+			{
+				string sourceFilePath = _configuration["FileOptions:ReportPath"] + "/" + dashboardId + ".xml";
+				string destinationFilePath = _configuration["FileOptions:ReportPath"] + "/" + fileName;
 				File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
 
-                ReplaceWordInFile(sourceFilePath, destinationFilePath, fileName);
+				ReplaceWordInFile(sourceFilePath, destinationFilePath, fileName);
 
-                return true;
-            }
+				return true;
+			}
 
-            catch (IOException ioEx)
-            {
-                Console.WriteLine("An error occurred: " + ioEx.Message);
-            }
-            catch (UnauthorizedAccessException uaEx)
-            {
-                Console.WriteLine("Access error: " + uaEx.Message);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("An unexpected error occurred: " + ex.Message);
-            }
-            return false;
-        }
+			catch (IOException ioEx)
+			{
+				Console.WriteLine("An error occurred: " + ioEx.Message);
+			}
+			catch (UnauthorizedAccessException uaEx)
+			{
+				Console.WriteLine("Access error: " + uaEx.Message);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("An unexpected error occurred: " + ex.Message);
+			}
+			return false;
+		}
 
-        private async Task<List<ReportDto>> GetDashboards()
-        {
-            using (HttpClient client = new HttpClient())
-            {
-                try
-                {
-                    string url = _configuration["FileOptions:DashboardUrl"] + "api/dashboard/dashboards";
+		private async Task<List<ReportDto>> GetDashboards()
+		{
+			using (HttpClient client = new HttpClient())
+			{
+				try
+				{
+					string url = _configuration["FileOptions:DashboardUrl"] + "api/dashboard/dashboards";
 
-                    HttpResponseMessage response = await client.GetAsync(url);
+					HttpResponseMessage response = await client.GetAsync(url);
 
-                    response.EnsureSuccessStatusCode();
-                    string id = null;
-                    string responseBody = await response.Content.ReadAsStringAsync();
-                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                    var reports = JsonSerializer.Deserialize<List<ReportDto>>(responseBody, options);
-                    return reports;
-                }
-                catch (Exception ex)
-                {
+					response.EnsureSuccessStatusCode();
+					string id = null;
+					string responseBody = await response.Content.ReadAsStringAsync();
+					var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+					var reports = JsonSerializer.Deserialize<List<ReportDto>>(responseBody, options);
+					return reports;
+				}
+				catch (Exception ex)
+				{
 
-                }
-                return new();
-            }
+				}
+				return new();
+			}
 
-        }
+		}
 
-        private async Task<string> GetFileName(List<ReportDto> reports)
-        {
-            var dashboardIds = reports.Select(x => Convert.ToInt16(x.Id.Substring(9, x.Id.Length - 9))).ToList();
+		private async Task<string> GetFileName(List<ReportDto> reports)
+		{
+			var dashboardIds = reports.Select(x => Convert.ToInt16(x.Id.Substring(9, x.Id.Length - 9))).ToList();
 
-            if (dashboardIds == null)
-                throw new Exception("Save as is not permitted");
+			if (dashboardIds == null)
+				throw new Exception("Save as is not permitted");
 
-            int maxId = dashboardIds.Max() + 1;
-            var fileName = $"dashboard{maxId}.xml";
-            return fileName;
-        }
+			int maxId = dashboardIds.Max() + 1;
+			var fileName = $"dashboard{maxId}.xml";
+			return fileName;
+		}
 
 
-    }
+	}
 }
