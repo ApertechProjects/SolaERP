@@ -11,6 +11,8 @@ namespace SolaERP.Application.Contracts.Repositories
     public interface IUserReportRepository
     {
         Task<bool> Delete(string reportFileId);
-        Task<bool> Save(UserReportFileAccess data);
+		Task<string> GetFileNameByReportFileId(int id);
+		Task<bool> Save(UserReportFileAccess data);
+        Task<int> SaveTest(UserReportFileAccess data);
     }
 }

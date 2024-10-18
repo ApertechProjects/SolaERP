@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Contracts.Services
 {
-    public interface IUserReportService
-    {
-        Task<ApiResponse<bool>> Save(UserReportSaveDto data);
-        Task<ApiResponse<bool>> SaveAs(string dashboardId, string dashboardName, string userName);
-    }
+	public interface IUserReportService
+	{
+		Task<ApiResponse<bool>> Save(UserReportSaveDto data);
+		Task<ApiResponse<bool>> SaveAs(UserReportSaveDto data, string userName);
+		Task<ApiResponse<bool>> SaveAsTest(string dashboardId, string dashboardName, string userName);
+	}
 }
