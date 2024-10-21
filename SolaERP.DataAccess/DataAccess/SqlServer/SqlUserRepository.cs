@@ -1,5 +1,6 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Auth;
+using SolaERP.Application.Dtos.Email;
 using SolaERP.Application.Dtos.UserReport;
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
@@ -95,27 +96,27 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
         }
 
         public async Task<User> GetByIdForRegAsync(int userId)
-		{
-			User user = null;
-			using (var command = _unitOfWork.CreateCommand() as DbCommand)
-			{
-				command.CommandText = "Select *,bu.BusinessUnitCode from Config.AppUser au \r\nLEFT JOIN Config.BusinessUnits bu\r\nON au.DefaultBusinessUnitId = Bu.BusinessUnitId\r\nwhere Id =  @Id";
-				command.Parameters.AddWithValue(command, "@Id", userId);
+        {
+            User user = null;
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "Select *,bu.BusinessUnitCode from Config.AppUser au \r\nLEFT JOIN Config.BusinessUnits bu\r\nON au.DefaultBusinessUnitId = Bu.BusinessUnitId\r\nwhere Id =  @Id";
+                command.Parameters.AddWithValue(command, "@Id", userId);
 
-				using var reader = await command.ExecuteReaderAsync();
-				while (reader.Read())
-				{
-					string languageString = reader.GetString("Language");
-					user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate",
-						 "Language");
-					user.Language = languageString.GetLanguageEnumValue();
-				}
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    string languageString = reader.GetString("Language");
+                    user = reader.GetByEntityStructure<User>("InActive", "RefreshToken", "RefreshTokenEndDate",
+                         "Language");
+                    user.Language = languageString.GetLanguageEnumValue();
+                }
 
-				return user;
-			}
-		}
+                return user;
+            }
+        }
 
-		public async Task<User> GetByEmailAsync(string email)
+        public async Task<User> GetByEmailAsync(string email)
         {
             User user = null;
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -678,7 +679,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             }
         }
 
-        public async Task<List<string>> GetAdminUserMailsAsync(int sequence, Application.Enums.Language language)
+        public async Task<List<string>> GetRegistratedUsersAsync(int sequence, Application.Enums.Language language)
         {
             List<string> userData = new List<string>();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -1003,6 +1004,25 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
             return count;
         }
-        #endregion
+
+        public async Task<List<EmailPersonDto>> GetAdminstrationPersonDatasForUserApprove(int userId)
+        {
+            List<EmailPersonDto> userData = new List<EmailPersonDto>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "exec dbo.SP_UserApprovalsMails @userId";
+                command.Parameters.AddWithValue(command, "@userId", userId);
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                    userData.Add(new EmailPersonDto
+                    {
+                        Email = reader.Get<string>("Email"),
+                        Language = reader.Get<string>("Language")
+                    });
+            }
+
+            return userData;
+        }
     }
+    #endregion
 }

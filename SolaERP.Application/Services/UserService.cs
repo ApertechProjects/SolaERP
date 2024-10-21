@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Renci.SshNet.Common;
 using SolaERP.Application.Constants;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
@@ -342,8 +343,10 @@ namespace SolaERP.Persistence.Services
             var table = model.ConvertListOfCLassToDataTable();
             var userId = await _userRepository.ConvertIdentity(name);
             var user = await _userRepository.UserChangeStatusAsync(userId, table);
-            await _unitOfWork.SaveChangesAsync();
 
+            await _unitOfWork.SaveChangesAsync();
+            foreach (var item in model)
+                await _mailService.SendMailToAdminstrationForApproveRegistration(item.Id);
 
             if (user)
                 return ApiResponse<bool>.Success(true, 200);
@@ -500,11 +503,7 @@ namespace SolaERP.Persistence.Services
 
             if (user)
             {
-                //var userType = await CheckUserType(verifyToken);
-                //if (userType == "0")
-                //	return ApiResponse<bool>.Success(true, 200);
-                //else
-                //{
+
                 UserData userData = await GetUserDataByVerifyTokenAsync(verifyToken);
                 var approvalCount = await UserApprovalCount(userData.Id);
 
@@ -516,14 +515,13 @@ namespace SolaERP.Persistence.Services
                 if (approvalCount > 0)
                 {
                     await _mailService.SendRegistrationPendingMail(userData.Id);
-                    //await _mailService.SendMailToAdminstrationForApproveRegistration(userData.Id);
+                    await _mailService.SendMailToAdminstrationForApproveRegistration(userData.Id);
                 }
                 else
                 {
-                    //await _mailService.SendMailToAdminstrationAboutRegistration(userData.Id);
+                    await _mailService.SendMailToAdminstrationAboutRegistration(userData.Id);
                 }
                 #endregion
-                //}
             }
 
             if (user)
@@ -546,9 +544,9 @@ namespace SolaERP.Persistence.Services
             return result;
         }
 
-        public async Task<List<string>> GetAdminUserMailsAsync(int sequence, Language language)
+        public async Task<List<string>> GetRegistratedUsersAsync(int sequence, Language language)
         {
-            var users = await _userRepository.GetAdminUserMailsAsync(sequence, language);
+            var users = await _userRepository.GetRegistratedUsersAsync(sequence, language);
             return users;
         }
 

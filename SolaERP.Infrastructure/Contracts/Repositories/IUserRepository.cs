@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Dtos.UserReport;
+﻿using SolaERP.Application.Dtos.Email;
+using SolaERP.Application.Dtos.UserReport;
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Groups;
@@ -48,7 +49,8 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> ConfirmEmail(string verifyToken);
         Task<bool> CheckEmailIsVerified(string email);
         Task<UserData> GetUserDataByVerifyTokenAsync(string verifyToken);
-        Task<List<string>> GetAdminUserMailsAsync(int sequence, Language language);
+        Task<List<string>> GetRegistratedUsersAsync(int sequence, Language language);
+        Task<List<EmailPersonDto>> GetAdminstrationPersonDatasForUserApprove(int userId);
         Task<bool> CheckUserVerifyByVendor(string email);
         Task<string> CheckUserType(string verifyToken);
         Task<UserImage> UserImageData(int? userId);
