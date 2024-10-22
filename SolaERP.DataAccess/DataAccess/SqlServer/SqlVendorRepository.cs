@@ -228,7 +228,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Sequence", sequence);
                 command.Parameters.AddWithValue(command, "@Comment", comment);
 
-                await _unitOfWork.SaveChangesAsync();
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }

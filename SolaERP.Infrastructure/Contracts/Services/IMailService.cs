@@ -27,6 +27,7 @@ namespace SolaERP.Application.Contracts.Services
 
         Task SendEmailVerification(HttpResponse response, int userId);
         Task SendMailToAdminstrationAboutRegistration(int userId);
+        Task SendRejectMailToVendor(int vendorId, HttpResponse response);
     }
 
 }

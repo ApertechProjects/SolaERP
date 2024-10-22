@@ -1,6 +1,7 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Email;
+using SolaERP.Application.Dtos.UserDto;
 using SolaERP.Application.Dtos.UserReport;
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
@@ -1018,6 +1019,26 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
                     {
                         Email = reader.Get<string>("Email"),
                         Language = reader.Get<string>("Language")
+                    });
+            }
+
+            return userData;
+        }
+
+        public async Task<List<VendorUserForMail>> GetVendorUsersForMail(int vendorId)
+        {
+            List<VendorUserForMail> userData = new List<VendorUserForMail>();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "select Email,FullName,Language from Config.AppUser where VendorId = @vendorId";
+                command.Parameters.AddWithValue(command, "@vendorId", vendorId);
+                using var reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                    userData.Add(new VendorUserForMail
+                    {
+                        Email = reader.Get<string>("Email"),
+                        Language = reader.Get<string>("Language"),
+                        FullName = reader.Get<string>("FullName")
                     });
             }
 

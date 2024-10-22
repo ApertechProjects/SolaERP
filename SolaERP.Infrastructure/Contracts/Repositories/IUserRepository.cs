@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Dtos.Email;
+using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Dtos.UserReport;
 using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.Auth;
@@ -8,6 +9,8 @@ using SolaERP.Application.Entities.UserReport;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using System.Data;
+using UserList = SolaERP.Application.Entities.User.UserList;
+using VendorUserForMail = SolaERP.Application.Entities.User.VendorUserForMail;
 
 namespace SolaERP.Application.Contracts.Repositories
 {
@@ -68,6 +71,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<int> GetVendorAdminGroupUserByUserId(int userId);
         Task<bool> RemoveUserFromVendorAdmin(int groupUserId);
         Task<int> UserApprovalCount(int userId);
+        Task<List<VendorUserForMail>> GetVendorUsersForMail(int vendorId);
     }
 
     public enum Filetype

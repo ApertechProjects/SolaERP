@@ -617,7 +617,7 @@ namespace SolaERP.Persistence.Services
                         changedFields.Add("Represented Product");
 
                 }
-                //await _mailService.SendMailToAdminstrationForApproveRegistration(Convert.ToInt32(userIdentity), changedFields);
+                await _mailService.SendMailToAdminstrationForApproveRegistration(Convert.ToInt32(userIdentity), changedFields);
 
 
                 return ApiResponse<EvaluationResultModel>.Success(result, 200);

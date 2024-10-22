@@ -78,8 +78,14 @@ namespace SolaERP.Persistence.Services
 
             model.UserId = user.Id;
             var result = await _repository.ApproveAsync(model);
-            await _mailService.CheckLastApproveStageAndSendMailToVendor(model.VendorId, model.Sequence, model.ApproveStatusId, response);
             await _unitOfWork.SaveChangesAsync();
+            if (result)
+            {
+                if (model.ApproveStatusId == 2)
+                    await _mailService.SendRejectMailToVendor(model.VendorId, response);
+                else
+                    await _mailService.CheckLastApproveStageAndSendMailToVendor(model.VendorId, model.Sequence, model.ApproveStatusId, response);
+            }
             return ApiResponse<bool>.Success(result, 200);
         }
 
@@ -90,10 +96,15 @@ namespace SolaERP.Persistence.Services
             for (int i = 0; i < taxModel.VendorIds.Count; i++)
             {
                 var result = await _repository.ChangeStatusAsync(taxModel.VendorIds[i], taxModel.Status, taxModel.Sequence, taxModel.Comment, userId);
+                if (taxModel.Status == 2)
+                {
+                    await _mailService.SendRejectMailToVendor(taxModel.VendorIds[i], response);
+                }
                 if (result)
                     await _mailService.CheckLastApproveStageAndSendMailToVendor(taxModel.VendorIds[i], taxModel.Sequence, taxModel.Status, response);
 
             }
+            //await _unitOfWork.SaveChangesAsync();
 
 
             if (counter == taxModel.VendorIds.Count)

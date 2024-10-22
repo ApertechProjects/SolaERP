@@ -11,6 +11,7 @@ using SolaERP.Application.Dtos.Email;
 using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Email;
+using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
@@ -31,17 +32,20 @@ namespace SolaERP.Infrastructure.Services
         private readonly IEmailNotificationService _emailNotificationService;
         private readonly IUserRepository _userRepository;
         private readonly IApproveStageService _approveStageService;
+        private readonly ISupplierEvaluationRepository _supplierEvaluationRepository;
         private readonly RazorLightEngine _razorEngine;
 
         public MailService(IConfiguration configuration,
                            IEmailNotificationService emailNotificationService,
                            IUserRepository userRepository,
-                           IApproveStageService approveStageService)
+                           IApproveStageService approveStageService,
+                           ISupplierEvaluationRepository supplierEvaluationRepository)
         {
             _configuration = configuration;
             _emailNotificationService = emailNotificationService;
             _userRepository = userRepository;
             _approveStageService = approveStageService;
+            _supplierEvaluationRepository = supplierEvaluationRepository;
         }
 
 
@@ -446,6 +450,36 @@ namespace SolaERP.Infrastructure.Services
         }
 
 
+        public async Task SendRejectMailToVendor(int vendorId, HttpResponse response)
+        {
+            var users = await _userRepository.GetVendorUsersForMail(vendorId);
+            var companyName = await _emailNotificationService.GetCompanyName(users[0].Email);
+            List<Task> emails = new List<Task>();
+            var grouped = users.GroupBy(x => x.Language).ToList();
+            foreach (IGrouping<string, Application.Entities.User.VendorUserForMail>? group in grouped)
+            {
+                var email = group.Select(x => x.Email).ToList();
+                VM_VendorReject vendorReject = new VM_VendorReject(group.Key.ToString())
+                {
+                    CompanyName = companyName,
+                    Language = (Language)Enum.Parse(typeof(Language), group.Key.ToString())
+                };
+
+                Task RegEmail = SendUsingTemplate(vendorReject.Subject, vendorReject,
+                      vendorReject.TemplateName(), null, email);
+                emails.Add(RegEmail);
+
+            }
+
+
+
+            //response.OnCompleted(async () =>
+            //{
+            //    await SendUsingTemplate(vendorApprove.Subject, vendorApprove,
+            //    vendorApprove.TemplateName(), null,
+            //    new List<string> { vendorUser.Email });
+            //});
+        }
 
         public async Task CheckLastApproveStageAndSendMailToVendor(int vendorId, int sequence, int approveStatus, HttpResponse response)
         {
@@ -574,6 +608,7 @@ namespace SolaERP.Infrastructure.Services
             }
 
         }
+
     }
 
 

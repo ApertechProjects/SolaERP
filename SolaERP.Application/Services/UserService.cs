@@ -332,7 +332,16 @@ namespace SolaERP.Persistence.Services
 
             var user = await _userRepository.UserChangeStatusAsync(userId, model);
 
+            var stageCount = await _approveStageMainService.GetStageCountAsync(Procedures.Users);
             await _unitOfWork.SaveChangesAsync();
+
+            if (model.Sequence == stageCount)
+            {
+                //user approved
+            }
+            await _mailService.SendMailToAdminstrationForApproveRegistration(model.Id);
+
+
             if (user)
                 return ApiResponse<bool>.Success(true, 200);
             return ApiResponse<bool>.Fail("Problem detected", 400);
@@ -343,10 +352,17 @@ namespace SolaERP.Persistence.Services
             var table = model.ConvertListOfCLassToDataTable();
             var userId = await _userRepository.ConvertIdentity(name);
             var user = await _userRepository.UserChangeStatusAsync(userId, table);
-
+            var stageCount = await _approveStageMainService.GetStageCountAsync(Procedures.Users);
             await _unitOfWork.SaveChangesAsync();
             foreach (var item in model)
+            {
+                if (item.Sequence == stageCount)
+                {
+                    //user approved
+                }
                 await _mailService.SendMailToAdminstrationForApproveRegistration(item.Id);
+
+            }
 
             if (user)
                 return ApiResponse<bool>.Success(true, 200);
@@ -672,5 +688,6 @@ namespace SolaERP.Persistence.Services
             var data = await _userRepository.UserApprovalCount(userId);
             return data;
         }
+
     }
 }

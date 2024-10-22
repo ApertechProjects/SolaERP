@@ -89,6 +89,7 @@ using UOMDto = SolaERP.Application.Dtos.UOM.UOMDto;
 using SolaERP.Job;
 using SolaERP.Application.Entities.UserReport;
 using SolaERP.Application.Dtos.UserReport;
+using VendorUserDto = SolaERP.Application.Dtos.Vendors.VendorUserDto;
 
 namespace SolaERP.Persistence.Mappers
 {
@@ -715,6 +716,8 @@ namespace SolaERP.Persistence.Mappers
 
 
             CreateMap<UserReportFileAccess, UserReportFileAccessDto>().ReverseMap();
+
+            CreateMap<VendorUserForMail, VendorUserForMailDto>().ReverseMap();
         }
     }
 }
