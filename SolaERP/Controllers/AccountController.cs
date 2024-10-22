@@ -158,7 +158,7 @@ namespace SolaERP.Controllers
 
             dto.VendorId = await _vendorService.GetByTaxIdAsync(dto.TaxId);
             var response = await _userService.UserRegisterAsync(dto);
-            if (dto.VendorId > 0)
+            if (dto.VendorId > 0 || dto.UserTypeId == 1)
             {
                 await _userRepository.UserSendToApprove(response.Data);
                 await _unitOfWork.SaveChangesAsync();
