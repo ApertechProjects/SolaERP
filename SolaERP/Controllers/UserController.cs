@@ -76,7 +76,7 @@ namespace SolaERP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> UserChangeStatusAsync(List<UserChangeStatusModel> model)
-          => CreateActionResult(await _userService.UserChangeStatusAsync(User.Identity.Name, model));
+          => CreateActionResult(await _userService.UserChangeStatusAsync(User.Identity.Name, model, Response));
 
         [HttpPost]
         public async Task<IActionResult> SaveUserAsync([FromForm] UserSaveModel userSaveModel, CancellationToken cancellationToken)

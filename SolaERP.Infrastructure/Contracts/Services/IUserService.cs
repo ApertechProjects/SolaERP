@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Dtos.Group;
+﻿using Microsoft.AspNetCore.Http;
+using SolaERP.Application.Dtos.Group;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Dtos.UserDto;
@@ -26,10 +27,10 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string name, int userStatus, int userType);
         Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string name, int userStatust);
         Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string name, int userStatus);
-        Task<ApiResponse<bool>> UserChangeStatusAsync(string name, UserChangeStatusModel model);
-        Task<ApiResponse<bool>> UserChangeStatusAsync(string name, List<UserChangeStatusModel> model);
+        Task<ApiResponse<bool>> UserChangeStatusAsync(string name, UserChangeStatusModel model, HttpResponse response);
+        Task<ApiResponse<bool>> UserChangeStatusAsync(string name, List<UserChangeStatusModel> model, HttpResponse response);
         Task<ApiResponse<int>> SaveUserAsync(UserSaveModel user, CancellationToken cancellationToken);
-        Task<ApiResponse<int>> UserRegisterAsync(UserRegisterModel model);
+        Task<ApiResponse<int>> UserRegisterAsync(UserRegisterModel model, HttpResponse response);
         Task<ApiResponse<UserLoadDto>> GetUserInfoAsync(int userId, string token);
         Task<ApiResponse<List<ERPUserDto>>> GetERPUserAsync();
         Task<ApiResponse<bool>> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel);

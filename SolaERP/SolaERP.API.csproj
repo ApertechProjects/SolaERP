@@ -71,6 +71,9 @@
     <Content Update="wwwroot\sources\templates\InformationAboutRegistrationForAdmin.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\sources\templates\UserApprove.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\sources\templates\VendorReject.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

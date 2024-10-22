@@ -152,27 +152,27 @@ namespace SolaERP.Controllers
         {
             var user = await _userManager.FindByNameAsync(dto.Email);
             if (user is not null)
-                return CreateActionResult(ApiResponse<bool>.Fail("email", $" This mail is already in use", 422));
+                return CreateActionResult(ApiResponse<bool>.Fail("email", $"This mail is already in use", 422));
 
             dto.VerifyToken = Helper.GetVerifyToken(_tokenHandler.CreateRefreshToken());
 
             dto.VendorId = await _vendorService.GetByTaxIdAsync(dto.TaxId);
-            var response = await _userService.UserRegisterAsync(dto);
+            var respons = await _userService.UserRegisterAsync(dto, Response);
             if (dto.VendorId > 0 || dto.UserTypeId == 1)
             {
-                await _userRepository.UserSendToApprove(response.Data);
+                await _userRepository.UserSendToApprove(respons.Data);
                 await _unitOfWork.SaveChangesAsync();
 
             }
             AccountResponseDto account = new();
-            if (response.Data > 0)
+            if (respons.Data > 0)
             {
-                account.UserId = response.Data;
+                account.UserId = respons.Data;
                 await _mailService.SendEmailVerification(Response, account.UserId);
                 return CreateActionResult(ApiResponse<AccountResponseDto>.Success(account, 200));
             }
 
-            return CreateActionResult(ApiResponse<AccountResponseDto>.Fail(response.Errors, 400));
+            return CreateActionResult(ApiResponse<AccountResponseDto>.Fail(respons.Errors, 400));
         }
 
 
