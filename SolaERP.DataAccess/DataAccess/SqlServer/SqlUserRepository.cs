@@ -1025,12 +1025,12 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 			return userData;
 		}
 
-		public async Task<List<EmailPersonDto>> GetAdminstrationPersonDatasAboutRegistration(int userId)
+		public async Task<List<EmailPersonDto>> GetAdminstrationPersonDatasAboutRegistration()
 		{
 			List<EmailPersonDto> userData = new List<EmailPersonDto>();
 			using (var command = _unitOfWork.CreateCommand() as DbCommand)
 			{
-				command.CommandText = "exec dbo.SP_UserApprovalsMails";
+				command.CommandText = "exec dbo.SP_UserApprovalsMailsForInformation";
 				using var reader = await command.ExecuteReaderAsync();
 				while (reader.Read())
 					userData.Add(new EmailPersonDto

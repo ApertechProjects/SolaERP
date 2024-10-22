@@ -54,7 +54,7 @@ namespace SolaERP.Application.Contracts.Repositories
 		Task<UserData> GetUserDataByVerifyTokenAsync(string verifyToken);
 		Task<List<string>> GetRegistratedUsersAsync(int sequence, Language language);
 		Task<List<EmailPersonDto>> GetAdminstrationPersonDatasForUserApprove(int userId);
-		Task<List<EmailPersonDto>> GetAdminstrationPersonDatasAboutRegistration(int userId);
+		Task<List<EmailPersonDto>> GetAdminstrationPersonDatasAboutRegistration();
 		Task<bool> CheckUserVerifyByVendor(string email);
 		Task<string> CheckUserType(string verifyToken);
 		Task<UserImage> UserImageData(int? userId);

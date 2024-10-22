@@ -6,31 +6,32 @@ using SolaERP.Application.Models;
 
 namespace SolaERP.Application.Contracts.Services
 {
-	public interface IMailService
-	{
-		Task SendSafeMailsAsync(string[] tos, string subject, string body, bool isBodyHtml = true);
-		Task SendManualMailsAsync(string to);
-		Task SendMailAsync(string[] tos, string subject, string body, bool isBodyHtml = true);
-		Task SendPasswordResetMailAsync(string to, string code);
-		Task<bool> SendEmailMessage<T>(string template, T viewModel, string to, string subject);
-		Task<bool> SendUsingTemplate<T>(string subject, T viewModel, string templateName, string imageName, List<string> tos);
-		Task SendRequestToMailService(MailModel mailModel);
+    public interface IMailService
+    {
+        Task SendSafeMailsAsync(string[] tos, string subject, string body, bool isBodyHtml = true);
+        Task SendManualMailsAsync(string to);
+        Task SendMailAsync(string[] tos, string subject, string body, bool isBodyHtml = true);
+        Task SendPasswordResetMailAsync(string to, string code);
+        Task<bool> SendEmailMessage<T>(string template, T viewModel, string to, string subject);
+        Task<bool> SendUsingTemplate<T>(string subject, T viewModel, string templateName, string imageName, List<string> tos);
+        Task SendRequestToMailService(MailModel mailModel);
 
-		Task SendMailForRequest(HttpResponse response, List<EmailTemplateData> templates, List<UserList> users, EmailTemplateKey key, int? sequence, string businessUnitName, string rejectReason = "");
-		Task SendRequestMailsForChangeStatus(HttpResponse response, List<UserList> users, int? sequence, string businessUnitName, string rejectReason);
+        Task SendMailForRequest(HttpResponse response, List<EmailTemplateData> templates, List<UserList> users, EmailTemplateKey key, int? sequence, string businessUnitName, string rejectReason = "");
+        Task SendRequestMailsForChangeStatus(HttpResponse response, List<UserList> users, int? sequence, string businessUnitName, string rejectReason);
 
-		Task SendRegistrationPendingMail(int userId);
+        Task SendRegistrationPendingMail(int userId);
 
-		Task SendMailToAdminstrationForApproveRegistration(int userId, List<string> changedFields = null);
 
-		Task CheckLastApproveStageAndSendMailToVendor(int vendorId, int sequence, int approveStatus, HttpResponse response);
+        Task CheckLastApproveStageAndSendMailToVendor(int vendorId, int sequence, int approveStatus, HttpResponse response);
 
-		Task SendEmailVerification(HttpResponse response, int userId);
-		Task SendMailToAdminstrationAboutRegistration(int userId);
-		Task SendRejectMailToVendor(int vendorId, HttpResponse response);
-		Task CheckLastApproveAndSendMailToUser(int userId, int sequence, int approveStatus, HttpResponse response);
-		Task SendRejectMailToUser(int userId, HttpResponse response);
-		Task SendMailToAdminstrationForApproveVendor(int vendorId);
-	}
+        Task SendEmailVerification(HttpResponse response, int userId);
+        Task SendMailToAdminstrationAboutRegistration(int userId);
+        Task SendMailToAdminstrationForApproveRegistration(int userId, List<string> changedFields = null);
+        Task SendMailToAdminstrationForApproveRegistrationForAutoApprove(int userId, List<string> changedFields = null);
+        Task SendRejectMailToVendor(int vendorId, HttpResponse response);
+        Task CheckLastApproveAndSendMailToUser(int userId, int sequence, int approveStatus, HttpResponse response);
+        Task SendRejectMailToUser(int userId, HttpResponse response);
+        Task SendMailToAdminstrationForApproveVendor(int vendorId);
+    }
 
 }
