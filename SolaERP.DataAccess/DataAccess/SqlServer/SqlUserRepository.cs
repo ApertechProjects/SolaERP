@@ -994,7 +994,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
             int count = 0;
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SELECT Count(*) as Count FROM CONFIG.UserApproval WHERE UserId = @userId";
+                command.CommandText = "SELECT Count(*) as Count FROM CONFIG.UserApproval WHERE Id = @userId";
                 command.Parameters.AddWithValue(command, "@userId", userId);
 
                 using var reader = await command.ExecuteReaderAsync();
