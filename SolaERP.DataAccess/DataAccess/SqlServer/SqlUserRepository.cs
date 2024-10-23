@@ -929,6 +929,23 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 			return userLang;
 		}
 
+		public async Task<UserEntity> GetUserByVendor(int vendorId)
+		{
+			UserEntity user = new UserEntity();
+			using (var command = _unitOfWork.CreateCommand() as DbCommand)
+			{
+				command.CommandText = "SELECT TOP 1 * FROM Config.AppUser Where VendorId = @vendorId";
+				command.Parameters.AddWithValue(command, "@vendorId", vendorId);
+
+				using var reader = await command.ExecuteReaderAsync();
+				string email = string.Empty;
+				if (reader.Read())
+					user = reader.GetByEntityStructure<UserEntity>();
+
+				return user;
+			}
+		}
+
 		public async Task<List<int>> GetUserIdsByVendor(int vendorId)
 		{
 			List<int> userIds = new List<int>();
