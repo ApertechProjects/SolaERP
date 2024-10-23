@@ -671,7 +671,7 @@ namespace SolaERP.Infrastructure.Services
             var user = await _userRepository.GetCurrentUserInfo(userId);
             var companyName = await _emailNotificationService.GetCompanyName(user.Email);
 
-            VM_VendorReject vendorReject = new VM_VendorReject(user.Language.ToString())
+            VM_UserReject vendorReject = new VM_UserReject(user.Language.ToString())
             {
                 CompanyName = companyName,
                 Language = (Language)Enum.Parse(typeof(Language), user.Language.ToString())

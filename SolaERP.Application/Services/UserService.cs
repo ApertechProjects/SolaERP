@@ -358,7 +358,7 @@ namespace SolaERP.Persistence.Services
             foreach (var item in model)
             {
                 if (item.ApproveStatus == 2)
-                    await _mailService.SendRejectMailToUser(userId, response);
+                    await _mailService.SendRejectMailToUser(item.Id, response);
                 else
                     await _mailService.SendMailToAdminstrationForApproveRegistration(item.Id);
 
