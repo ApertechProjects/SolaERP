@@ -67,7 +67,7 @@ namespace SolaERP.Application.Contracts.Repositories
 		Task UpdateUserStatusAsync(int userId);
 		Task<bool> ChangeUserLanguage(int userId, string language);
 		Task<string> GetUserLang(int userId);
-		Task<UserEntity> GetUserByVendor(int vendorId);
+		Task<List<int>> GetUserIdsByVendor(int vendorId);
 		Task<bool> UserSendToApprove(int userId);
 		Task<int> GetVendorAdminGroupUserByUserId(int userId);
 		Task<bool> RemoveUserFromVendorAdmin(int groupUserId);
