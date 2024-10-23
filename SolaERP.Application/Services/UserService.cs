@@ -100,7 +100,7 @@ namespace SolaERP.Persistence.Services
                     groupId = await _groupRepository.GetGroupIdByVendorAdmin();
                     if (groupId != 0)
                         await _userRepository.AddDefaultVendorAccessToVendorUser(groupId, result);
-                    await AutoApproveForSupplierUser(result, companyInfo, response);
+                    //await AutoApproveForSupplierUser(result, companyInfo, response);
                 }
                 else
                 {
