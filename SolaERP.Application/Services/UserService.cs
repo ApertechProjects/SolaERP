@@ -242,7 +242,7 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<UserDto>> GetCurrentUserInfo(string name)
         {
             var userId = await _userRepository.ConvertIdentity(name);
-            var user = await _userRepository.GetCurrentUserInfo(userId);
+            var user = await _userRepository.GetCurrentUserData(userId);
 
             if (user is null)
                 return ApiResponse<UserDto>.Fail("User not found", 404);
