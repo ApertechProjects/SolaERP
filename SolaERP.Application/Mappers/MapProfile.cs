@@ -97,7 +97,8 @@ namespace SolaERP.Persistence.Mappers
 	{
 		public MapProfile()
 		{
-			CreateMap<UserDto, CurrentUserData>().ReverseMap();
+			CreateMap<UserDto, CurrentUserData>().ForMember(dest => dest.UserTypeId, opt => opt.MapFrom(src => src.UserType))
+				.ReverseMap();
 			CreateMap<User, UserDto>().ForMember(dest => dest.UserType, opt => opt.MapFrom(src => src.UserTypeId))
 				.ReverseMap();
 			CreateMap<User, UserRegisterModel>()
