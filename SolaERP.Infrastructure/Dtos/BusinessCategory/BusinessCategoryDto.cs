@@ -13,5 +13,6 @@ namespace SolaERP.Application.Dtos.BusinessCategory
         public string BusinessCategoryName { get; set; }
         public int BusinessSectorId { get; set; }
         public string BusinessCategoryCode { get; set; }
+        public bool Active { get; set; } = false;
     }
 }

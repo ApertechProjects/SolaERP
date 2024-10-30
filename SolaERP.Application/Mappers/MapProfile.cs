@@ -720,6 +720,8 @@ namespace SolaERP.Persistence.Mappers
 			CreateMap<UserReportFileAccess, UserReportFileAccessDto>().ReverseMap();
 
 			CreateMap<VendorUserForMail, VendorUserForMailDto>().ReverseMap();
+
+			CreateMap<VendorBusinessCategory, VendorBusinessCategoryDto>().ReverseMap();
 		}
 	}
 }

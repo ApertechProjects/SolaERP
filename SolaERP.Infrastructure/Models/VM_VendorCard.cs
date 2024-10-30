@@ -33,5 +33,6 @@ namespace SolaERP.Application.Models
         public List<WithHoldingTaxDto> WithHoldingTaxDatas { get; set; }
         public List<TaxDto> TaxDatas { get; set; }
         public List<CountryDto> Countries { get; set; }
+        public List<VendorBuCategory> ActiveItemCategories { get; set; }
     }
 }
