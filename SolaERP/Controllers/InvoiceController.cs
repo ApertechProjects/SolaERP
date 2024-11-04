@@ -140,14 +140,20 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> InvoiceRegisterServiceDetailsLoad(InvoiceRegisterServiceLoadModel model)
             => CreateActionResult(await _invoiceService.InvoiceRegisterServiceDetailsLoad(model));
 
-		[HttpPost]
-		public async Task<IActionResult> InvoiceRegisterDetailsSave(InvoiceRegisterDetailsSaveModel model)
-		   => CreateActionResult(await _invoiceService.InvoiceRegisterDetailsSave(model));
-
-		[HttpGet("{invoiceMatchingId}/{businessUnitId}")]
-        public async Task<IActionResult> GetInvoiceMatchData(int invoiceMatchingId,int businessUnitId)
+        [HttpGet("{invoiceMatchingId}/{businessUnitId}")]
+        public async Task<IActionResult> GetInvoiceMatchData(int invoiceMatchingId, int businessUnitId)
             => CreateActionResult(await _invoiceService.GetInvoiceMatchData(invoiceMatchingId, businessUnitId));
 
+        [HttpPost]
+        public async Task<IActionResult> InvoiceRegisterDetailsSave(InvoiceRegisterDetailsSaveModel model)
+           => CreateActionResult(await _invoiceService.InvoiceRegisterDetailsSave(model));
 
+        [HttpGet]
+        public async Task<IActionResult> GetInvoiceRegisterDetails(int invoiceRegisterId)
+           => CreateActionResult(await _invoiceService.GetInvoiceRegisterDetails(invoiceRegisterId));
+
+        [HttpGet]
+        public async Task<IActionResult> GetInvoiceRegisterPayablesTransactions(int invoiceRegisterId)
+          => CreateActionResult(await _invoiceService.GetInvoiceRegisterPayablesTransactions(invoiceRegisterId));
     }
 }

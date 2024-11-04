@@ -670,6 +670,7 @@ namespace SolaERP.Persistence.Mappers
 			CreateMap<InvoiceRegisterDetailForPO, InvoiceRegisterDetailForPODto>()
 				.ForMember(x => x.Quantity, y => y.MapFrom(x => x.GRNQTY))
 				.ReverseMap();
+
 			CreateMap<InvoiceRegisterDetailForOther, InvoiceRegisterDetailForOtherDto>().ReverseMap();
 			CreateMap<InvoiceRegisterDetailForGeneral, InvoiceRegisterDetailForGeneralDto>().ReverseMap();
 
@@ -722,6 +723,7 @@ namespace SolaERP.Persistence.Mappers
 			CreateMap<VendorUserForMail, VendorUserForMailDto>().ReverseMap();
 
 			CreateMap<VendorBusinessCategory, VendorBusinessCategoryDto>().ReverseMap();
+			CreateMap<InvoiceRegisterPayablesTransactions, InvoiceRegisterPayablesTransactionsDto>().ReverseMap();
 		}
 	}
 }
