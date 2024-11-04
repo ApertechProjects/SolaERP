@@ -28,6 +28,9 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Vendors()
             => CreateActionResult(await _service.Vendors(User.Identity.Name));
 
+		[HttpPost]
+		public async Task<IActionResult> GetByTax([FromQuery] string taxId)
+		  => Ok(await _service.GetByTaxAsync(taxId));
 
-    }
+	}
 }
