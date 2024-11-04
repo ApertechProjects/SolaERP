@@ -32,5 +32,11 @@ namespace SolaERP.API.Controllers
 		public async Task<IActionResult> GetByTax([FromQuery] string taxId)
 		  => Ok(await _service.GetByTaxAsync(taxId));
 
+
+
+		[Authorize]
+		[HttpGet("{vendorCode}")]
+		public async Task<IActionResult> GetVendorRFQList([FromRoute] string vendorCode)
+			=> CreateActionResult(await _service.GetVendorRFQList(vendorCode, User.Identity.Name));
 	}
 }
