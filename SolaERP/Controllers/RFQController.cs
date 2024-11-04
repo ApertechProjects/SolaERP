@@ -16,58 +16,9 @@ namespace SolaERP.API.Controllers
         public RFQController(IRfqService service) => _service = service;
 
 
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetVendorsToSend([FromQuery] int businessCategoryId)
-            => CreateActionResult(await _service.GetRFQVendorsAsync(businessCategoryId));
-
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetBusinessCategories()
-            => CreateActionResult(await _service.GetBuCategoriesAsync());
-
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetAll([FromQuery] RfqAllFilter filter)
-            => CreateActionResult(await _service.GetAllAsync(filter));
-
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetInProgress([FromQuery] RFQFilterBase filter)
-            => CreateActionResult(await _service.GetInProgressAsync(filter, User.Identity.Name));
-
-        [HttpGet]
-        public async Task<IActionResult> GetDrafts([FromQuery] RfqFilter filter)
-            => CreateActionResult(await _service.GetDraftsAsync(filter, User.Identity.Name));
-
         [HttpGet("[action]/{rfqMainId}")]
         public async Task<IActionResult> Get(int rfqMainId)
             => CreateActionResult(await _service.GetRFQAsync(User.Identity.Name, rfqMainId));
-
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetRequestForRFQ([FromQuery] RFQRequestModel model)
-            => CreateActionResult(await _service.GetRequestsForRFQ(User.Identity.Name, model));
-
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetSingleSourceReasons()
-            => CreateActionResult(await _service.GetSingleSourceReasonsAsync());
-
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetConversionList([FromQuery] int businessUnitId, [FromQuery] string itemCode)
-            => CreateActionResult(await _service.GetPUOMAsync(businessUnitId, itemCode));
-
-        [HttpPost]
-        public async Task<IActionResult> Save(RfqSaveCommandRequest request)
-            => CreateActionResult(await _service.SaveRfqAsync(request, User.Identity.Name));
-
-        [HttpPost("[action]")]
-        public async Task<IActionResult> SaveRFQVendors(RFQVendorIUDDto dto)
-            => CreateActionResult(await _service.RFQVendorIUDAsync(dto, User.Identity.Name));
-
-        [HttpPost("[action]")]
-        public async Task<IActionResult> ChangeRFQStatus(RfqChangeStatusModel model)
-            => CreateActionResult(await _service.ChangeRFQStatusAsync(model, User.Identity.Name));
-
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromQuery] List<int> rfqMainId)
-            => CreateActionResult(await _service.DeleteAsync(rfqMainId, User.Identity.Name));
-
 
     }
 }
