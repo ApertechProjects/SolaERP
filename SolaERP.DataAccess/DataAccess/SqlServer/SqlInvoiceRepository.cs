@@ -12,7 +12,7 @@ using System.Reflection;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlInvoiceRepository : IInvoiceRepository
+	public class SqlInvoiceRepository : IInvoiceRepository
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly BusinessUnitHelper _businessUnitHelper;
@@ -779,5 +779,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return grnData;
         }
-    }
+
+		public Task<bool> InvoiceRegisterDetailsSave(int ınvoiceRegisterMainId, DataTable dataTable)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

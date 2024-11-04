@@ -47,5 +47,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<InvoiceMatchingMainGRN>> MatchingMainGRNList(InvoiceMatchingMainModel model);
         Task InvoiceIUDIntegration(int businessUnitId, int invoiceMatchingMainId, int userId);
         Task<InvoiceMatchResultModel> GetInvoiceMatchData(int invoiceMatchingMainId, int businessUnitId);
-    }
+		Task<bool> InvoiceRegisterDetailsSave(int ınvoiceRegisterMainId, DataTable dataTable);
+	}
 }
