@@ -25,5 +25,9 @@ namespace SolaERP.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAdditionalPrivilegeAccessAsync()
         => CreateActionResult(await _menuService.GetAdditionalPrivilegeAccessAsync(User.Identity.Name));
-    }
+
+		[HttpGet]
+		public async Task<IActionResult> GetUserMenusWithChildren()
+		  => CreateActionResult(await _menuService.GetUserMenusWithChildrenAsync(User.Identity.Name));
+	}
 }
