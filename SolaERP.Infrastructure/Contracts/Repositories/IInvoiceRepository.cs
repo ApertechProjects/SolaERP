@@ -48,7 +48,7 @@ namespace SolaERP.Application.Contracts.Repositories
 		Task InvoiceIUDIntegration(int businessUnitId, int invoiceMatchingMainId, int userId);
 		Task<InvoiceMatchResultModel> GetInvoiceMatchData(int invoiceMatchingMainId, int businessUnitId);
 		Task<bool> InvoiceRegisterDetailsSave(int invoiceRegisterMainId, DataTable dataTable);
-		Task<List<Entities.Invoice.InvoiceRegisterLoad>> GetInvoiceRegisterMainLoad(int invoiceRegisterId);
+		Task<InvoiceRegisterLoad> GetInvoiceRegisterMainLoad(int invoiceRegisterId);
 		Task<List<Entities.Invoice.InvoiceRegisterDetails>> GetInvoiceRegisterDetailsLoad(int invoiceRegisterId);
 		Task<List<InvoiceRegisterPayablesTransactions>> GetInvoiceRegisterPayablesTransactions(int invoiceRegisterId);
 

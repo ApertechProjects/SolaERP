@@ -36,6 +36,6 @@ namespace SolaERP.Application.Dtos.Invoice
 		public string? OrderReference { get; set; }
 		public int? InvoicePeriod { get; set; }
 		public string? VendorAccount { get; set; }
-		List<InvoiceRegisterDetailsDto> InvoiceRegisterDetails { get; set; }
+		public List<InvoiceRegisterDetailsDto> InvoiceRegisterDetails { get; set; }
 	}
 }
