@@ -588,7 +588,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.CommandText =
                 @"select InvoiceMatchingDetailId from Finance.InvoiceMatchingDetails where InvoiceMatchingMainid = @id";
             command.Parameters.AddWithValue(command, "@id", invoiceMatchingMainId);
-
+             
             await using var reader = await command.ExecuteReaderAsync();
 
             while (await reader.ReadAsync())
