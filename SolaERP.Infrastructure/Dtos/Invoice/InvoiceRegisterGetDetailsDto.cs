@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Application.Dtos.Invoice
 {
-	public class InvoiceRegisterGetDto
+	public class InvoiceRegisterGetDetailsDto
 	{
 		public int InvoiceRegisterDetailId { get; set; }
 		public int LineNo { get; set; }

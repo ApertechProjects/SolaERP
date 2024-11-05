@@ -49,7 +49,7 @@ namespace SolaERP.Application.Contracts.Repositories
 		Task<InvoiceMatchResultModel> GetInvoiceMatchData(int invoiceMatchingMainId, int businessUnitId);
 		Task<bool> InvoiceRegisterDetailsSave(int invoiceRegisterMainId, DataTable dataTable);
 		Task<InvoiceRegisterLoad> GetInvoiceRegisterMainLoad(int invoiceRegisterId);
-		Task<List<InvoiceRegisterGet>> GetInvoiceRegisterDetailsLoad(int invoiceRegisterId);
+		Task<List<InvoiceRegisterGetDetails>> GetInvoiceRegisterDetailsLoad(int invoiceRegisterId);
 		Task<List<InvoiceRegisterPayablesTransactions>> GetInvoiceRegisterPayablesTransactions(int invoiceRegisterId);
 
 	}
