@@ -1,4 +1,6 @@
-﻿namespace SolaERP.Application.Models
+﻿using SolaERP.Application.Entities.Invoice;
+
+namespace SolaERP.Application.Models
 {
     public class InvoiceRegisterSaveModel
     {
@@ -20,10 +22,8 @@
         public int ProblematicInvoiceReasonId { get; set; }
         public string? AccountCode { get; set; }
         public List<AttachmentSaveModel> Attachments { get; set; }
-    }
+		public List<InvoiceRegisterDetails> Details { get; set; }
+	}
 
-    public class InvoiceRegisterSave
-    {
-        public List<InvoiceRegisterSaveModel> invoiceRegisters { get; set; }
-    }
+  
 }

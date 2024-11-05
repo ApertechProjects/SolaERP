@@ -4,15 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Application.Models
+namespace SolaERP.Application.Dtos.Invoice
 {
-	public class InvoiceRegisterDetailsSaveModel
-	{
-		public int InvoiceRegisterMainId { get; set; }
-        public List<InvoiceRegisterDetails> Details { get; set; }
-    }
-
-	public class InvoiceRegisterDetails
+	public class InvoiceRegisterDetailsRequest
 	{
 		public int InvoiceregisterDetailId { get; set; }
 		public int LineNo { get; set; }

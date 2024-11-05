@@ -36,6 +36,7 @@ namespace SolaERP.Application.Entities.Invoice
 		public string? OrderReference { get; set; }
 		public int? InvoicePeriod { get; set; }
 		public string? VendorAccount { get; set; }
+		public bool UseOrderForInvoice { get; set; }
 		List<InvoiceRegisterDetails> InvoiceRegisterDetails { get; set; }
 	}
 

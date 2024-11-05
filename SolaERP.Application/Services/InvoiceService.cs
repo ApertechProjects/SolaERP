@@ -122,6 +122,9 @@ namespace SolaERP.Persistence.Services
 					model[i].InvoiceNo = "";
 
 				var data = await _invoiceRepository.Save(model[i], userId);
+
+				await InvoiceRegisterDetailsSave(data, model[i].Details);
+
 				if (model[i].Attachments != null)
 					await _attachmentService.SaveAttachmentAsync(model[i].Attachments, SourceType.INV, data);
 			}
@@ -410,10 +413,10 @@ namespace SolaERP.Persistence.Services
 			return ApiResponse<InvoiceMatchResultModelDto>.Success(resultModel);
 		}
 
-		public async Task<ApiResponse<bool>> InvoiceRegisterDetailsSave(InvoiceRegisterDetailsSaveModel model)
+		public async Task<ApiResponse<bool>> InvoiceRegisterDetailsSave(int invoiceRegisterMainId, List<InvoiceRegisterDetails> details)
 		{
-			var dataTable = model.Details.ConvertListOfCLassToDataTable();
-			var result = await _invoiceRepository.InvoiceRegisterDetailsSave(model.InvoiceRegisterMainId, dataTable);
+			var dataTable = details.ConvertListOfCLassToDataTable();
+			var result = await _invoiceRepository.InvoiceRegisterDetailsSave(invoiceRegisterMainId, dataTable);
 
 			await _unitOfWork.SaveChangesAsync();
 			return ApiResponse<bool>.Success(result);
