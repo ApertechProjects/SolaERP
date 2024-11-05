@@ -90,6 +90,7 @@ using SolaERP.Job;
 using SolaERP.Application.Entities.UserReport;
 using SolaERP.Application.Dtos.UserReport;
 using VendorUserDto = SolaERP.Application.Dtos.Vendors.VendorUserDto;
+using InvoiceRegisterDetails = SolaERP.Application.Entities.Invoice.InvoiceRegisterDetails;
 
 namespace SolaERP.Persistence.Mappers
 {
@@ -724,6 +725,8 @@ namespace SolaERP.Persistence.Mappers
 
 			CreateMap<VendorBusinessCategory, VendorBusinessCategoryDto>().ReverseMap();
 			CreateMap<InvoiceRegisterPayablesTransactions, InvoiceRegisterPayablesTransactionsDto>().ReverseMap();
+			CreateMap<InvoiceRegisterLoad, InvoiceRegisterLoadDto>().ReverseMap();
+			CreateMap<InvoiceRegisterDetails, InvoiceRegisterDetailsDto>().ReverseMap();
 		}
 	}
 }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolaERP.Application.Dtos.Invoice
+namespace SolaERP.Application.Entities.Invoice
 {
-    public class GetInvoiceRegisterDetailsDto
+    public class InvoiceRegisterDetails : BaseEntity
     {
         public int InvoiceRegisterDetailId { get; set; }
         public int LineNo { get; set; }
@@ -25,3 +25,4 @@ namespace SolaERP.Application.Dtos.Invoice
         public decimal ReportingGrossAmount { get; set; }
     }
 }
+

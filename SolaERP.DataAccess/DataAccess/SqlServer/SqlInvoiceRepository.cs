@@ -794,9 +794,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return value > 0;
         }
 
-        public async Task<List<GetInvoiceRegisterDetails>> GetInvoiceRegisterDetails(int invoiceRegisterId)
+        public async Task<List<Application.Entities.Invoice.InvoiceRegisterDetails>> GetInvoiceRegisterMainLoad(int invoiceRegisterId)
         {
-            List<GetInvoiceRegisterDetails> list = new List<GetInvoiceRegisterDetails>();
+            List<Application.Entities.Invoice.InvoiceRegisterDetails> list = new List<Application.Entities.Invoice.InvoiceRegisterDetails>();
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = @"exec dbo.SP_InvoiceRegisterDetails @invoiceRegisterId";
             command.Parameters.AddWithValue(command, "@invoiceRegisterId", invoiceRegisterId);
@@ -804,7 +804,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using var reader = await command.ExecuteReaderAsync();
 
             while (reader.Read())
-                list.Add(reader.GetByEntityStructure<GetInvoiceRegisterDetails>());
+                list.Add(reader.GetByEntityStructure<Application.Entities.Invoice.InvoiceRegisterDetails>());
 
             return list;
         }

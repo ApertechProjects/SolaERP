@@ -122,5 +122,8 @@ namespace SolaERP.Job
 
             services.ConfigureOptions<CbarBackgroundJobSetup>();
         }
+
+
+
     }
 }
