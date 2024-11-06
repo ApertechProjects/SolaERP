@@ -31,6 +31,7 @@ using SolaERP.Persistence.Validations.Vendor;
 using SolaERP.Job;
 using UserValidation = SolaERP.Application.Validations.UserValidation.UserValidation;
 using IBackgroundMailService = SolaERP.Job.IBackgroundMailService;
+using SolaERP.DataAccess.Helper;
 
 namespace SolaERP.Extensions
 {

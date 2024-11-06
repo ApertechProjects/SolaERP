@@ -21,7 +21,15 @@ namespace SolaERP.Application.Models
         public int AgingDays { get; set; }
         public int ProblematicInvoiceReasonId { get; set; }
         public string? AccountCode { get; set; }
-        public List<AttachmentSaveModel> Attachments { get; set; }
+        public int? WithHoldingTaxId { get; set; }
+        public int? TaxId { get; set; }
+        public decimal? TaxAmount { get; set; }
+        public decimal? GrossAmount { get; set; }
+        public string? OrderReference { get; set; }
+        public int? InvoicePeriod { get; set; }
+		public string? VendorAccount { get; set; }
+
+		public List<AttachmentSaveModel> Attachments { get; set; }
 		public List<InvoiceRegisterDetails> Details { get; set; }
 	}
 

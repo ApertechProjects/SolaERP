@@ -105,15 +105,16 @@ namespace SolaERP.Persistence.Services
 			return ApiResponse<List<RegisterWFADto>>.Success(dto);
 		}
 
-		public async Task<ApiResponse<bool>> Save(List<InvoiceRegisterSaveModel> model, string name)
+		public async Task<ApiResponse<int>> Save(List<InvoiceRegisterSaveModel> model, string name)
 		{
+			int data = 0;
 			int userId = await _userRepository.ConvertIdentity(name);
 			for (int i = 0; i < model.Count; i++)
 			{
 				var check = await _invoiceRepository.CheckInvoiceRegister(model[i].InvoiceRegisterId,
 					model[i].BusinessUnitId, model[i].VendorCode, model[i].InvoiceNo);
 				if (check)
-					return ApiResponse<bool>.Fail(
+					return ApiResponse<int>.Fail(
 						"Vendor Code and Invoice No can not be duplicate for the same Business Unit - Invoice no: " +
 						model[i].InvoiceNo, 400);
 
@@ -121,16 +122,17 @@ namespace SolaERP.Persistence.Services
 				if (string.IsNullOrEmpty(model[i].InvoiceNo))
 					model[i].InvoiceNo = "";
 
-				var data = await _invoiceRepository.Save(model[i], userId);
+				data = await _invoiceRepository.Save(model[i], userId);
 
-				await InvoiceRegisterDetailsSave(data, model[i].Details);
+				if (model[i].Details != null)
+					await InvoiceRegisterDetailsSave(data, model[i].Details);
 
 				if (model[i].Attachments != null)
 					await _attachmentService.SaveAttachmentAsync(model[i].Attachments, SourceType.INV, data);
 			}
 
 			await _unitOfWork.SaveChangesAsync();
-			return ApiResponse<bool>.Success(true);
+			return ApiResponse<int>.Success(data,200);
 		}
 
 		public async Task<ApiResponse<List<OrderListApprovedDto>>> GetOrderListApproved(int businessUnitId,
@@ -428,7 +430,7 @@ namespace SolaERP.Persistence.Services
 			var details = await _invoiceRepository.GetInvoiceRegisterDetailsLoad(invoiceRegisterId);
 			var dtoMain = _mapper.Map<InvoiceRegisterLoadDto>(main);
 			dtoMain.InvoiceRegisterDetails = _mapper.Map<List<InvoiceRegisterGetDetailsDto>>(details);
-		
+
 			return ApiResponse<InvoiceRegisterLoadDto>.Success(dtoMain, 200);
 		}
 

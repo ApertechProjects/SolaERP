@@ -18,6 +18,8 @@ using Quartz;
 using System.Globalization;
 using AspNetCoreRateLimit;
 using SolaERP.API.Middlewares;
+using SolaERP.DataAccess.Helper;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +70,7 @@ builder.Services.AddCors(options =>
         .Build());
 });
 
+
 var logger = new LoggerConfiguration()
     .WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnectionString"), "logs")
     .Enrich.FromLogContext()
@@ -114,8 +117,23 @@ builder.Services.AddAuthentication(x =>
         NameClaimType = ClaimTypes.NameIdentifier,
         LifetimeValidator = (notBefore, expires, securityToken, validationParametrs) =>
             expires != null ? expires > DateTime.UtcNow : false
-    };
+	};
 });
+
+builder.Services.AddSingleton<DatabaseInitializerService>();
+
+builder.Services.AddHostedService<DatabaseInitializationHostedService>();
+
+//var host = Host.CreateDefaultBuilder(args)
+//		  .ConfigureServices(services =>
+//		  {
+//			  services.AddHostedService<DatabaseInitializationHostedService>();
+//              services.AddScoped<DatabaseInitializerService>();
+//		  })
+//		  .Build();
+
+//await host.RunAsync();
+
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -150,6 +168,7 @@ builder.Services.AddSwaggerGen(c =>
         { jwtSecurityScheme, Array.Empty<string>() }
     });
 });
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSignalR();
 
@@ -158,6 +177,8 @@ builder.Services.AddControllers();
 
 IFileProvider? fileProvider = builder.Environment.ContentRootFileProvider;
 IConfiguration? configuration = builder.Configuration;
+
+
 var app = builder.Build();
 
 
