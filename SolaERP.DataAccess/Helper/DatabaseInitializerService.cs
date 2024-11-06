@@ -14,29 +14,21 @@ namespace SolaERP.DataAccess.Helper
 	public class DatabaseInitializerService
 	{
 		private readonly string _connectionString;
-		private readonly IUnitOfWork _unitOfWork;
 		public DatabaseInitializerService(IConfiguration configuration
-			//, IUnitOfWork unitOfWork
 			)
 		{
 			_connectionString = configuration.GetConnectionString("DevelopmentConnectionString");
-			//_unitOfWork = new SqlUnitOfWork(new );
 		}
 
 		public void CreateOrAlterStoredProcedure()
 		{
 			//string procedureSql = @"
-   //         IF OBJECT_ID('dbo.YourStoredProcedure', 'P') IS NOT NULL
-   //         BEGIN
-   //             DROP PROCEDURE dbo.YourStoredProcedure;
-   //         END;
-
-   //         CREATE PROCEDURE dbo.YourStoredProcedure
+   //         CREATE OR ALTER PROCEDURE dbo.YourStoredProcedure
    //         AS
    //         BEGIN
    //             SELECT 'Hello, world!';
    //         END;
-   //     ";
+			//";
 			//using (SqlConnection connection = new SqlConnection(_connectionString))
 			//{
 			//	connection.Open();
