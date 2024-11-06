@@ -13,7 +13,7 @@ namespace SolaERP.Application.Entities.Invoice
         public string Period { get; set; }
         public DateTime TransactionDate { get; set; }
         public decimal Amount { get; set; }
-        public string DC { get; set; } = "D";
+        public string D_C { get; set; } = "D";
         public string JournalType { get; set; } = "PINV";
         public string TransactionReference { get; set; }
         public string LineDescription { get; set; }

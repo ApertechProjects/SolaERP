@@ -125,9 +125,6 @@ namespace SolaERP.Persistence.Services
 
 				data = await _invoiceRepository.Save(model[i], userId);
 
-				//var detailIdList = model[i].Details.Select(x => x.InvoiceRegisterDetailId).ToList();
-				//var deletedIds = detailIdList.Select(x => x == null ? 0 : x).ToList();
-				//await _invoiceRepository.DeleteDetailsNotIncludes(deletedIds, model[i].InvoiceRegisterId);
 
 				if (model[i].Details != null)
 					await InvoiceRegisterDetailsSave(data, model[i].Details);
