@@ -14,15 +14,15 @@ namespace SolaERP.Application.Entities.Invoice
         public decimal Amount { get; set; }
         public decimal TaxAmount { get; set; }
         public decimal GrossAmount { get; set; }
-        //public string AccountCode { get; set; }
-        //public decimal QTY { get; set; }
-        //public string UOM { get; set; }
-        //public decimal BaseAmount { get; set; }
-        //public decimal ReportingAmount { get; set; }
-        //public decimal BaseTaxAmount { get; set; }
-        //public decimal ReportingTaxAmount { get; set; }
-        //public decimal BaseGrossAmount { get; set; }
-        //public decimal ReportingGrossAmount { get; set; }
+        public string AccountCode { get; set; }
+        public decimal QTY { get; set; }
+        public string UOM { get; set; }
+        public decimal BaseAmount { get; set; }
+        public decimal ReportingAmount { get; set; }
+        public decimal BaseTaxAmount { get; set; }
+        public decimal ReportingTaxAmount { get; set; }
+        public decimal BaseGrossAmount { get; set; }
+        public decimal ReportingGrossAmount { get; set; }
         public int CatId { get; set; }
         public int? AnalysisCode1Id { get; set; }
         public int? AnalysisCode2Id { get; set; }

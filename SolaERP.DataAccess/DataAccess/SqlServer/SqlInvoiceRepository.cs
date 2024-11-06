@@ -802,8 +802,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                     @InvoiceRegisterMainId,
                                     @Data";
 
-			command.Parameters.AddWithValue(command, "@InvoiceMatchingMainId", invoiceRegisterMainId);
-			command.Parameters.AddTableValue(command, "@Data", "InvoiceRegisterDetailsType", dataTable);
+			command.Parameters.AddWithValue(command, "@InvoiceRegisterMainId", invoiceRegisterMainId);
+			command.Parameters.AddTableValue(command, "@Data", "InvoiceRegisterDetailsType2", dataTable);
 			var value = await command.ExecuteNonQueryAsync();
 			return value > 0;
 		}
