@@ -428,10 +428,7 @@ namespace SolaERP.Persistence.Services
 			var details = await _invoiceRepository.GetInvoiceRegisterDetailsLoad(invoiceRegisterId);
 			var dtoMain = _mapper.Map<InvoiceRegisterLoadDto>(main);
 			dtoMain.InvoiceRegisterDetails = _mapper.Map<List<InvoiceRegisterGetDetailsDto>>(details);
-			if (dtoMain.InvoiceRegisterDetails.Count == 0)
-			{
-				dtoMain.InvoiceRegisterDetails = new();
-			}
+		
 			return ApiResponse<InvoiceRegisterLoadDto>.Success(dtoMain, 200);
 		}
 
