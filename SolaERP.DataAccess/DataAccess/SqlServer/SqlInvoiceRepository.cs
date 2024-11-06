@@ -2,6 +2,7 @@
 using SolaERP.Application.Dtos.Invoice;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Invoice;
+using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Helper;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
@@ -852,6 +853,26 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 				main = reader.GetByEntityStructure<InvoiceRegisterLoad>("InvoiceRegisterDetails");
 
 			return main;
+		}
+
+		public async Task DeleteDetailsNotIncludes(List<int?> ids, int invoiceRegisterId)
+		{
+			await using var command = _unitOfWork.CreateCommand() as DbCommand;
+			string result = $"({string.Join(",", ids)})";
+			command.CommandText = @"DELETE FROM Finance.InvoiceRegisterDetails WHERE InvoiceRegisterDetailId = @invoiceRegisterId
+                                       AND InvoiceRegisterDetailId NOT IN " + result;
+			command.Parameters.AddWithValue(command, "@invoiceRegisterId", invoiceRegisterId);
+
+			await command.ExecuteNonQueryAsync();
+		}
+
+		public async Task DeleteAnalysisNotIncludes(List<int?> invoiceRegisterDetailIds)
+		{
+			await using var command = _unitOfWork.CreateCommand() as DbCommand;
+			string result = $"({string.Join(",", invoiceRegisterDetailIds)})";
+			command.CommandText = @"DELETE FROM Finance.InvoiceRegisterAnalysis WHERE  InvoiceRegisterDetailId NOT IN " + result;
+
+			await command.ExecuteNonQueryAsync();
 		}
 	}
 }

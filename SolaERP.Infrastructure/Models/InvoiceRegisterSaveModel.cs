@@ -19,7 +19,7 @@ namespace SolaERP.Application.Models
         public string LineDescription { get; set; }
         public string VendorCode { get; set; }
         public int AgingDays { get; set; }
-        public int ProblematicInvoiceReasonId { get; set; }
+        public int? ProblematicInvoiceReasonId { get; set; }
         public string? AccountCode { get; set; }
         public int? WithHoldingTaxId { get; set; }
         public int? TaxId { get; set; }
