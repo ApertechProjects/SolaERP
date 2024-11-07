@@ -10,7 +10,7 @@ namespace SolaERP.Application.Entities.Invoice
     {
         public int InvoiceLineNo { get; set; }
         public string AccountCode { get; set; }
-        public string Period { get; set; }
+        public int Period { get; set; }
         public DateTime TransactionDate { get; set; }
         public decimal Amount { get; set; }
         public string D_C { get; set; } = "D";
@@ -23,7 +23,7 @@ namespace SolaERP.Application.Entities.Invoice
         public string LinkAccount { get; set; }
         public decimal ReportingRate { get; set; }
         public decimal ReportingAmount { get; set; }
-        public string LinkReference { get; set; }
+        public int LinkReference { get; set; }
         public string Comment { get; set; }
         public string InvoiceNo { get; set; }
         public string ReferenceDocNo { get; set; }
