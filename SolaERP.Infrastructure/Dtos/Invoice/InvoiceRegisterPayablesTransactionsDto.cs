@@ -8,7 +8,8 @@ namespace SolaERP.Application.Dtos.Invoice
 {
     public class InvoiceRegisterPayablesTransactionsDto
     {
-        public int InvoiceLineNo { get; set; }
+		public long RowNum { get; set; }
+		public int InvoiceLineNo { get; set; }
         public string AccountCode { get; set; }
         public string Period { get; set; }
         public DateTime TransactionDate { get; set; }

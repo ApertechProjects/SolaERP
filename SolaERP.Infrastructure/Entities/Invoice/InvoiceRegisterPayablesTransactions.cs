@@ -8,6 +8,7 @@ namespace SolaERP.Application.Entities.Invoice
 {
     public class InvoiceRegisterPayablesTransactions : BaseEntity
     {
+        public long RowNum { get; set; }
         public int InvoiceLineNo { get; set; }
         public string AccountCode { get; set; }
         public int Period { get; set; }
