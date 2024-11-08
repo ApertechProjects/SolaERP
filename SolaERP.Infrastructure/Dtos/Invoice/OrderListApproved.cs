@@ -10,4 +10,5 @@ public class OrderListApprovedDto
     public string VendorCode { get; set; }
     public int AgingDays { get; set; }
     public string VendorName { get; set; }
+    public decimal TotalAmount { get; set; }
 }
