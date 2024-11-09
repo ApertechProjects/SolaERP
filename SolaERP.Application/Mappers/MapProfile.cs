@@ -729,6 +729,8 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<InvoiceRegisterDetails, InvoiceRegisterDetailsDto>().ReverseMap();
             CreateMap<InvoiceRegisterGetDetails, InvoiceRegisterGetDetailsDto>().ReverseMap();
             CreateMap<VendorBaseInfo, VendorBaseInfoDto>().ReverseMap();
+
+            CreateMap<WithHoldingTaxData,WithHoldingTaxDto>().ReverseMap();
         }
     }
 }

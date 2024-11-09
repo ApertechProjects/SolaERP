@@ -46,7 +46,7 @@ namespace SolaERP.Application.Contracts.Services
 		Task<ApiResponse<List<InvoiceMatchingMainGRNDto>>> MatchingMainGRNList(InvoiceMatchingMainModel model);
 		Task<ApiResponse<InvoiceMatchResultModelDto>> GetInvoiceMatchData(int invoiceMatchingMainId, int businessUnitId);
 		Task<ApiResponse<bool>> InvoiceRegisterDetailsSave(int invoiceRegisterMainId, List<InvoiceRegisterDetails> details);
-		Task<ApiResponse<InvoiceRegisterLoadDto>> GetInvoiceRegisterLoad(int invoiceRegisterId);
+		Task<ApiResponse<InvoiceRegisterLoadDto>> GetInvoiceRegisterLoad(int invoiceRegisterId, string name);
 		Task<ApiResponse<List<InvoiceRegisterPayablesTransactionsDto>>> GetInvoiceRegisterPayablesTransactions(int invoiceRegisterId);
 	}
 }
