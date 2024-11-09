@@ -8,7 +8,9 @@ namespace SolaERP.Application.Entities.Invoice
 {
 	public class InvoiceRegisterLoad : BaseEntity
 	{
-		public int InvoiceRegisterId { get; set; }
+        private decimal? _grossAmount;
+        private decimal? _taxAmount;
+        public int InvoiceRegisterId { get; set; }
 		public int BusinessUnitId { get; set; }
 		public int InvoiceType { get; set; }
 		public DateTime InvoiceDate { get; set; }
@@ -31,9 +33,17 @@ namespace SolaERP.Application.Entities.Invoice
 		public string? AccountCode { get; set; }
 		public int? WithHoldingTaxId { get; set; }
 		public int? TaxId { get; set; }
-		public decimal? TaxAmount { get; set; }
-		public decimal? GrossAmount { get; set; }
-		public string? OrderReference { get; set; }
+		public decimal? TaxAmount
+		{
+            get => _taxAmount ?? 0;
+            set => _taxAmount = value ?? 0;
+        }
+        public decimal? GrossAmount
+        {
+            get => _grossAmount ?? 0;
+            set => _grossAmount = value ?? 0;
+        }
+        public string? OrderReference { get; set; }
 		public int? InvoicePeriod { get; set; }
 		public string? VendorAccount { get; set; }
 		public bool UseOrderForInvoice { get; set; }

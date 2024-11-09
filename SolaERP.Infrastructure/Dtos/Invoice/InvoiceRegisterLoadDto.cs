@@ -31,8 +31,8 @@ namespace SolaERP.Application.Dtos.Invoice
 		public string? AccountCode { get; set; }
 		public int? WithHoldingTaxId { get; set; }
 		public int? TaxId { get; set; }
-		public decimal? TaxAmount { get; set; }
-		public decimal? GrossAmount { get; set; }
+		public decimal? TaxAmount { get; set; } = 0;
+		public decimal? GrossAmount { get; set; } = 0;
 		public string? OrderReference { get; set; }
 		public int? InvoicePeriod { get; set; }
 		public string? VendorAccount { get; set; }
