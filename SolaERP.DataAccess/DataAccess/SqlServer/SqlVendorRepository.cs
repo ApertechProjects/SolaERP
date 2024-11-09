@@ -301,7 +301,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<VendorInfo>> Vendors(int userId)
+        public async Task<List<VendorBaseInfo>> Vendors(int userId)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
@@ -309,10 +309,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@userId", userId);
 
                 using var reader = await command.ExecuteReaderAsync();
-                List<VendorInfo> data = new List<VendorInfo>();
+                List<VendorBaseInfo> data = new List<VendorBaseInfo>();
 
                 while (reader.Read())
-                    data.Add(reader.GetByEntityStructure<VendorInfo>());
+                    data.Add(reader.GetByEntityStructure<VendorBaseInfo>());
 
                 return data;
             }

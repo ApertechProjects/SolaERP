@@ -592,12 +592,12 @@ namespace SolaERP.Persistence.Services
 				: ApiResponse<bool>.Success(isSuccessFull, 200);
 		}
 
-		public async Task<ApiResponse<List<VendorInfoDto>>> Vendors(string userIdentity)
+		public async Task<ApiResponse<List<VendorBaseInfoDto>>> Vendors(string userIdentity)
 		{
 			int userId = await _userRepository.ConvertIdentity(userIdentity);
 			var data = await _repository.Vendors(userId);
-			var dto = _mapper.Map<List<VendorInfoDto>>(data);
-			return ApiResponse<List<VendorInfoDto>>.Success(dto, 200);
+			var dto = _mapper.Map<List<VendorBaseInfoDto>>(data);
+			return ApiResponse<List<VendorBaseInfoDto>>.Success(dto, 200);
 		}
 
 		private static string GetBusinessCategoryById(int id)
