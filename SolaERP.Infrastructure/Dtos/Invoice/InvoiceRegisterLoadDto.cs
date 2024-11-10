@@ -17,7 +17,7 @@ namespace SolaERP.Application.Dtos.Invoice
         public DateTime InvoiceReceivedDate { get; set; }
         public string? InvoiceNo { get; set; }
         public string? SystemInvoiceNo { get; set; }
-        public int? OrderType { get; set; }
+        public int? OrderTypeId { get; set; }
         public string? ReferenceDocNo { get; set; }
         public decimal? InvoiceAmount { get; set; }
         public string CurrencyCode { get; set; } = string.Empty;
