@@ -11,9 +11,8 @@ namespace SolaERP.Application.Entities.Vendors
         public int VendorId { get; set; }
         public string VendorCode { get; set; }
         public string VendorName { get; set; }
-        public decimal SupplierWHTRate { get; set; }
         public int TaxesId { get; set; }
-        public string TaxCode { get; set; }
-        public string TaxName { get; set; }
+        public int WithHoldingTaxId { get; set; }
+        public decimal Tax { get; set; }
     }
 }
