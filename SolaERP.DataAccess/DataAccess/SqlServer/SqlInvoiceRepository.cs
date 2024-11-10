@@ -169,6 +169,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                   @OrderReference,
                                                   @InvoicePeriod,
                                                   @VendorAccount,
+                                                  @WithHoldingTaxAmount,
                                                   @UserId,
                                                   @NewInvoiceRegisterId = @NewInvoiceRegisterId OUTPUT 
                                                   select @NewInvoiceRegisterId as NewInvoiceRegisterId";
@@ -220,6 +221,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@InvoicePeriod", model.InvoicePeriod);
                 command.Parameters.AddWithValue(command, "@VendorAccount",
                     model.VendorAccount);
+                command.Parameters.AddWithValue(command, "@WithHoldingTaxAmount", model.WithHoldingTaxAmount);
 
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
@@ -804,7 +806,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                     @Data";
 
             command.Parameters.AddWithValue(command, "@InvoiceRegisterMainId", invoiceRegisterMainId);
-            command.Parameters.AddTableValue(command, "@Data", "InvoiceRegisterDetailsType2", dataTable);
+            command.Parameters.AddTableValue(command, "@Data", "InvoiceRegisterDetailsType", dataTable);
             var value = await command.ExecuteNonQueryAsync();
             return value > 0;
         }
