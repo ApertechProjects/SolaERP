@@ -137,7 +137,7 @@ namespace SolaERP.Persistence.Services
                     ReportMultiplyOrDivide = item.MultiplyDivide,
                     CurrCodeFrom = item.CurrCodeFrom,
                     CurrCodeTo = item.CurrCodeTo,
-                    IsReportEqualsDisCount = item.CurrCodeFrom == businessUnit.ReportingCurrencyCode
+                    IsReportEqualsDisCount = item.CurrCodeFrom.Trim() == businessUnit.ReportingCurrencyCode
                 });
             }
 
