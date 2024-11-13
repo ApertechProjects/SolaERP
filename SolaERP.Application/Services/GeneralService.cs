@@ -8,6 +8,7 @@ using SolaERP.Application.Dtos.Status;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Currency;
 using SolaERP.Application.Entities.SupplierEvaluation;
+using System.Collections.Generic;
 
 namespace SolaERP.Persistence.Services
 {
@@ -99,6 +100,50 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<BaseAndReportCurrencyRate>.Success(result);
         }
 
+        public async Task<ApiResponse<List<BaseAndReportCurrencyRates>>> GetBaseAndReportCurrencyRatesAsync(DateTime date, int businessUnitId)
+        {
+            //{06.12.2023 15:25:38}
+            //{06.12.2023 0:00:00}
+            date = date.Date;
+            var convDtoList = await _generalRepository.GetConvRateList(businessUnitId);
+            var businessUnit = (await _businessUnitRepository.GetAllAsync())
+                .SingleOrDefault(x => x.BusinessUnitId == businessUnitId);
+
+            var resultBaseResult = await GetConvRateDtoAsync(convDtoList, date, businessUnit);
+
+            var resultReport = convDtoList.SingleOrDefault(x =>
+                x.EffFromDateTime <= date
+                && x.EffToDateTime >= date
+                && x.CurrCodeFrom == businessUnit.BaseCurrencyCode + "  "
+                && x.CurrCodeTo == businessUnit.ReportingCurrencyCode + "  "
+            );
+
+            if (resultBaseResult is null || resultReport is null)
+            {
+                var dateStringFormatted = date.ToString("dd/MM/yyyy");
+                string message =
+                    $"There is no currency rate at date {dateStringFormatted}, please contact the finance department.";
+                return ApiResponse<List<BaseAndReportCurrencyRates>>.Fail(message, 444);
+            }
+
+            List<BaseAndReportCurrencyRates> list = new List<BaseAndReportCurrencyRates>();
+            foreach (var item in resultBaseResult)
+            {
+                list.Add(new BaseAndReportCurrencyRates
+                {
+                    BaseRate = item.ConvRate,
+                    ReportRate = resultReport.ConvRate,
+                    BaseMultiplyOrDivide = item.MultiplyDivide,
+                    ReportMultiplyOrDivide = item.MultiplyDivide,
+                    CurrCodeFrom = item.CurrCodeFrom,
+                    CurrCodeTo = item.CurrCodeTo,
+                    IsReportEqualsDisCount = item.CurrCodeFrom == businessUnit.ReportingCurrencyCode
+                });
+            }
+
+            return ApiResponse<List<BaseAndReportCurrencyRates>>.Success(list);
+        }
+
         public async Task<bool> DailyCurrencyIsExist(DateTime date, string currency, int businessUnitId)
         {
             var convDtoList = await _generalRepository.GetConvRateList(businessUnitId);
@@ -126,6 +171,19 @@ namespace SolaERP.Persistence.Services
 
 
             return singleResultBase;
+        }
+
+        private async Task<List<ConvRateDto>> GetConvRateDtoAsync(List<ConvRateDto> convDtoList, DateTime date, BusinessUnits businessUnit)
+        {
+            var resultBase = convDtoList.Where(x =>
+                x.EffFromDateTime <= date
+                && x.EffToDateTime >= date
+                //&& x.CurrCodeFrom == currency + "  "
+                && x.CurrCodeTo == businessUnit.BaseCurrencyCode + "  "
+            );
+
+
+            return resultBase.ToList();
         }
 
         public async Task<RejectReasonDto> GetRejectReasonByCode(string code)

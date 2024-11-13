@@ -40,6 +40,12 @@ namespace SolaERP.Controllers
             [BindRequired] string currency,
             [BindRequired] int businessUnitId) =>
             CreateActionResult(await _generalService.GetBaseAndReportCurrencyRateAsync(date, currency, businessUnitId));
+
+        [HttpGet]
+        public async Task<IActionResult> GetBaseAndReportCurrencyRates(
+        [BindRequired] DateTime date,
+        [BindRequired] int businessUnitId) =>
+        CreateActionResult(await _generalService.GetBaseAndReportCurrencyRatesAsync(date, businessUnitId));
     }
 
 }

@@ -17,6 +17,10 @@ namespace SolaERP.Application.Contracts.Services
             string currency,
             int businessUnitId);
 
+        Task<ApiResponse<List<BaseAndReportCurrencyRates>>> GetBaseAndReportCurrencyRatesAsync(
+          DateTime date,
+          int businessUnitId);
+
         Task<bool> DailyCurrencyIsExist(
            DateTime date,
            string currency,
