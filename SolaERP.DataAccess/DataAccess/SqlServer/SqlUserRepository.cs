@@ -101,7 +101,7 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 			CurrentUserData user = null;
 			using (var command = _unitOfWork.CreateCommand() as DbCommand)
 			{
-				command.CommandText = "Select *,v.VendorCode,bu.BusinessUnitCode from " +
+				command.CommandText = "Select *,v.VendorCode,bu.BusinessUnitCode, au.ChangePassword from " +
 									  "Config.AppUser au\r\nLEFT JOIN Config.BusinessUnits bu " +
 									  "ON au.DefaultBusinessUnitId = Bu.BusinessUnitId " +
 									  "LEFT JOIN Procurement.Vendors v\r\nON au.VendorId = v.VendorId " +
