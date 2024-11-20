@@ -45,7 +45,25 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return accounts;
         }
 
-        public async Task<List<AccountCode>> GetAllAsync()
+		public async Task<List<AccountCode>> GetAccountCodesByBusinessUnitAndAnlCode(int businessUnitId, string anlCode)
+		{
+			var accounts = new List<AccountCode>();
+			await using var command = _unitOfWork.CreateCommand() as SqlCommand;
+			command.CommandText = "EXEC dbo.SP_AccountListByConfig @BusinessUnitId, @ANL_CODE";
+
+			command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+			command.Parameters.AddWithValue(command, "@ANL_CODE", anlCode);
+
+			await using var reader = await command.ExecuteReaderAsync();
+
+			while (reader.Read())
+			{
+				accounts.Add(reader.GetByEntityStructure<AccountCode>());
+			}
+			return accounts;
+		}
+
+		public async Task<List<AccountCode>> GetAllAsync()
         {
             throw new NotImplementedException();
         }

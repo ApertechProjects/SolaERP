@@ -32,8 +32,14 @@ namespace SolaERP.Persistence.Services
             var dto = _mapper.Map<List<AccountCodeDto>>(accountCodes);
             return ApiResponse<List<AccountCodeDto>>.Success(dto, 200);
         }
+		public async Task<ApiResponse<List<AccountCodeDto>>> GetAccountCodesByBusinessUnitAndAnlCode(int businessUnitId, string anlCode)
+		{
+			var accountCodes = await _accountCodeRepository.GetAccountCodesByBusinessUnitAndAnlCode(businessUnitId, anlCode);
+			var dto = _mapper.Map<List<AccountCodeDto>>(accountCodes);
+			return ApiResponse<List<AccountCodeDto>>.Success(dto, 200);
+		}
 
-        public Task<ApiResponse<bool>> RemoveAsync(int Id)
+		public Task<ApiResponse<bool>> RemoveAsync(int Id)
         {
             throw new NotImplementedException();
         }
