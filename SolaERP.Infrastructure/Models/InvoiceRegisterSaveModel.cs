@@ -29,6 +29,7 @@ namespace SolaERP.Application.Models
         public string? OrderReference { get; set; }
         public int? InvoicePeriod { get; set; }
 		public string? VendorAccount { get; set; }
+		public string? ReasonAdditionalDescription { get; set; }
 
 		public List<AttachmentSaveModel> Attachments { get; set; }
 		public List<InvoiceRegisterDetails> Details { get; set; }
