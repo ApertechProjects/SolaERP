@@ -879,5 +879,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             await command.ExecuteNonQueryAsync();
         }
-    }
+
+		public async Task<InvoicePeriod> GetPeriod(int businessUnitId)
+		{
+			using var command = _unitOfWork.CreateCommand() as DbCommand;
+			command.CommandText = @"exec dbo.SP_PeriodListByBusinessId @BusinessUnitId";
+			command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+
+			using var reader = await command.ExecuteReaderAsync();
+
+			InvoicePeriod mainData = new InvoicePeriod();
+			if (reader.Read())
+				mainData = reader.GetByEntityStructure<InvoicePeriod>();
+
+			return mainData;
+		}
+	}
 }

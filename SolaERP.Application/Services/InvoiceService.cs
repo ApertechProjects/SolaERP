@@ -460,5 +460,32 @@ namespace SolaERP.Persistence.Services
             var dto = _mapper.Map<List<InvoiceRegisterPayablesTransactionsDto>>(data);
             return ApiResponse<List<InvoiceRegisterPayablesTransactionsDto>>.Success(dto, 200);
         }
-    }
+
+		public async Task<ApiResponse<List<InvoicePeriodListDto>>> GetPeriodList(int businessUnitId)
+		{
+			var data = await _invoiceRepository.GetPeriod(businessUnitId);
+
+            var periodFrom = Int32.Parse(data.periodFrom);
+            var periodTo = Int32.Parse(data.periodTo);
+
+			List<InvoicePeriodListDto> result = new List<InvoicePeriodListDto>();
+
+			for (int i = periodFrom; i <= periodTo; i++)
+			{
+				if (i % 100 == 13)
+				{
+                    var nextYear = ((i / 1000) + 1);
+					// Novbeti il 2024012
+					i = Int32.Parse(nextYear.ToString() + "000");
+					continue;
+				}
+
+				InvoicePeriodListDto dto = new InvoicePeriodListDto();
+                dto.name = i.ToString();
+				result.Add(dto);
+			}
+
+			return ApiResponse<List<InvoicePeriodListDto>>.Success(result, 200);
+		}
+	}
 }

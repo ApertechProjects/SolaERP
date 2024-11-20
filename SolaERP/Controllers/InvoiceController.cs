@@ -152,5 +152,9 @@ namespace SolaERP.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetInvoiceRegisterPayablesTransactions(int invoiceRegisterId)
           => CreateActionResult(await _invoiceService.GetInvoiceRegisterPayablesTransactions(invoiceRegisterId));
-    }
+
+		[HttpGet("{businessUnitId}")]
+		public async Task<IActionResult> GetPeriodList(int businessUnitId)
+			=> CreateActionResult(await _invoiceService.GetPeriodList(businessUnitId));
+	}
 }
