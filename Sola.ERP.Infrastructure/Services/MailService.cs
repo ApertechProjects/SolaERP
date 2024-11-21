@@ -524,7 +524,7 @@ namespace SolaERP.Infrastructure.Services
                 var key = group.Key;
                 var adminEmails = group.Select(x => x.Email).ToList();
 
-                if (adminEmails.Count > 0)
+                if (adminEmails.Count > 0 && templates.Count>0)
                 {
                     var templateData = templates.First(x => x.Language == key.ToString());
                     VM_InformationAboutRegistrationForAdmin adminApprove = new()
