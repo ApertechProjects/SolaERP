@@ -143,11 +143,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText =
-                    @"EXEC SP_InvoiceRegister_IUD @InvoiceRegisterId,
+					@"EXEC SP_InvoiceRegister_IUD @InvoiceRegisterId,
                                                   @BusinessUnitId,
                                                   @InvoiceType,
                                                   @InvoiceDate,
                                                   @InvoiceReceivedDate,
+                                                  @TransactionDate,
                                                   @InvoiceNo, 
                                                   @SystemInvoiceNo,
                                                   @OrderType,
@@ -184,6 +185,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@InvoiceDate", model.InvoiceDate);
 
                 command.Parameters.AddWithValue(command, "@InvoiceReceivedDate", model.InvoiceReceivedDate);
+
+                command.Parameters.AddWithValue(command, "@TransactionDate", model.TransactionDate);
 
                 command.Parameters.AddWithValue(command, "@InvoiceNo", model.InvoiceNo);
 
@@ -806,7 +809,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                     @Data";
 
             command.Parameters.AddWithValue(command, "@InvoiceRegisterMainId", invoiceRegisterMainId);
-            command.Parameters.AddTableValue(command, "@Data", "InvoiceRegisterDetailsType2", dataTable);
+            command.Parameters.AddTableValue(command, "@Data", "InvoiceRegisterDetailsType", dataTable);
             var value = await command.ExecuteNonQueryAsync();
             return value > 0;
         }

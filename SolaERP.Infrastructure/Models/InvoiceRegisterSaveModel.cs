@@ -9,6 +9,7 @@ namespace SolaERP.Application.Models
         public int InvoiceType { get; set; }
         public DateTime InvoiceDate { get; set; }
         public DateTime InvoiceReceivedDate { get; set; }
+        public DateTime TransactionDate { get; set; }
         public string InvoiceNo { get; set; }
         public string SystemInvoiceNo { get; set; }
         public int? OrderTypeId { get; set; }
