@@ -894,5 +894,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 			return mainData;
 		}
+
+		public async Task<List<InvoiceRegisterOrderDetail>> GetRegisterOrderDetails(int orderMainId)
+		{
+			List<InvoiceRegisterOrderDetail> list = new List<InvoiceRegisterOrderDetail>();
+			using var command = _unitOfWork.CreateCommand() as DbCommand;
+			command.CommandText = @"exec dbo.SP_InvoiceRegisterOrderDetails @OrderMainId";
+			command.Parameters.AddWithValue(command, "@OrderMainId", orderMainId);
+
+			using var reader = await command.ExecuteReaderAsync();
+
+			while (reader.Read())
+				list.Add(reader.GetByEntityStructure<InvoiceRegisterOrderDetail>());
+
+			return list;
+		}
 	}
 }
