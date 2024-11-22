@@ -9,15 +9,15 @@ namespace SolaERP.Application.Dtos.Invoice
     public class InvoiceRegisterOrderDetailDto
 	{
 		public Int64 LineNo { get; set; }
-		public string? Description { get; set; }
+		public string? LineDescription { get; set; }
 		public string ItemCode { get; set; }
 		public decimal OrderAmount { get; set; }
 		public int? Amount { get; set; }
 		public decimal TaxAmount { get; set; }
 		public decimal GrossAmount { get; set; }
 		public string? AccountCode { get; set; }
-		public decimal Quantity { get; set; }
-		public string RUOM { get; set; }
+		public decimal Qty { get; set; }
+		public string UOM { get; set; }
 		public int BaseAmount { get; set; }
 		public int ReportingAmount { get; set; }
 		public int BaseGrossAmount { get; set; }

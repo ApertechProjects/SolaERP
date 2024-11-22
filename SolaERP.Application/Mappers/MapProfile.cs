@@ -736,7 +736,11 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<WithHoldingTaxData, WithHoldingTaxDto>().ReverseMap();
 
-            CreateMap<InvoiceRegisterOrderDetail, InvoiceRegisterOrderDetailDto>().ReverseMap();
+            CreateMap<InvoiceRegisterOrderDetail, InvoiceRegisterOrderDetailDto>()
+                .ForMember(dest => dest.LineDescription, opt => opt.MapFrom(src => src.Description))
+                .ForMember(dest => dest.UOM, opt => opt.MapFrom(src => src.RUOM))
+                .ForMember(dest => dest.Qty, opt => opt.MapFrom(src => src.Quantity))
+                .ReverseMap();
         }
     }
 }

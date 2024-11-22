@@ -8,6 +8,7 @@ using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.AnalysisCode;
+using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Order;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
@@ -167,12 +168,13 @@ public class OrderService : IOrderService
         var order = await _orderRepository.GetHeaderLoadAsync(statusDto.OrderMainId);
         if (order.ApproveStatus == 1)
         {
-            await _vendorService.TransferToIntegration(new CreateVendorRequest
+            CreateVendorRequest request = new CreateVendorRequest
             {
                 VendorCode = order.VendorCode,
                 UserId = userId,
                 BusinessUnitId = order.BusinessUnitId
-            });
+            };
+			await _vendorService.TransferToIntegration(request);
             await _orderRepository.CreateOrderIntegration(order.BusinessUnitId, statusDto.OrderMainId, userId);
         }
 

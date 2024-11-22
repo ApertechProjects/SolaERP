@@ -7,6 +7,6 @@
         public string BusinessUnitName { get; set; }
         public string BankChargeAccount { get; set; }
         public string ConnectionData { get; set; }
-		public bool UseOrderForInvoice { get; set; }
+		public bool? UseOrderForInvoice { get; set; }
 	}
 }
