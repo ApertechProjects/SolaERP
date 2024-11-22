@@ -148,7 +148,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                   @InvoiceType,
                                                   @InvoiceDate,
                                                   @InvoiceReceivedDate,
-                                                  @TransactionDate,
                                                   @InvoiceNo, 
                                                   @SystemInvoiceNo,
                                                   @OrderType,
@@ -171,6 +170,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                   @InvoicePeriod,
                                                   @VendorAccount,
                                                   @WithHoldingTaxAmount,
+                                                  @TransactionDate,
                                                   @UserId,
                                                   @NewInvoiceRegisterId = @NewInvoiceRegisterId OUTPUT 
                                                   select @NewInvoiceRegisterId as NewInvoiceRegisterId";
@@ -185,8 +185,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@InvoiceDate", model.InvoiceDate);
 
                 command.Parameters.AddWithValue(command, "@InvoiceReceivedDate", model.InvoiceReceivedDate);
-
-                command.Parameters.AddWithValue(command, "@TransactionDate", model.TransactionDate);
 
                 command.Parameters.AddWithValue(command, "@InvoiceNo", model.InvoiceNo);
 
@@ -226,7 +224,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     model.VendorAccount);
                 command.Parameters.AddWithValue(command, "@WithHoldingTaxAmount", model.WithHoldingTaxAmount);
 
-                command.Parameters.AddWithValue(command, "@UserId", userId);
+				command.Parameters.AddWithValue(command, "@TransactionDate", model.TransactionDate);
+
+				command.Parameters.AddWithValue(command, "@UserId", userId);
 
                 command.Parameters.Add("@NewInvoiceRegisterId", SqlDbType.Int);
                 command.Parameters["@NewInvoiceRegisterId"].Direction = ParameterDirection.Output;
