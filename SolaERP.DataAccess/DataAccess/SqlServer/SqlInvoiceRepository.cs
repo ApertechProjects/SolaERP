@@ -542,10 +542,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             await using var command = _unitOfWork.CreateCommand() as SqlCommand;
             command.CommandText = @"EXEC SP_InvoiceMatchingDetails_IUD 
                                     @InvoiceMatchingMainid,
-                                    @InvoicesMatchingDetailsType";
+                                    @TVP";
 
             command.Parameters.AddWithValue(command, "@InvoiceMatchingMainid", requestInvoiceMatchingMainid);
-            command.Parameters.AddTableValue(command, "@InvoicesMatchingDetailsType", "InvoicesMatchingDetailsType",
+            command.Parameters.AddTableValue(command, "@TVP", "InvoicesMatchingDetailsType2",
                 dataTable);
             var value = await command.ExecuteNonQueryAsync();
             return value > 0;

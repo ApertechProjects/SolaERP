@@ -8,7 +8,8 @@ public class InvoiceMatchingDetail : BaseEntity
 
 public class InvoicesMatchingDetailsType
 {
-    public int LineNo { get; set; }
+	public int? InvoiceMatchingDetailId { get; set; }
+	public int LineNo { get; set; }
     public string OrderNo { get; set; }
     public int OrderLine { get; set; }
     public string GRNNo { get; set; }
@@ -31,10 +32,22 @@ public class InvoicesMatchingDetailsType
     public decimal AdvanceTotal { get; set; }
     public string AccountCode { get; set; }
     public string ItemCode { get; set; }
+	public decimal? BaseTotal { get; set; }
+	public decimal? ReportingTotal { get; set; }
+	public decimal? WithHoldingTaxAmount { get; set; }
+	public decimal? BaseWithHoldingTaxAmount { get; set; }
+	public decimal? ReportingWithHoldingTaxAmount { get; set; }
+	public decimal? VATAmount { get; set; }
+	public decimal? BaseVATAmount { get; set; }
+	public decimal? ReportingVATAmount { get; set; }
+	public decimal? BaseAdvanceTotal { get; set; }
+	public decimal? ReportingAdvanceTotal { get; set; }
+
 }
 
 public class InvoicesMatchingDetailsTypeDto
 {
+    public int? InvoiceMatchingDetailId { get; set; }
     public int LineNo { get; set; }
     public string OrderNo { get; set; }
     public int OrderLine { get; set; }
@@ -58,4 +71,14 @@ public class InvoicesMatchingDetailsTypeDto
     public decimal AdvanceAmount { get; set; }
     public string AccountCode { get; set; }
     public string ItemCode { get; set; }
+    public decimal? BaseTotal { get; set; }
+    public decimal? ReportingTotal { get; set; }
+    public decimal? WithHoldingTaxAmount { get; set; }
+    public decimal? BaseWithHoldingTaxAmount { get; set; }
+    public decimal? ReportingWithHoldingTaxAmount { get; set; }
+    public decimal? VATAmount { get; set; }
+    public decimal? BaseVATAmount { get; set; }
+    public decimal? ReportingVATAmount { get; set; }
+    public decimal? BaseAdvanceTotal { get; set; }
+    public decimal? ReportingAdvanceTotal { get; set; }
 }
