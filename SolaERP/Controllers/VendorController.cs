@@ -32,7 +32,12 @@ namespace SolaERP.API.Controllers
 		public async Task<IActionResult> GetByTax([FromQuery] string taxId)
 		  => Ok(await _service.GetByTaxAsync(taxId));
 
-
+		[Authorize]
+		[HttpPost]
+		public async Task<IActionResult> RFQVendorResponseChangeStatus([FromBody] VendorRFQStatusChangeRequest request)
+			=> CreateActionResult(await _service.RFQVendorResponseChangeStatus(
+				request.RFQMainId, request.Status, request.VendorCode
+			));
 
 		[Authorize]
 		[HttpGet("{vendorCode}")]
