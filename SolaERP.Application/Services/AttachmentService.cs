@@ -101,7 +101,7 @@ namespace SolaERP.Persistence.Services
                     continue;
                 }
 
-                if (attachment.AttachmentId > 0 || (attachment.AttachmentId < 0 && attachment.Type == 2)) continue;
+                if (attachment.AttachmentId > 0) continue;
 
                 await SaveAttachmentAsync(attachment, sourceType, sourceId);
             }
