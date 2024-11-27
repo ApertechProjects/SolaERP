@@ -95,13 +95,13 @@ namespace SolaERP.Persistence.Services
         {
             foreach (var attachment in attachments)
             {
-                if (attachment.Type == 2)
+                if (attachment.Type == 2 && attachment.AttachmentId > 0)
                 {
                     await DeleteAttachmentAsync(attachment.AttachmentId);
                     continue;
                 }
 
-                if (attachment.AttachmentId > 0) continue;
+                if (attachment.AttachmentId > 0 || (attachment.AttachmentId < 0 && attachment.Type == 2)) continue;
 
                 await SaveAttachmentAsync(attachment, sourceType, sourceId);
             }
