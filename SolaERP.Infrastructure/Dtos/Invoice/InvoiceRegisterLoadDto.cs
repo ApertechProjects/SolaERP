@@ -1,5 +1,6 @@
 ﻿using SolaERP.Application.Dtos.BusinessUnit;
 using SolaERP.Application.Dtos.WithHoldingTax;
+using SolaERP.Application.Dtos.Attachment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,5 +46,6 @@ namespace SolaERP.Application.Dtos.Invoice
         public List<WithHoldingTaxDto> WithHoldingTaxDatas { get; set; }
         public List<TaxDto.TaxDto> TaxDatas { get; set; }
         public List<BaseBusinessUnitDto> BusinessUnits { get; set; }
-    }
+		public List<AttachmentDto> Attachments { get; set; }
+	}
 }

@@ -443,8 +443,14 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.ConvertIdentity(name);
             var main = await _invoiceRepository.GetInvoiceRegisterMainLoad(invoiceRegisterId);
             var details = await _invoiceRepository.GetInvoiceRegisterDetailsLoad(invoiceRegisterId);
+
             var dtoMain = _mapper.Map<InvoiceRegisterLoadDto>(main);
-            dtoMain.Details = _mapper.Map<List<InvoiceRegisterGetDetailsDto>>(details);
+
+			dtoMain.Attachments = await _attachmentService.GetAttachmentsAsync(invoiceRegisterId,
+				SourceType.INV, Modules.Invoices);
+
+			dtoMain.Details = _mapper.Map<List<InvoiceRegisterGetDetailsDto>>(details);
+
             var withHoldingTax = await _supplierRepository.WithHoldingTaxDatas();
             var tax = await _supplierRepository.TaxDatas();
             dtoMain.WithHoldingTaxDatas = _mapper.Map<List<WithHoldingTaxDto>>(withHoldingTax);
