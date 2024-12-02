@@ -16,7 +16,7 @@ namespace SolaERP.Application.Models
         public string ConfirmPassword { get; set; }
         public string PhoneNumber { get; set; }
         public int UserTypeId { get; set; }
-        public int VendorId { get; set; }
+        public int? VendorId { get; set; }
         public int Gender { get; set; }
         public string Buyer { get; set; }
         public string Description { get; set; }
