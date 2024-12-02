@@ -386,6 +386,10 @@ namespace SolaERP.Persistence.Services
             {
                 user.ERPUser = null;
             }
+			if (user.VendorId == 0)
+			{
+				user.VendorId = null;
+			}
 
 			var userEntry = _mapper.Map<User>(user);
 
