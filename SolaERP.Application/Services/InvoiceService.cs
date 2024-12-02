@@ -74,7 +74,7 @@ namespace SolaERP.Persistence.Services
 
                 if (businessUnit.UseOrderForInvoice == false)
                 {
-                    await _invoiceRepository.InvoiceApproveIntegration(model.InvoiceRegisterIds[i].InvoiceRegisterId, userId);
+                    await _invoiceRepository.InvoiceApproveIntegration(model.InvoiceRegisterIds[i].InvoiceRegisterId, userId, model.BusinessUnitId);
 				}
 
 			}

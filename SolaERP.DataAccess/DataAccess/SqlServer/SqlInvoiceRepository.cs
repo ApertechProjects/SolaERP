@@ -1,6 +1,7 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Invoice;
 using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Helper;
@@ -44,18 +45,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-		public async Task<bool> InvoiceApproveIntegration(int invoiceRegisterId, int userId)
+		public async Task<bool> InvoiceApproveIntegration(int invoiceRegisterId, int userId, int businessUnitId)
 		{
-			using (var command = _unitOfWork.CreateCommand() as DbCommand)
-			{
-				command.CommandText =
-					"SET NOCOUNT OFF EXEC dbo.SP_InvoiceRegisterWOOrder_I @InvoiceRegisterId, @UserId";
+			await using var command = _unitOfWork.CreateCommand() as DbCommand;
+			command.CommandText = _businessUnitHelper.BuildQueryForIntegration(businessUnitId,
+				"SP_InvoiceRegisterWOOrder_I @InvoiceRegisterId, @UserId");
 
-				command.Parameters.AddWithValue(command, "@invoiceRegisterId", invoiceRegisterId);
-				command.Parameters.AddWithValue(command, "@UserId", userId);
+			command.Parameters.AddWithValue(command, "@invoiceRegisterId", invoiceRegisterId);
+			command.Parameters.AddWithValue(command, "@UserId", userId);
 
-				return await command.ExecuteNonQueryAsync() > 0;
-			}
+			return await command.ExecuteNonQueryAsync() > 0;
 		}
 
 		public async Task<List<RegisterAll>> RegisterAll(InvoiceRegisterGetModel model, int userId)

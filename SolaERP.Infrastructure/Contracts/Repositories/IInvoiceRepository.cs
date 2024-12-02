@@ -55,6 +55,6 @@ namespace SolaERP.Application.Contracts.Repositories
 		Task DeleteAnalysisNotIncludes(List<int?> invoiceRegisterDetailIds);
 		Task<InvoicePeriod> GetPeriod(int businessUnitId);
 		Task<List<InvoiceRegisterOrderDetail>> GetRegisterOrderDetails(int orderMainId);
-		Task<bool> InvoiceApproveIntegration(int invoiceRegisterId, int userId);
+		Task<bool> InvoiceApproveIntegration(int invoiceRegisterId, int userId, int businessUnitId);
 	}
 }
