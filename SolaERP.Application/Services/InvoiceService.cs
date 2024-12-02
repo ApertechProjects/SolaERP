@@ -69,7 +69,15 @@ namespace SolaERP.Persistence.Services
                     var data = await _invoiceRepository.InvoiceIUD(model.BusinessUnitId,
                         model.InvoiceRegisterIds[i].InvoiceRegisterId, userId);
                 }
-            }
+
+                var businessUnit = await _businessUnitRepository.GetByIdAsync(model.BusinessUnitId);
+
+                if (businessUnit.UseOrderForInvoice == false)
+                {
+                    await _invoiceRepository.InvoiceApproveIntegration(model.InvoiceRegisterIds[i].InvoiceRegisterId, userId);
+				}
+
+			}
 
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(res);

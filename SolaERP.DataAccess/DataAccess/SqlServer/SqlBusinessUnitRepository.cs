@@ -135,8 +135,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                         Address = reader.Get<string>("Address"),
                         Position = reader.Get<string>("Position"),
                         CountryCode = reader.Get<string>("CountryCode"),
-                        FullName = reader.Get<string>("FullName")
-                    };
+                        FullName = reader.Get<string>("FullName"),
+                        UseOrderForInvoice = reader.Get<bool>("UseOrderForInvoice")
+					};
 
                 return result;
             }

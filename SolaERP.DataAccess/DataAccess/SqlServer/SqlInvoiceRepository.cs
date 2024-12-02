@@ -44,7 +44,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<RegisterAll>> RegisterAll(InvoiceRegisterGetModel model, int userId)
+		public async Task<bool> InvoiceApproveIntegration(int invoiceRegisterId, int userId)
+		{
+			using (var command = _unitOfWork.CreateCommand() as DbCommand)
+			{
+				command.CommandText =
+					"SET NOCOUNT OFF EXEC dbo.SP_InvoiceRegisterWOOrder_I @InvoiceRegisterId, @UserId";
+
+				command.Parameters.AddWithValue(command, "@invoiceRegisterId", invoiceRegisterId);
+				command.Parameters.AddWithValue(command, "@UserId", userId);
+
+				return await command.ExecuteNonQueryAsync() > 0;
+			}
+		}
+
+		public async Task<List<RegisterAll>> RegisterAll(InvoiceRegisterGetModel model, int userId)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = @"exec dbo.SP_InvoiceRegisterAll @businessUnitId,@dateFrom,@dateTo,@userId";
