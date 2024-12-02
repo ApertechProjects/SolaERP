@@ -387,7 +387,7 @@ namespace SolaERP.Persistence.Services
                 user.ERPUser = null;
             }
 
-            var userEntry = _mapper.Map<User>(user);
+			var userEntry = _mapper.Map<User>(user);
 
 
             if (!string.IsNullOrEmpty(user.Password))
