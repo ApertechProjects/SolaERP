@@ -302,13 +302,18 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<Application.Dtos.RFQ.UOMDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<bool>> RFQVendorIUDAsync(RFQVendorIUDDto dto, string userIdentity)
+        public async Task<ApiResponse<int>> RFQVendorIUDAsync(RFQVendorIUDDto dto, string userIdentity)
         {
-            var data = _mapper.Map<RFQVendorIUD>(dto);
+			var mainRFQ = await _repository.GetRFQMainAsync(dto.Id);
+
+			if (mainRFQ.ProcurementType == ProcurementType.Bidding && dto.VendorCodes.Count < 2)
+				return ApiResponse<int>.Fail("Vendor Code must be greater than 2", 400);
+
+			var data = _mapper.Map<RFQVendorIUD>(dto);
             var result = await _repository.RFQVendorIUDAsync(data, Convert.ToInt32(userIdentity));
 
             await _unitOfWork.SaveChangesAsync();
-            return result ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Fail(false, 400);
+            return result ? ApiResponse<int>.Success(1, 200) : ApiResponse<int>.Fail(0, 400);
         }
     }
 }
