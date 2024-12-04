@@ -8,6 +8,7 @@ using SolaERP.Application.Dtos.Status;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Currency;
 using SolaERP.Application.Entities.SupplierEvaluation;
+using SolaERP.Persistence.Utils;
 using System.Collections.Generic;
 
 namespace SolaERP.Persistence.Services
@@ -71,7 +72,7 @@ namespace SolaERP.Persistence.Services
             var businessUnit = (await _businessUnitRepository.GetAllAsync())
                 .SingleOrDefault(x => x.BusinessUnitId == businessUnitId);
 
-            var singleResultBaseResult = await GetConvRateDtoAsync(convDtoList, date, currency, businessUnit);
+            var singleResultBaseResult = await CurrencyOps.GetConvRateDtoAsync(convDtoList, date, currency, businessUnit);
 
             var singleResultReport = convDtoList.SingleOrDefault(x =>
                 x.EffFromDateTime <= date
@@ -109,7 +110,7 @@ namespace SolaERP.Persistence.Services
             var businessUnit = (await _businessUnitRepository.GetAllAsync())
                 .SingleOrDefault(x => x.BusinessUnitId == businessUnitId);
 
-            var resultBaseResult = await GetConvRateDtoAsync(convDtoList, date, businessUnit);
+            var resultBaseResult = await CurrencyOps.GetConvRateDtoAsync(convDtoList, date, businessUnit);
 
             var resultReport = convDtoList.SingleOrDefault(x =>
                 x.EffFromDateTime <= date
@@ -151,7 +152,7 @@ namespace SolaERP.Persistence.Services
             var businessUnit = (await _businessUnitRepository.GetAllAsync())
                 .SingleOrDefault(x => x.BusinessUnitId == businessUnitId);
 
-            var result = await GetConvRateDtoAsync(convDtoList, date, currency, businessUnit);
+            var result = await CurrencyOps.GetConvRateDtoAsync(convDtoList, date, currency, businessUnit);
 
             if (result is null)
                 return false;
@@ -159,32 +160,6 @@ namespace SolaERP.Persistence.Services
             return true;
         }
 
-        private async Task<ConvRateDto> GetConvRateDtoAsync(List<ConvRateDto> convDtoList, DateTime date,
-            string currency, BusinessUnits businessUnit)
-        {
-            var singleResultBase = convDtoList.SingleOrDefault(x =>
-                x.EffFromDateTime <= date
-                && x.EffToDateTime >= date
-                && x.CurrCodeFrom == currency + "  "
-                && x.CurrCodeTo == businessUnit.BaseCurrencyCode + "  "
-            );
-
-
-            return singleResultBase;
-        }
-
-        private async Task<List<ConvRateDto>> GetConvRateDtoAsync(List<ConvRateDto> convDtoList, DateTime date, BusinessUnits businessUnit)
-        {
-            var resultBase = convDtoList.Where(x =>
-                x.EffFromDateTime <= date
-                && x.EffToDateTime >= date
-                //&& x.CurrCodeFrom == currency + "  "
-                && x.CurrCodeTo == businessUnit.BaseCurrencyCode + "  "
-            );
-
-
-            return resultBase.ToList();
-        }
 
         public async Task<RejectReasonDto> GetRejectReasonByCode(string code)
         {

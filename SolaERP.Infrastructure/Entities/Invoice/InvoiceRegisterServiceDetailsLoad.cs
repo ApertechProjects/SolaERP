@@ -19,9 +19,13 @@
         public decimal OrderAmount { get; set; }
         public decimal BaseRate { get; set; }
         public decimal ReportingRate { get; set; }
+        public int BaseMultiplyOrDivide { get; set; }
+        public int ReportMultiplyOrDivide { get; set; }
         public decimal BaseTotal { get; set; }
         public decimal ReportingTotal { get; set; }
         public string Description { get; set; }
+        public string BaseCurrency { get; set; }
+        public string ReportCurrency { get; set; }
         public int CatId { get; set; }
         public int AnalysisCode1Id { get; set; }
         public int AnalysisCode2Id { get; set; }
