@@ -1606,7 +1606,7 @@ namespace SolaERP.Persistence.Services
 		private static VM_RegistrationIsPendingAdminApprove GetVM(SupplierRegisterCommand command, User user,
 			EmailTemplateData templateData)
 		{
-			return new()
+			return new((UserRegisterType)user.UserTypeId)
 			{
 				Body = new HtmlString(templateData.Body),
 				CompanyName = command.CompanyInformation.CompanyName,

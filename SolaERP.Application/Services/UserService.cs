@@ -329,9 +329,9 @@ namespace SolaERP.Persistence.Services
             await _unitOfWork.SaveChangesAsync();
             foreach (var item in model)
             {
-                if (item.ApproveStatus == 2)
-                    await _mailService.SendRejectMailToUser(item.Id, response);
-                else
+                //if (item.ApproveStatus == 2)
+                //    await _mailService.SendRejectMailToUser(item.Id, response);
+                //else
                     await _mailService.SendMailToAdminstrationForApproveRegistration(item.Id);
 
                 await _mailService.CheckLastApproveAndSendMailToUser(item.Id, item.Sequence, item.ApproveStatus, response);
@@ -625,7 +625,7 @@ namespace SolaERP.Persistence.Services
         private static VM_RegistrationIsPendingAdminApprove GetVM(string companyName, User user,
          EmailTemplateData templateData)
         {
-            return new()
+            return new((UserRegisterType)user.UserTypeId)
             {
                 Body = new HtmlString(templateData.Body),
                 CompanyName = "",
