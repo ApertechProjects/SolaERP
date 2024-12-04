@@ -8,6 +8,7 @@ using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Groups;
 using SolaERP.Application.Enums;
+using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
 using SolaERP.Infrastructure.Services;
 using SolaERP.Infrastructure.ViewModels;
@@ -57,6 +58,56 @@ namespace SolaERP.Controllers
             return CreateActionResult(await _userService.GetCurrentUserInfo(User.Identity.Name));
         }
 
+		[HttpPost]
+		public async Task<IActionResult> SaveUserAsync([FromForm] UserSaveModel userSaveModel, CancellationToken cancellationToken)
+		{
+			bool signaturePhoto = Validation.PhotoIsValid(userSaveModel.SignaturePhoto);
+			if (!signaturePhoto)
+				return CreateActionResult(ApiResponse<bool>.Fail("photo", $"Only PNG, JPG, JPEG files are allowed", 422));
 
-    }
+			bool profilePhoto = Validation.PhotoIsValid(userSaveModel.UserPhoto);
+			if (!profilePhoto)
+				return CreateActionResult(ApiResponse<bool>.Fail("photo", $"Only PNG, JPG, JPEG files are allowed", 422));
+
+			var user = await _userService.GetUserByEmailAsync(userSaveModel.Email);
+			if (user is not null && (userSaveModel.Id == null || userSaveModel.Id == 0))
+				return CreateActionResult(ApiResponse<bool>.Fail("email", $" This mail is already in use", 422));
+
+			userSaveModel.VerifyToken = Helper.GetVerifyToken(_tokenHandler.CreateRefreshToken());
+
+			var result = await _userService.SaveUserAsync(userSaveModel, cancellationToken);
+
+			if (result.StatusCode == 200)
+			{
+				if (userSaveModel.Id == 0)
+				{
+					var templateDataForVerification =
+						   _emailNotificationService.GetEmailTemplateData(Language.az, EmailTemplateKey.VER).Result;
+					var companyName = _emailNotificationService.GetCompanyName(userSaveModel.Email).Result;
+
+					VM_EmailVerification emailVerification = new VM_EmailVerification
+					{
+						Username = userSaveModel.UserName,
+						Body = new HtmlString(string.Format(templateDataForVerification.Body, userSaveModel.FullName)),
+						CompanyName = companyName,
+						Header = templateDataForVerification.Header,
+						Language = Language.az,
+						Subject = templateDataForVerification.Subject,
+						Token = HttpUtility.HtmlDecode(userSaveModel.VerifyToken),
+					};
+
+					Response.OnCompleted(async () =>
+					{
+						await _mailService.SendUsingTemplate(templateDataForVerification.Subject, emailVerification,
+							emailVerification.TemplateName(), emailVerification.ImageName(),
+							new List<string> { userSaveModel.Email });
+					});
+				}
+			}
+
+			return CreateActionResult(result);
+		}
+
+
+	}
 }
