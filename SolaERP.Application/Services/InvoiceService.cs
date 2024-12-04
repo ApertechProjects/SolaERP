@@ -312,6 +312,8 @@ namespace SolaERP.Persistence.Services
             var dto = _mapper.Map<InvoiceRegisterByOrderMainIdDto>(data);
 			var tax = await _supplierRepository.TaxDatas();
 			dto.TaxDatas = _mapper.Map<List<TaxDto>>(tax);
+			var withHoldingTax = await _supplierRepository.WithHoldingTaxDatas();
+			dto.WithHoldingTaxDatas = _mapper.Map<List<WithHoldingTaxDto>>(withHoldingTax);
 			return ApiResponse<InvoiceRegisterByOrderMainIdDto>.Success(dto, 200);
         }
 
@@ -462,8 +464,8 @@ namespace SolaERP.Persistence.Services
 			dtoMain.Details = _mapper.Map<List<InvoiceRegisterGetDetailsDto>>(details);
 
             var withHoldingTax = await _supplierRepository.WithHoldingTaxDatas();
-            var tax = await _supplierRepository.TaxDatas();
             dtoMain.WithHoldingTaxDatas = _mapper.Map<List<WithHoldingTaxDto>>(withHoldingTax);
+            var tax = await _supplierRepository.TaxDatas();
             dtoMain.TaxDatas = _mapper.Map<List<TaxDto>>(tax);
             var businessUnits = await _businessUnitRepository.GetBusinessUnitListByCurrentUser(userId);
             dtoMain.BusinessUnits = _mapper.Map<List<BaseBusinessUnitDto>>(businessUnits);
