@@ -9,4 +9,8 @@ public class InvoiceMathcingMain : BaseEntity
     public decimal WHT { get; set; }
     public string Comment { get; set; }
     public DateTime TransactionDate { get; set; }
+    public decimal TaxAmount { get; set; }
+    public decimal GrossAmount { get; set; }
+    public decimal OrderAmount { get; set; }
+    public decimal SupplierWHTRate { get; set; }
 }
