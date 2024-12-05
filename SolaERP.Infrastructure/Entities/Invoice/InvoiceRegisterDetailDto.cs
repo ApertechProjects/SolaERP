@@ -37,6 +37,8 @@
         public decimal UnitPrice { get; set; }
         public string Description { get; set; }
         public decimal AdvanceAmount { get; set; }
+        public decimal TaxAmount { get; set; }
+        public decimal GrossAmount { get; set; }
         public int AnalysisCode1Id { get; set; }
         public int AnalysisCode2Id { get; set; }
         public int AnalysisCode3Id { get; set; }
