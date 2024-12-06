@@ -624,6 +624,8 @@ namespace SolaERP.Persistence.Services
 					var userApprovals = await _userRepository.CheckUserApproval(vendorUsers[0]);
 					if (userApprovals)
 						await _mailService.SendMailToAdminstrationForApproveRegistration(Convert.ToInt32(result), changedFields);
+					else
+						await _mailService.SendMailToAdminstrationForApproveRegistrationForAutoApprove(Convert.ToInt32(userIdentity), changedFields);
 				}
 				else
 					await _mailService.SendMailToAdminstrationForApproveRegistrationForAutoApprove(Convert.ToInt32(userIdentity), changedFields);
