@@ -588,50 +588,60 @@ namespace SolaERP.Persistence.Services
 		{
 			try
 			{
-				var result = (await AddAsync2(userIdentity, command, true)).Data;
+				//var result = (await AddAsync2(userIdentity, command, true)).Data;
 
-				await VendorSubmit(result.VendorId);
+				//await VendorSubmit(result.VendorId);
 
-				User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
+				//User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 
-				var vendor = await _vendorRepository.GetHeader(result.VendorId);
+				//var vendor = await _vendorRepository.GetHeader(result.VendorId);
 
-				List<Task> emails = new List<Task>();
+				//List<Task> emails = new List<Task>();
 
-				await _mailService.SendRegistrationPendingMail(Convert.ToInt32(userIdentity));
+				//await _mailService.SendRegistrationPendingMail(Convert.ToInt32(userIdentity));
 
-				var changedFields = new List<string>();
-				if (command.IsRevise)
-				{
-					var previousVendorId = await _vendorRepository.GetVendorPreviousVendorId(result.VendorId);
-					var vendorOld = await _vendorRepository.GetHeader(previousVendorId);
-					var vendorCurrent = await _vendorRepository.GetHeader(result.VendorId);
-					changedFields = Compare.CompareRow(vendorOld, vendorCurrent);
-					if (!await CompareVendorBusinessCategory(previousVendorId, result.VendorId))
-						changedFields.Add("Business Category");
-					if (!await CompareVendorBusinessSector(previousVendorId, result.VendorId))
-						changedFields.Add("Business Sector");
-					if (!await CompareVendorRepresentedCompany(previousVendorId, result.VendorId))
-						changedFields.Add("Represented Company");
-					if (!await CompareVendorRepresentedProduct(previousVendorId, result.VendorId))
-						changedFields.Add("Represented Product");
+				//var changedFields = new List<string>();
+				//if (command.IsRevise)
+				//{
+				//	var previousVendorId = await _vendorRepository.GetVendorPreviousVendorId(result.VendorId);
+				//	var vendorOld = await _vendorRepository.GetHeader(previousVendorId);
+				//	var vendorCurrent = await _vendorRepository.GetHeader(result.VendorId);
+				//	changedFields = Compare.CompareRow(vendorOld, vendorCurrent);
+				//	if (!await CompareVendorBusinessCategory(previousVendorId, result.VendorId))
+				//		changedFields.Add("Business Category");
+				//	if (!await CompareVendorBusinessSector(previousVendorId, result.VendorId))
+				//		changedFields.Add("Business Sector");
+				//	if (!await CompareVendorRepresentedCompany(previousVendorId, result.VendorId))
+				//		changedFields.Add("Represented Company");
+				//	if (!await CompareVendorRepresentedProduct(previousVendorId, result.VendorId))
+				//		changedFields.Add("Represented Product");
 
-				}
+				//}
 
-				var vendorUsers = await _userRepository.GetUserIdsByVendor(result.VendorId);
+				var vendorUsers = await _userRepository.GetUserIdsByVendor(2525);
 				if (vendorUsers.Count > 0)
 				{
 					var userApprovals = await _userRepository.CheckUserApproval(vendorUsers[0]);
 					if (userApprovals)
-						await _mailService.SendMailToAdminstrationForApproveRegistration(Convert.ToInt32(result), changedFields);
+					{
+						Console.WriteLine(vendorUsers[0]);
+						Console.WriteLine("SendMailToAdminstrationForApproveRegistration");
+						await _mailService.SendMailToAdminstrationForApproveRegistration(Convert.ToInt32(userIdentity), null);
+                    }
 					else
-						await _mailService.SendMailToAdminstrationForApproveRegistrationForAutoApprove(Convert.ToInt32(userIdentity), changedFields);
+					{
+						Console.WriteLine("SendMailToAdminstrationForApproveRegistrationForAutoApprove");
+						await _mailService.SendMailToAdminstrationForApproveRegistrationForAutoApprove(Convert.ToInt32(userIdentity), null);
+					}
 				}
 				else
-					await _mailService.SendMailToAdminstrationForApproveRegistrationForAutoApprove(Convert.ToInt32(userIdentity), changedFields);
+				{
+					Console.WriteLine("SendMailToAdminstrationForApproveRegistrationForAutoApprove else");
+					await _mailService.SendMailToAdminstrationForApproveRegistrationForAutoApprove(Convert.ToInt32(userIdentity), null);
+				}
 
 
-				return ApiResponse<EvaluationResultModel>.Success(result, 200);
+				return ApiResponse<EvaluationResultModel>.Success(null, 200);
 			}
 			catch (DueDiligenceException ex)
 			{

@@ -93,10 +93,10 @@ namespace SolaERP.API.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Submit2([FromBody] SupplierRegisterCommand2 command,
+        public async Task<IActionResult> Submit2(
             [FromQuery] bool isRevise = false)
         {
-            return CreateActionResult(await _service.SubmitAsync2(User.Identity.Name, command));
+            return CreateActionResult(await _service.SubmitAsync2(User.Identity.Name, null));
         }
 
         [HttpPost("[action]")]
