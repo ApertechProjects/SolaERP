@@ -570,7 +570,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                     @TVP";
 
             command.Parameters.AddWithValue(command, "@InvoiceMatchingMainid", requestInvoiceMatchingMainid);
-            command.Parameters.AddTableValue(command, "@TVP", "InvoicesMatchingDetailsType_2",
+            command.Parameters.AddTableValue(command, "@TVP", "InvoicesMatchingDetailsType2",
                 dataTable);
             var value = await command.ExecuteNonQueryAsync();
             return value > 0;

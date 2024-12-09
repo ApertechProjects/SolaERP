@@ -44,6 +44,10 @@ public class InvoicesMatchingDetailsType
 	public decimal? ReportingAdvanceTotal { get; set; }
 	public decimal TaxAmount { get; set; }
 	public decimal GrossAmount { get; set; }
+	public decimal BaseGrossAmount { get; set; }
+	public decimal BaseTaxAmount { get; set; }
+	public decimal ReportingTaxAmount { get; set; }
+	public decimal ReportingGrossAmount { get; set; }
 
 }
 
@@ -85,4 +89,9 @@ public class InvoicesMatchingDetailsTypeDto
 	public decimal? ReportingAdvanceTotal { get; set; }
 	public decimal TaxAmount { get; set; }
 	public decimal GrossAmount { get; set; }
+    ////////////////////////////////////////
+    public decimal BaseGrossAmount { get; set; }
+    public decimal BaseTaxAmount { get; set; }
+	public decimal ReportingTaxAmount { get; set; }
+	public decimal ReportingGrossAmount { get; set; }
 }
