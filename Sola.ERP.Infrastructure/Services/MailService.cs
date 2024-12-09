@@ -321,17 +321,19 @@ namespace SolaERP.Infrastructure.Services
                     {
                         await smtpClient.SendMailAsync(message);
                     }
-                    catch (SmtpFailedRecipientException ex)
-                    {
-                        // Handle other exceptions or logging if necessary
-                        // ...
-                    }
-                    catch (SmtpException ex)
-                    {
-                        // Handle other exceptions or logging if necessary
-                        // ...
-                    }
-                }
+					catch (SmtpFailedRecipientException ex)
+					{
+						Console.WriteLine("SmtpFailedRecipientException");
+						// Handle other exceptions or logging if necessary
+						// ...
+					}
+					catch (SmtpException ex)
+					{
+						Console.WriteLine("SmtpException");
+						// Handle other exceptions or logging if necessary
+						// ...
+					}
+				}
             }
 
             return true;
