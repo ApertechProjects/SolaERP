@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Dtos.Mail;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Request;
@@ -679,5 +680,24 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
-    }
+
+		public async Task<RequestMailDto> RequestEmailSendUsers(int requestMainId)
+		{
+			await using var command = _unitOfWork.CreateCommand() as DbCommand;
+			command.CommandText =
+				@"exec dbo.SP_RequestMailSender @RequestMainId";
+			command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+
+			await using DbDataReader reader = await command.ExecuteReaderAsync();
+			RequestMailDto data = new();
+			if (await reader.ReadAsync())
+			{
+                data.BusinessUnitName = reader.Get<string>("BusinessUnitName");
+                data.BuyerEmail = reader.Get<string>("BuyerEmail");
+                data.RequesterEmail = reader.Get<string>("RequesterEmail");
+			}
+
+			return data;
+		}
+	}
 }

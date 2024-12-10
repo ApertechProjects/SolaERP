@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Common;
+using SolaERP.Application.Dtos.Mail;
 using SolaERP.Application.Dtos.Request;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.Models;
@@ -35,5 +36,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<int>> GetDetailIds(int requestMainId);
         Task<List<BuyersAssignment>> GetBuyersAssignment(RequestWFAGetModel model, int userId);
         Task<bool> Retrieve(int requestMainId, int userId);
-    }
+		Task<RequestMailDto> RequestEmailSendUsers(int requestMainId);
+	}
 }
