@@ -17,7 +17,7 @@ namespace SolaERP.Application.Contracts.Services
 		Task<ApiResponse<List<RequestTypesDto>>> GetTypesAsync(int businessUnitId);
 
 		Task<bool> ChangeMainStatusAsync(string name, int requestMainId, int approveStatus, string comment,
-			int rejectReasonId);
+			int rejectReasonId,string businessUnitName,int? sequence,HttpResponse response);
 
 		Task<bool> SendToApproveAsync(string name, List<int> requestMainIds,HttpResponse response);
 

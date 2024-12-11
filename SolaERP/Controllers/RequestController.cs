@@ -1,6 +1,8 @@
 ﻿using AngleSharp.Io;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Ocsp;
+using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Request;
 using SolaERP.Application.Dtos.Shared;
@@ -116,7 +118,8 @@ namespace SolaERP.Controllers
 			for (int i = 0; i < data.RequestDatas.Count; i++)
 			{
 				var res = await _requestService.ChangeMainStatusAsync(User.Identity.Name,
-					data.RequestDatas[i].RequestMainId, data.ApproveStatus, data.Comment, data.RejectReasonId);
+					data.RequestDatas[i].RequestMainId, data.ApproveStatus, data.Comment, data.RejectReasonId, data.BusinessUnitName, data.RequestDatas[i].Sequence, Response);
+
 			}
 
 			return CreateActionResult(ApiResponse<bool>.Success(200));

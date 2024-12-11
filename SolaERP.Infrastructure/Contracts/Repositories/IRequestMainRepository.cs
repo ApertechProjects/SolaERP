@@ -40,5 +40,6 @@ namespace SolaERP.Application.Contracts.Repositories
 		Task<RequestMailDto> RequestEmailSendUsers(int requestMainId);
 		Task<UserList> RequesterMailInRequest(int requestMainId);
 		Task<UserList> BuyerMailInRequest(int requestMainId);
+		Task<string> GetRequestBusinessUnitName(int requestMainId);
 	}
 }

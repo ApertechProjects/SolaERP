@@ -30,6 +30,7 @@ namespace SolaERP.Persistence.Services
 		private readonly IAttachmentService _attachmentService;
 		private readonly IBusinessUnitService _businessUnitService;
 		private readonly IGeneralService _generalService;
+		private readonly IApproveStageService _approveStageService;
 
 		public RequestService(IUnitOfWork unitOfWork,
 			IMapper mapper,
@@ -40,7 +41,8 @@ namespace SolaERP.Persistence.Services
 			IAttachmentService attachmentService,
 			IBusinessUnitService businessUnitService,
 			IGeneralService generalService,
-			IEmailNotificationService emailNotificationService)
+			IEmailNotificationService emailNotificationService,
+			IApproveStageService approveStageService)
 		{
 			_unitOfWork = unitOfWork;
 			_mapper = mapper;
@@ -52,6 +54,7 @@ namespace SolaERP.Persistence.Services
 			_businessUnitService = businessUnitService;
 			_generalService = generalService;
 			_emailNotificationService = emailNotificationService;
+			_approveStageService = approveStageService;
 		}
 
 		public async Task<bool> RemoveDetailAsync(int requestDetailId)
@@ -98,18 +101,32 @@ namespace SolaERP.Persistence.Services
 		}
 
 		public async Task<bool> ChangeMainStatusAsync(string name, int requestMainId, int approveStatus, string comment,
-			int rejectReasonId)
+			int rejectReasonId, string businessUnitName, int? sequence, HttpResponse response)
 		{
 			var userId = await _userRepository.ConvertIdentity(name);
 
-			List<string> failedMailList = new List<string>();
-			var user = await _userRepository.GetByIdAsync(userId);
-
 			var result = await _requestMainRepository.RequestMainChangeStatusAsync(userId, requestMainId, approveStatus,
 				comment, rejectReasonId);
-
-
 			await _unitOfWork.SaveChangesAsync();
+
+			if (result)
+			{
+				var stageCount = await _approveStageService.GetStageCountAsync(Procedures.Request);
+				if (sequence == stageCount && approveStatus == 1)
+				{
+					var requestEmailSendUser = await RequestMailUsers(requestMainId);
+					var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQA);
+					await _mailService.SendMailForRequest(response, templates, requestEmailSendUser, EmailTemplateKey.REQA, sequence, businessUnitName);
+				}
+				else if (approveStatus == 2)
+				{
+					var requestEmailSendUser = await RequestMailUsers(requestMainId);
+					var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQR);
+					await _mailService.SendMailForRequest(response, templates, requestEmailSendUser, EmailTemplateKey.REQR, sequence, businessUnitName);
+				}
+
+			}
+
 
 			return result;
 		}
@@ -124,11 +141,11 @@ namespace SolaERP.Persistence.Services
 			var sendToApproveTasks = requestMainIds.Select(async requestId =>
 			{
 				await _requestMainRepository.SendRequestToApproveAsync(userId, requestId);
-
+				string businessUnitName = await _requestMainRepository.GetRequestBusinessUnitName(requestId);
 				var requestEmailSendUser = await RequestMailUsers(requestId);
 
 				var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQP);
-				await _mailService.SendMailForRequest(response, templates, requestEmailSendUser, EmailTemplateKey.REQP, 1, requestEmailSendUser.BusinessUnitName);
+				await _mailService.SendMailForRequest(response, templates, requestEmailSendUser, EmailTemplateKey.REQP, 1, businessUnitName);
 
 			}).ToList();
 
@@ -136,8 +153,8 @@ namespace SolaERP.Persistence.Services
 			await _unitOfWork.SaveChangesAsync();
 
 
-			bool allSuccess = sendToApproveTasks.All(task => task.Result);
-			return allSuccess;
+			//bool allSuccess = sendToApproveTasks.All(task => task.res);
+			return true;
 		}
 
 		private async Task<List<Application.Dtos.User.UserList>> RequestMailUsers(int requestMainId)
@@ -145,10 +162,10 @@ namespace SolaERP.Persistence.Services
 			List<Application.Dtos.User.UserList> result = new();
 
 			var requesterUser = await _requestMainRepository.RequesterMailInRequest(requestMainId);
-			if (requesterUser is not null)
+			if (requesterUser.FullName is not null)
 				result.Add(requesterUser);
 			var buyerUser = await _requestMainRepository.BuyerMailInRequest(requestMainId);
-			if (buyerUser is not null)
+			if (buyerUser.FullName is not null)
 				result.Add(buyerUser);
 
 			return result;

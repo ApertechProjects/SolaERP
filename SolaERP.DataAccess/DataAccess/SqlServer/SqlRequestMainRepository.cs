@@ -14,7 +14,7 @@ using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
-    public class SqlRequestMainRepository : SqlBaseRepository, IRequestMainRepository
+	public class SqlRequestMainRepository : SqlBaseRepository, IRequestMainRepository
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -741,6 +741,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 			}
 
 			return data;
+		}
+
+		public async Task<string> GetRequestBusinessUnitName(int requestMainId)
+		{
+			await using var command = _unitOfWork.CreateCommand() as DbCommand;
+			command.CommandText =
+				@"exec dbo.SP_GetRequestBusinessUnitName @RequestMainId";
+			command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+
+			await using DbDataReader reader = await command.ExecuteReaderAsync();
+            string result = null;
+			if (await reader.ReadAsync())
+			{
+				result = reader.Get<string>("BusinessUnitName");
+			}
+
+			return result;
 		}
 	}
 }
