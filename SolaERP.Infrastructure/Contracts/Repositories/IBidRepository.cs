@@ -1,10 +1,13 @@
-﻿using SolaERP.Application.Entities.Bid;
+﻿using SolaERP.Application.Dtos.Bid;
+using SolaERP.Application.Entities.Bid;
 
 namespace SolaERP.Application.Contracts.Repositories
 {
     public interface IBidRepository
     {
         Task<List<BidAll>> GetAllAsync(BidAllFilter filter);
+        Task<List<BidAll>> GetDraftAsync(BidAllFilter filter);
+        Task<List<BidAll>> GetSubmittedAsync(BidAllFilter filter);
         Task<List<BidDetailsLoad>> GetBidDetailsAsync(BidDetailsFilter filter);
         Task<BidMainLoad> GetMainLoadAsync(int bidMainId);
         Task<BidIUDResponse> BidMainIUDAsync(BidMain entity);

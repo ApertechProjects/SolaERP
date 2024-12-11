@@ -47,7 +47,23 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<BidAllDto>>.Success(dtos, 200);
         }
 
-        public async Task<ApiResponse<List<BidDetailsLoadDto>>> GetBidDetailsAsync(BidDetailsFilterDto filter)
+		public async Task<ApiResponse<List<BidAllDto>>> GetDraftAsync(BidDraftFilterDto filter)
+		{
+			var data = await _bidRepository.GetDraftAsync(_mapper.Map<BidAllFilter>(filter));
+			var dtos = _mapper.Map<List<BidAllDto>>(data);
+
+			return ApiResponse<List<BidAllDto>>.Success(dtos, 200);
+		}
+
+		public async Task<ApiResponse<List<BidAllDto>>> GetSubmittedAsync(BidDraftFilterDto filter)
+		{
+			var data = await _bidRepository.GetSubmittedAsync(_mapper.Map<BidAllFilter>(filter));
+			var dtos = _mapper.Map<List<BidAllDto>>(data);
+
+			return ApiResponse<List<BidAllDto>>.Success(dtos, 200);
+		}
+
+		public async Task<ApiResponse<List<BidDetailsLoadDto>>> GetBidDetailsAsync(BidDetailsFilterDto filter)
         {
             var data = await _bidRepository.GetBidDetailsAsync(_mapper.Map<BidDetailsFilter>(filter));
             var dtos = _mapper.Map<List<BidDetailsLoadDto>>(data);

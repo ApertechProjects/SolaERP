@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Dtos.Bid;
 using SolaERP.Application.Entities.Bid;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.UnitOfWork;
@@ -115,7 +116,51 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
             return data;
         }
 
-        public async Task<List<BidDetailsLoad>> GetBidDetailsAsync(BidDetailsFilter filter)
+		public async Task<List<BidAll>> GetDraftAsync(BidAllFilter filter)
+		{
+			using var command = _unitOfWork.CreateCommand() as DbCommand;
+			command.CommandText = @"EXEC SP_BidDraft @BusinessUnitId,
+                                        @Emergency,
+                                        @DateFrom,
+                                        @DateTo,
+                                        @ApproveStatus";
+
+			command.Parameters.AddWithValue(command, "@BusinessUnitId", filter.BusinessUnitId);
+			command.Parameters.AddWithValue(command, "@Emergency", filter.Emergency);
+			command.Parameters.AddWithValue(command, "@DateFrom", filter.DateFrom);
+			command.Parameters.AddWithValue(command, "@DateTo", filter.DateTo);
+			command.Parameters.AddWithValue(command, "@ApproveStatus", filter.ApproveStatus);
+
+			using DbDataReader reader = await command.ExecuteReaderAsync();
+			List<BidAll> data = new();
+			while (reader.Read())
+				data.Add(GetBidFromReader(reader));
+			return data;
+		}
+
+		public async Task<List<BidAll>> GetSubmittedAsync(BidAllFilter filter)
+		{
+			using var command = _unitOfWork.CreateCommand() as DbCommand;
+			command.CommandText = @"EXEC SP_BidSubmitted @BusinessUnitId,
+                                        @Emergency,
+                                        @DateFrom,
+                                        @DateTo,
+                                        @ApproveStatus";
+
+			command.Parameters.AddWithValue(command, "@BusinessUnitId", filter.BusinessUnitId);
+			command.Parameters.AddWithValue(command, "@Emergency", filter.Emergency);
+			command.Parameters.AddWithValue(command, "@DateFrom", filter.DateFrom);
+			command.Parameters.AddWithValue(command, "@DateTo", filter.DateTo);
+			command.Parameters.AddWithValue(command, "@ApproveStatus", filter.ApproveStatus);
+
+			using DbDataReader reader = await command.ExecuteReaderAsync();
+			List<BidAll> data = new();
+			while (reader.Read())
+				data.Add(GetBidFromReader(reader));
+			return data;
+		}
+
+		public async Task<List<BidDetailsLoad>> GetBidDetailsAsync(BidDetailsFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = "EXEC SP_BidDetailsLoad @BidMainId";
