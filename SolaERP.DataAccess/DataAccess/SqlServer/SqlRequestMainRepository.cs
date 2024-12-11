@@ -1,5 +1,6 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Mail;
+using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Request;
@@ -695,6 +696,48 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 data.BusinessUnitName = reader.Get<string>("BusinessUnitName");
                 data.BuyerEmail = reader.Get<string>("BuyerEmail");
                 data.RequesterEmail = reader.Get<string>("RequesterEmail");
+			}
+
+			return data;
+		}
+
+		public async Task<UserList> RequesterMailInRequest(int requestMainId)
+		{
+			await using var command = _unitOfWork.CreateCommand() as DbCommand;
+			command.CommandText =
+				@"exec dbo.SP_RequesterMailInRequest @RequestMainId";
+			command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+
+			await using DbDataReader reader = await command.ExecuteReaderAsync();
+			UserList data = new();
+			if (await reader.ReadAsync())
+			{
+				data.Email = reader.Get<string>("Email");
+				data.FullName = reader.Get<string>("FullName");
+				data.UserId = reader.Get<int>("UserId");
+				data.Language = reader.Get<string>("Language");
+				data.RequestNo = reader.Get<string>("RequestNo");
+			}
+
+			return data;
+		}
+
+		public async Task<UserList> BuyerMailInRequest(int requestMainId)
+		{
+			await using var command = _unitOfWork.CreateCommand() as DbCommand;
+			command.CommandText =
+				@"exec dbo.SP_BuyerMailInRequest @RequestMainId";
+			command.Parameters.AddWithValue(command, "@RequestMainId", requestMainId);
+
+			await using DbDataReader reader = await command.ExecuteReaderAsync();
+			UserList data = new();
+			if (await reader.ReadAsync())
+			{
+				data.Email = reader.Get<string>("Email");
+				data.FullName = reader.Get<string>("FullName");
+				data.UserId = reader.Get<int>("UserId");
+				data.Language = reader.Get<string>("Language");
+				data.RequestNo = reader.Get<string>("RequestNo");
 			}
 
 			return data;

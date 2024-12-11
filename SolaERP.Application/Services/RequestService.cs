@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using SolaERP.Application.Entities.General;
 using System.Xml.Linq;
 using SolaERP.Application.Dtos.Mail;
+using SolaERP.Application.Dtos.UserDto;
 
 namespace SolaERP.Persistence.Services
 {
@@ -135,17 +136,23 @@ namespace SolaERP.Persistence.Services
 			await Task.WhenAll(sendToApproveTasks);
 			await _unitOfWork.SaveChangesAsync();
 
-		
+
 			bool allSuccess = sendToApproveTasks.All(task => task.Result);
 			return allSuccess;
 		}
 
-		private List<string> RequestMailUsers(RequestMailDto mailDto)
+		private async Task<List<Application.Dtos.User.UserList>> RequestMailUsers(int requestMainId)
 		{
-			List<string> users = new List<string>();
-			users.Add(mailDto.BuyerEmail);
-			users.Add(mailDto.RequesterEmail);
-			return users;
+			List<Application.Dtos.User.UserList> result = new();
+
+			var requesterUser = await _requestMainRepository.RequesterMailInRequest(requestMainId);
+			if (requesterUser is not null)
+				result.Add(requesterUser);
+			var buyerUser = await _requestMainRepository.BuyerMailInRequest(requestMainId);
+			if (buyerUser is not null)
+				result.Add(buyerUser);
+
+			return result;
 		}
 
 		public async Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId,
@@ -435,10 +442,6 @@ namespace SolaERP.Persistence.Services
 			return ApiResponse<bool>.Success(true);
 		}
 
-		public async Task<RequestMailDto> RequestEmailSendUsers(int requestMainId)
-		{
-			var user = await _requestMainRepository.RequestEmailSendUsers(requestMainId);
-			return user;
-		}
+
 	}
 }
