@@ -630,7 +630,8 @@ namespace SolaERP.Infrastructure.Services
 				VM_UserApprove userApprove = new VM_UserApprove(user.Language.ToString())
 				{
 					CompanyName = companyName,
-					Language = (Language)Enum.Parse(typeof(Language), user.Language.ToString())
+					Language = (Language)Enum.Parse(typeof(Language), user.Language.ToString()),
+					Username = user.FullName,
 				};
 
 				Task RegEmail = SendUsingTemplate(userApprove.Subject, userApprove,

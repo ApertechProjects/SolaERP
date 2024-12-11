@@ -18,7 +18,8 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> GetAll([FromQuery] BidAllFilterDto filter)
             => CreateActionResult(await _bidService.GetAllAsync(filter));
 
-        [HttpGet("[action]/Details")]
+
+		[HttpGet("[action]/Details")]
         public async Task<IActionResult> Get([FromQuery] BidDetailsFilterDto filter)
             => CreateActionResult(await _bidService.GetBidDetailsAsync(filter));
 
@@ -29,10 +30,6 @@ namespace SolaERP.API.Controllers
         [HttpGet("[action]/{businessUnitId}")]
         public async Task<IActionResult> GetRFQList(int businessUnitId)
             => CreateActionResult(await _bidService.GetRfqListAsync(User.Identity.Name, businessUnitId));
-
-        //[HttpGet("[action]/{bidMainId}")]
-        //public async Task<IActionResult> GetCardWithLists(int bidMainId)
-        //    => CreateActionResult(await _bidService.GetBidCardAsync(bidMainId));
 
         [HttpPost]
         public async Task<IActionResult> Save(BidMainDto bidMain)

@@ -45,8 +45,8 @@ namespace SolaERP.Infrastructure.ViewModels
         {
             return this.Language switch
             {
-                Language.az => "Apertech Şirkəti tərəfindən hazırlanıb.",
-                Language.en => "Developed by Apertech Team",
+                Language.az => "GL Şirkəti tərəfindən hazırlanıb.",
+                Language.en => "Developed by GL Group",
             };
         }
     }
