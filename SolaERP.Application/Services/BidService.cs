@@ -133,6 +133,10 @@ namespace SolaERP.Persistence.Services
             }
 
             saveResponse.BidDetailIds = detailIds;
+            if (bidMain.Status == 1)
+            {
+               await _rfqRepository.ChangeRFQVendorResponseStatus(bidMain.RFQMainId, bidMain.VendorCode);
+            }
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<BidIUDResponse>.Success(saveResponse, 200);
         }

@@ -755,6 +755,8 @@ namespace SolaERP.Persistence.Mappers
 				.ForMember(dest => dest.UOM, opt => opt.MapFrom(src => src.RUOM))
 				.ForMember(dest => dest.Qty, opt => opt.MapFrom(src => src.Quantity))
 				.ReverseMap();
+
+			CreateMap<RfqVendors, RFQVendorsDto>().ReverseMap();
 		}
 	}
 }
