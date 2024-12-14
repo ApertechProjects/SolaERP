@@ -69,7 +69,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return bidComparisonId;
         }
 
-        public async Task<bool> ApproveComparisonAsync(BidComparisonApprove entity)
+		public async Task<bool> SaveComparisonBids(int bidComparisonId, DataTable dataTable)
+		{
+			await using var command = _unitOfWork.CreateCommand() as SqlCommand;
+			command.CommandText = @"EXEC SP_BidComparisonBids_IUD @TVP, @BidComparisonId";
+
+			command.Parameters.AddWithValue(command, "@BidComparisonId", bidComparisonId == 0 ? null : bidComparisonId);
+			command.Parameters.AddTableValue(command, "@TVP", "BidComparisonBidsType", dataTable);
+			var value = await command.ExecuteNonQueryAsync();
+
+			return value > 0;
+		}
+
+		public async Task<bool> ApproveComparisonAsync(BidComparisonApprove entity)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = @"EXEC SP_BidComparisonApprove @BidMainId,

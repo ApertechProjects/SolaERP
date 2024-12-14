@@ -9,6 +9,8 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
 using SolaERP.Application.Enums;
 using System.Diagnostics;
+using SolaERP.Application.Entities.Payment;
+using SolaERP.Application.Models;
 
 namespace SolaERP.Persistence.Services
 {
@@ -56,7 +58,16 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(true, 200);
         }
 
-        public async Task<ApiResponse<bool>> ApproveBidComparisonsAsync(
+		public async Task<ApiResponse<bool>> SaveBidsAsync(
+			BidComparisonBidsCreateRequestDto comparison)
+		{
+			var table = comparison.Bids.ConvertListOfCLassToDataTable();
+			await _bidComparisonRepository.SaveComparisonBids(comparison.BidComparisonId, table);
+
+			return ApiResponse<bool>.Success(true, 200);
+		}
+
+		public async Task<ApiResponse<bool>> ApproveBidComparisonsAsync(
             List<BidComparisonApproveDto> bidComparisonApproves, string userIdentity)
         {
             foreach (var bidComparisonApprove in bidComparisonApproves)

@@ -16,6 +16,7 @@ namespace SolaERP.Application.Contracts.Services
     {
         Task<bool> OrderCreateFromApproveBid(CreateOrderFromBidDto entity);
         Task<ApiResponse<bool>> SaveBidComparisonAsync(BidComparisonCreateDto bidComparison);
+        Task<ApiResponse<bool>> SaveBidsAsync(BidComparisonBidsCreateRequestDto bidComparison);
         Task<ApiResponse<bool>> ApproveBidComparisonsAsync(List<BidComparisonApproveDto> bidComparisonApproves, string userIdentity);
         Task<ApiResponse<bool>> SendComparisonToApproveAsync(BidComparisonSendToApproveDto bidComparisonSendToApprove);
         Task<ApiResponse<List<BidComparisonAllDto>>> GetBidComparisonAllAsync(BidComparisonAllFilterDto filter);

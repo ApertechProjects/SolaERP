@@ -5,6 +5,7 @@ using SolaERP.Application.Entities.RFQ;
 using SolaERP.Application.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace SolaERP.Application.Contracts.Repositories
     public interface IBidComparisonRepository
     {
         Task<int> AddComparisonAsync(BidComparisonIUD entity);
+        Task<bool> SaveComparisonBids(int bidComparisonId, DataTable dataTable);
         Task<bool> ApproveComparisonAsync(BidComparisonApprove entity);
         Task<bool> OrderCreateFromApproveBid(CreateOrderFromBidDto entity);
         Task<bool> SendComparisonToApprove(BidComparisonSendToApprove filter);

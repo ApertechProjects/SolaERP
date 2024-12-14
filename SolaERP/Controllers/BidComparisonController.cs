@@ -52,7 +52,14 @@ namespace SolaERP.API.Controllers
             return CreateActionResult(await _bidComparisonService.SaveBidComparisonAsync(comparison));
         }
 
-        [HttpPost("[action]")]
+		[HttpPost("[action]")]
+		public async Task<IActionResult> SaveComparisonBids(BidComparisonBidsCreateRequestDto comparison)
+		{
+			comparison.UserId = Convert.ToInt32(User.Identity.Name);
+			return CreateActionResult(await _bidComparisonService.SaveBidsAsync(comparison));
+		}
+
+		[HttpPost("[action]")]
         public async Task<IActionResult> ChangeComparisonStatuses(List<BidComparisonApproveDto> approves)
         {
             return CreateActionResult(
