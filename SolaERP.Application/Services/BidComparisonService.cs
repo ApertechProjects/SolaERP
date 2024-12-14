@@ -179,7 +179,59 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<BidComparisonDto>.Success(comparison, 200);
         }
 
-        public async Task<ApiResponse<List<BidComparisonDraftLoadDto>>> GetComparisonDraft(
+		public async Task<ApiResponse<BidComparisonLoadDto>> GetBidComparisonLoadAsync(BidComparisonFilterDto filter)
+		{
+			var comparison = new BidComparisonLoadDto();
+			var headerFilter = new BidComparisonHeaderFilter { RFQMainId = filter.RFQMainId, UserId = filter.UserId };
+			var header = await _bidComparisonRepository.GetComparisonHeader(headerFilter);
+			header.RequiredOnSiteDate = header.RequiredOnSiteDate.ConvertDateToValidDate();
+			header.SentDate = header.SentDate.ConvertDateToValidDate();
+			header.RFQDate = header.RFQDate.ConvertDateToValidDate();
+			header.DesiredDeliveryDate = header.DesiredDeliveryDate.ConvertDateToValidDate();
+			header.ComparisonDate = header.ComparisonDate.ConvertDateToValidDate();
+			header.RFQDeadline = header.RFQDeadline.ConvertDateToValidDate();
+			header.Entrydate = header.Entrydate.ConvertDateToValidDate();
+			header.Comparisondeadline = header.Comparisondeadline.ConvertDateToValidDate();
+			header.Attachments = await _attachmentService.GetAttachmentsAsync(header.BidComparisonId,
+				SourceType.BID_COMP, Modules.BidComparison);
+
+			comparison.BidComparisonHeader = _mapper.Map<BidComparisonHeaderLoadDto>(header);
+
+			var singleSourceFilter = new BidComparisonSingleSourceReasonsFilter { RFQMainId = filter.RFQMainId };
+			var singleSourceReasons =
+				await _bidComparisonRepository.GetComparisonSingleSourceReasons(singleSourceFilter);
+			comparison.BidComparisonHeader.SingleSourceReasons =
+				_mapper.Map<List<BidComparisonSingleSourceReasonsLoadDto>>(singleSourceReasons);
+
+			var rfqSingleSourceReasons =
+				await _rfqRepository.GetSingleSourceReasons(comparison.BidComparisonHeader.RFQMainId);
+			comparison.BidComparisonHeader.RFQSingleSourceReasons =
+				_mapper.Map<List<RFQSingleSourceReasonsLoadDto>>(rfqSingleSourceReasons);
+
+			//Bids
+			var bidHeaderFilter = new BidComparisonBidHeaderFilter
+			{ RFQMainId = filter.RFQMainId, BidComparisonId = filter.BidComparisonId, UserId = filter.UserId };
+			comparison.Bids = await _bidComparisonRepository.GetComparisonBidsLoad(bidHeaderFilter);
+
+            //Approval infos
+			var approvalInformationFilter = new BidComparisonApprovalInformationFilter { RFQMainId = filter.RFQMainId };
+			var approvalInformations =
+				await _bidComparisonRepository.GetComparisonApprovalInformations(approvalInformationFilter);
+			foreach (var item in approvalInformations)
+			{
+				item.SignaturePhoto = _fileUploadService.GetFileLink(item.SignaturePhoto, Modules.Users);
+				item.UserPhoto = _fileUploadService.GetFileLink(item.UserPhoto, Modules.Users);
+			}
+
+			comparison.ApprovalInformations =
+				_mapper.Map<List<BidComparisonApprovalInformationLoadDto>>(approvalInformations);
+			foreach (var item in comparison.ApprovalInformations)
+				item.ApproveDate = item.ApproveDate.ConvertDateToValidDate();
+
+			return ApiResponse<BidComparisonLoadDto>.Success(comparison, 200);
+		}
+
+		public async Task<ApiResponse<List<BidComparisonDraftLoadDto>>> GetComparisonDraft(
             BidComparisonDraftFilterDto filterDto)
         {
             var filter = _mapper.Map<BidComparisonDraftFilter>(filterDto);

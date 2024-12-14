@@ -5,6 +5,7 @@ namespace SolaERP.Application.Dtos.BidComparison
     public class BidComparisonFilterDto
     {
         public int RFQMainId { get; set; }
+        public int? BidComparisonId { get; set; }
         [JsonIgnore]
         public int UserId { get; set; }
     }

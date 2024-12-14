@@ -305,7 +305,46 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return data;
         }
 
-        public async Task<BidComparisonHeaderLoad> GetComparisonHeader(BidComparisonHeaderFilter filter)
+		public async Task<List<BidComparisonBidDto>> GetComparisonBidsLoad(BidComparisonBidHeaderFilter filter)
+		{
+			using var command = _unitOfWork.CreateCommand() as DbCommand;
+			var data = new List<BidComparisonBidDto>();
+			command.CommandText = "EXEC SP_BidComparisonBidsLoad @BidcomparisonId, @RFQMainId";
+
+            var bidComparisonId = filter.BidComparisonId == 0 ? null : filter.BidComparisonId;
+
+			command.Parameters.AddWithValue(command, "@BidcomparisonId", bidComparisonId);
+			command.Parameters.AddWithValue(command, "@RFQMainId", filter.RFQMainId);
+
+			using var reader = await command.ExecuteReaderAsync();
+			while (await reader.ReadAsync())
+			{
+				data.Add(new BidComparisonBidDto
+				{
+					LineNo = reader.Get<int>("LineNo"),
+					Quantity = reader.Get<decimal>("Quantity"),
+					UOM = reader.Get<string>("UOM"),
+					RFQItem = reader.Get<string>("RFQItem"),
+					VendorName = reader.Get<string>("VendorName"),
+					BidItem = reader.Get<string>("BidItem"),
+					SelectedQTY = reader.Get<int>("SelectedQTY"),
+					BidQuantity = reader.Get<decimal>("BidQuantity"),
+					PUOM = reader.Get<string>("PUOM"),
+					CurrencyCode = reader.Get<string>("CurrencyCode"),
+					UnitPrice = reader.Get<decimal>("UnitPrice"),
+					DiscountedAmount = reader.Get<decimal>("DiscountedAmount"),
+					ReportingAmount = reader.Get<decimal>("ReportingAmount"),
+					DeliverytermName = reader.Get<string>("DeliverytermName"),
+					DeliveryTime = reader.Get<string>("DeliveryTime"),
+					PaymentTermName = reader.Get<string>("PaymentTermName"),
+					Score = reader.Get<decimal>("Score"),
+				});
+			}
+
+			return data;
+		}
+
+		public async Task<BidComparisonHeaderLoad> GetComparisonHeader(BidComparisonHeaderFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = "EXEC SP_BidComparisonHeaderLoad @RFQMainId, @UserId";

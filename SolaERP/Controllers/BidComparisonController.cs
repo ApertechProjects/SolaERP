@@ -33,7 +33,19 @@ namespace SolaERP.API.Controllers
             return CreateActionResult(await _bidComparisonService.GetBidComparisonAsync(filter));
         }
 
-        [HttpPost("[action]")]
+		[HttpGet("[action]")]
+		public async Task<IActionResult> GetComparisonLoad(int rfqMainId, int bidComparisonId)
+		{
+			BidComparisonFilterDto filter = new()
+			{
+				UserId = Convert.ToInt32(User.Identity.Name),
+				RFQMainId = rfqMainId,
+                BidComparisonId = bidComparisonId
+			};
+			return CreateActionResult(await _bidComparisonService.GetBidComparisonLoadAsync(filter));
+		}
+
+		[HttpPost("[action]")]
         public async Task<IActionResult> AddComparison(BidComparisonCreateDto comparison)
         {
             comparison.UserId = Convert.ToInt32(User.Identity.Name);
