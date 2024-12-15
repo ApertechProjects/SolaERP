@@ -350,6 +350,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 					DeliveryTime = reader.Get<string>("DeliveryTime"),
 					PaymentTermName = reader.Get<string>("PaymentTermName"),
 					Score = reader.Get<decimal>("Score"),
+					BidDetailId = reader.Get<int>("BidDetailId"),
 				});
 			}
 
