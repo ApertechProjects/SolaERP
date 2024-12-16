@@ -65,8 +65,8 @@ namespace SolaERP.Persistence.Services
 			BidComparisonBidsCreateRequestDto comparison)
 		{
 			var table = comparison.Bids.ConvertListOfCLassToDataTable();
-			await _bidComparisonRepository.SaveComparisonBids(comparison.BidComparisonId, table);
-
+			var result = await _bidComparisonRepository.SaveComparisonBids(comparison.BidComparisonId, table);
+			await _unitOfWork.SaveChangesAsync();
 			return ApiResponse<bool>.Success(true, 200);
 		}
 
