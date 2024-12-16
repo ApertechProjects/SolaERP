@@ -44,7 +44,7 @@ namespace SolaERP.Persistence.Services
             _attachmentService = attachmentService;
         }
 
-        public async Task<ApiResponse<bool>> SaveBidComparisonAsync(BidComparisonCreateDto bidComparison)
+        public async Task<ApiResponse<BidComparisonCreateResponseDto>> SaveBidComparisonAsync(BidComparisonCreateDto bidComparison)
         {
             var entity = _mapper.Map<BidComparisonIUD>(bidComparison);
             var saveResponse = await _bidComparisonRepository.AddComparisonAsync(entity);
@@ -55,7 +55,10 @@ namespace SolaERP.Persistence.Services
 
             await _unitOfWork.SaveChangesAsync();
 
-            return ApiResponse<bool>.Success(true, 200);
+			BidComparisonCreateResponseDto bidComparisonCreateResponseDto = new BidComparisonCreateResponseDto();
+            bidComparisonCreateResponseDto.BidComparisonId = saveResponse;
+
+			return ApiResponse<BidComparisonCreateResponseDto>.Success(bidComparisonCreateResponseDto, 200);
         }
 
 		public async Task<ApiResponse<bool>> SaveBidsAsync(
