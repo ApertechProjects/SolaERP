@@ -23,6 +23,7 @@ namespace SolaERP.Persistence.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
+      
         public string CreateRefreshToken()
         {
             byte[] number = new byte[32];
@@ -32,7 +33,19 @@ namespace SolaERP.Persistence.Services
 
         }
 
-        public async Task<Token> GenerateJwtTokenAsync(int days, UserRegisterModel user)
+        //private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        //{
+        //    var jwtSettings = _configuration.GetSection("JwtSettings");
+        //    var tokenValidationParameters = new TokenValidationParameters
+        //    {
+        //        ValidateAudience = true,
+        //        ValidateIssuer = true,
+        //        ValidateIssuerSigningKey = true,
+        //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SECRET")));
+        //    };
+        //}
+
+        public async Task<Token> GenerateJwtTokenAsync(int hour, UserRegisterModel user)
         {
             Token result = await Task.Run(async () =>
             {
@@ -40,7 +53,7 @@ namespace SolaERP.Persistence.Services
                 SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:SecurityKey"]));
                 SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 
-                token.Expiration = DateTime.Now.AddDays(days);
+                token.Expiration = DateTime.Now.AddHours(hour);
                 SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Audience = _configuration["Token:Audience"],
