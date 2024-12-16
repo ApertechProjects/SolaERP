@@ -123,7 +123,7 @@ namespace SolaERP.Controllers
             {
                 await _userService.UpdateSessionAsync(user.Id, 1);
                 await _userService.UpdateUserLastActivity(user.Id);
-                var token = await _tokenHandler.GenerateJwtTokenAsync(30, userdto);
+                var token = await _tokenHandler.GenerateJwtTokenAsync(1, userdto);
                 await _userService.UpdateUserIdentifierAsync(user.Id, token.RefreshToken, token.Expiration, 5);
 
                 var result = await _userService.CheckUserVerifyByVendor(dto.Email);
