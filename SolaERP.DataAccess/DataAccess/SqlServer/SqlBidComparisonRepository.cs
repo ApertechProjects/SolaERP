@@ -75,7 +75,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 			command.CommandText = @"EXEC SP_BidComparisonBids_IUD @TVP, @BidComparisonId";
 
 			command.Parameters.AddWithValue(command, "@BidComparisonId", bidComparisonId == 0 ? null : bidComparisonId);
-			command.Parameters.AddTableValue(command, "@TVP", "BidComparisonBidsType", dataTable);
+			command.Parameters.AddTableValue(command, "@TVP", "BidComparisonBidsType2", dataTable);
 			var value = await command.ExecuteNonQueryAsync();
 
 			return value > 0;
