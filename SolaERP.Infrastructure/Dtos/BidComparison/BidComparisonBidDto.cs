@@ -11,7 +11,7 @@
         public int BidDetailId { get; set; }
         public int SelectedQTY { get; set; }
         public decimal BidQuantity { get; set; }
-        public decimal BidComparisonBidId { get; set; }
+        public int BidComparisonBidId { get; set; }
         public decimal RfqDetailId { get; set; }
         public string PUOM { get; set; }
         public string CurrencyCode { get; set; }
