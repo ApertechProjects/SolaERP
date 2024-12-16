@@ -12,5 +12,6 @@ namespace SolaERP.Application.Contracts.Services
         string CreateRefreshToken();
         string GetAccessToken();
 
+        Task<Token> CreateToken(bool populateExp);
     }
 }
