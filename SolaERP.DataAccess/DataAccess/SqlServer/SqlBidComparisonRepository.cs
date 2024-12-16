@@ -353,6 +353,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 					BidDetailId = reader.Get<int>("BidDetailId"),
 					RfqDetailId = reader.Get<int>("RfqDetailid"),
 					BidComparisonBidId = reader.Get<int>("BidComparisonBidId"),
+                    IsSelected = reader.Get<bool>("IsSelected")
 				});
 			}
 
