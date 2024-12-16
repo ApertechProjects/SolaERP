@@ -11,7 +11,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<List<Claim>> GetUserClaimsAsync(UserRegisterModel dto);
         string CreateRefreshToken();
         string GetAccessToken();
-
-        Task<Token> CreateToken(bool populateExp);
+        Token CreateAccessToken(int minute);
     }
 }
