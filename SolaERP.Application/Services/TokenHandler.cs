@@ -53,11 +53,11 @@ namespace SolaERP.Persistence.Services
 
 		//	var jwtSecurityToken = securityToken as JwtSecurityToken;
 
-  //          if (jwtSecurityToken is null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256))
-  //          {
-                
-  //          }
-  //      }
+		//	if (jwtSecurityToken is null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,StringComparison.InvariantCultureIgnoreCase))
+		//	{
+
+		//	}
+		//}
 
 
 		public async Task<Token> GenerateJwtTokenAsync(int hour, UserRegisterModel user)
