@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Group;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.User;
@@ -12,49 +13,51 @@ using UserList = SolaERP.Application.Dtos.User.UserList;
 
 namespace SolaERP.Application.Contracts.Services
 {
-    public interface IUserService
-    {
-        Task<ApiResponse<List<UserListDto>>> GetUserListAsync();
-        Task<UserDto> GetUserByIdAsync(int userId);
-        Task<UserDto> GetUserByEmailAsync(string email);
-        Task<ApiResponse<NoContentDto>> UpdateUserIdentifierAsync(int userId, string refreshToken, DateTime expirationDate, int addOnAccessTokenDate);
-        Task<ApiResponse<string>> SendResetPasswordEmail(string email);
-        Task<int> GetIdentityNameAsIntAsync(string name);
-        Task<ApiResponse<bool>> ResetPasswordAsync(ResetPasswordModel resetPasswordRequestDto);
-        Task<ApiResponse<List<ActiveUserDto>>> GetActiveUsersAsync();
-        Task<ApiResponse<List<ActiveUserDto>>> GetActiveUsersWithoutCurrentUserAsync(string name);
-        Task<ApiResponse<List<UserMainDto>>> GetUserWFAAsync(string name, int userStatus, int userType);
-        Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string name, int userStatus, int userType);
-        Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string name, int userStatust);
-        Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string name, int userStatus);
-        Task<ApiResponse<bool>> UserChangeStatusAsync(string name, UserChangeStatusModel model, HttpResponse response);
-        Task<ApiResponse<bool>> UserChangeStatusAsync(string name, List<UserChangeStatusModel> model, HttpResponse response);
-        Task<ApiResponse<int>> SaveUserAsync(UserSaveModel user, CancellationToken cancellationToken);
-        Task<ApiResponse<int>> UserRegisterAsync(UserRegisterModel model, HttpResponse response);
-        Task<ApiResponse<UserLoadDto>> GetUserInfoAsync(int userId, string token);
-        Task<ApiResponse<List<ERPUserDto>>> GetERPUserAsync();
-        Task<ApiResponse<bool>> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel);
-        Task<ApiResponse<int>> DeleteUserAsync(DeleteUser deleteUser);
-        Task<bool> UpdateSessionAsync(int userId, int updateCommand);
-        Task<ApiResponse<List<UsersByGroupDto>>> GetUsersByGroupIdAsync(int groupId);
-        Task<ApiResponse<bool>> AddGroupToUserAsync(List<int> groupsIds, int userId);
-        Task<ApiResponse<bool>> DeleteGroupFromUserAsync(List<int> groupsIds, int userId);
-        Task<ApiResponse<UserDto>> GetUserByNameAsync(string name, string token);
-        Task<ApiResponse<UserDto>> GetCurrentUserInfo(string name);
-        Task<ApiResponse<bool>> ConfirmEmail(string verifyToken);
-        Task<string> CheckUserType(string verifyToken);
-        Task<bool> CheckEmailIsVerified(string email);
-        Task<UserData> GetUserDataByVerifyTokenAsync(string verifyToken);
-        Task<List<string>> GetRegistratedUsersAsync(int sequence, Language language);
-        Task<bool> CheckUserVerifyByVendor(string email);
-        Task<List<UserList>> UsersRequestDetails(int? requestDetailId, int? sequence, ApproveStatus status);
-        Task<List<UserList>> UsersForRequestMain(int requestMainId, int? sequence, ApproveStatus status);
-        Task UpdateUserLastActivity(int id);
-        Task<ApiResponse<bool>> CheckVerifyCode(int verificationCode);
-        Task<ApiResponse<List<UserReportHasAccessDto>>> GetUserReportAccess(string fileId);
-        Task<ApiResponse<List<UserReportFileAccess>>> GetUserReportAccessByCurrentUser(string name);
-        Task<ApiResponse<bool>> ChangeUserLanguage(string name, string language);
-        Task<ApiResponse<bool>> UserSendToApprove(string name);
-        Task<int> UserApprovalCount(int userId);
-    }
+	public interface IUserService
+	{
+		Task<ApiResponse<List<UserListDto>>> GetUserListAsync();
+		Task<UserDto> GetUserByIdAsync(int userId);
+		Task<UserDto> GetUserByEmailAsync(string email);
+		Task<ApiResponse<NoContentDto>> UpdateUserIdentifierAsync(int userId, string refreshToken, DateTime expirationDate, int addOnAccessTokenDate);
+		Task<ApiResponse<string>> SendResetPasswordEmail(string email);
+		Task<int> GetIdentityNameAsIntAsync(string name);
+		Task<ApiResponse<bool>> ResetPasswordAsync(ResetPasswordModel resetPasswordRequestDto);
+		Task<ApiResponse<List<ActiveUserDto>>> GetActiveUsersAsync();
+		Task<ApiResponse<List<ActiveUserDto>>> GetActiveUsersWithoutCurrentUserAsync(string name);
+		Task<ApiResponse<List<UserMainDto>>> GetUserWFAAsync(string name, int userStatus, int userType);
+		Task<ApiResponse<List<UserMainDto>>> GetUserAllAsync(string name, int userStatus, int userType);
+		Task<ApiResponse<List<UserMainDto>>> GetUserCompanyAsync(string name, int userStatust);
+		Task<ApiResponse<List<UserMainDto>>> GetUserVendorAsync(string name, int userStatus);
+		Task<ApiResponse<bool>> UserChangeStatusAsync(string name, UserChangeStatusModel model, HttpResponse response);
+		Task<ApiResponse<bool>> UserChangeStatusAsync(string name, List<UserChangeStatusModel> model, HttpResponse response);
+		Task<ApiResponse<int>> SaveUserAsync(UserSaveModel user, CancellationToken cancellationToken);
+		Task<ApiResponse<int>> UserRegisterAsync(UserRegisterModel model, HttpResponse response);
+		Task<ApiResponse<UserLoadDto>> GetUserInfoAsync(int userId, string token);
+		Task<ApiResponse<List<ERPUserDto>>> GetERPUserAsync();
+		Task<ApiResponse<bool>> ChangeUserPasswordAsync(ChangeUserPasswordModel passwordModel);
+		Task<ApiResponse<int>> DeleteUserAsync(DeleteUser deleteUser);
+		Task<bool> UpdateSessionAsync(int userId, int updateCommand);
+		Task<ApiResponse<List<UsersByGroupDto>>> GetUsersByGroupIdAsync(int groupId);
+		Task<ApiResponse<bool>> AddGroupToUserAsync(List<int> groupsIds, int userId);
+		Task<ApiResponse<bool>> DeleteGroupFromUserAsync(List<int> groupsIds, int userId);
+		Task<ApiResponse<UserDto>> GetUserByNameAsync(string name, string token);
+		Task<ApiResponse<UserDto>> GetCurrentUserInfo(string name);
+		Task<ApiResponse<bool>> ConfirmEmail(string verifyToken);
+		Task<string> CheckUserType(string verifyToken);
+		Task<bool> CheckEmailIsVerified(string email);
+		Task<UserData> GetUserDataByVerifyTokenAsync(string verifyToken);
+		Task<List<string>> GetRegistratedUsersAsync(int sequence, Language language);
+		Task<bool> CheckUserVerifyByVendor(string email);
+		Task<List<UserList>> UsersRequestDetails(int? requestDetailId, int? sequence, ApproveStatus status);
+		Task<List<UserList>> UsersForRequestMain(int requestMainId, int? sequence, ApproveStatus status);
+		Task UpdateUserLastActivity(int id);
+		Task<ApiResponse<bool>> CheckVerifyCode(int verificationCode);
+		Task<ApiResponse<List<UserReportHasAccessDto>>> GetUserReportAccess(string fileId);
+		Task<ApiResponse<List<UserReportFileAccess>>> GetUserReportAccessByCurrentUser(string name);
+		Task<ApiResponse<bool>> ChangeUserLanguage(string name, string language);
+		Task<ApiResponse<bool>> UserSendToApprove(string name);
+		Task<int> UserApprovalCount(int userId);
+		Task<ApiResponse<Token>> RefreshTokenLogin(string refreshToken);
+
+	}
 }

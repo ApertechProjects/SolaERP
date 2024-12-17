@@ -12,83 +12,105 @@ using System.Text;
 
 namespace SolaERP.Persistence.Services
 {
-    public class JwtTokenHandler : ITokenHandler
-    {
-        private readonly IConfiguration _configuration;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+	public class JwtTokenHandler : ITokenHandler
+	{
+		private readonly IConfiguration _configuration;
+		private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public JwtTokenHandler(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
-        {
-            _configuration = configuration;
-            _httpContextAccessor = httpContextAccessor;
-        }
-
-        public string CreateRefreshToken()
-        {
-            byte[] number = new byte[32];
-            using RandomNumberGenerator random = RandomNumberGenerator.Create();
-            random.GetBytes(number);
-            return Convert.ToBase64String(number);
-
-        }
-
-        public async Task<Token> GenerateJwtTokenAsync(int days, UserRegisterModel user)
-        {
-            Token result = await Task.Run(async () =>
-            {
-                Token token = new Token();
-                SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:SecurityKey"]));
-                SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
-
-                token.Expiration = DateTime.Now.AddDays(days);
-                SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Audience = _configuration["Token:Audience"],
-                    Issuer = _configuration["Token:Issuer"],
-                    Expires = token.Expiration,
-                    NotBefore = DateTime.UtcNow,
-                    Subject = new ClaimsIdentity(await GetUserClaimsAsync(user)),
-                    SigningCredentials = signingCredentials
-
-                };
-
-                JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-                JwtSecurityToken securityToken = tokenHandler.CreateJwtSecurityToken(tokenDescriptor);
-
-                token.AccessToken = tokenHandler.WriteToken(securityToken);
-                token.RefreshToken = CreateRefreshToken();
-                return token;
-            });
-            return result;
-        }
-
-        public string GetAccessToken()
-        {
-            if (_httpContextAccessor.HttpContext.Request.Headers.TryGetValue("Authorization", out var authHeader) &&
-              authHeader.ToString().StartsWith("Bearer "))
-            {
-                var accessToken = authHeader.ToString().Substring("Bearer ".Length);
-                return accessToken;
-            }
-            return null;
-        }
-
-        public async Task<List<Claim>> GetUserClaimsAsync(UserRegisterModel user)
-        {
-            var claims = await Task.Run(() =>
-            {
-                var value = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name,user.FullName.ToString()),
-                    new Claim(ClaimTypes.Email,user.Email),
-                    new Claim(ClaimTypes.NameIdentifier,user.UserId.ToString())
-                };
-                return value;
-            });
-
-            return claims;
-        }
+		public JwtTokenHandler(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+		{
+			_configuration = configuration;
+			_httpContextAccessor = httpContextAccessor;
+		}
 
 
-    }
+		public string CreateRefreshToken()
+		{
+			byte[] number = new byte[32];
+			using RandomNumberGenerator random = RandomNumberGenerator.Create();
+			random.GetBytes(number);
+			return Convert.ToBase64String(number);
+
+		}
+
+
+		public async Task<Token> GenerateJwtTokenAsync(int hour, UserRegisterModel user)
+		{
+			Token result = await Task.Run(async () =>
+			{
+				Token token = new Token();
+				SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:SecurityKey"]));
+				SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+
+				token.Expiration = DateTime.Now.AddDays(14);
+				SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+				{
+					Audience = _configuration["Token:Audience"],
+					Issuer = _configuration["Token:Issuer"],
+					Expires = token.Expiration,
+					NotBefore = DateTime.UtcNow,
+					Subject = new ClaimsIdentity(await GetUserClaimsAsync(user)),
+					SigningCredentials = signingCredentials
+
+				};
+
+				JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+				JwtSecurityToken securityToken = tokenHandler.CreateJwtSecurityToken(tokenDescriptor);
+
+				token.AccessToken = tokenHandler.WriteToken(securityToken);
+				token.RefreshToken = CreateRefreshToken();
+				return token;
+			});
+			return result;
+		}
+
+		public string GetAccessToken()
+		{
+			if (_httpContextAccessor.HttpContext.Request.Headers.TryGetValue("Authorization", out var authHeader) &&
+			  authHeader.ToString().StartsWith("Bearer "))
+			{
+				var accessToken = authHeader.ToString().Substring("Bearer ".Length);
+				return accessToken;
+			}
+			return null;
+		}
+
+		public async Task<List<Claim>> GetUserClaimsAsync(UserRegisterModel user)
+		{
+			var claims = await Task.Run(() =>
+			{
+				var value = new List<Claim>
+				{
+					new Claim(ClaimTypes.Name,user.FullName.ToString()),
+					new Claim(ClaimTypes.Email,user.Email),
+					new Claim(ClaimTypes.NameIdentifier,user.UserId.ToString())
+				};
+				return value;
+			});
+
+			return claims;
+		}
+
+		public Token CreateAccessToken(int minute)
+		{
+			Token token = new();
+
+			SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(_configuration["Token:SecurityKey"]));
+
+			SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256);
+
+			token.Expiration = DateTime.UtcNow.AddMinutes(minute);
+			JwtSecurityToken securityToken = new(
+			audience: _configuration["Token:Audience"],
+			issuer: _configuration["Token:Issuer"],
+			expires: token.Expiration,
+			notBefore: DateTime.UtcNow.AddMinutes(1),
+			signingCredentials: signingCredentials
+				);
+
+			JwtSecurityTokenHandler tokenHandler = new();
+			token.AccessToken = tokenHandler.WriteToken(securityToken);
+			return token;
+		}
+	}
 }
