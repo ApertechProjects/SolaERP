@@ -310,5 +310,12 @@ namespace SolaERP.Persistence.Services
             await _unitOfWork.SaveChangesAsync();
             return result ? ApiResponse<bool>.Success(true, 200) : ApiResponse<bool>.Fail(false, 400);
         }
-    }
+
+		public async Task<bool> ChangeRFQVendorResponseStatus(int rfqMainId, string vendorCode)
+		{
+			var result = await _repository.ChangeRFQVendorResponseStatus(rfqMainId, vendorCode);
+
+			return result;
+		}
+	}
 }
