@@ -19,4 +19,5 @@ public class MatchingMainDto
     public decimal OrderAmount { get; set; }
     public decimal SupplierWHTRate { get; set; }
     public decimal Tax { get; set; }
+    public int InvoicePeriod { get; set; }
 }
