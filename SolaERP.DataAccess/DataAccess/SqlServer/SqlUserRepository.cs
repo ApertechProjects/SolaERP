@@ -308,13 +308,12 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 		{
 			using (var command = _unitOfWork.CreateCommand() as DbCommand)
 			{
-				command.CommandText = "SP_UPDATE_USER_REFRESH_TOKEN"; //@USERID,@USERTOKEN";
+				command.CommandText = "exec dbo.SP_UPDATE_USER_REFRESH_TOKEN @USERID,@USERTOKEN,@EXPIRATION_DATE";
 
 				command.Parameters.AddWithValue(command, "@USERID", userId);
 				command.Parameters.AddWithValue(command, "@USERTOKEN", token);
 				command.Parameters.AddWithValue(command, "@EXPIRATION_DATE",
 					expirationDate.AddSeconds(refreshTokenLifeTime));
-				command.CommandType = CommandType.StoredProcedure;
 
 				var result = await command.ExecuteNonQueryAsync();
 
@@ -1121,6 +1120,23 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 			}
 
 			return result;
+		}
+
+		public async Task<User> GetUserByRefreshToken(string refreshToken)
+		{
+			using (var command = _unitOfWork.CreateCommand() as DbCommand)
+			{
+				command.CommandText = "SELECT * FROM [Config].[AppUser] where RefreshToken=@refreshToken";
+				command.Parameters.AddWithValue(command, "@refreshToken", refreshToken);
+
+				using var reader = await command.ExecuteReaderAsync();
+
+				User user = new();
+				if (reader.Read())
+					user = GetFromReader(reader);
+
+				return user;
+			}
 		}
 	}
 	#endregion
