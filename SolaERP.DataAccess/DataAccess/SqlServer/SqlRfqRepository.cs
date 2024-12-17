@@ -625,6 +625,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return datas;
         }
 
-        #endregion
-    }
+		public async Task<bool> ChangeRFQVendorResponseStatus(int rfqMainId, string vendorCode)
+		{
+			using (var command = _unitOfWork.CreateCommand() as DbCommand)
+			{
+				command.CommandText = @"set nocount off  UPDATE Procurement.RFQVendorResponse
+										SET Status = 6
+										WHERE RFQMainId = @rfqMainId,VendorCode = @vendorCode";
+
+				command.Parameters.AddWithValue(command, "@rfqMainId", rfqMainId);
+				command.Parameters.AddWithValue(command, "@vendorCode", vendorCode);
+
+				var res = await command.ExecuteNonQueryAsync();
+				return res > 0;
+			}
+		}
+		#endregion
+	}
 }
