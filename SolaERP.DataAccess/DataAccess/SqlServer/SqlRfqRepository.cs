@@ -656,7 +656,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 			{
 				command.CommandText = @"set nocount off  UPDATE Procurement.RFQVendorResponse
 										SET Status = 6
-										WHERE RFQMainId = @rfqMainId,VendorCode = @vendorCode";
+										WHERE RFQMainId = @rfqMainId and VendorCode = @vendorCode";
 
 				command.Parameters.AddWithValue(command, "@rfqMainId", rfqMainId);
 				command.Parameters.AddWithValue(command, "@vendorCode", vendorCode);
