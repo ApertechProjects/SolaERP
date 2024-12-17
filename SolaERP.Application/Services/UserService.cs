@@ -7,6 +7,7 @@ using Renci.SshNet.Common;
 using SolaERP.Application.Constants;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Auth;
 using SolaERP.Application.Dtos.Group;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.User;
@@ -665,5 +666,17 @@ namespace SolaERP.Persistence.Services
 			return data;
 		}
 
+		public async Task<ApiResponse<Token>> RefreshTokenLogin(string refreshToken)
+		{
+			var user = await _userRepository.GetUserByRefreshToken(refreshToken);
+			if (user != null && user.RefreshTokenEndDate > DateTime.UtcNow)
+			{
+				Token token = _tokenHandler.CreateAccessToken(15);
+				await _userRepository.UpdateUserTokenAsync(user.Id, token.RefreshToken, token.Expiration, 15);
+				return ApiResponse<Token>.Success(token, 200);
+			}
+			else
+				return ApiResponse<Token>.Fail("User not found", 400);
+		}
 	}
 }

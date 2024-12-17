@@ -42,7 +42,7 @@ namespace SolaERP.Persistence.Services
 				SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:SecurityKey"]));
 				SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 
-				token.Expiration = DateTime.Now.AddHours(hour);
+				token.Expiration = DateTime.Now.AddDays(14);
 				SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
 				{
 					Audience = _configuration["Token:Audience"],
@@ -97,13 +97,20 @@ namespace SolaERP.Persistence.Services
 
 			SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(_configuration["Token:SecurityKey"]));
 
-			SigningCredentials signingCredentials = new(securityKey,SecurityAlgorithms.HmacSha256);
+			SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256);
 
 			token.Expiration = DateTime.UtcNow.AddMinutes(minute);
 			JwtSecurityToken securityToken = new(
-			{
-				Audiences
-			};
+			audience: _configuration["Token:Audience"],
+			issuer: _configuration["Token:Issuer"],
+			expires: token.Expiration,
+			notBefore: DateTime.UtcNow.AddMinutes(1),
+			signingCredentials: signingCredentials
+				);
+
+			JwtSecurityTokenHandler tokenHandler = new();
+			token.AccessToken = tokenHandler.WriteToken(securityToken);
+			return token;
 		}
 	}
 }

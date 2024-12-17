@@ -76,6 +76,7 @@ namespace SolaERP.Application.Contracts.Repositories
 		Task<int> UserApprovalCount(int userId);
 		Task<List<VendorUserForMail>> GetVendorUsersForMail(int vendorId);
 		Task<bool> CheckUserApproval(int userId);
+		Task<User> GetUserByRefreshToken(string refreshToken);
 	}
 
 	public enum Filetype
