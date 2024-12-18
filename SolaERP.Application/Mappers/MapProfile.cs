@@ -722,6 +722,8 @@ namespace SolaERP.Persistence.Mappers
 			CreateMap<VendorUserForMail, VendorUserForMailDto>().ReverseMap();
 
 			CreateMap<VendorBusinessCategory, VendorBusinessCategoryDto>().ReverseMap();
+
+			CreateMap<RFQVendors, RFQVendorsDto>().ReverseMap();
 		}
 	}
 }

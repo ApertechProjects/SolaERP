@@ -640,6 +640,32 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 				return res > 0;
 			}
 		}
+
+		public async Task<List<RFQVendors>> GetRfqVendors(int rfqMainId)
+		{
+			await using var command = _unitOfWork.CreateCommand() as DbCommand;
+			command.CommandText = @"select CAST(ROW_NUMBER() OVER(ORDER BY RFQVendorResponseId ASC) AS INT) AS RowNumber, vr.VendorCode,v.VendorName
+                                    from Procurement.RFQVendorResponse vr
+                                    INNER JOIN Procurement.Vendors v on
+                                    vr.VendorCode = v.VendorCode
+                                    where RFQMainId = @RfqMainId
+                                    GROUP by RFQVendorResponseId,vr.VendorCode,v.VendorName";
+			command.Parameters.AddWithValue(command, "@RfqmainId", rfqMainId);
+
+			await using DbDataReader reader = await command.ExecuteReaderAsync();
+			List<RFQVendors> datas = new();
+			while (await reader.ReadAsync())
+			{
+				datas.Add(new RFQVendors
+				{
+					RowNumber = reader.Get<int>("RowNumber"),
+					VendorCode = reader.Get<string>("VendorCode"),
+					VendorName = reader.Get<string>("VendorName")
+				});
+			}
+
+			return datas;
+		}
 		#endregion
 	}
 }
