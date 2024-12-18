@@ -8,6 +8,7 @@ namespace SolaERP.Application.Dtos.Bid
 {
 	public class RFQVendorsDto
 	{
+		public int RowNumber { get; set; }
 		public string VendorCode { get; set; }
 		public string VendorName { get; set; }
 	}

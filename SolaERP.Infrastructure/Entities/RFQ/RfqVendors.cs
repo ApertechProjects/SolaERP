@@ -8,7 +8,8 @@ namespace SolaERP.Application.Entities.RFQ
 {
 	public class RfqVendors : BaseEntity
 	{
-		public string VendorCode { get; set; }
+        public int RowNumber { get; set; }
+        public string VendorCode { get; set; }
 		public string VendorName { get; set; }
 	}
 }
