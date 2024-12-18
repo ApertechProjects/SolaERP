@@ -33,33 +33,33 @@ namespace SolaERP.API.Controllers
             return CreateActionResult(await _bidComparisonService.GetBidComparisonAsync(filter));
         }
 
-		[HttpGet("[action]")]
-		public async Task<IActionResult> GetComparisonLoad(int rfqMainId, int bidComparisonId)
-		{
-			BidComparisonFilterDto filter = new()
-			{
-				UserId = Convert.ToInt32(User.Identity.Name),
-				RFQMainId = rfqMainId,
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetComparisonLoad(int rfqMainId, int bidComparisonId)
+        {
+            BidComparisonFilterDto filter = new()
+            {
+                UserId = Convert.ToInt32(User.Identity.Name),
+                RFQMainId = rfqMainId,
                 BidComparisonId = bidComparisonId
-			};
-			return CreateActionResult(await _bidComparisonService.GetBidComparisonLoadAsync(filter));
-		}
+            };
+            return CreateActionResult(await _bidComparisonService.GetBidComparisonLoadAsync(filter));
+        }
 
-		[HttpPost("[action]")]
+        [HttpPost("[action]")]
         public async Task<IActionResult> AddComparison(BidComparisonCreateDto comparison)
         {
             comparison.UserId = Convert.ToInt32(User.Identity.Name);
             return CreateActionResult(await _bidComparisonService.SaveBidComparisonAsync(comparison));
         }
 
-		[HttpPost("[action]")]
-		public async Task<IActionResult> SaveComparisonBids(BidComparisonBidsCreateRequestDto comparison)
-		{
-			comparison.UserId = Convert.ToInt32(User.Identity.Name);
-			return CreateActionResult(await _bidComparisonService.SaveBidsAsync(comparison));
-		}
+        [HttpPost("[action]")]
+        public async Task<IActionResult> SaveComparisonBids(BidComparisonBidsCreateRequestDto comparison)
+        {
+            comparison.UserId = Convert.ToInt32(User.Identity.Name);
+            return CreateActionResult(await _bidComparisonService.SaveBidsAsync(comparison));
+        }
 
-		[HttpPost("[action]")]
+        [HttpPost("[action]")]
         public async Task<IActionResult> ChangeComparisonStatuses(List<BidComparisonApproveDto> approves)
         {
             return CreateActionResult(
@@ -118,6 +118,18 @@ namespace SolaERP.API.Controllers
         {
             request.UserId = Convert.ToInt32(User.Identity.Name);
             return CreateActionResult(await _bidComparisonService.HoldBidComparison(request));
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> BidComparisonSummarySave([FromBody] List<BidComparisonSummaryDto> request)
+        {
+            return CreateActionResult(await _bidComparisonService.BidComparisonSummarySave(request));
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> BidComparisonSummaryLoad(int bidComparisonId)
+        {
+            return CreateActionResult(await _bidComparisonService.BidComparisonSummaryLoad(bidComparisonId));
         }
     }
 }

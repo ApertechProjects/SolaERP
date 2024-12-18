@@ -6,6 +6,7 @@ using SolaERP.Application.Entities.BidComparison;
 using SolaERP.Application.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,5 +31,8 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<BidComparisonNotReleasedLoadDto>>> GetComparisonNotReleased(BidComparisonNotReleasedFilterDto filterDto);
         Task<ApiResponse<List<BidComparisonRejectedLoadDto>>> GetComparisonRejected(BidComparisonRejectedFilterDto filterDto);
         Task<ApiResponse<bool>> HoldBidComparison(HoldBidComparisonRequest request);
+
+        Task<ApiResponse<bool>> BidComparisonSummarySave(List<BidComparisonSummaryDto> summaryDto);
+        Task<ApiResponse<List<BidComparisonSummaryDto>>> BidComparisonSummaryLoad(int bidComparisonId);
     }
 }

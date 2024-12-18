@@ -19,7 +19,7 @@ namespace SolaERP.Persistence.Utils
                 table.Columns.Add(propertyInfo.Name, Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType);
             }
 
-            foreach (var person in list)
+            foreach (var item in list)
             {
                 DataRow row = table.NewRow();
                 foreach (PropertyInfo property in properties)
@@ -27,7 +27,7 @@ namespace SolaERP.Persistence.Utils
                     if (property.GetCustomAttributes(typeof(NotIncludeAttribute), true).Any())
                         continue;
 
-                    row[property.Name] = property.GetValue(person, null) ?? DBNull.Value;
+                    row[property.Name] = property.GetValue(item, null) ?? DBNull.Value;
                 }
                 table.Rows.Add(row);
             }

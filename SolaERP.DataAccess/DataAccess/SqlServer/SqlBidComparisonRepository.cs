@@ -20,6 +20,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -69,19 +70,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return bidComparisonId;
         }
 
-		public async Task<bool> SaveComparisonBids(int bidComparisonId, DataTable dataTable)
-		{
-			await using var command = _unitOfWork.CreateCommand() as SqlCommand;
-			command.CommandText = @"EXEC SP_BidComparisonBids_IUD @TVP, @BidComparisonId";
+        public async Task<bool> SaveComparisonBids(int bidComparisonId, DataTable dataTable)
+        {
+            await using var command = _unitOfWork.CreateCommand() as SqlCommand;
+            command.CommandText = @"EXEC SP_BidComparisonBids_IUD @TVP, @BidComparisonId";
 
-			command.Parameters.AddWithValue(command, "@BidComparisonId", bidComparisonId == 0 ? null : bidComparisonId);
-			command.Parameters.AddTableValue(command, "@TVP", "BidComparisonBidsType2", dataTable);
-			var value = await command.ExecuteNonQueryAsync();
+            command.Parameters.AddWithValue(command, "@BidComparisonId", bidComparisonId == 0 ? null : bidComparisonId);
+            command.Parameters.AddTableValue(command, "@TVP", "BidComparisonBidsType2", dataTable);
+            var value = await command.ExecuteNonQueryAsync();
 
-			return value > 0;
-		}
+            return value > 0;
+        }
 
-		public async Task<bool> ApproveComparisonAsync(BidComparisonApprove entity)
+        public async Task<bool> ApproveComparisonAsync(BidComparisonApprove entity)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = @"EXEC SP_BidComparisonApprove @BidMainId,
@@ -91,7 +92,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                         @UserId,
                                         @Comment,
                                         @RejectReasonId";
-        
+
 
             command.Parameters.AddWithValue(command, "@BidMainId", entity.BidMainId);
 
@@ -317,50 +318,50 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return data;
         }
 
-		public async Task<List<BidComparisonBidDto>> GetComparisonBidsLoad(BidComparisonBidHeaderFilter filter)
-		{
-			using var command = _unitOfWork.CreateCommand() as DbCommand;
-			var data = new List<BidComparisonBidDto>();
-			command.CommandText = "EXEC SP_BidComparisonBidsLoad @BidcomparisonId, @RFQMainId";
+        public async Task<List<BidComparisonBidDto>> GetComparisonBidsLoad(BidComparisonBidHeaderFilter filter)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            var data = new List<BidComparisonBidDto>();
+            command.CommandText = "EXEC SP_BidComparisonBidsLoad @BidcomparisonId, @RFQMainId";
 
             var bidComparisonId = filter.BidComparisonId == 0 ? null : filter.BidComparisonId;
 
-			command.Parameters.AddWithValue(command, "@BidcomparisonId", bidComparisonId);
-			command.Parameters.AddWithValue(command, "@RFQMainId", filter.RFQMainId);
+            command.Parameters.AddWithValue(command, "@BidcomparisonId", bidComparisonId);
+            command.Parameters.AddWithValue(command, "@RFQMainId", filter.RFQMainId);
 
-			using var reader = await command.ExecuteReaderAsync();
-			while (await reader.ReadAsync())
-			{
-				data.Add(new BidComparisonBidDto
-				{
-					LineNo = reader.Get<int>("LineNo"),
-					Quantity = reader.Get<decimal>("Quantity"),
-					UOM = reader.Get<string>("UOM"),
-					RFQItem = reader.Get<string>("RFQItem"),
-					VendorName = reader.Get<string>("VendorName"),
-					BidItem = reader.Get<string>("BidItem"),
-					SelectedQTY = reader.Get<int>("SelectedQTY"),
-					BidQuantity = reader.Get<decimal>("BidQuantity"),
-					PUOM = reader.Get<string>("PUOM"),
-					CurrencyCode = reader.Get<string>("CurrencyCode"),
-					UnitPrice = reader.Get<decimal>("UnitPrice"),
-					DiscountedAmount = reader.Get<decimal>("DiscountedAmount"),
-					ReportingAmount = reader.Get<decimal>("ReportingAmount"),
-					DeliverytermName = reader.Get<string>("DeliverytermName"),
-					DeliveryTime = reader.Get<string>("DeliveryTime"),
-					PaymentTermName = reader.Get<string>("PaymentTermName"),
-					Score = reader.Get<decimal>("Score"),
-					BidDetailId = reader.Get<int>("BidDetailId"),
-					RfqDetailId = reader.Get<int>("RfqDetailid"),
-					BidComparisonBidId = reader.Get<int>("BidComparisonBidId"),
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                data.Add(new BidComparisonBidDto
+                {
+                    LineNo = reader.Get<int>("LineNo"),
+                    Quantity = reader.Get<decimal>("Quantity"),
+                    UOM = reader.Get<string>("UOM"),
+                    RFQItem = reader.Get<string>("RFQItem"),
+                    VendorName = reader.Get<string>("VendorName"),
+                    BidItem = reader.Get<string>("BidItem"),
+                    SelectedQTY = reader.Get<int>("SelectedQTY"),
+                    BidQuantity = reader.Get<decimal>("BidQuantity"),
+                    PUOM = reader.Get<string>("PUOM"),
+                    CurrencyCode = reader.Get<string>("CurrencyCode"),
+                    UnitPrice = reader.Get<decimal>("UnitPrice"),
+                    DiscountedAmount = reader.Get<decimal>("DiscountedAmount"),
+                    ReportingAmount = reader.Get<decimal>("ReportingAmount"),
+                    DeliverytermName = reader.Get<string>("DeliverytermName"),
+                    DeliveryTime = reader.Get<string>("DeliveryTime"),
+                    PaymentTermName = reader.Get<string>("PaymentTermName"),
+                    Score = reader.Get<decimal>("Score"),
+                    BidDetailId = reader.Get<int>("BidDetailId"),
+                    RfqDetailId = reader.Get<int>("RfqDetailid"),
+                    BidComparisonBidId = reader.Get<int>("BidComparisonBidId"),
                     IsSelected = reader.Get<bool>("IsSelected")
-				});
-			}
+                });
+            }
 
-			return data;
-		}
+            return data;
+        }
 
-		public async Task<BidComparisonHeaderLoad> GetComparisonHeader(BidComparisonHeaderFilter filter)
+        public async Task<BidComparisonHeaderLoad> GetComparisonHeader(BidComparisonHeaderFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = "EXEC SP_BidComparisonHeaderLoad @RFQMainId, @UserId";
@@ -633,6 +634,40 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 
             return await command.ExecuteNonQueryAsync() > 0;
+        }
+
+        public async Task<bool> BidComparisonSummarySave(DataTable dataTable)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_BidComparisonSummary_IUD @tvp";
+                command.Parameters.AddTableValue(command, "@tvp", "BidComparisonSummaryType", dataTable);
+                var value = await command.ExecuteNonQueryAsync();
+                return value > 0;
+            }
+        }
+
+        public async Task<List<BidComparisonSummary>> BidComparisonSummaryLoad(int bidComparisonId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            var data = new List<BidComparisonSummary>();
+            command.CommandText = "EXEC SP_BidComparisonSummaryLoad @bidComparisonId";
+
+            command.Parameters.AddWithValue(command, "@bidComparisonId", bidComparisonId);
+
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                data.Add(new BidComparisonSummary
+                {
+                    BidComparisonId = reader.Get<int>("BidComparisonId"),
+                    BidComparisonSummaryId = reader.Get<int>("BidComparisonSummaryId"),
+                    NormalizationCost = reader.Get<decimal>("NormalizationCost"),
+                    VendorCode = reader.Get<string>("VendorCode"),
+                });
+            }
+
+            return data;
         }
     }
 }

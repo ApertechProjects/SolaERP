@@ -36,5 +36,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<BidComparisonNotReleasedLoad>> GetComparisonNotReleased(BidComparisonNotReleasedFilter filter);
         Task<List<BidComparisonRejectedLoad>> GetComparisonRejected(BidComparisonRejectedFilter filter);
         Task<bool> HoldBidComparison(HoldBidComparisonRequest request);
+        Task<bool> BidComparisonSummarySave(DataTable dataTable);
+        Task<List<BidComparisonSummary>> BidComparisonSummaryLoad(int bidComparisonId);
     }
 }
