@@ -77,6 +77,9 @@
     <Content Update="wwwroot\sources\templates\UserReject.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\sources\templates\RFQClose.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\sources\templates\VendorReject.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

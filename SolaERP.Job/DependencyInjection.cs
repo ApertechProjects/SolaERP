@@ -108,6 +108,7 @@ namespace SolaERP.Job
             services.ConfigureOptions<EmailSetupIsSent3ForAssignedBuyer>();
         }
 
+        [Obsolete]
         public static void AddCbarData(this IServiceCollection services)
         {
             services.AddQuartz(options =>
@@ -123,7 +124,21 @@ namespace SolaERP.Job
             services.ConfigureOptions<CbarBackgroundJobSetup>();
         }
 
+		//[Obsolete]
+		//public static void RFQCloseMailForVendors(this IServiceCollection services)
+		//{
+		//	services.AddQuartz(options =>
+		//	{
+		//		options.UseMicrosoftDependencyInjectionJobFactory();
+		//	});
 
+		//	services.AddQuartzHostedService(options =>
+		//	{
+		//		options.WaitForJobsToComplete = true;
+		//	});
 
-    }
+		//	services.ConfigureOptions<EmailSetupIsSent>();
+		//}
+
+	}
 }

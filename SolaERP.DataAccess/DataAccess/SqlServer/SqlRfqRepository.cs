@@ -628,12 +628,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 		public async Task<List<RfqVendors>> GetRfqVendors(int rfqMainId)
 		{
 			await using var command = _unitOfWork.CreateCommand() as DbCommand;
-			command.CommandText = @"select vr.VendorCode,v.VendorName
+			command.CommandText = @"select  ROW_NUMBER() OVER(ORDER BY RFQVendorResponseId ASC) AS RowNumber, vr.VendorCode,v.VendorName
                                     from Procurement.RFQVendorResponse vr
                                     INNER JOIN Procurement.Vendors v on
                                     vr.VendorCode = v.VendorCode
                                     where RFQMainId = @RfqMainId
-                                    GROUP by vr.VendorCode,v.VendorName";
+                                    GROUP by RFQVendorResponseId,vr.VendorCode,v.VendorName";
 			command.Parameters.AddWithValue(command, "@RfqmainId", rfqMainId);
 
 			await using DbDataReader reader = await command.ExecuteReaderAsync();

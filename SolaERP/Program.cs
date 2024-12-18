@@ -41,6 +41,7 @@ builder.Services.AddTransient(sp => new ConnectionFactory()
 });
 
 
+#pragma warning disable CS0612 
 builder.Services.AddRequestMailsForIsSent();
 builder.Services.AddRequestMailsForIsSentForAssignedBuyer();
 builder.Services.AddRequestMailsForIsSent2();
@@ -48,6 +49,7 @@ builder.Services.AddRequestMailsForIsSent2ForAssignedBuyer();
 builder.Services.AddRequestMailsForIsSent3();
 builder.Services.AddRequestMailsForIsSent3ForAssignedBuyer();
 builder.Services.AddCbarData();
+#pragma warning restore CS0612 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MapProfile));
