@@ -650,7 +650,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                     vr.VendorCode = v.VendorCode
                                     where RFQMainId = @RfqMainId
                                     GROUP by RFQVendorResponseId,vr.VendorCode,v.VendorName";
-			command.Parameters.AddWithValue(command, "@RfqmainId", rfqMainId);
+			command.Parameters.AddWithValue(command, "@RfqMainId", rfqMainId);
 
 			await using DbDataReader reader = await command.ExecuteReaderAsync();
 			List<RFQVendors> datas = new();

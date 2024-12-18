@@ -317,5 +317,13 @@ namespace SolaERP.Persistence.Services
 
 			return result;
 		}
+
+		public async Task<ApiResponse<List<RFQVendorsDto>>> GetRfqVendors(int rfqMainId)
+		{
+			var rfqVendors = await _repository.GetRfqVendors(rfqMainId);
+			var dto = _mapper.Map<List<RFQVendorsDto>>(rfqVendors);
+
+			return ApiResponse<List<RFQVendorsDto>>.Success(dto, 200);
+		}
 	}
 }

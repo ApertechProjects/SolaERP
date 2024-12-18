@@ -24,6 +24,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<Dtos.RFQ.UOMDto>>> GetPUOMAsync(int businessUnitId, string itemCodes);
         Task<ApiResponse<bool>> RFQVendorIUDAsync(RFQVendorIUDDto dto, string userIdentity);
         Task<bool> ChangeRFQVendorResponseStatus(int rfqMainId, string vendorCode);
+        Task<ApiResponse<List<RFQVendorsDto>>> GetRfqVendors(int rfqMainId);
 		//Task<ApiResponse<SolaERP.Application.Dtos.UOM.ConversionDTO>> GetConversionAsync(int businessUnit, string itemCodes);
 	}
 }
