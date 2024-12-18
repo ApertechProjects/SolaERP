@@ -24,9 +24,9 @@ namespace SolaERP.API.Controllers
 		public async Task<IActionResult> GetConversionList([FromQuery] int businessUnitId, [FromQuery] string itemCode)
 			=> CreateActionResult(await _service.GetPUOMAsync(businessUnitId, itemCode));
 
-		[HttpGet("[action]")]
+		[HttpGet("[action]/{rfqMainId}")]
 		public async Task<IActionResult> GetRfqVendors(int rfqMainId)
-		=> CreateActionResult(await _service.GetRfqVendors(rfqMainId));
+	   => CreateActionResult(await _service.GetRfqVendors(rfqMainId));
 
 	}
 }
