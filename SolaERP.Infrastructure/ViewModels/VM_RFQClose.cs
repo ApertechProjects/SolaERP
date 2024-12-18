@@ -14,13 +14,15 @@ namespace SolaERP.Application.ViewModels
 	{
 		private readonly IConfiguration _configuration;
 		private readonly string _lang;
-		public VM_RFQClose(string lang)
+		private readonly string _fullName;
+		public VM_RFQClose(string lang, string fullName)
 		{
 			IConfigurationBuilder builder = new ConfigurationBuilder()
 			.AddJsonFile(AppSettingsHelper.GetAppSettingsFileName(), optional: true, reloadOnChange: false);
 
 			_configuration = builder.Build();
 			_lang = lang;
+			_fullName = fullName;
 		}
 
 		public string? Token { get; set; }
@@ -55,16 +57,16 @@ namespace SolaERP.Application.ViewModels
 			}
 			return "";
 		}
-		public HtmlString GetBodyOfMail(string vendorName)
+		public HtmlString GetBodyOfMail()
 		{
 			switch (_lang)
 			{
 				case "az":
-					return new HtmlString($"Hörmətli {vendorName}, <br> " +
+					return new HtmlString($"Hörmətli {_fullName}, <br> " +
 						"Sizə bildiririk ki, RFQ üçün təqdimetmə müddəti rəsmi olaraq başa çatmışdır. Təklifiniz növbəti baxış mərhələsinə göndərilmişdir. <br> Xahiş edirik təsdiq prosesinin nəticələrini gözləyin. Əlavə məlumat və ya aydınlaşdırma tələb olunarsa, sizinlə əlaqə saxlayacağıq. <br>" +
 						"İştirakınız və əməkdaşlığınız üçün təşəkkür edirik.");
 				case "en":
-					return new HtmlString($"Dear {vendorName}, <br> " +
+					return new HtmlString($"Dear {_fullName}, <br> " +
 						"We would like to inform you that the submission period for the RFQ has officially closed. Your proposal has been successfully forwarded to the next stage of review.<br> " +
 						"Please await the results of this process. Should any additional information or clarification be required, we will reach out to you promptly. <br> Thank you for your participation and cooperation.");
 			}

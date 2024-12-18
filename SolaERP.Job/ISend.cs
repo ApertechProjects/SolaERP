@@ -1,4 +1,5 @@
 ﻿using SolaERP.Job.Enums;
+using SolaERP.Job.RFQClose;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace SolaERP.Job
     public interface ISend
     {
         Task SendRequestMails(StatusType statusType);
+        Task SendRFQCloseMails();
     }
 }
