@@ -61,7 +61,7 @@ namespace SolaERP.Job
 						var rowInfos = _mapper.Map<HashSet<RowInfo>>(rowInfoDrafts);
 						if (rowInfos.Count > 0)
 						{
-							await _backgroundMailService.SendMailAsync(rowInfos, new Person { email = user.Email, lang = user.Language, userName = user.UserName });
+							await _backgroundMailService.SendMailAsync(rowInfos, new Person { email = user.Email, lang = user.Language, userName = user.UserName }, Enums.EmailTemplateKey.ALL_TYPES_ALL_STATUSES);
 							Console.WriteLine("Log: " + "Mail");
 							int[] ids = rowInfoDrafts.Select(x => x.notificationSenderId).ToArray();
 							helper.UpdateIsSent1(ids);
@@ -81,25 +81,18 @@ namespace SolaERP.Job
 		public async Task SendRFQCloseMails()
 		{
 			RFQMethods methods = new RFQMethods(_unitOfWork);
-
+		
 			var vendors = await methods.GetRFQVendorUsers();
-			foreach (var rfq in vendors)
+			foreach (var item in vendors)
 			{
-				
-				var companyName = await _emailNotificationService.GetCompanyName(rfq.Email);
-				VM_RFQClose rfqClose = new VM_RFQClose(rfq.Language, rfq.VendorName)
+				await _backgroundMailService.SendMailAsync(null, new Person
 				{
-					CompanyName = companyName,
-					Language = (Language)Enum.Parse(typeof(Language), rfq.Language.ToString())
-				};
-
-
-				await _mailService.SendUsingTemplate(rfqClose.Subject, rfqClose,
-				rfqClose.TemplateName(), null,
-				new List<string> { rfq.Email });
-
+					email = item.Email,
+					lang = item.Language,
+					userName = item.VendorName
+				}, Enums.EmailTemplateKey.RFQ_CLOSE);
 			}
-
+		
 			await methods.UpdateIsSent(vendors.Select(x => x.RFQVendorResponseId).ToList());
 		}
 

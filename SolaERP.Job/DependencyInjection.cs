@@ -143,21 +143,21 @@ namespace SolaERP.Job
 		}
 
 
-		//[Obsolete]
-		//public static void RFQCloseMail(this IServiceCollection services)
-		//{
-		//	services.AddQuartz(options =>
-		//	{
-		//		options.UseMicrosoftDependencyInjectionJobFactory();
-		//	});
+		[Obsolete]
+		public static void RFQCloseMail(this IServiceCollection services)
+		{
+			services.AddQuartz(options =>
+			{
+				options.UseMicrosoftDependencyInjectionJobFactory();
+			});
 
-		//	services.AddQuartzHostedService(options =>
-		//	{
-		//		options.WaitForJobsToComplete = true;
-		//	});
+			services.AddQuartzHostedService(options =>
+			{
+				options.WaitForJobsToComplete = true;
+			});
 
-		//	services.ConfigureOptions<RFQCloseMailJobSetup>();
-		//}
+			services.ConfigureOptions<RFQCloseMailJobSetup>();
+		}
 
 		[Obsolete]
 		public static void RFQClose(this IServiceCollection services)

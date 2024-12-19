@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Job
 {
-    public interface IBackgroundMailService
-    {
-        Task SendMailAsync(HashSet<RowInfo> rowInfos, Person person);
+	public interface IBackgroundMailService
+	{
+		Task SendMailAsync(HashSet<RowInfo> rowInfos, Person person, Enums.EmailTemplateKey templateKey);
 
-    }
+	}
 }

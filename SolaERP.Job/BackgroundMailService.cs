@@ -28,14 +28,14 @@ namespace SolaERP.Job
 
             _configuration = builder.Build();
         }
-        public async Task SendMailAsync(HashSet<RowInfo> rowInfos, Person person)
+        public async Task SendMailAsync(HashSet<RowInfo> rowInfos, Person person, EmailTemplateKey templateKey)
         {
             try
             {
                 MailInfo emailModel = new MailInfo
                 {
                     link = _configuration["Mail:ServerUrlUI"],
-                    emailTemplateKey = EmailTemplateKey.ALL_TYPES_ALL_STATUSES.ToString(),
+                    emailTemplateKey = templateKey.ToString(),
                     rowInfos = rowInfos,
                     referenceNo = "",
                     companyName = "Apertech",

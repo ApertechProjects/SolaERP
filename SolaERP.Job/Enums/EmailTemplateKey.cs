@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Job.Enums
 {
-    public enum EmailTemplateKey
-    {
-        ALL_TYPES_ALL_STATUSES,
-        FORGOT_PASSWORD
-    }
+	public enum EmailTemplateKey
+	{
+		ALL_TYPES_ALL_STATUSES,
+		FORGOT_PASSWORD,
+		RFQ_CLOSE
+	}
 }
