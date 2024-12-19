@@ -11,5 +11,6 @@ namespace SolaERP.Application.Entities.RFQ
         public int RowNumber { get; set; }
         public string VendorCode { get; set; }
 		public string VendorName { get; set; }
-	}
+        public DateTime Date { get; set; }
+    }
 }

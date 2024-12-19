@@ -628,7 +628,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 		public async Task<List<RfqVendors>> GetRfqVendors(int rfqMainId)
 		{
 			await using var command = _unitOfWork.CreateCommand() as DbCommand;
-			command.CommandText = @"select CAST(ROW_NUMBER() OVER(ORDER BY RFQVendorResponseId ASC) AS INT) AS RowNumber, vr.VendorCode,v.VendorName
+			command.CommandText = @"select CAST(ROW_NUMBER() OVER(ORDER BY RFQVendorResponseId ASC) AS INT) AS RowNumber, vr.VendorCode,v.VendorName, vr.Date 
                                     from Procurement.RFQVendorResponse vr
                                     INNER JOIN Procurement.Vendors v on
                                     vr.VendorCode = v.VendorCode
@@ -642,6 +642,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 			{
 				datas.Add(new RfqVendors
 				{
+					Date = reader.Get<DateTime>("Date"),
 					RowNumber = reader.Get<int>("RowNumber"),
 					VendorCode = reader.Get<string>("VendorCode"),
 					VendorName = reader.Get<string>("VendorName")
@@ -661,7 +662,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 				command.Parameters.AddWithValue(command, "@rfqMainId", rfqMainId);
 				command.Parameters.AddWithValue(command, "@vendorCode", vendorCode);
-					
+
 				var res = await command.ExecuteNonQueryAsync();
 				return res > 0;
 			}

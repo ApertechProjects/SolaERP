@@ -11,6 +11,7 @@ namespace SolaERP.Application.Dtos.Bid
 		public int RowNumber { get; set; }
 		public string VendorCode { get; set; }
 		public string VendorName { get; set; }
-	}
+        public DateTime Date { get; set; }
+    }
 
 }

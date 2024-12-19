@@ -49,7 +49,7 @@ builder.Services.AddRequestMailsForIsSent2ForAssignedBuyer();
 builder.Services.AddRequestMailsForIsSent3();
 builder.Services.AddRequestMailsForIsSent3ForAssignedBuyer();
 builder.Services.AddCbarData();
-builder.Services.RFQCloseMailForVendors();
+//builder.Services.RFQCloseMailForVendors();
 builder.Services.RFQClose();
 #pragma warning restore CS0612
 builder.Services.AddHttpContextAccessor();
