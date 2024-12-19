@@ -1,9 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Quartz;
-using SolaERP.Application.UnitOfWork;
-using SolaERP.Job.Cbar;
+﻿using Quartz;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,15 +11,14 @@ namespace SolaERP.Job.RFQClose
 	public class RFQCloseJob : IJob
 	{
 		private readonly ISend _send;
-		public RFQCloseJob(ISend send)
-		{
+        public RFQCloseJob( ISend send)
+        {
 			_send = send;
 		}
 
-
 		public async Task Execute(IJobExecutionContext context)
 		{
-			await _send.SendRFQCloseMails();
+			await _send.UpdateRFQStatusToClose();
 		}
 	}
 }

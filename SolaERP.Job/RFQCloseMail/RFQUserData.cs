@@ -8,9 +8,11 @@ namespace SolaERP.Job.RFQClose
 {
 	public class RFQUserData
 	{
-		public string FullName { get; set; }
-		public string UserName { get; set; }
-		public string Language { get; set; }
+        public int RFQVendorResponseId { get; set; }
+        public int RFQMainId { get; set; }
+        public string Language { get; set; }
 		public string VendorCode { get; set; }
+		public string VendorName { get; set; }
+		public string Email { get; set; }
 	}
 }

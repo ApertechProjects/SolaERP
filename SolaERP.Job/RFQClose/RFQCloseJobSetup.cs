@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
 using Quartz;
-using SolaERP.Job.EmailIsSent3;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace SolaERP.Job.RFQClose
 {
-	public class RFQCloseJobSetup :
-	IConfigureOptions<QuartzOptions>
+	public class RFQCloseJobSetup : IConfigureOptions<QuartzOptions>
 	{
 		public void Configure(QuartzOptions options)
 		{
@@ -19,10 +17,9 @@ namespace SolaERP.Job.RFQClose
 			options.AddJob<RFQCloseJob>(jobBuilder => jobBuilder.WithIdentity(jobKey))
 				 .AddTrigger(trigger => trigger
 				   .ForJob(jobKey)
-				   .WithCronSchedule("0 0/1 9-18 * * ?")
+				   .WithCronSchedule("0 0/55 9-18 * * ?")
 				   .Build());
 
 		}
 	}
 }
-

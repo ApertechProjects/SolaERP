@@ -6,6 +6,7 @@ using SolaERP.Job.EmailIsSent1;
 using SolaERP.Job.EmailIsSent2;
 using SolaERP.Job.EmailIsSent3;
 using SolaERP.Job.RFQClose;
+using SolaERP.Job.RFQCloseMail;
 
 namespace SolaERP.Job
 {
@@ -138,8 +139,40 @@ namespace SolaERP.Job
 				options.WaitForJobsToComplete = true;
 			});
 
-			services.ConfigureOptions<RFQCloseJobSetup>();
+			services.ConfigureOptions<RFQCloseMailJobSetup>();
 		}
 
+
+		//[Obsolete]
+		//public static void RFQCloseMail(this IServiceCollection services)
+		//{
+		//	services.AddQuartz(options =>
+		//	{
+		//		options.UseMicrosoftDependencyInjectionJobFactory();
+		//	});
+
+		//	services.AddQuartzHostedService(options =>
+		//	{
+		//		options.WaitForJobsToComplete = true;
+		//	});
+
+		//	services.ConfigureOptions<RFQCloseMailJobSetup>();
+		//}
+
+		[Obsolete]
+		public static void RFQClose(this IServiceCollection services)
+		{
+			services.AddQuartz(options =>
+			{
+				options.UseMicrosoftDependencyInjectionJobFactory();
+			});
+
+			services.AddQuartzHostedService(options =>
+			{
+				options.WaitForJobsToComplete = true;
+			});
+
+			services.ConfigureOptions<RFQCloseJobSetup>();
+		}
 	}
 }

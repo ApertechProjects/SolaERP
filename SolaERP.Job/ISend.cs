@@ -12,5 +12,6 @@ namespace SolaERP.Job
     {
         Task SendRequestMails(StatusType statusType);
         Task SendRFQCloseMails();
-    }
+		Task UpdateRFQStatusToClose();
+	}
 }
