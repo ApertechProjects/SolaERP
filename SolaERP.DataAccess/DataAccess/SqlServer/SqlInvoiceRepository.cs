@@ -51,9 +51,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 			command.CommandText = _businessUnitHelper.BuildQueryForIntegration(businessUnitId,
 				"SP_InvoiceRegisterWOOrder_I @InvoiceRegisterId, @UserId");
 
-			command.Parameters.AddWithValue(command, "@invoiceRegisterId", invoiceRegisterId);
+			command.Parameters.AddWithValue(command, "@InvoiceRegisterId", invoiceRegisterId);
 			command.Parameters.AddWithValue(command, "@UserId", userId);
-
+			await _unitOfWork.SaveChangesAsync();
 			return await command.ExecuteNonQueryAsync() > 0;
 		}
 
