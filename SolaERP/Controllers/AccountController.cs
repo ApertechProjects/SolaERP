@@ -84,7 +84,8 @@ namespace SolaERP.Controllers
 		}
 
 
-		[HttpPost]
+        [RateLimit(3, 60)] 
+        [HttpPost]
 		public async Task<IActionResult> Login(LoginRequestModel dto)
 		{
 
@@ -198,8 +199,8 @@ namespace SolaERP.Controllers
 			=> CreateActionResult(await _userService.ResetPasswordAsync(resetPasswordrequestDto));
 
 
-
-		[HttpPost]
+        [RateLimit(3, 60)]
+        [HttpPost]
 		public async Task<IActionResult> CheckVerifyCode([FromBody] SingleItemModel model)
 			=> CreateActionResult(await _userService.CheckVerifyCode(model.VerificationCode));
 

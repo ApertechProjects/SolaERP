@@ -192,7 +192,12 @@ app.UseSwaggerUI(c =>
 	string swaggerJsonBasePath = string.IsNullOrWhiteSpace(c.RoutePrefix) ? "." : "..";
 	c.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/v1/swagger.json", "Web API");
 });
-//app.UseMiddleware<RequestLimitMiddleware>();
+
+//app.UseMiddleware<RequestLimitMiddleware>(new List<string>
+//{
+//    "/api/Account/Login",
+//    "/api/Account/ConfirmEmail"
+//});
 app.UseIpRateLimiting();
 app.UseHttpLogging();
 app.UseCors();

@@ -1,4 +1,5 @@
 ﻿using AngleSharp.Io;
+using Confluent.Kafka;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,72 +10,52 @@ namespace SolaERP.API.Middlewares
 {
     public class RequestLimitMiddleware
     {
-        private static Dictionary<string, (DateTime, int)> _requestTracker = new();
         private readonly RequestDelegate _next;
-        private readonly int _limit = 3; // Sorğu limiti
-        private readonly TimeSpan _timeSpan = TimeSpan.FromMinutes(1); // Zaman aralığı (1 dəqiqə)
+        private static Dictionary<string, (DateTime resetTime, int requestCount)> _clients = new();
+        private readonly int _limit = 3; // Maximum requests allowed
+        private readonly TimeSpan _timeWindow = TimeSpan.FromMinutes(1); // Time window
+        private readonly List<string> _rateLimitedPaths;
 
-        public RequestLimitMiddleware(RequestDelegate next)
+
+        public RequestLimitMiddleware(RequestDelegate next, List<string> rateLimitedPaths)
         {
             _next = next;
+            _rateLimitedPaths = rateLimitedPaths;
         }
 
-        public async Task InvokeAsync(HttpContext context, ILogger<NoContentDto> _logger)
+        public async Task InvokeAsync(HttpContext context)
         {
-            string requestName = context.Request.Query["name"];
-            string routeName = context.Request.RouteValues["name"]?.ToString();
-
-            
-
-            if (string.IsNullOrEmpty(requestName))
+            var requestPath = context.Request.Path.Value?.Split('?')[0];
+            if (_rateLimitedPaths.Contains(requestPath))
             {
-                requestName = "UnknownRequest"; // Əgər sorğu adı təyin olunmayıbsa, "UnknownRequest" olaraq təyin edin
-            }
-
-            // IP adresi və ya sorğu adını müəyyənləşdirin (IP-based və ya Request-Name based limitləmə)
-            var clientKey = context.Connection.RemoteIpAddress?.ToString() ?? requestName;
-
-            if (_requestTracker.ContainsKey(clientKey))
-            {
-                var (lastRequestTime, requestCount) = _requestTracker[clientKey];
-
-                if ((DateTime.UtcNow - lastRequestTime) < _timeSpan)
+                var clientIp = context.Connection.RemoteIpAddress?.ToString();
+                if (clientIp == null)
                 {
-                    if (requestCount >= _limit)
-                    {
-                        // 429 Too Many Requests statusu
-                        context.Response.StatusCode = 429;
-                        context.Response.ContentType = "application/json";
-                        _logger.LogError($"Request limit exceeded for {clientKey}. Please try again later.");
-                        var result = ApiResponse<NoContentDto>.Fail($"Request limit exceeded for {clientKey}. Please try again later.", 429);
-                        //var result = ApiResponse<NoContentDto>.Fail("request", $"Request limit exceeded for {clientKey}. Please try again later.", 422);
+                    await _next(context);
+                    return;
+                }
 
-                        var options = new JsonSerializerOptions
-                        {
-                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,  // Optional: Use camelCase for JSON properties
-                            WriteIndented = true // Optional: Pretty-print the JSON
-                        };
+                if (!_clients.ContainsKey(clientIp))
+                {
+                    _clients[clientIp] = (DateTime.UtcNow.Add(_timeWindow), 0);
+                }
 
-                        //await context.Response.WriteAsync(JsonSerializer.Serialize(result));
-                        var data = new ObjectResult(result) { StatusCode = context.Response.StatusCode };
-                        await context.Response.WriteAsync(JsonSerializer.Serialize(result));
-                        return;
-                    }
-                    else
-                    {
-                        _requestTracker[clientKey] = (lastRequestTime, requestCount + 1);
-                    }
+                var (resetTime, requestCount) = _clients[clientIp];
+
+                if (DateTime.UtcNow > resetTime)
+                {
+                    _clients[clientIp] = (DateTime.UtcNow.Add(_timeWindow), 1);
+                }
+                else if (requestCount >= _limit)
+                {
+                    context.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+                    await context.Response.WriteAsync("Too many requests. Try again later.");
+                    return;
                 }
                 else
                 {
-                    // Yeni zaman intervalı başlayırsa sorğu sayını sıfırlayın
-                    _requestTracker[clientKey] = (DateTime.UtcNow, 1);
+                    _clients[clientIp] = (resetTime, requestCount + 1);
                 }
-            }
-            else
-            {
-                // Yeni IP və ya Request-Name üçün limit izləyiçisini başlayın
-                _requestTracker[clientKey] = (DateTime.UtcNow, 1);
             }
 
             await _next(context);
