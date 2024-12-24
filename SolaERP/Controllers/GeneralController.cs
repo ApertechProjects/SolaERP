@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Shared;
 
 namespace SolaERP.Controllers
 {
@@ -16,6 +17,10 @@ namespace SolaERP.Controllers
         {
             _generalService = generalService;
         }
+
+        [HttpGet]
+        public IActionResult CheckAuthorize()
+              => CreateActionResult(ApiResponse<NoContentDto>.Success(200));
 
         [HttpGet]
         public async Task<IActionResult> RejectReasonsAsync()
