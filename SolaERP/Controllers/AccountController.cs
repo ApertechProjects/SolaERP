@@ -140,12 +140,7 @@ namespace SolaERP.Controllers
 			return CreateActionResult(ApiResponse<bool>.Fail("email", "Email or password is incorrect", 422));
 		}
 
-		[HttpGet]
-		public async Task<IActionResult> RefreshTokenLogin(string refreshToken)
-		{
-			return CreateActionResult(await _userService.RefreshTokenLogin(refreshToken));
-		}
-
+		
 		[HttpGet]
 		public async Task<IActionResult> ConfirmEmail([FromQuery] string verifyToken)
 		{
