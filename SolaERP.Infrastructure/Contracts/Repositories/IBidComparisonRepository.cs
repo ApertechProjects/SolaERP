@@ -20,6 +20,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> OrderCreateFromApproveBid(CreateOrderFromBidDto entity);
         Task<bool> SendComparisonToApprove(BidComparisonSendToApprove filter);
         Task<bool> BidApprove(BidComparisonBidApproveDto dto, int UserId);
+        Task<bool> BidReject(BidComparisonBidRejectDto dto, int UserId);
         Task<List<BidComparisonAll>> GetComparisonAll(BidComparisonAllFilter filter);
         Task<List<BidComparisonBidApprovalsLoad>> GetComparisonBidApprovals(BidComparisonBidApprovalsFilter filter);
         Task<List<BidComparisonApprovalInformationLoad>> GetComparisonApprovalInformations(BidComparisonApprovalInformationFilter filter);

@@ -108,6 +108,15 @@ namespace SolaERP.Persistence.Services
 			return ApiResponse<bool>.Success(saveResponse, 200);
 		}
 
+		public async Task<ApiResponse<bool>> BidRejectAsync(
+			BidComparisonBidRejectDto reject, string userIdentity)
+		{
+			var saveResponse = await _bidComparisonRepository.BidReject(reject, Convert.ToInt32(userIdentity));
+			await _unitOfWork.SaveChangesAsync();
+
+			return ApiResponse<bool>.Success(saveResponse, 200);
+		}
+
 		public async Task<ApiResponse<bool>> SendComparisonToApproveAsync(
             BidComparisonSendToApproveDto bidComparisonSendToApprove)
         {
