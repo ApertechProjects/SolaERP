@@ -275,7 +275,7 @@ namespace SolaERP.Controllers
 			var formData = new Dictionary<string, string>
 			{
 				{ "client_id", clientId },
-				{ "client_secret", secretId },
+				//{ "client_secret", secretId },
 				{ "grant_type", "authorization_code" },
 				{ "code", code },
 				{ "redirect_uri", redirectUri }
