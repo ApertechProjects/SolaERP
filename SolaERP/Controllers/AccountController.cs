@@ -215,6 +215,7 @@ namespace SolaERP.Controllers
 			return CreateActionResult(ApiResponse<bool>.Fail("email", "Email or password is incorrect", 422));
 		}
 
+		[NonAction]
 		public async Task<Dictionary<string, bool>> GetEmailByAccessTokenAsync(string accessToken)
 		{
 			string Url = "https://graph.microsoft.com/v1.0/me";
@@ -257,6 +258,7 @@ namespace SolaERP.Controllers
 			return new Dictionary<string, bool>() { { mailElement.GetString()!, true } };
 		}
 
+		[NonAction]
 		public async Task<Dictionary<string, bool>> GetAccessTokenAsync(string code)
 		{
 			const string url = "https://login.microsoftonline.com/common/oauth2/v2.0/token";
