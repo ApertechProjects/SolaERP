@@ -633,7 +633,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                     INNER JOIN Procurement.Vendors v on
                                     vr.VendorCode = v.VendorCode
                                     where RFQMainId = @RfqMainId
-                                    GROUP by RFQVendorResponseId,vr.VendorCode,v.VendorName";
+                                    GROUP by RFQVendorResponseId,vr.VendorCode,v.VendorName, vr.Date";
 			command.Parameters.AddWithValue(command, "@RfqmainId", rfqMainId);
 
 			await using DbDataReader reader = await command.ExecuteReaderAsync();
