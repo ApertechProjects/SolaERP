@@ -35,4 +35,6 @@ public interface IOrderRepository
     Task<List<int>> GetDetailIds(int orderMainId);
     Task DeleteDetailsNotIncludes(List<int> orderDetailIdList, int orderMaindId);
     Task<bool> CheckOrderList(int bidMainId);
+    Task<List<OrderApprovalDto>> GetOrderApprovalsByOrderDetailIdAsync(int orderDetailId);
+
 }
