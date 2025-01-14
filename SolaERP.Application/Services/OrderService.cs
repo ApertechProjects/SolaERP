@@ -317,5 +317,10 @@ public class OrderService : IOrderService
         return ApiResponse<List<AnalysisCodeIds>>.Success(result);
     }
 
-
+    public async Task<ApiResponse<List<OrderApprovalDto>>> GetOrderApprovalsAsync(int orderDetailId)
+    {
+        return ApiResponse<List<OrderApprovalDto>>.Success(
+            await _orderRepository.GetOrderApprovalsByOrderDetailIdAsync(orderDetailId)
+        );
+    }
 }

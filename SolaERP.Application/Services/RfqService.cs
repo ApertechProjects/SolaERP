@@ -55,8 +55,10 @@ namespace SolaERP.Persistence.Services
 			request.UserId = Convert.ToInt32(useridentity);
 			RfqSaveCommandResponse response = null;
 
-			if (request.Id <= 0) response = await _repository.AddMainAsync(request);
-			else response = await _repository.UpdateMainAsync(request);
+			if (request.Id <= 0) 
+				response = await _repository.AddMainAsync(request);
+			else 
+				response = await _repository.UpdateMainAsync(request);
 
 			if (request.Attachments != null)
 				await _attachmentService.SaveAttachmentAsync(request.Attachments, SourceType.RFQ, response.Id);

@@ -1009,4 +1009,28 @@ public class SqlOrderRepository : IOrderRepository
 
         return result;
     }
+    
+    public async Task<List<OrderApprovalDto>> GetOrderApprovalsByOrderDetailIdAsync(int orderDetailId)
+    {
+        await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = @"EXEC dbo.SP_OrderApprovals @OrderDetailId";
+
+        command.Parameters.AddWithValue(command, "@OrderDetailId", orderDetailId);
+
+        await using DbDataReader reader = await command.ExecuteReaderAsync();
+        List<OrderApprovalDto> data = new();
+        while (await reader.ReadAsync())
+            data.Add(new OrderApprovalDto
+            {
+                OrderApprovalId = reader.Get<int>("OrderApprovalId"),
+                ApproveStageDetailsName = reader.Get<string>("ApproveStageDetailsName"),
+                Sequence = reader.Get<int>("Sequence"),
+                FullName = reader.Get<string>("FullName"),
+                ApprovalStatusName = reader.Get<string>("ApprovalStatusName"),
+                ApproveDate = reader.Get<DateTime>("ApproveDate"),
+                Comment = reader.Get<string>("Comment"),
+            });
+
+        return data;
+    }
 }

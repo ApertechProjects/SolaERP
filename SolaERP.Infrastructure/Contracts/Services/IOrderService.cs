@@ -33,4 +33,7 @@ public interface IOrderService
     Task<ApiResponse<bool>> Retrieve(List<int> ids, string name);
     Task<bool> CheckIntegration(List<int> ids);
     Task<ApiResponse<List<AnalysisCodeIds>>> GetAnalysis(GetAnalysisByCode model);
+    
+    Task<ApiResponse<List<OrderApprovalDto>>> GetOrderApprovalsAsync(int orderDetailId);
+
 }
