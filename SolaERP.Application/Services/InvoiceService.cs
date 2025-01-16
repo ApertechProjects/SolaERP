@@ -5,6 +5,7 @@ using SolaERP.Application.Dtos;
 using SolaERP.Application.Dtos.Attachment;
 using SolaERP.Application.Dtos.BusinessUnit;
 using SolaERP.Application.Dtos.Invoice;
+using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.TaxDto;
 using SolaERP.Application.Dtos.WithHoldingTax;
@@ -31,6 +32,7 @@ namespace SolaERP.Persistence.Services
 		private readonly IBusinessUnitRepository _businessUnitRepository;
 		private readonly IGeneralRepository _generalRepository;
 		private readonly IGeneralService _generalService;
+		private readonly IVendorService _vendorService;
 		private readonly IUnitOfWork _unitOfWork;
 
 		public InvoiceService(IUserRepository userRepository,
@@ -41,6 +43,7 @@ namespace SolaERP.Persistence.Services
 							  IBusinessUnitRepository businessUnitRepository,
 							  IGeneralRepository generalRepository,
 							  IGeneralService generalService,
+							  IVendorService vendorService,
 							  IUnitOfWork unitOfWork)
 		{
 			_userRepository = userRepository;
@@ -51,6 +54,7 @@ namespace SolaERP.Persistence.Services
 			_supplierRepository = supplierRepository;
 			_generalRepository = generalRepository;
 			_businessUnitRepository = businessUnitRepository;
+			_vendorService = vendorService;
 		}
 
 		public async Task<ApiResponse<List<RegisterAllDto>>> RegisterAll(InvoiceRegisterGetModel model, string name)
@@ -84,6 +88,19 @@ namespace SolaERP.Persistence.Services
 					await _invoiceRepository.InvoiceApproveIntegration(model.InvoiceRegisterIds[i].InvoiceRegisterId, userId, model.BusinessUnitId);
 				}
 
+				if (model.InvoiceRegisterIds[i].InMaxSequence && businessUnit.UseOrderForInvoice == false)
+				{
+					//var invoice = GetInvoiceRegisterLoad(model.InvoiceRegisterIds[i].InvoiceRegisterId, name);
+					var invoice = await _invoiceRepository.GetInvoiceRegisterMainLoad(model.InvoiceRegisterIds[i].InvoiceRegisterId);
+
+					CreateVendorRequest requestVendor = new CreateVendorRequest
+					{
+						VendorCode = invoice.VendorCode,
+						UserId = userId,
+						BusinessUnitId = businessUnit.BusinessUnitId,
+					};
+					await _vendorService.TransferToIntegration(requestVendor);
+				}
 			}
 
 			await _unitOfWork.SaveChangesAsync();
