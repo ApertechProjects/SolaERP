@@ -387,10 +387,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<BidComparisonHeaderLoad> GetComparisonHeader(BidComparisonHeaderFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = "EXEC SP_BidComparisonHeaderLoad @RFQMainId, @UserId";
+            command.CommandText = "EXEC SP_BidComparisonHeaderLoad @RFQMainId, @UserId, @BidComparisonId";
 
             command.Parameters.AddWithValue(command, "@RFQMainId", filter.RFQMainId);
             command.Parameters.AddWithValue(command, "@UserId", filter.UserId);
+            command.Parameters.AddWithValue(command, "@BidComparisonId", filter.BidComparisonId);
 
             using var reader = await command.ExecuteReaderAsync();
             if (await reader.ReadAsync())

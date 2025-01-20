@@ -214,7 +214,7 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<BidComparisonLoadDto>> GetBidComparisonLoadAsync(BidComparisonFilterDto filter)
         {
             var comparison = new BidComparisonLoadDto();
-            var headerFilter = new BidComparisonHeaderFilter { RFQMainId = filter.RFQMainId, UserId = filter.UserId };
+            var headerFilter = new BidComparisonHeaderFilter { RFQMainId = filter.RFQMainId, UserId = filter.UserId, BidComparisonId = filter.BidComparisonId };
             var header = await _bidComparisonRepository.GetComparisonHeader(headerFilter);
             header.RequiredOnSiteDate = header.RequiredOnSiteDate.ConvertDateToValidDate();
             header.SentDate = header.SentDate.ConvertDateToValidDate();
