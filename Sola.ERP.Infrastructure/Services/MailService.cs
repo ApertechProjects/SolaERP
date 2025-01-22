@@ -735,6 +735,38 @@ namespace SolaERP.Infrastructure.Services
 
 			emails.Add(RegEmail);
 		}
+		
+		public async Task SendRFQDeadLineMail(int userId, string subject, string body)
+		{
+			List<Task> emails = new List<Task>();
+
+			var user = await _userRepository.GetCurrentUserInfo(userId);
+
+			VM_RFQDeadLine emailVM = new VM_RFQDeadLine(user.Language.ToString(), subject, body, user.Email)
+			{
+				Language = (Language)Enum.Parse(typeof(Language), user.Language.ToString())
+			};
+
+			Task RegEmail = SendUsingTemplate(subject, emailVM, emailVM.TemplateName(), null, new List<string> { "anarceferov1996@gmail.com" });
+
+			emails.Add(RegEmail);
+		}
+		
+		public async Task SendRFQLastDayMail(int userId, string subject, string body)
+		{
+			List<Task> emails = new List<Task>();
+
+			var user = await _userRepository.GetCurrentUserInfo(userId);
+
+			VM_RFQLastDay emailVM = new VM_RFQLastDay(user.Language.ToString(), subject, body, user.Email)
+			{
+				Language = (Language)Enum.Parse(typeof(Language), user.Language.ToString())
+			};
+
+			Task RegEmail = SendUsingTemplate(subject, emailVM, emailVM.TemplateName(), null, new List<string> { "anarceferov1996@gmail.com" });
+
+			emails.Add(RegEmail);
+		}
 	}
 
 }

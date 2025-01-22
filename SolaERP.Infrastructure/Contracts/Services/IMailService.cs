@@ -33,6 +33,8 @@ namespace SolaERP.Application.Contracts.Services
         Task SendRejectMailToUser(int userId, HttpResponse response);
         Task SendMailToAdminstrationForApproveVendor(int vendorId);
         Task SendSupportMail(int userId, string subject, string body);
+        Task SendRFQDeadLineMail(int userId, string subject, string body);
+        Task SendRFQLastDayMail(int userId, string subject, string body);
     }
 
 }
