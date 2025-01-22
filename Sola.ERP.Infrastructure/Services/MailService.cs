@@ -740,7 +740,7 @@ namespace SolaERP.Infrastructure.Services
 				if (attachmentDownloadLink == null)
 					continue;
 
-				attachmentsText += ("<br> File: " + attachmentDownloadLink);
+				attachmentsText += ("<br> File: <a href='" + attachmentDownloadLink + "'>Download</a> ");
 			}
 
 			VM_Support supportEmailVM = new VM_Support(user.Language.ToString(), subject, body, user.Email, attachmentsText)
