@@ -174,5 +174,38 @@ namespace SolaERP.Job
 
 			services.ConfigureOptions<RFQCloseJobSetup>();
 		}
+		
+		
+		[Obsolete]
+		public static void RFQDeadLineMail(this IServiceCollection services)
+		{
+			services.AddQuartz(options =>
+			{
+				options.UseMicrosoftDependencyInjectionJobFactory();
+			});
+
+			services.AddQuartzHostedService(options =>
+			{
+				options.WaitForJobsToComplete = true;
+			});
+
+			services.ConfigureOptions<RFQDeadLineMailJobSetup>();
+		}
+		
+		[Obsolete]
+		public static void RFQLastDayMail(this IServiceCollection services)
+		{
+			services.AddQuartz(options =>
+			{
+				options.UseMicrosoftDependencyInjectionJobFactory();
+			});
+
+			services.AddQuartzHostedService(options =>
+			{
+				options.WaitForJobsToComplete = true;
+			});
+
+			services.ConfigureOptions<RFQLastDayMailJobSetup>();
+		}
 	}
 }

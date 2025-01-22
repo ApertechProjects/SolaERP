@@ -16,6 +16,12 @@
     <None Remove="wwwroot\UserImages\**" />
     <Content Remove="wwwroot\sources\templates\vypt5elo.e2o~" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <Content Update="wwwroot\sources\templates\RFQDeadLine.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\sources\templates\RFQLastDay.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
