@@ -51,6 +51,7 @@ namespace SolaERP.Infrastructure.Services
 			_approveStageService = approveStageService;
 			_supplierEvaluationRepository = supplierEvaluationRepository;
 			_fileUploadService = fileUploadService;
+
 		}
 
 
@@ -748,7 +749,7 @@ namespace SolaERP.Infrastructure.Services
 			};
 
 			Task RegEmail = SendUsingTemplate(subject, supportEmailVM,
-				  supportEmailVM.TemplateName(), null, new List<string> { "sahmar.quluzade7@gmail.com" });
+				supportEmailVM.TemplateName(), null, new List<string> { "sahmar.quluzade7@gmail.com" });
 
 			emails.Add(RegEmail);
 		}
