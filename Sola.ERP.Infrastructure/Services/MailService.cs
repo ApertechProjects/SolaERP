@@ -717,7 +717,23 @@ namespace SolaERP.Infrastructure.Services
 					emails.Add(RegEmail);
 				}
 			}
+		}
 
+		public async Task SendSupportMail(int userId, string subject, string body)
+		{
+			List<Task> emails = new List<Task>();
+
+			var user = await _userRepository.GetCurrentUserInfo(userId);
+
+			VM_Support supportEmailVM = new VM_Support(user.Language.ToString(), subject, body, user.Email)
+			{
+				Language = (Language)Enum.Parse(typeof(Language), user.Language.ToString())
+			};
+
+			Task RegEmail = SendUsingTemplate(subject, supportEmailVM,
+				  supportEmailVM.TemplateName(), null, new List<string> { "sahmar.quluzade7@gmail.com" });
+
+			emails.Add(RegEmail);
 		}
 	}
 

@@ -74,6 +74,9 @@
     <Content Update="wwwroot\sources\templates\UserApprove.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\sources\templates\Support.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\sources\templates\UserReject.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

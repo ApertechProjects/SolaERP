@@ -29,12 +29,14 @@ namespace SolaERP.Persistence.Services
 		private readonly IGeneralRepository _generalRepository;
 		private readonly IAttachmentService _attachmentService;
 		private readonly IUserRepository _userRepository;
+		private readonly IMailService _mailService;
 
 		public SupportService(IUnitOfWork unitOfWork,
 			ISupportRepository repository,
 			IMapper mapper,
 			IGeneralRepository generalRepository,
 			IAttachmentService attachmentService,
+			IMailService mailService,
 			IUserRepository userRepository)
 		{
 			_unitOfWork = unitOfWork;
@@ -43,6 +45,7 @@ namespace SolaERP.Persistence.Services
 			_generalRepository = generalRepository;
 			_attachmentService = attachmentService;
 			_userRepository = userRepository;
+			_mailService = mailService;
 		}
 
 
@@ -63,6 +66,8 @@ namespace SolaERP.Persistence.Services
 
 			var user = await _userRepository.GetCurrentUserInfo(dto.UserId);
 			var email = user.Email;
+
+			await _mailService.SendSupportMail(dto.UserId, dto.subject, dto.description);
 
 			return ApiResponse<int>.Success(1, 200);
 		}
