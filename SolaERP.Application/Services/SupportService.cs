@@ -67,7 +67,7 @@ namespace SolaERP.Persistence.Services
 			var user = await _userRepository.GetCurrentUserInfo(dto.UserId);
 			var email = user.Email;
 
-			await _mailService.SendSupportMail(dto.UserId, dto.subject, dto.description);
+			await _mailService.SendSupportMail(dto.UserId, dto.subject, dto.description, dto.Attachments);
 
 			return ApiResponse<int>.Success(1, 200);
 		}

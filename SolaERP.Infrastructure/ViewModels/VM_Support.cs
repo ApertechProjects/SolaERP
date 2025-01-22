@@ -13,7 +13,8 @@ namespace SolaERP.Infrastructure.ViewModels
         private readonly string _subject;
         private readonly string _body;
         private readonly string _userEmail;
-        public VM_Support(string lang, string subject, string body, string userEmail)
+        private readonly string _attachmentText;
+        public VM_Support(string lang, string subject, string body, string userEmail, string attachmentText)
         {
             string appsettingsFileName = AppSettingsHelper.GetAppSettingsFileName();
             IConfigurationBuilder builder = new ConfigurationBuilder()
@@ -24,6 +25,7 @@ namespace SolaERP.Infrastructure.ViewModels
 			_subject = subject;
 			_body = body;
 			_userEmail = userEmail;
+            _attachmentText = attachmentText;
         }
 
         public string? Token { get; set; }
@@ -53,6 +55,11 @@ namespace SolaERP.Infrastructure.ViewModels
             return new HtmlString(_body);
         }
 
+		public HtmlString GetAttachmentLinksOfMail()
+		{
+			return new HtmlString(_attachmentText);
+		}
 
-    }
+
+	}
 }
