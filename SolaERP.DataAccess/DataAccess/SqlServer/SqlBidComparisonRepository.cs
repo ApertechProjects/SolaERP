@@ -363,7 +363,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     RFQItem = reader.Get<string>("RFQItem"),
                     VendorName = reader.Get<string>("VendorName"),
                     BidItem = reader.Get<string>("BidItem"),
-                    SelectedQTY = reader.Get<int>("SelectedQTY"),
+                    SelectedQTY = reader.Get<decimal>("SelectedQTY"),
                     BidQuantity = reader.Get<decimal>("BidQuantity"),
                     PUOM = reader.Get<string>("PUOM"),
                     CurrencyCode = reader.Get<string>("CurrencyCode"),

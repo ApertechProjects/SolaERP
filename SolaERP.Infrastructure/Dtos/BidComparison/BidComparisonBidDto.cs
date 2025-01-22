@@ -9,7 +9,7 @@
         public string VendorName { get; set; }
         public string BidItem { get; set; }
         public int BidDetailId { get; set; }
-        public int SelectedQTY { get; set; }
+        public decimal SelectedQTY { get; set; }
         public decimal BidQuantity { get; set; }
         public int BidComparisonBidId { get; set; }
         public decimal RfqDetailId { get; set; }
