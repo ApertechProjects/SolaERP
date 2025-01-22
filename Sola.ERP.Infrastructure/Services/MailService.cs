@@ -33,6 +33,7 @@ namespace SolaERP.Infrastructure.Services
 		private readonly IConfiguration _configuration;
 		private readonly IEmailNotificationService _emailNotificationService;
 		private readonly IUserRepository _userRepository;
+		private readonly IFileUploadService _fileUploadService;
 		private readonly IApproveStageService _approveStageService;
 		private readonly ISupplierEvaluationRepository _supplierEvaluationRepository;
 		private readonly RazorLightEngine _razorEngine;
@@ -40,6 +41,7 @@ namespace SolaERP.Infrastructure.Services
 		public MailService(IConfiguration configuration,
 						   IEmailNotificationService emailNotificationService,
 						   IUserRepository userRepository,
+						   IFileUploadService fileUploadService,
 						   IApproveStageService approveStageService,
 						   ISupplierEvaluationRepository supplierEvaluationRepository)
 		{
@@ -48,6 +50,7 @@ namespace SolaERP.Infrastructure.Services
 			_userRepository = userRepository;
 			_approveStageService = approveStageService;
 			_supplierEvaluationRepository = supplierEvaluationRepository;
+			_fileUploadService = fileUploadService;
 		}
 
 
@@ -719,13 +722,27 @@ namespace SolaERP.Infrastructure.Services
 			}
 		}
 
-		public async Task SendSupportMail(int userId, string subject, string body)
+		public async Task SendSupportMail(int userId, string subject, string body, List<AttachmentSaveModel> attachments)
 		{
 			List<Task> emails = new List<Task>();
 
 			var user = await _userRepository.GetCurrentUserInfo(userId);
 
-			VM_Support supportEmailVM = new VM_Support(user.Language.ToString(), subject, body, user.Email)
+			var attachmentsText = "";
+
+			for (int i = 0; i < attachments.Count; i++)
+			{
+				var attachment = attachments[i];
+
+				var attachmentDownloadLink = _fileUploadService.GetDownloadFileLink(attachment.FileLink, Modules.Support);
+
+				if (attachmentDownloadLink == null)
+					continue;
+
+				attachmentsText += ("<br> File: " + attachmentDownloadLink);
+			}
+
+			VM_Support supportEmailVM = new VM_Support(user.Language.ToString(), subject, body, user.Email, attachmentsText)
 			{
 				Language = (Language)Enum.Parse(typeof(Language), user.Language.ToString())
 			};

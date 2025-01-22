@@ -10,6 +10,7 @@
         Rfqs,
         Vendors,
         Payment,
-        Invoices
+        Invoices,
+        Support
     }
 }
