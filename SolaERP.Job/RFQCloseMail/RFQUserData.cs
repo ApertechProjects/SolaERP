@@ -14,5 +14,7 @@ namespace SolaERP.Job.RFQClose
 		public string VendorCode { get; set; }
 		public string VendorName { get; set; }
 		public string Email { get; set; }
+
+		public int UserId { get; set; } = 0;
 	}
 }
