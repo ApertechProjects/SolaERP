@@ -61,7 +61,8 @@ namespace SolaERP.Job
     			au.Language,
 			    vr.VendorCode,
 			    v.VendorName,
-			    au.Email
+			    au.Email,
+			    au.Id as UserId
 				from Procurement.RFQVendorResponse vr
 				INNER JOIN Procurement.Vendors v ON vr.VendorCode = v.VendorCode
 				INNER JOIN Config.AppUser au ON v.VendorId = au.VendorId
@@ -85,7 +86,8 @@ namespace SolaERP.Job
 						Email = reader.Get<string>("Email"),
 						Language = reader.Get<string>("Language"),
 						VendorCode = reader.Get<string>("VendorCode"),
-						VendorName = reader.Get<string>("VendorName")
+						VendorName = reader.Get<string>("VendorName"),
+						UserId = reader.Get<int>("UserId")
 					});
 				}
 				return userDatas;
@@ -103,12 +105,13 @@ namespace SolaERP.Job
     			au.Language,
 			    vr.VendorCode,
 			    v.VendorName,
-			    au.Email 
+			    au.Email ,
+			    au.Id as UserId
 				from Procurement.RFQVendorResponse vr
 				INNER JOIN Procurement.Vendors v ON vr.VendorCode = v.VendorCode 
 				INNER JOIN Config.AppUser au ON v.VendorId = au.VendorId 
 				INNER JOIN Procurement.RFQMain rm ON vr.RFQMainId = rm.RFQMainId 
-				where vr.MailIsSentDeadLine = 0 and
+				where vr.MailIsSentLastDay = 0 and
 				rm.Status = 1 and
 				rm.IsDeleted != 1 and
 				CONVERT(DATE , rm.RFQDeadline) = CONVERT(DATE, DATEADD(DAY, -1, GETDATE()))
@@ -127,7 +130,8 @@ namespace SolaERP.Job
 						Email = reader.Get<string>("Email"),
 						Language = reader.Get<string>("Language"),
 						VendorCode = reader.Get<string>("VendorCode"),
-						VendorName = reader.Get<string>("VendorName")
+						VendorName = reader.Get<string>("VendorName"),
+						UserId = reader.Get<int>("UserId")
 					});
 				}
 				return userDatas;
@@ -140,6 +144,46 @@ namespace SolaERP.Job
 			using (var command = _unitOfWork.CreateCommand() as DbCommand)
 			{
 				command.CommandText = @$"set nocount off update Procurement.RFQVendorResponse set MailIsSent = 1 where RFQVendorResponseId IN({idsRes})";
+				try
+				{
+					var res = command.ExecuteNonQuery() > 0;
+					return res;
+				}
+				catch (Exception ex)
+				{
+					return false;
+				}
+
+
+			}
+		}
+		
+		public async Task<bool> UpdateMailIsSentDeadLine(List<int> rfqVendorResponseIds)
+		{
+			var idsRes = string.Join(",", rfqVendorResponseIds);
+			using (var command = _unitOfWork.CreateCommand() as DbCommand)
+			{
+				command.CommandText = @$"set nocount off update Procurement.RFQVendorResponse set MailIsSentDeadLine = 1 where RFQVendorResponseId IN({idsRes})";
+				try
+				{
+					var res = command.ExecuteNonQuery() > 0;
+					return res;
+				}
+				catch (Exception ex)
+				{
+					return false;
+				}
+
+
+			}
+		}
+		
+		public async Task<bool> UpdateMailIsSentLastDay(List<int> rfqVendorResponseIds)
+		{
+			var idsRes = string.Join(",", rfqVendorResponseIds);
+			using (var command = _unitOfWork.CreateCommand() as DbCommand)
+			{
+				command.CommandText = @$"set nocount off update Procurement.RFQVendorResponse set MailIsSentLastDay = 1 where RFQVendorResponseId IN({idsRes})";
 				try
 				{
 					var res = command.ExecuteNonQuery() > 0;

@@ -114,39 +114,25 @@ namespace SolaERP.Job
 			RFQMethods methods = new RFQMethods(_unitOfWork);
 			
 			var vendors = await methods.GetRFQVendorUsersMailIsSentDeadLineFalse();
-			
-			await _mailService.SendRFQDeadLineMail(5794,"test subject" , "test body DeadLine");
-
 			foreach (var item in vendors)
 			{
-				// Console.WriteLine("SendRFQDeadLineMail :"+item.Email+"  "+item.VendorName);
-				// await _mailService.SendRFQDeadLineMail();
+				await _mailService.SendRFQDeadLineMail(item.UserId,"test subject" , "test body LastDay");
 			}
 		
-			await methods.UpdateIsSent(vendors.Select(x => x.RFQVendorResponseId).ToList());
+			await methods.UpdateMailIsSentDeadLine(vendors.Select(x => x.RFQVendorResponseId).ToList());
 		}
 
 		public async Task SendRFQLastDayMail()
 		{
 			RFQMethods methods = new RFQMethods(_unitOfWork);
 		
-			var vendors = await methods.GetRFQVendorUsersMailIsSentLastDayFalse();
-			
-			await _mailService.SendRFQLastDayMail(5794,"test subject" , "test body LastDay");
-			
+			var vendors = await methods.GetRFQVendorUsersMailIsSentLastDayFalse(); 
 			foreach (var item in vendors)
 			{
-				// Console.WriteLine("SendRFQLastDayMail :"+item.Email+"  "+item.VendorName);
-
-				// await _mailService.SendRFQLastDayMail(null, new Person
-				// {
-				// 	email = item.Email,
-				// 	lang = item.Language,
-				// 	userName = item.VendorName
-				// }, Enums.EmailTemplateKey.RFQ_CLOSE);
+				await _mailService.SendRFQLastDayMail(item.UserId,"test subject" , "test body LastDay");
 			}
 		
-			await methods.UpdateIsSent(vendors.Select(x => x.RFQVendorResponseId).ToList());
+			await methods.UpdateMailIsSentLastDay(vendors.Select(x => x.RFQVendorResponseId).ToList());
 		}
 
 	}
