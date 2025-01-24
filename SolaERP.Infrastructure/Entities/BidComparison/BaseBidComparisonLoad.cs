@@ -7,6 +7,7 @@
         public long RowNum { get; set; }
         public int ApproveStatus { get; set; }
         public int Status { get; set; }
+        public string StatusName { get; set; }
         public int Emergency { get; set; }
         public string SingleSourceReasons { get; set; }
         public int ProcurementType { get; set; }
@@ -40,7 +41,8 @@
                 CreatedBy = this.CreatedBy,
                 ComparisonDate = this.ComparisonDate,
                 HasAttachments = this.HasAttachments,
-                Status = this.Status
+                Status = this.Status,
+                StatusName = this.StatusName
             };
         }
     }

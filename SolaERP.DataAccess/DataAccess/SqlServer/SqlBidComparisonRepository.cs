@@ -644,7 +644,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 CreatedBy = reader.Get<string>("CreatedBy"),
                 ComparisonDate = reader.Get<DateTime?>("ComparisonDate"),
                 HasAttachments = reader.Get<bool>("HasAttachments"),
-                Status = reader.Get<int>("Status")
+                Status = reader.Get<int>("Status"),
+                StatusName = reader.Get<string>("StatusName")
             };
         }
 
