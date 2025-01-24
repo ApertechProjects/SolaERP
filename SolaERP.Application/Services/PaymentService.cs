@@ -415,6 +415,11 @@ namespace SolaERP.Persistence.Services
 
                 foreach (var a in data.Item1)
                 {
+                    string genrl_descr_03 = model.BusinessUnitId != 7 ? null : a.InvoiceNo;
+					string genrl_descr_04 = model.BusinessUnitId != 7 ? null : a.Reference;
+					string genrl_descr_24 = model.BusinessUnitId == 7 ? null : a.InvoiceNo;
+					string genrl_descr_25 = model.BusinessUnitId == 7 ? null : a.Reference;
+
                     aSaldldgLadList.Add(new ASalfldgLadDto
                     {
                         ACCNT_CODE = a.ACCNT_CODE,
@@ -422,8 +427,10 @@ namespace SolaERP.Persistence.Services
                         TRANS_DATETIME = a.TRANS_DATETIME,
                         JRNAL_NO = a.JRNAL_NO,
                         JRNAL_LINE = a.JRNAL_LINE,
-                        GNRL_DESCR_24 = a.InvoiceNo,
-                        GNRL_DESCR_25 = a.Reference,
+						GNRL_DESCR_03 = genrl_descr_03,
+						GNRL_DESCR_04 = genrl_descr_04,
+						GNRL_DESCR_24 = genrl_descr_24,
+                        GNRL_DESCR_25 = genrl_descr_25,
                         UPDATE_COUNT = 1,
                         LAST_CHANGE_USER_ID = a.LAST_CHANGE_USER_ID,
                         USER_NAME = a.JRNAL_SRCE,
