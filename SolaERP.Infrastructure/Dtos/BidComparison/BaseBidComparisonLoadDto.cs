@@ -12,6 +12,8 @@
         public string ComparisonNo { get; set; }
         public string RFQNo { get; set; }
         public string Buyer { get; set; }
+        public string Status { get; set; }
+        public string StatusName { get; set; }
         public DateTime? Comparisondeadline { get; set; }
         public DateTime? RFQDeadline { get; set; }
         public string SpecialistComment { get; set; }
