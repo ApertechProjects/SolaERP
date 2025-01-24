@@ -75,7 +75,7 @@ namespace SolaERP.Persistence.Services
 					model.InvoiceRegisterIds[i].Sequence, model.ApproveStatus, model.Comment, userId,
 					model.RejectReasonId);
 
-				if (model.InvoiceRegisterIds[i].InMaxSequence && model.InvoiceRegisterIds[i].InvoiceTypeId == 1)
+				if (model.InvoiceRegisterIds[i].InMaxSequence && model.InvoiceRegisterIds[i].InvoiceTypeId == 1 && model.ApproveStatus == 1)
 				{
 					var data = await _invoiceRepository.InvoiceIUD(model.BusinessUnitId,
 						model.InvoiceRegisterIds[i].InvoiceRegisterId, userId);
