@@ -11,6 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Serilog;
 using SolaERP.Application.Contracts.Services;
 using static SolaERP.Job.Helper;
 
@@ -70,7 +71,7 @@ namespace SolaERP.Job
 				where vr.MailIsSentDeadLine = 0 and
 				rm.Status = 1 and
 				rm.IsDeleted != 1 and
-				CONVERT(DATE , rm.RFQDeadline) = CONVERT(DATE, DATEADD(DAY, -2, GETDATE()))
+				CONVERT(DATE , rm.RFQDeadline) = CONVERT(DATE, DATEADD(DAY, +2, GETDATE()))
 				";
 
 			using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -82,6 +83,7 @@ namespace SolaERP.Job
 				{
 					userDatas.Add(new RFQUserData
 					{
+						RFQVendorResponseId = reader.Get<int>("RFQVendorResponseId"),
 						RFQMainId = reader.Get<int>("RFQMainId"),
 						Email = reader.Get<string>("Email"),
 						Language = reader.Get<string>("Language"),
@@ -114,7 +116,7 @@ namespace SolaERP.Job
 				where vr.MailIsSentLastDay = 0 and
 				rm.Status = 1 and
 				rm.IsDeleted != 1 and
-				CONVERT(DATE , rm.RFQDeadline) = CONVERT(DATE, DATEADD(DAY, -1, GETDATE()))
+				CONVERT(DATE , rm.RFQDeadline) = CONVERT(DATE, DATEADD(DAY, +1, GETDATE()))
 				";
 			
 			using (var command = _unitOfWork.CreateCommand() as DbCommand)
@@ -126,6 +128,7 @@ namespace SolaERP.Job
 				{
 					userDatas.Add(new RFQUserData
 					{
+						RFQVendorResponseId = reader.Get<int>("RFQVendorResponseId"),
 						RFQMainId = reader.Get<int>("RFQMainId"),
 						Email = reader.Get<string>("Email"),
 						Language = reader.Get<string>("Language"),
@@ -158,43 +161,36 @@ namespace SolaERP.Job
 			}
 		}
 		
-		public async Task<bool> UpdateMailIsSentDeadLine(List<int> rfqVendorResponseIds)
+		public async Task UpdateMailIsSentDeadLine(List<int> rfqVendorResponseIds)
 		{
-			var idsRes = string.Join(",", rfqVendorResponseIds);
+			var idsRes = rfqVendorResponseIds.ToArray();
+			
 			using (var command = _unitOfWork.CreateCommand() as DbCommand)
 			{
-				command.CommandText = @$"set nocount off update Procurement.RFQVendorResponse set MailIsSentDeadLine = 1 where RFQVendorResponseId IN({idsRes})";
-				try
-				{
-					var res = command.ExecuteNonQuery() > 0;
-					return res;
-				}
-				catch (Exception ex)
-				{
-					return false;
-				}
+				command.CommandText = @"SET NOCOUNT OFF EXEC SP_RFQVendorResponseUpdateDeadLine @RFQVendorResponseId";
 
-
+				string ids = string.Join(",", idsRes); // Assuming you can pass a CSV of values to the query
+				command.Parameters.AddWithValue(command, "@RFQVendorResponseId", ids);
+				Console.WriteLine("UpdateMailIsSentDeadLine "+ids);
+				await _unitOfWork.SaveChangesAsync();
+				await command.ExecuteNonQueryAsync();
 			}
+
 		}
 		
-		public async Task<bool> UpdateMailIsSentLastDay(List<int> rfqVendorResponseIds)
+		public async Task UpdateMailIsSentLastDay(List<int> rfqVendorResponseIds)
 		{
-			var idsRes = string.Join(",", rfqVendorResponseIds);
+			var idsRes = rfqVendorResponseIds.ToArray();
+
 			using (var command = _unitOfWork.CreateCommand() as DbCommand)
 			{
-				command.CommandText = @$"set nocount off update Procurement.RFQVendorResponse set MailIsSentLastDay = 1 where RFQVendorResponseId IN({idsRes})";
-				try
-				{
-					var res = command.ExecuteNonQuery() > 0;
-					return res;
-				}
-				catch (Exception ex)
-				{
-					return false;
-				}
+				command.CommandText = @"SET NOCOUNT OFF EXEC SP_RFQVendorResponseUpdateLastDay @RFQVendorResponseId";
 
-
+				string ids = string.Join(",", idsRes); // Assuming you can pass a CSV of values to the query
+				Console.WriteLine("UpdateMailIsSentLastDay "+ids);
+				command.Parameters.AddWithValue(command, "@RFQVendorResponseId", ids);
+				await _unitOfWork.SaveChangesAsync();
+				await command.ExecuteNonQueryAsync();
 			}
 		}
 
