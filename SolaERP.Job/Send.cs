@@ -15,7 +15,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Serilog;
 
 namespace SolaERP.Job
 {
@@ -115,32 +114,25 @@ namespace SolaERP.Job
 			RFQMethods methods = new RFQMethods(_unitOfWork);
 			
 			var vendors = await methods.GetRFQVendorUsersMailIsSentDeadLineFalse();
-			if (vendors != null && vendors.Count > 0)
+			foreach (var item in vendors)
 			{
-				foreach (var item in vendors)
-				{
-					await _mailService.SendRFQDeadLineMail(item.UserId,"test subject" , "test body DeadLine");
-				}
-			
-				await methods.UpdateMailIsSentDeadLine(vendors.Select(x => x.RFQVendorResponseId).Distinct().ToList());
+				await _mailService.SendRFQDeadLineMail(item.UserId,"test subject" , "test body LastDay");
 			}
+		
+			await methods.UpdateMailIsSentDeadLine(vendors.Select(x => x.RFQVendorResponseId).ToList());
 		}
 
 		public async Task SendRFQLastDayMail()
 		{
 			RFQMethods methods = new RFQMethods(_unitOfWork);
 		
-			var vendors = await methods.GetRFQVendorUsersMailIsSentLastDayFalse();
-
-			if (vendors != null && vendors.Count > 0)
+			var vendors = await methods.GetRFQVendorUsersMailIsSentLastDayFalse(); 
+			foreach (var item in vendors)
 			{
-				foreach (var item in vendors)
-				{
-					await _mailService.SendRFQLastDayMail(item.UserId,"test subject" , "test body LastDay");
-				}
-
-				await methods.UpdateMailIsSentLastDay(vendors.Select(x => x.RFQVendorResponseId).Distinct().ToList());	
+				await _mailService.SendRFQLastDayMail(item.UserId,"test subject" , "test body LastDay");
 			}
+		
+			await methods.UpdateMailIsSentLastDay(vendors.Select(x => x.RFQVendorResponseId).ToList());
 		}
 
 	}
