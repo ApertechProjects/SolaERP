@@ -19,6 +19,7 @@ namespace SolaERP.Job.RFQClose
 				   .ForJob(jobKey)
 				   .WithCronSchedule("0 0/30 9-18 * * ?")
 				   .Build());
+
 		}
 	}
 }
