@@ -8,6 +8,6 @@
         public DateTime InvoiceReceivedDate { get; set; }
         public string InvoiceComment { get; set; }
         public decimal OrderTotal { get; set; }
-        public string WithHoldingTaxCode { get; set; }
+        // public string WithHoldingTaxCode { get; set; }
     }
 }
