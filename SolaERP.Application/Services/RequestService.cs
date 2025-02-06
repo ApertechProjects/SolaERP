@@ -145,7 +145,11 @@ namespace SolaERP.Persistence.Services
 				var requestEmailSendUser = await RequestMailUsers(requestId);
 
 				var templates = await _emailNotificationService.GetEmailTemplateData(EmailTemplateKey.REQP);
-				await _mailService.SendMailForRequest(response, templates, requestEmailSendUser, EmailTemplateKey.REQP, 1, businessUnitName);
+
+				response.OnCompleted(async () =>
+				{
+					await _mailService.SendMailForRequest(response, templates, requestEmailSendUser, EmailTemplateKey.REQP, 1, businessUnitName);
+				});
 
 			}).ToList();
 
