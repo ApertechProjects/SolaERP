@@ -50,5 +50,7 @@ namespace SolaERP.Application.Contracts.Services
 		Task<ApiResponse<List<RequestCategory>>> CategoryList(int businessUnitId, string keyCode);
 		Task<ApiResponse<List<BuyersAssignmentDto>>> GetBuyersAssignment(RequestWFAGetModel model, string userName);
 		Task<ApiResponse<bool>> Retrieve(RequestRetrieveDto data, string name);
+		Task<ApiResponse<bool>> UpdateRequestDetailBuyerAsync(List<RequestDetailUpdateBuyerDto> buyers, string name);
+
 	}
 }
