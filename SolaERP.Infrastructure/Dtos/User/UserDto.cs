@@ -10,7 +10,8 @@ namespace SolaERP.Application.Dtos.UserDto
         public int UserId { get; set; }
         public string FullName { get; set; }
         public int StatusId { get; set; }
-        public string UserName { get; set; }
+		public bool ChangePassword { get; set; }
+		public string UserName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
