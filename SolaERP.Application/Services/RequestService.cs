@@ -458,6 +458,14 @@ namespace SolaERP.Persistence.Services
 			return ApiResponse<bool>.Success(true);
 		}
 
+		public async Task<ApiResponse<bool>> UpdateRequestDetailBuyerAsync(List<RequestDetailUpdateBuyerDto> buyers, string name)
+		{
+			int userId = await _userRepository.ConvertIdentity(name);
+			bool data = await _requestMainRepository.UpdateRequestDetailBuyerAsync(buyers, userId);
+
+			await _unitOfWork.SaveChangesAsync();
+			return ApiResponse<bool>.Success(data);
+		}
 
 	}
 }
