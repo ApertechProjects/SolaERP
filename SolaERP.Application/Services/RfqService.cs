@@ -81,6 +81,12 @@ namespace SolaERP.Persistence.Services
 				for (int i = 0; i < request.Details.Count; i++)
 				{
 					RfqDetailSaveModel item = request.Details[i];
+
+					if (detailIds.Count <= i)
+					{
+						break;
+					}
+
 					item.Id = detailIds[i];
 					if (item.Attachments != null)
 						await _attachmentService.SaveAttachmentAsync(item.Attachments, SourceType.RFQD, item.Id);
