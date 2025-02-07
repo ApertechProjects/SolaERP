@@ -10,6 +10,7 @@ using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using SolaERP.Application.Dtos.Request;
 using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
@@ -496,6 +497,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@BUYER", setBuyer.Buyer);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", setBuyer.BusinessUnitId);
+
+                await UpdateRequestDetailBuyerAsync(setBuyer.RequestDetails , userId , setBuyer.BusinessUnitId);
+                
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
@@ -759,5 +763,25 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 			return result;
 		}
+        
+        public async Task UpdateRequestDetailBuyerAsync(List<RequestDetailUpdateBuyerDto> buyers, int userId,
+            int businessUnitId)
+        {
+            foreach (RequestDetailUpdateBuyerDto requestDetail in buyers)
+            {
+                using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+                {
+                        command.CommandText = @"SET NOCOUNT OFF exec SP_RequestDetail_Update_Buyer @RequestDetailId,@Buyer,@UserId,@BusinessUnitId";
+
+                        command.Parameters.AddWithValue(command, "@RequestDetailId", requestDetail.RequestDetailId);
+                        command.Parameters.AddWithValue(command, "@Buyer", requestDetail.Buyer);
+                        command.Parameters.AddWithValue(command, "@UserId", userId);
+                        command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+                        
+                        await command.ExecuteNonQueryAsync();
+                }
+
+            }
+        }
 	}
 }

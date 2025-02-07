@@ -462,6 +462,5 @@ namespace SolaERP.Persistence.Services
 			return ApiResponse<bool>.Success(true);
 		}
 
-
 	}
 }
