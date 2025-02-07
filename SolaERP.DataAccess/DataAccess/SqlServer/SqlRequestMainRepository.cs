@@ -764,23 +764,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 			return result;
 		}
         
-        public async Task<bool> UpdateRequestDetailBuyerAsync(List<RequestDetailUpdateBuyerDto> buyers, int userId , int businessUnitId)
+        public async Task UpdateRequestDetailBuyerAsync(List<RequestDetailUpdateBuyerDto> buyers, int userId,
+            int businessUnitId)
         {
-            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            foreach (RequestDetailUpdateBuyerDto requestDetail in buyers)
             {
-                foreach (RequestDetailUpdateBuyerDto requestDetail in buyers)
+                using (var command = _unitOfWork.CreateCommand() as SqlCommand)
                 {
-                    
-                    command.CommandText = @"SET NOCOUNT OFF exec SP_RequestDetail_Update_Buyer @RequestDetailId,@Buyer,@UserId,@BusinessUnitId";
+                        command.CommandText = @"SET NOCOUNT OFF exec SP_RequestDetail_Update_Buyer @RequestDetailId,@Buyer,@UserId,@BusinessUnitId";
 
-                    command.Parameters.AddWithValue(command, "@RequestDetailId", requestDetail.RequestDetailId);
-                    command.Parameters.AddWithValue(command, "@Buyer", requestDetail.Buyer);
-                    command.Parameters.AddWithValue(command, "@UserId", userId);
-                    command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
-                
+                        command.Parameters.AddWithValue(command, "@RequestDetailId", requestDetail.RequestDetailId);
+                        command.Parameters.AddWithValue(command, "@Buyer", requestDetail.Buyer);
+                        command.Parameters.AddWithValue(command, "@UserId", userId);
+                        command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+                        
+                        await command.ExecuteNonQueryAsync();
                 }
-                
-                return await command.ExecuteNonQueryAsync() > 0;
+
             }
         }
 	}
