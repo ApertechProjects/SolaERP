@@ -163,9 +163,5 @@ namespace SolaERP.Controllers
 		public async Task<IActionResult> CategoryList(int businessUnitId, string keyCode)
 			=> CreateActionResult(await _requestService.CategoryList(businessUnitId, keyCode));
 		
-		[HttpPost]
-		public async Task<IActionResult> UpdateRequestDetailBuyer(List<RequestDetailUpdateBuyerDto> saveModel)
-			=> CreateActionResult(await _requestService.UpdateRequestDetailBuyerAsync(saveModel , User.Identity.Name));
-
 	}
 }
