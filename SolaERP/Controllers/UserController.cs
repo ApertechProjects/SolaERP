@@ -51,6 +51,10 @@ namespace SolaERP.Controllers
             return CreateActionResult(await _userService.GetUserInfoAsync(userId, token));
         }
 
+ 	[HttpPost]
+	public async Task<IActionResult> ChangeUserPasswordAsync(ChangeUserPasswordModel user)
+		=> CreateActionResult(await _userService.ChangeUserPasswordAsync(user));
+
      
         [HttpGet]
         public async Task<IActionResult> GetCurrentUserInfoAsync()
