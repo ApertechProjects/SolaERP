@@ -625,7 +625,7 @@ namespace SolaERP.Persistence.Services
 					if (userApprovals)
 					{
 						Console.WriteLine("SendMailToAdminstrationForApproveRegistration: " + DateTime.Now.ToString());
-						await _mailService.SendMailToAdminstrationForApproveRegistration(Convert.ToInt32(result), changedFields);
+						await _mailService.SendMailToAdminstrationForApproveRegistration(Convert.ToInt32(userIdentity), changedFields);
 					}
 					else
 					{
