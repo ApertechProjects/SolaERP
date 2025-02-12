@@ -28,7 +28,8 @@ namespace SolaERP.Persistence.Services
 		private readonly IGeneralRepository _generalRepository;
 		private readonly IAttachmentService _attachmentService;
 		private readonly IUserRepository _userRepository;
-
+		private readonly IMailService _mailService;
+		private readonly IVendorRepository _vendorRepository;
 		public RfqService(IUnitOfWork unitOfWork,
 			IRfqRepository repository,
 			IMapper mapper,
@@ -36,7 +37,10 @@ namespace SolaERP.Persistence.Services
 			IBusinessUnitRepository bURepository,
 			IGeneralRepository generalRepository,
 			IAttachmentService attachmentService,
-			IUserRepository userRepository)
+			IUserRepository userRepository,
+			IMailService mailService,
+			IVendorRepository vendorRepository
+			)
 		{
 			_unitOfWork = unitOfWork;
 			_repository = repository;
@@ -46,6 +50,8 @@ namespace SolaERP.Persistence.Services
 			_generalRepository = generalRepository;
 			_attachmentService = attachmentService;
 			_userRepository = userRepository;
+			_mailService = mailService;
+			_vendorRepository = vendorRepository;
 		}
 
 
@@ -322,11 +328,24 @@ namespace SolaERP.Persistence.Services
 
 			var data = _mapper.Map<RFQVendorIUD>(dto);
 			var result = await _repository.RFQVendorIUDAsync(data, Convert.ToInt32(userIdentity));
-
+			
 			await _unitOfWork.SaveChangesAsync();
+
+			Task.Run(() => SendMailsAsync(dto));
+
 			return result ? ApiResponse<int>.Success(1, 200) : ApiResponse<int>.Fail(0, 400);
 		}
 
+		public async Task SendMailsAsync(RFQVendorIUDDto dto)
+		{
+			foreach (var vendorCode in dto.VendorCodes)
+			{
+				Console.WriteLine($"Sending mail to {vendorCode}");
+				var vendorId = await _vendorRepository.GetRevisionVendorIdByVendorCode(vendorCode);
+				_mailService.SendRFQVendorMail(vendorId);
+			}
+		}
+		
 		public async Task<ApiResponse<List<RFQVendorsDto>>> GetRfqVendors(int rfqMainId)
 		{
 			var rfqVendors = await _repository.GetRfqVendors(rfqMainId);

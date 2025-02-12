@@ -785,6 +785,27 @@ namespace SolaERP.Infrastructure.Services
 
 			emails.Add(RegEmail);
 		}
+		
+		public async Task SendRFQVendorMail(int vendorId)
+		{
+			List<Task> emails = new List<Task>();
+			
+			var users = await _userRepository.GetVendorUsersForMail(vendorId);
+
+			foreach (var user in users)
+			{
+				Console.WriteLine($"Sending mail to {user}");
+
+				VM_RFQVendorApprove emailVM = new VM_RFQVendorApprove(user.Language.ToString(), "RFQ Approve", "Sizə göndərilmiş RFQ qəbul etmınzi gözləyir", "anarceferov1996@gmail.com")
+				{
+					Language = (Language)Enum.Parse(typeof(Language), user.Language.ToString())
+				};
+
+				Task RegEmail = SendUsingTemplate("RFQ Approve", emailVM, emailVM.TemplateName(), null, new List<string> { "anarceferov1996@gmail.com" });
+
+				emails.Add(RegEmail);
+			}
+		}
 	}
 
 }
