@@ -7,6 +7,7 @@ namespace SolaERP.Application.Dtos.Vendors
     {
         public int VendorId { get; set; }
         public int RevisionVendorId { get; set; }
+        public bool IsUpdate { get; set; }
         public int BlackList { get; set; }
         public string BlackListDescription { get; set; }
         public decimal Rating { get; set; }
