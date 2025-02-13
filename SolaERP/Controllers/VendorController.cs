@@ -34,6 +34,11 @@ namespace SolaERP.API.Controllers
 
 		[Authorize]
 		[HttpPost]
+		public async Task<IActionResult> Save2(VendorCardDto2 vendor)
+			=> CreateActionResult(await _service.SaveAsync2(User.Identity.Name, vendor));
+		
+		[Authorize]
+		[HttpPost]
 		public async Task<IActionResult> RFQVendorResponseChangeStatus([FromBody] VendorRFQStatusChangeRequest request)
 			=> CreateActionResult(await _service.RFQVendorResponseChangeStatus(
 				request.RFQMainId, request.Status, request.VendorCode
