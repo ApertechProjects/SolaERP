@@ -498,6 +498,7 @@ namespace SolaERP.Persistence.Services
 
 		public async Task<ApiResponse<bool>> SaveAsync2(string userIdentity, VendorCardDto2 vendorDto)
 		{
+
 			User user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 			List<Task<bool>> tasks = new();
 			Vendor vendor = _mapper.Map<Vendor>(vendorDto);
@@ -571,10 +572,10 @@ namespace SolaERP.Persistence.Services
 			#endregion
 
 			#region BusinessCategory
-			foreach (var item in vendorDto.VendorBusinessCategories)
-			{
-				await _supplierRepository.ModifyVendorBusinessCategoryActivityAsync(item.VendorBusinessCategoryId, item.Active);
-			}
+			// foreach (var item in vendorDto.VendorBusinessCategories)
+			// {
+			// 	await _supplierRepository.ModifyVendorBusinessCategoryActivityAsync(item.VendorBusinessCategoryId, item.Active);
+			// }
 			#endregion
 
 			await Task.WhenAll(tasks);
