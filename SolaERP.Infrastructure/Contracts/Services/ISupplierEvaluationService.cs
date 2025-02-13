@@ -12,8 +12,7 @@ namespace SolaERP.Application.Contracts.Services
 
         Task<ApiResponse<VM_GET_SupplierEvaluation>> GetAllAsync(SupplierEvaluationGETModel model);
 
-        Task<ApiResponse<VM_GET_InitalRegistration>>
-            GetInitRegistrationAsync(string userIdentity, int? vendorId = null);
+        Task<ApiResponse<VM_GET_InitalRegistration>> GetInitRegistrationAsync(string userIdentity, int? vendorId = null);
 
         Task<ApiResponse<VM_GET_VendorBankDetails>> GetBankDetailsAsync(string userIdentity, int? vendorId = null);
         Task<ApiResponse<List<NonDisclosureAgreement>>> GetNDAAsync(string userIdentity, int? vendorId = null);
@@ -39,5 +38,10 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<EvaluationResultModel>> SubmitAsync2(string userIdentity, SupplierRegisterCommand2 command);
 
         Task<ApiResponse<bool>> UpdateVendor(string name, string taxId);
+        Task UpdateAsync(string userIdentity, SupplierRegisterCommand2 command);
+
+        Task<ApiResponse<EvaluationResultModel>> UpdateVendorRevise(string useridentity,
+            SupplierRegisterCommand2 command, bool isSubmitted = false);
+
     }
 }

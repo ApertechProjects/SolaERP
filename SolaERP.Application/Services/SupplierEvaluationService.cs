@@ -110,7 +110,7 @@ namespace SolaERP.Persistence.Services
 					throw new DueDiligenceException($"Fill grid datas for Financial Status");
 				}
 
-
+				
 				User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
 				command.CompanyInformation.VendorCode = command.CompanyInformation.VendorCode == ""
 					? null
@@ -647,6 +647,500 @@ namespace SolaERP.Persistence.Services
 			}
 		}
 
+		public async Task UpdateAsync(string userIdentity,
+		  SupplierRegisterCommand2 command)
+		{
+			try
+			{
+				var result = (await UpdateVendorRevise(userIdentity, command, true)).Data;
+
+				await VendorSubmit(result.VendorId);
+				
+				List<Task> emails = new List<Task>();
+
+				await _mailService.SendRegistrationPendingMail(Convert.ToInt32(userIdentity));
+
+				var changedFields = new List<string>();
+				if (command.IsRevise)
+				{
+					var previousVendorId = await _vendorRepository.GetVendorPreviousVendorId(result.VendorId);
+					var vendorOld = await _vendorRepository.GetHeader(previousVendorId);
+					var vendorCurrent = await _vendorRepository.GetHeader(result.VendorId);
+					changedFields = Compare.CompareRow(vendorOld, vendorCurrent);
+					if (!await CompareVendorBusinessCategory(previousVendorId, result.VendorId))
+						changedFields.Add("Business Category");
+					if (!await CompareVendorBusinessSector(previousVendorId, result.VendorId))
+						changedFields.Add("Business Sector");
+					if (!await CompareVendorRepresentedCompany(previousVendorId, result.VendorId))
+						changedFields.Add("Represented Company");
+					if (!await CompareVendorRepresentedProduct(previousVendorId, result.VendorId))
+						changedFields.Add("Represented Product");
+
+				}
+
+				var vendorUsers = await _userRepository.GetUserIdsByVendor(result.VendorId);
+				if (vendorUsers.Count > 0)
+				{
+					var userApprovals = await _userRepository.CheckUserApproval(vendorUsers[0]);
+					if (userApprovals)
+						await _mailService.SendMailToAdminstrationForApproveRegistration(Convert.ToInt32(userIdentity),
+							changedFields);
+					else
+						await _mailService.SendMailToAdminstrationForApproveRegistrationForAutoApprove(
+							Convert.ToInt32(userIdentity), changedFields);
+				}
+				else
+					await _mailService.SendMailToAdminstrationForApproveRegistrationForAutoApprove(
+						Convert.ToInt32(userIdentity), changedFields);
+
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+				
+		public async Task<ApiResponse<EvaluationResultModel>> UpdateVendorRevise(string useridentity, SupplierRegisterCommand2 command, bool isSubmitted = false)
+		{
+			try
+			{
+				var dueDiligence = command.DueDiligence
+					.Where(x => x.Childs != null)         // Ensure the Childs list is not null
+					.SelectMany(x => x.Childs)
+					.ToList();
+
+				var validatorDue = new DueDiligenceValidator(_repository);
+				var validationDueResponse = await validatorDue.ValidateDueDiligenceAsync(dueDiligence);
+				if (!string.IsNullOrEmpty(validationDueResponse))
+				{
+					throw new DueDiligenceException($"Please, fill all mandatory fields");
+				}
+
+				var validatorGridResponse = await validatorDue.ValidateGridDatas(dueDiligence);
+				if (!validatorGridResponse)
+				{
+					throw new DueDiligenceException($"Fill grid datas for Financial Status");
+				}
+
+				
+				User user = await _userRepository.GetByIdAsync(Convert.ToInt32(useridentity));
+				command.CompanyInformation.VendorCode = command.CompanyInformation.VendorCode == ""
+					? null
+					: command.CompanyInformation.VendorCode;
+
+				var processSelector = GetProcessSelector(command.CompanyInformation.VendorId, command.IsRevise);
+
+				SetRevisionNumber(command, processSelector, isSubmitted);
+
+				Vendor vendor = _mapper.Map<Vendor>(command?.CompanyInformation);
+				if (isSubmitted && !processSelector.IsCreate)
+				{
+					vendor.ReviseDate = DateTime.UtcNow.AddHours(4);
+				}
+
+				string companyLogoFile = await _vendorRepository.GetCompanyLogoFileAsync(vendor.VendorId);
+
+
+				int vendorId = await _vendorRepository.UpdateAsync(user.Id, vendor);
+
+
+
+				vendor.RegistrationDate = vendor.RegistrationDate.ConvertDateToValidDate();
+
+				#region Represented Company & Represented Products
+
+				await _repository.DeleteRepresentedProductAsync(vendorId);
+				await _repository.DeleteRepresentedCompanyAsync(vendorId);
+
+				if (command?.CompanyInformation?.RepresentedCompanies != null)
+					await _repository.AddRepresentedCompany(new Application.Models.VendorRepresentedCompany
+					{
+						VendorId = vendorId,
+						RepresentedCompanyName = string.Join(",", command?.CompanyInformation?.RepresentedCompanies)
+					});
+				if (command?.CompanyInformation?.RepresentedProducts != null)
+					await _repository.AddRepresentedProductAsync(new RepresentedProductData
+					{
+						VendorId = vendorId,
+						RepresentedProductName = string.Join(",", command?.CompanyInformation?.RepresentedProducts)
+					});
+
+				#endregion
+
+				#region BusinessCategory
+
+				await _repository.DeleteVendorBusinessCategoryAsync(vendorId);
+				foreach (var item in command.CompanyInformation.BusinessCategories)
+				{
+					await _repository.AddVendorBusinessCategoryAsync(new VendorBusinessCategoryData
+					{
+						VendorId = vendorId,
+						BusinessCategoryId = item.Id
+					});
+				}
+
+				#endregion
+
+				#region BusinessSector
+
+				//await _repository.DeleteVendorBusinessSectorAsync(vendorId);
+				//foreach (var item in command.CompanyInformation.BusinessSectors)
+				//{
+				//await _repository.AddVendorBusinessSectorAsync(new VendorBusinessSectorData
+				//    {
+				//        VendorId = vendorId,
+				//        BusinessSectorId = item.BusinessSectorId
+				//    });
+				//}
+
+				#endregion
+
+				#region ProductServices
+
+				await _repository.DeleteProductServiceAsync(vendorId);
+				foreach (var item in command.CompanyInformation.Services)
+				{
+					await _repository.AddProductServiceAsync(new ProductServiceData
+					{
+						VendorId = vendorId,
+						ProductServiceId = item.Id
+					});
+				}
+
+				#endregion
+
+				#region PrequalificationCategory
+
+				await _repository.DeletePrequalificationCategoryAsync(vendorId);
+				foreach (var item in command.CompanyInformation.PrequalificationTypes)
+				{
+					await _repository.AddPrequalificationCategoryAsync(new PrequalificationCategoryData
+					{
+						VendorId = vendorId,
+						PrequalificationCategoryId = item.Id
+					});
+				}
+
+				#endregion
+
+				#region Company Information Logo
+				if (command?.CompanyInformation?.CompanyLogo != null)
+				{
+					SetAttachmentIdToZeroWhenIsRevise(command.IsRevise, command?.CompanyInformation?.CompanyLogo);
+					await _attachmentService.SaveAttachmentAsync(command?.CompanyInformation?.CompanyLogo,
+						SourceType.VEN_LOGO, vendorId);
+				}
+
+				#endregion
+
+
+				#region Company Information Attachments
+
+				//SetAttachmentIdToZeroWhenIsRevise(command.IsRevise, command?.CompanyInformation?.Attachments);
+				//await _attachmentService.SaveAttachmentAsync2(command?.CompanyInformation?.Attachments,
+				//    SourceType.VEN_OLET, vendorId);
+
+				#endregion
+
+				#region Setting Vendor Ids (COBC,NDA,Bank Accounts)
+
+				command?.CodeOfBuConduct?.ForEach(x => x.VendorId = vendorId);
+				command?.NonDisclosureAgreement?.ForEach(x => x.VendorId = vendorId);
+				command?.BankAccounts?.ForEach(x => x.VendorId = vendorId);
+
+				#endregion
+
+				#region NDA
+
+				if (command.NonDisclosureAgreement is not null)
+				{
+					if (command.NonDisclosureAgreement.Count > 0)
+					{
+						await _repository.DeleteNDAAsync(vendorId);
+					}
+
+					for (int i = 0; i < command.NonDisclosureAgreement.Count; i++)
+					{
+						command.NonDisclosureAgreement[i].VendorId = vendorId;
+						var mappedNDA = _mapper.Map<VendorNDA>(command.NonDisclosureAgreement[i]);
+						await _repository.AddNDAAsync(mappedNDA);
+					}
+				}
+
+				#endregion
+
+				#region COBC
+
+				if (command.CodeOfBuConduct is not null)
+				{
+					if (command.CodeOfBuConduct.Count > 0)
+					{
+						await _repository.DeleteCOBCAsync(vendorId);
+					}
+
+					for (int i = 0; i < command.CodeOfBuConduct.Count; i++)
+					{
+						command.CodeOfBuConduct[i].VendorId = vendorId;
+						await _repository.AddCOBCAsync(_mapper.Map<VendorCOBC>(command.CodeOfBuConduct[i]));
+					}
+				}
+
+				#endregion
+
+				#region Bank Accounts
+
+				if (command.BankAccounts is not null)
+				{
+					for (var i = 0; i < command.BankAccounts.Count; i++)
+					{
+						var x = command.BankAccounts[i];
+
+						if (x.Type == 2 && x.Id > 0)
+						{
+							await _vendorRepository.DeleteBankDetailsAsync(user.Id, x.Id);
+						}
+
+						else if (x.Type != 2)
+						{
+							x.VendorId = vendorId;
+
+							var detaildId = await _vendorRepository.UpdateBankDetailsAsync(user.Id,
+								_mapper.Map<VendorBankDetail>(x));
+
+							if (x.AccountVerificationLetter != null)
+							{
+								SetAttachmentIdToZeroWhenIsRevise(command.IsRevise, x.AccountVerificationLetter);
+								await _attachmentService.SaveAttachmentAsync(x.AccountVerificationLetter,
+									SourceType.VEN_BNK, detaildId);
+							}
+						}
+					}
+				}
+
+				#endregion
+
+				#region DueDiligence
+
+				if (command.DueDiligence is not null)
+				{
+					foreach (var designSaveDto in command.DueDiligence)
+					{
+						foreach (var item in designSaveDto.Childs)
+						{
+							if (item.HasCheckBox == false)
+							{
+								item.CheckboxValue = false;
+							}
+
+							if (item.HasRadioBox == false)
+							{
+								item.RadioboxValue = false;
+							}
+
+							if (item.HasDateTime == false)
+							{
+								item.DateTimeValue = null;
+							}
+
+							if (item.TextareaValue == "null" || string.IsNullOrEmpty(item.TextareaValue))
+							{
+								item.TextareaValue = "";
+							}
+
+							if (item.TextboxValue == "null" || string.IsNullOrEmpty(item.TextboxValue))
+							{
+								item.TextboxValue = "";
+							}
+
+							var dueInputModel = _mapper.Map<VendorDueDiligenceModel>(item);
+							dueInputModel.VendorId = vendorId;
+
+							if (!string.IsNullOrEmpty(item.DateTimeValue) && item.DateTimeValue != "null")
+							{
+								try
+								{
+									dueInputModel.DateTimeValue = Convert.ToDateTime(item.DateTimeValue);
+								}
+								catch (Exception e)
+								{
+									dueInputModel.DateTimeValue = null;
+								}
+							}
+							else
+							{
+								dueInputModel.DateTimeValue = null;
+							}
+
+							await _repository.UpdateDueAsync(dueInputModel);
+
+							if (item?.HasDataGrid == true)
+							{
+								foreach (var gridData in item?.GridDatas)
+								{
+									if (gridData.Type == 2 && gridData.Id > 0)
+									{
+										await _repository.DeleteDueDesignGrid(gridData.Id);
+										continue;
+									}
+									else if (gridData.Type != 2)
+									{
+										var gridDatas = _mapper.Map<DueDiligenceGridModel>(gridData);
+										if (gridDatas.Id < 0)
+											gridDatas.Id = 0;
+
+										gridDatas.DueDesignId = item.DesignId;
+										gridDatas.VendorId = vendorId;
+
+										await _repository.UpdateDueDesignGrid(gridDatas);
+									}
+								}
+							}
+
+							if (item.Attachments != null)
+							{
+								item.Attachments.ForEach(x => x.AttachmentTypeId = item.DesignId);
+								SetAttachmentIdToZeroWhenIsRevise(command.IsRevise, item.Attachments);
+								await _attachmentService.SaveAttachmentAsync(item.Attachments, SourceType.VEN_DUE,
+									vendorId);
+							}
+						}
+					}
+				}
+
+				#endregion
+
+				#region Prequalification
+
+				if (command.Prequalification is not null)
+				{
+					for (int i = 0; i < command.Prequalification.Count; i++)
+					{
+						for (int j = 0; j < command.Prequalification[i].Prequalifications.Count; j++)
+						{
+							foreach (var item in command?.Prequalification?[i].Prequalifications[j]?.Childs)
+							{
+								if (item.HasCheckbox == false)
+								{
+									item.CheckboxValue = false;
+								}
+
+								if (item.HasRadiobox == false)
+								{
+									item.RadioboxValue = false;
+								}
+
+								if (item.HasDateTime == false &&
+									string.IsNullOrEmpty(item.DateTimeValue))
+								{
+									item.DateTimeValue = null;
+								}
+
+								if (item.TextareaValue == "null" ||
+									string.IsNullOrEmpty(item.TextareaValue))
+								{
+									item.TextareaValue = "";
+								}
+
+								if (item.TextboxValue == "null" ||
+									string.IsNullOrEmpty(item.TextboxValue))
+								{
+									item.TextboxValue = "";
+								}
+
+								var prequalificationValue =
+									_mapper.Map<VendorPrequalificationValues>(item);
+								if (!string.IsNullOrEmpty(item.DateTimeValue) &&
+									item.DateTimeValue != "null")
+								{
+									try
+									{
+										prequalificationValue.DateTimeValue =
+											Convert.ToDateTime(item.DateTimeValue);
+									}
+									catch (Exception e)
+									{
+										prequalificationValue.DateTimeValue = null;
+									}
+								}
+								else
+								{
+									prequalificationValue.DateTimeValue = null;
+								}
+
+								prequalificationValue.VendorId = vendorId;
+
+
+								await _repository.UpdatePrequalification(prequalificationValue);
+
+
+								if (item?.Attachments is not null)
+								{
+									item.Attachments.ForEach(x => x.AttachmentTypeId = item.DesignId);
+									SetAttachmentIdToZeroWhenIsRevise(command.IsRevise, item.Attachments);
+									await _attachmentService.SaveAttachmentAsync(item.Attachments, SourceType.VEN_PREQ,
+										vendorId);
+								}
+
+
+								if (item.HasGrid == true)
+								{
+									if (item.GridDatas != null)
+									{
+										foreach (var gridData in item.GridDatas)
+										{
+											var gridDatas =
+												_mapper.Map<PrequalificationGridData>(gridData);
+											if (gridData.Type == 2 && gridData.Id > 0)
+											{
+												await _repository.DeletePreGridAsync(gridDatas
+													.PreqqualificationGridDataId);
+												continue;
+											}
+											else if (gridData.Type != 2)
+											{
+												if (gridDatas.PreqqualificationGridDataId < 0)
+													gridDatas.PreqqualificationGridDataId = 0;
+												gridDatas.PreqqualificationDesignId = item.DesignId;
+												gridDatas.VendorId = vendorId;
+
+												await _repository.UpdatePreGridAsync(gridDatas);
+											}
+
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
+				#endregion
+
+				if (processSelector.IsCreate && user.UserTypeId == 0)
+				{
+					user.VendorId = vendorId;
+					await _userRepository.SaveUserAsync(user);
+				}
+
+				await _unitOfWork.SaveChangesAsync();
+				EvaluationResultModel resultModel = new EvaluationResultModel()
+				{
+					VendorId = vendorId,
+					BankDetails = await GetBankDetail(useridentity),
+					CompanyInformation = await GetCompanyInformation(useridentity),
+				};
+
+				return ApiResponse<EvaluationResultModel>.Success(resultModel, 200);
+			}
+			catch (DueDiligenceException ex)
+			{
+				throw;
+			}
+			catch (Exception ex)
+			{
+				throw;
+			}
+		}
 		private async Task VendorSubmit(int vendorId)
 		{
 			await _vendorRepository.VendorSubmit(vendorId);
@@ -1223,7 +1717,7 @@ namespace SolaERP.Persistence.Services
 		{
 			var user = await _userRepository.GetByIdAsync(Convert.ToInt32(userIdentity));
 			int vendor = revisedVendorId ?? user.VendorId;
-
+			
 			var vendorPrequalificationTask = await _repository.GetVendorPrequalificationAsync(vendor);
 			var vendorRepresentedProduct = await _repository.GetRepresentedProductAsync(vendor);
 			var vendorBusinessSector = await _repository.GetBusinessSectorAsync(vendor);
