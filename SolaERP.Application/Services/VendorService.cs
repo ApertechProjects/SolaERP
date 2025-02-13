@@ -278,6 +278,7 @@ namespace SolaERP.Persistence.Services
 			if (vendorId == 0) header.CompanyRegistrationDate = null;
 
 			header.RevisionVendorId = await _repository.GetRevisionVendorIdByVendorCode(header.VendorCode);
+			header.IsUpdate = await _repository.GetVendorCountByVendorCode(header.VendorCode) > 1;
 			header.WithHoldingTaxId = header.WithHoldingTaxId == 0 ? null : header.WithHoldingTaxId;
 			header.ShipVia = header.ShipVia == 0 ? null : header.ShipVia;
 			header.DeliveryTerms = header.DeliveryTerms == 0 ? null : header.DeliveryTerms;

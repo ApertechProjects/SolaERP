@@ -574,6 +574,54 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return result;
         }
+        
+        public async Task<int> GetLastVendorIdByVendorCode(String? vendorCode)
+        {
+            int result = 0;
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"SELECT TOP 1 VendorId
+                                    FROM Procurement.Vendors
+                                    WHERE vendorCode = @VendorCode ORDER BY VendorId DESC ";
+            command.Parameters.AddWithValue(command, "@VendorCode", vendorCode);
+
+            await using DbDataReader reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+                result = reader.Get<int>("VendorId");
+
+            return result;
+        }
+        
+        public async Task<int> GetVendorCountByVendorCode(String? vendorCode)
+        {
+            int result = 0;
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"SELECT count(*) as count
+                                    FROM Procurement.Vendors
+                                    WHERE vendorCode = @VendorCode";
+            command.Parameters.AddWithValue(command, "@VendorCode", vendorCode);
+
+            await using DbDataReader reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+                result = reader.Get<int>("count");
+
+            return result;
+        }
+        
+        public async Task<String> GetVendorCodeByVendorId(int? vendorId)
+        {
+            String result = null;
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"SELECT TOP 1 VendorCode
+                                    FROM Procurement.Vendors
+                                    WHERE VendorId = @VendorId";
+            command.Parameters.AddWithValue(command, "@VendorId", vendorId);
+
+            await using DbDataReader reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+                result = reader.Get<String>("VendorCode");
+
+            return result;
+        }
 
         public async Task<int> GetRevisionNumberByVendorCode(string vendorCode)
         {
