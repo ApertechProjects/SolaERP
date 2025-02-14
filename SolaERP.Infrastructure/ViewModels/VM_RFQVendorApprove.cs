@@ -56,13 +56,12 @@ public class VM_RFQVendorApprove : VM_EmailTemplateBase
         return "";
     }
     
-    public string companyName {get;set;}
     public HtmlString GetBodyOfMail()
     {
         switch (_lang)
         {
             case "en":
-                return new HtmlString($"Dear {companyName}, <br>"+
+                return new HtmlString($"Dear {_companyName}, <br>"+
                                       "A new RFQ (Request for Quotation) has been sent to you. Please click the link below to review the request and submit your response relatively: <br>"+
                                       $"<b><a href={_configuration["Mail:VendorServerUrlUI"]+"/rfq-information"}>SolaERP</a></b> <br>"+
                                       "If you have any further questions, please do not hesitate to contact us. <br>"+
@@ -70,7 +69,7 @@ public class VM_RFQVendorApprove : VM_EmailTemplateBase
                                       "GL Group"
                 );
             case "az":
-                return new HtmlString($"Hörmətli {companyName}, <br>"+
+                return new HtmlString($"Hörmətli {_companyName}, <br>"+
                                       "Sizə yeni RFQ (Təklif Sorğusu) göndərilmişdir. Zəhmət olmasa, aşağıdakı linkə daxil olaraq sorğunu nəzərdən keçirin və müvafiq cavabınızı təqdim edin: <br>"+
                                       $"<b><a href='{_configuration["Mail:VendorServerUrlUI"]+"/rfq-information"}'>SolaERP</a></b> <br>"+
                                       "Əlavə suallarınız olarsa, bizimlə əlaqə saxlamaqdan çəkinməyin. <br>"+
