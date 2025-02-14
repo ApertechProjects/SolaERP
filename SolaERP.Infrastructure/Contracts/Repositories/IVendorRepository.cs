@@ -38,5 +38,9 @@ namespace SolaERP.Application.Contracts.Repositories
         Task VendorSubmit(int vendorId);
         Task<VendorLoad> GetVendorPreviousHeader(int vendorId);
         Task<int> GetVendorPreviousVendorId(int vendorId);
+        Task<int> GetLastVendorIdByVendorCode(String? vendorId);
+        Task<String> GetVendorCodeByVendorId(int? vendorId);
+        Task<int> GetVendorCountByVendorCode(String? vendorCode);
+
     }
 }
