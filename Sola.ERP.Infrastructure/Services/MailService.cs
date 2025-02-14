@@ -8,7 +8,6 @@ using RazorLight;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Email;
-using SolaERP.Application.Dtos.User;
 using SolaERP.Application.Entities.ApproveStages;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Email;
@@ -24,6 +23,8 @@ using System.Net;
 using System.Net.Mail;
 using System.Text.Json;
 using System.Web;
+using SolaERP.Application.Entities.User;
+using UserList = SolaERP.Application.Dtos.User.UserList;
 
 namespace SolaERP.Infrastructure.Services
 {
@@ -786,22 +787,26 @@ namespace SolaERP.Infrastructure.Services
 			emails.Add(RegEmail);
 		}
 		
-		public async Task SendRFQVendorMail(int vendorId)
+		public async Task SendRFQVendorMail(int vendorId , String vendorName , int rfqId)
 		{
 			List<Task> emails = new List<Task>();
 			
 			var users = await _userRepository.GetVendorUsersForMail(vendorId);
-
+			// users.Add(new VendorUserForMail()
+			// {
+			// 	FullName = "Anar MMC",
+			// 	Email = "anarceferov1996@gmail.com",
+			// 	Language = "en"
+			// });
+			
 			foreach (var user in users)
 			{
-				Console.WriteLine($"Sending mail to {user}");
-
-				VM_RFQVendorApprove emailVM = new VM_RFQVendorApprove(user.Language.ToString(), "RFQ Approve", "Sizə göndərilmiş RFQ qəbul etmınzi gözləyir", "anarceferov1996@gmail.com")
+				VM_RFQVendorApprove emailVM = new VM_RFQVendorApprove(user.Language, user.Email, vendorName, rfqId)
 				{
-					Language = (Language)Enum.Parse(typeof(Language), user.Language.ToString())
+					Language = (Language)Enum.Parse(typeof(Language), user.Language)
 				};
 
-				Task RegEmail = SendUsingTemplate("RFQ Approve", emailVM, emailVM.TemplateName(), null, new List<string> { "anarceferov1996@gmail.com" });
+				Task RegEmail = SendUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null, new List<string> { user.Email });
 
 				emails.Add(RegEmail);
 			}

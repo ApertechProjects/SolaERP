@@ -11,6 +11,7 @@ using SolaERP.Application.Entities.SupplierEvaluation;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using System.Reflection.Metadata.Ecma335;
+using Microsoft.Extensions.Hosting;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Dtos.Bid;
 using SolaERP.Application.Entities.BusinessUnits;
@@ -331,8 +332,10 @@ namespace SolaERP.Persistence.Services
 			
 			await _unitOfWork.SaveChangesAsync();
 
-			Task.Run(() => SendMailsAsync(dto));
-
+			await Task.Run(() => SendMailsAsync(dto));
+			
+			// SendMailsAsync(dto);
+			
 			return result ? ApiResponse<int>.Success(1, 200) : ApiResponse<int>.Fail(0, 400);
 		}
 
@@ -340,9 +343,10 @@ namespace SolaERP.Persistence.Services
 		{
 			foreach (var vendorCode in dto.VendorCodes)
 			{
-				Console.WriteLine($"Sending mail to {vendorCode}");
-				var vendorId = await _vendorRepository.GetRevisionVendorIdByVendorCode(vendorCode);
-				_mailService.SendRFQVendorMail(vendorId);
+				var vendor = await _vendorRepository.GetRevisionVendorIdAndNameByVendorCode(vendorCode);
+				// _mailBackgroundService.SendRFQVendorMail(vendor.VendorId , vendor.VendorName , dto.Id);
+
+				await _mailService.SendRFQVendorMail(vendor.VendorId , vendor.VendorName , dto.Id);
 			}
 		}
 		

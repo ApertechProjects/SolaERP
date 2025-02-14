@@ -20,6 +20,7 @@ using AspNetCoreRateLimit;
 using SolaERP.API.Middlewares;
 using SolaERP.DataAccess.Helper;
 using Microsoft.Extensions.Hosting;
+using SolaERP.Persistence.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

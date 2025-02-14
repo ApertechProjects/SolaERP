@@ -36,8 +36,7 @@ namespace SolaERP.Application.Contracts.Services
         Task SendRFQLastDayMail(int userId, string subject, string body);
         Task SendSupportMail(int userId, string subject, string body, List<AttachmentSaveModel> attachments);
         
-        Task SendRFQVendorMail(int vendorId);
-
+        Task SendRFQVendorMail(int vendorId , String vendorName , int rfqId);
     }
 
 }
