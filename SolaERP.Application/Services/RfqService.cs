@@ -12,10 +12,12 @@ using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Dtos.Bid;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Item_Code;
+using SolaERP.Application.Entities.User;
 
 namespace SolaERP.Persistence.Services
 {
@@ -31,6 +33,8 @@ namespace SolaERP.Persistence.Services
 		private readonly IUserRepository _userRepository;
 		private readonly IMailService _mailService;
 		private readonly IVendorRepository _vendorRepository;
+		private readonly IBackgroundTaskQueue _taskQueue;
+		private readonly ILogger<RfqService> _logger;
 		public RfqService(IUnitOfWork unitOfWork,
 			IRfqRepository repository,
 			IMapper mapper,
@@ -40,7 +44,9 @@ namespace SolaERP.Persistence.Services
 			IAttachmentService attachmentService,
 			IUserRepository userRepository,
 			IMailService mailService,
-			IVendorRepository vendorRepository
+			IVendorRepository vendorRepository,
+			IBackgroundTaskQueue taskQueue,
+			ILogger<RfqService> logger
 			)
 		{
 			_unitOfWork = unitOfWork;
@@ -53,6 +59,8 @@ namespace SolaERP.Persistence.Services
 			_userRepository = userRepository;
 			_mailService = mailService;
 			_vendorRepository = vendorRepository;
+			_taskQueue = taskQueue;
+			_logger = logger;
 		}
 
 
@@ -332,22 +340,32 @@ namespace SolaERP.Persistence.Services
 			
 			await _unitOfWork.SaveChangesAsync();
 
-			await Task.Run(() => SendMailsAsync(dto));
+			List<VendorUserForMail> mailData = new List<VendorUserForMail>();
 			
-			// SendMailsAsync(dto);
-			
-			return result ? ApiResponse<int>.Success(1, 200) : ApiResponse<int>.Fail(0, 400);
-		}
-
-		public async Task SendMailsAsync(RFQVendorIUDDto dto)
-		{
 			foreach (var vendorCode in dto.VendorCodes)
 			{
 				var vendor = await _vendorRepository.GetRevisionVendorIdAndNameByVendorCode(vendorCode);
-				// _mailBackgroundService.SendRFQVendorMail(vendor.VendorId , vendor.VendorName , dto.Id);
 
-				await _mailService.SendRFQVendorMail(vendor.VendorId , vendor.VendorName , dto.Id);
+				var users = await _userRepository.GetVendorUsersForMail(vendor.VendorId);
+
+				foreach (var user in users)
+				{
+					mailData.Add(new VendorUserForMail()
+					{
+						Email = user.Email,
+						FullName = user.FullName,
+						Language = user.Language,
+						VendorName = vendor.VendorName,
+					});
+				}
 			}
+			
+			_taskQueue.QueueBackgroundWorkItem(async token =>
+			{
+				await _mailService.SendRFQVendorApproveMail(mailData);
+			});
+		
+			return result ? ApiResponse<int>.Success(1, 200) : ApiResponse<int>.Fail(0, 400);
 		}
 		
 		public async Task<ApiResponse<List<RFQVendorsDto>>> GetRfqVendors(int rfqMainId)

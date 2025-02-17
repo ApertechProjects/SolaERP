@@ -343,6 +343,81 @@ namespace SolaERP.Infrastructure.Services
 
 		}
 
+		public async Task SendQueueUsingTemplate<T>(string subject, T viewModel, string templateName, string imageName, List<string> tos)
+		{
+
+			var fileRootPath = Path.GetFullPath(@"wwwroot/sources/templates");
+			var imageRootPath = Path.GetFullPath(@"wwwroot/sources/images");
+
+			var engine = new RazorLightEngineBuilder()
+				.UseFileSystemProject(fileRootPath)
+				.EnableEncoding()
+				.UseMemoryCachingProvider()
+				.Build();
+
+			string renderedHtml = await engine.CompileRenderAsync(templateName, viewModel);
+			var processedBody = PreMailer.Net.PreMailer.MoveCssInline(renderedHtml, true).Html;
+
+			Attachment? imageAttachment = null;
+			if (!string.IsNullOrEmpty(imageName))
+			{
+				imageAttachment = new Attachment(Path.Combine(imageRootPath, imageName));
+				// Attach the image file
+				imageAttachment.ContentId = "image1";
+
+				// Include the image reference in the HTML body
+				processedBody = processedBody.Replace("cid:image1", $"cid:{imageAttachment.ContentId}");
+			}
+			using (SmtpClient smtpClient = new SmtpClient())
+			{
+				var basicCredential = new NetworkCredential(_configuration["Mail:UserName"], _configuration["Mail:Password"]);
+
+				smtpClient.Host = _configuration["Mail:Host"];
+				smtpClient.Port = Convert.ToInt32(_configuration["Mail:Port"]);
+				smtpClient.EnableSsl = Convert.ToBoolean(_configuration["Mail:EnableSSL"]);
+				smtpClient.UseDefaultCredentials = false;
+				smtpClient.Credentials = basicCredential;
+
+				using (MailMessage message = new MailMessage())
+				{
+					foreach (string item in tos)
+					{
+						if (IsValidEmail(item))
+						{
+							message.From = new MailAddress(_configuration["Mail:UserName"], _configuration["Mail:UserAlias"]);
+							message.Subject = subject;
+							message.IsBodyHtml = true;
+
+							// Add the image attachment to the message
+							if (message.Attachments.Count == 0 && !string.IsNullOrEmpty(imageName))
+								message.Attachments.Add(imageAttachment);
+
+							// Set the processed HTML body as the email body
+							message.Body = processedBody;
+
+							// Add recipients
+							message.To.Add(item);
+						}
+					}
+
+					try
+					{
+						await smtpClient.SendMailAsync(message);
+					}
+					catch (SmtpFailedRecipientException ex)
+					{
+						// Handle other exceptions or logging if necessary
+						// ...
+					}
+					catch (SmtpException ex)
+					{
+						// Handle other exceptions or logging if necessary
+						// ...
+					}
+				}
+			}
+		}
+
 		private bool IsValidEmail(string email)
 		{
 			try
@@ -789,26 +864,37 @@ namespace SolaERP.Infrastructure.Services
 		
 		public async Task SendRFQVendorMail(int vendorId , String vendorName , int rfqId)
 		{
-			List<Task> emails = new List<Task>();
-			
 			var users = await _userRepository.GetVendorUsersForMail(vendorId);
-			// users.Add(new VendorUserForMail()
-			// {
-			// 	FullName = "Anar MMC",
-			// 	Email = "anarceferov1996@gmail.com",
-			// 	Language = "en"
-			// });
 			
 			foreach (var user in users)
 			{
+				// user.Email = "anarceferov1996@gmail.com";
+				// user.FullName = "Anar MMC";
+				// user.Language = "en";
+
 				VM_RFQVendorApprove emailVM = new VM_RFQVendorApprove(user.Language, user.Email, vendorName, rfqId)
 				{
 					Language = (Language)Enum.Parse(typeof(Language), user.Language)
 				};
 
-				Task RegEmail = SendUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null, new List<string> { user.Email });
-
-				emails.Add(RegEmail);
+				await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null, new List<string> { user.Email });
+			}
+		}
+		
+		public async Task SendRFQVendorApproveMail(List<VendorUserForMail> users)
+		{
+			foreach (var user in users)
+			{
+				// user.Email = "anarceferov1996@gmail.com";
+				// user.FullName = "Anar MMC";
+				// user.Language = "en";
+				
+				VM_RFQVendorApprove emailVM = new VM_RFQVendorApprove(user.Language, user.Email, user.VendorName , 1)
+				{
+					Language = (Language)Enum.Parse(typeof(Language), user.Language)
+				};
+				
+				await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null, new List<string> { user.Email });
 			}
 		}
 	}

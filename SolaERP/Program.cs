@@ -68,6 +68,9 @@ builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>()
 builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
 builder.Services.AddInMemoryRateLimiting();
 
+builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
+builder.Services.AddHostedService<EmailQueueHostedService>();
+
 builder.Services.AddCors(options =>
 {
 	options.AddDefaultPolicy(corsBuilder => corsBuilder
