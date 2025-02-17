@@ -31,6 +31,7 @@ namespace SolaERP.Application.Dtos.Invoice
         public int? Status { get; set; }
         public int? ApproveStatus { get; set; }
         public string? ReasonAdditionalDescription { get; set; }
+        public string? Comment { get; set; }
         public int? OrderMainId { get; set; }
         public string? AccountCode { get; set; }
         public int? WithHoldingTaxId { get; set; }
