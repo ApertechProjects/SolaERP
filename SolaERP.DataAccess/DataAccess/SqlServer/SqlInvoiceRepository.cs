@@ -174,6 +174,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                   @AgingDays,
                                                   @ProblematicInvoiceReasonId,
                                                   @ReasonAdditionalDescription,
+                                                  @Comment,
                                                   @AccountCode,
                                                   @WithHoldingTaxId,
                                                   @TaxId,
@@ -225,6 +226,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     model.ProblematicInvoiceReasonId);
 
                 command.Parameters.AddWithValue(command, "@ReasonAdditionalDescription", model.ReasonAdditionalDescription);
+                command.Parameters.AddWithValue(command, "@Comment", model.Comment);
 
                 command.Parameters.AddWithValue(command, "@AccountCode", model.AccountCode);
                 command.Parameters.AddWithValue(command, "@WithHoldingTaxId", model.WithHoldingTaxId);

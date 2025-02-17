@@ -29,6 +29,7 @@
         public int MatchedAmount { get; set; }
         public int ProblematicInvoiceReasonId { get; set; }
         public string ReasonAdditionalDescription { get; set; }
+        public string Comment { get; set; }
         public int Sequence { get; set; }
         public long LineNo { get; set; }
         public string GRNList { get; set; }

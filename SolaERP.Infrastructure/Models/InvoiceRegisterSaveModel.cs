@@ -31,7 +31,7 @@ namespace SolaERP.Application.Models
         public int? InvoicePeriod { get; set; }
 		public string? VendorAccount { get; set; }
 		public string? ReasonAdditionalDescription { get; set; }
-
+		public string? Comment { get; set; }
 		public List<AttachmentSaveModel> Attachments { get; set; }
 		public List<InvoiceRegisterDetails> Details { get; set; }
 	}
