@@ -9,8 +9,6 @@ public class VM_RFQVendorApprove : VM_EmailTemplateBase
 {
     private readonly IConfiguration _configuration;
     private readonly string _lang;
-    private readonly string _subject;
-    private readonly string _body;
     private readonly string _companyName;
     private readonly string _userEmail;
     
@@ -23,20 +21,11 @@ public class VM_RFQVendorApprove : VM_EmailTemplateBase
         _lang = lang;
         _userEmail = userEmail;
         _companyName = companyName;
-        
     }
-
-    public string? Subject
+    
+    public string Subject
     {
-        get
-        {
-            return _lang switch
-            {
-                "az" => "Yeni RFQ sorğusu göndərildi",
-                "en" => "A new RFQ request has been sent",
-                _ => "en"
-            };
-        }
+        get { return "A new RFQ request has been sent"; }
     }
 
     public string TemplateName()
@@ -44,39 +33,44 @@ public class VM_RFQVendorApprove : VM_EmailTemplateBase
         return @"RFQVendorApprove.cshtml";
     }
 
-    public string GetHeaderOfMail()
+    public string GetHeaderOfMailAz
     {
-        switch (_lang)
+        get
         {
-            case "az":
-                return "Yeni RFQ sorğusu göndərildi";
-            case "en":
-                return "A new RFQ request has been sent";
+            return "Yeni RFQ sorğusu göndərildi";
         }
-        return "";
     }
     
-    public HtmlString GetBodyOfMail()
+    public string GetHeaderOfMailEn
     {
-        switch (_lang)
+        get
         {
-            case "en":
-                return new HtmlString($"Dear {_companyName}, <br>"+
-                                      "A new RFQ (Request for Quotation) has been sent to you. Please click the link below to review the request and submit your response relatively: <br>"+
-                                      $"<b><a href={_configuration["Mail:VendorServerUrlUI"]+"/rfq-information"}>SolaERP</a></b> <br>"+
-                                      "If you have any further questions, please do not hesitate to contact us. <br>"+
-                                      "Best regards, <br>"+
-                                      "GL Group"
-                );
-            case "az":
-                return new HtmlString($"Hörmətli {_companyName}, <br>"+
-                                      "Sizə yeni RFQ (Təklif Sorğusu) göndərilmişdir. Zəhmət olmasa, aşağıdakı linkə daxil olaraq sorğunu nəzərdən keçirin və müvafiq cavabınızı təqdim edin: <br>"+
-                                      $"<b><a href='{_configuration["Mail:VendorServerUrlUI"]+"/rfq-information"}'>SolaERP</a></b> <br>"+
-                                      "Əlavə suallarınız olarsa, bizimlə əlaqə saxlamaqdan çəkinməyin. <br>"+
-                                      "Hörmətlə, <br>"+
-                                      "GL Group"
-                                      );
+            return "A new RFQ request has been sent";
         }
-        return new HtmlString("");
     }
+    
+    public HtmlString GetBodyOfMailAz()
+    {
+        return new HtmlString(
+            $"<div style='font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5;'>"+
+            $"<p>Hörmətli {_companyName},</p>" +
+            "<p>Sizə yeni RFQ (Təklif Sorğusu) göndərilmişdir. Zəhmət olmasa, aşağıdakı linkə daxil olaraq sorğunu nəzərdən keçirin və müvafiq cavabınızı təqdim edin:</p>" +
+            $"<p><b><a href='{_configuration["Mail:VendorServerUrlUI"]}/rfq-information' style='text-decoration: none;'>SolaERP</a></b></p>" +
+            "<p>Əlavə suallarınız olarsa, bizimlə əlaqə saxlamaqdan çəkinməyin.</p>" +
+            "<p>Hörmətlə,<br>GL Group</p>"
+        );
+    }
+    
+    public HtmlString GetBodyOfMailEn()
+    {
+        return new HtmlString(
+            $"<p>Dear {_companyName},</p>" +
+            "<p>A new RFQ (Request for Quotation) has been sent to you. Please click the link below to review the request and submit your response relatively:</p>" +
+            $"<p><b><a href='{_configuration["Mail:VendorServerUrlUI"]}/rfq-information' style='text-decoration: none;'>SolaERP</a></b></p>" +
+            "<p>If you have any further questions, please do not hesitate to contact us.</p>" +
+            "<p>Best regards,<br>GL Group</p>" +
+            "</div>"
+        );
+    }
+    
 }
