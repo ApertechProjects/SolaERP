@@ -11,5 +11,6 @@ namespace SolaERP.Application.Entities.User
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Language { get; set; }
+        public string VendorName { get; set; }
     }
 }
