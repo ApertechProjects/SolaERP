@@ -83,7 +83,9 @@ namespace SolaERP.Persistence.Services
 
 				var businessUnit = await _businessUnitRepository.GetByIdAsync(model.BusinessUnitId);
 
-				if (model.InvoiceRegisterIds[i].InMaxSequence && businessUnit.UseOrderForInvoice == false && model.ApproveStatus == 1)
+				var invoice = await _invoiceRepository.GetInvoiceRegisterMainLoad(model.InvoiceRegisterIds[i].InvoiceRegisterId);
+					
+				if (model.InvoiceRegisterIds[i].InMaxSequence && businessUnit.UseOrderForInvoice == false && model.ApproveStatus == 1 && invoice.InvoiceType != 1)
 				{
 					await _invoiceRepository.InvoiceApproveIntegration(model.InvoiceRegisterIds[i].InvoiceRegisterId, userId, model.BusinessUnitId);
 				}
@@ -91,7 +93,6 @@ namespace SolaERP.Persistence.Services
 				if (model.InvoiceRegisterIds[i].InMaxSequence && businessUnit.UseOrderForInvoice == false && model.ApproveStatus == 1)
 				{
 					//var invoice = GetInvoiceRegisterLoad(model.InvoiceRegisterIds[i].InvoiceRegisterId, name);
-					var invoice = await _invoiceRepository.GetInvoiceRegisterMainLoad(model.InvoiceRegisterIds[i].InvoiceRegisterId);
 
 					CreateVendorRequest requestVendor = new CreateVendorRequest
 					{
