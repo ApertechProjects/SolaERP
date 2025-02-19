@@ -125,11 +125,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 		public async Task<bool> BidApprove(BidComparisonBidApproveDto dto, int UserId)
 		{
 			using var command = _unitOfWork.CreateCommand() as DbCommand;
-			command.CommandText = "EXEC SP_BidComparisonBidsApprove @BidComparisonId, @approveStatus, @UserId";
+			command.CommandText = "EXEC SP_BidComparisonBidsApprove @BidComparisonId, @approveStatus, @UserId, @Comment, @RejectReasonId";
 
 			command.Parameters.AddWithValue(command, "@BidComparisonId", dto.BidComparisonId);
 			command.Parameters.AddWithValue(command, "@approveStatus", dto.ApproveStatusId);
-			command.Parameters.AddWithValue(command, "@UserId", UserId);
+            command.Parameters.AddWithValue(command, "@UserId", UserId);
+            command.Parameters.AddWithValue(command, "@Comment", dto.Comment);
+            command.Parameters.AddWithValue(command, "@RejectReasonId", dto.RejectReasonId);
 
 			return await command.ExecuteNonQueryAsync() > 0;
 		}
