@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,7 @@ namespace SolaERP.Application.Dtos.BidComparison
     {
         public int BidComparisonId { get; set; }
         public int ApproveStatusId { get; set; }
+        public int? RejectReasonId { get; set; }
+        public string? Comment { get; set; }
     }
 }
