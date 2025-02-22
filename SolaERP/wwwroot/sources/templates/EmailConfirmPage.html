@@ -37,8 +37,9 @@
             var apiIndex = currentUrl.indexOf("/sources");
             var result = currentUrl.substring(0, apiIndex);
 
-            const params = new URLSearchParams(currentUrl.search);
-            const loginUrl = params.get('loginUrl');
+            const searchParams = new URLSearchParams(currentUrl.search);
+
+            const loginUrl = searchParams.get('loginUrl');
             
             fetch(`${result}/api/Account/ConfirmEmail?verifyToken=${token}&loginUrl=${loginUrl}`, {
                 method: "GET",
@@ -53,7 +54,8 @@
                     document.getElementById('verified-text').innerText = res.statusCode === 200 ? "Return To Login Page" : "";
                 })
                 .catch(err => console.log(err));
-            document.getElementById('verified-text').href = loginUrl+'/login'
+
+            document.getElementById('verified-text').href = new URL('/login', loginUrl).href;
 
         }
 
