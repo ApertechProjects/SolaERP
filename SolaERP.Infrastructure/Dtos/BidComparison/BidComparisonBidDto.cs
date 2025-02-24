@@ -8,6 +8,7 @@
         public string RFQItem { get; set; }
         public string VendorName { get; set; }
         public string BidItem { get; set; }
+        public string BidItemName { get; set; }
         public int BidDetailId { get; set; }
         public decimal SelectedQTY { get; set; }
         public decimal BidQuantity { get; set; }
