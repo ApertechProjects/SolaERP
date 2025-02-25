@@ -296,7 +296,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                   NULL,NULL,NULL,NULL,NULL,NULL,NULL,
                                                   NULL,NULL,NULL,NULL,NULL,NULL,NULL,
                                                   NULL,NULL,NULL,NULL,NULL,NULL,NULL,
-                                                  NULL,NULL,NULL,@UserId,@NewInvoiceRegisterId = @NewInvoiceRegisterId
+                                                  NULL,NULL,NULL,NULL,@UserId,@NewInvoiceRegisterId = @NewInvoiceRegisterId
                     OUTPUT select @NewInvoiceRegisterId as NewInvoiceRegisterId";
 
 
