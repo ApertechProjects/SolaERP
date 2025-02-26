@@ -2442,15 +2442,17 @@ namespace SolaERP.Persistence.Services
 		private void SetRevisionNumber(SupplierRegisterCommand2 command, ProcessSelectorDto processSelector,
 			bool isSubmitted)
 		{
-			if (processSelector.IsCreate)
+			string vendorCode = command.CompanyInformation.VendorCode;
+			
+			if (vendorCode == null || vendorCode.Equals(""))
 			{
 				command.CompanyInformation.ReviseNo = 0;
 				return;
 			}
 
-			if (!isSubmitted) return;
-
-			if (!processSelector.IsRevise) return;
+			// if (!isSubmitted) return;
+			//
+			// if (!processSelector.IsRevise) return;
 
 			var resviseNo = _vendorRepository
 				.GetRevisionNumberByVendorCode(command.CompanyInformation.VendorCode).Result;
