@@ -136,16 +136,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 			return await command.ExecuteNonQueryAsync() > 0;
 		}
 
-		public async Task<bool> BidReject(BidComparisonBidRejectDto dto, int UserId)
+		public async Task BidReject(BidComparisonBidRejectDto dto, int UserId)
 		{
-			using var command = _unitOfWork.CreateCommand() as DbCommand;
-			command.CommandText = "EXEC SP_BidComparisonBidsReject @BidComparisonBidId, @UserId";
+            foreach (var BidComparisonBidId in dto.BidComparisonBidIds)
+            {
+                using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+                {
+                    command.CommandText = "EXEC SP_BidComparisonBidsReject @BidComparisonBidId, @UserId";
 
-			command.Parameters.AddWithValue(command, "@BidComparisonBidId", dto.BidComparisonId);
-			command.Parameters.AddWithValue(command, "@UserId", UserId);
-
-			return await command.ExecuteNonQueryAsync() > 0;
-		}
+                    command.Parameters.AddWithValue(command, "@BidComparisonBidId", BidComparisonBidId);
+                    command.Parameters.AddWithValue(command, "@UserId", UserId);
+                        
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
 
 		public async Task<List<BidComparisonAll>> GetComparisonAll(BidComparisonAllFilter filter)
         {
