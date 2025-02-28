@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using SolaERP.Application.Contracts.Common;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Bid;
 using SolaERP.Application.Entities.Auth;
+using SolaERP.Application.Entities.Bid;
 using SolaERP.Application.Helper;
 using SolaERP.Application.Identity_Server;
 using SolaERP.Application.Models;
@@ -31,6 +33,8 @@ using SolaERP.Persistence.Validations.Vendor;
 using SolaERP.Job;
 using UserValidation = SolaERP.Application.Validations.UserValidation.UserValidation;
 using IBackgroundMailService = SolaERP.Job.IBackgroundMailService;
+using SolaERP.DataAccess.Helper;
+using SolaERP.Persistence.Validations.Bid;
 using SolaERP.DataAccess.Helper;
 
 namespace SolaERP.Extensions
@@ -168,6 +172,7 @@ namespace SolaERP.Extensions
             builder.Services.AddValidatorsFromAssemblyContaining<OrderDetailDtoValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<InvoiceRegisterDetailsLoadValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<InvoiceRegisterApproveValidation>();
+            builder.Services.AddValidatorsFromAssemblyContaining<BidSaveValidation>();
             builder.Services.AddScoped<ValidationFilter>();
         }
 
