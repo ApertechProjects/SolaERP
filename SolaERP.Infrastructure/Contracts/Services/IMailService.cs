@@ -49,5 +49,8 @@ namespace SolaERP.Application.Contracts.Services
         Task SendQueueUsingTemplate<T>(string subject, T viewModel, string templateName, string imageName, List<string> tos);
 
         Task SendRFQVendorApproveMail(List<VendorUserForMail> users);
+
+        Task SendNewVendorRegistrationMailToGLEmail(string vendorName);
+
     }
 }
