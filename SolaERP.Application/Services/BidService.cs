@@ -12,6 +12,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SolaERP.Application.Enums;
+using SolaERP.Persistence.Validations.Bid;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SolaERP.Persistence.Services
 {
@@ -110,6 +112,20 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<BidIUDResponse>> SaveBidMainAsync(BidMainDto bidMain, string userIdentity)
         {
+            // var validationResult = await _validator.ValidateAsync(bid);
+
+            // if (!validationResult.IsValid)
+            // {
+            //     return BadRequest(new
+            //     {
+            //         success = false,
+            //         errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList()
+            //     });
+            // }
+            
+            // var validator = new BidSaveValidation(_bidRepository);
+            // var result = await validator.ValidateAsync(bidMain);
+            
             var entity = _mapper.Map<BidMain>(bidMain);
             entity.UserId = Convert.ToInt32(userIdentity);
 

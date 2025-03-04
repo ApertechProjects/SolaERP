@@ -16,5 +16,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<BidRFQListLoad>> GetRFQListForBidAsync(BidRFQListFilter filter);
         Task OrderCreateFromApproveBidAsync(int bidMainId, int userId);
         Task<List<int>> GetDetailIds(int id);
+        Task<List<BidMainDto>> GetBidByRFQMainIdAndVendorCode(int rfqMainId, string vendorCode);
+        Task<bool> GetBidCheckExistsByRFQMainIdAndVendorCode(int rfqMainId, string vendorCode);
     }
 }

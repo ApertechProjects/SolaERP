@@ -48,6 +48,7 @@ namespace SolaERP.Persistence.Services
 		private readonly IFileUploadService _fileUploadService;
 		private readonly IGeneralRepository _generalRepository;
 		private readonly IAttachmentService _attachmentService;
+		private readonly IBackgroundTaskQueue _taskQueue;
 
 		public SupplierEvaluationService(ISupplierEvaluationRepository repository,
 			IMapper mapper,
@@ -60,7 +61,9 @@ namespace SolaERP.Persistence.Services
 			IUserService userService,
 			IFileUploadService fileUploadService,
 			IGeneralRepository generalRepository,
-			IAttachmentService attachmentService)
+			IAttachmentService attachmentService,
+			IBackgroundTaskQueue taskQueue
+			)
 		{
 			_repository = repository;
 			_unitOfWork = unitOfWork;
@@ -74,6 +77,7 @@ namespace SolaERP.Persistence.Services
 			_fileUploadService = fileUploadService;
 			_generalRepository = generalRepository;
 			_attachmentService = attachmentService;
+			_taskQueue = taskQueue;
 		}
 
 		private void SetAttachmentIdToZeroWhenIsRevise(bool isRevise, List<AttachmentSaveModel> saveModels)
@@ -626,10 +630,16 @@ namespace SolaERP.Persistence.Services
 						await _mailService.SendMailToAdminstrationForApproveRegistration(Convert.ToInt32(userIdentity), changedFields);
 					else
 						await _mailService.SendMailToAdminstrationForApproveRegistrationForAutoApprove(Convert.ToInt32(userIdentity), changedFields);
-				}
-				else
+				}else
+				{
 					await _mailService.SendMailToAdminstrationForApproveRegistrationForAutoApprove(Convert.ToInt32(userIdentity), changedFields);
+				}
 
+				// New Register Vendor Send Mail / Yeni Qeydiyyatdan keçmiş vendora mail göndərilməsi
+				_taskQueue.QueueBackgroundWorkItem(async token =>
+				{
+					await _mailService.SendNewVendorRegistrationMailToGLEmail(vendor.VendorName);
+				});
 
 				return ApiResponse<EvaluationResultModel>.Success(result, 200);
 			}

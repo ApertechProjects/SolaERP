@@ -897,6 +897,24 @@ namespace SolaERP.Infrastructure.Services
 				await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null, new List<string> { user.Email });
 			}
 		}
+
+		public async Task SendNewVendorRegistrationMailToGLEmail(string vendorName)
+		{
+			try
+			{
+				VM_NewVendorRegistrationMailSendGLEmail emailVM = new VM_NewVendorRegistrationMailSendGLEmail("en" , vendorName)
+				{
+					Language = (Language)Enum.Parse(typeof(Language), "en")
+				};
+				
+				await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null, new List<string> { "anarceferov1996@gmail.com" });
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+				throw;
+			}
+		}
 	}
 
 }

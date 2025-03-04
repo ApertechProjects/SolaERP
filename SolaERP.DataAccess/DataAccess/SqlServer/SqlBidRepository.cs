@@ -339,5 +339,43 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
 
             return datas;
         }
+        
+        public async Task<List<BidMainDto>> GetBidByRFQMainIdAndVendorCode(int rfqMainId, string vendorCode)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"select BidDetailId from Procurement.BidMain where RFQMainId = @RFQMainId and VendorCode = @VendorCode";
+            command.Parameters.AddWithValue(command, "@RFQMainId", rfqMainId);
+            command.Parameters.AddWithValue(command, "@VendorCode", vendorCode);
+
+            await using DbDataReader reader = await command.ExecuteReaderAsync();
+            List<BidMainDto> datas = new();
+            while (reader.Read())
+                datas.Add(new BidMainDto
+                {
+                    RFQMainId = reader.Get<int>("RFQMainId"),
+                    VendorCode = reader.Get<String>("VendorCode"),
+                });
+
+            return datas;
+        }
+        
+        public async Task<bool> GetBidCheckExistsByRFQMainIdAndVendorCode(int rfqMainId, string vendorCode)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"select count(*) ac count from Procurement.BidMain where RFQMainId = @RFQMainId and VendorCode = @VendorCode";
+            command.Parameters.AddWithValue(command, "@RFQMainId", rfqMainId);
+            command.Parameters.AddWithValue(command, "@VendorCode", vendorCode);
+
+            // await using DbDataReader reader = await command.ExecuteReaderAsync();
+            // List<BidMainDto> datas = new();
+            // while (reader.Read())
+            //     datas.Add(new BidMainDto
+            //     {
+            //         RFQMainId = reader.Get<int>("RFQMainId"),
+            //         VendorCode = reader.Get<String>("VendorCode"),
+            //     });
+
+            return await command.ExecuteNonQueryAsync() > 0;
+        }
     }
 }
