@@ -34,8 +34,7 @@ using SolaERP.Job;
 using UserValidation = SolaERP.Application.Validations.UserValidation.UserValidation;
 using IBackgroundMailService = SolaERP.Job.IBackgroundMailService;
 using SolaERP.DataAccess.Helper;
-using SolaERP.Persistence.Validations.Bid;
-using SolaERP.DataAccess.Helper;
+// using SolaERP.Persistence.Validations.Bid;
 
 namespace SolaERP.Extensions
 {
@@ -172,7 +171,7 @@ namespace SolaERP.Extensions
             builder.Services.AddValidatorsFromAssemblyContaining<OrderDetailDtoValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<InvoiceRegisterDetailsLoadValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<InvoiceRegisterApproveValidation>();
-            builder.Services.AddValidatorsFromAssemblyContaining<BidSaveValidation>();
+            // builder.Services.AddValidatorsFromAssemblyContaining<BidSaveValidation>();
             builder.Services.AddScoped<ValidationFilter>();
         }
 

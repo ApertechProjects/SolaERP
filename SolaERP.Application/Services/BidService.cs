@@ -123,8 +123,8 @@ namespace SolaERP.Persistence.Services
             //     });
             // }
             
-            var validator = new BidSaveValidation(_bidRepository);
-            var result = await validator.ValidateAsync(bidMain);
+            // var validator = new BidSaveValidation(_bidRepository);
+            // var result = await validator.ValidateAsync(bidMain);
             
             var entity = _mapper.Map<BidMain>(bidMain);
             entity.UserId = Convert.ToInt32(userIdentity);
