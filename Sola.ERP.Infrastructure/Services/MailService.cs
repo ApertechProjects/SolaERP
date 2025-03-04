@@ -907,7 +907,7 @@ namespace SolaERP.Infrastructure.Services
 					Language = (Language)Enum.Parse(typeof(Language), "en")
 				};
 				
-				await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null, new List<string> { "anarceferov1996@gmail.com" });
+				await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null, new List<string> { _configuration["Mail:Email"] });
 			}
 			catch (Exception e)
 			{
