@@ -172,7 +172,7 @@ namespace SolaERP.Extensions
             builder.Services.AddValidatorsFromAssemblyContaining<OrderDetailDtoValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<InvoiceRegisterDetailsLoadValidation>();
             builder.Services.AddValidatorsFromAssemblyContaining<InvoiceRegisterApproveValidation>();
-            builder.Services.AddValidatorsFromAssemblyContaining<BidSaveValidation>();
+            // builder.Services.AddValidatorsFromAssemblyContaining<BidSaveValidation>();
             builder.Services.AddScoped<ValidationFilter>();
         }
 
