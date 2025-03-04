@@ -17,10 +17,10 @@ public class BidSaveValidation : AbstractValidator<BidMainDto>
         //     .MustAsync(BeUniqueRFQVendor)
         //     .WithMessage("Bu RFX üçün artıq həmin təçhizatçı tərəfindən təklif yaradılmışdır");
         
-        RuleFor(x => new { x.RFQMainId, x.VendorCode })
-            .MustAsync(async (x, cancellationToken) => 
-                await _bidRepository.GetBidCheckExistsByRFQMainIdAndVendorCode(x.RFQMainId, x.VendorCode))
-            .WithMessage("Bu RFX üçün artıq həmin təçhizatçı tərəfindən təklif yaradılmışdır");
+        // RuleFor(x => new { x.RFQMainId, x.VendorCode })
+        //     .MustAsync(async (x, cancellationToken) => 
+        //         await _bidRepository.GetBidCheckExistsByRFQMainIdAndVendorCode(x.RFQMainId, x.VendorCode))
+        //     .WithMessage("Bu RFX üçün artıq həmin təçhizatçı tərəfindən təklif yaradılmışdır");
     }
     
     // private async Task<bool> BeUniqueRFQVendor(BidMainDto bidMain, CancellationToken cancellationToken)
