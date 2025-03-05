@@ -898,16 +898,19 @@ namespace SolaERP.Infrastructure.Services
 			}
 		}
 
-		public async Task SendNewVendorRegistrationMailToGLEmail(string vendorName)
+		public async Task SendNewVendorApproveGroupEmail(List<string> emails, string vendorName)
 		{
 			try
 			{
-				VM_NewVendorRegistrationMailSendGLEmail emailVM = new VM_NewVendorRegistrationMailSendGLEmail("en" , vendorName)
+				foreach (var email in emails)
 				{
-					Language = (Language)Enum.Parse(typeof(Language), "en")
-				};
+					VM_NewVendorApproveGroupEmail emailVM = new VM_NewVendorApproveGroupEmail("en" , vendorName)
+					{
+						Language = (Language)Enum.Parse(typeof(Language), "en")
+					};
 				
-				await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null, new List<string> { _configuration["Mail:Email"] });
+					await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null, new List<string> { email });					
+				}
 			}
 			catch (Exception e)
 			{

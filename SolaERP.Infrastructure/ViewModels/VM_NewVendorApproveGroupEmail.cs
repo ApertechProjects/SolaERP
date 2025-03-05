@@ -3,11 +3,11 @@ using SolaERP.Infrastructure.ViewModels;
 
 namespace SolaERP.Application.ViewModels
 {
-	public class VM_NewVendorRegistrationMailSendGLEmail : VM_EmailTemplateBase
+	public class VM_NewVendorApproveGroupEmail : VM_EmailTemplateBase
 	{
 		private readonly string _vendorName;
 
-		public VM_NewVendorRegistrationMailSendGLEmail(string lang, string vendorName)
+		public VM_NewVendorApproveGroupEmail(string lang, string vendorName)
 		{
 			_vendorName = vendorName;
 		}
@@ -19,7 +19,7 @@ namespace SolaERP.Application.ViewModels
 
 		public string TemplateName()
 		{
-			return @"NewVendorRegistrationMailSendGLEmail.cshtml";
+			return @"NewVendorApproveGroupEmail.cshtml";
 		}
 		
 		public string GetHeaderOfMailAz

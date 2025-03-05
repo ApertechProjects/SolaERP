@@ -18,6 +18,7 @@ using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using UserList = SolaERP.Application.Entities.User.UserList;
 
 namespace SolaERP.DataAccess.DataAcces.SqlServer
@@ -25,10 +26,12 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 	public class SqlUserRepository : IUserRepository
 	{
 		private readonly IUnitOfWork _unitOfWork;
+		private readonly IConfiguration _configuration;
 
-		public SqlUserRepository(IUnitOfWork unitOfWork)
+		public SqlUserRepository(IUnitOfWork unitOfWork , IConfiguration configuration)
 		{
 			_unitOfWork = unitOfWork;
+			_configuration = configuration;
 		}
 
 
@@ -1137,6 +1140,29 @@ namespace SolaERP.DataAccess.DataAcces.SqlServer
 
 				return user;
 			}
+		}
+		
+		public async Task<List<string>> GetVendorApproveGroupUsersEmail()
+		{
+			List<string> userEmails = new List<string>();
+			
+			using (var command = _unitOfWork.CreateCommand() as DbCommand)
+			{
+				command.CommandText = @"
+					select au.Email as email from Config.AppUser as au
+					INNER JOIN Config.GroupUsers as gu ON au.Id = gu.UserId
+					where gu.GroupId = @groupId
+					";
+				
+				command.Parameters.AddWithValue(command, "@groupId", _configuration["Mail:VendorApproveGroupId"]);
+				
+				using var reader = await command.ExecuteReaderAsync();
+				
+				while (reader.Read())
+					userEmails.Add(reader.Get<string>("email"));
+			}
+
+			return userEmails;
 		}
 	}
 	#endregion
