@@ -50,7 +50,7 @@ namespace SolaERP.Application.Contracts.Services
 
         Task SendRFQVendorApproveMail(List<VendorUserForMail> users);
 
-        Task SendNewVendorRegistrationMailToGLEmail(string vendorName);
+        Task SendNewVendorApproveGroupEmail(List<string> emails, string vendorName);
 
     }
 }

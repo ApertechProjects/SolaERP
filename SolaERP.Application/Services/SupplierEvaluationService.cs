@@ -636,10 +636,14 @@ namespace SolaERP.Persistence.Services
 				}
 
 				// New Register Vendor Send Mail / Yeni Qeydiyyatdan keçmiş vendora mail göndərilməsi
-				_taskQueue.QueueBackgroundWorkItem(async token =>
+				List<string> approveGroupUsersEmails= await _userRepository.GetVendorApproveGroupUsersEmail();
+				if (approveGroupUsersEmails.Count > 0)
 				{
-					await _mailService.SendNewVendorRegistrationMailToGLEmail(vendor.VendorName);
-				});
+					_taskQueue.QueueBackgroundWorkItem(async token =>
+					{
+						_mailService.SendNewVendorApproveGroupEmail(approveGroupUsersEmails, vendor.VendorName);
+					});	
+				}
 
 				return ApiResponse<EvaluationResultModel>.Success(result, 200);
 			}
