@@ -32,7 +32,7 @@ public class OrderCreateRequestListDto
     public string AccountName { get; set; }
     public int Condition { get; set; }
     public int Priority { get; set; }
-    public decimal ManualUP { get; set; }
+    public decimal? ManualUP { get; set; }
     public bool AlternativeItem { get; set; }
     public int BusinessCategoryId { get; set; }
     public string BusinessCategoryName { get; set; }

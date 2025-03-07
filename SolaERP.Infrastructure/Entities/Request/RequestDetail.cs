@@ -26,7 +26,7 @@
         public int Condition { get; set; }
         public int ItemCategory { get; set; }
         public int Priority { get; set; }
-        public decimal ManualUP { get; set; }
+        public decimal? ManualUP { get; set; }
         public bool AlternativeItem { get; set; }
         public int? AnalysisCode1Id { get; set; }
         public int? AnalysisCode2Id { get; set; }
