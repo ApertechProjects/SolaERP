@@ -36,7 +36,7 @@ namespace SolaERP.Application.Dtos.Request
         public string AccountCode { get; set; }
         public string AccountName { get; set; }
         public bool AlternativeItem { get; set; }
-        public decimal ManualUP { get; set; }
+        public decimal? ManualUP { get; set; }
         public int CatId { get; set; }
         public decimal LastUnitPrice { get; set; }
         public DateTime LastPurchaseDate { get; set; }
