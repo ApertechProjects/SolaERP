@@ -702,5 +702,34 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return data;
         }
+        
+        public async Task<List<BidComparisonApprovalInfoDto>> BidComparisonApprovalInfo(int bidComparisonId)
+        {
+            var data = new List<BidComparisonApprovalInfoDto>();
+
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = "EXEC SP_BidComparisonBidsApprovalInfo @bidComparisonId";
+
+            command.Parameters.AddWithValue(command, "@bidComparisonId", bidComparisonId);
+
+            using var reader = await command.ExecuteReaderAsync();
+            
+            while (await reader.ReadAsync())
+            {
+                data.Add(new BidComparisonApprovalInfoDto
+                {
+                    Sequence = reader.Get<int>("Sequence"),
+                    ApproveStageDetailsName = reader.Get<string>("ApproveStageDetailsName"),
+                    FullName = reader.Get<string>("FullName"),
+                    ApproveStatus = reader.Get<string>("ApproveStatus"),
+                    ApproveDate = reader.Get<DateTime>("ApproveDate"),
+                    Comment = reader.Get<string>("Comment"),
+                    ReasonName = reader.Get<string>("ReasonName"),
+                    SignaturePhoto = reader.Get<string>("SignaturePhoto"),
+                });
+            }
+            
+            return data.Count > 0 ? data : null;
+        }
     }
 }

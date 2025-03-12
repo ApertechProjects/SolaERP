@@ -36,5 +36,7 @@ namespace SolaERP.Application.Contracts.Services
 
         Task<ApiResponse<bool>> BidComparisonSummarySave(List<BidComparisonSummaryDto> summaryDto);
         Task<ApiResponse<List<BidComparisonSummaryDto>>> BidComparisonSummaryLoad(int bidComparisonId);
+        Task<ApiResponse<List<BidComparisonApprovalInfoDto>>> BidComparisonApprovalInfo(int bidComparisonId);
+
     }
 }

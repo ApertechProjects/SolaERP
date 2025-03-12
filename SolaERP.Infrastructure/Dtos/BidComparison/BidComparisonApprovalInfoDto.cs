@@ -1,0 +1,13 @@
+﻿namespace SolaERP.Application.Dtos.BidComparison;
+
+public class BidComparisonApprovalInfoDto
+{
+    public int? Sequence { get; set; }
+    public string ApproveStageDetailsName { get; set; }
+    public string FullName { get; set; }
+    public string ApproveStatus { get; set; }
+    public DateTime? ApproveDate { get; set; }
+    public string Comment { get; set; }
+    public string ReasonName { get; set; }
+    public string SignaturePhoto { get; set; }
+}

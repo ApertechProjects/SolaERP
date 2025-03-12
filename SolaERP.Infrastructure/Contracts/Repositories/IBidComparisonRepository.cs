@@ -40,5 +40,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> HoldBidComparison(HoldBidComparisonRequest request);
         Task<bool> BidComparisonSummarySave(DataTable dataTable);
         Task<List<BidComparisonSummary>> BidComparisonSummaryLoad(int bidComparisonId);
+        Task<List<BidComparisonApprovalInfoDto>> BidComparisonApprovalInfo(int bidComparisonId);
+
     }
 }
