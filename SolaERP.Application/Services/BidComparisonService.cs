@@ -347,5 +347,12 @@ namespace SolaERP.Persistence.Services
             var map = _mapper.Map<List<BidComparisonSummaryDto>>(data);
             return ApiResponse<List<BidComparisonSummaryDto>>.Success(map);
         }
+        
+        public async Task<ApiResponse<List<BidComparisonApprovalInfoDto>>> BidComparisonApprovalInfo(int bidComparisonId)
+        {
+            var data = await _bidComparisonRepository.BidComparisonApprovalInfo(bidComparisonId);
+            var map = _mapper.Map<List<BidComparisonApprovalInfoDto>>(data);
+            return ApiResponse<List<BidComparisonApprovalInfoDto>>.Success(map);
+        }
     }
 }
