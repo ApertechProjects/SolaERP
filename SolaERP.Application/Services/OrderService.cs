@@ -167,7 +167,7 @@ public class OrderService : IOrderService
         
         if (statusDto.RejectReasonId == 5)
         {
-            return await Retrieve(new List<int>{statusDto.OrderMainId}, identityName);
+            return await Retrieve(new List<int>{statusDto.OrderMainId}, identityName , "Order Reject" , 17 , 8);
         }
         
         await _orderRepository.ChangeOrderMainStatusAsync(statusDto, userId, statusDto.OrderMainId, statusDto.Sequence);
@@ -287,7 +287,7 @@ public class OrderService : IOrderService
         return true;
     }
 
-    public async Task<ApiResponse<bool>> Retrieve(List<int> ids, string name)
+    public async Task<ApiResponse<bool>> Retrieve(List<int> ids, string name, string logInformation="Order Changed Status To Retrieve", int logTypeId=17, int actionId=2)
     {
         if (!await CheckIntegration(ids))
         {
@@ -299,7 +299,7 @@ public class OrderService : IOrderService
         string errorIds = string.Empty;
         for (int i = 0; i < ids.Count; i++)
         {
-            var result = await _orderRepository.Retrieve(ids[i], userId);
+            var result = await _orderRepository.Retrieve(ids[i], userId , logInformation, logTypeId, actionId);
             if (result)
                 count++;
             else
