@@ -164,6 +164,12 @@ public class OrderService : IOrderService
         string identityName)
     {
         int userId = Convert.ToInt32(identityName);
+        
+        if (statusDto.RejectReasonId == 5)
+        {
+            return await Retrieve(new List<int>{statusDto.OrderMainId}, identityName);
+        }
+        
         await _orderRepository.ChangeOrderMainStatusAsync(statusDto, userId, statusDto.OrderMainId, statusDto.Sequence);
         var order = await _orderRepository.GetHeaderLoadAsync(statusDto.OrderMainId);
         if (order.ApproveStatus == 1)
