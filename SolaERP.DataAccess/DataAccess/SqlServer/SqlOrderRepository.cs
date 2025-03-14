@@ -317,8 +317,7 @@ public class SqlOrderRepository : IOrderRepository
         return await command.ExecuteNonQueryAsync() > 0;
     }
 
-    public async Task<bool> ChangeOrderMainStatusAsync(ChangeOrderMainStatusDto statusDto, int userId, int orderMainId,
-        int sequence)
+    public async Task<bool> ChangeOrderMainStatusAsync(ChangeOrderMainStatusDto statusDto, int userId, int orderMainId, int sequence, string logInformation=null, int actionId=4)
     {
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
         command.CommandText = @"EXEC dbo.SP_OrderMainApprove 
@@ -327,7 +326,9 @@ public class SqlOrderRepository : IOrderRepository
             @ApproveStatusId,
             @Comment,
             @Sequence,
-            @RejectReasonId";
+            @RejectReasonId,
+            @LogInformation,
+            @ActionId";
 
         command.Parameters.AddWithValue(command, "@OrderMainId", orderMainId);
         command.Parameters.AddWithValue(command, "@UserId", userId);
@@ -335,6 +336,8 @@ public class SqlOrderRepository : IOrderRepository
         command.Parameters.AddWithValue(command, "@Comment", statusDto.Comment);
         command.Parameters.AddWithValue(command, "@Sequence", sequence);
         command.Parameters.AddWithValue(command, "@RejectReasonId", statusDto.RejectReasonId);
+        command.Parameters.AddWithValue(command, "@LogInformation", logInformation);
+        command.Parameters.AddWithValue(command, "@ActionId", actionId);
 
         await _unitOfWork.SaveChangesAsync();
 
