@@ -167,7 +167,7 @@ public class OrderService : IOrderService
         
         if (statusDto.RejectReasonId == 5)
         {
-            return await Retrieve(new List<int>{statusDto.OrderMainId}, identityName , "Order Reject" , 17 , 8);
+            return await Retrieve(new List<int>{statusDto.OrderMainId}, identityName , "Order Reject", 17);
         }
         
         await _orderRepository.ChangeOrderMainStatusAsync(statusDto, userId, statusDto.OrderMainId, statusDto.Sequence);
