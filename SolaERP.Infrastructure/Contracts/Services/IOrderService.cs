@@ -36,5 +36,5 @@ public interface IOrderService
     Task<ApiResponse<List<AnalysisCodeIds>>> GetAnalysis(GetAnalysisByCode model);
     
     Task<ApiResponse<List<OrderApprovalDto>>> GetOrderApprovalsAsync(int orderDetailId);
-
+    Task<Dictionary<int, string>> getOrderLogInformationAndActionIdByApproveStatusId(int approveStatusId);
 }

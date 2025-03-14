@@ -169,8 +169,10 @@ public class OrderService : IOrderService
         {
             return await Retrieve(new List<int>{statusDto.OrderMainId}, identityName , "Order Reject", 17);
         }
+
+        Dictionary<int,string> logData = await getOrderLogInformationAndActionIdByApproveStatusId(statusDto.ApproveStatusId);
         
-        await _orderRepository.ChangeOrderMainStatusAsync(statusDto, userId, statusDto.OrderMainId, statusDto.Sequence);
+        await _orderRepository.ChangeOrderMainStatusAsync(statusDto, userId, statusDto.OrderMainId, statusDto.Sequence, logData.Values.First(), logData.Keys.First());
         var order = await _orderRepository.GetHeaderLoadAsync(statusDto.OrderMainId);
         if (order.ApproveStatus == 1)
         {
@@ -328,5 +330,16 @@ public class OrderService : IOrderService
         return ApiResponse<List<OrderApprovalDto>>.Success(
             await _orderRepository.GetOrderApprovalsByOrderDetailIdAsync(orderDetailId)
         );
+    }
+    
+    public async Task<Dictionary<int, string>> getOrderLogInformationAndActionIdByApproveStatusId(int approveStatusId)
+    {
+        Dictionary<int, Dictionary<int, string>> data = new Dictionary<int, Dictionary<int, string>>();
+        
+        data.Add(1, new Dictionary<int, string>{{4,"Order Approve"}});
+        data.Add(2, new Dictionary<int, string>{{2,"Order Reject"}});
+        data.Add(3, new Dictionary<int, string>{{2,"Order Hold"}});
+        
+        return data[approveStatusId];
     }
 }

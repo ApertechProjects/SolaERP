@@ -17,10 +17,7 @@ public interface IOrderRepository
     Task<List<OrderFilteredDto>> GetDraftAsync(OrderDraftFilterDto filterDto, int userId);
     Task<OrderIUDResponse> SaveOrderMainAsync(OrderMainDto orderMainDto, int userId);
     Task<bool> SaveOrderDetailsAsync(List<OrderDetailDto> orderDetails);
-
-    Task<bool> ChangeOrderMainStatusAsync(ChangeOrderMainStatusDto statusDto, int userId, int orderMainId,
-        int sequence);
-
+    Task<bool> ChangeOrderMainStatusAsync(ChangeOrderMainStatusDto statusDto, int userId, int orderMainId, int sequence, string logInformation = null, int actionId = 4);
     Task<bool> SendToApproveAsync(List<int> orderMainIdList, int userId);
     Task<OrderHeadLoaderDto> GetHeaderLoadAsync(int orderMainId);
     Task<List<OrderIntegrateCheckDto>> GetOrderNos(List<int> orderMainIds);
