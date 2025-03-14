@@ -907,15 +907,21 @@ public class SqlOrderRepository : IOrderRepository
         };
     }
 
-    public async Task<bool> Retrieve(int id, int userId)
+    public async Task<bool> Retrieve(int id, int userId, string logInformation="Order Changed Status To Retrieve", int logTypeId=17, int actionId=2)
     {
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
         command.CommandText = @"EXEC dbo.SP_OrderRetrieve 
             @OrderMainId,
-            @UserId";
+            @UserId,
+            @LogInformation,
+            @LogTypeId,
+            @ActionId";
 
         command.Parameters.AddWithValue(command, "@OrderMainId", id);
         command.Parameters.AddWithValue(command, "@UserId", userId);
+        command.Parameters.AddWithValue(command, "@LogInformation", logInformation);
+        command.Parameters.AddWithValue(command, "@LogTypeId", logTypeId);
+        command.Parameters.AddWithValue(command, "@ActionId", actionId);
 
         await _unitOfWork.SaveChangesAsync();
 

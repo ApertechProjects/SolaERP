@@ -30,7 +30,8 @@ public interface IOrderService
     Task<ApiResponse<List<OrderCreateBidListDto>>> GetOrderCreateListForBidsAsync(OrderCreateListRequest dto);
     Task<ApiResponse<OrderMainGetDto>> GetOrderCardAsync();
     Task<ApiResponse<WithHoldingTaxData>> WithHoldingTaxDatas(int vendorId);
-    Task<ApiResponse<bool>> Retrieve(List<int> ids, string name);
+
+    Task<ApiResponse<bool>> Retrieve(List<int> ids, string name, string logInformation = "Order Changed Status To Retrieve", int logTypeId = 17, int actionId = 2);
     Task<bool> CheckIntegration(List<int> ids);
     Task<ApiResponse<List<AnalysisCodeIds>>> GetAnalysis(GetAnalysisByCode model);
     

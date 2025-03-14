@@ -29,7 +29,8 @@ public interface IOrderRepository
     Task<List<OrderDetailLoadDto>> GetAllDetailsAsync(int orderMainId);
     Task<bool> CreateOrderIntegration(int businessUnitId, int orderMainId, int userId);
     Task<int> GetAllIntegratedData(List<OrderIntegrateCheckDto> orders);
-    Task<bool> Retrieve(int id, int userId);
+
+    Task<bool> Retrieve(int id, int userId, string logInformation = "Order Changed Status To Retrieve", int logTypeId = 17, int actionId = 2);
     Task<List<AnalysisCodeIds>> GetAnalysis(int businessUnitId, DataTable data);
     Task<List<OrderMainBaseReportInfo>> GetOrderMainBaseReportInfos(List<int> orderMainIds);
     Task<List<int>> GetDetailIds(int orderMainId);
