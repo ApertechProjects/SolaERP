@@ -604,7 +604,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentDocumentDetails_IUD @Data";
-                command.Parameters.AddTableValue(command, "@Data", "PaymentDocumentDetailsType_2", model);
+                command.Parameters.AddTableValue(command, "@Data", "PaymentDocumentDetailsType", model);
                 var value = await command.ExecuteNonQueryAsync();
                 return value > 0;
             }
