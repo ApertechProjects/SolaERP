@@ -158,7 +158,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 PaymentDocumentDetailId = reader.Get<int>("PaymentDocumentDetailId"),
                 PaymentDocumentMainId = reader.Get<int>("PaymentDocumentMainId"),
                 PaymentTermName = reader.Get<string>("PaymentTermName"),
-                AgingDays = reader.Get<int>("AgingDays")
+                AgingDays = reader.Get<int>("AgingDays"),
+                AnalysisCode1 = reader.Get<string>("AnalysisCode1"),
+                AnalysisCode2 = reader.Get<string>("AnalysisCode2"),
+                AnalysisCode3 = reader.Get<string>("AnalysisCode3"),
+                AnalysisCode4 = reader.Get<string>("AnalysisCode4"),
+                AnalysisCode5 = reader.Get<string>("AnalysisCode5"),
+                AnalysisCode6 = reader.Get<string>("AnalysisCode6"),
+                AnalysisCode7 = reader.Get<string>("AnalysisCode7"),
+                AnalysisCode8 = reader.Get<string>("AnalysisCode8"),
+                AnalysisCode9 = reader.Get<string>("AnalysisCode9"),
+                AnalysisCode10 = reader.Get<string>("AnalysisCode10")
             };
         }
 
