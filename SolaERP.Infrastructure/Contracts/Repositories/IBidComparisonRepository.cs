@@ -23,13 +23,18 @@ namespace SolaERP.Application.Contracts.Repositories
         Task BidReject(BidComparisonBidRejectDto dto, int UserId);
         Task<List<BidComparisonAll>> GetComparisonAll(BidComparisonAllFilter filter);
         Task<List<BidComparisonBidApprovalsLoad>> GetComparisonBidApprovals(BidComparisonBidApprovalsFilter filter);
-        Task<List<BidComparisonApprovalInformationLoad>> GetComparisonApprovalInformations(BidComparisonApprovalInformationFilter filter);
+
+        Task<List<BidComparisonApprovalInformationLoad>> GetComparisonApprovalInformations(
+            BidComparisonApprovalInformationFilter filter);
+
         Task<List<BidComparisonBidDetailsLoad>> GetComparisonBidDetails(BidComparisonBidDetailsFilter filter);
         Task<List<BidComparisonRFQDetailsLoad>> GetComparisonRFQDetails(BidComparisonRFQDetailsFilter filter);
         Task<List<BidComparisonBidHeaderLoad>> GetComparisonBidHeader(BidComparisonBidHeaderFilter filter);
         Task<List<BidComparisonBidDto>> GetComparisonBidsLoad(BidComparisonBidHeaderFilter filter);
         Task<BidComparisonHeaderLoad> GetComparisonHeader(BidComparisonHeaderFilter filter);
-        Task<List<BidComparisonSingleSourceReasonsLoad>> GetComparisonSingleSourceReasons(BidComparisonSingleSourceReasonsFilter filter);
+
+        Task<List<BidComparisonSingleSourceReasonsLoad>> GetComparisonSingleSourceReasons(
+            BidComparisonSingleSourceReasonsFilter filter);
 
         Task<List<BidComparisonWFALoad>> GetComparisonWFA(BidComparisonWFAFilter filter);
         Task<List<BidComparisonDraftLoad>> GetComparisonDraft(BidComparisonDraftFilter filter);
@@ -41,6 +46,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> BidComparisonSummarySave(DataTable dataTable);
         Task<List<BidComparisonSummary>> BidComparisonSummaryLoad(int bidComparisonId);
         Task<List<BidComparisonApprovalInfoDto>> BidComparisonApprovalInfo(int bidComparisonId);
-
+        Task<bool> Retrieve(int bidComparisonId, int userId);
+        Task<bool> Delete(int bidComparisonId);
     }
 }

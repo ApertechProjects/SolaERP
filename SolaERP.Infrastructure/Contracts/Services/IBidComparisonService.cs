@@ -18,7 +18,10 @@ namespace SolaERP.Application.Contracts.Services
         Task<bool> OrderCreateFromApproveBid(CreateOrderFromBidDto entity);
         Task<ApiResponse<BidComparisonCreateResponseDto>> SaveBidComparisonAsync(BidComparisonCreateDto bidComparison);
         Task<ApiResponse<bool>> SaveBidsAsync(BidComparisonBidsCreateRequestDto bidComparison);
-        Task<ApiResponse<bool>> ApproveBidComparisonsAsync(List<BidComparisonApproveDto> bidComparisonApproves, string userIdentity);
+
+        Task<ApiResponse<bool>> ApproveBidComparisonsAsync(List<BidComparisonApproveDto> bidComparisonApproves,
+            string userIdentity);
+
         Task<ApiResponse<bool>> BidApproveAsync(BidComparisonBidApproveDto approve, string userIdentity);
         Task<ApiResponse<bool>> BidRejectAsync(BidComparisonBidRejectDto reject, string userIdentity);
         Task<ApiResponse<bool>> SendComparisonToApproveAsync(BidComparisonSendToApproveDto bidComparisonSendToApprove);
@@ -29,14 +32,22 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<BidComparisonWFALoadDto>>> GetComparisonWFA(BidComparisonWFAFilterDto filterDto);
         Task<ApiResponse<List<BidComparisonDraftLoadDto>>> GetComparisonDraft(BidComparisonDraftFilterDto filterDto);
         Task<ApiResponse<List<BidComparisonHeldLoadDto>>> GetComparisonHeld(BidComparisonHeldFilterDto filterDto);
-        Task<ApiResponse<List<BidComparisonMyChartsLoadDto>>> GetComparisonMyCharts(BidComparisonMyChartsFilterDto filterDto, string userIdentity);
-        Task<ApiResponse<List<BidComparisonNotReleasedLoadDto>>> GetComparisonNotReleased(BidComparisonNotReleasedFilterDto filterDto);
-        Task<ApiResponse<List<BidComparisonRejectedLoadDto>>> GetComparisonRejected(BidComparisonRejectedFilterDto filterDto);
+
+        Task<ApiResponse<List<BidComparisonMyChartsLoadDto>>> GetComparisonMyCharts(
+            BidComparisonMyChartsFilterDto filterDto, string userIdentity);
+
+        Task<ApiResponse<List<BidComparisonNotReleasedLoadDto>>> GetComparisonNotReleased(
+            BidComparisonNotReleasedFilterDto filterDto);
+
+        Task<ApiResponse<List<BidComparisonRejectedLoadDto>>> GetComparisonRejected(
+            BidComparisonRejectedFilterDto filterDto);
+
         Task<ApiResponse<bool>> HoldBidComparison(HoldBidComparisonRequest request);
 
         Task<ApiResponse<bool>> BidComparisonSummarySave(List<BidComparisonSummaryDto> summaryDto);
         Task<ApiResponse<List<BidComparisonSummaryDto>>> BidComparisonSummaryLoad(int bidComparisonId);
         Task<ApiResponse<List<BidComparisonApprovalInfoDto>>> BidComparisonApprovalInfo(int bidComparisonId);
-
+        Task<ApiResponse<bool>> Retrieve(int bidComparisonId, int userId);
+        Task<ApiResponse<bool>> Delete(int bidComparisonId);
     }
 }

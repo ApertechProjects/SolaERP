@@ -67,6 +67,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 bidComparisonId = reader.Get<int>("NewBidComparisonId");
             }
+
             return bidComparisonId;
         }
 
@@ -122,22 +123,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return await command.ExecuteNonQueryAsync() > 0;
         }
 
-		public async Task<bool> BidApprove(BidComparisonBidApproveDto dto, int UserId)
-		{
-			using var command = _unitOfWork.CreateCommand() as DbCommand;
-			command.CommandText = "EXEC SP_BidComparisonBidsApprove @BidComparisonId, @approveStatus, @UserId, @Comment, @RejectReasonId";
+        public async Task<bool> BidApprove(BidComparisonBidApproveDto dto, int UserId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText =
+                "EXEC SP_BidComparisonBidsApprove @BidComparisonId, @approveStatus, @UserId, @Comment, @RejectReasonId";
 
-			command.Parameters.AddWithValue(command, "@BidComparisonId", dto.BidComparisonId);
-			command.Parameters.AddWithValue(command, "@approveStatus", dto.ApproveStatusId);
+            command.Parameters.AddWithValue(command, "@BidComparisonId", dto.BidComparisonId);
+            command.Parameters.AddWithValue(command, "@approveStatus", dto.ApproveStatusId);
             command.Parameters.AddWithValue(command, "@UserId", UserId);
             command.Parameters.AddWithValue(command, "@Comment", dto.Comment);
             command.Parameters.AddWithValue(command, "@RejectReasonId", dto.RejectReasonId);
 
-			return await command.ExecuteNonQueryAsync() > 0;
-		}
+            return await command.ExecuteNonQueryAsync() > 0;
+        }
 
-		public async Task BidReject(BidComparisonBidRejectDto dto, int UserId)
-		{
+        public async Task BidReject(BidComparisonBidRejectDto dto, int UserId)
+        {
             foreach (var BidComparisonBidId in dto.BidComparisonBidIds)
             {
                 using (var command = _unitOfWork.CreateCommand() as SqlCommand)
@@ -146,13 +148,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                     command.Parameters.AddWithValue(command, "@BidComparisonBidId", BidComparisonBidId);
                     command.Parameters.AddWithValue(command, "@UserId", UserId);
-                        
+
                     await command.ExecuteNonQueryAsync();
                 }
             }
         }
 
-		public async Task<List<BidComparisonAll>> GetComparisonAll(BidComparisonAllFilter filter)
+        public async Task<List<BidComparisonAll>> GetComparisonAll(BidComparisonAllFilter filter)
         {
             var data = new List<BidComparisonAll>();
 
@@ -702,7 +704,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return data;
         }
-        
+
         public async Task<List<BidComparisonApprovalInfoDto>> BidComparisonApprovalInfo(int bidComparisonId)
         {
             var data = new List<BidComparisonApprovalInfoDto>();
@@ -713,7 +715,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@bidComparisonId", bidComparisonId);
 
             using var reader = await command.ExecuteReaderAsync();
-            
+
             while (await reader.ReadAsync())
             {
                 data.Add(new BidComparisonApprovalInfoDto
@@ -728,8 +730,29 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     SignaturePhoto = reader.Get<string>("SignaturePhoto"),
                 });
             }
-            
+
             return data.Count > 0 ? data : null;
+        }
+
+        public async Task<bool> Retrieve(int bidComparisonId, int userId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as SqlCommand;
+            command.CommandText = "SET NOCOUNT OFF EXEC dbo.SP_BidComparisonRetrieve @BidComparisonId, @UserId";
+
+            command.Parameters.AddWithValue(command, "@BidComparisonId", bidComparisonId);
+            command.Parameters.AddWithValue(command, "@UserId", userId);
+
+            return await command.ExecuteNonQueryAsync() > 0;
+        }
+
+        public async Task<bool> Delete(int bidComparisonId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as SqlCommand;
+            command.CommandText = "SET NOCOUNT OFF EXEC dbo.SP_BidComparisonDelete @BidComparisonId";
+
+            command.Parameters.AddWithValue(command, "@BidComparisonId", bidComparisonId);
+
+            return await command.ExecuteNonQueryAsync() > 0;
         }
     }
 }

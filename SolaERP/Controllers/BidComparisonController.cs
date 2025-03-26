@@ -132,24 +132,37 @@ namespace SolaERP.API.Controllers
             return CreateActionResult(await _bidComparisonService.BidComparisonSummaryLoad(bidComparisonId));
         }
 
-		[HttpPost("[action]")]
-		public async Task<IActionResult> BidApprove(BidComparisonBidApproveDto approve)
-		{
-			return CreateActionResult(
-				await _bidComparisonService.BidApproveAsync(approve, User.Identity.Name));
-		}
+        [HttpPost("[action]")]
+        public async Task<IActionResult> BidApprove(BidComparisonBidApproveDto approve)
+        {
+            return CreateActionResult(
+                await _bidComparisonService.BidApproveAsync(approve, User.Identity.Name));
+        }
 
-		[HttpPost("[action]")]
-		public async Task<IActionResult> BidReject(BidComparisonBidRejectDto reject)
-		{
-			return CreateActionResult(
-				await _bidComparisonService.BidRejectAsync(reject, User.Identity.Name));
-		}
-        
+        [HttpPost("[action]")]
+        public async Task<IActionResult> BidReject(BidComparisonBidRejectDto reject)
+        {
+            return CreateActionResult(
+                await _bidComparisonService.BidRejectAsync(reject, User.Identity.Name));
+        }
+
         [HttpGet("[action]/{bidComparisonId}")]
         public async Task<IActionResult> BidComparisonApprovalInfo(int bidComparisonId)
         {
             return CreateActionResult(await _bidComparisonService.BidComparisonApprovalInfo(bidComparisonId));
         }
-	}
+
+        [HttpPost("[action]/{bidComparisonId}")]
+        public async Task<IActionResult> Retrieve(int bidComparisonId)
+        {
+            var userId = Convert.ToInt32(User.Identity.Name);
+            return CreateActionResult(await _bidComparisonService.Retrieve(bidComparisonId, userId));
+        }
+
+        [HttpDelete("[action]/{bidComparisonId}")]
+        public async Task<IActionResult> Delete(int bidComparisonId)
+        {
+            return CreateActionResult(await _bidComparisonService.Delete(bidComparisonId));
+        }
+    }
 }
