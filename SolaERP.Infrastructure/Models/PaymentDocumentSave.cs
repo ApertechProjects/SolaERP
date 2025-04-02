@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Dtos.Attachment;
+﻿using Newtonsoft.Json;
+using SolaERP.Application.Dtos.Attachment;
 
 namespace SolaERP.Application.Models
 {
@@ -43,6 +44,7 @@ namespace SolaERP.Application.Models
         public string AccountCode { get; set; }
         public string PaymentTerms { get; set; }
         public decimal PayableAmount { get; set; }
+        [JsonProperty("PaymentRequestAmount")]
         public decimal PaymenRequestAmount { get; set; }
         public decimal AmountToPay { get; set; }
         public decimal GRNAmount { get; set; }
