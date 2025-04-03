@@ -39,6 +39,7 @@ namespace SolaERP.Application.Entities.Invoice
         public int? AnalysisCode10Id { get; set; }
         public string ItemCode { get;set; }
         public decimal? OrderAmount { get;set; }
+        public string FixedAssetCode  { get; set; }
     }
 }
 
