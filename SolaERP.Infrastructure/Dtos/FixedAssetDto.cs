@@ -2,6 +2,6 @@ namespace SolaERP.Application.Dtos;
 
 public class FixedAssetDto
 {
-    public string AssetCode { get; set; }
-    public string Description { get; set; }
+    public string FixedAssetCode { get; set; }
+    public string FixedAssetDescription { get; set; }
 }

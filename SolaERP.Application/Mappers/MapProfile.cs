@@ -762,7 +762,10 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<BidComparisonSummary, BidComparisonSummaryDto>().ReverseMap();
 
-            CreateMap<FixedAsset, FixedAssetDto>().ReverseMap();
+            CreateMap<FixedAsset, FixedAssetDto>()
+                .ForMember(dest => dest.FixedAssetCode, opt => opt.MapFrom(src => src.AssetCode))
+                .ForMember(dest => dest.FixedAssetDescription, opt => opt.MapFrom(src => src.Description))
+                .ReverseMap();
         }
     }
 }
