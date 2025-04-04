@@ -27,15 +27,5 @@ namespace SolaERP.Application.Entities.Payment
         public string LinkAccount { get; set; }
         public decimal GRNAmount { get; set; }
         public int AgingDays { get; set; }
-        public string AnalysisCode1 { get; set; }
-        public string AnalysisCode2 { get; set; }
-        public string AnalysisCode3 { get; set; }
-        public string AnalysisCode4 { get; set; }
-        public string AnalysisCode5 { get; set; }
-        public string AnalysisCode6 { get; set; }
-        public string AnalysisCode7 { get; set; }
-        public string AnalysisCode8 { get; set; }
-        public string AnalysisCode9 { get; set; }
-        public string AnalysisCode10 { get; set; }
     }
 }

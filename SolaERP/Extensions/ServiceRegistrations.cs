@@ -34,6 +34,7 @@ using SolaERP.Job;
 using UserValidation = SolaERP.Application.Validations.UserValidation.UserValidation;
 using IBackgroundMailService = SolaERP.Job.IBackgroundMailService;
 using SolaERP.DataAccess.Helper;
+
 // using SolaERP.Persistence.Validations.Bid;
 
 namespace SolaERP.Extensions
@@ -97,6 +98,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<ISupportService, SupportService>();
             builder.Services.AddScoped<ISend, Send>();
             builder.Services.AddScoped<BusinessUnitHelper>();
+            builder.Services.AddScoped<IFixedAssetService, FixedAssetService>();
         }
 
         private static void UseRepositories(this WebApplicationBuilder builder)
@@ -141,6 +143,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IInvoiceRepository, SqlInvoiceRepository>();
             builder.Services.AddScoped<IUserReportRepository, SqlUserReportRepository>();
             builder.Services.AddScoped<ISupportRepository, SqlSupportRepository>();
+            builder.Services.AddScoped<IFixedAssetRepository, SqlFixedAssetRepository>();
         }
 
         public static void UseValidationExtension(this WebApplicationBuilder builder)
