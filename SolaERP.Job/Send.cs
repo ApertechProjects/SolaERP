@@ -103,9 +103,6 @@ namespace SolaERP.Job
 			using (var command = _unitOfWork.CreateCommand() as DbCommand)
 			{
 				command.CommandText = @$"set nocount off update Procurement.RFQMain set Status = 2 where RFQDeadline<getDate()";
-
-				var res = command.ExecuteNonQuery() > 0;
-
 			}
 			await _unitOfWork.SaveChangesAsync();
 		}

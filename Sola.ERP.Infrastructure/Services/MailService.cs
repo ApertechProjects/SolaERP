@@ -23,6 +23,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Text.Json;
 using System.Web;
+using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Entities.User;
 using UserList = SolaERP.Application.Dtos.User.UserList;
 
@@ -910,6 +911,27 @@ namespace SolaERP.Infrastructure.Services
 					};
 				
 					await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null, new List<string> { email });					
+				}
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+				throw;
+			}
+		}
+		
+		public async Task SendRFQDeadlineFinishedMailForBuyer(List<RFQDeadlineFinishedMailForBuyerDto> datas)
+		{
+			try
+			{
+				foreach (var data in datas)
+				{
+					VM_RFQDeadlineFinishedMailForBuyer emailVM = new VM_RFQDeadlineFinishedMailForBuyer("en", data.BuyerName, data.RFQNo, data.RFQDeadline,data.RFQMainId)
+					{
+						Language = (Language)Enum.Parse(typeof(Language), "en")
+					};
+				
+					await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null, new List<string> { data.BuyerEmail });					
 				}
 			}
 			catch (Exception e)

@@ -6,5 +6,6 @@
         public string BusinessUnitCode { get; set; }
         public string BuyerCode { get; set; }
         public string BuyerName { get; set; }
+        public string BuyerEmail { get; set; }
     }
 }

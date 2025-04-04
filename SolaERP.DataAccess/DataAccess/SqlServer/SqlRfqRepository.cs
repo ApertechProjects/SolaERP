@@ -651,6 +651,29 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 			return datas;
 		}
+		
+		public async Task<List<RFQDeadlineFinishedMailForBuyerDto>> GetRFQDeadlineFinished()
+		{
+			await using var command = _unitOfWork.CreateCommand() as DbCommand;
+			command.CommandText = @$"select RFQMainId, BuyerName, BuyerEmail, RFQNo, RFQDeadline from Procurement.RFQMain where RFQDeadline<getDate()";
+
+			await using DbDataReader reader = await command.ExecuteReaderAsync();
+			
+			List<RFQDeadlineFinishedMailForBuyerDto> datas = new();
+			while (await reader.ReadAsync())
+			{
+				datas.Add(new RFQDeadlineFinishedMailForBuyerDto
+				{
+					RFQMainId = reader.Get<int>("RFQMainId"),
+					BuyerName = reader.Get<string>("BuyerName"),
+					BuyerEmail = reader.Get<string>("BuyerEmail"),
+					RFQNo = reader.Get<string>("RFQNo"),
+					RFQDeadline = reader.Get<DateTime>("RFQDeadline")
+				});
+			}
+
+			return datas;
+		}
 
 		public async Task<bool> ChangeRFQVendorResponseStatus(int rfqMainId, string vendorCode)
 		{
