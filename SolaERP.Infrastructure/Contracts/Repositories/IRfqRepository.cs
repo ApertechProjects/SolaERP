@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Dtos.RFQ;
+using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Entities.RFQ;
 using SolaERP.Application.Models;
 
@@ -33,5 +34,6 @@ namespace SolaERP.Application.Contracts.Repositories
 		Task<List<int>> GetDetailIds(int id);
 		Task<List<RfqVendors>> GetRfqVendors(int rfqMainId);
 		Task<bool> ChangeRFQVendorResponseStatus(int rfqMainId, string vendorCode);
+		Task<bool> ExtendRfqDeadlineAsync(RfqExtendDeadlineRequest request, int userId);
 	}
 }

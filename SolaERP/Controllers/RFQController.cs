@@ -68,9 +68,13 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Delete([FromQuery] List<int> rfqMainId)
             => CreateActionResult(await _service.DeleteAsync(rfqMainId, User.Identity.Name));
 
-		[HttpGet("[action]/{rfqMainId}")]
-		public async Task<IActionResult> GetRfqVendors(int rfqMainId)
-		   => CreateActionResult(await _service.GetRfqVendors(rfqMainId));
+        [HttpGet("[action]/{rfqMainId}")]
+        public async Task<IActionResult> GetRfqVendors(int rfqMainId)
+            => CreateActionResult(await _service.GetRfqVendors(rfqMainId));
 
-	}
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ExtendRfqDeadline(RfqExtendDeadlineRequest request) =>
+            CreateActionResult(await _service.ExtendRfqDeadlineAsync(request, Convert.ToInt32(User.Identity.Name)));
+        
+    }
 }
