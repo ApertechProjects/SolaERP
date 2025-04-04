@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Data.Common;
+using AutoMapper;
 using MediatR;
 using SolaERP.Application.Constants;
 using SolaERP.Application.Contracts.Repositories;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Dtos.Bid;
+using SolaERP.Application.Dtos.Buyer;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Item_Code;
 using SolaERP.Application.Entities.User;
@@ -35,6 +37,7 @@ namespace SolaERP.Persistence.Services
 		private readonly IVendorRepository _vendorRepository;
 		private readonly IBackgroundTaskQueue _taskQueue;
 		private readonly ILogger<RfqService> _logger;
+		private readonly IBuyerService _buyerService;
 		public RfqService(IUnitOfWork unitOfWork,
 			IRfqRepository repository,
 			IMapper mapper,
@@ -46,8 +49,7 @@ namespace SolaERP.Persistence.Services
 			IMailService mailService,
 			IVendorRepository vendorRepository,
 			IBackgroundTaskQueue taskQueue,
-			ILogger<RfqService> logger
-			)
+			ILogger<RfqService> logger, IBuyerService buyerService)
 		{
 			_unitOfWork = unitOfWork;
 			_repository = repository;
@@ -61,6 +63,7 @@ namespace SolaERP.Persistence.Services
 			_vendorRepository = vendorRepository;
 			_taskQueue = taskQueue;
 			_logger = logger;
+			_buyerService = buyerService;
 		}
 
 
@@ -381,6 +384,37 @@ namespace SolaERP.Persistence.Services
 			var result = await _repository.ChangeRFQVendorResponseStatus(rfqMainId, vendorCode);
 
 			return result;
+		}
+		
+		public async Task GetRFQDeadlineFinished(string name, int businessUnitId)
+		{
+			List<RFQDeadlineFinishedMailForBuyerDto> rfqs = await _repository.GetRFQDeadlineFinished();
+			
+			if (rfqs.Count > 0)
+			{
+				using (var command = _unitOfWork.CreateCommand() as DbCommand)
+				{
+					var rfqMainIds = rfqs.Select(x => x.RFQMainId).ToList();
+					var idListForSql = string.Join(",", rfqMainIds);
+                    
+					command.CommandText = @$"set nocount off update Procurement.RFQMain set Status = 2 where RFQMainId in ({{idListForSql}})";
+                    
+				}
+				await _unitOfWork.SaveChangesAsync();
+
+				// List<BuyerDto> buyers = _buyerService.GetBuyersAsync();
+				
+				foreach (var rfq in rfqs)
+				{
+					
+				}
+				
+				_taskQueue.QueueBackgroundWorkItem(async token =>
+				{
+					await _mailService.SendRFQDeadlineFinishedMailForBuyer(rfqs);
+				});
+			}
+			
 		}
 	}
 }
