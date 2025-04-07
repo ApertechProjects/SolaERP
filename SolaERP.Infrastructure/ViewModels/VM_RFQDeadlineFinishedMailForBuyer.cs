@@ -52,7 +52,7 @@ namespace SolaERP.Application.ViewModels
                 "<table width='100%' style='font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; border-spacing: 0; padding: 0;'>" +
                 $"<tr><td><p>Hörmətli {_buyerName},</p></td></tr>" +
                 $"<tr><td><p>{_rfqNo} nömrəli Qiymət Təklifi Sorğusunun son müraciət tarixi {_rfqDeadline} tarixində bitmişdir.</p></td></tr>" +
-                $"<tr><td><p>Sorğuya baxmaq üçün <b><a href='{_configuration["Mail:ServerUrlUI"] + "/" + _rfqId}' style='text-decoration: none;'> linkə </a></b> keçid edə bilərsiniz.</p></td></tr>"+
+                $"<tr><td><p>Sorğuya baxmaq üçün <b><a href='{_configuration["Mail:ServerUrlUI"] + "/rfqs/" + _rfqId}' style='text-decoration: none;'> linkə </a></b> keçid edə bilərsiniz.</p></td></tr>"+
                 "<tr><td><p>Hörmətlə,<br>GL Group</p></td></tr>" +
                 "</table>"
             );
@@ -64,7 +64,7 @@ namespace SolaERP.Application.ViewModels
                 "<table width='100%' style='font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; border-spacing: 0; padding: 0;'>" +
                 $"<tr><td><p>Dear {_buyerName},</p></td></tr>" +
                 $"<tr><td><p>The deadline for the submission of the {_rfqNo} number was {_rfqDeadline}.</p></td></tr>" +
-                $"<tr><td><p>You can review the RFQ using the following <b><a href='{_configuration["Mail:ServerUrlUI"] + "/" + _rfqId}' style='text-decoration: none;'> link </a></b>.</p></td></tr>" +
+                $"<tr><td><p>You can review the RFQ using the following <b><a href='{_configuration["Mail:ServerUrlUI"] + "/rfqs/" + _rfqId}' style='text-decoration: none;'> link </a></b>.</p></td></tr>" +
                 "<tr><td><p>Best regards,<br>GL Group</p></td></tr>" +
                 "</table>"
             );
