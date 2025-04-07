@@ -655,7 +655,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 		public async Task<List<RFQDeadlineFinishedMailForBuyerDto>> GetRFQDeadlineFinished()
 		{
 			await using var command = _unitOfWork.CreateCommand() as DbCommand;
-			command.CommandText = @$"select RFQMainId, BuyerName, BuyerEmail, RFQNo, RFQDeadline from Procurement.RFQMain where RFQDeadline<getDate()";
+			command.CommandText = @$"select RFQMainId, Buyer, RFQNo, RFQDeadline, BusinessUnitId from Procurement.RFQMain where Status=1 and RFQDeadline<getDate()";
 
 			await using DbDataReader reader = await command.ExecuteReaderAsync();
 			
@@ -665,10 +665,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 				datas.Add(new RFQDeadlineFinishedMailForBuyerDto
 				{
 					RFQMainId = reader.Get<int>("RFQMainId"),
-					BuyerName = reader.Get<string>("BuyerName"),
-					BuyerEmail = reader.Get<string>("BuyerEmail"),
+					BuyerName = reader.Get<string>("Buyer"),
 					RFQNo = reader.Get<string>("RFQNo"),
-					RFQDeadline = reader.Get<DateTime>("RFQDeadline")
+					RFQDeadline = reader.Get<DateTime>("RFQDeadline"),
+					BusinessUnitId = reader.Get<int>("BusinessUnitId")
 				});
 			}
 

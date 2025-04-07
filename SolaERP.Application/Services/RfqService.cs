@@ -386,7 +386,7 @@ namespace SolaERP.Persistence.Services
 			return result;
 		}
 		
-		public async Task GetRFQDeadlineFinished(string name, int businessUnitId)
+		public async Task GetRFQDeadlineFinished()
 		{
 			List<RFQDeadlineFinishedMailForBuyerDto> rfqs = await _repository.GetRFQDeadlineFinished();
 			
@@ -401,12 +401,11 @@ namespace SolaERP.Persistence.Services
                     
 				}
 				await _unitOfWork.SaveChangesAsync();
-
-				// List<BuyerDto> buyers = _buyerService.GetBuyersAsync();
 				
 				foreach (var rfq in rfqs)
 				{
-					
+					string buyerEmail = await _buyerService.FindBuyerEmailByBuyerName(rfq.BuyerName, rfq.BusinessUnitId);
+					rfq.BuyerEmail = buyerEmail;
 				}
 				
 				_taskQueue.QueueBackgroundWorkItem(async token =>

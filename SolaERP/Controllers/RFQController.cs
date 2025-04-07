@@ -83,7 +83,7 @@ namespace SolaERP.API.Controllers
         [HttpGet("[action]")]
         public async Task UpdateRFQStatusToClose()
         {
-            await _service.GetRFQDeadlineFinished(User.Identity.Name, 1);
+            await _service.GetRFQDeadlineFinished();
         }
     }
 }

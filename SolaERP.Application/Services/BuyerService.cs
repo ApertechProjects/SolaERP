@@ -60,5 +60,10 @@ namespace SolaERP.Persistence.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task<string> FindBuyerEmailByBuyerName(string buyerName , int businessUnitId)
+        {
+            return _buyerRepository.FindBuyerEmailByBuyerName(buyerName , businessUnitId);
+        }
     }
 }

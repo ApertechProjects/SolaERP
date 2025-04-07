@@ -1,21 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using SolaERP.Application.Contracts.Services;
-using SolaERP.Application.Entities.Vendors;
-using SolaERP.Application.Enums;
 using SolaERP.Application.UnitOfWork;
-using SolaERP.Application.ViewModels;
 using SolaERP.Job.EmailIsSent1;
 using SolaERP.Job.Enums;
-using SolaERP.Job.RFQClose;
-using System;
-using System.Collections.Generic;
-using System.Data.Common;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Serilog;
 
 namespace SolaERP.Job
 {
@@ -27,12 +16,12 @@ namespace SolaERP.Job
 		private readonly IEmailNotificationService _emailNotificationService;
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IMapper _mapper;
-
+		private readonly IRfqService _rfqService;
 		public Send(ILogger<EmailIsSentForAssignedBuyer> logger,
 								  IUnitOfWork unitOfWork,
 								  IBackgroundMailService backgroundMailService,
 								  IMailService mailService, IEmailNotificationService emailNotificationService,
-		IMapper mapper)
+		IMapper mapper, IRfqService rfqService)
 		{
 			_logger = logger;
 			Console.WriteLine("constructor started");
@@ -41,6 +30,7 @@ namespace SolaERP.Job
 			_backgroundMailService = backgroundMailService;
 			_mailService = mailService;
 			_mapper = mapper;
+			_rfqService = rfqService;
 			_emailNotificationService = emailNotificationService;
 			Console.WriteLine("constructor finsihed");
 			Debug.WriteLine("constructor finsihed");
@@ -100,11 +90,13 @@ namespace SolaERP.Job
 
 		public async Task UpdateRFQStatusToClose()
 		{
-			using (var command = _unitOfWork.CreateCommand() as DbCommand)
-			{
-				command.CommandText = @$"set nocount off update Procurement.RFQMain set Status = 2 where RFQDeadline<getDate()";
-			}
-			await _unitOfWork.SaveChangesAsync();
+
+			await _rfqService.GetRFQDeadlineFinished();
+			// using (var command = _unitOfWork.CreateCommand() as DbCommand)
+			// {
+			// 	command.CommandText = @$"set nocount off update Procurement.RFQMain set Status = 2 where RFQDeadline<getDate()";
+			// }
+			// await _unitOfWork.SaveChangesAsync();
 		}
 		
 		public async Task SendRFQDeadLineMail()
