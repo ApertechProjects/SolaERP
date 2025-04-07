@@ -11,6 +11,8 @@ namespace SolaERP.Application.Contracts.Repositories
     public interface IBuyerRepository : ICrudOperations<Buyer>
     {
         public Task<List<Buyer>> GetBuyersAsync(int userId, int businessUnitId);
-       
+
+        public Task<string> FindBuyerEmailByBuyerName(string buyerName, int businessUnitId);
+
     }
 }

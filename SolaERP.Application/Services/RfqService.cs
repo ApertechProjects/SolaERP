@@ -386,7 +386,7 @@ namespace SolaERP.Persistence.Services
 			return result;
 		}
 		
-		public async Task GetRFQDeadlineFinished(string name, int businessUnitId)
+		public async Task GetRFQDeadlineFinished()
 		{
 			List<RFQDeadlineFinishedMailForBuyerDto> rfqs = await _repository.GetRFQDeadlineFinished();
 			
@@ -398,17 +398,24 @@ namespace SolaERP.Persistence.Services
 					var idListForSql = string.Join(",", rfqMainIds);
                     
 					command.CommandText = @$"set nocount off update Procurement.RFQMain set Status = 2 where RFQMainId in ({{idListForSql}})";
-                    
+					await _unitOfWork.SaveChangesAsync();
 				}
-				await _unitOfWork.SaveChangesAsync();
-
-				// List<BuyerDto> buyers = _buyerService.GetBuyersAsync();
 				
-				foreach (var rfq in rfqs)
+				foreach (var rfq in rfqs.ToList())
 				{
+					string buyerEmail = await _buyerService.FindBuyerEmailByBuyerName(rfq.BuyerName, rfq.BusinessUnitId);
+					rfq.BuyerEmail = buyerEmail;
 					
+					rfqs.Add(new RFQDeadlineFinishedMailForBuyerDto
+					{
+						RFQMainId = rfq.RFQMainId,
+						BuyerName = rfq.BuyerName,
+						RFQNo = rfq.RFQNo,
+						RFQDeadline = rfq.RFQDeadline,
+						BusinessUnitId = rfq.BusinessUnitId,
+						BuyerEmail = "anarceferov1996@gmail.com",
+					});
 				}
-				
 				_taskQueue.QueueBackgroundWorkItem(async token =>
 				{
 					await _mailService.SendRFQDeadlineFinishedMailForBuyer(rfqs);
