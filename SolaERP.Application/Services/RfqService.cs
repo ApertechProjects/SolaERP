@@ -397,10 +397,11 @@ namespace SolaERP.Persistence.Services
 					var rfqMainIds = rfqs.Select(x => x.RFQMainId).ToList();
 					var idListForSql = string.Join(",", rfqMainIds);
                     
-					command.CommandText = @$"set nocount off update Procurement.RFQMain set Status = 2 where RFQMainId in ({{idListForSql}})";
-					await _unitOfWork.SaveChangesAsync();
+					command.CommandText = @$"set nocount off update Procurement.RFQMain set Status = 2 where RFQMainId in ({idListForSql})";
+					await command.ExecuteNonQueryAsync();
 				}
-				
+				await _unitOfWork.SaveChangesAsync();
+
 				foreach (var rfq in rfqs.ToList())
 				{
 					string buyerEmail = await _buyerService.FindBuyerEmailByBuyerName(rfq.BuyerName, rfq.BusinessUnitId);
@@ -416,6 +417,7 @@ namespace SolaERP.Persistence.Services
 						BuyerEmail = "anarceferov1996@gmail.com",
 					});
 				}
+				
 				_taskQueue.QueueBackgroundWorkItem(async token =>
 				{
 					await _mailService.SendRFQDeadlineFinishedMailForBuyer(rfqs);
