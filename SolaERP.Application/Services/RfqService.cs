@@ -414,7 +414,7 @@ namespace SolaERP.Persistence.Services
 						RFQNo = rfq.RFQNo,
 						RFQDeadline = rfq.RFQDeadline,
 						BusinessUnitId = rfq.BusinessUnitId,
-						BuyerEmail = "anarceferov1996@gmail.com",
+						BuyerEmail = "anarceferov1996@gmail.com"
 					});
 				}
 				
