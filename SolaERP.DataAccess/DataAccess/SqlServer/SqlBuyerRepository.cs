@@ -36,9 +36,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "exec [dbo].[SP_UNI_Buyer_List] @userId,@businessUnitId";
-                command.Parameters.AddWithValue(command, "@businessUnitId", businessUnitId);
-                command.Parameters.AddWithValue(command, "@userId", userId);
+                command.CommandText = "exec [dbo].[SP_UNI_Buyer_List] @UserId,@BusinessUnitId";
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
                 using var reader = await command.ExecuteReaderAsync();
                 List<Buyer> status = new List<Buyer>();
 
