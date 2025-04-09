@@ -165,10 +165,10 @@ public class OrderService : IOrderService
     {
         int userId = Convert.ToInt32(identityName);
         
-        if (statusDto.RejectReasonId == 5)
-        {
-            return await Retrieve(new List<int>{statusDto.OrderMainId}, identityName , "Order Reject", 17);
-        }
+        // if (statusDto.RejectReasonId == 5)
+        // {
+        //     return await Retrieve(new List<int>{statusDto.OrderMainId}, identityName , "Order Reject", 17);
+        // }
 
         Dictionary<int,string> logData = await getOrderLogInformationAndActionIdByApproveStatusId(statusDto.ApproveStatusId);
         
