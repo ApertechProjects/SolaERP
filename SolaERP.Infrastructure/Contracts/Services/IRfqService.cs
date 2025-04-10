@@ -29,6 +29,7 @@ namespace SolaERP.Application.Contracts.Services
 		//Task<ApiResponse<SolaERP.Application.Dtos.UOM.ConversionDTO>> GetConversionAsync(int businessUnit, string itemCodes);
 
 		Task GetRFQDeadlineFinished();
+		Task<ApiResponse<bool>> ExtendRfqDeadlineAsync(RfqExtendDeadlineRequest request, int userId);
 
 	}
 }

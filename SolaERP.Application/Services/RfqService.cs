@@ -425,5 +425,12 @@ namespace SolaERP.Persistence.Services
 			}
 			
 		}
+		
+		public async Task<ApiResponse<bool>> ExtendRfqDeadlineAsync(RfqExtendDeadlineRequest request, int userId)
+		{
+			var result = await _repository.ExtendRfqDeadlineAsync(request, userId);
+			await _unitOfWork.SaveChangesAsync();
+			return ApiResponse<bool>.Success(result);
+		}
 	}
 }

@@ -85,5 +85,10 @@ namespace SolaERP.API.Controllers
         {
             await _service.GetRFQDeadlineFinished();
         }
+        
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ExtendRfqDeadline(RfqExtendDeadlineRequest request) =>
+            CreateActionResult(await _service.ExtendRfqDeadlineAsync(request, Convert.ToInt32(User.Identity.Name)));
+
     }
 }

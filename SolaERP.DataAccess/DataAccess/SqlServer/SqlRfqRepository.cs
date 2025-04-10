@@ -690,6 +690,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 				return res > 0;
 			}
 		}
+		
+		public async Task<bool> ExtendRfqDeadlineAsync(RfqExtendDeadlineRequest request, int userId)
+		{
+			using (var command = _unitOfWork.CreateCommand() as DbCommand)
+			{
+				command.CommandText = @"SET NOCOUNT OFF EXEC SP_ExtendRFQDeadline @RFQMainId, @Date, @UserId";
+
+				command.Parameters.AddWithValue(command, "@RFQMainId", request.RfqMainId);
+				command.Parameters.AddWithValue(command, "@Date", request.DateTime);
+				command.Parameters.AddWithValue(command, "@UserId", userId);
+
+				var res = await command.ExecuteNonQueryAsync();
+				return res > 0;
+			}
+		}
 
 		#endregion
 	}
