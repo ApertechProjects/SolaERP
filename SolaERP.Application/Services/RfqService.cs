@@ -406,16 +406,6 @@ namespace SolaERP.Persistence.Services
 				{
 					string buyerEmail = await _buyerService.FindBuyerEmailByBuyerName(rfq.BuyerName, rfq.BusinessUnitId);
 					rfq.BuyerEmail = buyerEmail;
-					
-					rfqs.Add(new RFQDeadlineFinishedMailForBuyerDto
-					{
-						RFQMainId = rfq.RFQMainId,
-						BuyerName = rfq.BuyerName,
-						RFQNo = rfq.RFQNo,
-						RFQDeadline = rfq.RFQDeadline,
-						BusinessUnitId = rfq.BusinessUnitId,
-						BuyerEmail = "anarceferov1996@gmail.com"
-					});
 				}
 				
 				_taskQueue.QueueBackgroundWorkItem(async token =>
