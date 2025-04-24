@@ -343,7 +343,7 @@ namespace SolaERP.Persistence.Services
 			
 			await _unitOfWork.SaveChangesAsync();
 
-			List<VendorUserForMail> mailData = new List<VendorUserForMail>();
+			List<RfqVendorToSend> mailData = new List<RfqVendorToSend>();
 			
 			foreach (var vendorCode in dto.VendorCodes)
 			{
@@ -353,12 +353,16 @@ namespace SolaERP.Persistence.Services
 
 				foreach (var user in users)
 				{
-					mailData.Add(new VendorUserForMail()
+					mailData.Add(new RfqVendorToSend()
 					{
-						Email = user.Email,
-						FullName = user.FullName,
-						Language = user.Language,
+						VendorId = vendor.VendorId,
+						VendorCode = vendor.VendorCode,
 						VendorName = vendor.VendorName,
+						Email = user.Email,
+						Language = user.Language,
+						RFQMainId = mainRFQ.Id,
+						RFQDeadline = mainRFQ.RFQDeadline,
+						RFQNo = mainRFQ.RFQNo,
 					});
 				}
 			}

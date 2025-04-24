@@ -11,8 +11,9 @@ public class VM_RFQVendorApprove : VM_EmailTemplateBase
     private readonly string _lang;
     private readonly string _companyName;
     private readonly string _userEmail;
-    
-    public VM_RFQVendorApprove(string lang, string userEmail ,string companyName , int rfqId)
+    private readonly DateTime _rfqDeadLine;
+    private readonly string _rfqNo;
+    public VM_RFQVendorApprove(string lang, string userEmail ,string companyName , int rfqId , DateTime? rfqDeadLine , string rfqNo)
     {
         string appsettingsFileName = AppSettingsHelper.GetAppSettingsFileName();
         IConfigurationBuilder builder = new ConfigurationBuilder().AddJsonFile(appsettingsFileName, optional: true, reloadOnChange: false);
@@ -21,6 +22,8 @@ public class VM_RFQVendorApprove : VM_EmailTemplateBase
         _lang = lang;
         _userEmail = userEmail;
         _companyName = companyName;
+        _rfqDeadLine = (DateTime)rfqDeadLine;
+        _rfqNo = rfqNo;
     }
     
     public string Subject
@@ -55,6 +58,7 @@ public class VM_RFQVendorApprove : VM_EmailTemplateBase
             $"<div style='font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5;'>"+
             $"<p>Hörmətli {_companyName},</p>" +
             "<p>Sizə yeni RFQ (Təklif Sorğusu) göndərilmişdir. Zəhmət olmasa, aşağıdakı linkə daxil olaraq sorğunu nəzərdən keçirin və müvafiq cavabınızı təqdim edin:</p>" +
+            $"<p>RFQ (Təklif Sorğusu) məlumatları- RFQ nömrəsi ({_rfqNo}) və RFQ son müraciət tarixi ({_rfqDeadLine})</p>" +
             $"<p><b><a href='{_configuration["Mail:VendorServerUrlUI"]}/rfq-information' style='text-decoration: none;'>SolaERP</a></b></p>" +
             "<p>Əlavə suallarınız olarsa, bizimlə əlaqə saxlamaqdan çəkinməyin.</p>" +
             "<p>Hörmətlə,<br>GL Group</p>"
@@ -66,6 +70,7 @@ public class VM_RFQVendorApprove : VM_EmailTemplateBase
         return new HtmlString(
             $"<p>Dear {_companyName},</p>" +
             "<p>A new RFQ (Request for Quotation) has been sent to you. Please click the link below to review the request and submit your response relatively:</p>" +
+            $"<p>Details of the RFQ – RFQ Reference Number ({_rfqNo}) and the Final Submission Date ({_rfqDeadLine})</p>" +
             $"<p><b><a href='{_configuration["Mail:VendorServerUrlUI"]}/rfq-information' style='text-decoration: none;'>SolaERP</a></b></p>" +
             "<p>If you have any further questions, please do not hesitate to contact us.</p>" +
             "<p>Best regards,<br>GL Group</p>" +
