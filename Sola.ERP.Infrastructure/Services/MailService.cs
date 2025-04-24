@@ -868,10 +868,6 @@ namespace SolaERP.Infrastructure.Services
 		{
 			foreach (var user in users)
 			{
-				user.Email = "anarceferov1996@gmail.com";
-				user.VendorName = "Anar MMC";
-				user.Language = "en";
-				
 				VM_RFQVendorApprove emailVM = new VM_RFQVendorApprove(user.Language, user.Email, user.VendorName , 1 , user.RFQDeadline , user.RFQNo)
 				{
 					Language = (Language)Enum.Parse(typeof(Language), user.Language)
