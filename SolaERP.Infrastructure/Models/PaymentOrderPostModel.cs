@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace SolaERP.Application.Models
 {
@@ -14,7 +15,6 @@ namespace SolaERP.Application.Models
         public List<PaymentDocumentPost> PaymentDocumentPosts { get; set; }
         public PaymentOrderPostMain PaymentOrderMain { get; set; }
         public List<PaymentOrderPostDetail> PaymentOrderDetails { get; set; }
-
     }
 
     public class PaymentOrderPostMain
@@ -42,7 +42,6 @@ namespace SolaERP.Application.Models
     public class PaymentDocumentPost
     {
         public int PaymentOrderTransactionId { get; set; }
-        public int PaymentOrderMainId { get; set; }
         public int PaymentDocumentDetailId { get; set; }
         public int LineNo { get; set; }
         public string TransactionReference { get; set; }
@@ -57,8 +56,8 @@ namespace SolaERP.Application.Models
         public string CurrencyCode { get; set; }
         public decimal BaseConvRate { get; set; }
         public decimal BaseAmount { get; set; }
-        public decimal ReportRate { get; set; }
-        public decimal ReportAmount { get; set; }
+        [JsonProperty("ReportRate")] public decimal ReportingConvRate { get; set; }
+        [JsonProperty("ReportingAmount")] public decimal ReportinAmount { get; set; }
         public string JournalType { get; set; }
         public string Budget { get; set; }
         public string Employee { get; set; }
@@ -66,6 +65,16 @@ namespace SolaERP.Application.Models
         public string LinkAccount { get; set; }
         public string VendorCode { get; set; }
         public string Department { get; set; }
+        public string? AnalysisCode1 { get; set; }
+        public string? AnalysisCode2 { get; set; }
+        public string? AnalysisCode3 { get; set; }
+        public string? AnalysisCode4 { get; set; }
+        public string? AnalysisCode5 { get; set; }
+        public string? AnalysisCode6 { get; set; }
+        public string? AnalysisCode7 { get; set; }
+        public string? AnalysisCode8 { get; set; }
+        public string? AnalysisCode9 { get; set; }
+        public string? AnalysisCode10 { get; set; }
     }
 
     public class PaymentTransaction
@@ -85,8 +94,8 @@ namespace SolaERP.Application.Models
         public string CurrencyCode { get; set; }
         public decimal BaseConvRate { get; set; }
         public decimal BaseAmount { get; set; }
-        public decimal ReportRate { get; set; }
-        public decimal ReportAmount { get; set; }
+        public decimal ReportingConvRate { get; set; }
+        public decimal ReportinAmount { get; set; }
         public string JournalType { get; set; }
         public string Budget { get; set; }
         public string Employee { get; set; }
@@ -94,6 +103,16 @@ namespace SolaERP.Application.Models
         public string LinkAccount { get; set; }
         public string VendorCode { get; set; }
         public string Department { get; set; }
+        public string? AnalysisCode1 { get; set; }
+        public string? AnalysisCode2 { get; set; }
+        public string? AnalysisCode3 { get; set; }
+        public string? AnalysisCode4 { get; set; }
+        public string? AnalysisCode5 { get; set; }
+        public string? AnalysisCode6 { get; set; }
+        public string? AnalysisCode7 { get; set; }
+        public string? AnalysisCode8 { get; set; }
+        public string? AnalysisCode9 { get; set; }
+        public string? AnalysisCode10 { get; set; }
     }
 
     public class PaymentOrderPostMainSaveResult
@@ -107,6 +126,5 @@ namespace SolaERP.Application.Models
         public int JournalNo { get; set; }
         public string PaymentOrderNo { get; set; }
         public int PaymentOrderMainId { get; set; }
-
     }
 }
