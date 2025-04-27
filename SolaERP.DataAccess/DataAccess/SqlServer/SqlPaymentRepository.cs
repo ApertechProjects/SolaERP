@@ -1030,8 +1030,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@PaymentOrderMainId", paymentOrderMainId);
                 command.Parameters.AddTableValue(command, "@PaymentOrderTransactions", "PaymentDocumentPost2", table);
 
-                // command.Parameters.Add("@NewJournalNo", SqlDbType.Int);
-                // command.Parameters["@NewJournalNo"].Direction = ParameterDirection.Output;
+                command.Parameters.Add("@NewJournalNo", SqlDbType.Int);
+                command.Parameters["@NewJournalNo"].Direction = ParameterDirection.Output;
 
                 using var reader = await command.ExecuteReaderAsync();
 
