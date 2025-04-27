@@ -42,12 +42,12 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<PaymentOrderTransaction>> PaymentOrderTransaction(DataTable table, int paymentOrderMainId, DateTime paymentDate, string bankAccount, decimal bankCharge);
         Task<List<BankAccountList>> BankAccountList(int businessUnitId);
         Task<bool> PaymentOrderPost(DataTable table, int journalNo, int userId);
-        Task<(List<ASalfldg>, int)> PaymentOrderPostData(DataTable table, int paymentOrderMainId, int allocationReference, int journalNo, int userId,int businessUnitId);
+        Task< int> PaymentOrderPostData(DataTable table, int paymentOrderMainId, int allocationReference, int journalNo, int userId,int businessUnitId);
         Task<PaymentOrderPostMainSaveResult> PaymentOrderPostSaveMain(PaymentOrderPostMain paymentOrderMain, int allocationReference, int journalNo, int userId);
         Task<bool> PaymentOrderPostDetailSave(int paymentOrderMainId, DataTable detailData);
         Task<bool> PaymentOrderPostTransactionSave(int paymentOrderMainId, DataTable transactionData);
         Task<bool> PaymentOrderDetailsCheckNonAllocated(DataTable detailData);
-        Task<List<AllocationData>> PaymentOrderAllocationData(int paymentOrderMainId, int userId);
+        Task PaymentOrderAllocationData(int businessUnitId, int paymentOrderMainId, int userId);
         Task<List<PaymentOrder>> PaymentOrders(PaymentOrderGetModel payment);
     }
 }
