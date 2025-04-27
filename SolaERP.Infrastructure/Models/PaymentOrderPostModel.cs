@@ -76,6 +76,45 @@ namespace SolaERP.Application.Models
         public string AnalysisCode9 { get; set; }
         public string AnalysisCode10 { get; set; }
     }
+    
+    public class PaymentOrderPostDataDto
+    {
+        public int PaymentOrderTransactionId { get; set; }
+        public int PaymentOrderMainId { get; set; }
+        public int PaymentDocumentDetailId { get; set; }
+        public int LineNo { get; set; }
+        public string TransactionReference { get; set; }
+        public string Reference { get; set; }
+        public string InvoiceNo { get; set; }
+        public string SystemInvoiceNo { get; set; }
+        public string AccountCode { get; set; }
+        public DateTime TransactionDate { get; set; }
+        public string Period { get; set; }
+        public string D_C { get; set; }
+        public decimal Amount { get; set; }
+        public string CurrencyCode { get; set; }
+        public decimal BaseConvRate { get; set; }
+        public decimal BaseAmount { get; set; }
+         public decimal ReportingConvRate { get; set; }
+         public decimal ReportinAmount { get; set; }
+        public string JournalType { get; set; }
+        public string Budget { get; set; }
+        public string Employee { get; set; }
+        public string WellNo { get; set; }
+        public string LinkAccount { get; set; }
+        public string VendorCode { get; set; }
+        public string Department { get; set; }
+        public string AnalysisCode1 { get; set; }
+        public string AnalysisCode2 { get; set; }
+        public string AnalysisCode3 { get; set; }
+        public string AnalysisCode4 { get; set; }
+        public string AnalysisCode5 { get; set; }
+        public string AnalysisCode6 { get; set; }
+        public string AnalysisCode7 { get; set; }
+        public string AnalysisCode8 { get; set; }
+        public string AnalysisCode9 { get; set; }
+        public string AnalysisCode10 { get; set; }
+    }
 
     public class PaymentTransaction
     {
