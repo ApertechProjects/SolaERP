@@ -78,7 +78,7 @@ namespace SolaERP.Persistence.Services
             for (int i = 0; i < model.Payments.Count; i++)
             {
                 var data = await _paymentRepository.ChangeStatus(userId, model.Payments[i].PaymentDocumentMainId,
-                    model.Payments[i].Sequence, model.ApproveStatus, model.Comment);
+                    model.Payments[i].Sequence, model.ApproveStatus, model.Comment, model.RejectReasonId);
             }
 
             await _unitOfWork.SaveChangesAsync();
