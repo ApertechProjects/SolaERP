@@ -1021,14 +1021,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 var query = _businessUnitHelper.BuildQueryForIntegration(businessUnitId,
-                    "SP_PaymentOrderPostData @JournalNo,@AllocationReference,@PaymentOrderMainId,@BusinessUnitId,@UserId,@PaymentOrderTransactions,@NewJournalNo = @NewJournalNo OUTPUT select @NewJournalNo as [NewJournalNo]");
+                    "SP_PaymentOrderPostData @JournalNo,@AllocationReference,@PaymentOrderMainId,@BusinessUnitId,@UserId,@NewJournalNo = @NewJournalNo OUTPUT select @NewJournalNo as [NewJournalNo]");
                 command.CommandText = query;
                 command.Parameters.AddWithValue(command, "@JournalNo", journalNo);
                 command.Parameters.AddWithValue(command, "@AllocationReference", allocationReference);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
                 command.Parameters.AddWithValue(command, "@PaymentOrderMainId", paymentOrderMainId);
-                command.Parameters.AddTableValue(command, "@PaymentOrderTransactions", "PaymentDocumentPost2", table);
+                // command.Parameters.AddTableValue(command, "@PaymentOrderTransactions", "PaymentDocumentPost2", table);
 
                 command.Parameters.Add("@NewJournalNo", SqlDbType.Int);
                 command.Parameters["@NewJournalNo"].Direction = ParameterDirection.Output;
