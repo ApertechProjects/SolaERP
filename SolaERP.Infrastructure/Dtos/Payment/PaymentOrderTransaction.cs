@@ -32,6 +32,7 @@ namespace SolaERP.Application.Dtos.Payment
         public string LinkAccount { get; set; }
         public string VendorCode { get; set; }
         public string Department { get; set; }
+        public string CurrencyCode { get; set; }
         public string AnalysisCode1 { get; set; }
         public string AnalysisCode2 { get; set; }
         public string AnalysisCode3 { get; set; }
