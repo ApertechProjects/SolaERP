@@ -378,8 +378,12 @@ namespace SolaERP.Persistence.Services
                 var paymentOrderSaveMain = await _paymentRepository.PaymentOrderPostSaveMain(model.PaymentOrderMain,
                     model.AllocationReference, model.JournalNo, userId);
 
+                Console.WriteLine("SaveMain1");
+
                 await _paymentRepository.PaymentOrderPostDetailSave(paymentOrderSaveMain.PaymentOrderMainId,
                     detailData);
+
+                Console.WriteLine("SaveDetail1");
 
                 var paymentOrderTransaction = _mapper.Map<List<PaymentTransaction>>(model.PaymentDocumentPosts);
 
@@ -387,6 +391,8 @@ namespace SolaERP.Persistence.Services
                 await _paymentRepository.PaymentOrderPostTransactionSave(
                     paymentOrderSaveMain.PaymentOrderMainId,
                     transactionData);
+
+                Console.WriteLine("Transactions..");
 
                 #endregion
 
