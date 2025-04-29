@@ -383,7 +383,7 @@ namespace SolaERP.Persistence.Services
                 await _paymentRepository.PaymentOrderPostDetailSave(paymentOrderSaveMain.PaymentOrderMainId,
                     detailData);
                 
-                Console.WriteLine("Step1 - PaymentOrderDetails IUD done!");
+                Console.WriteLine("Step2 - PaymentOrderDetails IUD done!");
 
                 var paymentOrderTransaction = _mapper.Map<List<PaymentTransaction>>(model.PaymentDocumentPosts);
 
