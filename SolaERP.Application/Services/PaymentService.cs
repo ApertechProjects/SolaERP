@@ -378,21 +378,21 @@ namespace SolaERP.Persistence.Services
                 var paymentOrderSaveMain = await _paymentRepository.PaymentOrderPostSaveMain(model.PaymentOrderMain,
                     model.AllocationReference, model.JournalNo, userId);
 
-                Console.WriteLine("SaveMain1");
-
+                Console.WriteLine("Step1 - PaymentOrderMain IUD done!");
+                
                 await _paymentRepository.PaymentOrderPostDetailSave(paymentOrderSaveMain.PaymentOrderMainId,
                     detailData);
-
-                Console.WriteLine("SaveDetail1");
+                
+                Console.WriteLine("Step1 - PaymentOrderDetails IUD done!");
 
                 var paymentOrderTransaction = _mapper.Map<List<PaymentTransaction>>(model.PaymentDocumentPosts);
 
-                // DataTable transactionData = paymentOrderTransaction.ConvertListOfCLassToDataTable();
-                // await _paymentRepository.PaymentOrderPostTransactionSave(
-                //     paymentOrderSaveMain.PaymentOrderMainId,
-                //     transactionData);
+                DataTable transactionData = paymentOrderTransaction.ConvertListOfCLassToDataTable();
+                await _paymentRepository.PaymentOrderPostTransactionSave(
+                    paymentOrderSaveMain.PaymentOrderMainId,
+                    transactionData);
 
-                // Console.WriteLine("Transactions..");
+                Console.WriteLine("Step3 - PaymentOrderTransaction IUD done!");
 
                 #endregion
 
@@ -400,20 +400,24 @@ namespace SolaERP.Persistence.Services
 
                 table.ForEach(x => x.PaymentOrderMainId = paymentOrderSaveMain.PaymentOrderMainId);
 
-                // var data = await _paymentRepository.PaymentOrderPostData(table.ConvertListOfCLassToDataTable(),
-                //     paymentOrderSaveMain.PaymentOrderMainId,
-                //     model.AllocationReference, model.JournalNo,
-                //     userId, model.BusinessUnitId);
+                var data = await _paymentRepository.PaymentOrderPostData(table.ConvertListOfCLassToDataTable(),
+                    paymentOrderSaveMain.PaymentOrderMainId,
+                    model.AllocationReference, model.JournalNo,
+                    userId, model.BusinessUnitId);
+                
+                Console.WriteLine("Step4 - SP_PaymentOrderPostData done!");
 
-                // await _paymentRepository.PaymentOrderAllocationData(model.BusinessUnitId,
-                //     paymentOrderSaveMain.PaymentOrderMainId,
-                //     userId);
+                await _paymentRepository.PaymentOrderAllocationData(model.BusinessUnitId,
+                    paymentOrderSaveMain.PaymentOrderMainId,
+                    userId);
+                
+                Console.WriteLine("Step5 - SP_PaymentOrderPostAllocation done!");
 
                 await _unitOfWork.SaveChangesAsync();
 
                 return ApiResponse<PaymentOrderPostDataResult>.Success(new PaymentOrderPostDataResult
                 {
-                    JournalNo = 0,
+                    JournalNo = data,
                     PaymentOrderNo = paymentOrderSaveMain.PaymentOrderNo,
                     PaymentOrderMainId = paymentOrderSaveMain.PaymentOrderMainId,
                 }, 200);
