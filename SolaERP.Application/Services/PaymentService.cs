@@ -407,7 +407,7 @@ namespace SolaERP.Persistence.Services
 
                 return ApiResponse<PaymentOrderPostDataResult>.Success(new PaymentOrderPostDataResult
                 {
-                    JournalNo = data,
+                    JournalNo = 0,
                     PaymentOrderNo = paymentOrderSaveMain.PaymentOrderNo,
                     PaymentOrderMainId = paymentOrderSaveMain.PaymentOrderMainId,
                 }, 200);
