@@ -394,14 +394,14 @@ namespace SolaERP.Persistence.Services
 
                 table.ForEach(x => x.PaymentOrderMainId = paymentOrderSaveMain.PaymentOrderMainId);
 
-                var data = await _paymentRepository.PaymentOrderPostData(table.ConvertListOfCLassToDataTable(),
-                    paymentOrderSaveMain.PaymentOrderMainId,
-                    model.AllocationReference, model.JournalNo,
-                    userId, model.BusinessUnitId);
+                // var data = await _paymentRepository.PaymentOrderPostData(table.ConvertListOfCLassToDataTable(),
+                //     paymentOrderSaveMain.PaymentOrderMainId,
+                //     model.AllocationReference, model.JournalNo,
+                //     userId, model.BusinessUnitId);
 
-                await _paymentRepository.PaymentOrderAllocationData(model.BusinessUnitId,
-                    paymentOrderSaveMain.PaymentOrderMainId,
-                    userId);
+                // await _paymentRepository.PaymentOrderAllocationData(model.BusinessUnitId,
+                //     paymentOrderSaveMain.PaymentOrderMainId,
+                //     userId);
 
                 await _unitOfWork.SaveChangesAsync();
 
