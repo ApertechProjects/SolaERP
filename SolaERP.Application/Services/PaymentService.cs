@@ -387,12 +387,12 @@ namespace SolaERP.Persistence.Services
 
                 var paymentOrderTransaction = _mapper.Map<List<PaymentTransaction>>(model.PaymentDocumentPosts);
 
-                DataTable transactionData = paymentOrderTransaction.ConvertListOfCLassToDataTable();
-                await _paymentRepository.PaymentOrderPostTransactionSave(
-                    paymentOrderSaveMain.PaymentOrderMainId,
-                    transactionData);
+                // DataTable transactionData = paymentOrderTransaction.ConvertListOfCLassToDataTable();
+                // await _paymentRepository.PaymentOrderPostTransactionSave(
+                //     paymentOrderSaveMain.PaymentOrderMainId,
+                //     transactionData);
 
-                Console.WriteLine("Transactions..");
+                // Console.WriteLine("Transactions..");
 
                 #endregion
 
