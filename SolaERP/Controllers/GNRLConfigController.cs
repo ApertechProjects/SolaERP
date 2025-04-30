@@ -16,7 +16,7 @@ namespace SolaERP.Controllers
             _gnrlConfigService = gnrlConfigService;
         }
 
-        [HttpGet("/{businessUnitId:int}")]
+        [HttpGet("/[action]/{businessUnitId:int}")]
         public async Task<IActionResult> GetList([FromRoute] int businessUnitId)
             => CreateActionResult(await _gnrlConfigService.GetGNRLListByBusinessUnitId(businessUnitId));
     }
