@@ -34,4 +34,34 @@ public class GNRLConfig : BaseEntity
     public int GNRL_3_DATETIME { get; set; }
     public int GNRL_4_DATETIME { get; set; }
     public int GNRL_5_DATETIME { get; set; }
+    public string GNRL_DESCR_1_NAME { get; set; }
+    public string GNRL_DESCR_2_NAME { get; set; }
+    public string GNRL_DESCR_3_NAME { get; set; }
+    public string GNRL_DESCR_4_NAME { get; set; }
+    public string GNRL_DESCR_5_NAME { get; set; }
+    public string GNRL_DESCR_6_NAME { get; set; }
+    public string GNRL_DESCR_7_NAME { get; set; }
+    public string GNRL_DESCR_8_NAME { get; set; }
+    public string GNRL_DESCR_9_NAME { get; set; }
+    public string GNRL_DESCR_10_NAME { get; set; }
+    public string GNRL_DESCR_11_NAME { get; set; }
+    public string GNRL_DESCR_12_NAME { get; set; }
+    public string GNRL_DESCR_13_NAME { get; set; }
+    public string GNRL_DESCR_14_NAME { get; set; }
+    public string GNRL_DESCR_15_NAME { get; set; }
+    public string GNRL_DESCR_16_NAME { get; set; }
+    public string GNRL_DESCR_17_NAME { get; set; }
+    public string GNRL_DESCR_18_NAME { get; set; }
+    public string GNRL_DESCR_19_NAME { get; set; }
+    public string GNRL_DESCR_20_NAME { get; set; }
+    public string GNRL_DESCR_21_NAME { get; set; }
+    public string GNRL_DESCR_22_NAME { get; set; }
+    public string GNRL_DESCR_23_NAME { get; set; }
+    public string GNRL_DESCR_24_NAME { get; set; }
+    public string GNRL_DESCR_25_NAME { get; set; }
+    public string GNRL_1_DATETIME_NAME { get; set; }
+    public string GNRL_2_DATETIME_NAME { get; set; }
+    public string GNRL_3_DATETIME_NAME { get; set; }
+    public string GNRL_4_DATETIME_NAME { get; set; }
+    public string GNRL_5_DATETIME_NAME { get; set; }
 }
