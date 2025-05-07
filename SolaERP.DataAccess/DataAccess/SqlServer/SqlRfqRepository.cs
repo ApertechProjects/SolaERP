@@ -443,6 +443,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 				using var reader = await command.ExecuteReaderAsync();
 
 				while (reader.Read()) rfqDetails.Add(GetRFQDetailFromReader(reader));
+				Console.WriteLine(rfqDetails[0].ConversionRate);
 				return rfqDetails;
 			}
 		}
