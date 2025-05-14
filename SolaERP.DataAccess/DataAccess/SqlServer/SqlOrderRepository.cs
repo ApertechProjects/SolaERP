@@ -884,7 +884,8 @@ public class SqlOrderRepository : IOrderRepository
             RFQNo = reader.Get<string>("RFQNo"),
             Buyer = reader.Get<string>("Buyer"),
             Total = reader.Get<decimal>("Total"),
-            HasAttachments = reader.Get<bool>("HasAttachments")
+            HasAttachments = reader.Get<bool>("HasAttachments"),
+            ApproveStageMainId = reader.Get<int>("ApproveStageMainId")
         };
     }
 
