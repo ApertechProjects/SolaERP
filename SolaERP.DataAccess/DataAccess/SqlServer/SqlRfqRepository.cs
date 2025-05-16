@@ -458,19 +458,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 				ItemCode = reader.Get<string>("ItemCode"),
 				ItemName1 = reader.Get<string>("ItemName1"),
 				ItemName2 = reader.Get<string>("ItemName2"),
-				BusinessCategory = new Application.Entities.SupplierEvaluation.BusinessCategory
-				{
-					Id = reader.Get<int>("BusinessCategoryId"),
-					Name = reader.Get<string>("BusinessCategoryName")
-				},
-				Condition = (Condition)reader.Get<int>("Condition"),
+				BusinessCategoryId = reader.Get<int>("BusinessCategoryId"),
+				BusinessCategoryName = reader.Get<string>("BusinessCategoryName"),
+				Condition = reader.Get<int>("Condition"),
 				AlternativeItem = reader.Get<bool>("AlternativeItems"),
 				UOM = reader.Get<string>("UOM"),
 				DefaultUOM = reader.Get<string>("DefaultUOM"),
 				Quantity = reader.Get<decimal>("Quantity"),
 				CONV_ID = reader.Get<decimal>("CONV_ID"),
 				Description = reader.Get<string>("Description"),
-				GUID = reader.Get<Guid>("GUID")
+				GUID = reader.Get<Guid>("GUID"),
+				ConversionRate = reader.Get<decimal>("ConversionRate")
 			};
 		}
 
@@ -512,11 +510,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 				Buyer = reader.Get<string>("Buyer"),
 				AlternativeItem = reader.Get<bool>("AlternativeItem"),
 				RequestQuantity = reader.Get<decimal>("RequestQuantity"),
-				BusinessCategory = new()
-				{
-					Id = reader.Get<int>("BusinessCategoryId"),
-					Name = reader.Get<string>("BusinessCategoryName")
-				},
+				BusinessCategoryId = reader.Get<int>("BusinessCategoryId"),
+				BusinessCategoryName = reader.Get<string>("BusinessCategoryName")
 			};
 		}
 

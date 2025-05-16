@@ -19,4 +19,5 @@ public class OrderFilteredDto
     public string Buyer { get; set; }
     public decimal Total { get; set; }
     public bool HasAttachments { get; set; }
+    public int ApproveStageMainId { get; set; } 
 }
