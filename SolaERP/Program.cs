@@ -51,7 +51,7 @@ builder.Services.AddRequestMailsForIsSent3();
 builder.Services.AddRequestMailsForIsSent3ForAssignedBuyer();
 builder.Services.AddCbarData();
 //builder.Services.RFQCloseMailForVendors();
-// builder.Services.RFQClose();
+builder.Services.RFQClose();
 // builder.Services.RFQDeadLineMail();
 // builder.Services.RFQLastDayMail();
 #pragma warning restore CS0612
