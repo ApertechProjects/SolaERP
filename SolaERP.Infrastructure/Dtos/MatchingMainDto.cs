@@ -20,4 +20,5 @@ public class MatchingMainDto
     public decimal SupplierWHTRate { get; set; }
     public decimal Tax { get; set; }
     public int InvoicePeriod { get; set; }
+    public decimal OrderTotal { get; set; }
 }
