@@ -281,6 +281,14 @@ namespace SolaERP.Persistence.Services
 			SaveResultModel resultModel = new SaveResultModel();
 			int userId = await _userRepository.ConvertIdentity(userName);
 			int mainId = model.Main.InvoiceMatchingMainId;
+			
+			model.Details.ForEach(x =>
+			{
+				x.VATAmount = x.TaxAmount;
+				x.BaseVATAmount = x.BaseTaxAmount;
+				x.ReportingVATAmount = x.ReportingTaxAmount;
+			});
+			
 			var data = await _invoiceRepository.SaveInvoiceMatchingMain(model.Main, userId);
 			if (data > 0)
 				mainId = data;
@@ -368,6 +376,19 @@ namespace SolaERP.Persistence.Services
 			SaveResultModel resultModel = new SaveResultModel();
 			int userId = await _userRepository.ConvertIdentity(userName);
 			int mainId = model.Main.InvoiceMatchingMainId;
+
+			model.Main.WHT = 0;
+			
+			model.Details.ForEach(x =>
+			{
+				x.WithHoldingTaxAmount = 0;
+				x.BaseWithHoldingTaxAmount = 0;
+				x.ReportingWithHoldingTaxAmount = 0;
+				x.VATAmount = x.TaxAmount;
+				x.BaseVATAmount = x.BaseTaxAmount;
+				x.ReportingVATAmount = x.ReportingTaxAmount;
+			});
+			
 			var data = await _invoiceRepository.SaveInvoiceMatchingMain(model.Main, userId);
 			if (data > 0)
 				mainId = data;
@@ -378,8 +399,7 @@ namespace SolaERP.Persistence.Services
 
 				var grnTable = model.RNEInvoicesMatchingTypeList.ConvertListOfCLassToDataTable();
 				var grnSave = await _invoiceRepository.SaveInvoiceMatchingGRNs(mainId, grnTable);
-
-
+				
 				var dataTable = model.Details.ConvertListOfCLassToDataTable();
 				var result = await _invoiceRepository.SaveInvoiceMatchingDetails(mainId, dataTable);
 
