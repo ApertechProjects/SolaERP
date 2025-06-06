@@ -566,5 +566,15 @@ namespace SolaERP.Persistence.Services
 
 			return ApiResponse<List<InvoiceRegisterOrderDetailDto>>.Success(dto, 200);
 		}
+
+		public async Task<ApiResponse<List<InvoiceRegisterAdvanceDto>>> GetInvoiceRegisterAdvance(int businessUnitId, 
+			DateTime dateFrom,
+			DateTime dateTo,
+			int userId)
+		{
+			var data = await _invoiceRepository.GetInvoiceRegisterAdvance(businessUnitId, dateFrom, dateTo, userId);
+			var dto = _mapper.Map<List<InvoiceRegisterAdvanceDto>>(data);
+			return ApiResponse<List<InvoiceRegisterAdvanceDto>>.Success(dto, 200);
+		}
 	}
 }

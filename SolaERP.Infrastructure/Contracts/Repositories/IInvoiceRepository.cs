@@ -56,5 +56,6 @@ namespace SolaERP.Application.Contracts.Repositories
 		Task<InvoicePeriod> GetPeriod(int businessUnitId);
 		Task<List<InvoiceRegisterOrderDetail>> GetRegisterOrderDetails(int orderMainId);
 		Task<bool> InvoiceApproveIntegration(int invoiceRegisterId, int userId, int businessUnitId);
+		Task<List<InvoiceRegisterAdvance>> GetInvoiceRegisterAdvance(int businessUnitId, DateTime dateFrom, DateTime dateTo, int userId);
 	}
 }

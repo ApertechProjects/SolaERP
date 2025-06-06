@@ -766,6 +766,8 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.FixedAssetCode, opt => opt.MapFrom(src => src.AssetCode))
                 .ForMember(dest => dest.FixedAssetDescription, opt => opt.MapFrom(src => src.Description))
                 .ReverseMap();
+
+            CreateMap<InvoiceRegisterAdvance, InvoiceRegisterAdvanceDto>().ReverseMap();
         }
     }
 }
