@@ -945,8 +945,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<List<InvoiceRegisterAdvance>> GetInvoiceRegisterAdvance(int businessUnitId, DateTime dateFrom, DateTime dateTo, int userId)
         {
            var list = new List<InvoiceRegisterAdvance>();
-            using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec SP_InvoiceRegisterAdvance @BusinessUnitId, @DateFrom, @DateTo, @UserId";
+           await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = "exec SP_InvoiceRegisterAdvance @BusinessUnitId, @DateFrom, @DateTo, @UserId";
             command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
             command.Parameters.AddWithValue(command, "@DateFrom", dateFrom);
             command.Parameters.AddWithValue(command, "@DateTo", dateTo);
@@ -954,7 +954,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             
             using var reader = await command.ExecuteReaderAsync();
 
-            while (reader.Read())
+            while (await reader.ReadAsync())
                 list.Add(reader.GetByEntityStructure<InvoiceRegisterAdvance>());
 
             return list;
