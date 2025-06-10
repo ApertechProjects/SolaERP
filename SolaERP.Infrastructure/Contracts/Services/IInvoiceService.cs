@@ -51,5 +51,6 @@ namespace SolaERP.Application.Contracts.Services
 		Task<ApiResponse<List<InvoicePeriodListDto>>> GetPeriodList(int businessUnitId);
 		Task<ApiResponse<List<InvoiceRegisterOrderDetailDto>>> GetRegisterOrderDetails(int orderMainId);
 		Task<ApiResponse<List<InvoiceRegisterAdvanceDto>>> GetInvoiceRegisterAdvance(int businessUnitId, DateTime dateFrom, DateTime dateTo, int userId);
+		Task<ApiResponse<List<InvoiceRegisterAdvanceClosingListDto>>> GetInvoiceRegisterAdvanceClosingList(int invoiceRegisterId);
 	}
 }

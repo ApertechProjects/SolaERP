@@ -959,5 +959,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return list;
         }
+        
+        public async Task<List<InvoiceRegisterAdvanceClosingList>> GetInvoiceRegisterAdvanceClosingList(int invoiceRegisterId)
+        {
+            var list = new List<InvoiceRegisterAdvanceClosingList>();
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = "exec SP_InvoiceRegisterAdvanceClosingList @InvoiceRegisterId";
+            command.Parameters.AddWithValue(command, "@InvoiceRegisterId", invoiceRegisterId);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+                list.Add(reader.GetByEntityStructure<InvoiceRegisterAdvanceClosingList>());
+
+            return list;
+        }
 	}
 }
