@@ -169,5 +169,9 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> InvoiceRegisterAdvanceClosingList(int invoiceRegisterId)
             => CreateActionResult(await _invoiceService.GetInvoiceRegisterAdvanceClosingList(invoiceRegisterId));
         
+        [HttpGet]
+        public async Task<IActionResult> InvoiceRegisterInvoiceDetailsForCreditNote(int invoiceRegisterId)
+            => CreateActionResult(await _invoiceService.GetInvoiceRegisterInvoiceDetailsForCreditNote(invoiceRegisterId));
+        
     }
 }

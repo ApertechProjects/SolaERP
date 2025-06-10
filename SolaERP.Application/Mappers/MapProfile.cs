@@ -768,7 +768,10 @@ namespace SolaERP.Persistence.Mappers
                 .ReverseMap();
 
             CreateMap<InvoiceRegisterAdvance, InvoiceRegisterAdvanceDto>().ReverseMap();
+            
             CreateMap<InvoiceRegisterAdvanceClosingList, InvoiceRegisterAdvanceClosingListDto>().ReverseMap();
+            
+            CreateMap<InvoiceRegisterInvoiceDetailsForCreditNote, InvoiceRegisterInvoiceDetailsForCreditNoteDto>().ReverseMap();
         }
     }
 }
