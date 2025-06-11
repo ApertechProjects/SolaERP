@@ -1048,5 +1048,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             await _unitOfWork.SaveChangesAsync();
             return await command.ExecuteNonQueryAsync() > 0;
         }
+
+        public async Task<List<InvoiceRegister>> GetInvoiceRegisterList(int businessUnitId)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_InvoiceRegisterList @BusinessUnitId";
+            command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<InvoiceRegister> list = new List<InvoiceRegister>();
+            while (reader.Read())
+                list.Add(reader.GetByEntityStructure<InvoiceRegister>());
+
+            return list;
+        }
     }
 }

@@ -618,5 +618,12 @@ namespace SolaERP.Persistence.Services
 
 			return ApiResponse<int>.Fail("Data can not be saved", 400);
 		}
+		
+		public async Task<ApiResponse<List<InvoiceRegisterDto>>> GetInvoiceRegisterList(int businessUnitId)
+		{
+			var data = await _invoiceRepository.GetInvoiceRegisterList(businessUnitId);
+			var dto = _mapper.Map<List<InvoiceRegisterDto>>(data);
+			return ApiResponse<List<InvoiceRegisterDto>>.Success(dto, 200);
+		}
 	}
 }
