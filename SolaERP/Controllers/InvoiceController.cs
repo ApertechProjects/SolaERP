@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Invoice;
 using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
@@ -173,5 +174,8 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> InvoiceRegisterInvoiceDetailsForCreditNote(int invoiceRegisterId)
             => CreateActionResult(await _invoiceService.GetInvoiceRegisterInvoiceDetailsForCreditNote(invoiceRegisterId));
         
+        [HttpPost]
+        public async Task<IActionResult> SaveAdvanceClosing(InvoiceClosingRequest model)
+            => CreateActionResult(await _invoiceService.SaveAdvanceClosing(model, Convert.ToInt32(User.Identity.Name)));
     }
 }

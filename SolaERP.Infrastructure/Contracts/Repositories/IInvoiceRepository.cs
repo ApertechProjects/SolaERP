@@ -59,5 +59,7 @@ namespace SolaERP.Application.Contracts.Repositories
 		Task<List<InvoiceRegisterAdvance>> GetInvoiceRegisterAdvance(int businessUnitId, DateTime dateFrom, DateTime dateTo, int userId);
 		Task<List<InvoiceRegisterAdvanceClosingList>> GetInvoiceRegisterAdvanceClosingList(int invoiceRegisterId);
 		Task<List<InvoiceRegisterInvoiceDetailsForCreditNote>> GetInvoiceRegisterInvoiceDetailsForCreditNote(int invoiceRegisterId);
+		Task<int> SaveAdvanceClosing(InvoiceClosingRequest model);
+		Task<bool> SaveAdvanceClosingWOOrderCN(int businessUnitId, int advanceClosingId, int userId);
 	}
 }
