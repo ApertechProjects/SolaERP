@@ -1063,5 +1063,20 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return list;
         }
+        
+        public async Task<List<InvoiceTransactionTypeEntity>> GetInvoiceTransactionTypes()
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = "SELECT InvoiceTransactionTypeId, InvoiceTransactionType FROM Register.InvoiceTransactionType";
+            
+            using var reader = await command.ExecuteReaderAsync();
+
+            List<InvoiceTransactionTypeEntity> list = new List<InvoiceTransactionTypeEntity>();
+            while (reader.Read())
+                list.Add(reader.GetByEntityStructure<InvoiceTransactionTypeEntity>());
+
+            return list;
+        }
+        
     }
 }

@@ -774,6 +774,8 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<InvoiceRegisterInvoiceDetailsForCreditNote, InvoiceRegisterInvoiceDetailsForCreditNoteDto>().ReverseMap();
 
             CreateMap<InvoiceRegister, InvoiceRegisterDto>().ReverseMap();
+
+            CreateMap<InvoiceTransactionTypeEntity, InvoiceTransactionTypeEntityDto>().ReverseMap();
         }
     }
 }

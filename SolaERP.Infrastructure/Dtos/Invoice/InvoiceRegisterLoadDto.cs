@@ -48,5 +48,6 @@ namespace SolaERP.Application.Dtos.Invoice
         public List<TaxDto.TaxDto> TaxDatas { get; set; }
         public List<BaseBusinessUnitDto> BusinessUnits { get; set; }
 		public List<AttachmentDto> Attachments { get; set; }
+		public List<InvoiceTransactionTypeEntityDto> TransactionTypes { get; set; }
 	}
 }
