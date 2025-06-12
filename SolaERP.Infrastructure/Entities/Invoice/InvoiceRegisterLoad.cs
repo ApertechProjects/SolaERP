@@ -39,6 +39,9 @@ namespace SolaERP.Application.Entities.Invoice
         public string? AccountCode { get; set; }
         public int? WithHoldingTaxId { get; set; }
         public int? TaxId { get; set; }
+        public int InvoiceTransactionTypeId { get; set; }
+        public bool FullPrepaid { get; set; }
+        
         public decimal? TaxAmount
         {
             get => _taxAmount ?? 0;

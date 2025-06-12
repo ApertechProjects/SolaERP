@@ -186,6 +186,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                   @WithHoldingTaxAmount,
                                                   @TransactionDate,
                                                   @UserId,
+                                                  @InvoiceTransactionTypeId,
+                                                  @FullPrepaid,
                                                   @NewInvoiceRegisterId = @NewInvoiceRegisterId OUTPUT 
                                                   select @NewInvoiceRegisterId as NewInvoiceRegisterId";
 
@@ -244,6 +246,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 command.Parameters.AddWithValue(command, "@UserId", userId);
 
+                command.Parameters.AddWithValue(command, "@InvoiceTransactionTypeId", model.InvoiceTransactionTypeId);
+
+                command.Parameters.AddWithValue(command, "@FullPrepaid", model.FullPrepaid);
+
                 command.Parameters.Add("@NewInvoiceRegisterId", SqlDbType.Int);
                 command.Parameters["@NewInvoiceRegisterId"].Direction = ParameterDirection.Output;
 
@@ -297,7 +303,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                   NULL,NULL,NULL,NULL,NULL,NULL,NULL,
                                                   NULL,NULL,NULL,NULL,NULL,NULL,NULL,
                                                   NULL,NULL,NULL,NULL,NULL,NULL,NULL,
-                                                  NULL,NULL,NULL,NULL,@UserId,@NewInvoiceRegisterId = @NewInvoiceRegisterId
+                                                  NULL,NULL,NULL,NULL,@UserId,NULL,NULL,@NewInvoiceRegisterId = @NewInvoiceRegisterId
                     OUTPUT select @NewInvoiceRegisterId as NewInvoiceRegisterId";
 
 
@@ -767,7 +773,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             resultModel.InvoiceMatchAdvances = await InvoiceMatchAdvance(invoiceMatchingMainId);
             resultModel.InvoiceMatchGRN = await InvoiceMatchGRN(invoiceMatchingMainId);
             return resultModel;
-
         }
 
         public async Task<InvoiceMatchMainData> InvoiceMatchMainData(int invoiceMatchMainId)

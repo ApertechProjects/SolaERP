@@ -43,6 +43,9 @@ namespace SolaERP.Application.Dtos.Invoice
         public int? InvoicePeriod { get; set; }
         public string? VendorAccount { get; set; }
         public bool UseOrderForInvoice { get; set; }
+        public int InvoiceTransactionTypeId { get; set; }
+        public bool FullPrepaid { get; set; }
+        
         public List<InvoiceRegisterGetDetailsDto> Details { get; set; }
         public List<WithHoldingTaxDto> WithHoldingTaxDatas { get; set; }
         public List<TaxDto.TaxDto> TaxDatas { get; set; }
