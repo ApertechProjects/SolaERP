@@ -175,7 +175,7 @@ namespace SolaERP.API.Controllers
             => CreateActionResult(await _invoiceService.GetInvoiceRegisterInvoiceDetailsForCreditNote(invoiceRegisterId));
         
         [HttpPost]
-        public async Task<IActionResult> SaveAdvanceClosing(InvoiceClosingRequest model)
+        public async Task<IActionResult> SaveAdvanceClosing(List<InvoiceClosingRequest> model)
             => CreateActionResult(await _invoiceService.SaveAdvanceClosing(model, Convert.ToInt32(User.Identity.Name)));
         
         [HttpGet]
