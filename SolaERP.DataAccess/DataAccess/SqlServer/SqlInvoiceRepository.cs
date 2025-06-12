@@ -1063,12 +1063,13 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return list;
         }
-        
+
         public async Task<List<InvoiceTransactionTypeEntity>> GetInvoiceTransactionTypes()
         {
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = "SELECT InvoiceTransactionTypeId, InvoiceTransactionType FROM Register.InvoiceTransactionType";
-            
+            command.CommandText =
+                "SELECT InvoiceTransactionTypeId, InvoiceTransactionType FROM Register.InvoiceTransactionType";
+
             using var reader = await command.ExecuteReaderAsync();
 
             List<InvoiceTransactionTypeEntity> list = new List<InvoiceTransactionTypeEntity>();
@@ -1077,6 +1078,36 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return list;
         }
-        
+
+        public async Task<List<int>> GetCreditNoteInvoiceRegisters(List<int> modelInvoiceRegisterIds)
+        {
+            if (modelInvoiceRegisterIds == null || modelInvoiceRegisterIds.Count == 0)
+                return new List<int>();
+
+            var ids = string.Join(",", modelInvoiceRegisterIds);
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText =
+                $"SELECT InvoiceRegisterId FROM Finance.InvoiceRegister WHERE InvoiceRegisterId IN ({ids}) AND InvoiceTransactionTypeId = 1";
+
+            await using var reader = await command.ExecuteReaderAsync();
+
+            var list = new List<int>();
+            while (await reader.ReadAsync())
+                list.Add(reader.Get<int>("InvoiceRegisterId"));
+
+            return list;
+        }
+
+        public async Task<bool> SaveInvoiceRegisterWOOrderCN(int businessUnitId, int invoiceRegisterId, int userId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = _businessUnitHelper.BuildQueryForIntegration(
+                businessUnitId, "SP_InvoiceRegisterWOOrderCN_I @InvoiceRegisterId, @UserId");
+            command.Parameters.AddWithValue(command, "@InvoiceRegisterId", invoiceRegisterId);
+            command.Parameters.AddWithValue(command, "@UserId", userId);
+
+            await _unitOfWork.SaveChangesAsync();
+            return await command.ExecuteNonQueryAsync() > 0;
+        }
     }
 }

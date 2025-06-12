@@ -69,6 +69,11 @@ namespace SolaERP.Persistence.Services
         {
             var userId = await _userRepository.ConvertIdentity(name);
             bool res = false;
+            
+            var creditNoteInvoiceRegisters = await _invoiceRepository
+                .GetCreditNoteInvoiceRegisters(model.InvoiceRegisterIds
+                    .Select(x=>x.InvoiceRegisterId).ToList());
+            
             for (int i = 0; i < model.InvoiceRegisterIds.Count; i++)
             {
                 await _invoiceRepository.ChangeStatus(model.InvoiceRegisterIds[i].InvoiceRegisterId,
@@ -107,6 +112,14 @@ namespace SolaERP.Persistence.Services
                     };
                     await _vendorService.TransferToIntegration(requestVendor);
                 }
+
+                if (creditNoteInvoiceRegisters.Contains(model.InvoiceRegisterIds[i].InvoiceRegisterId)
+                    && model.ApproveStatus == 3)
+                {
+                   await _invoiceRepository.SaveInvoiceRegisterWOOrderCN(model.BusinessUnitId,
+                        model.InvoiceRegisterIds[i].InvoiceRegisterId, userId);
+                }
+                
             }
 
             await _unitOfWork.SaveChangesAsync();
