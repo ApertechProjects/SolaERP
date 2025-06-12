@@ -1087,7 +1087,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             var ids = string.Join(",", modelInvoiceRegisterIds);
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText =
-                $"SELECT InvoiceRegisterId FROM Finance.InvoiceRegister WHERE InvoiceRegisterId IN ({ids}) AND InvoiceTransactionTypeId = 1";
+                $"SELECT InvoiceRegisterId FROM Finance.InvoiceRegister WHERE InvoiceRegisterId IN ({ids}) AND InvoiceTransactionTypeId = 2";
 
             await using var reader = await command.ExecuteReaderAsync();
 
