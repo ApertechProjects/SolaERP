@@ -188,6 +188,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                   @UserId,
                                                   @InvoiceTransactionTypeId,
                                                   @FullPrepaid,
+                                                  @LinkedInvoiceRegisterId,
                                                   @NewInvoiceRegisterId = @NewInvoiceRegisterId OUTPUT 
                                                   select @NewInvoiceRegisterId as NewInvoiceRegisterId";
 
@@ -249,6 +250,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@InvoiceTransactionTypeId", model.InvoiceTransactionTypeId);
 
                 command.Parameters.AddWithValue(command, "@FullPrepaid", model.FullPrepaid);
+                
+                command.Parameters.AddWithValue(command, "@LinkedInvoiceRegisterId", model.LinkedInvoiceRegisterId);
 
                 command.Parameters.Add("@NewInvoiceRegisterId", SqlDbType.Int);
                 command.Parameters["@NewInvoiceRegisterId"].Direction = ParameterDirection.Output;
@@ -303,7 +306,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                   NULL,NULL,NULL,NULL,NULL,NULL,NULL,
                                                   NULL,NULL,NULL,NULL,NULL,NULL,NULL,
                                                   NULL,NULL,NULL,NULL,NULL,NULL,NULL,
-                                                  NULL,NULL,NULL,NULL,@UserId,NULL,NULL,@NewInvoiceRegisterId = @NewInvoiceRegisterId
+                                                  NULL,NULL,NULL,NULL,@UserId,NULL,NULL,NULL,@NewInvoiceRegisterId = @NewInvoiceRegisterId
                     OUTPUT select @NewInvoiceRegisterId as NewInvoiceRegisterId";
 
 
