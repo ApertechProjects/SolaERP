@@ -38,4 +38,6 @@ public class InvoiceRegisterAdvance : BaseEntity
     public decimal? WithHoldingTaxAmount { get; set; }
     public string InvoiceTransactionType { get; set; }
     public bool? FullPrepaid { get; set; }
+    public int TaxId { get; set; }
+    public string TaxCode { get; set; }
 }
