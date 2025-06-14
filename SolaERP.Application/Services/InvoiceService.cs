@@ -174,12 +174,15 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.ConvertIdentity(name);
             for (int i = 0; i < model.Count; i++)
             {
-                var check = await _invoiceRepository.CheckInvoiceRegister(model[i].InvoiceRegisterId,
-                    model[i].BusinessUnitId, model[i].VendorCode, model[i].InvoiceNo);
-                if (check)
-                    return ApiResponse<int>.Fail(
-                        "Vendor Code and Invoice No can not be duplicate for the same Business Unit - Invoice no: " +
-                        model[i].InvoiceNo, 400);
+                if (model[i].InvoiceTransactionTypeId == 1)
+                {
+                    var check = await _invoiceRepository.CheckInvoiceRegister(model[i].InvoiceRegisterId,
+                        model[i].BusinessUnitId, model[i].VendorCode, model[i].InvoiceNo);
+                    if (check)
+                        return ApiResponse<int>.Fail(
+                            "Vendor Code and Invoice No can not be duplicate for the same Business Unit - Invoice no: " +
+                            model[i].InvoiceNo, 400);
+                }
 
                 if (model[i].InvoiceRegisterId < 0) model[i].InvoiceRegisterId = 0;
                 if (string.IsNullOrEmpty(model[i].InvoiceNo))
