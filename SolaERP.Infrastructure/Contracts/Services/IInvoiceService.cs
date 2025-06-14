@@ -36,8 +36,8 @@ namespace SolaERP.Application.Contracts.Services
 		Task<ApiResponse<bool>> SaveInvoiceMatchingAdvances(InvoiceMatchingAdvance request);
 		Task<ApiResponse<InvoiceRegisterByOrderMainIdDto>> InvoiceRegisterList(int orderMainId);
 		Task<ApiResponse<List<InvoiceRegisterServiceDetailsLoadDto>>> InvoiceRegisterServiceDetailsLoad(InvoiceRegisterServiceLoadModel model);
-		Task<ApiResponse<SaveResultModel>> SaveInvoiceMatchingForService(SaveInvoiceMatchingModel model, string userName);
-		Task<ApiResponse<SaveResultModel>> SaveInvoiceMatchingForGRN(SaveInvoiceMatchingGRNModel model, string userName);
+		Task<ApiResponse<InvoiceIUDIntegrationResultModel>> SaveInvoiceMatchingForService(SaveInvoiceMatchingModel model, string userName);
+		Task<ApiResponse<InvoiceIUDIntegrationResultModel>> SaveInvoiceMatchingForGRN(SaveInvoiceMatchingGRNModel model, string userName);
 
 		Task<ApiResponse<bool>> CheckInvoiceRegister(int invocieRegisterId, int businessUnitId, string vendorCode, string invoiceNo);
 		Task<ApiResponse<List<RegisterDraftDto>>> RegisterDraft(InvoiceRegisterGetModel model, string name);

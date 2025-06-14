@@ -296,10 +296,10 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<AdvanceInvoiceDto>>.Success(dto, 200);
         }
 
-        public async Task<ApiResponse<SaveResultModel>> SaveInvoiceMatchingForService(SaveInvoiceMatchingModel model,
+        public async Task<ApiResponse<InvoiceIUDIntegrationResultModel>> SaveInvoiceMatchingForService(SaveInvoiceMatchingModel model,
             string userName)
         {
-            SaveResultModel resultModel = new SaveResultModel();
+            var resultModel = new InvoiceIUDIntegrationResultModel();
             int userId = await _userRepository.ConvertIdentity(userName);
             int mainId = model.Main.InvoiceMatchingMainId;
 
@@ -325,22 +325,23 @@ namespace SolaERP.Persistence.Services
 
                 await _unitOfWork.SaveChangesAsync();
 
-                await _invoiceRepository.InvoiceIUDIntegration(model.Main.BusinessUnitId, mainId, userId);
+               var newJournalNo = await _invoiceRepository.InvoiceIUDIntegration(model.Main.BusinessUnitId, mainId, userId);
 
                 if (result)
                 {
                     resultModel.MainId = mainId;
                     resultModel.DetailIds = await _invoiceRepository.GetDetailIds(mainId);
-                    return ApiResponse<SaveResultModel>.Success(resultModel, 200);
+                    resultModel.JournalNo = newJournalNo;
+                    return ApiResponse<InvoiceIUDIntegrationResultModel>.Success(resultModel, 200);
                 }
                 else
                 {
-                    return ApiResponse<SaveResultModel>.Fail("Data can not be saved for details", 400);
+                    return ApiResponse<InvoiceIUDIntegrationResultModel>.Fail("Data can not be saved for details", 400);
                 }
             }
             else
             {
-                return ApiResponse<SaveResultModel>.Fail("Data can not be saved for main", 400);
+                return ApiResponse<InvoiceIUDIntegrationResultModel>.Fail("Data can not be saved for main", 400);
             }
         }
 
@@ -391,10 +392,10 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<InvoiceRegisterServiceDetailsLoadDto>>.Fail("Please, enter valid parameters", 400);
         }
 
-        public async Task<ApiResponse<SaveResultModel>> SaveInvoiceMatchingForGRN(SaveInvoiceMatchingGRNModel model,
+        public async Task<ApiResponse<InvoiceIUDIntegrationResultModel>> SaveInvoiceMatchingForGRN(SaveInvoiceMatchingGRNModel model,
             string userName)
         {
-            SaveResultModel resultModel = new SaveResultModel();
+            var resultModel = new InvoiceIUDIntegrationResultModel();
             int userId = await _userRepository.ConvertIdentity(userName);
             int mainId = model.Main.InvoiceMatchingMainId;
 
@@ -426,22 +427,23 @@ namespace SolaERP.Persistence.Services
 
                 await _unitOfWork.SaveChangesAsync();
 
-                await _invoiceRepository.InvoiceIUDIntegration(model.Main.BusinessUnitId, mainId, userId);
+                var newJournalNo = await _invoiceRepository.InvoiceIUDIntegration(model.Main.BusinessUnitId, mainId, userId);
 
                 if (result)
                 {
                     resultModel.MainId = mainId;
                     resultModel.DetailIds = await _invoiceRepository.GetDetailIds(mainId);
-                    return ApiResponse<SaveResultModel>.Success(resultModel, 200);
+                    resultModel.JournalNo = newJournalNo;
+                    return ApiResponse<InvoiceIUDIntegrationResultModel>.Success(resultModel, 200);
                 }
                 else
                 {
-                    return ApiResponse<SaveResultModel>.Fail("Data can not be saved for details", 400);
+                    return ApiResponse<InvoiceIUDIntegrationResultModel>.Fail("Data can not be saved for details", 400);
                 }
             }
             else
             {
-                return ApiResponse<SaveResultModel>.Fail("Data can not be saved for main", 400);
+                return ApiResponse<InvoiceIUDIntegrationResultModel>.Fail("Data can not be saved for main", 400);
             }
         }
 

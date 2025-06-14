@@ -755,17 +755,25 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return list;
         }
 
-        public async Task InvoiceIUDIntegration(int businessUnitId, int invoiceMatchingMainId, int userId)
+        public async Task<int> InvoiceIUDIntegration(int businessUnitId, int invoiceMatchingMainId, int userId)
         {
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = _businessUnitHelper.BuildQueryForIntegration(businessUnitId,
-                "SP_M_Invoice_IUD @BusinessUnitId, @InvoiceMatchingMainId, @UserId");
+                "SP_InvoiceMatchingPost_I @InvoiceMatchingMainId, @UserId");
 
-            command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
             command.Parameters.AddWithValue(command, "@InvoiceMatchingMainId", invoiceMatchingMainId);
             command.Parameters.AddWithValue(command, "@UserId", userId);
-            await _unitOfWork.SaveChangesAsync();
+            
             await command.ExecuteNonQueryAsync();
+
+            await using var reader = await command.ExecuteReaderAsync();
+            await _unitOfWork.SaveChangesAsync();
+            
+            int newJournalNo = 0;
+            if (await reader.ReadAsync())
+                newJournalNo = reader.GetInt32("NewJrnalNo");
+
+            return newJournalNo;
         }
 
         public async Task<InvoiceMatchResultModel> GetInvoiceMatchData(int invoiceMatchingMainId, int businessUnitId)
