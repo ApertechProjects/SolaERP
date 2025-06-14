@@ -767,8 +767,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             await using var reader = await command.ExecuteReaderAsync();
             
             int newJournalNo = 0;
-            if (await reader.ReadAsync())
-                newJournalNo = reader.GetInt32("NewJrnalNo");
+            while (await reader.ReadAsync())
+                newJournalNo = reader.Get<int>("NewJrnalNo");
 
             return newJournalNo;
         }
