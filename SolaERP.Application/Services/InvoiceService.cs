@@ -114,7 +114,7 @@ namespace SolaERP.Persistence.Services
                 }
 
                 if (creditNoteInvoiceRegisters.Contains(model.InvoiceRegisterIds[i].InvoiceRegisterId)
-                    && model.ApproveStatus == 2)
+                    && model.ApproveStatus == 1)
                 {
                    await _invoiceRepository.SaveInvoiceRegisterWOOrderCN(model.BusinessUnitId,
                         model.InvoiceRegisterIds[i].InvoiceRegisterId, userId);
