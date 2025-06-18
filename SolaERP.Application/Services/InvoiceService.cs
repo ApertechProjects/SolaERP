@@ -193,7 +193,14 @@ namespace SolaERP.Persistence.Services
 
 
                 if (model[i].Details != null)
+                {
+                    if (model[i].UseOrderForInvoice)
+                    {
+                        await _invoiceRepository.DeleteAllByMainId(model[i].InvoiceRegisterId);
+                    }
                     await InvoiceRegisterDetailsSave(data, model[i].Details);
+                }
+                    
 
                 if (model[i].Attachments != null)
                     await _attachmentService.SaveAttachmentAsync(model[i].Attachments, SourceType.INV, data);

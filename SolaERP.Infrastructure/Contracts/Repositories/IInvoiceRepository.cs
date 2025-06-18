@@ -65,5 +65,6 @@ namespace SolaERP.Application.Contracts.Repositories
 		Task<List<InvoiceTransactionTypeEntity>> GetInvoiceTransactionTypes();
 		Task<List<int>> GetCreditNoteInvoiceRegisters(List<int> modelInvoiceRegisterIds);
 		Task<bool> SaveInvoiceRegisterWOOrderCN(int businessUnitId, int invoiceRegisterId, int userId);
+		Task<bool> DeleteAllByMainId(int invoiceRegisterId);
 	}
 }

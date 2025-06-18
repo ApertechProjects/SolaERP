@@ -35,6 +35,7 @@ namespace SolaERP.Application.Models
 		public int InvoiceTransactionTypeId { get; set; }
 		public bool FullPrepaid { get; set; }
 		public int? LinkedInvoiceRegisterId { get; set; }
+		public bool UseOrderForInvoice { get; set; }
 		
 		public List<AttachmentSaveModel> Attachments { get; set; }
 		public List<InvoiceRegisterDetails> Details { get; set; }

@@ -1124,5 +1124,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             await _unitOfWork.SaveChangesAsync();
             return await command.ExecuteNonQueryAsync() > 0;
         }
+
+        public async Task<bool> DeleteAllByMainId(int invoiceRegisterId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText =
+                @"DELETE FROM Finance.InvoiceRegisterDetails WHERE InvoiceRegisterId = @invoiceRegisterId";
+            command.Parameters.AddWithValue(command, "@invoiceRegisterId", invoiceRegisterId);
+
+            await _unitOfWork.SaveChangesAsync();
+            return await command.ExecuteNonQueryAsync() > 0;
+        }
     }
 }
