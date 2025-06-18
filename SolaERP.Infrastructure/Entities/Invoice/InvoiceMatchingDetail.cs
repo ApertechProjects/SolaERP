@@ -29,7 +29,7 @@ public class InvoicesMatchingDetailsType
 	public int AnalysisCode8Id { get; set; }
 	public int AnalysisCode9Id { get; set; }
 	public int AnalysisCode10Id { get; set; }
-	public decimal AdvanceTotal { get; set; }
+	public decimal AdvanceAmount { get; set; }
 	public string AccountCode { get; set; }
 	public string ItemCode { get; set; }
 	public decimal? BaseTotal { get; set; }
