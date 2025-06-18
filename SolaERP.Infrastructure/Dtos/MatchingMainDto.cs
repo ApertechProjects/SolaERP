@@ -21,4 +21,6 @@ public class MatchingMainDto
     public decimal Tax { get; set; }
     public int InvoicePeriod { get; set; }
     public decimal OrderTotal { get; set; }
+    public int TaxId { get; set; }
+    public List<TaxDto.TaxDto> TaxDatas { get; set; }
 }

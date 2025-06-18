@@ -248,6 +248,10 @@ namespace SolaERP.Persistence.Services
         {
             var data = await _invoiceRepository.GetMatchingMain(orderMainId);
             var dto = _mapper.Map<MatchingMainDto>(data);
+            
+            var tax = await _supplierRepository.TaxDatas();
+            dto.TaxDatas = _mapper.Map<List<TaxDto>>(tax);
+            
             return ApiResponse<MatchingMainDto>.Success(dto);
         }
 
