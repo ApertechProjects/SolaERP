@@ -14,5 +14,5 @@ public class InvoiceMathcingMain : BaseEntity
     public decimal GrossAmount { get; set; }
     public decimal OrderAmount { get; set; }
     public decimal SupplierWHTRate { get; set; }
-        
+    public int? TaxId { get; set; }
 }

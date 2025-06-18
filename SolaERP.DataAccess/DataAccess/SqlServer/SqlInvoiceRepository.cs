@@ -518,6 +518,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 @SupplierWHTRate,
                 @UserId,
                 @Period,
+                @TaxId,
                 @NewInvoiceMatchingMainId = @NewInvoiceMatchingMainId OUTPUT select @NewInvoiceMatchingMainId 
                 as NewInvoiceMatchingMainId";
 
@@ -535,6 +536,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@SupplierWHTRate", request.SupplierWHTRate);
             command.Parameters.AddWithValue(command, "@UserId", userId);
             command.Parameters.AddWithValue(command, "@Period", request.InvoicePeriod);
+            command.Parameters.AddWithValue(command, "@TaxId", request.TaxId);
             command.Parameters.Add("@NewInvoiceMatchingMainId", SqlDbType.Int);
             command.Parameters["@NewInvoiceMatchingMainId"].Direction = ParameterDirection.Output;
 
