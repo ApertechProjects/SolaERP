@@ -22,5 +22,7 @@ public class MatchingMainDto
     public int InvoicePeriod { get; set; }
     public decimal OrderTotal { get; set; }
     public int TaxId { get; set; }
+    public bool HasVATAccount { get; set; }
+    
     public List<TaxDto.TaxDto> TaxDatas { get; set; }
 }

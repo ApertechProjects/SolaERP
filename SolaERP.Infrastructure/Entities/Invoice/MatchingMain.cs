@@ -22,4 +22,5 @@ public class MatchingMain : BaseEntity
     public int InvoicePeriod { get; set; }
     public decimal OrderTotal { get; set; }
     public int TaxId { get; set; }
+    public bool HasVATAccount { get; set; }
 }

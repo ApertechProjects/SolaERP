@@ -58,6 +58,7 @@ namespace SolaERP.Application.Entities.Invoice
         public int? InvoicePeriod { get; set; }
         public string? VendorAccount { get; set; }
         public bool UseOrderForInvoice { get; set; }
+        public bool HasVATAccount { get; set; }
         List<InvoiceRegisterGetDetails> InvoiceRegisterDetails { get; set; }
         public List<Vendors.WithHoldingTaxData> WithHoldingTaxDatas { get; set; }
         public List<Vendors.TaxData> TaxDatas { get; set; }
