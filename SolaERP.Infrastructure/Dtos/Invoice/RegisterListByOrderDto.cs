@@ -9,6 +9,7 @@
         public string InvoiceComment { get; set; }
         public decimal OrderTotal { get; set; }
         public int? TaxId { get; set; }
+        public int? InvoicePeriod { get; set; }
         // public string WithHoldingTaxCode { get; set; }
     }
 }
