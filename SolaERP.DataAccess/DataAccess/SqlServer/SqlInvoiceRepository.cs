@@ -1049,7 +1049,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             await using var reader = await command.ExecuteReaderAsync();
             if (reader.Read())
                 newAdvanceClosingId = reader.Get<int>("@NewAdvanceClosingId");
-
+            
+            await _unitOfWork.SaveChangesAsync();
             return newAdvanceClosingId;
         }
 
