@@ -646,9 +646,9 @@ namespace SolaERP.Persistence.Services
                 foreach (var invoiceClosingRequest in model)
                 {
                     var advanceClosingId = await _invoiceRepository.SaveAdvanceClosing(invoiceClosingRequest);
-                    // await _invoiceRepository.SaveAdvanceClosingWOOrderCN(model[0].BusinessUnitId,
-                    //     advanceClosingId,
-                    //     userId);
+                    await _invoiceRepository.SaveAdvanceClosingWOOrderCN(model[0].BusinessUnitId,
+                        advanceClosingId,
+                        userId);
                 }
 
                 await _unitOfWork.SaveChangesAsync();
