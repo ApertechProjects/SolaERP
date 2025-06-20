@@ -95,8 +95,19 @@ namespace SolaERP.Persistence.Services
                 if (model.InvoiceRegisterIds[i].InMaxSequence && businessUnit.UseOrderForInvoice == false &&
                     model.ApproveStatus == 1 && invoice.InvoiceType != 1)
                 {
-                    await _invoiceRepository.InvoiceApproveIntegration(model.InvoiceRegisterIds[i].InvoiceRegisterId,
-                        userId, model.BusinessUnitId);
+                    if (invoice.InvoiceTransactionTypeId == 1)
+                    {
+                        await _invoiceRepository.InvoiceApproveIntegration(
+                            model.InvoiceRegisterIds[i].InvoiceRegisterId,
+                            userId, model.BusinessUnitId);
+                    }
+
+                    if (invoice.InvoiceTransactionTypeId == 2)
+                    {
+                        await _invoiceRepository.SaveInvoiceRegisterWOOrderCN(model.BusinessUnitId,
+                            model.InvoiceRegisterIds[i].InvoiceRegisterId, userId);
+                    }
+
                 }
 
                 if (model.InvoiceRegisterIds[i].InMaxSequence && businessUnit.UseOrderForInvoice == false &&
@@ -113,8 +124,8 @@ namespace SolaERP.Persistence.Services
                     await _vendorService.TransferToIntegration(requestVendor);
                 }
 
-                if (creditNoteInvoiceRegisters.Contains(model.InvoiceRegisterIds[i].InvoiceRegisterId)
-                    && model.ApproveStatus == 1)
+                if (model.InvoiceRegisterIds[i].InMaxSequence && creditNoteInvoiceRegisters.Contains(model.InvoiceRegisterIds[i].InvoiceRegisterId)
+                    && model.ApproveStatus == 1 && businessUnit.UseOrderForInvoice == true && invoice.InvoiceType != 1)
                 {
                    await _invoiceRepository.SaveInvoiceRegisterWOOrderCN(model.BusinessUnitId,
                         model.InvoiceRegisterIds[i].InvoiceRegisterId, userId);
