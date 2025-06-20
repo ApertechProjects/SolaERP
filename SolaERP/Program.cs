@@ -14,12 +14,8 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.FileProviders;
 using SolaERP.Job;
-using Quartz;
-using System.Globalization;
 using AspNetCoreRateLimit;
-using SolaERP.API.Middlewares;
 using SolaERP.DataAccess.Helper;
-using Microsoft.Extensions.Hosting;
 using SolaERP.Persistence.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,8 +48,8 @@ builder.Services.AddRequestMailsForIsSent3ForAssignedBuyer();
 builder.Services.AddCbarData();
 //builder.Services.RFQCloseMailForVendors();
 builder.Services.RFQClose();
-// builder.Services.RFQDeadLineMail();
-// builder.Services.RFQLastDayMail();
+builder.Services.RFQDeadLineMail();
+builder.Services.RFQLastDayMail();
 #pragma warning restore CS0612
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();

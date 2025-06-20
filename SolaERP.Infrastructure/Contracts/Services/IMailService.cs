@@ -41,8 +41,8 @@ namespace SolaERP.Application.Contracts.Services
         Task CheckLastApproveAndSendMailToUser(int userId, int sequence, int approveStatus, HttpResponse response);
         Task SendRejectMailToUser(int userId, HttpResponse response);
         Task SendMailToAdminstrationForApproveVendor(int vendorId);
-        Task SendRFQDeadLineMail(int userId, string subject, string body);
-        Task SendRFQLastDayMail(int userId, string subject, string body);
+        Task SendRFQDeadLineMail(List<RFQUserData> rfqUserData);
+        Task SendRFQLastDayMail(List<RFQUserData> rfqUserData);
         Task SendSupportMail(int userId, string subject, string body, List<AttachmentSaveModel> attachments);
         
         Task SendQueueUsingTemplate<T>(string subject, T viewModel, string templateName, string imageName, List<string> tos);

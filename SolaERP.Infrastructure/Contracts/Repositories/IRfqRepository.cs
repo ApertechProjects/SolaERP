@@ -35,6 +35,7 @@ namespace SolaERP.Application.Contracts.Repositories
 		Task<bool> ChangeRFQVendorResponseStatus(int rfqMainId, string vendorCode);
 		Task<List<RFQDeadlineFinishedMailForBuyerDto>> GetRFQDeadlineFinished();
 		Task<bool> ExtendRfqDeadlineAsync(RfqExtendDeadlineRequest request, int userId);
-
+		Task<List<RFQUserData>> GetRFQVendorUsersMailIsSentLastDayFalse();
+		Task<List<RFQUserData>> GetRFQVendorUsersMailIsSentDeadLineFalse();
 	}
 }
