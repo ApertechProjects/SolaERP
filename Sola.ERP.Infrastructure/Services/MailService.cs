@@ -1,18 +1,12 @@
-﻿using AngleSharp.Io;
-using FluentEmail.Core;
-using Microsoft.AspNetCore.Html;
+﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using RazorLight;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Email;
-using SolaERP.Application.Entities.ApproveStages;
 using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Email;
-using SolaERP.Application.Entities.SupplierEvaluation;
-using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Extensions;
 using SolaERP.Application.Models;
@@ -25,7 +19,6 @@ using System.Text.Json;
 using System.Web;
 using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Entities.RFQ;
-using SolaERP.Application.Entities.User;
 using UserList = SolaERP.Application.Dtos.User.UserList;
 
 namespace SolaERP.Infrastructure.Services
@@ -39,6 +32,7 @@ namespace SolaERP.Infrastructure.Services
         private readonly IApproveStageService _approveStageService;
         private readonly ISupplierEvaluationRepository _supplierEvaluationRepository;
         private readonly RazorLightEngine _razorEngine;
+        private readonly IBackgroundTaskQueue _taskQueue;
 
         public MailService(IConfiguration configuration,
             IEmailNotificationService emailNotificationService,
@@ -848,38 +842,50 @@ namespace SolaERP.Infrastructure.Services
             emails.Add(RegEmail);
         }
 
-        public async Task SendRFQDeadLineMail(int userId, string subject, string body)
+        public async Task SendRFQDeadLineMail(List<RFQUserData> rfqUserData)
         {
-            List<Task> emails = new List<Task>();
-
-            var user = await _userRepository.GetCurrentUserInfo(userId);
-
-            VM_RFQDeadLine emailVM = new VM_RFQDeadLine(user.Language.ToString(), subject, body, user.Email)
+            try
             {
-                Language = (Language)Enum.Parse(typeof(Language), user.Language.ToString())
-            };
+                foreach (var data in rfqUserData)
+                {
+                    VM_RFQDeadLine emailVM = new VM_RFQDeadLine("en", data.VendorName, data.RFQNo, data.RFQDeadline,
+                        data.RFQMainId, data.BusinessUnitName)
+                    {
+                        Language = (Language)Enum.Parse(typeof(Language), "en")
+                    };
 
-            Task RegEmail = SendUsingTemplate(subject, emailVM, emailVM.TemplateName(), null,
-                new List<string> { "anarceferov1996@gmail.com" });
-
-            emails.Add(RegEmail);
+                    await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null,
+                        new List<string> { data.Email });
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
-        public async Task SendRFQLastDayMail(int userId, string subject, string body)
+        public async Task SendRFQLastDayMail(List<RFQUserData> rfqUserData)
         {
-            List<Task> emails = new List<Task>();
-
-            var user = await _userRepository.GetCurrentUserInfo(userId);
-
-            VM_RFQLastDay emailVM = new VM_RFQLastDay(user.Language.ToString(), subject, body, user.Email)
+            try
             {
-                Language = (Language)Enum.Parse(typeof(Language), user.Language.ToString())
-            };
+                foreach (var data in rfqUserData)
+                {
+                    VM_RFQLastDay emailVM = new VM_RFQLastDay("en", data.VendorName, data.RFQNo, data.RFQDeadline,
+                        data.RFQMainId, data.BusinessUnitName)
+                    {
+                        Language = (Language)Enum.Parse(typeof(Language), "en")
+                    };
 
-            Task RegEmail = SendUsingTemplate(subject, emailVM, emailVM.TemplateName(), null,
-                new List<string> { "anarceferov1996@gmail.com" });
-
-            emails.Add(RegEmail);
+                    await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null,
+                        new List<string> { data.Email });
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public async Task SendRFQVendorApproveMail(List<RfqVendorToSend> users)

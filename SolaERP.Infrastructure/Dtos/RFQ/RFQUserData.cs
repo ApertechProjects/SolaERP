@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Job.RFQClose
+﻿namespace SolaERP.Application.Dtos.RFQ
 {
 	public class RFQUserData
 	{

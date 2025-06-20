@@ -5,133 +5,110 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.Job.EmailIsSent1;
 using SolaERP.Job.Enums;
 using System.Diagnostics;
+using RFQUserData = SolaERP.Application.Dtos.RFQ.RFQUserData;
 
 namespace SolaERP.Job
 {
-	public class Send : ISend
-	{
-		private readonly ILogger<EmailIsSentForAssignedBuyer> _logger;
-		private readonly IBackgroundMailService _backgroundMailService;
-		private readonly IMailService _mailService;
-		private readonly IEmailNotificationService _emailNotificationService;
-		private readonly IUnitOfWork _unitOfWork;
-		private readonly IMapper _mapper;
-		private readonly IRfqService _rfqService;
-		public Send(ILogger<EmailIsSentForAssignedBuyer> logger,
-								  IUnitOfWork unitOfWork,
-								  IBackgroundMailService backgroundMailService,
-								  IMailService mailService, IEmailNotificationService emailNotificationService,
-		IMapper mapper, IRfqService rfqService)
-		{
-			_logger = logger;
-			Console.WriteLine("constructor started");
-			Debug.WriteLine("constructor started");
-			_unitOfWork = unitOfWork;
-			_backgroundMailService = backgroundMailService;
-			_mailService = mailService;
-			_mapper = mapper;
-			_rfqService = rfqService;
-			_emailNotificationService = emailNotificationService;
-			Console.WriteLine("constructor finsihed");
-			Debug.WriteLine("constructor finsihed");
-		}
-		public async Task SendRequestMails(StatusType statusType)
-		{
-			try
-			{
-				Console.WriteLine("Execute started");
-				Helper helper = new Helper(_unitOfWork);
-				var requestUsers = helper.GetUsersIsSent(Procedure.Request);
-				if (requestUsers != null && requestUsers.Count > 0)
-				{
-					foreach (var user in requestUsers)
-					{
-						Debug.WriteLine("sended to " + user.UserName);
-						Console.WriteLine("sended to " + user.UserName);
-						var rowInfoDrafts = helper.GetRowInfosForIsSent(Procedure.Request, user.UserId, statusType);
+    public class Send : ISend
+    {
+        private readonly ILogger<EmailIsSentForAssignedBuyer> _logger;
+        private readonly IBackgroundMailService _backgroundMailService;
+        private readonly IMailService _mailService;
+        private readonly IEmailNotificationService _emailNotificationService;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly IRfqService _rfqService;
 
-						var rowInfos = _mapper.Map<HashSet<RowInfo>>(rowInfoDrafts);
-						if (rowInfos.Count > 0)
-						{
-							await _backgroundMailService.SendMailAsync(rowInfos, new Person { email = user.Email, lang = user.Language, userName = user.UserName }, Enums.EmailTemplateKey.ALL_TYPES_ALL_STATUSES);
-							Console.WriteLine("Log: " + "Mail");
-							int[] ids = rowInfoDrafts.Select(x => x.notificationSenderId).ToArray();
-							helper.UpdateIsSent1(ids);
-							await _unitOfWork.SaveChangesAsync();
-						}
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex, "An error occurred while executing the email background job 1.");
-				Console.WriteLine("Exception: " + ex.Message);
-			}
-			await Task.CompletedTask;
-		}
+        public Send(ILogger<EmailIsSentForAssignedBuyer> logger,
+            IUnitOfWork unitOfWork,
+            IBackgroundMailService backgroundMailService,
+            IMailService mailService,
+            IEmailNotificationService emailNotificationService,
+            IMapper mapper,
+            IRfqService rfqService)
+        {
+            _logger = logger;
+            Console.WriteLine("constructor started");
+            Debug.WriteLine("constructor started");
+            _unitOfWork = unitOfWork;
+            _backgroundMailService = backgroundMailService;
+            _mailService = mailService;
+            _mapper = mapper;
+            _rfqService = rfqService;
+            _emailNotificationService = emailNotificationService;
+            Console.WriteLine("constructor finsihed");
+            Debug.WriteLine("constructor finsihed");
+        }
 
-		public async Task SendRFQCloseMails()
-		{
-			RFQMethods methods = new RFQMethods(_unitOfWork);
-		
-			var vendors = await methods.GetRFQVendorUsers();
-			foreach (var item in vendors)
-			{
-				await _backgroundMailService.SendMailAsync(null, new Person
-				{
-					email = item.Email,
-					lang = item.Language,
-					userName = item.VendorName
-				}, Enums.EmailTemplateKey.RFQ_CLOSE);
-			}
-		
-			await methods.UpdateIsSent(vendors.Select(x => x.RFQVendorResponseId).ToList());
-		}
+        public async Task SendRequestMails(StatusType statusType)
+        {
+            try
+            {
+                Console.WriteLine("Execute started");
+                Helper helper = new Helper(_unitOfWork);
+                var requestUsers = helper.GetUsersIsSent(Procedure.Request);
+                if (requestUsers != null && requestUsers.Count > 0)
+                {
+                    foreach (var user in requestUsers)
+                    {
+                        Debug.WriteLine("sended to " + user.UserName);
+                        Console.WriteLine("sended to " + user.UserName);
+                        var rowInfoDrafts = helper.GetRowInfosForIsSent(Procedure.Request, user.UserId, statusType);
 
-		public async Task UpdateRFQStatusToClose()
-		{
+                        var rowInfos = _mapper.Map<HashSet<RowInfo>>(rowInfoDrafts);
+                        if (rowInfos.Count > 0)
+                        {
+                            await _backgroundMailService.SendMailAsync(rowInfos,
+                                new Person { email = user.Email, lang = user.Language, userName = user.UserName },
+                                Enums.EmailTemplateKey.ALL_TYPES_ALL_STATUSES);
+                            Console.WriteLine("Log: " + "Mail");
+                            int[] ids = rowInfoDrafts.Select(x => x.notificationSenderId).ToArray();
+                            helper.UpdateIsSent1(ids);
+                            await _unitOfWork.SaveChangesAsync();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while executing the email background job 1.");
+                Console.WriteLine("Exception: " + ex.Message);
+            }
 
-			await _rfqService.GetRFQDeadlineFinished();
-			// using (var command = _unitOfWork.CreateCommand() as DbCommand)
-			// {
-			// 	command.CommandText = @$"set nocount off update Procurement.RFQMain set Status = 2 where RFQDeadline<getDate()";
-			// }
-			// await _unitOfWork.SaveChangesAsync();
-		}
-		
-		public async Task SendRFQDeadLineMail()
-		{
-			RFQMethods methods = new RFQMethods(_unitOfWork);
-			
-			var vendors = await methods.GetRFQVendorUsersMailIsSentDeadLineFalse();
-			if (vendors != null && vendors.Count > 0)
-			{
-				foreach (var item in vendors)
-				{
-					await _mailService.SendRFQDeadLineMail(item.UserId,"test subject" , "test body DeadLine");
-				}
-			
-				await methods.UpdateMailIsSentDeadLine(vendors.Select(x => x.RFQVendorResponseId).Distinct().ToList());
-			}
-		}
+            await Task.CompletedTask;
+        }
 
-		public async Task SendRFQLastDayMail()
-		{
-			RFQMethods methods = new RFQMethods(_unitOfWork);
-		
-			var vendors = await methods.GetRFQVendorUsersMailIsSentLastDayFalse();
+        public async Task SendRFQCloseMails()
+        {
+            RFQMethods methods = new RFQMethods(_unitOfWork);
 
-			if (vendors != null && vendors.Count > 0)
-			{
-				foreach (var item in vendors)
-				{
-					await _mailService.SendRFQLastDayMail(item.UserId,"test subject" , "test body LastDay");
-				}
+            var vendors = await methods.GetRFQVendorUsers();
+            foreach (var item in vendors)
+            {
+                await _backgroundMailService.SendMailAsync(null, new Person
+                {
+                    email = item.Email,
+                    lang = item.Language,
+                    userName = item.VendorName
+                }, Enums.EmailTemplateKey.RFQ_CLOSE);
+            }
 
-				await methods.UpdateMailIsSentLastDay(vendors.Select(x => x.RFQVendorResponseId).Distinct().ToList());	
-			}
-		}
+            await methods.UpdateIsSent(vendors.Select(x => x.RFQVendorResponseId).ToList());
+        }
 
-	}
+        public async Task UpdateRFQStatusToClose()
+        {
+            await _rfqService.GetRFQDeadlineFinished();
+        }
+
+        public async Task SendRFQDeadLineMail()
+        {
+            await _rfqService.SendRFQDeadLineMail();
+        }
+
+        public async Task SendRFQLastDayMail()
+        {
+            await _rfqService.SendRFQLastDayMail();
+        }
+    }
 }
-

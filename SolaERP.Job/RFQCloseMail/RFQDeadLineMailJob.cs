@@ -1,14 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Quartz;
-using SolaERP.Application.UnitOfWork;
-using SolaERP.Job.Cbar;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Quartz;
 
 namespace SolaERP.Job.RFQCloseMail
 {
