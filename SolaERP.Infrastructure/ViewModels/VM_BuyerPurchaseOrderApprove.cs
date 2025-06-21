@@ -53,7 +53,6 @@ namespace SolaERP.Application.ViewModels
                 $"<tr><td><p>Hörmətli {_buyerName},</p></td></tr>" +
                 $"<tr><td><p>Bildirmək istəyirik ki, <b><a href='{_configuration["Mail:ServerUrlUI"] + "/orders/" + _orderId}' style='text-decoration: none;'> {_orderNo} </a></b> nömrəli sifariş təsdiqlənmişdir.</p></td></tr>" +
                 $"<tr><td><p>Biznes bölməsi - {_businessUnitName}</p></td></tr>" +
-                "<tr><td><p>Sifarişlə bağlı hər hansı sualınız olarsa, bizimlə əlaqə saxlamaqdan çəkinməyin.</p></td></tr>" +
                 "<tr><td><p>Hörmətlə,<br>GL Group</p></td></tr>" +
                 "</table>"
             );
@@ -66,7 +65,6 @@ namespace SolaERP.Application.ViewModels
                 $"<tr><td><p>Dear {_buyerName},</p></td></tr>" +
                 $"<tr><td><p>We would like to inform you that order <b><a href='{_configuration["Mail:ServerUrlUI"] + "/orders/" + _orderId}' style='text-decoration: none;'> {_orderNo} </a></b> has been approved.</p></td></tr>" +
                 $"<tr><td><p>Business Unit - {_businessUnitName}</p></td></tr>" +
-                "<tr><td><p>If you have any questions regarding the order, please feel free to contact us.</p></td></tr>" +
                 "<tr><td><p>Best regards,<br>GL Group</p></td></tr>" +
                 "</table>"
             );
