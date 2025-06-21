@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using SolaERP.Application.Dtos.Buyer;
 using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Entities.RFQ;
@@ -52,6 +53,8 @@ namespace SolaERP.Application.Contracts.Services
         Task SendNewVendorApproveGroupEmail(List<string> emails, string vendorName);
 
         Task SendRFQDeadlineFinishedMailForBuyer(List<RFQDeadlineFinishedMailForBuyerDto> datas);
+        Task BuyerPurchaseOrderApproveEmail(BuyerPurchaseOrderApproveEmailDto datas);
+
 
     }
 }

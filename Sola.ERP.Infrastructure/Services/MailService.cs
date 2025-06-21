@@ -17,6 +17,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Text.Json;
 using System.Web;
+using SolaERP.Application.Dtos.Buyer;
 using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Entities.RFQ;
 using UserList = SolaERP.Application.Dtos.User.UserList;
@@ -941,6 +942,26 @@ namespace SolaERP.Infrastructure.Services
                     await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null,
                         new List<string> { data.BuyerEmail });
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public async Task BuyerPurchaseOrderApproveEmail(BuyerPurchaseOrderApproveEmailDto data)
+        {
+            try
+            {
+                VM_BuyerPurchaseOrderApprove emailVM =
+                    new VM_BuyerPurchaseOrderApprove("en", data.BuyerName, data.OrderNo, data.BusinessUnitName , data.OrderId)
+                    {
+                        Language = (Language)Enum.Parse(typeof(Language), "en")
+                    };
+
+                await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null,
+                    new List<string> { "anarceferov1996@gmail.com" });
             }
             catch (Exception e)
             {
