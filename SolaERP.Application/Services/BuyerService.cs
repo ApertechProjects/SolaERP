@@ -65,5 +65,10 @@ namespace SolaERP.Persistence.Services
         {
             return _buyerRepository.FindBuyerEmailByBuyerName(buyerName , businessUnitId);
         }
+        
+        public Task<BuyerDto> FindBuyerDataByBuyerName(string buyerName , int businessUnitId)
+        {
+            return _buyerRepository.FindBuyerDataByBuyerName(buyerName , businessUnitId);
+        }
     }
 }
