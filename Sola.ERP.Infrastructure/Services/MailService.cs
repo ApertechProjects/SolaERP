@@ -961,7 +961,7 @@ namespace SolaERP.Infrastructure.Services
                     };
 
                 await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null,
-                    new List<string> { "anarceferov1996@gmail.com" });
+                    new List<string> { data.BuyerEmail });
             }
             catch (Exception e)
             {
