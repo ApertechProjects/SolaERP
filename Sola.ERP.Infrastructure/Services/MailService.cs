@@ -994,7 +994,7 @@ namespace SolaERP.Infrastructure.Services
                         {
                             Language = (Language)Enum.Parse(typeof(Language), "en")
                         };
-
+                    Console.WriteLine("Email gönderildi");
                     await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null,
                         new List<string> { data.VendorEmail });
                 }
