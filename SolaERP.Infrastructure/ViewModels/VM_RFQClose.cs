@@ -2,77 +2,80 @@
 using Microsoft.Extensions.Configuration;
 using SolaERP.Application.Helper;
 using SolaERP.Infrastructure.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SolaERP.Application.ViewModels
+namespace SolaERP.Application.ViewModels;
+
+public class VM_RFQClose : VM_EmailTemplateBase
 {
-	public class VM_RFQClose : VM_EmailTemplateBase
-	{
-		private readonly IConfiguration _configuration;
-		private readonly string _lang;
-		private readonly string _fullName;
-		public VM_RFQClose(string lang, string fullName)
-		{
-			IConfigurationBuilder builder = new ConfigurationBuilder()
-			.AddJsonFile(AppSettingsHelper.GetAppSettingsFileName(), optional: true, reloadOnChange: false);
+    private readonly string _vendorName;
+    private readonly string _rfqNo;
+    private readonly string _businessUnitName;
+    private readonly DateTime _rfqDeadline;
+    private readonly int _rfqId;
+    private readonly IConfiguration _configuration;
 
-			_configuration = builder.Build();
-			_lang = lang;
-			_fullName = fullName;
-		}
+    public VM_RFQClose(string lang, string vendorName, string rfqNo, DateTime rfqDeadline,
+        int rfqId, string businessUnitName)
+    {
+        string appsettingsFileName = AppSettingsHelper.GetAppSettingsFileName();
+        IConfigurationBuilder builder =
+            new ConfigurationBuilder().AddJsonFile(appsettingsFileName, optional: true, reloadOnChange: false);
 
-		public string? Token { get; set; }
-		public string? Subject
-		{
-			get
-			{
-				return _lang switch
-				{
-					"az" => "RFQ üçün təqdim etmə müddəti",
-					"en" => "RFQ period",
-					_ => "en"
-				};
-			}
-		}
-		public string? Username { get; set; }
+        _configuration = builder.Build();
+        _vendorName = vendorName;
+        _rfqNo = rfqNo;
+        _rfqDeadline = rfqDeadline;
+        _rfqId = rfqId;
+        _businessUnitName = businessUnitName;
+    }
 
+    public string Subject
+    {
+        get { return "RFQ Close"; }
+    }
 
-		public string TemplateName()
-		{
-			return @"RFQClose.cshtml";
-		}
+    public string TemplateName()
+    {
+        return @"RFQClose.cshtml";
+    }
 
-		public string GetHeaderOfMail()
-		{
-			switch (_lang)
-			{
-				case "az":
-					return "RFQ üçün təqdim etmə müddəti";
-				case "en":
-					return "RFQ period";
-			}
-			return "";
-		}
-		public HtmlString GetBodyOfMail()
-		{
-			switch (_lang)
-			{
-				case "az":
-					return new HtmlString($"Hörmətli {_fullName}, <br> " +
-						"Sizə bildiririk ki, RFQ üçün təqdimetmə müddəti rəsmi olaraq başa çatmışdır. Təklifiniz növbəti baxış mərhələsinə göndərilmişdir. <br> Xahiş edirik təsdiq prosesinin nəticələrini gözləyin. Əlavə məlumat və ya aydınlaşdırma tələb olunarsa, sizinlə əlaqə saxlayacağıq. <br>" +
-						"İştirakınız və əməkdaşlığınız üçün təşəkkür edirik.");
-				case "en":
-					return new HtmlString($"Dear {_fullName}, <br> " +
-						"We would like to inform you that the submission period for the RFQ has officially closed. Your proposal has been successfully forwarded to the next stage of review.<br> " +
-						"Please await the results of this process. Should any additional information or clarification be required, we will reach out to you promptly. <br> Thank you for your participation and cooperation.");
-			}
-			return new HtmlString("");
-		}
+    public string GetHeaderOfMailAz
+    {
+        get { return $"[{_rfqNo}] №-li RFQ üçün təqdim etmə müddəti"; }
+    }
 
+    public string GetHeaderOfMailEn
+    {
+        get { return $"[{_rfqNo}] № RFQ period"; }
+    }
 
-	}
+    public HtmlString GetBodyOfMailAz()
+    {
+        return new HtmlString(
+            "<table width='100%' style='font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; border-spacing: 0; padding: 0;'>" +
+            $"<tr><td><p>Hörmətli {_vendorName},</p></td></tr>" +
+            $"<tr><td><p>Sizə bildiririk ki, RFQ üçün təqdimetmə müddəti rəsmi olaraq başa çatmışdır. Təklifiniz növbəti baxış mərhələsinə göndərilmişdir.</p></td></tr>" +
+            $"<tr><td><p>Son tarix: [{_rfqDeadline}].</p></td></tr>" +
+            $"<tr><td><p>BusinessUnit - {_businessUnitName}.</p></td></tr>" +
+            "<tr><td><p>Xahiş edirik təsdiq prosesinin nəticələrini gözləyin. Əlavə məlumat və ya aydınlaşdırma tələb olunarsa, sizinlə əlaqə saxlayacağıq.</p></td></tr>" +
+            "<tr><td><p>İştirakınız və əməkdaşlığınız üçün təşəkkür edirik.</p></td></tr>" +
+            "<tr><td><p>Hörmətlə,<br>GL Group</p></td></tr>" +
+            "</table>"
+        );
+    }
+
+    public HtmlString GetBodyOfMailEn()
+    {
+        return new HtmlString(
+            "<table width='100%' style='font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; border-spacing: 0; padding: 0;'>" +
+            $"<tr><td><p>Dear {_vendorName},</p></td></tr>" +
+            $"<tr><td><p>We would like to inform you that the submission period for the RFQ has officially closed. Your proposal has been successfully forwarded to the next stage of review.</p></td></tr>" +
+            $"<tr><td><p>Deadline: [{_rfqDeadline}].</p></td></tr>" +
+            $"<tr><td><p>BusinessUnit - {_businessUnitName}.</p></td></tr>" +
+            "<tr><td><p>Please await the results of this process. Should any additional information or clarification be required, we will reach out to you promptly.</p></td></tr>" +
+            "<tr><td><p>Thank you for your participation and cooperation.</p></td></tr>" +
+            "<tr><td><p>Best regards,<br>GL Group</p></td></tr>" +
+            "</table>"
+        );
+    }
 }

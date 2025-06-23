@@ -955,13 +955,49 @@ namespace SolaERP.Infrastructure.Services
             try
             {
                 VM_BuyerPurchaseOrderApprove emailVM =
-                    new VM_BuyerPurchaseOrderApprove("en", data.BuyerName, data.OrderNo, data.BusinessUnitName , data.OrderId)
+                    new VM_BuyerPurchaseOrderApprove("en", data.BuyerName, data.OrderNo, data.BusinessUnitName,
+                        data.OrderId)
                     {
                         Language = (Language)Enum.Parse(typeof(Language), "en")
                     };
 
                 await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null,
                     new List<string> { data.BuyerEmail });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public async Task RFQCloseSendVendorEmail(List<RFQVendorEmailDto> datas)
+        {
+            try
+            {
+                datas.Add(new RFQVendorEmailDto
+                    {
+                        RFQMainId = 1111,
+                        VendorEmail = "anarceferov1996@gmail.com",
+                        VendorName = "Anarceferov",
+                        VendorCode = "VwfFGEWFG",
+                        RfqDeadline = DateTime.Now,
+                        BusinessUnitName = "AperTech",
+                        RFQNo = "534t31ct412t"
+                    });
+
+                foreach (var data in datas)
+                {
+                    VM_RFQClose emailVM =
+                        new VM_RFQClose("en", data.VendorName, data.RFQNo, data.RfqDeadline, data.RFQMainId,
+                            data.BusinessUnitName)
+                        {
+                            Language = (Language)Enum.Parse(typeof(Language), "en")
+                        };
+
+                    await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null,
+                        new List<string> { data.VendorEmail });
+                }
             }
             catch (Exception e)
             {
