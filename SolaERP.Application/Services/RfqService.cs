@@ -398,6 +398,7 @@ namespace SolaERP.Persistence.Services
                     command.CommandText =
                         @$"set nocount off update Procurement.RFQMain set Status = 2 where RFQMainId in ({idListForSql})";
                     await command.ExecuteNonQueryAsync();
+                    Console.WriteLine("RFQMain update edildi");
                 }
 
                 await _unitOfWork.SaveChangesAsync();
@@ -410,7 +411,7 @@ namespace SolaERP.Persistence.Services
                 }
 
                 List<RFQVendorEmailDto> vendorEmails = await _repository.GetRfqVendors(rfqMainIds);
-
+                Console.WriteLine("vendorEmails tapıldı");
                 _taskQueue.QueueBackgroundWorkItem(async token =>
                 {
                     await _mailService.SendRFQDeadlineFinishedMailForBuyer(rfqs);
