@@ -41,12 +41,12 @@ public class VM_RFQClose : VM_EmailTemplateBase
 
     public string GetHeaderOfMailAz
     {
-        get { return $"[{_rfqNo}] №-li RFQ üçün təqdim etmə müddəti"; }
+        get { return $"Təklifiniz növbəti mərhələyə keçmişdir – [{_rfqNo}]"; }
     }
 
     public string GetHeaderOfMailEn
     {
-        get { return $"[{_rfqNo}] № RFQ period"; }
+        get { return $"Your Proposal Has Been Forwarded – [{_rfqNo}]"; }
     }
 
     public HtmlString GetBodyOfMailAz()
@@ -54,9 +54,8 @@ public class VM_RFQClose : VM_EmailTemplateBase
         return new HtmlString(
             "<table width='100%' style='font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; border-spacing: 0; padding: 0;'>" +
             $"<tr><td><p>Hörmətli {_vendorName},</p></td></tr>" +
-            $"<tr><td><p>Sizə bildiririk ki, RFQ üçün təqdimetmə müddəti rəsmi olaraq başa çatmışdır. Təklifiniz növbəti baxış mərhələsinə göndərilmişdir.</p></td></tr>" +
-            $"<tr><td><p>Son tarix: [{_rfqDeadline}].</p></td></tr>" +
-            $"<tr><td><p>BusinessUnit - {_businessUnitName}.</p></td></tr>" +
+            "<tr><td><p>Sizə bildiririk ki, RFQ üçün təqdimetmə müddəti rəsmi olaraq başa çatmışdır. Təklifiniz növbəti baxış mərhələsinə göndərilmişdir.</p></td></tr>" +
+            $"<tr><td><p>RFQ Nomresi {_rfqNo} və RFQ son bitme tarixi {_rfqDeadline}.</p></td></tr>" +
             "<tr><td><p>Xahiş edirik təsdiq prosesinin nəticələrini gözləyin. Əlavə məlumat və ya aydınlaşdırma tələb olunarsa, sizinlə əlaqə saxlayacağıq.</p></td></tr>" +
             "<tr><td><p>İştirakınız və əməkdaşlığınız üçün təşəkkür edirik.</p></td></tr>" +
             "<tr><td><p>Hörmətlə,<br>GL Group</p></td></tr>" +
@@ -69,9 +68,8 @@ public class VM_RFQClose : VM_EmailTemplateBase
         return new HtmlString(
             "<table width='100%' style='font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; border-spacing: 0; padding: 0;'>" +
             $"<tr><td><p>Dear {_vendorName},</p></td></tr>" +
-            $"<tr><td><p>We would like to inform you that the submission period for the RFQ has officially closed. Your proposal has been successfully forwarded to the next stage of review.</p></td></tr>" +
-            $"<tr><td><p>Deadline: [{_rfqDeadline}].</p></td></tr>" +
-            $"<tr><td><p>BusinessUnit - {_businessUnitName}.</p></td></tr>" +
+            "<tr><td><p>We would like to inform you that the submission period for the RFQ has officially closed. Your proposal has been successfully forwarded to the next stage of review.</p></td></tr>" +
+            $"<tr><td><p>RFQ NO {_rfqNo} and RFQ Deadline {_rfqDeadline}.</p></td></tr>" +
             "<tr><td><p>Please await the results of this process. Should any additional information or clarification be required, we will reach out to you promptly.</p></td></tr>" +
             "<tr><td><p>Thank you for your participation and cooperation.</p></td></tr>" +
             "<tr><td><p>Best regards,<br>GL Group</p></td></tr>" +
