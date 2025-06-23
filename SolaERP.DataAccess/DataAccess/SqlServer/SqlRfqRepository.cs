@@ -804,5 +804,52 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return datas;
         }
+
+        public async Task<List<RFQVendorEmailDto>> GetRfqVendors(List<int> rfqMainIds)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText =
+                @"select
+                       rfqm.RFQMainId
+                     , rfqm.RFQDeadline
+                     , rfqm.RFQNo
+                     , v.VendorCode
+                     , v.VendorName
+                     , v.Email
+                     , b.BusinessUnitId
+                     , b.BusinessUnitName
+                from Procurement.RFQMain rfqm
+                inner join (select ROW_NUMBER() over (PARTITION BY rfqvr.VendorCode order by RFQVendorResponseId desc) as rn
+                          , rfqvr.VendorCode
+                          , rfqvr.RFQMainId
+                     from Procurement.RFQVendorResponse rfqvr
+                     where rfqvr.RFQMainId in (1210, 1211)) rfqvr on rfqvr.RFQMainId = rfqm.RFQMainId
+                inner join Procurement.Vendors as v on v.VendorCode = rfqvr.VendorCode
+                left join Config.BusinessUnits as b on b.BusinessUnitId = rfqm.BusinessUnitId
+                where rfqm.RFQMainId in @RfqMainIds
+                and rfqvr.rn = 1
+                and v.Status = 2";
+            command.Parameters.AddWithValue(command, "@RfqmainIds", rfqMainIds);
+
+            await using DbDataReader reader = await command.ExecuteReaderAsync();
+            List<RFQVendorEmailDto> datas = new();
+
+            while (await reader.ReadAsync())
+            {
+                datas.Add(new RFQVendorEmailDto()
+                {
+                    VendorEmail = reader.Get<string>("Email"),
+                    RFQMainId = reader.Get<int>("RFQMainId"),
+                    VendorCode = reader.Get<string>("VendorCode"),
+                    VendorName = reader.Get<string>("VendorName"),
+                    BusinessUnitName = reader.Get<string>("BusinessUnitName"),
+                    RfqDeadline = reader.Get<DateTime>("RFQDeadline"),
+                    RFQNo = reader.Get<string>("RFQNo"),
+                    BusinessUnitId = reader.Get<int>("BusinessUnitId")
+                });
+            }
+
+            return datas;
+        }
     }
 }

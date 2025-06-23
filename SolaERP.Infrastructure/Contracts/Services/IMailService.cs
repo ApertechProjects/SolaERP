@@ -54,7 +54,7 @@ namespace SolaERP.Application.Contracts.Services
 
         Task SendRFQDeadlineFinishedMailForBuyer(List<RFQDeadlineFinishedMailForBuyerDto> datas);
         Task BuyerPurchaseOrderApproveEmail(BuyerPurchaseOrderApproveEmailDto datas);
-
+        Task RFQCloseSendVendorEmail(List<RFQVendorEmailDto> datas);
 
     }
 }

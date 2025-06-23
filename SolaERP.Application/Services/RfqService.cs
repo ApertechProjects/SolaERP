@@ -390,11 +390,11 @@ namespace SolaERP.Persistence.Services
 
             if (rfqs.Count > 0)
             {
+                var rfqMainIds = rfqs.Select(x => x.RFQMainId).ToList();
+                var idListForSql = string.Join(",", rfqMainIds);
+
                 using (var command = _unitOfWork.CreateCommand() as DbCommand)
                 {
-                    var rfqMainIds = rfqs.Select(x => x.RFQMainId).ToList();
-                    var idListForSql = string.Join(",", rfqMainIds);
-
                     command.CommandText =
                         @$"set nocount off update Procurement.RFQMain set Status = 2 where RFQMainId in ({idListForSql})";
                     await command.ExecuteNonQueryAsync();
@@ -409,9 +409,12 @@ namespace SolaERP.Persistence.Services
                     rfq.BuyerEmail = buyerEmail;
                 }
 
+                List<RFQVendorEmailDto> vendorEmails = await _repository.GetRfqVendors(rfqMainIds);
+
                 _taskQueue.QueueBackgroundWorkItem(async token =>
                 {
                     await _mailService.SendRFQDeadlineFinishedMailForBuyer(rfqs);
+                    await _mailService.RFQCloseSendVendorEmail(vendorEmails);
                 });
             }
         }
@@ -449,6 +452,11 @@ namespace SolaERP.Persistence.Services
 
                 await methods.UpdateMailIsSentLastDay(rfqs.Select(x => x.RFQVendorResponseId).Distinct().ToList());
             }
+        }
+
+        public async Task<List<RFQVendorEmailDto>> GetRfqVendors(List<int> rfqMainIds)
+        {
+            return await _repository.GetRfqVendors(rfqMainIds);
         }
     }
 }
