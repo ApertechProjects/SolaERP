@@ -109,7 +109,9 @@ namespace SolaERP.Persistence.Mappers
                 .ReverseMap();
             CreateMap<BusinessUnits, BusinessUnitsAllDto>().ReverseMap();
             CreateMap<BusinessUnits, BusinessUnitsDto>().ReverseMap();
-            CreateMap<BaseBusinessUnit, BaseBusinessUnitDto>().ReverseMap();
+            CreateMap<BaseBusinessUnit, BaseBusinessUnitDto>()
+                .ForMember(dest => dest.HasVATAccount, opt => opt.MapFrom(src => src.VATAccount != null))
+                .ReverseMap();
             CreateMap<BusinessUnits, BusinessUnitConnectionDto>().ReverseMap();
             CreateMap<Groups, GroupsDto>().ReverseMap();
             CreateMap<GroupUser, GroupUserDto>().ReverseMap();
