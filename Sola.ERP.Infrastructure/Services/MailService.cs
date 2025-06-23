@@ -975,17 +975,6 @@ namespace SolaERP.Infrastructure.Services
         {
             try
             {
-                datas.Add(new RFQVendorEmailDto
-                    {
-                        RFQMainId = 1111,
-                        VendorEmail = "anarceferov1996@gmail.com",
-                        VendorName = "Anarceferov",
-                        VendorCode = "VwfFGEWFG",
-                        RfqDeadline = DateTime.Now,
-                        BusinessUnitName = "AperTech",
-                        RFQNo = "534t31ct412t"
-                    });
-
                 foreach (var data in datas)
                 {
                     VM_RFQClose emailVM =
@@ -994,7 +983,6 @@ namespace SolaERP.Infrastructure.Services
                         {
                             Language = (Language)Enum.Parse(typeof(Language), "en")
                         };
-                    Console.WriteLine("Email gönderildi");
                     await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null,
                         new List<string> { data.VendorEmail });
                 }

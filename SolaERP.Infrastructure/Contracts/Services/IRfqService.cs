@@ -33,6 +33,6 @@ namespace SolaERP.Application.Contracts.Services
 
 		Task SendRFQDeadLineMail();
 		Task SendRFQLastDayMail();
-		Task<List<RFQVendorEmailDto>> GetRfqVendors(List<int> rfqMainIds);
+		Task<List<RFQVendorEmailDto>> GetRfqVendors(string rfqMainIds);
 	}
 }

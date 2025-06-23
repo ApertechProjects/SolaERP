@@ -398,7 +398,6 @@ namespace SolaERP.Persistence.Services
                     command.CommandText =
                         @$"set nocount off update Procurement.RFQMain set Status = 2 where RFQMainId in ({idListForSql})";
                     await command.ExecuteNonQueryAsync();
-                    Console.WriteLine("RFQMain update edildi");
                 }
 
                 await _unitOfWork.SaveChangesAsync();
@@ -410,13 +409,21 @@ namespace SolaERP.Persistence.Services
                     rfq.BuyerEmail = buyerEmail;
                 }
 
-                List<RFQVendorEmailDto> vendorEmails = await _repository.GetRfqVendors(rfqMainIds);
-                Console.WriteLine("vendorEmails tapıldı");
                 _taskQueue.QueueBackgroundWorkItem(async token =>
                 {
                     await _mailService.SendRFQDeadlineFinishedMailForBuyer(rfqs);
-                    await _mailService.RFQCloseSendVendorEmail(vendorEmails);
                 });
+
+                List<RFQVendorEmailDto> vendorEmails =
+                    await _repository.GetRfqVendors(idListForSql) ?? new List<RFQVendorEmailDto>();
+
+                if (vendorEmails.Count > 0)
+                {
+                    _taskQueue.QueueBackgroundWorkItem(async token =>
+                    {
+                        await _mailService.RFQCloseSendVendorEmail(vendorEmails);
+                    });
+                }
             }
         }
 
@@ -455,7 +462,7 @@ namespace SolaERP.Persistence.Services
             }
         }
 
-        public async Task<List<RFQVendorEmailDto>> GetRfqVendors(List<int> rfqMainIds)
+        public async Task<List<RFQVendorEmailDto>> GetRfqVendors(string rfqMainIds)
         {
             return await _repository.GetRfqVendors(rfqMainIds);
         }

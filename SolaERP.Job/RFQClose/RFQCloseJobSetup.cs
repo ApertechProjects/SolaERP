@@ -17,7 +17,7 @@ namespace SolaERP.Job.RFQClose
 			options.AddJob<RFQCloseJob>(jobBuilder => jobBuilder.WithIdentity(jobKey))
 				 .AddTrigger(trigger => trigger
 				   .ForJob(jobKey)
-				   .WithCronSchedule("0 0/1 9-18 * * ?")
+				   .WithCronSchedule("0 0/15 9-18 * * ?")
 				   .Build());
 
 		}
