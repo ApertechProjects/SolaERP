@@ -686,7 +686,9 @@ public class SqlOrderRepository : IOrderRepository
             RFQNo = reader.Get<string>("RFQNo"),
             ComparisonDeadline = reader.Get<DateTime>("ComparisonDeadline"),
             Priority = reader.Get<string>("Priority"),
-            RequestedDate = reader.Get<DateTime>("RequestedDate")
+            RequestedDate = reader.Get<DateTime>("RequestedDate"),
+            RequestType = reader.Get<string>("RequestType"),
+            RequestTypeId = reader.Get<int>("RequestTypeId"),
         };
         return dto;
     }

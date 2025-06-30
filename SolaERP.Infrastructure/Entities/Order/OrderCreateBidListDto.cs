@@ -53,4 +53,6 @@ public class OrderCreateBidListDto
     public DateTime ComparisonDeadline { get; set; }
     public DateTime RequestedDate { get; set; }
     public string Priority { get; set; }
+    public string RequestType { get; set; }
+    public int RequestTypeId { get; set; }
 }
