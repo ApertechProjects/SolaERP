@@ -38,5 +38,6 @@ namespace SolaERP.Application.Contracts.Repositories
 		Task<List<RFQUserData>> GetRFQVendorUsersMailIsSentLastDayFalse();
 		Task<List<RFQUserData>> GetRFQVendorUsersMailIsSentDeadLineFalse();
 		Task<List<RFQVendorEmailDto>> GetRfqVendors(string rfqMainIds);
+		Task<bool> UpdateNonBidRFQMainAndRequestDetails();
 	}
 }

@@ -859,5 +859,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 throw;
             }
         }
+        
+        public async Task<bool> UpdateNonBidRFQMainAndRequestDetails()
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"EXEC SP_UpdateNonBidRFQMainAndRequestDetails";
+            return await command.ExecuteNonQueryAsync() > 0;
+        }
     }
 }
