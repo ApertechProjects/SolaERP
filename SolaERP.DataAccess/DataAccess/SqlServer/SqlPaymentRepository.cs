@@ -240,7 +240,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 GNRL_3_DATETIME = reader.Get<DateTime?>("GNRL_3_DATETIME"),
                 GNRL_4_DATETIME = reader.Get<DateTime?>("GNRL_4_DATETIME"),
                 GNRL_5_DATETIME = reader.Get<DateTime?>("GNRL_5_DATETIME"),
-                LINK_REF_1 = reader.Get<string>("LINK_REF_1")
+                LINK_REF_1 = reader.Get<string>("LINK_REF_1"),
+                InvoiceRegisterDetailId = reader.Get<int?>("InvoiceRegisterDetailId")
             };
         }
 
@@ -676,7 +677,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentDocumentDetails_IUD @Data";
-                command.Parameters.AddTableValue(command, "@Data", "PaymentDocumentDetailsType2", model);
+                command.Parameters.AddTableValue(command, "@Data", "PaymentDocumentDetailsType", model);
                 var value = await command.ExecuteNonQueryAsync();
                 return value > 0;
             }
