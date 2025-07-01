@@ -1197,7 +1197,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.CommandText =
                     "SET NOCOUNT OFF EXEC SP_PaymentOrderTransactin_IUD @PaymentOrderMainId,@PaymentOrderTransaction";
                 command.Parameters.AddWithValue(command, "@PaymentOrderMainId", paymentOrderMainId);
-                command.Parameters.AddTableValue(command, "@PaymentOrderTransaction", "PaymentOrderTransactionType2",
+                command.Parameters.AddTableValue(command, "@PaymentOrderTransaction", "PaymentOrderTransactionType",
                     transactionData);
                 var value = await command.ExecuteNonQueryAsync();
                 return value > 0;
