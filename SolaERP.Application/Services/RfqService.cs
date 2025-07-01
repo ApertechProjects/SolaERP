@@ -400,8 +400,6 @@ namespace SolaERP.Persistence.Services
                     await command.ExecuteNonQueryAsync();
                 }
 
-                await _repository.UpdateNonBidRFQMainAndRequestDetails();
-
                 await _unitOfWork.SaveChangesAsync();
 
                 foreach (var rfq in rfqs.ToList())
