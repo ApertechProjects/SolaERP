@@ -1095,6 +1095,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.Add("@NewJournalNo", SqlDbType.Int);
                 command.Parameters["@NewJournalNo"].Direction = ParameterDirection.Output;
 
+                await _unitOfWork.SaveChangesAsync();
                 using var reader = await command.ExecuteReaderAsync();
 
                 while (await reader.ReadAsync())
@@ -1230,7 +1231,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.CommandText = query;
             command.Parameters.AddWithValue(command, "@paymentOrderMainId", paymentOrderMainId);
             command.Parameters.AddWithValue(command, "@userId", userId);
-
+            await _unitOfWork.SaveChangesAsync();
             await command.ExecuteNonQueryAsync();
         }
 
