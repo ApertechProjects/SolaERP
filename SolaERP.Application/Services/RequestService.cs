@@ -462,5 +462,12 @@ namespace SolaERP.Persistence.Services
 			return ApiResponse<bool>.Success(true);
 		}
 
+		public async Task<ApiResponse<List<WarehouseInfoDto>>> GetWarehouseList(int businessUnitId)
+		{
+			var warehouseList = await _requestMainRepository.GetWarehouseList(businessUnitId);
+			var dto = _mapper.Map<List<WarehouseInfoDto>>(warehouseList);
+			return ApiResponse<List<WarehouseInfoDto>>.Success(dto);
+		}
+
 	}
 }

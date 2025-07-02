@@ -783,5 +783,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             }
         }
+        
+        public async Task<List<WarehouseInfo>> GetWarehouseList(int businessUnitId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as SqlCommand;
+            command.CommandText = @"exec SP_WarehouseList @BusinessUnitId";
+
+            command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+
+            await using var reader = await command.ExecuteReaderAsync();
+            List<WarehouseInfo> warehouseInfo = new();
+
+            while (await reader.ReadAsync())
+            {
+                 warehouseInfo.Add(reader.GetByEntityStructure<WarehouseInfo>());
+            }
+
+            return warehouseInfo;
+        }
 	}
 }
