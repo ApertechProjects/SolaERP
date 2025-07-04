@@ -77,6 +77,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                     @AnalysisCode9Id, 
                                                                     @AnalysisCode10Id,
                                                                     @Catid,
+                                                                    @Warehouse,
                                                                     @NewRequestDetailsId";
 
                 command.Parameters.AddWithValue(command, "@RequestDetailId", entity.RequestDetailId);
@@ -116,6 +117,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@AnalysisCode9Id", entity.AnalysisCode9Id);
                 command.Parameters.AddWithValue(command, "@AnalysisCode10Id", entity.AnalysisCode10Id);
                 command.Parameters.AddWithValue(command, "@Catid", entity.Catid);
+                command.Parameters.AddWithValue(command, "@Warehouse", entity.Warehouse);
                 command.Parameters.AddOutPutParameter(command, "@NewRequestDetailsId");
 
                 return await command.ExecuteNonQueryAsync() > 0;

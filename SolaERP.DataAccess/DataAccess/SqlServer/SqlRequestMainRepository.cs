@@ -412,7 +412,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                 @OperatorComment,
                                                                 @QualityRequired,@Currency,
                                                                 @LogisticTotal,@Buyer,@Destination,
-                                                                @Priority,@ApproveStageMainId,@Location,
+                                                                @Priority,@ApproveStageMainId,@Location,@Warehouse,
                                                                 @NewRequestmainId = @NewRequestmainId OUTPUT,
                                                                 @NewRequestNo = @NewRequestNo OUTPUT 
                                                                 select @NewRequestmainId as NewRequestmainId,
@@ -440,6 +440,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Priority", model.Priority);
                 command.Parameters.AddWithValue(command, "@ApproveStageMainId", model.ApproveStageMainId);
                 command.Parameters.AddWithValue(command, "@Location", model.Location);
+                command.Parameters.AddWithValue(command, "@Warehouse", model.Warehouse);
 
                 command.Parameters.Add("@NewRequestmainId", SqlDbType.Int);
                 command.Parameters["@NewRequestmainId"].Direction = ParameterDirection.Output;
