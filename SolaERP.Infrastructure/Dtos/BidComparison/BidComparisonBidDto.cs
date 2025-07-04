@@ -25,6 +25,7 @@
         public string PaymentTermName { get; set; }
         public decimal Score { get; set; }
         public bool IsSelected { get; set; }
+        public string LineDescription { get; set; }
 
     }
 }
