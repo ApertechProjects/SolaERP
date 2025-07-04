@@ -310,9 +310,9 @@ public class SqlOrderRepository : IOrderRepository
     public async Task<bool> SaveOrderDetailsAsync(List<OrderDetailDto> orderDetails)
     {
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
-        command.CommandText = @"SET NOCOUNT OFF EXEC dbo.SP_OrderDetails_IUD @OrderMainId, @Data";
+        command.CommandText = @"SET NOCOUNT OFF EXEC dbo.SP_OrderDetails_IUD2 @OrderMainId, @Data";
         command.Parameters.AddWithValue(command, "@OrderMainId", orderDetails[0].OrderMainId);
-        command.Parameters.AddTableValue(command, "@Data", "OrderDetailsType", orderDetails.ConvertToDataTable());
+        command.Parameters.AddTableValue(command, "@Data", "OrderDetailsType2", orderDetails.ConvertToDataTable());
 
         return await command.ExecuteNonQueryAsync() > 0;
     }
@@ -572,6 +572,7 @@ public class SqlOrderRepository : IOrderRepository
             ApproveStatusName = reader.Get<string>("ApproveStatusName"),
             RequestLineNo = reader.Get<string>("RequestLineNo"),
             RequestNo = reader.Get<string>("RequestNo"),
+            Warehouse = reader.Get<string>("Warehouse")
         };
     }
 
