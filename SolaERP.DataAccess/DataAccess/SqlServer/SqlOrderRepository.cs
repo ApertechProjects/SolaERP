@@ -628,7 +628,8 @@ public class SqlOrderRepository : IOrderRepository
             AnalysisCode9Id = reader.Get<int>("AnalysisCode9Id"),
             AnalysisCode10Id = reader.Get<int>("AnalysisCode10Id"),
             CatId = reader.Get<int>("CatId"),
-            Requester = reader.Get<int>("Requester")
+            Requester = reader.Get<int>("Requester"),
+            Warehouse = reader.Get<string>("Warehouse")
         };
     }
 
@@ -689,6 +690,8 @@ public class SqlOrderRepository : IOrderRepository
             RequestedDate = reader.Get<DateTime>("RequestedDate"),
             RequestType = reader.Get<string>("RequestType"),
             RequestTypeId = reader.Get<int>("RequestTypeId"),
+            Location = reader.Get<string>("Location"),
+            Warehouse = reader.Get<string>("Warehouse")
         };
         return dto;
     }
