@@ -273,7 +273,8 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                 DiscualificationReason = reader.Get<string>("DiscualificationReason"),
                 Discualified = reader.Get<bool>("Discualified"),
                 EnteredBy = reader.Get<string>("EnteredBy"),
-                EntryDate = reader.Get<DateTime>("EntryDate")
+                EntryDate = reader.Get<DateTime>("EntryDate"),
+                RfqComment = reader.Get<string>("RfqComment")
             };
         }
 
