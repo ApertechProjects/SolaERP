@@ -275,7 +275,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Priority = reader.Get<int>("Priority"),
                 HasAttachments = reader.Get<bool>("HasAttachments"),
                 Sequence = reader.Get<int>("Sequence"),
-                KeyCode = reader.Get<string>("KeyCode")
+                KeyCode = reader.Get<string>("KeyCode"),
+                Warehouse = reader.Get<string>("Warehouse")
             };
         }
 
