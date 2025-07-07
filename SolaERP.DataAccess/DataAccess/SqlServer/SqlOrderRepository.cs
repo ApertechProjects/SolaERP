@@ -692,7 +692,9 @@ public class SqlOrderRepository : IOrderRepository
             RequestType = reader.Get<string>("RequestType"),
             RequestTypeId = reader.Get<int>("RequestTypeId"),
             Location = reader.Get<string>("Location"),
-            Warehouse = reader.Get<string>("Warehouse")
+            Warehouse = reader.Get<string>("Warehouse"),
+            Ordertype = reader.Get<string>("Ordertype"),
+            OrderTypeId = reader.Get<int>("OrderTypeId")
         };
         return dto;
     }

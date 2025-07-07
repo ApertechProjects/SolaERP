@@ -57,4 +57,6 @@ public class OrderCreateBidListDto
     public int RequestTypeId { get; set; }
     public string Location { get; set; }
     public string Warehouse { get; set; }
+    public string Ordertype { get; set; }
+    public int OrderTypeId { get; set; }
 }
