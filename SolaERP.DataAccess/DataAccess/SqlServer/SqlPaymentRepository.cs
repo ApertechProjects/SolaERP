@@ -25,17 +25,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<CreateAdvance>> CreateAdvanceAsync(CreateAdvanceModel createBalance)
         {
-            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = @"exec dbo.SP_PaymentDocumentCreateAdvance @vendorCode,@currencyCode,@businessUnitId";
             command.Parameters.AddWithValue(command, "@vendorCode", createBalance.VendorCode);
             command.Parameters.AddWithValue(command, "@currencyCode", createBalance.CurrencyCode);
             command.Parameters.AddWithValue(command, "@businessUnitId", createBalance.BusinessUnitId);
 
-            using var reader = await command.ExecuteReaderAsync();
+            await using var reader = await command.ExecuteReaderAsync();
 
             List<CreateAdvance> createAdvances = new List<CreateAdvance>();
-            while (reader.Read())
-                createAdvances.Add(GetCreateAdvance(reader));
+            while (await reader.ReadAsync())
+                createAdvances.Add(reader.GetByEntityStructure<CreateAdvance>());
 
             return createAdvances;
         }
@@ -84,27 +84,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 VendorName = reader.Get<string>("VendorName"),
                 CurrencyCode = reader.Get<string>("CurrencyCode"),
                 Amount = reader.Get<decimal>("Amount")
-            };
-        }
-
-        private CreateAdvance GetCreateAdvance(DbDataReader reader)
-        {
-            return new CreateAdvance
-            {
-                AccountCode = reader.Get<string>("AccountCode"),
-                AccountName = reader.Get<string>("AccountName"),
-                AmountToPay = reader.Get<decimal>("AmountToPay"),
-                Budget = reader.Get<string>("Budget"),
-                CurrencyCode = reader.Get<string>("CurrencyCode"),
-                InvoiceNo = reader.Get<string>("InvoiceNo"),
-                TransactionReference = reader.Get<string>("TransactionReference"),
-                OrderTotal = reader.Get<decimal>("OrderTotal"),
-                PayableAmount = reader.Get<decimal>("PayableAmount"),
-                PaymentRequestAmount = reader.Get<decimal>("PaymentRequestAmount"),
-                PaymentTerms = reader.Get<string>("PaymentTerms"),
-                PaymentTermsName = reader.Get<string>("PaymentTermsName"),
-                SystemInvoiceNo = reader.Get<string>("SystemInvoiceNo"),
-                Department = reader.Get<string>("Department")
             };
         }
 
