@@ -48,5 +48,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<BidComparisonApprovalInfoDto>> BidComparisonApprovalInfo(int bidComparisonId);
         Task<bool> Retrieve(int bidComparisonId, int userId);
         Task<bool> Delete(int bidComparisonId);
+        Task<List<BidMainListByRfqMain>> GetBidListByRfqMainId(int rfqMainId);
     }
 }
