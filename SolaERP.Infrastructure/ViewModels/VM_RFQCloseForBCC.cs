@@ -43,12 +43,12 @@ public class VM_RFQCloseForBCC : VM_EmailTemplateBase
 
     public string GetHeaderOfMailAz
     {
-        get { return $"Təklif vermə müddətinin başa çatması barədə bildiriş – {_bidNo}"; }
+        get { return $"Təklif vermə müddətinin başa çatması barədə bildiriş – {_rfqNo}"; }
     }
 
     public string GetHeaderOfMailEn
     {
-        get { return $"Notification of Bid Expiry – Reference No. {_bidNo}"; }
+        get { return $"Notification of Bid Expiry – Reference No. {_rfqNo}"; }
     }
 
     public HtmlString GetBodyOfMailAz()
@@ -56,7 +56,7 @@ public class VM_RFQCloseForBCC : VM_EmailTemplateBase
         return new HtmlString(
             "<table width='100%' style='font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; border-spacing: 0; padding: 0;'>" +
             $"<tr><td><p>Hörmətli {_vendorName},</p></td></tr>" +
-            $"<tr><td><p>Təklif - {_bidNo} üzrə keçirilmiş son təklif vermə prosesində iştirak etdiyiniz üçün sizə təşəkkür edirik.</p></td></tr>" +
+            $"<tr><td><p>Təklif - {_rfqNo} üzrə keçirilmiş son təklif vermə prosesində iştirak etdiyiniz üçün sizə təşəkkür edirik.</p></td></tr>" +
             "<tr><td><p>Bildiririk ki, təklif vermə müddəti artıq başa çatmışdır və bu mərhələdə yeni təkliflər qəbul edilmir.</p></td></tr>" +
             "<tr><td><p>Sizin təqdim etdiyiniz təklif şirkətimiz tərəfindən qəbul olunmuşdur və hal-hazırda satınalma və biznes komandaları tərəfindən nəzərdən keçirilir. Təfərrüatların işlənməsi üçün zəhmət olmasa 5–7 iş günü gözləyin.</p></td></tr>" +
             "<tr><td><p>Əgər təklifiniz uğurlu olarsa, bu barədə sizə ayrıca olaraq Satınalma Sifarişi (PO) göndəriləcək.</p></td></tr>" +
@@ -72,7 +72,7 @@ public class VM_RFQCloseForBCC : VM_EmailTemplateBase
         return new HtmlString(
             "<table width='100%' style='font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; border-spacing: 0; padding: 0;'>" +
             $"<tr><td><p>Dear {_vendorName},</p></td></tr>" +
-            $"<tr><td><p>Thank you for your participation in the recent bidding exercise under Bid Reference No. {_bidNo}.</p></td></tr>" +
+            $"<tr><td><p>Thank you for your participation in the recent bidding exercise under Bid Reference No. {_rfqNo}.</p></td></tr>" +
             "<tr><td><p>Please be informed that this bid has now expired and is no longer accepting proposals.</p></td></tr>" +
             "<tr><td><p>We confirm that your submitted proposal has been received by the company and under review with procurement and business teams. Please allow 5–7 working days for us to process the submitted details.</p></td></tr>" +
             "<tr><td><p>In case your bid is successful, you will receive a Purchase Order (PO) as a separate communication.</p></td></tr>" +
