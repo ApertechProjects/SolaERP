@@ -687,5 +687,10 @@ namespace SolaERP.Persistence.Services
 			}
 			return ApiResponse<List<string>>.Fail(data, 404);
 		}
+
+		public async Task<VendorInfo> GetVendorInfoByVendorCode(int vendorCode)
+		{
+			return await _repository.GetVendorInfoByVendorCode(vendorCode);
+		}
 	}
 }
