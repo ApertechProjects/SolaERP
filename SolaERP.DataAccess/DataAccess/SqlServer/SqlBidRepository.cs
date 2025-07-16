@@ -387,7 +387,7 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
             var idListForSql = string.Join(",", rfqMainIds);
 
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"
+            command.CommandText = $@"
                                     select 
                                         b.RFQMainId,
                                         b.VendorCode,
