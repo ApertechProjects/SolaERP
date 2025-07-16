@@ -410,11 +410,12 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                 datas.Add(new RFQVendorEmailDto
                 {
                     RFQMainId = reader.Get<int>("RFQMainId"),
-                    VendorCode = reader.Get<String>("VendorCode"),
-                    VendorName = reader.Get<String>("VendorName"),
+                    VendorCode = reader.Get<string>("VendorCode"),
+                    VendorName = reader.Get<string>("VendorName"),
                     RfqDeadline = reader.Get<DateTime>("RfqDeadline"),
-                    VendorEmail = reader.Get<String>("Email"),
+                    VendorEmail = reader.Get<string>("Email"),
                     BidNo = reader.Get<string>("BidNo"),
+                    RFQNo = reader.Get<string>("RFQNo"),
                 });
 
             return datas;
