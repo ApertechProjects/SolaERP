@@ -6,6 +6,7 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
+using SolaERP.Application.Dtos.RFQ;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -116,51 +117,51 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
             return data;
         }
 
-		public async Task<List<BidAll>> GetDraftAsync(BidAllFilter filter)
-		{
-			using var command = _unitOfWork.CreateCommand() as DbCommand;
-			command.CommandText = @"EXEC SP_BidDraft @BusinessUnitId,
+        public async Task<List<BidAll>> GetDraftAsync(BidAllFilter filter)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"EXEC SP_BidDraft @BusinessUnitId,
                                         @Emergency,
                                         @DateFrom,
                                         @DateTo,
                                         @ApproveStatus";
 
-			command.Parameters.AddWithValue(command, "@BusinessUnitId", filter.BusinessUnitId);
-			command.Parameters.AddWithValue(command, "@Emergency", filter.Emergency);
-			command.Parameters.AddWithValue(command, "@DateFrom", filter.DateFrom);
-			command.Parameters.AddWithValue(command, "@DateTo", filter.DateTo);
-			command.Parameters.AddWithValue(command, "@ApproveStatus", filter.ApproveStatus);
+            command.Parameters.AddWithValue(command, "@BusinessUnitId", filter.BusinessUnitId);
+            command.Parameters.AddWithValue(command, "@Emergency", filter.Emergency);
+            command.Parameters.AddWithValue(command, "@DateFrom", filter.DateFrom);
+            command.Parameters.AddWithValue(command, "@DateTo", filter.DateTo);
+            command.Parameters.AddWithValue(command, "@ApproveStatus", filter.ApproveStatus);
 
-			using DbDataReader reader = await command.ExecuteReaderAsync();
-			List<BidAll> data = new();
-			while (reader.Read())
-				data.Add(GetBidFromReader(reader));
-			return data;
-		}
+            using DbDataReader reader = await command.ExecuteReaderAsync();
+            List<BidAll> data = new();
+            while (reader.Read())
+                data.Add(GetBidFromReader(reader));
+            return data;
+        }
 
-		public async Task<List<BidAll>> GetSubmittedAsync(BidAllFilter filter)
-		{
-			using var command = _unitOfWork.CreateCommand() as DbCommand;
-			command.CommandText = @"EXEC SP_BidSubmitted @BusinessUnitId,
+        public async Task<List<BidAll>> GetSubmittedAsync(BidAllFilter filter)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"EXEC SP_BidSubmitted @BusinessUnitId,
                                         @Emergency,
                                         @DateFrom,
                                         @DateTo,
                                         @ApproveStatus";
 
-			command.Parameters.AddWithValue(command, "@BusinessUnitId", filter.BusinessUnitId);
-			command.Parameters.AddWithValue(command, "@Emergency", filter.Emergency);
-			command.Parameters.AddWithValue(command, "@DateFrom", filter.DateFrom);
-			command.Parameters.AddWithValue(command, "@DateTo", filter.DateTo);
-			command.Parameters.AddWithValue(command, "@ApproveStatus", filter.ApproveStatus);
+            command.Parameters.AddWithValue(command, "@BusinessUnitId", filter.BusinessUnitId);
+            command.Parameters.AddWithValue(command, "@Emergency", filter.Emergency);
+            command.Parameters.AddWithValue(command, "@DateFrom", filter.DateFrom);
+            command.Parameters.AddWithValue(command, "@DateTo", filter.DateTo);
+            command.Parameters.AddWithValue(command, "@ApproveStatus", filter.ApproveStatus);
 
-			using DbDataReader reader = await command.ExecuteReaderAsync();
-			List<BidAll> data = new();
-			while (reader.Read())
-				data.Add(GetBidFromReader(reader));
-			return data;
-		}
+            using DbDataReader reader = await command.ExecuteReaderAsync();
+            List<BidAll> data = new();
+            while (reader.Read())
+                data.Add(GetBidFromReader(reader));
+            return data;
+        }
 
-		public async Task<List<BidDetailsLoad>> GetBidDetailsAsync(BidDetailsFilter filter)
+        public async Task<List<BidDetailsLoad>> GetBidDetailsAsync(BidDetailsFilter filter)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = "EXEC SP_BidDetailsLoad @BidMainId";
@@ -340,11 +341,12 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
 
             return datas;
         }
-        
+
         public async Task<List<BidMainDto>> GetBidByRFQMainIdAndVendorCode(int rfqMainId, string vendorCode)
         {
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"select BidDetailId from Procurement.BidMain where RFQMainId = @RFQMainId and VendorCode = @VendorCode";
+            command.CommandText =
+                @"select BidDetailId from Procurement.BidMain where RFQMainId = @RFQMainId and VendorCode = @VendorCode";
             command.Parameters.AddWithValue(command, "@RFQMainId", rfqMainId);
             command.Parameters.AddWithValue(command, "@VendorCode", vendorCode);
 
@@ -359,11 +361,12 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
 
             return datas;
         }
-        
+
         public async Task<bool> GetBidCheckExistsByRFQMainIdAndVendorCode(int rfqMainId, string vendorCode)
         {
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"select count(*) ac count from Procurement.BidMain where RFQMainId = @RFQMainId and VendorCode = @VendorCode";
+            command.CommandText =
+                @"select count(*) ac count from Procurement.BidMain where RFQMainId = @RFQMainId and VendorCode = @VendorCode";
             command.Parameters.AddWithValue(command, "@RFQMainId", rfqMainId);
             command.Parameters.AddWithValue(command, "@VendorCode", vendorCode);
 
@@ -377,6 +380,44 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
             //     });
 
             return await command.ExecuteNonQueryAsync() > 0;
+        }
+
+        public async Task<List<RFQVendorEmailDto>> GetBidsByRFQMainIdAsync(List<int> rfqMainIds)
+        {
+            var idListForSql = string.Join(",", rfqMainIds);
+
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"
+                                    select 
+                                        b.RFQMainId,
+                                        b.VendorCode,
+                                        v.VendorName,
+                                        rfqm.RFQDeadline,
+                                        au.Email,
+                                        b.BidNo
+                                    from Procurement.BidMain as b
+                                             inner join Procurement.RFQMain rfqm on rfqm.RFQMainId = b.RFQMainId
+                                             inner join Procurement.Vendors as v on b.VendorCode = v.VendorCode
+                                             inner join Config.AppUser as au on au.VendorId = v.VendorId
+                                    where b.RFQMainId in ({idListForSql})
+                                    and v.Status = 2
+                                    ";
+
+
+            await using DbDataReader reader = await command.ExecuteReaderAsync();
+            List<RFQVendorEmailDto> datas = new();
+            while (reader.Read())
+                datas.Add(new RFQVendorEmailDto
+                {
+                    RFQMainId = reader.Get<int>("RFQMainId"),
+                    VendorCode = reader.Get<String>("VendorCode"),
+                    VendorName = reader.Get<String>("VendorName"),
+                    RfqDeadline = reader.Get<DateTime>("RfqDeadline"),
+                    VendorEmail = reader.Get<String>("Email"),
+                    BidNo = reader.Get<string>("BidNo"),
+                });
+
+            return datas;
         }
     }
 }

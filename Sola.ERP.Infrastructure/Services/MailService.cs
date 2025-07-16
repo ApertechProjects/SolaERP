@@ -993,5 +993,28 @@ namespace SolaERP.Infrastructure.Services
                 throw;
             }
         }
+
+        public async Task RFQCloseSendVendorEmailForBCC(List<RFQVendorEmailDto> datas)
+        {
+            try
+            {
+                foreach (var data in datas)
+                {
+                    VM_RFQCloseForBCC emailVM =
+                        new VM_RFQCloseForBCC("en", data.VendorName, data.RFQNo, data.RfqDeadline, data.RFQMainId,
+                            data.BusinessUnitName, data.BidNo)
+                        {
+                            Language = (Language)Enum.Parse(typeof(Language), "en")
+                        };
+                    await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null,
+                        new List<string> { data.VendorEmail });
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
     }
 }

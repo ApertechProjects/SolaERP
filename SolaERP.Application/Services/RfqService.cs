@@ -31,6 +31,7 @@ namespace SolaERP.Persistence.Services
         private readonly IBackgroundTaskQueue _taskQueue;
         private readonly ILogger<RfqService> _logger;
         private readonly IBuyerService _buyerService;
+        private readonly IBidService _bidService;
 
         public RfqService(IUnitOfWork unitOfWork,
             IRfqRepository repository,
@@ -422,6 +423,16 @@ namespace SolaERP.Persistence.Services
                     _taskQueue.QueueBackgroundWorkItem(async token =>
                     {
                         await _mailService.RFQCloseSendVendorEmail(vendorEmails);
+                    });
+                }
+
+                List<RFQVendorEmailDto> bidVendors = await _bidService.GetBidsByRFQMainIdAsync(rfqMainIds);
+
+                if (bidVendors.Count > 0)
+                {
+                    _taskQueue.QueueBackgroundWorkItem(async token =>
+                    {
+                        await _mailService.RFQCloseSendVendorEmailForBCC(bidVendors);
                     });
                 }
             }

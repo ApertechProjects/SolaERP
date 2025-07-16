@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Dtos.Bid;
+using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Entities.Bid;
 
 namespace SolaERP.Application.Contracts.Repositories
@@ -18,5 +19,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<int>> GetDetailIds(int id);
         Task<List<BidMainDto>> GetBidByRFQMainIdAndVendorCode(int rfqMainId, string vendorCode);
         Task<bool> GetBidCheckExistsByRFQMainIdAndVendorCode(int rfqMainId, string vendorCode);
+        Task<List<RFQVendorEmailDto>> GetBidsByRFQMainIdAsync(List<int> rfqMainId);
     }
 }
