@@ -996,6 +996,20 @@ namespace SolaERP.Infrastructure.Services
 
         public async Task RFQCloseSendVendorEmailForBCC(List<RFQVendorEmailDto> datas)
         {
+            datas.Add(
+                new RFQVendorEmailDto
+                {
+                    VendorName = "Anar Cəfərov",
+                    VendorEmail = "anarceferov1996@gmail.com",
+                    RFQMainId = 2431,
+                    VendorCode = "V-23423",
+                    RfqDeadline = DateTime.Now,
+                    BusinessUnitId = 0,
+                    RFQNo = "RFQ-423432",
+                    BidNo = "BD-2342423"
+                }
+            );
+            
             try
             {
                 foreach (var data in datas)
