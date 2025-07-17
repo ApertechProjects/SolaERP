@@ -394,7 +394,8 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                                         v.VendorName,
                                         rfqm.RFQDeadline,
                                         au.Email,
-                                        b.BidNo
+                                        b.BidNo,
+                                        rfqm.RFQNo
                                     from Procurement.BidMain as b
                                              inner join Procurement.RFQMain rfqm on rfqm.RFQMainId = b.RFQMainId
                                              inner join Procurement.Vendors as v on b.VendorCode = v.VendorCode
