@@ -276,7 +276,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 HasAttachments = reader.Get<bool>("HasAttachments"),
                 Sequence = reader.Get<int>("Sequence"),
                 KeyCode = reader.Get<string>("KeyCode"),
-                Warehouse = reader.Get<string>("Warehouse")
+                Warehouse = reader.Get<string>("Warehouse"),
+                IsWarehouseValid = reader.Get<bool>("IsWarehouseValid"),
+                MaxSequence = reader.Get<int>("MaxSequence")
             };
         }
 
