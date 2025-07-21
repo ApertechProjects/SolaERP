@@ -71,6 +71,7 @@ namespace SolaERP.Application.Dtos.Request
         public string Location { get; set; }
         public string Warehouse { get; set; }
         public int ApproveStageMainId { get; set; }
+        public string RequestType { get; set; }
         public List<RequestCardDetailDto> requestCardDetails { get; set; }
         public List<RequestCardAnalysisDto> requestCardAnalysis { get; set; }
         public List<AttachmentDto> Attachments { get; set; }

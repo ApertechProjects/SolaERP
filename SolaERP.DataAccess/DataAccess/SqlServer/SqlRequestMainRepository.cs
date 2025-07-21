@@ -339,7 +339,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 ApproveStageMainId = reader.Get<int>("ApproveStageMainId"),
                 KeyCode = reader.Get<string>("KeyCode"),
                 Location = reader.Get<string>("Location"),
-                Warehouse = reader.Get<string>("Warehouse")
+                Warehouse = reader.Get<string>("Warehouse"),
+                RequestType = reader.Get<string>("RequestType")
             };
         }
 
