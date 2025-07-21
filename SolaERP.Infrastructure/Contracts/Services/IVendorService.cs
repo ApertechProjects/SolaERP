@@ -31,7 +31,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> DeleteAsync(string userIdentity, VendorDeleteModel model);
         Task<ApiResponse<bool>> HasVendorName(string vendorName, string userIdentity);
         Task<ApiResponse<List<VendorRFQListResponseDto>>> GetVendorRFQList(string vendorCode, string userIdentity);
-        Task<ApiResponse<bool>> RFQVendorResponseChangeStatus(int rfqMainId, int status, string vendorCode);
+        Task<ApiResponse<bool>> RFQVendorResponseChangeStatus(int rfqMainId, int status, string vendorCode, int? rejectReasonId, string comment);
         Task<ApiResponse<bool>> TransferToIntegration(CreateVendorRequest request);
         Task<ApiResponse<List<string>>> CompareVendor(int oldVersionId, int newVersionId);
     }

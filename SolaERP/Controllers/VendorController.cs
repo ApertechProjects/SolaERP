@@ -41,7 +41,7 @@ namespace SolaERP.API.Controllers
 		[HttpPost]
 		public async Task<IActionResult> RFQVendorResponseChangeStatus([FromBody] VendorRFQStatusChangeRequest request)
 			=> CreateActionResult(await _service.RFQVendorResponseChangeStatus(
-				request.RFQMainId, request.Status, request.VendorCode
+				request.RFQMainId, request.Status, request.VendorCode, request.RejectReasonId, request.Comment
 			));
 
 		[Authorize]

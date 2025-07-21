@@ -178,10 +178,10 @@ namespace SolaERP.Persistence.Services
 			return ApiResponse<List<VendorRFQListResponseDto>>.Success(list);
 		}
 
-		public async Task<ApiResponse<bool>> RFQVendorResponseChangeStatus(int rfqMainId, int status, string vendorCode)
+		public async Task<ApiResponse<bool>> RFQVendorResponseChangeStatus(int rfqMainId, int status, string vendorCode, int? rejectReasonId, string comment)
 		{
 			return ApiResponse<bool>.Success(
-				await _repository.RFQVendorResponseChangeStatus(rfqMainId, status, vendorCode)
+				await _repository.RFQVendorResponseChangeStatus(rfqMainId, status, vendorCode, rejectReasonId, comment)
 			);
 		}
 
