@@ -761,12 +761,22 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             var data = new List<BidMainListByRfqMain>();
 
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = "select v.VendorCode, v.VendorName, bm.BidNo, bm.BidMainId," +
-                                  "sum(bd.DiscountedAmount) as TotalDiscountedAmount " +
-                                  "from Procurement.BidMain BM inner join Procurement.BidDetails BD " +
-                                  "on BD.BidMainId = BM.BidMainId inner join Procurement.Vendors V " +
-                                  "on v.VendorCode = bm.VendorCode " +
-                                  "where RFQMainId = @rfqMainId " +
+            command.CommandText = "select v.VendorCode," +
+                                  "    v.VendorName," +
+                                  "    bm.BidNo,  " +
+                                  "  bm.BidMainId,  " +
+                                  "     sum(bd.DiscountedAmount) as TotalDiscountedAmount,  " +
+                                  "     count(distinct A.AttachmentId) as AttachmentCount,  " +
+                                  "  CASE     WHEN count(distinct A.AttachmentId) = 0 THEN CAST(0 AS BIT)  " +
+                                  "   ELSE CAST(1 AS BIT)   END AS HasAttachments " +
+                                  "from Procurement.BidMain BM   " +
+                                  "   inner join Procurement.BidDetails BD  " +
+                                  "               on BD.BidMainId = BM.BidMainId " +
+                                  "     inner join Procurement.Vendors V         " +
+                                  "        on v.VendorCode = bm.VendorCode " +
+                                  "     left join Register.Attachments A   " +
+                                  "             on A.SourceId = BM.BidMainId   " +
+                                  "             AND A.SourceTypeId = 17 where RFQMainId = @RfqMainId " +
                                   "group by v.VendorCode, v.VendorName, bm.BidNo, bm.BidMainId";
 
             command.Parameters.AddWithValue(command, "@rfqMainId", rfqMainId);
@@ -774,14 +784,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             await using var reader = await command.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
-                data.Add(new BidMainListByRfqMain
-                {
-                    BidMainId = reader.Get<int>("BidMainId"),
-                    BidNo = reader.Get<string>("BidNo"),
-                    VendorName = reader.Get<string>("VendorName"),
-                    VendorCode = reader.Get<string>("VendorCode"),
-                    TotalDiscountedAmount = reader.Get<decimal>("TotalDiscountedAmount")
-                });
+                data.Add(reader.GetByEntityStructure<BidMainListByRfqMain>());
             }
 
             return data;
