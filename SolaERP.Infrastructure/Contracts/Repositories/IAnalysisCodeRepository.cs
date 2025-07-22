@@ -14,5 +14,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<AnalysisWithBu>> GetByBUIdAsync(int businessUnitId, int userId);
         Task<List<AnalysisCodes>> GetAnalysisCodesByDimensionIdAsync(int dimensionId);
         Task<bool> SaveAnalysisCode(AnalysisCodeSaveModel analysisCodeSave, int userId);
+        Task SaveAnalysisCodeIntegration(AnalysisCodeSaveModel analysisCodeSave, int userId, int businessUnitId);
+        Task<int> GetBusinessUnitIdByAnalysisDimensionId(int analysisDimensionId);
     }
 }
