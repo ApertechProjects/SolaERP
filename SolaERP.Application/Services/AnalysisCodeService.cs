@@ -276,11 +276,14 @@ namespace SolaERP.Persistence.Services
             int userId = await _userRepository.ConvertIdentity(name);
             var code = false;
             int counter = 0;
+            int businessUnitId = await _analysisCodeRepository.GetBusinessUnitIdByAnalysisDimensionId(analysisCodeSave.First().AnalysisDimensionId);
+            
             for (int i = 0; i < analysisCodeSave.Count; i++)
             {
                 if (analysisCodeSave[i].AnalysisCodesId < 0)
                     analysisCodeSave[i].AnalysisCodesId = 0;
                 code = await _analysisCodeRepository.SaveAnalysisCode(analysisCodeSave[i], userId);
+                await _analysisCodeRepository.SaveAnalysisCodeIntegration(analysisCodeSave[i], userId,businessUnitId);
                 if (code)
                     counter++;
             }

@@ -7,6 +7,7 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data.Common;
 using System.Data.SqlClient;
+using SolaERP.Application.Helper;
 using AnalysisCode = SolaERP.Application.Entities.AnalysisCode.AnalysisCode;
 using AnalysisCodes = SolaERP.Application.Entities.AnalysisCode.AnalysisCodes;
 
@@ -15,10 +16,15 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
     public class SqlAnalysisCodeRepository : IAnalysisStructureRepository
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly BusinessUnitHelper _businessUnitHelper;
 
-        public SqlAnalysisCodeRepository(IUnitOfWork unitOfWork)
+        public SqlAnalysisCodeRepository(
+            IUnitOfWork unitOfWork,
+            BusinessUnitHelper businessUnitHelper
+            )
         {
             _unitOfWork = unitOfWork;
+            _businessUnitHelper = businessUnitHelper;
         }
 
         public async Task<bool> DeleteAnalysisCodeAsync(int analysisCodeId, int userId)
@@ -152,6 +158,51 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }
+        }
+        
+        public async Task SaveAnalysisCodeIntegration(AnalysisCodeSaveModel analysisCodeSave, int userId, int businessUnitId)
+        {
+            try
+            {
+                await using var command = _unitOfWork.CreateCommand() as DbCommand;
+                command.CommandText = _businessUnitHelper.BuildQueryForIntegration(businessUnitId,
+                    "SP_BU_ANC_IUD @AnalysisCodesId, @AnalysisDimensionId, @AnalysisCode, @AnalysisName, @Description, @AdditionalDescription, @AdditionalDescription2, @Status, @Date1, @Date2, @LinkedAnalysisDimensionid, @UserId");
+                command.Parameters.AddWithValue(command, "@AnalysisCodesId", analysisCodeSave.AnalysisCodesId);
+                command.Parameters.AddWithValue(command, "@AnalysisDimensionId", analysisCodeSave.AnalysisDimensionId);
+                command.Parameters.AddWithValue(command, "@AnalysisCode", analysisCodeSave.AnalysisCode);
+                command.Parameters.AddWithValue(command, "@AnalysisName", analysisCodeSave.AnalysisName);
+                command.Parameters.AddWithValue(command, "@Description", analysisCodeSave.Description);
+                command.Parameters.AddWithValue(command, "@AdditionalDescription", analysisCodeSave.AdditionalDescription);
+                command.Parameters.AddWithValue(command, "@AdditionalDescription2", analysisCodeSave.AdditionalDescription2);
+                command.Parameters.AddWithValue(command, "@Status", analysisCodeSave.Status);
+                command.Parameters.AddWithValue(command, "@Date1", analysisCodeSave.Date1);
+                command.Parameters.AddWithValue(command, "@Date2", analysisCodeSave.Date2);
+                command.Parameters.AddWithValue(command, "@LinkedAnalysisDimensionId", analysisCodeSave.LinkedAnalysisDimensionId);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+        
+        public async Task<int> GetBusinessUnitIdByAnalysisDimensionId(int analysisDimensionId)
+        {
+            int result = 0;
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"SELECT BusinessUnitId
+                                    FROM Config.AnalysisDimension
+                                    WHERE AnalysisDimensionId = @AnalysisDimensionId";
+            command.Parameters.AddWithValue(command, "@AnalysisDimensionId", analysisDimensionId);
+
+            await using DbDataReader reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+                result = reader.Get<int>("BusinessUnitId");
+
+            return result;
+
         }
     }
 }
