@@ -34,5 +34,8 @@
         public int Sequence { get; set; }
         public List<RequestDetailWithAnalysisCode> Details { get; set; }
         public bool HasAttachments { get; set; }
+        public string Warehouse { get; set; }
+        public bool IsWarehouseValid { get; set; }
+        public int MaxSequence { get; set; }
     }
 }

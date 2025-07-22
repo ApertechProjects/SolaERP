@@ -33,5 +33,6 @@
         public int RequestAnalysisCode8Id { get; set; }
         public int RequestAnalysisCode9Id { get; set; }
         public int RequestAnalysisCode10Id { get; set; }
+        public int MaxSequence { get; set; }
     }
 }

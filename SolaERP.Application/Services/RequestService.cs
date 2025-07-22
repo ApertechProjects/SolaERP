@@ -225,17 +225,6 @@ namespace SolaERP.Persistence.Services
 			return ApiResponse<List<RequestApprovalInfoDto>>.Success(approvalInfoResult);
 		}
 
-		public async Task<ApiResponse<RequestMainDto>> GetHeaderAsync(string name, int requestMainId)
-		{
-			var userId = await _userRepository.ConvertIdentity(name);
-			var requestHeader = await _requestMainRepository.GetRequesMainHeaderAsync(userId, requestMainId);
-			var requestHeaderResult = _mapper.Map<RequestMainDto>(requestHeader);
-
-			return requestHeaderResult != null
-				? ApiResponse<RequestMainDto>.Success(requestHeaderResult)
-				: ApiResponse<RequestMainDto>.Fail("Bad request header is null", 404);
-		}
-
 		public async Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetDetails(int requestmainId,
 			int businessUnitId)
 		{
@@ -460,6 +449,13 @@ namespace SolaERP.Persistence.Services
 			}
 			await _unitOfWork.SaveChangesAsync();
 			return ApiResponse<bool>.Success(true);
+		}
+
+		public async Task<ApiResponse<List<WarehouseInfoDto>>> GetWarehouseList(int businessUnitId)
+		{
+			var warehouseList = await _requestMainRepository.GetWarehouseList(businessUnitId);
+			var dto = _mapper.Map<List<WarehouseInfoDto>>(warehouseList);
+			return ApiResponse<List<WarehouseInfoDto>>.Success(dto);
 		}
 
 	}

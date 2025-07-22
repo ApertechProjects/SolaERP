@@ -25,6 +25,7 @@ namespace SolaERP.Application.Models
         public int Priority { get; set; }
         public int ApproveStageMainId { get; set; }
         public string RequestNo { get; set; }
+        public string Warehouse { get; set; }
         public List<RequestDetailDto> Details { get; set; }
         public List<AttachmentSaveModel> Attachments { get; set; }
         public bool FromStockChanged { get; set; }
