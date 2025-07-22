@@ -10,4 +10,6 @@ public class RFQVendorEmailDto
     public int BusinessUnitId { get; set; }
     public string BusinessUnitName { get; set; }
     public string RFQNo { get; set; }
+    
+    public string BidNo { get; set; }
 }

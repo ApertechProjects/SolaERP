@@ -75,5 +75,12 @@ public class AttachmentController : CustomBaseController
         var attachments = await _attachmentService.GetAttachmentsAsync(sourceId, SourceType.INV, Modules.Invoices);
         return CreateActionResult(ApiResponse<List<AttachmentDto>>.Success(attachments));
     }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetBccBidMainAttachments(int sourceId)
+    {
+        var attachments = await _attachmentService.GetAttachmentsAsync(sourceId, SourceType.BID, Modules.Bid);
+        return CreateActionResult(ApiResponse<List<AttachmentDto>>.Success(attachments));
+    }
 
 }

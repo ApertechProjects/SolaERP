@@ -31,6 +31,7 @@ namespace SolaERP.Persistence.Services
         private readonly IBackgroundTaskQueue _taskQueue;
         private readonly ILogger<RfqService> _logger;
         private readonly IBuyerService _buyerService;
+        private readonly IBidService _bidService;
 
         public RfqService(IUnitOfWork unitOfWork,
             IRfqRepository repository,
@@ -43,7 +44,10 @@ namespace SolaERP.Persistence.Services
             IMailService mailService,
             IVendorRepository vendorRepository,
             IBackgroundTaskQueue taskQueue,
-            ILogger<RfqService> logger, IBuyerService buyerService)
+            IBidService bidService,
+            ILogger<RfqService> logger,
+            IBuyerService buyerService
+        )
         {
             _unitOfWork = unitOfWork;
             _repository = repository;
@@ -58,6 +62,7 @@ namespace SolaERP.Persistence.Services
             _taskQueue = taskQueue;
             _logger = logger;
             _buyerService = buyerService;
+            _bidService = bidService;
         }
 
 
@@ -392,36 +397,46 @@ namespace SolaERP.Persistence.Services
             {
                 var rfqMainIds = rfqs.Select(x => x.RFQMainId).ToList();
                 var idListForSql = string.Join(",", rfqMainIds);
-
+                
                 using (var command = _unitOfWork.CreateCommand() as DbCommand)
                 {
                     command.CommandText =
                         @$"set nocount off update Procurement.RFQMain set Status = 2 where RFQMainId in ({idListForSql})";
                     await command.ExecuteNonQueryAsync();
                 }
-
+                
                 await _unitOfWork.SaveChangesAsync();
-
+                
                 foreach (var rfq in rfqs.ToList())
                 {
                     string buyerEmail =
                         await _buyerService.FindBuyerEmailByBuyerName(rfq.BuyerName, rfq.BusinessUnitId);
                     rfq.BuyerEmail = buyerEmail;
                 }
-
+                
                 _taskQueue.QueueBackgroundWorkItem(async token =>
                 {
                     await _mailService.SendRFQDeadlineFinishedMailForBuyer(rfqs);
                 });
-
+                
                 List<RFQVendorEmailDto> vendorEmails =
                     await _repository.GetRfqVendors(idListForSql) ?? new List<RFQVendorEmailDto>();
-
+                
                 if (vendorEmails.Count > 0)
                 {
                     _taskQueue.QueueBackgroundWorkItem(async token =>
                     {
                         await _mailService.RFQCloseSendVendorEmail(vendorEmails);
+                    });
+                }
+
+                List<RFQVendorEmailDto> bidVendors = await _bidService.GetBidsByRFQMainIdAsync(rfqMainIds);
+
+                if (bidVendors.Count > 0)
+                {
+                    _taskQueue.QueueBackgroundWorkItem(async token =>
+                    {
+                        await _mailService.RFQCloseSendVendorEmailForBCC(bidVendors);
                     });
                 }
             }

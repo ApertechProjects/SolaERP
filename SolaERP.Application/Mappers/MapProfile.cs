@@ -768,6 +768,8 @@ namespace SolaERP.Persistence.Mappers
                 .ReverseMap();
 
             CreateMap<WarehouseInfo, WarehouseInfoDto>().ReverseMap();
+            
+            CreateMap<BidMainListByRfqMain, BidMainListByRfqMainDto>().ReverseMap();
         }
     }
 }

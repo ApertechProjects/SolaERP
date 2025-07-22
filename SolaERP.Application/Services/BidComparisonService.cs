@@ -372,5 +372,12 @@ namespace SolaERP.Persistence.Services
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(result);
         }
+        
+        public async Task<ApiResponse<List<BidMainListByRfqMainDto>>> GetBidListByRfqMainId(int rfqMainId)
+        {
+            var data = await _bidComparisonRepository.GetBidListByRfqMainId(rfqMainId);
+            var dtos = _mapper.Map<List<BidMainListByRfqMainDto>>(data);
+            return ApiResponse<List<BidMainListByRfqMainDto>>.Success(dtos, 200);
+        }
     }
 }

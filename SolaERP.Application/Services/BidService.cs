@@ -199,5 +199,10 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<bool>.Success(true);
         }
+
+        public async Task<List<RFQVendorEmailDto>> GetBidsByRFQMainIdAsync(List<int> rfqMainIds)
+        {
+            return await _bidRepository.GetBidsByRFQMainIdAsync(rfqMainIds);
+        }
     }
 }

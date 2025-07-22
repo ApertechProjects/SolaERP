@@ -164,5 +164,12 @@ namespace SolaERP.API.Controllers
         {
             return CreateActionResult(await _bidComparisonService.Delete(bidComparisonId));
         }
+
+        [HttpGet("[action]/{rfqMainId}")]
+        public async Task<IActionResult> GetBidListByRfqMainId(int rfqMainId)
+        {
+            return CreateActionResult(await _bidComparisonService.GetBidListByRfqMainId(rfqMainId));
+        }
+
     }
 }
