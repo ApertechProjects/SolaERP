@@ -128,34 +128,34 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText = @"SET NOCOUNT ON; EXEC SP_AnalysisCodes_IUD    
-                                        @AnalysisCodesId,
-                                        @AnalysisDimensionId,
-                                        @AnalysisCode,
-                                        @AnalysisName,
-                                        @Description,
-                                        @AdditionalDescription,
-                                        @AdditionalDescription2,
-                                        @Status,
-                                        @Date1,
-                                        @Date2,
-                                        @LinkedAnalysisDimensionId,
-                                        @UserId";
+                command.CommandText = @"SET NOCOUNT OFF EXEC SP_AnalysisCodes_IUD    
+                                                                @AnalysisCodesId,
+                                                                @AnalysisDimensionId,
+                                                                @AnalysisCode,
+                                                                @AnalysisName,
+                                                                @Description,
+                                                                @AdditionalDescription,
+                                                                @AdditionalDescription2,
+                                                                @Status,
+                                                                @Date1,
+                                                                @Date2,
+                                                                @LinkedAnalysisDimensionid,
+                                                                @UserId"
+                ;
 
-                command.Parameters.AddWithValue("@AnalysisCodesId", analysisCodeSave.AnalysisCodesId);
-                command.Parameters.AddWithValue("@AnalysisDimensionId", analysisCodeSave.AnalysisDimensionId);
-                command.Parameters.AddWithValue("@AnalysisCode", analysisCodeSave.AnalysisCode);
-                command.Parameters.AddWithValue("@AnalysisName", analysisCodeSave.AnalysisName);
-                command.Parameters.AddWithValue("@Description", analysisCodeSave.Description);
-                command.Parameters.AddWithValue("@AdditionalDescription", analysisCodeSave.AdditionalDescription);
-                command.Parameters.AddWithValue("@AdditionalDescription2", analysisCodeSave.AdditionalDescription2);
-                command.Parameters.AddWithValue("@Status", analysisCodeSave.Status);
-                command.Parameters.AddWithValue("@Date1", analysisCodeSave.Date1);
-                command.Parameters.AddWithValue("@Date2", analysisCodeSave.Date2);
-                command.Parameters.AddWithValue("@LinkedAnalysisDimensionId", analysisCodeSave.LinkedAnalysisDimensionId);
-                command.Parameters.AddWithValue("@UserId", userId);
+                command.Parameters.AddWithValue(command, "@AnalysisCodesId", analysisCodeSave.AnalysisCodesId);
+                command.Parameters.AddWithValue(command, "@AnalysisDimensionId", analysisCodeSave.AnalysisDimensionId);
+                command.Parameters.AddWithValue(command, "@AnalysisCode", analysisCodeSave.AnalysisCode);
+                command.Parameters.AddWithValue(command, "@AnalysisName", analysisCodeSave.AnalysisName);
+                command.Parameters.AddWithValue(command, "@Description", analysisCodeSave.Description);
+                command.Parameters.AddWithValue(command, "@AdditionalDescription", analysisCodeSave.AdditionalDescription);
+                command.Parameters.AddWithValue(command, "@AdditionalDescription2", analysisCodeSave.AdditionalDescription2);
+                command.Parameters.AddWithValue(command, "@Status", analysisCodeSave.Status);
+                command.Parameters.AddWithValue(command, "@Date1", analysisCodeSave.Date1);
+                command.Parameters.AddWithValue(command, "@Date2", analysisCodeSave.Date2);
+                command.Parameters.AddWithValue(command, "@LinkedAnalysisDimensionId", analysisCodeSave.LinkedAnalysisDimensionId);
+                command.Parameters.AddWithValue(command, "@UserId", userId);
 
-                var result = await command.ExecuteScalarAsync();
                 return await command.ExecuteNonQueryAsync() > 0;
             }
         }
