@@ -733,5 +733,28 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 return -1;
             }
         }
+        
+        public async Task<VendorInfo> GetVendorInfoByVendorCode(int vendorCode)
+        {
+            var vendorInfo = new VendorInfo();
+
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"SELECT TOP 1 VendorId, VendorName, VendorCode
+                                    FROM Procurement.Vendors
+                                    WHERE VendorCode = @VendorCode
+                                    AND Status = 2";
+            command.Parameters.AddWithValue(command, "@VendorCode", vendorCode);
+
+            await using DbDataReader reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                vendorInfo.VendorId = reader.Get<int>("VendorId");
+                vendorInfo.VendorName = reader.Get<String>("VendorName");
+                vendorInfo.VendorCode = reader.Get<String>("VendorCode");
+                
+            }
+
+            return vendorInfo;
+        }
     }
 }

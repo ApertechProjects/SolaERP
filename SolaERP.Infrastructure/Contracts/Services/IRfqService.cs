@@ -31,5 +31,8 @@ namespace SolaERP.Application.Contracts.Services
 		Task GetRFQDeadlineFinished();
 		Task<ApiResponse<bool>> ExtendRfqDeadlineAsync(RfqExtendDeadlineRequest request, int userId);
 
+		Task SendRFQDeadLineMail();
+		Task SendRFQLastDayMail();
+		Task<List<RFQVendorEmailDto>> GetRfqVendors(string rfqMainIds);
 	}
 }

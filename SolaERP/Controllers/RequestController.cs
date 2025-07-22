@@ -163,5 +163,9 @@ namespace SolaERP.Controllers
 		public async Task<IActionResult> CategoryList(int businessUnitId, string keyCode)
 			=> CreateActionResult(await _requestService.CategoryList(businessUnitId, keyCode));
 		
+		[HttpGet]
+		public async Task<IActionResult> GetWarehouseList(int businessUnitId)
+			=> CreateActionResult(await _requestService.GetWarehouseList(businessUnitId));
+		
 	}
 }

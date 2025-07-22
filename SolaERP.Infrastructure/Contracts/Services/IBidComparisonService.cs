@@ -49,5 +49,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<BidComparisonApprovalInfoDto>>> BidComparisonApprovalInfo(int bidComparisonId);
         Task<ApiResponse<bool>> Retrieve(int bidComparisonId, int userId);
         Task<ApiResponse<bool>> Delete(int bidComparisonId);
+        Task<ApiResponse<List<BidMainListByRfqMainDto>>> GetBidListByRfqMainId(int rfqMainId);
     }
 }

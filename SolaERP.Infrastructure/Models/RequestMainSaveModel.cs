@@ -22,6 +22,7 @@
         public string Location { get; set; }
         public int ApproveStageMainId { get; set; }
         public string RequestNo { get; set; }
+        public string Warehouse { get; set; }
 
     }
 }

@@ -275,7 +275,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Priority = reader.Get<int>("Priority"),
                 HasAttachments = reader.Get<bool>("HasAttachments"),
                 Sequence = reader.Get<int>("Sequence"),
-                KeyCode = reader.Get<string>("KeyCode")
+                KeyCode = reader.Get<string>("KeyCode"),
+                Warehouse = reader.Get<string>("Warehouse"),
+                IsWarehouseValid = reader.Get<bool>("IsWarehouseValid"),
+                MaxSequence = reader.Get<int>("MaxSequence")
             };
         }
 
@@ -335,7 +338,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 Priority = reader.Get<int>("Priority"),
                 ApproveStageMainId = reader.Get<int>("ApproveStageMainId"),
                 KeyCode = reader.Get<string>("KeyCode"),
-                Location = reader.Get<string>("Location")
+                Location = reader.Get<string>("Location"),
+                Warehouse = reader.Get<string>("Warehouse"),
+                RequestType = reader.Get<string>("RequestType")
             };
         }
 
@@ -412,7 +417,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                                                                 @OperatorComment,
                                                                 @QualityRequired,@Currency,
                                                                 @LogisticTotal,@Buyer,@Destination,
-                                                                @Priority,@ApproveStageMainId,@Location,
+                                                                @Priority,@ApproveStageMainId,@Location,@Warehouse,
                                                                 @NewRequestmainId = @NewRequestmainId OUTPUT,
                                                                 @NewRequestNo = @NewRequestNo OUTPUT 
                                                                 select @NewRequestmainId as NewRequestmainId,
@@ -440,6 +445,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@Priority", model.Priority);
                 command.Parameters.AddWithValue(command, "@ApproveStageMainId", model.ApproveStageMainId);
                 command.Parameters.AddWithValue(command, "@Location", model.Location);
+                command.Parameters.AddWithValue(command, "@Warehouse", model.Warehouse);
 
                 command.Parameters.Add("@NewRequestmainId", SqlDbType.Int);
                 command.Parameters["@NewRequestmainId"].Direction = ParameterDirection.Output;
@@ -782,6 +788,24 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 }
 
             }
+        }
+        
+        public async Task<List<WarehouseInfo>> GetWarehouseList(int businessUnitId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as SqlCommand;
+            command.CommandText = @"exec SP_WarehouseList @BusinessUnitId";
+
+            command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+
+            await using var reader = await command.ExecuteReaderAsync();
+            List<WarehouseInfo> warehouseInfo = new();
+
+            while (await reader.ReadAsync())
+            {
+                 warehouseInfo.Add(reader.GetByEntityStructure<WarehouseInfo>());
+            }
+
+            return warehouseInfo;
         }
 	}
 }

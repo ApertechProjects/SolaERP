@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Dtos.Bid;
+using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Entities.Bid;
 
@@ -17,5 +18,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> BidDisqualifyAsync(BidDisqualifyDto dto, string userIdentity);
         Task<ApiResponse<List<BidRFQListLoadDto>>> GetRfqListAsync(string userIdentity,int businessUnitId);
         Task<ApiResponse<bool>> OrderCreateFromApproveBidsAsync(List<int> bidMainIdList, string userIdentity);
+        Task<List<RFQVendorEmailDto>> GetBidsByRFQMainIdAsync(List<int> rfqMainIds);
     }
 }

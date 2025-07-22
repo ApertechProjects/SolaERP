@@ -39,6 +39,7 @@ namespace SolaERP.Application.Dtos.Request
         public int? AnalysisCode10Id { get; set; }
         public int CatId { get; set; }
         public int? Sequence { get; set; }
+        public string Warehouse { get; set; }
     }
 
 
