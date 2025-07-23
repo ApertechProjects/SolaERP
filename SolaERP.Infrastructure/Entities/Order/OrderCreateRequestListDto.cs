@@ -54,4 +54,5 @@ public class OrderCreateRequestListDto
     public int AnalysisCode10Id { get; set; }
     public int CatId { get; set; }
     public int LineNo { get; set; }
+    public string Warehouse { get; set; }
 }

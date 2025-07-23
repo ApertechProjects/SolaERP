@@ -7,4 +7,6 @@ public class BidMainListByRfqMain : BaseEntity
     public string BidNo { get; set; }
     public int BidMainId { get; set; }
     public decimal TotalDiscountedAmount { get; set; }
+    public int AttachmentCount { get; set; }
+    public bool HasAttachments { get; set; }
 }
