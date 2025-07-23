@@ -76,16 +76,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 rfqBase.EnteredBy = null;
             }
-
-            try
-            {
-                rfqBase.BiddingType = reader.Get<int>("BiddingType");
-            }
-            catch (Exception)
-            {
-                rfqBase.BiddingType = 0;
-            }
-
+            
+            rfqBase.BiddingType = reader.Get<string>("BiddingType");
+            
             try
             {
                 rfqBase.HasAttachments = reader.Get<bool>("HasAttachments");
