@@ -171,6 +171,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@AnalysisCodeId", analysisCodesId);
                 await _unitOfWork.SaveChangesAsync();
+                await command.ExecuteNonQueryAsync();
             }
             catch (Exception e)
             {
