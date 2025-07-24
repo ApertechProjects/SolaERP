@@ -25,5 +25,6 @@ namespace SolaERP.Application.Dtos.RFQ
         public bool HasAttachments { get; set; }
         public string EnteredBy { get; set; }
         public DateTime EntryDate { get; set; }
+        public string BiddingType { get; set; }
     }
 }
