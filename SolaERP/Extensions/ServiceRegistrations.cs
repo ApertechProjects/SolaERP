@@ -93,7 +93,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IInvoiceService, InvoiceService>();
-            builder.Services.AddScoped<IKafkaMailService, KafkaMailService>();
+            // builder.Services.AddScoped<IKafkaMailService, KafkaMailService>();
             builder.Services.AddScoped<IUserReportService, UserReportService>();
             builder.Services.AddScoped<ISupportService, SupportService>();
             builder.Services.AddScoped<ISend, Send>();

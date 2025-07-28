@@ -10,10 +10,10 @@ namespace SolaERP.Application.Contracts.Services
 {
     public interface IKafkaMailService
     {
-        Task SendMail(EmailTemplate emailTemplateKey,
-                      ApproveStatus approveStatus,
-                      List<Person> persons,
-                      int sequence,
-                      string referenceNo);
+        // Task SendMail(EmailTemplate emailTemplateKey,
+        //               ApproveStatus approveStatus,
+        //               List<Person> persons,
+        //               int sequence,
+        //               string referenceNo);
     }
 }
