@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Confluent.Kafka;
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.General;

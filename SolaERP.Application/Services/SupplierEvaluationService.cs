@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Confluent.Kafka;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Repositories;
