@@ -29,6 +29,7 @@ namespace SolaERP.Application.Dtos.RFQ
         public int BusinessCategoryid { get; set; }
         public Application.Entities.SupplierEvaluation.BusinessCategory BusinessCategory { get; set; }
         public string BiddingType { get; set; }
+        public int BiddingTypeId { get; set; }
         public bool HasAttachments { get; set; }
         public string EnteredBy { get; set; }
         public DateTime EntryDate { get; set; }
