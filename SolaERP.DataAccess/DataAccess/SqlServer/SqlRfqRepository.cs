@@ -76,9 +76,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 rfqBase.EnteredBy = null;
             }
-            
+
             rfqBase.BiddingType = reader.Get<string>("BiddingType");
-            
+            rfqBase.BiddingTypeId = reader.Get<int>("BiddingTypeId");
+
             try
             {
                 rfqBase.HasAttachments = reader.Get<bool>("HasAttachments");
@@ -125,7 +126,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
 
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", filter.BusinessUnitId);
-                command.Parameters.AddWithValue(command, "@ItemCode", filter.ItemCode == "All" ? "%" : filter.ItemCode);
+                command.Parameters.AddWithValue(command, "@ItemCode",
+                    filter.ItemCode == "All" ? "%" : filter.ItemCode);
                 command.Parameters.AddWithValue(command, "@Emergency", filter.Emergency);
                 command.Parameters.AddWithValue(command, "@DateFrom", filter.DateFrom);
                 command.Parameters.AddWithValue(command, "@DateTo", filter.DateTo);
@@ -852,7 +854,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 throw;
             }
         }
-        
+
         public async Task<bool> UpdateNonBidRFQMainAndRequestDetails()
         {
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
