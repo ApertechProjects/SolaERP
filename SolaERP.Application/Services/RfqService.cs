@@ -334,42 +334,48 @@ namespace SolaERP.Persistence.Services
         {
             var mainRFQ = await _repository.GetRFQMainAsync(dto.Id);
 
-            if (mainRFQ.ProcurementType == ProcurementType.Bidding && dto.VendorCodes.Count < 2)
+            if (mainRFQ.BiddingType == BiddingType.Automatic && dto.VendorCodes.Count < 2)
                 return ApiResponse<int>.Fail("Vendor Code must be greater than 2", 400);
+
+            if (mainRFQ.BiddingType == BiddingType.Manual && dto.VendorCodes != null)
+                return ApiResponse<int>.Fail("Vendor Code must be empty", 400);
 
             var data = _mapper.Map<RFQVendorIUD>(dto);
             var result = await _repository.RFQVendorIUDAsync(data, Convert.ToInt32(userIdentity));
 
             await _unitOfWork.SaveChangesAsync();
 
-            List<RfqVendorToSend> mailData = new List<RfqVendorToSend>();
-
-            foreach (var vendorCode in dto.VendorCodes)
+            if (dto.VendorCodes != null)
             {
-                var vendor = await _vendorRepository.GetRevisionVendorIdAndNameByVendorCode(vendorCode);
+                List<RfqVendorToSend> mailData = new List<RfqVendorToSend>();
 
-                var users = await _userRepository.GetVendorUsersForMail(vendor.VendorId);
-
-                foreach (var user in users)
+                foreach (var vendorCode in dto.VendorCodes)
                 {
-                    mailData.Add(new RfqVendorToSend()
-                    {
-                        VendorId = vendor.VendorId,
-                        VendorCode = vendor.VendorCode,
-                        VendorName = vendor.VendorName,
-                        Email = user.Email,
-                        Language = user.Language,
-                        RFQMainId = mainRFQ.Id,
-                        RFQDeadline = mainRFQ.RFQDeadline,
-                        RFQNo = mainRFQ.RFQNo,
-                    });
-                }
-            }
+                    var vendor = await _vendorRepository.GetRevisionVendorIdAndNameByVendorCode(vendorCode);
 
-            _taskQueue.QueueBackgroundWorkItem(async token =>
-            {
-                await _mailService.SendRFQVendorApproveMail(mailData);
-            });
+                    var users = await _userRepository.GetVendorUsersForMail(vendor.VendorId);
+
+                    foreach (var user in users)
+                    {
+                        mailData.Add(new RfqVendorToSend()
+                        {
+                            VendorId = vendor.VendorId,
+                            VendorCode = vendor.VendorCode,
+                            VendorName = vendor.VendorName,
+                            Email = user.Email,
+                            Language = user.Language,
+                            RFQMainId = mainRFQ.Id,
+                            RFQDeadline = mainRFQ.RFQDeadline,
+                            RFQNo = mainRFQ.RFQNo,
+                        });
+                    }
+                }
+
+                _taskQueue.QueueBackgroundWorkItem(async token =>
+                {
+                    await _mailService.SendRFQVendorApproveMail(mailData);
+                });
+            }
 
             return result ? ApiResponse<int>.Success(1, 200) : ApiResponse<int>.Fail(0, 400);
         }
@@ -397,31 +403,31 @@ namespace SolaERP.Persistence.Services
             {
                 var rfqMainIds = rfqs.Select(x => x.RFQMainId).ToList();
                 var idListForSql = string.Join(",", rfqMainIds);
-                
+
                 using (var command = _unitOfWork.CreateCommand() as DbCommand)
                 {
                     command.CommandText =
                         @$"set nocount off update Procurement.RFQMain set Status = 2 where RFQMainId in ({idListForSql})";
                     await command.ExecuteNonQueryAsync();
                 }
-                
+
                 await _unitOfWork.SaveChangesAsync();
-                
+
                 foreach (var rfq in rfqs.ToList())
                 {
                     string buyerEmail =
                         await _buyerService.FindBuyerEmailByBuyerName(rfq.BuyerName, rfq.BusinessUnitId);
                     rfq.BuyerEmail = buyerEmail;
                 }
-                
+
                 _taskQueue.QueueBackgroundWorkItem(async token =>
                 {
                     await _mailService.SendRFQDeadlineFinishedMailForBuyer(rfqs);
                 });
-                
+
                 List<RFQVendorEmailDto> vendorEmails =
                     await _repository.GetRfqVendors(idListForSql) ?? new List<RFQVendorEmailDto>();
-                
+
                 if (vendorEmails.Count > 0)
                 {
                     _taskQueue.QueueBackgroundWorkItem(async token =>
