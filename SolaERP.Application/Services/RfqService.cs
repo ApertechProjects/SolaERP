@@ -337,7 +337,7 @@ namespace SolaERP.Persistence.Services
             if (mainRFQ.BiddingType == BiddingType.Automatic && dto.VendorCodes.Count < 2)
                 return ApiResponse<int>.Fail("Vendor Code must be greater than 2", 400);
 
-            if (mainRFQ.BiddingType == BiddingType.Manual && dto.VendorCodes.Capacity != 0)
+            if (mainRFQ.BiddingType == BiddingType.Manual && dto.VendorCodes?.Any() == true)
                 return ApiResponse<int>.Fail("Vendor Code must be empty", 400);
 
             var data = _mapper.Map<RFQVendorIUD>(dto);
@@ -345,7 +345,7 @@ namespace SolaERP.Persistence.Services
 
             await _unitOfWork.SaveChangesAsync();
 
-            if (dto.VendorCodes != null)
+            if (dto.VendorCodes?.Any() == true)
             {
                 List<RfqVendorToSend> mailData = new List<RfqVendorToSend>();
 
