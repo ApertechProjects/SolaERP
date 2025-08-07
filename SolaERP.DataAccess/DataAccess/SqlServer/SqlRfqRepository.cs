@@ -861,5 +861,23 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.CommandText = @"EXEC SP_UpdateNonBidRFQMainAndRequestDetails";
             return await command.ExecuteNonQueryAsync() > 0;
         }
+
+        public async Task UpdateRFQSendManualBiddingType(int rfqMainId)
+        {
+            DateTime currrentDate = DateTime.Now;
+
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText =
+                    @$"set nocount off update Procurement.RFQMain set Status = 2,RFQDeadline=@currrentDate where RFQMainId = @rfqMainId";
+
+                command.Parameters.AddWithValue(command, "@currrentDate", currrentDate);
+                command.Parameters.AddWithValue(command, "@rfqMainId", rfqMainId);
+
+                await command.ExecuteReaderAsync();
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+        }
     }
 }

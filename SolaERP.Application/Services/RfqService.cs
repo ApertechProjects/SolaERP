@@ -339,12 +339,17 @@ namespace SolaERP.Persistence.Services
 
             if (mainRFQ.BiddingType == BiddingType.Manual && dto.VendorCodes?.Any() == true)
                 return ApiResponse<int>.Fail("Vendor Code must be empty", 400);
-
+            
             var data = _mapper.Map<RFQVendorIUD>(dto);
             var result = await _repository.RFQVendorIUDAsync(data, Convert.ToInt32(userIdentity));
 
             await _unitOfWork.SaveChangesAsync();
 
+            if (mainRFQ.BiddingType == BiddingType.Manual)
+            {
+                await _repository.UpdateRFQSendManualBiddingType(dto.Id);
+            }
+            
             if (dto.VendorCodes?.Any() == true)
             {
                 List<RfqVendorToSend> mailData = new List<RfqVendorToSend>();
