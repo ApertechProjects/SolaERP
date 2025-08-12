@@ -790,7 +790,7 @@ public class SqlOrderRepository : IOrderRepository
         };
     }
 
-    private static OrderTab MapFromReaderForOrderAllDto(IDataReader reader)
+    private static OrderTab MapFromReaderForOrderAllDto(DbDataReader reader)
     {
         return new OrderTab
         {

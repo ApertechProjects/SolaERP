@@ -26,5 +26,6 @@ namespace SolaERP.Application.Dtos.RFQ
         public string EnteredBy { get; set; }
         public DateTime EntryDate { get; set; }
         public string BiddingType { get; set; }
+        public int BiddingTypeId { get; set; }
     }
 }

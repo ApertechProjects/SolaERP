@@ -271,9 +271,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     RFQDetailId = reader.Get<int>("RFQDetailId"),
                     BaseTotalWithRate = reader.Get<decimal>("BaseTotalWithRate"),
                     ConvertedGross = reader.Get<decimal>("ConvertedGross"),
-                    Margins = reader.Get<decimal>("Margins")
+                    Margins = reader.Get<decimal>("Margins"),
+                    LastUnitPrice = reader.Get<decimal>("LastUnitPrice"),
+                    LastOrderDate = reader.Get<DateTime>("LastOrderDate"),
+                    LastVendor = reader.Get<string>("LastVendor"),
                 });
-                ;
+                
             }
 
             return data;
@@ -388,7 +391,10 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     RfqDetailId = reader.Get<int>("RfqDetailid"),
                     BidComparisonBidId = reader.Get<int>("BidComparisonBidId"),
                     IsSelected = reader.Get<bool>("IsSelected"),
-                    LineDescription = reader.Get<string>("LineDescription")
+                    LineDescription = reader.Get<string>("LineDescription"),
+                    LastUnitPrice = reader.Get<decimal>("LastUnitPrice"),
+                    LastOrderDate = reader.Get<DateTime>("LastOrderDate"),
+                    LastVendor = reader.Get<string>("LastVendor"),
                 });
             }
 
