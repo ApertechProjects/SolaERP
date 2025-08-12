@@ -14,5 +14,11 @@
         public decimal BaseTotalWithRate { get; set; }
         public decimal ConvertedGross { get; set; }
         public decimal Margins { get; set; }
+        
+        public decimal LastUnitPrice { get; set; }
+        
+        public DateTime LastOrderDate { get; set; }
+        
+        public string LastVendor { get; set; }
     }
 }

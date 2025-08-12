@@ -271,9 +271,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     RFQDetailId = reader.Get<int>("RFQDetailId"),
                     BaseTotalWithRate = reader.Get<decimal>("BaseTotalWithRate"),
                     ConvertedGross = reader.Get<decimal>("ConvertedGross"),
-                    Margins = reader.Get<decimal>("Margins")
+                    Margins = reader.Get<decimal>("Margins"),
+                    LastUnitPrice = reader.Get<decimal>("LastUnitPrice"),
+                    LastOrderDate = reader.Get<DateTime>("LastOrderDate"),
+                    LastVendor = reader.Get<string>("LastVendor"),
                 });
-                ;
+                
             }
 
             return data;
