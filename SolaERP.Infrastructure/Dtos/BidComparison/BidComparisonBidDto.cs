@@ -26,6 +26,8 @@
         public decimal Score { get; set; }
         public bool IsSelected { get; set; }
         public string LineDescription { get; set; }
-
+        public decimal LastUnitPrice { get; set; }
+        public DateTime LastOrderDate { get; set; }
+        public string LastVendor { get; set; }
     }
 }
