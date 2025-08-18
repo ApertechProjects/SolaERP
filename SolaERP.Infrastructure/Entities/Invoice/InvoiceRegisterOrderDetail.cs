@@ -36,5 +36,8 @@ namespace SolaERP.Application.Entities.Invoice
 		public int? AnalysisCode8Id { get; set; }
 		public int? AnalysisCode9Id { get; set; }
 		public int? AnalysisCode10Id { get; set; }
+		public DateTime PrepaymentDateFrom { get; set; }
+		public DateTime PrepaymentDateTo { get; set; }
+		public int PrepaymentPeriods { get; set; }
 	}
 }
