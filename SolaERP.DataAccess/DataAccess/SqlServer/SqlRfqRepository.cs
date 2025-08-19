@@ -864,12 +864,16 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task UpdateRFQSendManualBiddingType(int rfqMainId)
         {
+            
+            TimeZoneInfo bakuTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Azerbaijan Standard Time");
+            DateTime bakuDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, bakuTimeZone);
+
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText =
                     @$"set nocount off update Procurement.RFQMain set Status = 2,RFQDeadline=@currentDate where RFQMainId = @rfqMainId";
 
-                command.Parameters.AddWithValue(command, "@currentDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                command.Parameters.AddWithValue(command, "@currentDate", bakuDateTime.ToString("yyyy-MM-dd HH:mm:ss"));
                 command.Parameters.AddWithValue(command, "@rfqMainId", rfqMainId);
 
                 await command.ExecuteReaderAsync();
