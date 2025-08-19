@@ -37,6 +37,7 @@ builder.Services.AddTransient(sp => new ConnectionFactory()
 	Uri = new(builder.Configuration["FileOptions:URI"])
 });
 
+TimeZoneInfo.FindSystemTimeZoneById("AppSettings:TimeZoneId");
 
 #pragma warning disable CS0612
 builder.Services.AddRequestMailsForIsSent();
