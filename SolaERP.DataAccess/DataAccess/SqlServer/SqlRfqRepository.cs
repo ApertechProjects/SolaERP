@@ -864,14 +864,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task UpdateRFQSendManualBiddingType(int rfqMainId)
         {
-            DateTime currrentDate = DateTime.Now;
-
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText =
-                    @$"set nocount off update Procurement.RFQMain set Status = 2,RFQDeadline=@currrentDate where RFQMainId = @rfqMainId";
+                    @$"set nocount off update Procurement.RFQMain set Status = 2,RFQDeadline=@currentDate where RFQMainId = @rfqMainId";
 
-                command.Parameters.AddWithValue(command, "@currrentDate", currrentDate);
+                command.Parameters.AddWithValue(command, "@currentDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 command.Parameters.AddWithValue(command, "@rfqMainId", rfqMainId);
 
                 await command.ExecuteReaderAsync();
@@ -879,5 +877,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             await _unitOfWork.SaveChangesAsync();
         }
+
     }
 }
