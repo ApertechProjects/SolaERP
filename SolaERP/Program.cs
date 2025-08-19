@@ -37,19 +37,6 @@ builder.Services.AddTransient(sp => new ConnectionFactory()
 	Uri = new(builder.Configuration["FileOptions:URI"])
 });
 
-static void Main(string[] args)
-{
-	var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
-
-	var configuration = new ConfigurationBuilder()
-		.SetBasePath(Directory.GetCurrentDirectory())
-		.AddJsonFile($"appsettings.{environment}.json", optional: false, reloadOnChange: true)
-		.Build();
-
-	var timeZoneId = configuration.GetValue<string>("AppSettings:TimeZoneId");
-
-	TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
-}
 
 #pragma warning disable CS0612
 builder.Services.AddRequestMailsForIsSent();
