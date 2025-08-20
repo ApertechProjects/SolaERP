@@ -47,6 +47,7 @@ namespace SolaERP.Application.Dtos.Invoice
         public bool FullPrepaid { get; set; }
         public int? LinkedInvoiceRegisterId { get; set; }
         public bool HasVATAccount { get; set; }
+        public bool? WHTGrossUp { get; set; }
         
         public List<InvoiceRegisterGetDetailsDto> Details { get; set; }
         public List<WithHoldingTaxDto> WithHoldingTaxDatas { get; set; }
