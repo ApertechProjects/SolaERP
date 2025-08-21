@@ -42,7 +42,7 @@ namespace SolaERP.Application.Entities.Invoice
         public int InvoiceTransactionTypeId { get; set; }
         public bool FullPrepaid { get; set; }
         public int? LinkedInvoiceRegisterId { get; set; }
-        public bool? WHTGrossUp { get; set; }
+        public bool WHTGrossUp { get; set; } = false;
         
         public decimal? TaxAmount
         {
