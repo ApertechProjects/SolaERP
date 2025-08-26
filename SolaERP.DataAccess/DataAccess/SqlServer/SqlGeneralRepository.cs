@@ -62,7 +62,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             List<RejectReason> rejectReasons = new();
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "select * from VW_RejectReasons";
+                command.CommandText = "select * from VW_RejectReasons where RFQPortal=1";
                 using var reader = await command.ExecuteReaderAsync();
 
                 while (reader.Read())
