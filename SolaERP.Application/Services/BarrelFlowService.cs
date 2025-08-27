@@ -115,4 +115,11 @@ public class BarrelFlowService : IBarrelFlowService
         var result = await _barrelFlowRepository.GetQuarterList();
         return ApiResponse<List<QuarterListDto>>.Success(result, 200);
     }
+
+    public async Task<ApiResponse<decimal>> GetBarrelFlowRegisterOpeningPeriodAsync(int businessUnitId,
+        int period)
+    {
+        var result = await _barrelFlowRepository.GetBarrelFlowRegisterOpeningPeriod(businessUnitId, period);
+        return ApiResponse<decimal>.Success(result);
+    }
 }

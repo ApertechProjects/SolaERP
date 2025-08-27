@@ -260,4 +260,22 @@ public class SqlBarrelFlowRepository : IBarrelFlowRepository
 
         return data;
     }
+
+    public async Task<decimal> GetBarrelFlowRegisterOpeningPeriod(int businessUnitId, int period)
+    {
+        using var command = _unitOfWork.CreateCommand() as DbCommand;
+        command.CommandText = @"EXEC SP_BarrelFlowRegisterOpeningPeriod @BusinessUnitId, @Period";
+
+        command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+        command.Parameters.AddWithValue(command, "@Period", period);
+
+        using var reader = await command.ExecuteReaderAsync();
+        decimal result = 0;
+        if (reader.Read())
+        {
+            result = reader.Get<decimal>("ClosingOilStockTon");
+        }
+
+        return result;
+    }
 }

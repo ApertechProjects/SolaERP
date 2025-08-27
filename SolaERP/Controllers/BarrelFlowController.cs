@@ -73,4 +73,12 @@ public class BarrelFlowController : CustomBaseController
         return CreateActionResult(
             await _barrelFlowService.GetQuarterListAsync());
     }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> BarrelFlowRegisterOpeningPeriod(int businessUnitId,
+        int period)
+    {
+        return CreateActionResult(
+            await _barrelFlowService.GetBarrelFlowRegisterOpeningPeriodAsync(businessUnitId, period));
+    }
 }
