@@ -8,7 +8,20 @@ public interface IBarrelFlowService
 {
     Task<ApiResponse<bool>> SaveBarrelFlowsAsync(List<BarrelFlowUIDDto> data);
 
-    Task<ApiResponse<List<BarrelFlowRegisterDto>>> BarrelFlowRegisterAsync(int businessUnitId,
+    Task<ApiResponse<List<BarrelFlowRegisterDto>>> GetBarrelFlowRegisterAsync(int businessUnitId,
         DateTime dateFrom, DateTime dateTo);
 
+    Task<ApiResponse<List<BarrelFlowPeriodConvertListDto>>> GetPeriodListByBusinessIdAsync(int businessUnitId);
+    Task<ApiResponse<bool>> SaveBarrelFlowBudgetRegisterAsync(List<BarrelFlowBudgetUIDDto> data);
+
+    Task<ApiResponse<List<BarrelFlowBudgetRegisterDto>>> GetBarrelFlowBudgetRegisterAsync(int businessUnitId,
+        DateTime dateFrom, DateTime dateTo);
+
+    Task<ApiResponse<bool>> SaveProductionRevenueRegisterAsync(List<ProductionRevenueRegisterIUDDto> data);
+
+    Task<ApiResponse<List<ProductionRevenueListDto>>> GetProductionRevenueRegisterAsync(int businessUnitId,
+        DateTime dateFrom, DateTime dateTo);
+
+    Task<ApiResponse<List<FactForecastListDto>>> GetFactForecastListAsync();
+    Task<ApiResponse<List<QuarterListDto>>> GetQuarterListAsync();
 }

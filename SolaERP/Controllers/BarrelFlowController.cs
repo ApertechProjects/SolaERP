@@ -24,6 +24,53 @@ public class BarrelFlowController : CustomBaseController
     [HttpGet("[action]")]
     public async Task<IActionResult> BarrelFlowRegister(int businessUnitId, DateTime dateFrom, DateTime dateTo)
     {
-        return CreateActionResult(await _barrelFlowService.BarrelFlowRegisterAsync(businessUnitId, dateFrom, dateTo));
+        return CreateActionResult(
+            await _barrelFlowService.GetBarrelFlowRegisterAsync(businessUnitId, dateFrom, dateTo));
+    }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> PeriodList(int businessUnitId)
+    {
+        return CreateActionResult(await _barrelFlowService.GetPeriodListByBusinessIdAsync(businessUnitId));
+    }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> SaveBarrelFlowBudget(List<BarrelFlowBudgetUIDDto> data)
+    {
+        return CreateActionResult(await _barrelFlowService.SaveBarrelFlowBudgetRegisterAsync(data));
+    }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> BarrelFlowBudgetRegister(int businessUnitId, DateTime dateFrom, DateTime dateTo)
+    {
+        return CreateActionResult(
+            await _barrelFlowService.GetBarrelFlowBudgetRegisterAsync(businessUnitId, dateFrom, dateTo));
+    }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> SaveProductionRevenue(List<ProductionRevenueRegisterIUDDto> data)
+    {
+        return CreateActionResult(await _barrelFlowService.SaveProductionRevenueRegisterAsync(data));
+    }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> ProductionRevenueRegister(int businessUnitId, DateTime dateFrom, DateTime dateTo)
+    {
+        return CreateActionResult(
+            await _barrelFlowService.GetProductionRevenueRegisterAsync(businessUnitId, dateFrom, dateTo));
+    }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> FactForecastList()
+    {
+        return CreateActionResult(
+            await _barrelFlowService.GetFactForecastListAsync());
+    }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> QuarterList()
+    {
+        return CreateActionResult(
+            await _barrelFlowService.GetQuarterListAsync());
     }
 }
