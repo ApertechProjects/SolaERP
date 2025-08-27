@@ -15,7 +15,10 @@ public interface IBarrelFlowRepository
 
     Task<bool> SaveProductionRevenueRegisterIUD(DataTable dataTable);
 
-    Task<List<ProductionRevenueListDto>> GetProductionRevenueRegister(int businessUnitId, DateTime dateFrom, DateTime dateTo);
+    Task<List<ProductionRevenueListDto>> GetProductionRevenueRegister(int businessUnitId, DateTime dateFrom,
+        DateTime dateTo);
+
     Task<List<FactForecastListDto>> GetFactForecastList();
     Task<List<QuarterListDto>> GetQuarterList();
+    Task<decimal> GetBarrelFlowRegisterOpeningPeriod(int businessUnitId, int period);
 }
