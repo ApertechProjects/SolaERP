@@ -2,7 +2,7 @@
 
 public class BarrelFlowBudgetRegisterDto
 {
-    public int BarrelFlowRegisterId { get; set; }
+    public int BarrelFlowBudgetRegisterId { get; set; }
     public int Period { get; set; }
     public DateTime Date { get; set; }
     public decimal ProductionGross { get; set; }
