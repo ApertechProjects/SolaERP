@@ -120,9 +120,9 @@ public class SqlBarrelFlowRepository : IBarrelFlowRepository
             data.Add(new BarrelFlowBudgetRegisterDto
             {
                 BarrelFlowRegisterId = reader.Get<int>("BarrelFlowRegisterId"),
-                ProductionGross = reader.Get<int>("ProductionGross"),
-                LossPercent = reader.Get<int>("LossPercent"),
-                ProductionNet = reader.Get<int>("ProductionNet"),
+                ProductionGross = reader.Get<decimal>("ProductionGross"),
+                LossPercent = reader.Get<decimal>("LossPercent"),
+                ProductionNet = reader.Get<decimal>("ProductionNet"),
                 Delivery = reader.Get<decimal>("Delivery"),
                 Period = reader.Get<int>("Period"),
                 Date = reader.Get<DateTime>("Date"),
