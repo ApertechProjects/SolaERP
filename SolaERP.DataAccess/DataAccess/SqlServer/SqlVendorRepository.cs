@@ -119,7 +119,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             try
             {
-
                 using (var command = _unitOfWork.CreateCommand() as DbCommand)
                 {
                     command.CommandText = @"DECLARE	 @NewVendorBankId int
@@ -155,7 +154,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     command.Parameters.AddWithValue(command, "@UserId", userId);
 
 
-
                     using var reader = await command.ExecuteReaderAsync();
 
                     int id = 0;
@@ -165,11 +163,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                     return id;
                 }
-
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -546,19 +542,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             return list;
         }
 
-        public async Task<bool> RFQVendorResponseChangeStatus(int rfqMainId, int status, string vendorCode, int? rejectReasonId, string comment)
+        public async Task<bool> RFQVendorResponseChangeStatus(int rfqMainId, int status, string vendorCode,
+            int? rejectReasonId, string comment)
         {
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText =
-                @"SET NOCOUNT OFF EXEC SP_RFQVendorResponseChangeStatus @RFQMainid, @Status, @VendorCode";
+                @"SET NOCOUNT OFF EXEC SP_RFQVendorResponseChangeStatus @RFQMainid, @Status, @VendorCode, @RejectReasonId, @Comment";
             command.Parameters.AddWithValue(command, "@RFQMainid", rfqMainId);
             command.Parameters.AddWithValue(command, "@Status", status);
             command.Parameters.AddWithValue(command, "@VendorCode", vendorCode);
+            command.Parameters.AddWithValue(command, "@Comment", comment);
+
             if (rejectReasonId.HasValue)
                 command.Parameters.AddWithValue(command, "@RejectReasonId", rejectReasonId.Value);
             else
                 command.Parameters.AddWithValue(command, "@RejectReasonId", DBNull.Value);
-            command.Parameters.AddWithValue(command, "@Comment", comment);
 
             await _unitOfWork.SaveChangesAsync();
             return await command.ExecuteNonQueryAsync() > 0;
@@ -579,7 +577,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return result;
         }
-        
+
         public async Task<int> GetLastVendorIdByVendorCode(String? vendorCode)
         {
             int result = 0;
@@ -595,7 +593,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return result;
         }
-        
+
         public async Task<int> GetVendorCountByVendorCode(String? vendorCode)
         {
             int result = 0;
@@ -611,7 +609,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return result;
         }
-        
+
         public async Task<String> GetVendorCodeByVendorId(int? vendorId)
         {
             String result = null;
@@ -678,7 +676,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 command.CommandText = @"SET NOCOUNT OFF 
                                         EXEC SP_VendorSubmit @VendorId"
-                ;
+                    ;
 
                 command.Parameters.AddWithValue(command, "@VendorId", vendorId);
 
