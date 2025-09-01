@@ -97,6 +97,14 @@ public class BarrelFlowService : IBarrelFlowService
 
     public async Task<ApiResponse<bool>> SaveProductionRevenueRegisterAsync(List<ProductionRevenueRegisterIUDDto> data)
     {
+        foreach (var dto in data)
+        {
+            if (dto.DeliveryQuarter == 0) dto.DeliveryQuarter = null;
+            if (dto.SalesQuarter == 0) dto.SalesQuarter = null;
+            if (dto.AdvanceQuarter == 0) dto.AdvanceQuarter = null;
+            if (dto.PaymentQuarter == 0) dto.PaymentQuarter = null;
+        }
+        
         var table = data.ConvertListOfCLassToDataTable();
         var result = await _barrelFlowRepository.SaveProductionRevenueRegisterIUD(table);
         await _unitOfWork.SaveChangesAsync();
