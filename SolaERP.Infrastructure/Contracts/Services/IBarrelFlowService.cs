@@ -26,4 +26,6 @@ public interface IBarrelFlowService
     Task<ApiResponse<List<QuarterListDto>>> GetQuarterListAsync();
 
     Task<ApiResponse<decimal>> GetBarrelFlowRegisterOpeningPeriodAsync(int businessUnitId, int period);
+
+    Task<ApiResponse<List<BarrelFlowPeriodListDto>>> GetPeriodListByBusinessId(int businessUnitId);
 }

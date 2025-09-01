@@ -4,7 +4,7 @@ public class BarrelFlowRegisterDto
 {
     public int BarrelFlowRegisterId { get; set; }
     public int Period { get; set; }
-    public DateTime Date { get; set; }
+    public DateTime? Date { get; set; }
     public decimal OpeningOilStockTon { get; set; }
     public decimal BarrelFactor { get; set; }
     public decimal ProductionTon { get; set; }
