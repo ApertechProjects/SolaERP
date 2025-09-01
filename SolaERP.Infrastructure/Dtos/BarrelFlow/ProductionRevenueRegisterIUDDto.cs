@@ -12,7 +12,7 @@ public class ProductionRevenueRegisterIUDDto
     public decimal DeliveredGrossTon { get; set; }
     public decimal DeliveredNetTon { get; set; }
     public decimal BarrelFactor { get; set; }
-    public int SalesQuarter { get; set; }
+    public int? SalesQuarter { get; set; }
     public string SalesMonth { get; set; }
     public DateTime? SalesDate { get; set; }
     public decimal SoldNetTon { get; set; }
@@ -24,10 +24,10 @@ public class ProductionRevenueRegisterIUDDto
     public decimal CertifCustoms { get; set; }
     public decimal TranportRatePerTon { get; set; }
     public decimal AdvanceAmount { get; set; }
-    public int AdvanceQuarter { get; set; }
+    public int? AdvanceQuarter { get; set; }
     public string AdvanceMonth { get; set; }
     public DateTime? AdvanceDate { get; set; }
-    public int PaymentQuarter { get; set; }
+    public int? PaymentQuarter { get; set; }
     public string PaymentMonth { get; set; }
     public DateTime? FinalPaymentDate { get; set; }
     public int UserId { get; set; }
