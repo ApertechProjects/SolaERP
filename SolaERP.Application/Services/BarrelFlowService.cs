@@ -72,6 +72,13 @@ public class BarrelFlowService : IBarrelFlowService
         return ApiResponse<List<BarrelFlowPeriodConvertListDto>>.Success(result, 200);
     }
 
+    public async Task<ApiResponse<List<BarrelFlowPeriodListDto>>> GetPeriodListByBusinessId(
+        int businessUnitId)
+    {
+        var data = await _barrelFlowRepository.GetPeriodListByBusinessId(businessUnitId);
+        return ApiResponse<List<BarrelFlowPeriodListDto>>.Success(data, 200);
+    }
+    
     public async Task<ApiResponse<bool>> SaveBarrelFlowBudgetRegisterAsync(List<BarrelFlowBudgetUIDDto> data)
     {
         var table = data.ConvertListOfCLassToDataTable();

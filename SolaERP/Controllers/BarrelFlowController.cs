@@ -33,6 +33,12 @@ public class BarrelFlowController : CustomBaseController
     {
         return CreateActionResult(await _barrelFlowService.GetPeriodListByBusinessIdAsync(businessUnitId));
     }
+    
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetPeriodList(int businessUnitId)
+    {
+        return CreateActionResult(await _barrelFlowService.GetPeriodListByBusinessId(businessUnitId));
+    }
 
     [HttpPost("[action]")]
     public async Task<IActionResult> SaveBarrelFlowBudget(List<BarrelFlowBudgetUIDDto> data)

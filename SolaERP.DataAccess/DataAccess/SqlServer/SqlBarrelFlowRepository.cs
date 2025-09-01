@@ -193,10 +193,9 @@ public class SqlBarrelFlowRepository : IBarrelFlowRepository
                 BarrelFactor = reader.Get<decimal>("BarrelFactor"),
                 SalesQuarter = reader.Get<int>("SalesQuarter"),
                 SalesMonth = reader.Get<string>("SalesMonth"),
-                SalesDate = reader.Get<DateTime>("SalesDate"),
+                SalesDate = reader.Get<DateTime?>("SalesDate"),
                 SoldNetTon = reader.Get<decimal>("SoldNetTon"),
                 SalesPrice = reader.Get<decimal>("SalesPrice"),
-
                 SoldBarrel = reader.Get<decimal>("SoldBarrel"),
                 GrossAmount = reader.Get<decimal>("GrossAmount"),
                 TransportBankFee = reader.Get<decimal>("TransportBankFee"),
@@ -206,15 +205,15 @@ public class SqlBarrelFlowRepository : IBarrelFlowRepository
                 AdvanceAmount = reader.Get<decimal>("AdvanceAmount"),
                 AdvanceQuarter = reader.Get<int>("AdvanceQuarter"),
                 AdvanceMonth = reader.Get<string>("AdvanceMonth"),
-                AdvanceDate = reader.Get<DateTime>("AdvanceDate"),
+                AdvanceDate = reader.Get<DateTime?>("AdvanceDate"),
                 PaymentQuarter = reader.Get<int>("PaymentQuarter"),
                 PaymentMonth = reader.Get<string>("PaymentMonth"),
-                FinalPaymentDate = reader.Get<DateTime>("FinalPaymentDate"),
+                FinalPaymentDate = reader.Get<DateTime?>("FinalPaymentDate"),
                 UserId = reader.Get<int>("UserId"),
                 BusinessUnitId = reader.Get<int>("BusinessUnitId"),
                 CreatedBy = reader.Get<int>("CreatedBy"),
                 FullName = reader.Get<string>("FullName"),
-                CreatedDate = reader.Get<DateTime>("CreatedDate"),
+                CreatedDate = reader.Get<DateTime?>("CreatedDate"),
             });
         }
 
