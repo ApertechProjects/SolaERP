@@ -1080,7 +1080,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 while (await reader.ReadAsync())
                 {
-                    journalNo = reader.Get<int>("@NewVendorId");
+                    journalNo = reader.Get<int>("@NewJournalNo");
                 }
 
                 return journalNo;
