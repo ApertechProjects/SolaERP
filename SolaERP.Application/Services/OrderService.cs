@@ -133,7 +133,7 @@ public class OrderService : IOrderService
                 if (detail.OrderDetailid <= 0)
                     detail.OriginalQuantity = detail.Quantity;
 
-                if (detail.Deleted && detail.OrderDetailid > 0)
+                if (detail.Deleted)
                 { 
                     detail.OrderMainId = 0;
                 }
