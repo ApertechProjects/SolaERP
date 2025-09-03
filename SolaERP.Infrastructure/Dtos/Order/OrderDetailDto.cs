@@ -49,4 +49,5 @@ public class OrderDetailDto
     public int? AnalysisCode9Id { get; set; }
     public int? AnalysisCode10Id { get; set; }
     public string Warehouse { get; set; }
+    public bool Deleted { get; set; }
 }
