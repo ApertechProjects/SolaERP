@@ -78,7 +78,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
                 while (reader.Read())
                 {
-                    businessUnits.Add(reader.GetByEntityStructure<BusinessUnits>());
+                    businessUnits.Add(reader.GetByEntityStructure<BusinessUnits>("ExportOilPercent"));
                 }
                 return businessUnits;
             }

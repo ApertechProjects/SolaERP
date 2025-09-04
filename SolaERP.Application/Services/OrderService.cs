@@ -118,9 +118,6 @@ public class OrderService : IOrderService
         int userId = Convert.ToInt32(identityName);
         var mainDto = await _orderRepository.SaveOrderMainAsync(orderMainDto, userId);
 
-        var orderIdList = orderMainDto.OrderDetails.Select(x => x.OrderDetailid).ToList();
-        await _orderRepository.DeleteDetailsNotIncludes(orderIdList, mainDto.OrderMainId);
-
         await _attachmentService.SaveAttachmentAsync(orderMainDto.Attachments, SourceType.ORDER, mainDto.OrderMainId);
 
         if (orderMainDto.OrderDetails.Count > 0)
@@ -135,6 +132,12 @@ public class OrderService : IOrderService
 
                 if (detail.OrderDetailid <= 0)
                     detail.OriginalQuantity = detail.Quantity;
+
+                if (detail.Deleted)
+                { 
+                    detail.OrderMainId = 0;
+                }
+         
             }
 
             var result = await _orderRepository.SaveOrderDetailsAsync(orderMainDto.OrderDetails);
