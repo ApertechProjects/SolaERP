@@ -629,7 +629,11 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<RequestHeld, RequestHeldDto>().ReverseMap();
 
-            CreateMap<CreateAdvance, CreateAdvanceDto>().ReverseMap();
+            CreateMap<CreateAdvance, CreateAdvanceDto>()
+                .ForMember(
+                    dest => dest.LINK_REF_1,
+                    opt => opt.MapFrom(src => Convert.ToString(src.LINK_REF_1)))
+                .ReverseMap();
             CreateMap<CreateOrder, CreateOrderDto>().ReverseMap();
             CreateMap<CreateBalance, CreateBalanceDto>().ReverseMap();
             CreateMap<InfoHeader, InfoHeaderDto>().ReverseMap();
