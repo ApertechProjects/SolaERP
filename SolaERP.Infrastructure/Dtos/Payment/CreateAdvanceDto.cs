@@ -77,5 +77,6 @@
         public DateTime? GNRL_5_DATETIME { get; set; }
         public string? LINK_REF_1 { get; set; }
         public string TransactionReference { get; set; }
+        public int? InvoiceRegisterDetailId { get; set; }
     }
 }
