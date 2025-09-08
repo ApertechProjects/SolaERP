@@ -112,7 +112,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<BidIUDResponse>> SaveBidMainAsync(BidMainDto bidMain, string userIdentity)
         {
-            BidRFQDto checkData = await _bidRepository.GetVendorCodeForBidAsync(bidMain.RFQMainId, bidMain.BusinessUnitId);
+            BidRFQDto checkData = await _bidRepository.GetVendorCodeForBidAsync(bidMain.RFQMainId, bidMain.BusinessUnitId, bidMain.VendorCode);
             if (checkData != null)
             {
                 return ApiResponse<BidIUDResponse>.Fail($"Sistemdə {checkData.VendorCode} nömrəli Vendor {checkData.RFQNo} nömrəli RFQ-ə artıq bir BID yaradıb və yeni təklif göndərilə bilməz.Hazırda mövcud olan BID nömrəsi:{checkData.BidNo}", 400);

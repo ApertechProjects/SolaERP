@@ -20,6 +20,6 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<BidMainDto>> GetBidByRFQMainIdAndVendorCode(int rfqMainId, string vendorCode);
         Task<bool> GetBidCheckExistsByRFQMainIdAndVendorCode(int rfqMainId, string vendorCode);
         Task<List<RFQVendorEmailDto>> GetBidsByRFQMainIdAsync(List<int> rfqMainId);
-        Task<BidRFQDto> GetVendorCodeForBidAsync(int rfqMainId, int businessUnitId);
+        Task<BidRFQDto> GetVendorCodeForBidAsync(int rfqMainId, int businessUnitId, string vendorCode);
     }
 }
