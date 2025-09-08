@@ -422,7 +422,7 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
             return datas;
         }
 
-        public async Task<BidRFQDto?> GetVendorCodeForBidAsync(int rfqMainId, int businessUnitId)
+        public async Task<BidRFQDto?> GetVendorCodeForBidAsync(int rfqMainId, int businessUnitId, string vendorCode)
         {
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = @"
@@ -435,6 +435,7 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                                     INNER JOIN Procurement.RFQMain rfqm ON rfqm.RFQMainId = b.RFQMainId
                                     WHERE b.RFQMainId = @rfqMainId
                                     AND b.BusinessUnitId = @businessUnitId
+                                    AND b.VendorCode = @vendorCode
                                     ";
 
             var rfqParam = command.CreateParameter();
@@ -447,6 +448,11 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
             buParam.Value = businessUnitId;
             command.Parameters.Add(buParam);
 
+            var vendorParam = command.CreateParameter();
+            vendorParam.ParameterName = "@vendorCode";
+            vendorParam.Value = vendorCode;
+            command.Parameters.Add(vendorParam);
+            
             await using var reader = await command.ExecuteReaderAsync();
 
             if (!await reader.ReadAsync())
