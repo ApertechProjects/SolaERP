@@ -112,19 +112,11 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<BidIUDResponse>> SaveBidMainAsync(BidMainDto bidMain, string userIdentity)
         {
-            // var validationResult = await _validator.ValidateAsync(bid);
-
-            // if (!validationResult.IsValid)
-            // {
-            //     return BadRequest(new
-            //     {
-            //         success = false,
-            //         errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList()
-            //     });
-            // }
-            
-            // var validator = new BidSaveValidation(_bidRepository);
-            // var result = await validator.ValidateAsync(bidMain);
+            BidRFQDto checkData = await _bidRepository.GetVendorCodeForBidAsync(bidMain.RFQMainId, bidMain.BusinessUnitId);
+            if (checkData != null)
+            {
+                return ApiResponse<BidIUDResponse>.Fail($"Sistemdə {checkData.VendorCode} nömrəli Vendor {checkData.RFQNo} nömrəli RFQ-ə artıq bir BID yaradıb və yeni təklif göndərilə bilməz.Hazırda mövcud olan BID nömrəsi:{checkData.BidNo}", 400);
+            }
             
             var entity = _mapper.Map<BidMain>(bidMain);
             entity.UserId = Convert.ToInt32(userIdentity);
