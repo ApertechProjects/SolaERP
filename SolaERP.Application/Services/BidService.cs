@@ -114,7 +114,7 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<BidIUDResponse>> SaveBidMainAsync(BidMainDto bidMain, string userIdentity)
         {
-            if (bidMain.BidMainId == null)
+            if (bidMain.BidMainId == 0)
             {
                 BidRFQDto checkData = await _bidRepository.GetVendorCodeForBidAsync(bidMain.RFQMainId,
                     bidMain.BusinessUnitId, bidMain.VendorCode);
