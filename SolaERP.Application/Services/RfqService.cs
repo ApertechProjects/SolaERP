@@ -335,7 +335,7 @@ namespace SolaERP.Persistence.Services
             var mainRFQ = await _repository.GetRFQMainAsync(dto.Id);
 
             if (mainRFQ.BiddingType == BiddingType.Automatic && dto.VendorCodes.Count < 2 && mainRFQ.ProcurementType == ProcurementType.Bidding)
-                return ApiResponse<int>.Fail("Vendor Code must be greater than 2", 400);
+                return ApiResponse<int>.Fail("Vendor must be greater than 1", 400);
 
             if (mainRFQ.BiddingType == BiddingType.Manual && dto.VendorCodes?.Any() == true)
                 return ApiResponse<int>.Fail("Vendor Code must be empty", 400);
