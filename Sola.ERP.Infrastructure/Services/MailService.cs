@@ -963,8 +963,6 @@ namespace SolaERP.Infrastructure.Services
 
                 await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null,
                     new List<string> { data.BuyerEmail });
-
-                Console.WriteLine("Order Approved Mail göndərildi: "+data.BuyerName+" Email: "+data.BuyerEmail);
             }
             catch (Exception e)
             {
