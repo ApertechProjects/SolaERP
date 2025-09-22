@@ -48,7 +48,7 @@ public class InvoicesMatchingDetailsType
 	public decimal BaseTaxAmount { get; set; }
 	public decimal ReportingTaxAmount { get; set; }
 	public decimal ReportingGrossAmount { get; set; }
-
+    public int? AdvanceInvoiceRegisterId { get; set; }
 }
 
 public class InvoicesMatchingDetailsTypeDto
@@ -94,4 +94,5 @@ public class InvoicesMatchingDetailsTypeDto
     public decimal BaseTaxAmount { get; set; }
 	public decimal ReportingTaxAmount { get; set; }
 	public decimal ReportingGrossAmount { get; set; }
+	public int? AdvanceInvoiceRegisterId { get; set; }
 }

@@ -32,6 +32,7 @@ namespace SolaERP.Application.Dtos.Invoice
     {
         public int? InvoiceMatchingDetailId { get; set; }
         public int? InvoiceMatchingMainId { get; set; }
+        public int? AdvanceInvoiceRegisterId { get; set; }
         public long LineNo { get; set; }
         public int OrderLine { get; set; }
         public string ItemCode { get; set; }
