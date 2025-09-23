@@ -50,5 +50,7 @@
         public int AnalysisCode8Id { get; set; }
         public int AnalysisCode9Id { get; set; }
         public int AnalysisCode10Id { get; set; }
+        public string InvoiceDate { get; set; }
+        public string AccountCode { get; set; }
     }
 }
