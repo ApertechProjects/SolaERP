@@ -20,8 +20,10 @@ namespace SolaERP.Application.Dtos.Invoice
         public string? InvoiceNo { get; set; }
         public string? SystemInvoiceNo { get; set; }
         public int? OrderTypeId { get; set; }
+        public int? OrderType { get; set; }
         public string? ReferenceDocNo { get; set; }
         public decimal? InvoiceAmount { get; set; }
+        public decimal? TaxRate { get; set; }
         public string CurrencyCode { get; set; } = string.Empty;
         public string? LineDescription { get; set; }
         public string? VendorCode { get; set; }
@@ -42,6 +44,7 @@ namespace SolaERP.Application.Dtos.Invoice
         public string? OrderReference { get; set; }
         public int? InvoicePeriod { get; set; }
         public string? VendorAccount { get; set; }
+        public string? InvoiceTransactionType { get; set; }
         public bool UseOrderForInvoice { get; set; }
         public int InvoiceTransactionTypeId { get; set; }
         public bool FullPrepaid { get; set; }

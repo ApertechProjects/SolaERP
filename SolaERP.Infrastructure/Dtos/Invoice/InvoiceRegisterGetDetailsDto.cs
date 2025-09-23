@@ -26,6 +26,7 @@ namespace SolaERP.Application.Dtos.Invoice
         public decimal WithHoldingTaxAmount { get; set; }
 		public decimal BaseWithHoldingTaxAmount { get; set; }
 		public decimal ReportingWithHoldingTaxAmount { get; set; }
+		public int CatId { get; set; }
 		public int AnalysisCode1Id { get; set; }
 		public int AnalysisCode2Id { get; set; }
 		public int AnalysisCode3Id { get; set; }
