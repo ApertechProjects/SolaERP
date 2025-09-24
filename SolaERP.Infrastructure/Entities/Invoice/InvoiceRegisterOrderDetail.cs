@@ -17,8 +17,8 @@ namespace SolaERP.Application.Entities.Invoice
         public decimal GrossAmount { get; set; }
         public string? AccountCode { get; set; }
         public decimal? Quantity { get; set; }
-        public decimal? MatchingAmount { get; set; }
-        public decimal? TotalMatchingAmount { get; set; }
+        public decimal? MatchedLineAmount { get; set; }
+        public decimal? MatchedOrderTotal { get; set; }
         public string RUOM { get; set; }
         public decimal? BaseAmount { get; set; }
         public decimal? ReportingAmount { get; set; }
