@@ -43,5 +43,6 @@ namespace SolaERP.Application.Dtos.Invoice
 		public DateTime PrepaymentDateFrom { get; set; }
 		public DateTime PrepaymentDateTo { get; set; }
 		public int PrepaymentPeriods { get; set; }
+		public int OrderDetailId { get; set; }
 	}
 }
