@@ -44,5 +44,7 @@ namespace SolaERP.Application.Dtos.Invoice
 		public DateTime PrepaymentDateTo { get; set; }
 		public int PrepaymentPeriods { get; set; }
 		public int OrderDetailId { get; set; }
+		public decimal? MatchedLineAmount { get; set; }
+		public decimal? MatchedOrderTotal { get; set; }
 	}
 }
