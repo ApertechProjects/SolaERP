@@ -12,4 +12,5 @@ public class EntitlementListDto
     public int? CreatedBy { get; set; }
     public string? CreatedName { get; set; }
     public DateTime? CreatedDate { get; set; }
+    public int? BusinessUnitId { get; set; }
 }
