@@ -73,6 +73,7 @@ public class SqlEntitlementRepository : IEntitlementRepository
                 CreatedBy = reader.Get<int>("CreatedBy"),
                 CreatedName = reader.Get<string>("CreatedName"),
                 CreatedDate = reader.Get<DateTime>("CreatedDate"),
+                BusinessUnitId = reader.Get<int>("BusinessUnitId"),
             });
         }
 
