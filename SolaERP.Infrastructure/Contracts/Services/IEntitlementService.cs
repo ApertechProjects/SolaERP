@@ -5,7 +5,7 @@ namespace SolaERP.Application.Contracts.Services;
 
 public interface IEntitlementService
 {
-    Task<ApiResponse<bool>> SaveEntitlementsAsync(EntitlementUIDDto data);
+    Task<ApiResponse<bool>> SaveEntitlementsAsync(List<EntitlementUIDDto> data);
 
     Task<ApiResponse<List<EntitlementListDto>>> GetEntitlementListAsync(int businessUnitId, int periodFrom,
         int periodTo);
