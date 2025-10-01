@@ -16,7 +16,7 @@ public class EntitlementController : CustomBaseController
         _entitlementService = entitlementService;
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> SaveEntitlements(EntitlementUIDDto data)
+    public async Task<IActionResult> SaveEntitlements(List<EntitlementUIDDto> data)
     {
         return CreateActionResult(await _entitlementService.SaveEntitlementsAsync(data));
     }

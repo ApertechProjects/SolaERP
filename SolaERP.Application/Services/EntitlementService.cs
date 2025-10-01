@@ -24,7 +24,7 @@ public class EntitlementService : IEntitlementService
         _entitlementRepository = entitlementRepository;
     }
 
-    public async Task<ApiResponse<bool>> SaveEntitlementsAsync(EntitlementUIDDto data)
+    public async Task<ApiResponse<bool>> SaveEntitlementsAsync(List<EntitlementUIDDto> data)
     {
         await _entitlementRepository.SaveEntitlementIUD(data);
         await _unitOfWork.SaveChangesAsync();

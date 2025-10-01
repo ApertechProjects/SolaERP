@@ -11,25 +11,34 @@ public class SqlEntitlementRepository : IEntitlementRepository
     private readonly IUnitOfWork _unitOfWork;
     public SqlEntitlementRepository(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-    public async Task<bool> SaveEntitlementIUD(EntitlementUIDDto dto)
+    public async Task<bool> SaveEntitlementIUD(List<EntitlementUIDDto> dtoList)
     {
-        using (var command = _unitOfWork.CreateCommand() as DbCommand)
-        {
-            command.CommandText =
-                @"SET NOCOUNT OFF Exec SP_EntitlementRegister_IUD  @EntitlementRegisterId,@BusinessUnitId,@Period,@Date,@Opex,@CorrectionToPriorPeriodsOpex,@Capex,@CorrectionToPriorPeriodsCapex,@UserId";
-            command.Parameters.AddWithValue(command, "@EntitlementRegisterId", dto.EntitlementRegisterId);
-            command.Parameters.AddWithValue(command, "@BusinessUnitId", dto.BusinessUnitId);
-            command.Parameters.AddWithValue(command, "@Period", dto.Period);
-            command.Parameters.AddWithValue(command, "@Date", dto.Date);
-            command.Parameters.AddWithValue(command, "@Opex", dto.Opex);
-            command.Parameters.AddWithValue(command, "@CorrectionToPriorPeriodsOpex", dto.CorrectionToPriorPeriodsOpex);
-            command.Parameters.AddWithValue(command, "@Capex", dto.Capex);
-            command.Parameters.AddWithValue(command, "@CorrectionToPriorPeriodsCapex",
-                dto.CorrectionToPriorPeriodsCapex);
-            command.Parameters.AddWithValue(command, "@UserId", dto.UserId);
+        bool result = false;
 
-            return await command.ExecuteNonQueryAsync() > 0;
+        foreach (var dto in dtoList)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText =
+                    @"SET NOCOUNT OFF Exec SP_EntitlementRegister_IUD  @EntitlementRegisterId,@BusinessUnitId,@Period,@Date,@Opex,@CorrectionToPriorPeriodsOpex,@Capex,@CorrectionToPriorPeriodsCapex,@UserId";
+                command.Parameters.AddWithValue(command, "@EntitlementRegisterId", dto.EntitlementRegisterId);
+                command.Parameters.AddWithValue(command, "@BusinessUnitId", dto.BusinessUnitId);
+                command.Parameters.AddWithValue(command, "@Period", dto.Period);
+                command.Parameters.AddWithValue(command, "@Date", dto.Date);
+                command.Parameters.AddWithValue(command, "@Opex", dto.Opex);
+                command.Parameters.AddWithValue(command, "@CorrectionToPriorPeriodsOpex",
+                    dto.CorrectionToPriorPeriodsOpex);
+                command.Parameters.AddWithValue(command, "@Capex", dto.Capex);
+                command.Parameters.AddWithValue(command, "@CorrectionToPriorPeriodsCapex",
+                    dto.CorrectionToPriorPeriodsCapex);
+                command.Parameters.AddWithValue(command, "@UserId", dto.UserId);
+
+                if (await command.ExecuteNonQueryAsync() > 0)
+                    result = true;
+            }
         }
+
+        return result;
     }
 
     public Task<bool> SaveEntitlementIUDv(EntitlementUIDDto dto)
