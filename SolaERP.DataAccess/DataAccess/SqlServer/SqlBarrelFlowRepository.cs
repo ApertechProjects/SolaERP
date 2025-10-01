@@ -61,7 +61,12 @@ public class SqlBarrelFlowRepository : IBarrelFlowRepository
                 FullName = reader.Get<string>("FullName"),
                 CreatedDate = reader.Get<DateTime>("CreatedDate"),
                 BusinessUnitId = reader.Get<int>("BusinessUnitId"),
-                Status = reader.Get<string>("Status")
+                Status = reader.Get<string>("Status"),
+                OpeningOilStockBBL = reader.Get<decimal>("OpeningOilStockBBL"),
+                OBConsignmentBBL = reader.Get<decimal>("OBConsignmentBBL"),
+                ClosingOilStockBBL = reader.Get<decimal>("ClosingOilStockBBL"),
+                CBConsignmentBBL = reader.Get<decimal>("CBConsignmentBBL"),
+                RealizedSales = reader.Get<decimal>("RealizedSales")
             });
         }
 
