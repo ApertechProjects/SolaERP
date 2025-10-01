@@ -100,6 +100,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<BusinessUnitHelper>();
             builder.Services.AddScoped<IFixedAssetService, FixedAssetService>();
             builder.Services.AddScoped<IBarrelFlowService, BarrelFlowService>();
+            builder.Services.AddScoped<IEntitlementService, EntitlementService>();
         }
 
         private static void UseRepositories(this WebApplicationBuilder builder)

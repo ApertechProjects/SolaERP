@@ -1,11 +1,10 @@
-﻿using SolaERP.Application.Dtos.Entitlement;
-
-namespace SolaERP.API.Controllers;
-
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Controllers;
+using SolaERP.Application.Dtos.Entitlement;
+
+namespace SolaERP.API.Controllers;
 
 [Route("api/[controller]")]
 [Authorize]
