@@ -20,5 +20,5 @@ public interface IBarrelFlowRepository
 
     Task<List<FactForecastListDto>> GetFactForecastList();
     Task<List<QuarterListDto>> GetQuarterList();
-    Task<decimal> GetBarrelFlowRegisterOpeningPeriod(int businessUnitId, int period);
+    Task<List<BarrelFlowRegisterOpeningPeriodDto>> GetBarrelFlowRegisterOpeningPeriod(int businessUnitId, int period);
 }
