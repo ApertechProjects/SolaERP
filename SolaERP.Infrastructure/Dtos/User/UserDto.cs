@@ -25,5 +25,6 @@ namespace SolaERP.Application.Dtos.UserDto
         public string UserPhoto { get; set; }
         public int DefaultBusinessUnitId { get; set; }
         public string BusinessUnitCode { get; set; }
+        public string HomePageReportFileId { get; set; }
     }
 }
