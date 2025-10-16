@@ -20,7 +20,34 @@ public class SqlEntitlementRepository : IEntitlementRepository
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
                 command.CommandText =
-                    @"SET NOCOUNT OFF Exec SP_EntitlementRegister_IUD  @EntitlementRegisterId,@BusinessUnitId,@Period,@Date,@Opex,@CorrectionToPriorPeriodsOpex,@Capex,@CorrectionToPriorPeriodsCapex,@UserId";
+                    @"SET NOCOUNT OFF Exec SP_EntitlementRegister_IUD
+                        @EntitlementRegisterId,
+                        @BusinessUnitId,
+                        @Period,
+                        @Date,
+                        @Opex,
+                        @CorrectionToPriorPeriodsOpex,
+                        @Capex,
+                        @CorrectionToPriorPeriodsCapex,
+                        @UserId,
+                        @UnrecoveredOpexBroughtEstimated,
+                        @AOHEstimated,
+                        @UnrecoveredCapexBroughtForwardEstimated,
+                        @ReconciliationAmountFromQn2Estimated,
+                        @OilNBVEstimated,
+                        @TotalOpexEndEstimated,
+                        @TotalCapexEndEstimated,
+                        @RfactorEstimated,
+                        @UnrecoveredOpexBroughtActual,
+                        @AOHActual,
+                        @UncoveredCapexBroughtForwardActual, 
+                        @AccumulatedReconciliationSOFAZActual,
+                        @AccumulatedReconciliationSOAActual,
+                        @CorrectionsPriorPeriodsOpexActual,
+                        @CorrectionsPriorPeriodsCapexActual,
+                        @AccumulatedReconciliationSOANBVActual,
+                        @RfactorActual";
+
                 command.Parameters.AddWithValue(command, "@EntitlementRegisterId", dto.EntitlementRegisterId);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", dto.BusinessUnitId);
                 command.Parameters.AddWithValue(command, "@Period", dto.Period);
@@ -32,6 +59,33 @@ public class SqlEntitlementRepository : IEntitlementRepository
                 command.Parameters.AddWithValue(command, "@CorrectionToPriorPeriodsCapex",
                     dto.CorrectionToPriorPeriodsCapex);
                 command.Parameters.AddWithValue(command, "@UserId", dto.UserId);
+                command.Parameters.AddWithValue(command, "@UnrecoveredOpexBroughtEstimated",
+                    dto.UnrecoveredOpexBroughtEstimated);
+                command.Parameters.AddWithValue(command, "@AOHEstimated", dto.AOHEstimated);
+                command.Parameters.AddWithValue(command, "@UnrecoveredCapexBroughtForwardEstimated",
+                    dto.UnrecoveredCapexBroughtForwardEstimated);
+                command.Parameters.AddWithValue(command, "@ReconciliationAmountFromQn2Estimated",
+                    dto.ReconciliationAmountFromQn2Estimated);
+                command.Parameters.AddWithValue(command, "@OilNBVEstimated", dto.OilNBVEstimated);
+                command.Parameters.AddWithValue(command, "@TotalOpexEndEstimated", dto.TotalOpexEndEstimated);
+                command.Parameters.AddWithValue(command, "@TotalCapexEndEstimated", dto.TotalCapexEndEstimated);
+                command.Parameters.AddWithValue(command, "@RfactorEstimated", dto.RfactorEstimated);
+                command.Parameters.AddWithValue(command, "@UnrecoveredOpexBroughtActual",
+                    dto.UnrecoveredOpexBroughtActual);
+                command.Parameters.AddWithValue(command, "@AOHActual", dto.AOHActual);
+                command.Parameters.AddWithValue(command, "@UncoveredCapexBroughtForwardActual",
+                    dto.UncoveredCapexBroughtForwardActual);
+                command.Parameters.AddWithValue(command, "@AccumulatedReconciliationSOFAZActual",
+                    dto.AccumulatedReconciliationSOFAZActual);
+                command.Parameters.AddWithValue(command, "@AccumulatedReconciliationSOAActual",
+                    dto.AccumulatedReconciliationSOAActual);
+                command.Parameters.AddWithValue(command, "@CorrectionsPriorPeriodsOpexActual",
+                    dto.CorrectionsPriorPeriodsOpexActual);
+                command.Parameters.AddWithValue(command, "@CorrectionsPriorPeriodsCapexActual",
+                    dto.CorrectionsPriorPeriodsCapexActual);
+                command.Parameters.AddWithValue(command, "@AccumulatedReconciliationSOANBVActual",
+                    dto.AccumulatedReconciliationSOANBVActual);
+                command.Parameters.AddWithValue(command, "@RfactorActual", dto.RfactorActual);
 
                 if (await command.ExecuteNonQueryAsync() > 0)
                     result = true;
@@ -40,11 +94,7 @@ public class SqlEntitlementRepository : IEntitlementRepository
 
         return result;
     }
-
-    public Task<bool> SaveEntitlementIUDv(EntitlementUIDDto dto)
-    {
-        throw new NotImplementedException();
-    }
+    
 
     public async Task<List<EntitlementListDto>> GetEntitlementsList(int businessUnitId, int periodFrom,
         int periodTo)
@@ -74,6 +124,24 @@ public class SqlEntitlementRepository : IEntitlementRepository
                 CreatedName = reader.Get<string>("CreatedName"),
                 CreatedDate = reader.Get<DateTime>("CreatedDate"),
                 BusinessUnitId = reader.Get<int>("BusinessUnitId"),
+                UnrecoveredOpexBroughtEstimated = reader.Get<decimal>("UnrecoveredOpexBroughtEstimated"),
+                AOHEstimated = reader.Get<decimal>("AOHEstimated"),
+                UnrecoveredCapexBroughtForwardEstimated =
+                    reader.Get<decimal>("UnrecoveredCapexBroughtForwardEstimated"),
+                ReconciliationAmountFromQn2Estimated = reader.Get<decimal>("ReconciliationAmountFromQn2Estimated"),
+                OilNBVEstimated = reader.Get<decimal>("OilNBVEstimated"),
+                TotalOpexEndEstimated = reader.Get<decimal>("TotalOpexEndEstimated"),
+                TotalCapexEndEstimated = reader.Get<decimal>("TotalCapexEndEstimated"),
+                RfactorEstimated = reader.Get<decimal>("RfactorEstimated"),
+                UnrecoveredOpexBroughtActual = reader.Get<decimal>("UnrecoveredOpexBroughtActual"),
+                AOHActual = reader.Get<decimal>("AOHActual"),
+                UnrecoveredCapexBroughtForwardActual = reader.Get<decimal>("UnrecoveredCapexBroughtForwardActual"),
+                AccumulatedReconciliationSOFAZActual = reader.Get<decimal>("AccumulatedReconciliationSOFAZActual"),
+                AccumulatedReconciliationSOAActual = reader.Get<decimal>("AccumulatedReconciliationSOAActual"),
+                CorrectionsPriorPeriodsOpexActual = reader.Get<decimal>("CorrectionsPriorPeriodsOpexActual"),
+                CorrectionsPriorPeriodsCapexActual = reader.Get<decimal>("CorrectionsPriorPeriodsCapexActual"),
+                AccumulatedReconciliationSOANBVActual = reader.Get<decimal>("AccumulatedReconciliationSOANBVActual"),
+                RfactorActual = reader.Get<decimal>("RfactorActual"),
             });
         }
 
