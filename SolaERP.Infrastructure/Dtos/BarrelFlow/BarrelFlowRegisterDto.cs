@@ -23,4 +23,9 @@ public class BarrelFlowRegisterDto
     public DateTime CreatedDate { get; set; }
     public int BusinessUnitId { get; set; }
     public string Status { get; set; }
+    public decimal OpeningOilStockBBL { get; set; }
+    public decimal OBConsignmentBBL { get; set; }
+    public decimal ClosingOilStockBBL { get; set; }
+    public decimal CBConsignmentBBL { get; set; }
+    public decimal RealizedSales { get; set; }
 }

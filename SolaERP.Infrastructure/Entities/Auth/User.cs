@@ -6,7 +6,7 @@ namespace SolaERP.Application.Entities.Auth
 {
     public class User : BaseEntity
     {
-        [DbColumn("Id")]
+        [DbColumn("Id")]    
         public int UserId { get; set; }
         private string theme = "light";
         public int Id { get; set; } = 0;

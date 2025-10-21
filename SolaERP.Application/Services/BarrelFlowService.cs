@@ -131,10 +131,10 @@ public class BarrelFlowService : IBarrelFlowService
         return ApiResponse<List<QuarterListDto>>.Success(result, 200);
     }
 
-    public async Task<ApiResponse<decimal>> GetBarrelFlowRegisterOpeningPeriodAsync(int businessUnitId,
+    public async Task<ApiResponse<List<BarrelFlowRegisterOpeningPeriodDto>>> GetBarrelFlowRegisterOpeningPeriodAsync(int businessUnitId,
         int period)
     {
         var result = await _barrelFlowRepository.GetBarrelFlowRegisterOpeningPeriod(businessUnitId, period);
-        return ApiResponse<decimal>.Success(result);
+        return ApiResponse<List<BarrelFlowRegisterOpeningPeriodDto>>.Success(result);
     }
 }

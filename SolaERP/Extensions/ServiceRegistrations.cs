@@ -100,6 +100,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<BusinessUnitHelper>();
             builder.Services.AddScoped<IFixedAssetService, FixedAssetService>();
             builder.Services.AddScoped<IBarrelFlowService, BarrelFlowService>();
+            builder.Services.AddScoped<IEntitlementService, EntitlementService>();
         }
 
         private static void UseRepositories(this WebApplicationBuilder builder)
@@ -146,6 +147,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<ISupportRepository, SqlSupportRepository>();
             builder.Services.AddScoped<IFixedAssetRepository, SqlFixedAssetRepository>();
             builder.Services.AddScoped<IBarrelFlowRepository, SqlBarrelFlowRepository>();
+            builder.Services.AddScoped<IEntitlementRepository, SqlEntitlementRepository>();
         }
 
         public static void UseValidationExtension(this WebApplicationBuilder builder)

@@ -61,7 +61,12 @@ public class SqlBarrelFlowRepository : IBarrelFlowRepository
                 FullName = reader.Get<string>("FullName"),
                 CreatedDate = reader.Get<DateTime>("CreatedDate"),
                 BusinessUnitId = reader.Get<int>("BusinessUnitId"),
-                Status = reader.Get<string>("Status")
+                Status = reader.Get<string>("Status"),
+                OpeningOilStockBBL = reader.Get<decimal>("OpeningOilStockBBL"),
+                OBConsignmentBBL = reader.Get<decimal>("OBConsignmentBBL"),
+                ClosingOilStockBBL = reader.Get<decimal>("ClosingOilStockBBL"),
+                CBConsignmentBBL = reader.Get<decimal>("CBConsignmentBBL"),
+                RealizedSales = reader.Get<decimal>("RealizedSales")
             });
         }
 
@@ -260,7 +265,8 @@ public class SqlBarrelFlowRepository : IBarrelFlowRepository
         return data;
     }
 
-    public async Task<decimal> GetBarrelFlowRegisterOpeningPeriod(int businessUnitId, int period)
+    public async Task<List<BarrelFlowRegisterOpeningPeriodDto>> GetBarrelFlowRegisterOpeningPeriod(int businessUnitId,
+        int period)
     {
         using var command = _unitOfWork.CreateCommand() as DbCommand;
         command.CommandText = @"EXEC SP_BarrelFlowRegisterOpeningPeriod @BusinessUnitId, @Period";
@@ -269,12 +275,18 @@ public class SqlBarrelFlowRepository : IBarrelFlowRepository
         command.Parameters.AddWithValue(command, "@Period", period);
 
         using var reader = await command.ExecuteReaderAsync();
-        decimal result = 0;
+        var resultList = new List<BarrelFlowRegisterOpeningPeriodDto>();
         if (reader.Read())
         {
-            result = reader.Get<decimal>("ClosingOilStockTon");
+            resultList.Add(new BarrelFlowRegisterOpeningPeriodDto
+                {
+                    OBConsignmentBBL = reader.Get<decimal>("OBConsignmentBBL"),
+                    OpeningOilStockBBL = reader.Get<decimal>("OpeningOilStockBBL"),
+                    OpeningOilStockTon = reader.Get<decimal>("OpeningOilStockTon"),
+                }
+            );
         }
 
-        return result;
+        return resultList;
     }
 }

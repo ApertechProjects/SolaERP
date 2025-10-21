@@ -421,5 +421,53 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
 
             return datas;
         }
+
+        public async Task<BidRFQDto?> GetVendorCodeForBidAsync(int rfqMainId, int businessUnitId, string vendorCode)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"
+                                    SELECT TOP 1
+                                    b.RFQMainId,
+                                    b.VendorCode,
+                                    b.BidNo,
+                                    rfqm.RFQNo
+                                    FROM Procurement.BidMain AS b
+                                    INNER JOIN Procurement.RFQMain rfqm ON rfqm.RFQMainId = b.RFQMainId
+                                    WHERE b.RFQMainId = @rfqMainId
+                                    AND b.BusinessUnitId = @businessUnitId
+                                    AND b.VendorCode = @vendorCode
+                                    ";
+
+            var rfqParam = command.CreateParameter();
+            rfqParam.ParameterName = "@rfqMainId";
+            rfqParam.Value = rfqMainId;
+            command.Parameters.Add(rfqParam);
+
+            var buParam = command.CreateParameter();
+            buParam.ParameterName = "@businessUnitId";
+            buParam.Value = businessUnitId;
+            command.Parameters.Add(buParam);
+
+            var vendorParam = command.CreateParameter();
+            vendorParam.ParameterName = "@vendorCode";
+            vendorParam.Value = vendorCode;
+            command.Parameters.Add(vendorParam);
+            
+            await using var reader = await command.ExecuteReaderAsync();
+
+            if (!await reader.ReadAsync())
+            {
+                return null;
+            }
+
+            var dto = new BidRFQDto
+            {
+                VendorCode = reader.GetString(reader.GetOrdinal("VendorCode")),
+                BidNo = reader.GetString(reader.GetOrdinal("BidNo")),
+                RFQNo = reader.GetString(reader.GetOrdinal("RFQNo"))
+            };
+
+            return dto;
+        }
     }
 }

@@ -21,4 +21,9 @@ public class BarrelFlowUIDDto
     public int? UserId { get; set; }
     public DateTime? CreatedDate { get; set; }
     public int? BusinessUnitId { get; set; }
+    public decimal? OpeningOilStockBBL { get; set; }
+    public decimal? OBConsignmentBBL { get; set; }
+    public decimal? ClosingOilStockBBL { get; set; }
+    public decimal? CBConsignmentBBL { get; set; }
+    public decimal? RealizedSales { get; set; }
 }
