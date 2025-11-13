@@ -267,6 +267,7 @@ public class SqlOrderRepository : IOrderRepository
                                 @DestinationPoint,
                                 @StartDate,
                                 @EndDate,
+                                @LCType,
                                 @NewOrderMainId = @NewOrderMainId OUTPUT,
 		                        @NewOrderNo = @NewOrderNo OUTPUT
                                         
@@ -299,6 +300,7 @@ public class SqlOrderRepository : IOrderRepository
         command.Parameters.AddWithValue(command, "@DestinationPoint", orderMainDto.DestinationPoint);
         command.Parameters.AddWithValue(command, "@StartDate", orderMainDto.StartDate);
         command.Parameters.AddWithValue(command, "@EndDate", orderMainDto.EndDate);
+        command.Parameters.AddWithValue(command, "@LCType", orderMainDto.LCType);
 
         await using var reader = await command.ExecuteReaderAsync();
         if (await reader.ReadAsync())
@@ -754,6 +756,7 @@ public class SqlOrderRepository : IOrderRepository
             DestinationPoint = reader.Get<string>("DestinationPoint"),
             OrderNotes = reader.Get<string>("OrderNotes"),
             KeyCode = reader.Get<string>("KeyCode"),
+            LCType =  reader.Get<string>("LCType")
 
         };
     }
