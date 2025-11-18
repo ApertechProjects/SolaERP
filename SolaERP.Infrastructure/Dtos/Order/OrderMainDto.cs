@@ -33,7 +33,9 @@ public class OrderMainDto
     public int BudgetYear { get; set; }
     public string OrderNotes { get; set; }
     public string DestinationPoint { get; set; }
+    public string LCType { get; set; }
 
     public List<OrderDetailDto> OrderDetails { get; set; }
     public List<AttachmentSaveModel> Attachments { get; set; }
+   
 }
