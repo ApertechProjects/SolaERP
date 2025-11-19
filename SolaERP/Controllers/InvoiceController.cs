@@ -184,10 +184,10 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> GetInvoiceRegisterList(int businessUnitId)
             => CreateActionResult(await _invoiceService.GetInvoiceRegisterList(businessUnitId));
 
-        [HttpPost("{invoiceRegisterId:int}")]
-        public async Task<IActionResult> RetrieveInvoiceRegister(int invoiceRegisterId)
+        [HttpPost]
+        public async Task<IActionResult> RetrieveInvoiceRegister(InvoiceRetrieveModel model)
             => CreateActionResult(
-                await _invoiceService.RetrieveInvoiceRegister(invoiceRegisterId, Convert.ToInt32(User.Identity.Name)));
+                await _invoiceService.RetrieveInvoiceRegister(model.InvoiceRegisterId, Convert.ToInt32(User.Identity.Name)));
         
     }
 }
