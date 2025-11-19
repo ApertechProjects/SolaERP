@@ -251,9 +251,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 command.Parameters.AddWithValue(command, "@InvoiceTransactionTypeId", model.InvoiceTransactionTypeId);
 
                 command.Parameters.AddWithValue(command, "@FullPrepaid", model.FullPrepaid);
-                
+
                 command.Parameters.AddWithValue(command, "@LinkedInvoiceRegisterId", model.LinkedInvoiceRegisterId);
-                
+
                 command.Parameters.AddWithValue(command, "@WHTGrossUp", model.WHTGrossUp);
 
                 command.Parameters.Add("@NewInvoiceRegisterId", SqlDbType.Int);
@@ -768,9 +768,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             command.Parameters.AddWithValue(command, "@InvoiceMatchingMainId", invoiceMatchingMainId);
             command.Parameters.AddWithValue(command, "@UserId", userId);
-            
+
             await using var reader = await command.ExecuteReaderAsync();
-            
+
             int newJournalNo = 0;
             while (await reader.ReadAsync())
                 newJournalNo = reader.Get<int>("NewJrnalNo");
@@ -1052,7 +1052,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             await using var reader = await command.ExecuteReaderAsync();
             if (reader.Read())
                 newAdvanceClosingId = reader.Get<int>("@NewAdvanceClosingId");
-            
+
             return newAdvanceClosingId;
         }
 
@@ -1137,6 +1137,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             await _unitOfWork.SaveChangesAsync();
             return await command.ExecuteNonQueryAsync() > 0;
+        }
+
+        public async Task RetrieveInvoiceRegister(int invoiceRegisterId, int userId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = "exec dbo.SP_InvoiceRegisterRetrieve @InvoiceRegisterId, @UserId";
+            command.Parameters.AddWithValue(command, "@InvoiceRegisterId", invoiceRegisterId);
+            command.Parameters.AddWithValue(command, "@UserId", userId);
+
+            await _unitOfWork.SaveChangesAsync();
+            await command.ExecuteNonQueryAsync();
         }
     }
 }

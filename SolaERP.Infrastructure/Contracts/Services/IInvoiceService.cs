@@ -55,5 +55,6 @@ namespace SolaERP.Application.Contracts.Services
 		Task<ApiResponse<List<InvoiceRegisterInvoiceDetailsForCreditNoteDto>>> GetInvoiceRegisterInvoiceDetailsForCreditNote(int invoiceRegisterId);
 		Task<ApiResponse<bool>> SaveAdvanceClosing(List<InvoiceClosingRequest> model, int userId);
 		Task<ApiResponse<List<InvoiceRegisterDto>>> GetInvoiceRegisterList(int businessUnitId);
+		Task<ApiResponse<bool>> RetrieveInvoiceRegister(int invoiceRegisterId, int userId);
 	}
 }
