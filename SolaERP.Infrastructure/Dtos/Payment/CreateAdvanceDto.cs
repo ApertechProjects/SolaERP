@@ -25,5 +25,6 @@ namespace SolaERP.Application.Dtos.Payment
         public string Department { get; set; }
         public decimal PaidAmount { get; set; }
         public string Employee { get; set; }
+        public string WellNo { get; set; }
     }
 }
