@@ -31,6 +31,10 @@ namespace SolaERP.Persistence.Services
 		private readonly IBusinessUnitService _businessUnitService;
 		private readonly IGeneralService _generalService;
 		private readonly IApproveStageService _approveStageService;
+		private readonly IBuyerService _buyerService;
+		private readonly IBackgroundTaskQueue _taskQueue;
+
+
 
 		public RequestService(IUnitOfWork unitOfWork,
 			IMapper mapper,
@@ -42,7 +46,9 @@ namespace SolaERP.Persistence.Services
 			IBusinessUnitService businessUnitService,
 			IGeneralService generalService,
 			IEmailNotificationService emailNotificationService,
-			IApproveStageService approveStageService)
+			IApproveStageService approveStageService,
+			IBuyerService buyerService,
+			IBackgroundTaskQueue taskQueue)
 		{
 			_unitOfWork = unitOfWork;
 			_mapper = mapper;
@@ -55,6 +61,9 @@ namespace SolaERP.Persistence.Services
 			_generalService = generalService;
 			_emailNotificationService = emailNotificationService;
 			_approveStageService = approveStageService;
+			_buyerService = buyerService;
+			_taskQueue = taskQueue;
+
 		}
 
 		public async Task<bool> RemoveDetailAsync(int requestDetailId)
@@ -348,6 +357,22 @@ namespace SolaERP.Persistence.Services
 		{
 			int userId = await _userRepository.ConvertIdentity(name);
 			bool data = await _requestMainRepository.UpdateBuyerAsync(requestSetBuyer, userId);
+			
+			string buyerEmail =
+				await _buyerService.FindBuyerEmailByBuyerName(requestSetBuyer.Buyer, requestSetBuyer.BusinessUnitId);
+			RequestBuyerData buyerData = new RequestBuyerData();
+			buyerData.BuyerName = requestSetBuyer.Buyer;
+			buyerData.Email = buyerEmail;
+			buyerData.RequestNo = requestSetBuyer.RequestNo;
+			buyerData.RequestMainId = 0;
+			buyerData.BusinessUnitName = "";
+			buyerData.Language = "eng";
+			
+			
+			_taskQueue.QueueBackgroundWorkItem(async token =>
+			{
+				await _mailService.SendRequestBuyerMail(buyerData);
+			});
 
 			await _unitOfWork.SaveChangesAsync();
 			return ApiResponse<bool>.Success(data);
