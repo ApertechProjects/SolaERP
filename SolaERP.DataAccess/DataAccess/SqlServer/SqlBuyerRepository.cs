@@ -76,6 +76,25 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return result;
         }
+        
+        public async Task<string> FindBusinessUnitNameByBuyerName(string buyerName, int businessUnitId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_UNI_Buyer_List_FOREMAIL @BusinessUnitId, @BuyerName";
+            command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+            command.Parameters.AddWithValue(command, "@BuyerName", buyerName);
+
+            await using DbDataReader reader = await command.ExecuteReaderAsync();
+            string result = null;
+            if (await reader.ReadAsync())
+            {
+                result = reader.Get<string>("BusinessUnitName");
+            }
+
+            return result;
+        }
+        
+        
 
         public async Task<BuyerDto> FindBuyerDataByBuyerName(string buyerName, int businessUnitId)
         {

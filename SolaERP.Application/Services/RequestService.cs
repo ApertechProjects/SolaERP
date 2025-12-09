@@ -360,12 +360,15 @@ namespace SolaERP.Persistence.Services
 			
 			string buyerEmail =
 				await _buyerService.FindBuyerEmailByBuyerName(requestSetBuyer.Buyer, requestSetBuyer.BusinessUnitId);
+			
+			string businessUnitName =
+				await _buyerService.FindBuyerEmailByBuyerName(requestSetBuyer.Buyer, requestSetBuyer.BusinessUnitId);
 			RequestBuyerData buyerData = new RequestBuyerData();
 			buyerData.BuyerName = requestSetBuyer.Buyer;
 			buyerData.Email = buyerEmail;
 			buyerData.RequestNo = requestSetBuyer.RequestNo;
 			buyerData.RequestMainId = 0;
-			buyerData.BusinessUnitName = "";
+			buyerData.BusinessUnitName = businessUnitName;
 			buyerData.Language = "eng";
 			
 			
