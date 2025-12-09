@@ -119,7 +119,7 @@ namespace SolaERP.Persistence.Services
             var saveResponse = await _bidComparisonRepository.BidApprove(approve, Convert.ToInt32(userIdentity));
             await _unitOfWork.SaveChangesAsync();
 
-           var datas = await _bidComparisonRepository.GetById(approve.BidComparisonId);
+           // var datas = await _bidComparisonRepository.GetById(approve.BidComparisonId);
 
            // if (datas != null && datas.Any())
            // {
@@ -146,6 +146,38 @@ namespace SolaERP.Persistence.Services
            // }
 
             return ApiResponse<bool>.Success(saveResponse, 200);
+        }
+        
+        public async Task<ApiResponse<bool>> BidApproveAsyncForMail(
+            BidComparisonBidApproveDto approve, string userIdentity)
+        {
+            var datas = await _bidComparisonRepository.GetById(approve.BidComparisonId);
+
+            if (datas != null && datas.Any())
+            {
+                var data = datas[0];
+                string buyerEmail =
+                    await _buyerService.FindBuyerEmailByBuyerName(data.Buyer, data.BusinessUnitId);
+            
+                string businessUnitName =
+                    await _buyerService.FindBusinessUnitNameByBuyerName(data.Buyer, data.BusinessUnitId);
+                
+                RequestBuyerData buyerData = new RequestBuyerData();
+                buyerData.BuyerName = data.Buyer;
+                buyerData.Email = buyerEmail;
+                buyerData.RequestNo = data.ComparisonNo;
+                buyerData.RequestMainId = data.BidComparisonId;
+                buyerData.BusinessUnitName = businessUnitName;
+                buyerData.Language = "eng";
+            
+            
+                _taskQueue.QueueBackgroundWorkItem(async token =>
+                {
+                    await _mailService.SendBidComparisonForBuyer(buyerData);
+                });
+            }
+
+            return ApiResponse<bool>.Success(true, 200);
         }
 
         public async Task<ApiResponse<bool>> BidRejectAsync(
