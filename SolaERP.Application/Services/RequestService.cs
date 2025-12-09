@@ -358,24 +358,24 @@ namespace SolaERP.Persistence.Services
 			int userId = await _userRepository.ConvertIdentity(name);
 			bool data = await _requestMainRepository.UpdateBuyerAsync(requestSetBuyer, userId);
 			
-			string buyerEmail =
-				await _buyerService.FindBuyerEmailByBuyerName(requestSetBuyer.Buyer, requestSetBuyer.BusinessUnitId);
-			
-			string businessUnitName =
-				await _buyerService.FindBusinessUnitNameByBuyerName(requestSetBuyer.Buyer, requestSetBuyer.BusinessUnitId);
-			RequestBuyerData buyerData = new RequestBuyerData();
-			buyerData.BuyerName = requestSetBuyer.Buyer;
-			buyerData.Email = buyerEmail;
-			buyerData.RequestNo = requestSetBuyer.RequestNo;
-			buyerData.RequestMainId = 0;
-			buyerData.BusinessUnitName = businessUnitName;
-			buyerData.Language = "eng";
-			
-			
-			_taskQueue.QueueBackgroundWorkItem(async token =>
-			{
-				await _mailService.SendRequestBuyerMail(buyerData);
-			});
+			// string buyerEmail =
+			// 	await _buyerService.FindBuyerEmailByBuyerName(requestSetBuyer.Buyer, requestSetBuyer.BusinessUnitId);
+			//
+			// string businessUnitName =
+			// 	await _buyerService.FindBusinessUnitNameByBuyerName(requestSetBuyer.Buyer, requestSetBuyer.BusinessUnitId);
+			// RequestBuyerData buyerData = new RequestBuyerData();
+			// buyerData.BuyerName = requestSetBuyer.Buyer;
+			// buyerData.Email = buyerEmail;
+			// buyerData.RequestNo = requestSetBuyer.RequestNo;
+			// buyerData.RequestMainId = 0;
+			// buyerData.BusinessUnitName = businessUnitName;
+			// buyerData.Language = "eng";
+			//
+			//
+			// _taskQueue.QueueBackgroundWorkItem(async token =>
+			// {
+			// 	await _mailService.SendRequestBuyerMail(buyerData);
+			// });
 
 			await _unitOfWork.SaveChangesAsync();
 			return ApiResponse<bool>.Success(data);

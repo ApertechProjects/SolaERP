@@ -119,7 +119,7 @@ namespace SolaERP.Persistence.Services
             var saveResponse = await _bidComparisonRepository.BidApprove(approve, Convert.ToInt32(userIdentity));
             await _unitOfWork.SaveChangesAsync();
 
-            await BidApproveAsyncForMail(approve, userIdentity);
+            // await BidApproveAsyncForMail(approve, userIdentity);
 
             return ApiResponse<bool>.Success(saveResponse, 200);
         }
