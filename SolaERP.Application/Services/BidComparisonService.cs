@@ -128,7 +128,7 @@ namespace SolaERP.Persistence.Services
            //         await _buyerService.FindBuyerEmailByBuyerName(data.Buyer, data.BusinessUnitId);
            //
            //     string businessUnitName =
-           //         await _buyerService.FindBuyerEmailByBuyerName(data.Buyer, data.BusinessUnitId);
+           //         await _buyerService.FindBusinessUnitNameByBuyerName(data.Buyer, data.BusinessUnitId);
            //     
            //     RequestBuyerData buyerData = new RequestBuyerData();
            //     buyerData.BuyerName = data.Buyer;
