@@ -40,12 +40,12 @@ public class VM_BidComparisonApprove : VM_EmailTemplateBase
 
     public string GetHeaderOfMailAz
     {
-        get { return $" [{_bidComparisonNo}] №-li sorğu təsdiqlənmişdir"; }
+        get { return $" [{_bidComparisonNo}] №-li Təklif Müqayisəsi təsdiqlənmişdir"; }
     }
 
     public string GetHeaderOfMailEn
     {
-        get { return $" [{_bidComparisonNo}] № request approved"; }
+        get { return $" [{_bidComparisonNo}] № Bid Comparison approved"; }
     }
 
     public HtmlString GetBodyOfMailAz()
@@ -53,7 +53,7 @@ public class VM_BidComparisonApprove : VM_EmailTemplateBase
         return new HtmlString(
             "<table width='100%' style='font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; border-spacing: 0; padding: 0;'>" +
             $"<tr><td><p>Hörmətli {_buyerName},</p></td></tr>" +
-            $"<tr><td><p>[{_bidComparisonNo}] №-li sorğu təsdiqlənmişdir.</p></td></tr>" +
+            $"<tr><td><p>[{_bidComparisonNo}] №-li Təklif Müqayisəsi təsdiqlənmişdir.</p></td></tr>" +
             
             $"<tr><td><p>BusinessUnit - {_businessUnitName}</p></td></tr>" +
             "<tr><td><p>Hər hansı bir sualınız və ya köməyə ehtiyacınız olarsa, bizimlə əlaqə saxlamaqdan çəkinməyin.</p></td></tr>" +
@@ -67,7 +67,7 @@ public class VM_BidComparisonApprove : VM_EmailTemplateBase
         return new HtmlString(
             "<table width='100%' style='font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; border-spacing: 0; padding: 0;'>" +
             $"<tr><td><p>Dear {_buyerName},</p></td></tr>" +
-            $"<tr><td><p> [{_bidComparisonNo}] № request approved.</p></td></tr>" +
+            $"<tr><td><p> [{_bidComparisonNo}] № Bid Comparison approved.</p></td></tr>" +
             
             $"<tr><td><p>BusinessUnit - {_businessUnitName}</p></td></tr>" +
             "<tr><td><p>Should you have any questions or require assistance, feel free to contact us.</p></td></tr>" +
