@@ -8,6 +8,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<BuyerDto>>> GetBuyersAsync(string name, int businessUnitId);
 
         Task<string> FindBuyerEmailByBuyerName(string buyerName, int businessUnitId);
+        Task<string> FindBusinessUnitNameByBuyerName(string buyerName, int businessUnitId);
         Task<BuyerDto> FindBuyerDataByBuyerName(string buyerName, int businessUnitId);
     }
 }
