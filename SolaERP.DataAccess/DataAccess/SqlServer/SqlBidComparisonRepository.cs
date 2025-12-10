@@ -802,7 +802,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
 
-            command.CommandText = "select bc.BidComparisonId, bc.ComparisonNo, rfq.Buyer, rfq.BusinessUnitId " +
+            command.CommandText = "select bc.BidComparisonId, bc.ComparisonNo, rfq.Buyer, rfq.BusinessUnitId, rfq.RFQMainId " +
                                   " from Procurement.BidComparison bc " +
                                   " inner join Procurement.RFQMain rfq on bc.RFQMainId = rfq.RFQMainId " +
                                   " where bc.BidComparisonId = @MainId ";

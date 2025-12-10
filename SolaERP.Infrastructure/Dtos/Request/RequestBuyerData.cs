@@ -3,6 +3,7 @@ namespace SolaERP.Application.Dtos.Request;
 public class RequestBuyerData
 {
         public int RequestMainId { get; set; }
+        public int ParentMainId { get; set; }
         public string BuyerName { get; set; }
         public string Email { get; set; }
         public string RequestNo { get; set; }

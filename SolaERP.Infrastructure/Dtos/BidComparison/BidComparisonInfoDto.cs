@@ -6,5 +6,6 @@ namespace SolaERP.Application.Entities.BidComparison
         public string ComparisonNo { get; set; }
         public string Buyer { get; set; }
         public int BusinessUnitId { get; set; }
+        public int RFQMainId { get; set; }
     }
 }
