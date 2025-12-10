@@ -26,10 +26,12 @@ public class VM_RequestBuyer : VM_EmailTemplateBase
         _requestMainId = requestMainId;
         _businessUnitName = businessUnitName;
     }
+    
+    
 
     public string Subject
     {
-        get { return "Request Buyer Assigned"; }
+        get { return $"{_requestNo} Request Assigned to You for Sourcing / Satınalma Tələbi Sizə Təhvil Verildi"; }
     }
 
     public string TemplateName()
@@ -49,28 +51,37 @@ public class VM_RequestBuyer : VM_EmailTemplateBase
 
     public HtmlString GetBodyOfMailAz()
     {
+        string baseUrl = _configuration["Mail:ServerUrlUI"];
+        string requestLink = $"{baseUrl}/requests/{_requestMainId}";
+        
         return new HtmlString(
             "<table width='100%' style='font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; border-spacing: 0; padding: 0;'>" +
             $"<tr><td><p>Hörmətli {_buyerName},</p></td></tr>" +
-            $"<tr><td><p>[{_requestNo}] №-li Sorğu üçün alıcıya təyin olunmusunuz.</p></td></tr>" +
+            "<tr><td><p>Siz satınalma prosesinə dair yeni Tələb üçün təyin olunmusunuz.</p></td></tr>" +
+            $"<tr><td><p>Tələb Nömrəsi: {_requestNo}</p></td></tr>" +
             
-            $"<tr><td><p>BusinessUnit - {_businessUnitName}</p></td></tr>" +
-            "<tr><td><p>Hər hansı bir sualınız və ya köməyə ehtiyacınız olarsa, bizimlə əlaqə saxlamaqdan çəkinməyin.</p></td></tr>" +
-            "<tr><td><p>Hörmətlə,<br>GL Group</p></td></tr>" +
+            "<tr><td><p>Zəhmət olmasa satınalma fəaliyyətlərinə davam edin. Tələb haqqında bütün detallara aşağıdakı link vasitəsilə daxil ola bilərsiniz:</p></td></tr>" +
+            $"<tr><td><p><a href='{requestLink}'>{requestLink}</a></p></td></tr>" +
+            "<tr><td><p>Hörmətlə,<br>SOLA ERP</p></td></tr>" +
             "</table>"
         );
     }
 
     public HtmlString GetBodyOfMailEn()
     {
+        
+        string baseUrl = _configuration["Mail:ServerUrlUI"];
+        string requestLink = $"{baseUrl}/requests/{_requestMainId}";
+
         return new HtmlString(
             "<table width='100%' style='font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; border-spacing: 0; padding: 0;'>" +
             $"<tr><td><p>Dear {_buyerName},</p></td></tr>" +
-            $"<tr><td><p> [{_requestNo}] № Request was assigned to you.</p></td></tr>" +
+            "<tr><td><p> You have been assigned a new Request for the sourcing process.</p></td></tr>" +
+            $"<tr><td><p> Request Number: {_requestNo}</p></td></tr>" +
             
-            $"<tr><td><p>BusinessUnit - {_businessUnitName}</p></td></tr>" +
-            "<tr><td><p>Should you have any questions or require assistance, feel free to contact us.</p></td></tr>" +
-            "<tr><td><p>Best regards,<br>GL Group</p></td></tr>" +
+            "<tr><td><p>Please proceed with the sourcing activities. You can access the full details of the Request via the following link:</p></td></tr>" +
+            $"<tr><td><p><a href='{requestLink}'>{requestLink}</a></p></td></tr>" +
+            "<tr><td><p>Best regards,<br>SOLA ERP</p></td></tr>" +
             "</table>"
         );
     }

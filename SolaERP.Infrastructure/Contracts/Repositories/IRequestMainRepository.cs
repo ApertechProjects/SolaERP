@@ -41,6 +41,7 @@ namespace SolaERP.Application.Contracts.Repositories
 		Task<UserList> RequesterMailInRequest(int requestMainId);
 		Task<UserList> BuyerMailInRequest(int requestMainId);
 		Task<string> GetRequestBusinessUnitName(int requestMainId);
+		Task<int> GetRequestMainIdByRequestDetailId(int requestDetailId);
 		Task UpdateRequestDetailBuyerAsync(List<RequestDetailUpdateBuyerDto> buyers, int userId, int businessUnitId);
 		Task<List<WarehouseInfo>> GetWarehouseList(int businessUnitId);
 	}
