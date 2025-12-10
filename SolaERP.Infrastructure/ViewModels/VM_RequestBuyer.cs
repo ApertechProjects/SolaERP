@@ -61,7 +61,7 @@ public class VM_RequestBuyer : VM_EmailTemplateBase
             $"<tr><td><p>Tələb Nömrəsi: {_requestNo}</p></td></tr>" +
             
             "<tr><td><p>Zəhmət olmasa satınalma fəaliyyətlərinə davam edin. Tələb haqqında bütün detallara aşağıdakı link vasitəsilə daxil ola bilərsiniz:</p></td></tr>" +
-            $"<tr><td><p><a href='{requestLink}'>{requestLink}</a></p></td></tr>" +
+            $"<tr><td><p><a href='{requestLink}' style='color: #00008B; text-decoration: underline;'>{requestLink}</a></p></td></tr>" +
             "<tr><td><p>Hörmətlə,<br>SOLA ERP</p></td></tr>" +
             "</table>"
         );
@@ -80,7 +80,7 @@ public class VM_RequestBuyer : VM_EmailTemplateBase
             $"<tr><td><p> Request Number: {_requestNo}</p></td></tr>" +
             
             "<tr><td><p>Please proceed with the sourcing activities. You can access the full details of the Request via the following link:</p></td></tr>" +
-            $"<tr><td><p><a href='{requestLink}'>{requestLink}</a></p></td></tr>" +
+            $"<tr><td><p><a href='{requestLink}' style='color: #00008B; text-decoration: underline;'>{requestLink}</a></p></td></tr>" +
             "<tr><td><p>Best regards,<br>SOLA ERP</p></td></tr>" +
             "</table>"
         );
