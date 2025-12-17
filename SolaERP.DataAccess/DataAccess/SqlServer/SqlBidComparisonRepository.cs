@@ -795,5 +795,27 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return data;
         }
+        
+        public async Task<List<BidComparisonInfoDto>> GetById(int bcId)
+        {
+            var data = new List<BidComparisonInfoDto>();
+
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+
+            command.CommandText = "select bc.BidComparisonId, bc.ComparisonNo, rfq.Buyer, rfq.BusinessUnitId, rfq.RFQMainId " +
+                                  " from Procurement.BidComparison bc " +
+                                  " inner join Procurement.RFQMain rfq on bc.RFQMainId = rfq.RFQMainId " +
+                                  " where bc.BidComparisonId = @MainId ";
+
+            command.Parameters.AddWithValue(command, "@MainId", bcId);
+
+            await using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                data.Add(reader.GetByEntityStructure<BidComparisonInfoDto>());
+            }
+
+            return data;
+        }
     }
 }

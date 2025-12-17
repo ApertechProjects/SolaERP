@@ -770,6 +770,65 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 			return result;
 		}
         
+        // public async Task<int> GetRequestMainIdByRequestDetailId(int requestDetailId)
+        // {
+        //     int result = 0;
+        //
+        //     await using var command = _unitOfWork.CreateCommand() as DbCommand;
+        //
+        //     command.CommandText = "select rd.RequestMainId  RequestMainId" +
+        //                           " from Procurement.RequestDetails rd " +
+        //                           " where rd.RequestDetailId = @RequestDetailId ";
+        //
+        //     command.Parameters.AddWithValue(command, "@RequestDetailId", requestDetailId);
+        //
+        //     await using var reader = await command.ExecuteReaderAsync();
+        //     while (await reader.ReadAsync())
+        //     {
+        //         result = reader.GetInt32(reader.GetOrdinal("RequestMainId"));
+        //     }
+        //
+        //     return result;
+        // }
+        
+        public async Task<int> GetRequestMainIdByRequestDetailId(int requestDetailId)
+        {
+            int result = 0;
+
+            try
+            {
+                await using var command = _unitOfWork.CreateCommand() as DbCommand;
+                if (command == null)
+                    throw new InvalidOperationException("Failed to create command from UnitOfWork.");
+
+                command.CommandText = @"
+            SELECT rd.RequestMainId
+            FROM Procurement.RequestDetails rd
+            WHERE rd.RequestDetailId = @RequestDetailId
+        ";
+
+                var parameter = command.CreateParameter();
+                parameter.ParameterName = "@RequestDetailId";
+                parameter.Value = requestDetailId;
+                command.Parameters.Add(parameter);
+
+
+                await using var reader = await command.ExecuteReaderAsync();
+                if (await reader.ReadAsync())
+                {
+                    result = reader.GetInt32(reader.GetOrdinal("RequestMainId"));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetRequestMainIdByRequestDetailId: {ex.Message}");
+                throw;
+            }
+
+            return result;
+        }
+
+        
         public async Task UpdateRequestDetailBuyerAsync(List<RequestDetailUpdateBuyerDto> buyers, int userId,
             int businessUnitId)
         {

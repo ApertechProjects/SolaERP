@@ -138,6 +138,13 @@ namespace SolaERP.API.Controllers
             return CreateActionResult(
                 await _bidComparisonService.BidApproveAsync(approve, User.Identity.Name));
         }
+        
+        [HttpPost("[action]")]
+        public async Task<IActionResult> BidApproveForMail(BidComparisonBidApproveDto approve)
+        {
+            return CreateActionResult(
+                await _bidComparisonService.BidApproveAsyncForMail(approve, User.Identity.Name));
+        }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> BidReject(BidComparisonBidRejectDto reject)

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using SolaERP.Application.Dtos.Buyer;
+using SolaERP.Application.Dtos.Request;
 using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Entities.Email;
 using SolaERP.Application.Entities.RFQ;
@@ -43,12 +44,16 @@ namespace SolaERP.Application.Contracts.Services
         Task SendRejectMailToUser(int userId, HttpResponse response);
         Task SendMailToAdminstrationForApproveVendor(int vendorId);
         Task SendRFQDeadLineMail(List<RFQUserData> rfqUserData);
+        Task SendRequestBuyerMail(RequestBuyerData data);
+        
+        Task SendBidComparisonForBuyer(RequestBuyerData data);
         Task SendRFQLastDayMail(List<RFQUserData> rfqUserData);
         Task SendSupportMail(int userId, string subject, string body, List<AttachmentSaveModel> attachments);
         
         Task SendQueueUsingTemplate<T>(string subject, T viewModel, string templateName, string imageName, List<string> tos);
 
         Task SendRFQVendorApproveMail(List<RfqVendorToSend> users);
+        
 
         Task SendNewVendorApproveGroupEmail(List<string> emails, string vendorName);
 

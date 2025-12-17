@@ -18,7 +18,9 @@ using System.Net.Mail;
 using System.Text.Json;
 using System.Web;
 using SolaERP.Application.Dtos.Buyer;
+using SolaERP.Application.Dtos.Request;
 using SolaERP.Application.Dtos.RFQ;
+using SolaERP.Application.Entities.BidComparison;
 using SolaERP.Application.Entities.RFQ;
 using UserList = SolaERP.Application.Dtos.User.UserList;
 
@@ -858,6 +860,47 @@ namespace SolaERP.Infrastructure.Services
                     await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null,
                         new List<string> { data.Email });
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+
+        public async Task SendRequestBuyerMail(RequestBuyerData data)
+        {
+            try
+            {
+                VM_RequestBuyer emailVM = new VM_RequestBuyer("en", data.BuyerName, data.RequestNo,
+                    data.RequestMainId, data.BusinessUnitName)
+                {
+                    Language = (Language)Enum.Parse(typeof(Language), "en")
+                };
+
+                await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null,
+                    new List<string> { data.Email });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public async Task SendBidComparisonForBuyer(RequestBuyerData data)
+        {
+            try
+            {
+                VM_BidComparisonApprove emailVM = new VM_BidComparisonApprove("en", data.BuyerName, data.RequestNo,
+                    data.RequestMainId, data.ParentMainId, data.BusinessUnitName)
+                {
+                    Language = (Language)Enum.Parse(typeof(Language), "en")
+                };
+
+                await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null,
+                    new List<string> { data.Email });
             }
             catch (Exception e)
             {
