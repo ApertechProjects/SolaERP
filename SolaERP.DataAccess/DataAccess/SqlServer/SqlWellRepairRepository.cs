@@ -28,8 +28,8 @@ public class SqlWellRepairRepository : IWellRepairRepository
                 CreatedDate = reader.Get<DateTime>("CreatedDate"),
                 CreatedBy = reader.Get<string>("CreatedBy"),
                 RepairCode = reader.Get<string>("RepairCode"),
-                RepairNameAz = reader.Get<string>("NameAz"),
-                RepairNameEng = reader.Get<string>("NameEng"),
+                RepairNameAz = reader.Get<string>("RepairNameAz"),
+                RepairNameEng = reader.Get<string>("RepairNameEng"),
                 WellRepairId = reader.Get<int>("WellRepairId")
             });
         }
@@ -52,8 +52,8 @@ public class SqlWellRepairRepository : IWellRepairRepository
                 CreatedDate = reader.Get<DateTime>("CreatedDate"),
                 CreatedBy = reader.Get<int>("CreatedBy"),
                 RepairCode = reader.Get<string>("RepairCode"),
-                RepairNameAz = reader.Get<string>("NameAz"),
-                RepairNameEng = reader.Get<string>("NameEng"),
+                RepairNameAz = reader.Get<string>("RepairNameAz"),
+                RepairNameEng = reader.Get<string>("RepairNameEng"),
                 WellRepairId = reader.Get<int>("WellRepairId")
             });
         }
@@ -81,7 +81,7 @@ public async Task<List<WellCostListDto>> GetWellCostList(int businessUnitId, Dat
             EndDate = reader.Get<DateTime>("EndDate"),
             NumberOfStomp = reader.Get<int>("NumberOfStomp"),
             WellNumber = reader.Get<string>("WellNumber"),
-            RepairNameAz = reader.Get<string>("NameAz"),
+            RepairNameAz = reader.Get<string>("RepairNameAz"),
             Description = reader.Get<string>("Description"),
             ProductionWay = reader.Get<string>("ProductionWay"),
             ProductionTon = reader.Get<decimal>("ProductionTon"),
