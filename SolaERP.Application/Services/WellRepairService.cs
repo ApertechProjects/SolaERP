@@ -39,13 +39,13 @@ public class WellRepairService : IWellRepairService
         return ApiResponse<List<AnalysisFromSunListDto>>.Success(result);
     }
 
-    public async Task<ApiResponse<bool>> SaveWellRepairAsync(WellRepairRequest data, int userId)
+    public async Task<ApiResponse<bool>> SaveWellRepairAsync(List<WellRepairRequest> data, int userId)
     {
         await _wellRepairRepository.SaveWellRepairAsync(data, userId);
         await _unitOfWork.SaveChangesAsync();
         return ApiResponse<bool>.Success(true);
     } 
-    public async Task<ApiResponse<bool>> SaveWellCostAsync(WellCostRequest data,  int userId)
+    public async Task<ApiResponse<bool>> SaveWellCostAsync(List<WellCostRequest> data,  int userId)
     {
         await _wellRepairRepository.SaveWellCostAsync(data, userId);
         await _unitOfWork.SaveChangesAsync();

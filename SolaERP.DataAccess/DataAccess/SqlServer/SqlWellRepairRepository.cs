@@ -121,10 +121,10 @@ public async Task<List<AnalysisFromSunListDto>> GetAnalysisListFromSun(int busin
         return data;
     }
 
-public async Task<bool> SaveWellRepairAsync(WellRepairRequest dto,  int userId)
+public async Task<bool> SaveWellRepairAsync(List<WellRepairRequest> dtoList,  int userId)
 {
     bool result = false;
-    
+    foreach (var dto in dtoList){
         using (var command = _unitOfWork.CreateCommand() as DbCommand)
         {
             command.CommandText =
@@ -153,17 +153,20 @@ public async Task<bool> SaveWellRepairAsync(WellRepairRequest dto,  int userId)
             if (await command.ExecuteNonQueryAsync() > 0)
                 result = true;
         }
+        
+    }
         return result;
     }
 
-public async Task<bool> SaveWellCostAsync(WellCostRequest dto,  int userId)
+public async Task<bool> SaveWellCostAsync(List<WellCostRequest> dtoList,  int userId)
 {
     bool result = false;
-
-    using (var command = _unitOfWork.CreateCommand() as DbCommand)
+    foreach (var dto in dtoList)
     {
-        command.CommandText =
-            @"SET NOCOUNT OFF; 
+        using (var command = _unitOfWork.CreateCommand() as DbCommand)
+        {
+            command.CommandText =
+                @"SET NOCOUNT OFF; 
               EXEC SP_WellCost_IUD
                 @WellCostId,
                 @BusinessUnitId,
@@ -182,32 +185,32 @@ public async Task<bool> SaveWellCostAsync(WellCostRequest dto,  int userId)
                 @UserId,
                 @NewWellCostId OUTPUT";
 
-        command.Parameters.AddWithValue(command, "@WellCostId", dto.WellCostId);
-        command.Parameters.AddWithValue(command, "@BusinessUnitId", dto.BusinessUnitId);
-        command.Parameters.AddWithValue(command, "@WellNumber", dto.WellNumber);
-        command.Parameters.AddWithValue(command, "@StartDate", dto.StartDate);
-        command.Parameters.AddWithValue(command, "@EndDate", dto.EndDate);
-        command.Parameters.AddWithValue(command, "@NumberOfStomp", dto.NumberOfStomp);
-        command.Parameters.AddWithValue(command, "@WellRepairId", dto.WellRepairId);
-        command.Parameters.AddWithValue(command, "@Description", dto.Description);
-        command.Parameters.AddWithValue(command, "@ProductionWay", dto.ProductionWay);
-        command.Parameters.AddWithValue(command, "@ProductionTon", dto.ProductionTon);
-        command.Parameters.AddWithValue(command, "@Subject", dto.Subject);
-        command.Parameters.AddWithValue(command, "@PeriodStart", dto.PeriodStart);
-        command.Parameters.AddWithValue(command, "@PeriodEnd", dto.PeriodEnd);
-        command.Parameters.AddWithValue(command, "@ActualPeriod", dto.ActualPeriod);
-        command.Parameters.AddWithValue(command, "@UserId", userId);
-        
-        var outputId = command.CreateParameter();
-        outputId.ParameterName = "@NewWellCostId";
-        outputId.DbType = DbType.Int32;
-        outputId.Direction = ParameterDirection.Output;
-        command.Parameters.Add(outputId);
-        
-        if (await command.ExecuteNonQueryAsync() > 0)
-            result = true;
+            command.Parameters.AddWithValue(command, "@WellCostId", dto.WellCostId);
+            command.Parameters.AddWithValue(command, "@BusinessUnitId", dto.BusinessUnitId);
+            command.Parameters.AddWithValue(command, "@WellNumber", dto.WellNumber);
+            command.Parameters.AddWithValue(command, "@StartDate", dto.StartDate);
+            command.Parameters.AddWithValue(command, "@EndDate", dto.EndDate);
+            command.Parameters.AddWithValue(command, "@NumberOfStomp", dto.NumberOfStomp);
+            command.Parameters.AddWithValue(command, "@WellRepairId", dto.WellRepairId);
+            command.Parameters.AddWithValue(command, "@Description", dto.Description);
+            command.Parameters.AddWithValue(command, "@ProductionWay", dto.ProductionWay);
+            command.Parameters.AddWithValue(command, "@ProductionTon", dto.ProductionTon);
+            command.Parameters.AddWithValue(command, "@Subject", dto.Subject);
+            command.Parameters.AddWithValue(command, "@PeriodStart", dto.PeriodStart);
+            command.Parameters.AddWithValue(command, "@PeriodEnd", dto.PeriodEnd);
+            command.Parameters.AddWithValue(command, "@ActualPeriod", dto.ActualPeriod);
+            command.Parameters.AddWithValue(command, "@UserId", userId);
+
+            var outputId = command.CreateParameter();
+            outputId.ParameterName = "@NewWellCostId";
+            outputId.DbType = DbType.Int32;
+            outputId.Direction = ParameterDirection.Output;
+            command.Parameters.Add(outputId);
+
+            if (await command.ExecuteNonQueryAsync() > 0)
+                result = true;
+        }
     }
-    
 
     return result;
 }

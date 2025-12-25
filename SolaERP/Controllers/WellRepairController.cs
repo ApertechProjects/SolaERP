@@ -46,13 +46,13 @@ public class WellRepairController : CustomBaseController
     
     
     [HttpPost("[action]")]
-    public async Task<IActionResult> SaveWellRepair(WellRepairRequest data)
+    public async Task<IActionResult> SaveWellRepair(List<WellRepairRequest> data)
     {
         return CreateActionResult(await _wellRepairService.SaveWellRepairAsync(data,  Convert.ToInt32(User.Identity.Name)));
     }   
     
     [HttpPost("[action]")]
-    public async Task<IActionResult> SaveWellCost(WellCostRequest data)
+    public async Task<IActionResult> SaveWellCost(List<WellCostRequest> data)
     {
         return CreateActionResult(await _wellRepairService.SaveWellCostAsync(data,  Convert.ToInt32(User.Identity.Name)));
     }
