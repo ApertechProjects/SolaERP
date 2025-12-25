@@ -24,7 +24,7 @@ public class SqlWellRepairRepository : IWellRepairRepository
         {
             data.Add(new WellRepairListDto
             {
-                Status = reader.Get<string>("Status"),
+                Status = reader.Get<int>("Status"),
                 CreatedDate = reader.Get<DateTime>("CreatedDate"),
                 CreatedBy = reader.Get<string>("CreatedBy"),
                 RepairCode = reader.Get<string>("RepairCode"),

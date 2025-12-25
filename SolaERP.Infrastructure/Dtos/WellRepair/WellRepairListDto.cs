@@ -6,7 +6,7 @@ public class WellRepairListDto
     public string RepairCode { get; set; }
     public string RepairNameEng { get; set; }
     public string RepairNameAz { get; set; }
-    public String? Status { get; set; }
+    public int? Status { get; set; }
     public DateTime? CreatedDate { get; set; }
-    public String? CreatedBy { get; set; }
+    public string? CreatedBy { get; set; }
 }
