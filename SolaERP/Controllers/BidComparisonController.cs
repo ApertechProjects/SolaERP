@@ -51,6 +51,12 @@ namespace SolaERP.API.Controllers
             comparison.UserId = Convert.ToInt32(User.Identity.Name);
             return CreateActionResult(await _bidComparisonService.SaveBidComparisonAsync(comparison));
         }
+        
+        [HttpPost("[action]")]
+        public async Task<IActionResult> AddAttachment(BidComparisonAttachmentCardDto comparison)
+        {
+            return CreateActionResult(await _bidComparisonService.AddAttachment(comparison));
+        }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> SaveComparisonBids(BidComparisonBidsCreateRequestDto comparison)

@@ -18,6 +18,8 @@ namespace SolaERP.Application.Contracts.Services
         Task<bool> OrderCreateFromApproveBid(CreateOrderFromBidDto entity);
         Task<ApiResponse<BidComparisonCreateResponseDto>> SaveBidComparisonAsync(BidComparisonCreateDto bidComparison);
         Task<ApiResponse<bool>> SaveBidsAsync(BidComparisonBidsCreateRequestDto bidComparison);
+        Task<ApiResponse<BidComparisonAttachmentCardDto>> AddAttachment(BidComparisonAttachmentCardDto bidComparison);
+
 
         Task<ApiResponse<bool>> ApproveBidComparisonsAsync(List<BidComparisonApproveDto> bidComparisonApproves,
             string userIdentity);
