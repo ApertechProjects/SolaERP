@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.Invoice;
 using SolaERP.Application.Entities.Invoice;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
@@ -34,7 +35,7 @@ namespace SolaERP.API.Controllers
 
         [HttpGet]
         public async Task<IActionResult> RegisterHeld([FromQuery] InvoiceRegisterGetModel model)
-           => CreateActionResult(await _invoiceService.RegisterHeld(model, User.Identity.Name));
+            => CreateActionResult(await _invoiceService.RegisterHeld(model, User.Identity.Name));
 
         [HttpPost]
         public async Task<IActionResult> RegisterSendToApprove(InvoiceSendToApproveModel model)
@@ -46,7 +47,7 @@ namespace SolaERP.API.Controllers
 
         [HttpGet]
         public async Task<IActionResult> ApprovalInfo(int invoiceRegisterId)
-        => CreateActionResult(await _invoiceService.ApprovalInfos(invoiceRegisterId, User.Identity.Name));
+            => CreateActionResult(await _invoiceService.ApprovalInfos(invoiceRegisterId, User.Identity.Name));
 
         [HttpGet]
         public async Task<IActionResult> RegisterLoadGRN(int orderMainId)
@@ -84,7 +85,7 @@ namespace SolaERP.API.Controllers
 
         [HttpGet]
         public async Task<IActionResult> MatchingMainGRNList([FromQuery] InvoiceMatchingMainModel model)
-          => CreateActionResult(await _invoiceService.MatchingMainGRNList(model));
+            => CreateActionResult(await _invoiceService.MatchingMainGRNList(model));
 
         [HttpGet]
         public async Task<IActionResult> MatchingMainService([FromQuery] InvoiceMatchingGRNModel model)
@@ -126,7 +127,7 @@ namespace SolaERP.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> SaveInvoiceMatchingForGRN(SaveInvoiceMatchingGRNModel model)
-           => CreateActionResult(await _invoiceService.SaveInvoiceMatchingForGRN(model, User.Identity.Name));
+            => CreateActionResult(await _invoiceService.SaveInvoiceMatchingForGRN(model, User.Identity.Name));
 
         [HttpPost]
         public async Task<IActionResult> SaveInvoiceMatchingGRNs(InvoiceMatchingGRNs request)
@@ -147,18 +148,46 @@ namespace SolaERP.API.Controllers
 
         [HttpGet]
         public async Task<IActionResult> InvoiceRegisterInfo(int invoiceRegisterId)
-           => CreateActionResult(await _invoiceService.GetInvoiceRegisterLoad(invoiceRegisterId, User.Identity.Name));
+            => CreateActionResult(await _invoiceService.GetInvoiceRegisterLoad(invoiceRegisterId, User.Identity.Name));
 
         [HttpGet]
         public async Task<IActionResult> GetInvoiceRegisterPayablesTransactions(int invoiceRegisterId)
-          => CreateActionResult(await _invoiceService.GetInvoiceRegisterPayablesTransactions(invoiceRegisterId));
+            => CreateActionResult(await _invoiceService.GetInvoiceRegisterPayablesTransactions(invoiceRegisterId));
 
-		[HttpGet("{businessUnitId}")]
-		public async Task<IActionResult> GetPeriodList(int businessUnitId)
-			=> CreateActionResult(await _invoiceService.GetPeriodList(businessUnitId));
+        [HttpGet("{businessUnitId}")]
+        public async Task<IActionResult> GetPeriodList(int businessUnitId)
+            => CreateActionResult(await _invoiceService.GetPeriodList(businessUnitId));
 
-		[HttpGet("{orderMainId}")]
-		public async Task<IActionResult> GetRegisterOrderDetails(int orderMainId)
-			=> CreateActionResult(await _invoiceService.GetRegisterOrderDetails(orderMainId));
-	}
+        [HttpGet("{orderMainId}")]
+        public async Task<IActionResult> GetRegisterOrderDetails(int orderMainId)
+            => CreateActionResult(await _invoiceService.GetRegisterOrderDetails(orderMainId));
+
+        [HttpGet]
+        public async Task<IActionResult> InvoiceRegisterAdvance(int businessUnitId, DateTime dateFrom, DateTime dateTo)
+            => CreateActionResult(await _invoiceService.GetInvoiceRegisterAdvance(businessUnitId, dateFrom, dateTo,
+                Convert.ToInt32(User.Identity.Name)));
+
+        [HttpGet]
+        public async Task<IActionResult> InvoiceRegisterAdvanceClosingList(int invoiceRegisterId)
+            => CreateActionResult(await _invoiceService.GetInvoiceRegisterAdvanceClosingList(invoiceRegisterId));
+
+        [HttpGet]
+        public async Task<IActionResult> InvoiceRegisterInvoiceDetailsForCreditNote(int invoiceRegisterId)
+            => CreateActionResult(
+                await _invoiceService.GetInvoiceRegisterInvoiceDetailsForCreditNote(invoiceRegisterId));
+
+        [HttpPost]
+        public async Task<IActionResult> SaveAdvanceClosing(List<InvoiceClosingRequest> model)
+            => CreateActionResult(await _invoiceService.SaveAdvanceClosing(model, Convert.ToInt32(User.Identity.Name)));
+
+        [HttpGet]
+        public async Task<IActionResult> GetInvoiceRegisterList(int businessUnitId)
+            => CreateActionResult(await _invoiceService.GetInvoiceRegisterList(businessUnitId));
+
+        [HttpPost]
+        public async Task<IActionResult> RetrieveInvoiceRegister(InvoiceRetrieveModel model)
+            => CreateActionResult(
+                await _invoiceService.RetrieveInvoiceRegister(model.InvoiceRegisterId, Convert.ToInt32(User.Identity.Name)));
+        
+    }
 }

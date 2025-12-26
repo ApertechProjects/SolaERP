@@ -49,23 +49,23 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<BidAllDto>>.Success(dtos, 200);
         }
 
-		public async Task<ApiResponse<List<BidAllDto>>> GetDraftAsync(BidDraftFilterDto filter)
-		{
-			var data = await _bidRepository.GetDraftAsync(_mapper.Map<BidAllFilter>(filter));
-			var dtos = _mapper.Map<List<BidAllDto>>(data);
+        public async Task<ApiResponse<List<BidAllDto>>> GetDraftAsync(BidDraftFilterDto filter)
+        {
+            var data = await _bidRepository.GetDraftAsync(_mapper.Map<BidAllFilter>(filter));
+            var dtos = _mapper.Map<List<BidAllDto>>(data);
 
-			return ApiResponse<List<BidAllDto>>.Success(dtos, 200);
-		}
+            return ApiResponse<List<BidAllDto>>.Success(dtos, 200);
+        }
 
-		public async Task<ApiResponse<List<BidAllDto>>> GetSubmittedAsync(BidDraftFilterDto filter)
-		{
-			var data = await _bidRepository.GetSubmittedAsync(_mapper.Map<BidAllFilter>(filter));
-			var dtos = _mapper.Map<List<BidAllDto>>(data);
+        public async Task<ApiResponse<List<BidAllDto>>> GetSubmittedAsync(BidDraftFilterDto filter)
+        {
+            var data = await _bidRepository.GetSubmittedAsync(_mapper.Map<BidAllFilter>(filter));
+            var dtos = _mapper.Map<List<BidAllDto>>(data);
 
-			return ApiResponse<List<BidAllDto>>.Success(dtos, 200);
-		}
+            return ApiResponse<List<BidAllDto>>.Success(dtos, 200);
+        }
 
-		public async Task<ApiResponse<List<BidDetailsLoadDto>>> GetBidDetailsAsync(BidDetailsFilterDto filter)
+        public async Task<ApiResponse<List<BidDetailsLoadDto>>> GetBidDetailsAsync(BidDetailsFilterDto filter)
         {
             var data = await _bidRepository.GetBidDetailsAsync(_mapper.Map<BidDetailsFilter>(filter));
             var dtos = _mapper.Map<List<BidDetailsLoadDto>>(data);
@@ -82,8 +82,10 @@ namespace SolaERP.Persistence.Services
             var dtos = _mapper.Map<List<BidDetailsLoadDto>>(details);
             foreach (var item in dtos)
             {
-                item.Attachments = await _attachmentService.GetAttachmentsAsync(item.BidDetailId, SourceType.BIDD, Modules.Bid);
+                item.Attachments =
+                    await _attachmentService.GetAttachmentsAsync(item.BidDetailId, SourceType.BIDD, Modules.Bid);
             }
+
             model.Details = dtos;
             model.RFQMain = _mapper.Map<RFQMainDto>(await _rfqRepository.GetRFQMainAsync(model.RFQMainId));
             model.Attachments = await _attachmentService.GetAttachmentsAsync(bidMainId, SourceType.BID, Modules.Bid);
@@ -112,20 +114,19 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<BidIUDResponse>> SaveBidMainAsync(BidMainDto bidMain, string userIdentity)
         {
-            // var validationResult = await _validator.ValidateAsync(bid);
+            if (bidMain.BidMainId == 0)
+            {
+                BidRFQDto checkData = await _bidRepository.GetVendorCodeForBidAsync(bidMain.RFQMainId,
+                    bidMain.BusinessUnitId, bidMain.VendorCode);
 
-            // if (!validationResult.IsValid)
-            // {
-            //     return BadRequest(new
-            //     {
-            //         success = false,
-            //         errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList()
-            //     });
-            // }
-            
-            // var validator = new BidSaveValidation(_bidRepository);
-            // var result = await validator.ValidateAsync(bidMain);
-            
+                if (checkData != null)
+                {
+                    return ApiResponse<BidIUDResponse>.Fail(
+                        $"Sistemdə {checkData.VendorCode} nömrəli Vendor {checkData.RFQNo} nömrəli RFQ-ə artıq bir BID yaradıb və yeni təklif göndərilə bilməz.Hazırda mövcud olan BID nömrəsi:{checkData.BidNo}",
+                        400);
+                }
+            }
+
             var entity = _mapper.Map<BidMain>(bidMain);
             entity.UserId = Convert.ToInt32(userIdentity);
 
@@ -133,7 +134,8 @@ namespace SolaERP.Persistence.Services
             var saveResponse = await _bidRepository.BidMainIUDAsync(entity);
 
             await _attachmentService.SaveAttachmentAsync(bidMain.Attachments, SourceType.BID, saveResponse.Id);
-            await _attachmentService.SaveAttachmentAsync(bidMain.CommercialAttachments, SourceType.BID_COMM, saveResponse.Id);
+            await _attachmentService.SaveAttachmentAsync(bidMain.CommercialAttachments, SourceType.BID_COMM,
+                saveResponse.Id);
 
             foreach (var detail in details)
                 detail.BidMainId = saveResponse.Id;
@@ -151,8 +153,9 @@ namespace SolaERP.Persistence.Services
             saveResponse.BidDetailIds = detailIds;
             if (bidMain.Status == 1)
             {
-               await _rfqRepository.ChangeRFQVendorResponseStatus(bidMain.RFQMainId, bidMain.VendorCode);
+                await _rfqRepository.ChangeRFQVendorResponseStatus(bidMain.RFQMainId, bidMain.VendorCode);
             }
+
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<BidIUDResponse>.Success(saveResponse, 200);
         }
@@ -181,7 +184,8 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<List<BidRFQListLoadDto>>> GetRfqListAsync(string userIdentity, int businessUnitId)
         {
-            var filter = new BidRFQListFilter { UserId = Convert.ToInt32(userIdentity), BusinessUnitId = businessUnitId };
+            var filter = new BidRFQListFilter
+                { UserId = Convert.ToInt32(userIdentity), BusinessUnitId = businessUnitId };
             var data = await _bidRepository.GetRFQListForBidAsync(filter);
             var dtos = _mapper.Map<List<BidRFQListLoadDto>>(data);
 
@@ -198,6 +202,11 @@ namespace SolaERP.Persistence.Services
             }
 
             return ApiResponse<bool>.Success(true);
+        }
+
+        public async Task<List<RFQVendorEmailDto>> GetBidsByRFQMainIdAsync(List<int> rfqMainIds)
+        {
+            return await _bidRepository.GetBidsByRFQMainIdAsync(rfqMainIds);
         }
     }
 }

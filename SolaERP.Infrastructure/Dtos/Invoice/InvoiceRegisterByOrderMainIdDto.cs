@@ -15,7 +15,9 @@ namespace SolaERP.Application.Dtos.Invoice
         public string VendorName { get; set; }
         public int WithHoldingTaxId { get; set; }
         public string WithHoldingTaxCode { get; set; }
+        public decimal WithHoldingTax { get; set; }
         public decimal OrderTotal { get; set; }
+        public decimal Balance { get; set; }
         public List<Dtos.TaxDto.TaxDto> TaxDatas { get; set; }
         public List<Dtos.WithHoldingTax.WithHoldingTaxDto> WithHoldingTaxDatas { get; set; }
         //public DateTime InvoiceReceivedDate { get; set; }

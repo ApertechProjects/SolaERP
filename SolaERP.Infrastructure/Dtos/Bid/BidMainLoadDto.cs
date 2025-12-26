@@ -27,6 +27,7 @@ namespace SolaERP.Application.Dtos.Bid
         public int ApproveStageMainId { get; set; }
         public bool Discualified { get; set; }
         public string DiscualificationReason { get; set; }
+        public string RfqComment { get; set; }
 
         public RFQMainDto RFQMain { get; set; }
         public List<BidDetailsLoadDto> Details { get; set; }

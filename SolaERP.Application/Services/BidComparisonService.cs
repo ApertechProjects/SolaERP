@@ -9,6 +9,7 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
 using SolaERP.Application.Enums;
 using System.Diagnostics;
+using SolaERP.Application.Dtos.Request;
 using SolaERP.Application.Entities.Payment;
 using SolaERP.Application.Models;
 
@@ -25,6 +26,10 @@ namespace SolaERP.Persistence.Services
         private readonly IRfqRepository _rfqRepository;
         private readonly IFileUploadService _fileUploadService;
         private readonly IAttachmentService _attachmentService;
+        private readonly IBuyerService _buyerService;
+        private readonly IBackgroundTaskQueue _taskQueue;
+        private readonly IMailService _mailService;
+
 
         public BidComparisonService(IUnitOfWork unitOfWork, IMapper mapper,
             IBidComparisonRepository bidComparisonRepository,
@@ -32,7 +37,10 @@ namespace SolaERP.Persistence.Services
             IApproveStageMainRepository approveStageMainRepository,
             IRfqRepository rfqRepository,
             IFileUploadService fileUploadService,
-            IAttachmentService attachmentService)
+            IAttachmentService attachmentService,
+            IBuyerService buyerService,
+            IBackgroundTaskQueue taskQueue,
+            IMailService mailService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -42,6 +50,10 @@ namespace SolaERP.Persistence.Services
             _rfqRepository = rfqRepository;
             _fileUploadService = fileUploadService;
             _attachmentService = attachmentService;
+            _buyerService = buyerService;
+            _taskQueue = taskQueue;
+            _mailService = mailService;
+
         }
 
         public async Task<ApiResponse<BidComparisonCreateResponseDto>> SaveBidComparisonAsync(
@@ -60,6 +72,16 @@ namespace SolaERP.Persistence.Services
             bidComparisonCreateResponseDto.BidComparisonId = saveResponse;
 
             return ApiResponse<BidComparisonCreateResponseDto>.Success(bidComparisonCreateResponseDto, 200);
+        }
+        
+        public async Task<ApiResponse<BidComparisonAttachmentCardDto>> AddAttachment(
+            BidComparisonAttachmentCardDto bidComparison)
+        {
+            await _attachmentService.SaveAttachmentAsync(bidComparison.Attachments,
+                SourceType.BID_COMP,
+                bidComparison.BidComparisonMainId);
+
+            return ApiResponse<BidComparisonAttachmentCardDto>.Success(bidComparison, 200);;
         }
 
         public async Task<ApiResponse<bool>> SaveBidsAsync(
@@ -107,7 +129,42 @@ namespace SolaERP.Persistence.Services
             var saveResponse = await _bidComparisonRepository.BidApprove(approve, Convert.ToInt32(userIdentity));
             await _unitOfWork.SaveChangesAsync();
 
+            await BidApproveAsyncForMail(approve, userIdentity);
+
             return ApiResponse<bool>.Success(saveResponse, 200);
+        }
+        
+        public async Task<ApiResponse<bool>> BidApproveAsyncForMail(
+            BidComparisonBidApproveDto approve, string userIdentity)
+        {
+            var datas = await _bidComparisonRepository.GetById(approve.BidComparisonId);
+
+            if (datas != null && datas.Any())
+            {
+                var data = datas[0];
+                string buyerEmail =
+                    await _buyerService.FindBuyerEmailByBuyerName(data.Buyer, data.BusinessUnitId);
+            
+                string businessUnitName =
+                    await _buyerService.FindBusinessUnitNameByBuyerName(data.Buyer, data.BusinessUnitId);
+                
+                RequestBuyerData buyerData = new RequestBuyerData();
+                buyerData.BuyerName = data.Buyer;
+                buyerData.Email = buyerEmail;
+                buyerData.RequestNo = data.ComparisonNo;
+                buyerData.RequestMainId = data.BidComparisonId;
+                buyerData.BusinessUnitName = businessUnitName;
+                buyerData.ParentMainId = data.RFQMainId;
+                buyerData.Language = "eng";
+            
+            
+                _taskQueue.QueueBackgroundWorkItem(async token =>
+                {
+                    await _mailService.SendBidComparisonForBuyer(buyerData);
+                });
+            }
+
+            return ApiResponse<bool>.Success(true, 200);
         }
 
         public async Task<ApiResponse<bool>> BidRejectAsync(
@@ -371,6 +428,13 @@ namespace SolaERP.Persistence.Services
             var result = await _bidComparisonRepository.Delete(bidComparisonId);
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(result);
+        }
+        
+        public async Task<ApiResponse<List<BidMainListByRfqMainDto>>> GetBidListByRfqMainId(int rfqMainId)
+        {
+            var data = await _bidComparisonRepository.GetBidListByRfqMainId(rfqMainId);
+            var dtos = _mapper.Map<List<BidMainListByRfqMainDto>>(data);
+            return ApiResponse<List<BidMainListByRfqMainDto>>.Success(dtos, 200);
         }
     }
 }

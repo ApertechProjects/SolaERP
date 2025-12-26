@@ -27,5 +27,12 @@ namespace SolaERP.Application.Contracts.Services
 		Task<ApiResponse<List<RFQVendorsDto>>> GetRfqVendors(int rfqMainId);
 		Task<bool> ChangeRFQVendorResponseStatus(int rfqMainId, string vendorCode);
 		//Task<ApiResponse<SolaERP.Application.Dtos.UOM.ConversionDTO>> GetConversionAsync(int businessUnit, string itemCodes);
+
+		Task GetRFQDeadlineFinished();
+		Task<ApiResponse<bool>> ExtendRfqDeadlineAsync(RfqExtendDeadlineRequest request, int userId);
+
+		Task SendRFQDeadLineMail();
+		Task SendRFQLastDayMail();
+		Task<List<RFQVendorEmailDto>> GetRfqVendors(string rfqMainIds);
 	}
 }

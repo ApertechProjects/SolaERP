@@ -37,9 +37,12 @@ namespace SolaERP.Application.Entities.Invoice
         public int? AnalysisCode8Id { get; set; }
         public int? AnalysisCode9Id { get; set; }
         public int? AnalysisCode10Id { get; set; }
-        public string ItemCode { get;set; }
-        public decimal? OrderAmount { get;set; }
-        public string FixedAssetCode  { get; set; }
+        public string ItemCode { get; set; }
+        public decimal? OrderAmount { get; set; }
+        public string FixedAssetCode { get; set; }
+        public DateTime PrepaymentDateFrom { get; set; }
+        public DateTime PrepaymentDateTo { get; set; }
+        public int PrepaymentPeriods { get; set; }
+        public int? OrderDetailId { get; set; }
     }
 }
-

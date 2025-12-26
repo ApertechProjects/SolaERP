@@ -15,7 +15,6 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Confluent.Kafka;
 using System.Xml.Linq;
 
 namespace SolaERP.Persistence.Services

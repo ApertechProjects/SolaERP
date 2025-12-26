@@ -36,8 +36,8 @@ namespace SolaERP.Application.Contracts.Services
 		Task<ApiResponse<bool>> SaveInvoiceMatchingAdvances(InvoiceMatchingAdvance request);
 		Task<ApiResponse<InvoiceRegisterByOrderMainIdDto>> InvoiceRegisterList(int orderMainId);
 		Task<ApiResponse<List<InvoiceRegisterServiceDetailsLoadDto>>> InvoiceRegisterServiceDetailsLoad(InvoiceRegisterServiceLoadModel model);
-		Task<ApiResponse<SaveResultModel>> SaveInvoiceMatchingForService(SaveInvoiceMatchingModel model, string userName);
-		Task<ApiResponse<SaveResultModel>> SaveInvoiceMatchingForGRN(SaveInvoiceMatchingGRNModel model, string userName);
+		Task<ApiResponse<InvoiceIUDIntegrationResultModel>> SaveInvoiceMatchingForService(SaveInvoiceMatchingModel model, string userName);
+		Task<ApiResponse<InvoiceIUDIntegrationResultModel>> SaveInvoiceMatchingForGRN(SaveInvoiceMatchingGRNModel model, string userName);
 
 		Task<ApiResponse<bool>> CheckInvoiceRegister(int invocieRegisterId, int businessUnitId, string vendorCode, string invoiceNo);
 		Task<ApiResponse<List<RegisterDraftDto>>> RegisterDraft(InvoiceRegisterGetModel model, string name);
@@ -50,5 +50,11 @@ namespace SolaERP.Application.Contracts.Services
 		Task<ApiResponse<List<InvoiceRegisterPayablesTransactionsDto>>> GetInvoiceRegisterPayablesTransactions(int invoiceRegisterId);
 		Task<ApiResponse<List<InvoicePeriodListDto>>> GetPeriodList(int businessUnitId);
 		Task<ApiResponse<List<InvoiceRegisterOrderDetailDto>>> GetRegisterOrderDetails(int orderMainId);
+		Task<ApiResponse<List<InvoiceRegisterAdvanceDto>>> GetInvoiceRegisterAdvance(int businessUnitId, DateTime dateFrom, DateTime dateTo, int userId);
+		Task<ApiResponse<List<InvoiceRegisterAdvanceClosingListDto>>> GetInvoiceRegisterAdvanceClosingList(int invoiceRegisterId);
+		Task<ApiResponse<List<InvoiceRegisterInvoiceDetailsForCreditNoteDto>>> GetInvoiceRegisterInvoiceDetailsForCreditNote(int invoiceRegisterId);
+		Task<ApiResponse<bool>> SaveAdvanceClosing(List<InvoiceClosingRequest> model, int userId);
+		Task<ApiResponse<List<InvoiceRegisterDto>>> GetInvoiceRegisterList(int businessUnitId);
+		Task<ApiResponse<bool>> RetrieveInvoiceRegister(int invoiceRegisterId, int userId);
 	}
 }

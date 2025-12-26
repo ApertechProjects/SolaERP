@@ -20,4 +20,11 @@ public class MatchingMainDto
     public decimal SupplierWHTRate { get; set; }
     public decimal Tax { get; set; }
     public int InvoicePeriod { get; set; }
+    public decimal OrderTotal { get; set; }
+    public decimal DiscountedOrderAmount { get; set; }
+    public decimal MatchedGRNs { get; set; }
+    public int TaxId { get; set; }
+    public bool HasVATAccount { get; set; }
+    
+    public List<TaxDto.TaxDto> TaxDatas { get; set; }
 }

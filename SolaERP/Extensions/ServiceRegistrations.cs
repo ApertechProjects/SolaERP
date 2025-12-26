@@ -93,13 +93,16 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IInvoiceService, InvoiceService>();
-            builder.Services.AddScoped<IKafkaMailService, KafkaMailService>();
+            // builder.Services.AddScoped<IKafkaMailService, KafkaMailService>();
             builder.Services.AddScoped<IUserReportService, UserReportService>();
             builder.Services.AddScoped<ISupportService, SupportService>();
             builder.Services.AddScoped<ISend, Send>();
             builder.Services.AddScoped<BusinessUnitHelper>();
             builder.Services.AddScoped<IFixedAssetService, FixedAssetService>();
             builder.Services.AddScoped<IGNRLConfigService, GNRLConfigService>();
+            builder.Services.AddScoped<IBarrelFlowService, BarrelFlowService>();
+            builder.Services.AddScoped<IEntitlementService, EntitlementService>();
+            builder.Services.AddScoped<IWellRepairService, WellRepairService>();
         }
 
         private static void UseRepositories(this WebApplicationBuilder builder)
@@ -146,6 +149,9 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<ISupportRepository, SqlSupportRepository>();
             builder.Services.AddScoped<IFixedAssetRepository, SqlFixedAssetRepository>();
             builder.Services.AddScoped<IGNRLConfigRepository, SqlGNRLConfigRepository>();
+            builder.Services.AddScoped<IBarrelFlowRepository, SqlBarrelFlowRepository>();
+            builder.Services.AddScoped<IEntitlementRepository, SqlEntitlementRepository>();
+            builder.Services.AddScoped<IWellRepairRepository, SqlWellRepairRepository>();
         }
 
         public static void UseValidationExtension(this WebApplicationBuilder builder)

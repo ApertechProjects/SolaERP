@@ -44,9 +44,13 @@ namespace SolaERP.Application.Models
         public string AccountCode { get; set; }
         public string PaymentTerms { get; set; }
         public decimal PayableAmount { get; set; }
-        [JsonProperty("PaymentRequestAmount")]
-        public decimal PaymenRequestAmount { get; set; }
+        [JsonProperty("PaymentRequestAmount")] 
+        public decimal PaymentRequestAmount { get; set; }
         public decimal AmountToPay { get; set; }
+        public string Budget { get; set; }
+        public string Employee { get; set; }
+        public string WellNo { get; set; }
+        public string LinkAccount { get; set; }
         public decimal GRNAmount { get; set; }
         public DateTime DueDate { get; set; }
         public string AnalysisCode1 { get; set; }

@@ -18,11 +18,14 @@ namespace SolaERP.Application.Contracts.Services
         Task<bool> OrderCreateFromApproveBid(CreateOrderFromBidDto entity);
         Task<ApiResponse<BidComparisonCreateResponseDto>> SaveBidComparisonAsync(BidComparisonCreateDto bidComparison);
         Task<ApiResponse<bool>> SaveBidsAsync(BidComparisonBidsCreateRequestDto bidComparison);
+        Task<ApiResponse<BidComparisonAttachmentCardDto>> AddAttachment(BidComparisonAttachmentCardDto bidComparison);
+
 
         Task<ApiResponse<bool>> ApproveBidComparisonsAsync(List<BidComparisonApproveDto> bidComparisonApproves,
             string userIdentity);
 
         Task<ApiResponse<bool>> BidApproveAsync(BidComparisonBidApproveDto approve, string userIdentity);
+        Task<ApiResponse<bool>> BidApproveAsyncForMail(BidComparisonBidApproveDto approve, string userIdentity);
         Task<ApiResponse<bool>> BidRejectAsync(BidComparisonBidRejectDto reject, string userIdentity);
         Task<ApiResponse<bool>> SendComparisonToApproveAsync(BidComparisonSendToApproveDto bidComparisonSendToApprove);
         Task<ApiResponse<List<BidComparisonAllDto>>> GetBidComparisonAllAsync(BidComparisonAllFilterDto filter);
@@ -49,5 +52,6 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<BidComparisonApprovalInfoDto>>> BidComparisonApprovalInfo(int bidComparisonId);
         Task<ApiResponse<bool>> Retrieve(int bidComparisonId, int userId);
         Task<ApiResponse<bool>> Delete(int bidComparisonId);
+        Task<ApiResponse<List<BidMainListByRfqMainDto>>> GetBidListByRfqMainId(int rfqMainId);
     }
 }

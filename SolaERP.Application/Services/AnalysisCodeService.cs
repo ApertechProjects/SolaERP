@@ -24,11 +24,11 @@ namespace SolaERP.Persistence.Services
         private readonly IAnalysisDimensionRepository _dimensionRepository;
 
         public AnalysisCodeService(IMapper mapper,
-                                   IUnitOfWork unitOfWork,
-                                   IAnalysisStructureRepository analysisCodeRepository,
-                                   IAnalysisDimensionRepository dimensionRepository,
-                                   IUserRepository userRepository,
-                                   IBusinessUnitRepository businessUnitRepository)
+            IUnitOfWork unitOfWork,
+            IAnalysisStructureRepository analysisCodeRepository,
+            IAnalysisDimensionRepository dimensionRepository,
+            IUserRepository userRepository,
+            IBusinessUnitRepository businessUnitRepository)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -55,6 +55,7 @@ namespace SolaERP.Persistence.Services
                 await _unitOfWork.SaveChangesAsync();
                 return ApiResponse<bool>.Success(code, 200);
             }
+
             return ApiResponse<bool>.Fail("Analysis code can not be deleted", 400);
         }
 
@@ -76,7 +77,9 @@ namespace SolaERP.Persistence.Services
 
         public async Task<ApiResponse<AnalysisCodeModel>> GetAnalysisCodesAsync(AnalysisCodeGetModel getRequest)
         {
-            var analysisCodes = await _analysisCodeRepository.GetAnalysisCodesAsync(getRequest.BusinessUnitId, getRequest.ProcedureName);
+            var analysisCodes =
+                await _analysisCodeRepository.GetAnalysisCodesAsync(getRequest.BusinessUnitId,
+                    getRequest.ProcedureName);
             var analysisCodeByCat = analysisCodes.Where(x => x.CatId == getRequest.CatId).FirstOrDefault();
 
             if (analysisCodeByCat == null)
@@ -132,7 +135,7 @@ namespace SolaERP.Persistence.Services
                         AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId9,
                         AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode9
                     },
-                        new Application.Dtos.AnalysisCode.AnalysisCode
+                    new Application.Dtos.AnalysisCode.AnalysisCode
                     {
                         AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId10,
                         AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode10
@@ -141,7 +144,6 @@ namespace SolaERP.Persistence.Services
             };
 
             return ApiResponse<AnalysisCodeModel>.Success(analysisCodeModel, 200);
-
         }
 
         public async Task<ApiResponse<List<AnalysisDto>>> GetAnalysisCodesAsync(int dimensionId, string userName)
@@ -150,7 +152,8 @@ namespace SolaERP.Persistence.Services
             var analysisCodes = await _analysisCodeRepository.GetAnalysisCodesAsync(dimensionId, userId);
 
             var analysisDimension = await _dimensionRepository.ByAnalysisDimensionId(dimensionId, userId);
-            var businessUnit = await _businessUnitRepository.GetByIdAsync(Convert.ToInt32(analysisDimension?.BusinessUnitId));
+            var businessUnit =
+                await _businessUnitRepository.GetByIdAsync(Convert.ToInt32(analysisDimension?.BusinessUnitId));
 
             var map = analysisCodes?.Select(ac => new AnalysisDto
             {
@@ -175,9 +178,12 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<AnalysisDto>>.Success(map, 200);
         }
 
-        public async Task<ApiResponse<List<AnalysisCodesModel>>> GetAnalysisCodesListAsync(AnalysisCodeGetModel getRequest, string userName)
+        public async Task<ApiResponse<List<AnalysisCodesModel>>> GetAnalysisCodesListAsync(
+            AnalysisCodeGetModel getRequest, string userName)
         {
-            var analysisCodes = await _analysisCodeRepository.GetAnalysisCodesAsync(getRequest.BusinessUnitId, getRequest.ProcedureName);
+            var analysisCodes =
+                await _analysisCodeRepository.GetAnalysisCodesAsync(getRequest.BusinessUnitId,
+                    getRequest.ProcedureName);
             var analysisCodeByCat = analysisCodes.Where(x => x.CatId == getRequest.CatId).FirstOrDefault();
 
             if (analysisCodeByCat == null)
@@ -189,66 +195,75 @@ namespace SolaERP.Persistence.Services
                 {
                     AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId1,
                     AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode1,
-                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId1,userName).Result.Data
+                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId1, userName).Result
+                        .Data
                 },
                 new AnalysisCodesModel
                 {
                     AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId2,
                     AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode2,
-                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId2,userName).Result.Data
+                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId2, userName).Result
+                        .Data
                 },
                 new AnalysisCodesModel
                 {
                     AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId3,
                     AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode3,
-                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId3,userName).Result.Data
+                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId3, userName).Result
+                        .Data
                 },
                 new AnalysisCodesModel
                 {
                     AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId4,
                     AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode4,
-                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId4,userName).Result.Data
+                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId4, userName).Result
+                        .Data
                 },
                 new AnalysisCodesModel
                 {
                     AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId5,
                     AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode5,
-                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId5,userName).Result.Data
+                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId5, userName).Result
+                        .Data
                 },
                 new AnalysisCodesModel
                 {
                     AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId6,
                     AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode6,
-                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId6,userName).Result.Data
+                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId6, userName).Result
+                        .Data
                 },
                 new AnalysisCodesModel
                 {
                     AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId7,
                     AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode7,
-                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId7,userName).Result.Data
+                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId7, userName).Result
+                        .Data
                 },
                 new AnalysisCodesModel
                 {
                     AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId8,
                     AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode8,
-                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId8,userName).Result.Data
+                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId8, userName).Result
+                        .Data
                 },
                 new AnalysisCodesModel
                 {
                     AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId9,
                     AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode9,
-                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId9,userName).Result.Data
+                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId9, userName).Result
+                        .Data
                 },
                 new AnalysisCodesModel
                 {
                     AnalysisDimensionId = analysisCodeByCat.AnalysisDimensionId10,
                     AnalysisDimensionCode = analysisCodeByCat.AnalysisDimensionCode10,
-                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId10,userName).Result.Data
+                    AnalysisCodes = GetAnalysisCodeListAsync(analysisCodeByCat.AnalysisDimensionId10, userName).Result
+                        .Data
                 },
             };
 
             return ApiResponse<List<AnalysisCodesModel>>.Success(analysisCodesModels, 200);
-
         }
 
         public async Task<ApiResponse<List<AnalysisWithBuDto>>> GetByBUIdAsync(int businessUnitId, string userName)
@@ -268,19 +283,29 @@ namespace SolaERP.Persistence.Services
             if (map.Count > 0)
                 return ApiResponse<List<AnalysisCodesDto>>.Success(map, 200);
             return ApiResponse<List<AnalysisCodesDto>>.Fail("Analysis Codes is empty", 400);
-
         }
 
-        public async Task<ApiResponse<bool>> SaveAnalysisCodeAsync(List<AnalysisCodeSaveModel> analysisCodeSave, string name)
+        public async Task<ApiResponse<bool>> SaveAnalysisCodeAsync(List<AnalysisCodeSaveModel> analysisCodeSave,
+            string name)
         {
             int userId = await _userRepository.ConvertIdentity(name);
             var code = false;
             int counter = 0;
+
             for (int i = 0; i < analysisCodeSave.Count; i++)
             {
+                int businessUnitId =
+                    await _analysisCodeRepository.GetBusinessUnitIdByAnalysisDimensionId(analysisCodeSave.First()
+                        .AnalysisDimensionId);
+
                 if (analysisCodeSave[i].AnalysisCodesId < 0)
                     analysisCodeSave[i].AnalysisCodesId = 0;
                 code = await _analysisCodeRepository.SaveAnalysisCode(analysisCodeSave[i], userId);
+
+                int analysisCodeId = analysisCodeSave[i].AnalysisCodesId <= 0 ? await _analysisCodeRepository.GetLastAnalysisCodeId() : analysisCodeSave[i].AnalysisCodesId;
+                
+                await _analysisCodeRepository.SaveAnalysisCodeIntegration(analysisCodeId, userId, businessUnitId);
+
                 if (code)
                     counter++;
             }
@@ -288,7 +313,7 @@ namespace SolaERP.Persistence.Services
             if (counter == analysisCodeSave.Count)
             {
                 await _unitOfWork.SaveChangesAsync();
-                return ApiResponse<bool>.Success(code, 200);
+                return ApiResponse<bool>.Success(true, 200);
             }
 
             return ApiResponse<bool>.Fail("Analysis code can not be saved", 400);

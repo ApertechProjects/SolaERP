@@ -8,33 +8,35 @@ namespace SolaERP.Application.Entities.Invoice
 {
     public class InvoiceRegisterOrderDetail : BaseEntity
     {
-		public Int64 LineNo { get; set; }
-		public string? Description { get; set; }
-		public string ItemCode { get; set; }
-		public decimal OrderAmount { get; set; }
-		public int? Amount { get; set; }
-		public decimal TaxAmount { get; set; }
-		public decimal GrossAmount { get; set; }
-		public string? AccountCode { get; set; }
-		public decimal Quantity { get; set; }
-		public string RUOM { get; set; }
-		public int BaseAmount { get; set; }
-		public int ReportingAmount { get; set; }
-		public int BaseGrossAmount { get; set; }
-		public int WithHoldingTaxAmount { get; set; }
-		public int BaseWithHoldingTaxAmount { get; set; }
-		public int ReportingWithHoldingTaxAmount { get; set; }
-		public int ReportingGrossAmount { get; set; }
-		public int CatId { get; set; }
-		public int? AnalysisCode1Id { get; set; }
-		public int? AnalysisCode2Id { get; set; }
-		public int? AnalysisCode3Id { get; set; }
-		public int? AnalysisCode4Id { get; set; }
-		public int? AnalysisCode5Id { get; set; }
-		public int? AnalysisCode6Id { get; set; }
-		public int? AnalysisCode7Id { get; set; }
-		public int? AnalysisCode8Id { get; set; }
-		public int? AnalysisCode9Id { get; set; }
-		public int? AnalysisCode10Id { get; set; }
-	}
+        public Int64 LineNo { get; set; }
+        public string? Description { get; set; }
+        public string ItemCode { get; set; }
+        public decimal OrderAmount { get; set; }
+        public decimal? Amount { get; set; }
+        public decimal TaxAmount { get; set; }
+        public decimal GrossAmount { get; set; }
+        public string? AccountCode { get; set; }
+        public decimal? Quantity { get; set; }
+        public decimal? MatchedLineAmount { get; set; }
+        public decimal? MatchedOrderTotal { get; set; }
+        public string RUOM { get; set; }
+        public decimal? BaseAmount { get; set; }
+        public decimal? ReportingAmount { get; set; }
+        public decimal? BaseGrossAmount { get; set; }
+        public decimal? WithHoldingTaxAmount { get; set; }
+        public decimal? BaseWithHoldingTaxAmount { get; set; }
+        public decimal? ReportingWithHoldingTaxAmount { get; set; }
+        public decimal? ReportingGrossAmount { get; set; }
+        public int CatId { get; set; }
+        public int? AnalysisCode1Id { get; set; }
+        public int? AnalysisCode2Id { get; set; }
+        public int? AnalysisCode3Id { get; set; }
+        public int? AnalysisCode4Id { get; set; }
+        public int? AnalysisCode5Id { get; set; }
+        public int? AnalysisCode6Id { get; set; }
+        public int? AnalysisCode7Id { get; set; }
+        public int? AnalysisCode8Id { get; set; }
+        public int? AnalysisCode9Id { get; set; }
+        public int? AnalysisCode10Id { get; set; }
+    }
 }

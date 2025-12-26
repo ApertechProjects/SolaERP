@@ -15,7 +15,9 @@ namespace SolaERP.Application.Entities.Invoice
         public string VendorName { get; set; }
         public int WithHoldingTaxId { get; set; }
         public string WithHoldingTaxCode { get; set; }
+        public decimal WithHoldingTax { get; set; }
         public decimal OrderTotal { get; set; }
+        public decimal Balance { get; set; }
         //public DateTime InvoiceReceivedDate { get; set; }
     }
 }

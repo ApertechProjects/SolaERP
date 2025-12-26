@@ -71,14 +71,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "Select * from dbo.VW_BusinessUnits_List";
+                command.CommandText = "SELECT * FROM Config.BusinessUnits";
                 using var reader = await command.ExecuteReaderAsync();
 
                 List<BusinessUnits> businessUnits = new List<BusinessUnits>();
 
                 while (reader.Read())
                 {
-                    businessUnits.Add(reader.GetByEntityStructure<BusinessUnits>());
+                    businessUnits.Add(reader.GetByEntityStructure<BusinessUnits>("ExportOilPercent"));
                 }
                 return businessUnits;
             }

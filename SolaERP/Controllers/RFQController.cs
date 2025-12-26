@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Data.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Models;
+using SolaERP.Application.UnitOfWork;
 using SolaERP.Controllers;
 
 namespace SolaERP.API.Controllers
@@ -13,7 +15,13 @@ namespace SolaERP.API.Controllers
     public class RFQController : CustomBaseController
     {
         private readonly IRfqService _service;
-        public RFQController(IRfqService service) => _service = service;
+        private readonly IUnitOfWork _unitOfWork;
+
+        public RFQController(IRfqService service, IUnitOfWork unitOfWork)
+        {
+            _service = service;
+            _unitOfWork = unitOfWork;
+        }
 
 
         [HttpGet("[action]")]
@@ -68,9 +76,19 @@ namespace SolaERP.API.Controllers
         public async Task<IActionResult> Delete([FromQuery] List<int> rfqMainId)
             => CreateActionResult(await _service.DeleteAsync(rfqMainId, User.Identity.Name));
 
-		[HttpGet("[action]/{rfqMainId}")]
-		public async Task<IActionResult> GetRfqVendors(int rfqMainId)
-		   => CreateActionResult(await _service.GetRfqVendors(rfqMainId));
+        [HttpGet("[action]/{rfqMainId}")]
+        public async Task<IActionResult> GetRfqVendors(int rfqMainId)
+            => CreateActionResult(await _service.GetRfqVendors(rfqMainId));
 
-	}
+        [HttpGet("[action]")]
+        public async Task UpdateRFQStatusToClose()
+        {
+            await _service.GetRFQDeadlineFinished();
+        }
+        
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ExtendRfqDeadline(RfqExtendDeadlineRequest request) =>
+            CreateActionResult(await _service.ExtendRfqDeadlineAsync(request, Convert.ToInt32(User.Identity.Name)));
+
+    }
 }

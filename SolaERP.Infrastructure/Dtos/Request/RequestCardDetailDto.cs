@@ -63,6 +63,7 @@ namespace SolaERP.Application.Dtos.Request
         public string RejectReason { get; set; }
         public string PurchaseOrder { get; set; }
         public int? Sequence { get; set; }
-
+        public string Warehouse { get; set; }
+        public int MaxSequence { get; set; }
     }
 }

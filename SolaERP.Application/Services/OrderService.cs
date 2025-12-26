@@ -8,14 +8,13 @@ using SolaERP.Application.Dtos.Payment;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.Vendors;
 using SolaERP.Application.Entities.AnalysisCode;
-using SolaERP.Application.Entities.Auth;
 using SolaERP.Application.Entities.Order;
 using SolaERP.Application.Entities.Vendors;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
-using System.Text;
+using SolaERP.Application.Dtos.Buyer;
 
 namespace SolaERP.Persistence.Services;
 
@@ -30,11 +29,15 @@ public class OrderService : IOrderService
     private readonly IVendorService _vendorService;
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
+    private readonly IBackgroundTaskQueue _taskQueue;
+    private readonly IMailService _mailService;
+    private readonly IBuyerService _buyerService;
 
     public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork,
         ISupplierEvaluationRepository supplierRepository, IGeneralService generalService,
         IVendorRepository vendorRepository, IAttachmentService attachmentService, IVendorService vendorService,
-        IUserRepository userRepository, IMapper mapper)
+        IUserRepository userRepository, IMapper mapper, IBackgroundTaskQueue taskQueue, IMailService mailService,
+        IBuyerService buyerService)
     {
         _orderRepository = orderRepository;
         _unitOfWork = unitOfWork;
@@ -45,6 +48,9 @@ public class OrderService : IOrderService
         _vendorService = vendorService;
         _userRepository = userRepository;
         _mapper = mapper;
+        _taskQueue = taskQueue;
+        _mailService = mailService;
+        _buyerService = buyerService;
     }
 
     public async Task<ApiResponse<List<OrderTypeLoadDto>>> GetTypesAsync(int businessUnitId)
@@ -112,9 +118,6 @@ public class OrderService : IOrderService
         int userId = Convert.ToInt32(identityName);
         var mainDto = await _orderRepository.SaveOrderMainAsync(orderMainDto, userId);
 
-        var orderIdList = orderMainDto.OrderDetails.Select(x => x.OrderDetailid).ToList();
-        await _orderRepository.DeleteDetailsNotIncludes(orderIdList, mainDto.OrderMainId);
-
         await _attachmentService.SaveAttachmentAsync(orderMainDto.Attachments, SourceType.ORDER, mainDto.OrderMainId);
 
         if (orderMainDto.OrderDetails.Count > 0)
@@ -125,10 +128,16 @@ public class OrderService : IOrderService
                 if (detail.RequestDetailId <= 0)
                 {
                     detail.RequestDetailId = null;
-
                 }
+
                 if (detail.OrderDetailid <= 0)
                     detail.OriginalQuantity = detail.Quantity;
+
+                if (detail.Deleted)
+                { 
+                    detail.OrderMainId = 0;
+                }
+         
             }
 
             var result = await _orderRepository.SaveOrderDetailsAsync(orderMainDto.OrderDetails);
@@ -164,25 +173,42 @@ public class OrderService : IOrderService
         string identityName)
     {
         int userId = Convert.ToInt32(identityName);
-        
+
         if (statusDto.RejectReasonId == 5)
         {
             return await Retrieve(new List<int>{statusDto.OrderMainId}, identityName , "Order Reject", 17);
         }
 
-        Dictionary<int,string> logData = await getOrderLogInformationAndActionIdByApproveStatusId(statusDto.ApproveStatusId);
-        
-        await _orderRepository.ChangeOrderMainStatusAsync(statusDto, userId, statusDto.OrderMainId, statusDto.Sequence, logData.Values.First(), logData.Keys.First());
+        Dictionary<int, string> logData =
+            await getOrderLogInformationAndActionIdByApproveStatusId(statusDto.ApproveStatusId);
+
+        await _orderRepository.ChangeOrderMainStatusAsync(statusDto, userId, statusDto.OrderMainId, statusDto.Sequence,
+            logData.Values.First(), logData.Keys.First());
         var order = await _orderRepository.GetHeaderLoadAsync(statusDto.OrderMainId);
         if (order.ApproveStatus == 1)
         {
+            if (order.Status == 2)
+            {
+                BuyerDto buyerData = await _buyerService.FindBuyerDataByBuyerName(order.Buyer, order.BusinessUnitId);
+
+                BuyerPurchaseOrderApproveEmailDto buyerPurchaseOrderApproveEmailDto = new BuyerPurchaseOrderApproveEmailDto();
+                buyerPurchaseOrderApproveEmailDto.BuyerEmail = buyerData.BuyerEmail;
+                buyerPurchaseOrderApproveEmailDto.BuyerName = order.Buyer;
+                buyerPurchaseOrderApproveEmailDto.BusinessUnitId = order.BusinessUnitId;
+                buyerPurchaseOrderApproveEmailDto.OrderNo = order.OrderNo;
+                buyerPurchaseOrderApproveEmailDto.BusinessUnitName = buyerData.BusinessUnitName;
+                buyerPurchaseOrderApproveEmailDto.OrderId = statusDto.OrderMainId;
+                
+                _taskQueue.QueueBackgroundWorkItem(async token => { await _mailService.BuyerPurchaseOrderApproveEmail(buyerPurchaseOrderApproveEmailDto); });
+            }
+
             CreateVendorRequest request = new CreateVendorRequest
             {
                 VendorCode = order.VendorCode,
                 UserId = userId,
                 BusinessUnitId = order.BusinessUnitId
             };
-			await _vendorService.TransferToIntegration(request);
+            await _vendorService.TransferToIntegration(request);
             await _orderRepository.CreateOrderIntegration(order.BusinessUnitId, statusDto.OrderMainId, userId);
         }
 
@@ -206,7 +232,8 @@ public class OrderService : IOrderService
         var orderInfo = await GetOrderMainBaseReportInfo(orderMainIdList);
         foreach (var item in orderInfo)
         {
-            var checkCurrency = await _generalService.DailyCurrencyIsExist(item.Date, item.Currency, item.BusinessUnitId);
+            var checkCurrency =
+                await _generalService.DailyCurrencyIsExist(item.Date, item.Currency, item.BusinessUnitId);
             if (!checkCurrency)
                 errorDatas.Add(item.OrderNo);
             else
@@ -220,7 +247,6 @@ public class OrderService : IOrderService
             return ApiResponse<List<string>>.Fail(errorDatas, 400);
 
         return ApiResponse<List<string>>.Success(200);
-
     }
 
     public async Task<ApiResponse<OrderHeadLoaderDto>> GetHeaderLoadAsync(int orderMainId)
@@ -289,7 +315,8 @@ public class OrderService : IOrderService
         return true;
     }
 
-    public async Task<ApiResponse<bool>> Retrieve(List<int> ids, string name, string logInformation="Order Changed Status To Retrieve", int logTypeId=17, int actionId=2)
+    public async Task<ApiResponse<bool>> Retrieve(List<int> ids, string name,
+        string logInformation = "Order Changed Status To Retrieve", int logTypeId = 17, int actionId = 2)
     {
         if (!await CheckIntegration(ids))
         {
@@ -301,7 +328,7 @@ public class OrderService : IOrderService
         string errorIds = string.Empty;
         for (int i = 0; i < ids.Count; i++)
         {
-            var result = await _orderRepository.Retrieve(ids[i], userId , logInformation, logTypeId, actionId);
+            var result = await _orderRepository.Retrieve(ids[i], userId, logInformation, logTypeId, actionId);
             if (result)
                 count++;
             else
@@ -331,15 +358,15 @@ public class OrderService : IOrderService
             await _orderRepository.GetOrderApprovalsByOrderDetailIdAsync(orderDetailId)
         );
     }
-    
+
     public async Task<Dictionary<int, string>> getOrderLogInformationAndActionIdByApproveStatusId(int approveStatusId)
     {
         Dictionary<int, Dictionary<int, string>> data = new Dictionary<int, Dictionary<int, string>>();
-        
-        data.Add(1, new Dictionary<int, string>{{4,"Order Approve"}});
-        data.Add(2, new Dictionary<int, string>{{2,"Order Reject"}});
-        data.Add(3, new Dictionary<int, string>{{2,"Order Hold"}});
-        
+
+        data.Add(1, new Dictionary<int, string> { { 4, "Order Approve" } });
+        data.Add(2, new Dictionary<int, string> { { 2, "Order Reject" } });
+        data.Add(3, new Dictionary<int, string> { { 2, "Order Hold" } });
+
         return data[approveStatusId];
     }
 }

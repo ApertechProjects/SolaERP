@@ -31,8 +31,9 @@ namespace SolaERP.Application.Entities.Request
         public int Priority { get; set; }
         public int ApproveStageMainId { get; set; }
         public string Location { get; set; }
+        public string Warehouse { get; set; }
+        public string RequestType { get; set; }
         public List<RequestCardDetail> requestCardDetails { get; set; }
         public List<RequestCardAnalysis> requestCardAnalysis { get; set; }
-
     }
 }

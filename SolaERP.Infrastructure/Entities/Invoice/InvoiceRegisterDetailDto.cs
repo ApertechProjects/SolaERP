@@ -30,6 +30,7 @@
     {
         public int? InvoiceMatchingDetailId { get; set; }
         public int? InvoiceMatchingMainId { get; set; }
+        public int? AdvanceInvoiceRegisterId { get; set; }
         public long LineNo { get; set; }
         public int OrderLine { get; set; }
         public string ItemCode { get; set; }
@@ -49,5 +50,7 @@
         public int AnalysisCode8Id { get; set; }
         public int AnalysisCode9Id { get; set; }
         public int AnalysisCode10Id { get; set; }
+        public string InvoiceDate { get; set; }
+        public string AccountCode { get; set; }
     }
 }
