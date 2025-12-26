@@ -32,9 +32,16 @@ namespace SolaERP.Application.Models
 		public string? VendorAccount { get; set; }
 		public string? ReasonAdditionalDescription { get; set; }
 		public string? Comment { get; set; }
+		public int InvoiceTransactionTypeId { get; set; }
+		public bool FullPrepaid { get; set; }
+		public int? LinkedInvoiceRegisterId { get; set; }
+		public bool UseOrderForInvoice { get; set; }
+		public bool? WHTGrossUp { get; set; }
+		public int OrderDetailId { get; set; }
+
 		public List<AttachmentSaveModel> Attachments { get; set; }
 		public List<InvoiceRegisterDetails> Details { get; set; }
-	}
+    }
 
   
 }

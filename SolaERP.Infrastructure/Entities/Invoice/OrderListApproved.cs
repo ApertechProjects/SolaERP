@@ -12,4 +12,5 @@ public class OrderListApproved : BaseEntity
     public int AgingDays { get; set; }
     public string VendorName { get; set; }
     public decimal TotalAmount { get; set; }
+    public decimal OrderBalance { get; set; }
 }

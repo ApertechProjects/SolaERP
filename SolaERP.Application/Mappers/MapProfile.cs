@@ -109,7 +109,9 @@ namespace SolaERP.Persistence.Mappers
                 .ReverseMap();
             CreateMap<BusinessUnits, BusinessUnitsAllDto>().ReverseMap();
             CreateMap<BusinessUnits, BusinessUnitsDto>().ReverseMap();
-            CreateMap<BaseBusinessUnit, BaseBusinessUnitDto>().ReverseMap();
+            CreateMap<BaseBusinessUnit, BaseBusinessUnitDto>()
+                .ForMember(dest => dest.HasVATAccount, opt => opt.MapFrom(src => src.VATAccount != null))
+                .ReverseMap();
             CreateMap<BusinessUnits, BusinessUnitConnectionDto>().ReverseMap();
             CreateMap<Groups, GroupsDto>().ReverseMap();
             CreateMap<GroupUser, GroupUserDto>().ReverseMap();
@@ -708,7 +710,6 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<InvoiceMatchingMainGRN, InvoiceMatchingMainGRNDto>().ReverseMap();
 
             CreateMap<InvoicesMatchingDetailsTypeDto, InvoicesMatchingDetailsType>()
-                .ForMember(x => x.AdvanceTotal, y => y.MapFrom(x => x.AdvanceAmount))
                 .ForMember(x => x.Quantity, y => y.MapFrom(x => x.ServiceAmount))
                 .ForMember(x => x.Total, y => y.MapFrom(x => x.InvoiceAmount))
                 .ReverseMap();
@@ -767,6 +768,16 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.FixedAssetDescription, opt => opt.MapFrom(src => src.Description))
                 .ReverseMap();
 
+            CreateMap<InvoiceRegisterAdvance, InvoiceRegisterAdvanceDto>().ReverseMap();
+            
+            CreateMap<InvoiceRegisterAdvanceClosingList, InvoiceRegisterAdvanceClosingListDto>().ReverseMap();
+            
+            CreateMap<InvoiceRegisterInvoiceDetailsForCreditNote, InvoiceRegisterInvoiceDetailsForCreditNoteDto>().ReverseMap();
+
+            CreateMap<InvoiceRegister, InvoiceRegisterDto>().ReverseMap();
+
+            CreateMap<InvoiceTransactionTypeEntity, InvoiceTransactionTypeEntityDto>().ReverseMap();
+            
             CreateMap<WarehouseInfo, WarehouseInfoDto>().ReverseMap();
             
             CreateMap<BidMainListByRfqMain, BidMainListByRfqMainDto>().ReverseMap();

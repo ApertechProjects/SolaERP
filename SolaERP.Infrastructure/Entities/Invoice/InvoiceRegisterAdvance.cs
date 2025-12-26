@@ -1,0 +1,43 @@
+namespace SolaERP.Application.Entities.Invoice;
+
+public class InvoiceRegisterAdvance : BaseEntity
+{
+    public int InvoiceRegisterId { get; set; }
+    public long LineNo { get; set; }
+    public int? Status { get; set; }
+    public int? ApproveStatus { get; set; }
+    public string StatusName { get; set; }
+    public string ApproveStatusName { get; set; }
+    public int? InvoiceType { get; set; }
+    public string InvoiceTypeName { get; set; }
+    public int? BusinessUnitId { get; set; }
+    public DateTime? InvoiceDate { get; set; }
+    public string AccountCode { get; set; }
+    public string AccountName { get; set; }
+    public DateTime? InvoiceReceivedDate { get; set; }
+    public string InvoiceNo { get; set; }
+    public string SystemInvoiceNo { get; set; }
+    public int? OrderTypeId { get; set; }
+    public string Ordertype { get; set; }
+    public int? OrderMainId { get; set; }
+    public string OrderNo { get; set; }
+    public string ReferenceDocNo { get; set; }
+    public decimal? InvoiceAmount { get; set; }
+    public string CurrencyCode { get; set; }
+    public string LineDescription { get; set; }
+    public string VendorCode { get; set; }
+    public string VendorName { get; set; }
+    public DateTime? DueDate { get; set; }
+    public int? AgingDays { get; set; }
+    public decimal MatchedAmount { get; set; } = 0;
+    public int? ProblematicInvoiceReasonId { get; set; }
+    public string ReasonAdditionalDescription { get; set; }
+    public bool HasAttachments { get; set; }
+    public string Comment { get; set; }
+    public decimal? TaxAmount { get; set; }
+    public decimal? WithHoldingTaxAmount { get; set; }
+    public string InvoiceTransactionType { get; set; }
+    public bool? FullPrepaid { get; set; }
+    public int TaxId { get; set; }
+    public string TaxCode { get; set; }
+}

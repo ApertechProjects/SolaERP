@@ -29,7 +29,8 @@ public class InvoicesMatchingDetailsType
 	public int AnalysisCode8Id { get; set; }
 	public int AnalysisCode9Id { get; set; }
 	public int AnalysisCode10Id { get; set; }
-	public decimal AdvanceTotal { get; set; }
+	public decimal AdvanceAmount { get; set; }
+	public int? AdvanceInvoiceRegisterId { get; set; }
 	public string AccountCode { get; set; }
 	public string ItemCode { get; set; }
 	public decimal? BaseTotal { get; set; }
@@ -48,7 +49,6 @@ public class InvoicesMatchingDetailsType
 	public decimal BaseTaxAmount { get; set; }
 	public decimal ReportingTaxAmount { get; set; }
 	public decimal ReportingGrossAmount { get; set; }
-
 }
 
 public class InvoicesMatchingDetailsTypeDto
@@ -75,6 +75,7 @@ public class InvoicesMatchingDetailsTypeDto
 	public int AnalysisCode9Id { get; set; }
 	public int AnalysisCode10Id { get; set; }
 	public decimal AdvanceAmount { get; set; }
+	public int? AdvanceInvoiceRegisterId { get; set; }
 	public string AccountCode { get; set; }
 	public string ItemCode { get; set; }
 	public decimal? BaseTotal { get; set; }
