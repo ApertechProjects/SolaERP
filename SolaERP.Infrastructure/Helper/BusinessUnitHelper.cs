@@ -23,25 +23,49 @@ public class BusinessUnitHelper
     private async Task<ConnectionData> GetConnectionData(int businessUnitId)
     {
         var connectionFullData = await GetFullConnection(businessUnitId);
-        //[DB_HOST(0.0.0.0)].DB_NAME.DB_SCHEMA.BUSINESS_UNIT_NAME + _(underscore symbol)
-        var splittedHostString = connectionFullData.Split("].");
-        var connectionData = new ConnectionData
+        
+        // [DB_HOST(0.0.0.0)].DB_NAME.DB_SCHEMA.BUSINESS_UNIT_NAME + _(underscore symbol)
+        // DB_NAME.DB_SCHEMA.BUSINESS_UNIT_NAME + _(underscore symbol)
+
+        if (connectionFullData.Contains("]"))
+        { 
+            var splittedHostString = connectionFullData.Split("].");
+            var connectionData = new ConnectionData
+            {
+                HostWithBrackets = splittedHostString[0] + "]"
+            };
+            
+            var withoutHostSplitString = splittedHostString[1].Split(".");
+            connectionData.DbName = withoutHostSplitString[0];
+            connectionData.Schema = withoutHostSplitString[1];
+            connectionData.BusinessUnitNameWithUnderscore = withoutHostSplitString[2];
+                    
+            return connectionData;
+        }
+        
+        
+        var connectionDataWithoutBrackets = new ConnectionData
         {
-            HostWithBrackets = splittedHostString[0] + "]"
+            HostWithBrackets = null
         };
-
-        var withoutHostSplitString = splittedHostString[1].Split(".");
-        connectionData.DbName = withoutHostSplitString[0];
-        connectionData.Schema = withoutHostSplitString[1];
-        connectionData.BusinessUnitNameWithUnderscore = withoutHostSplitString[2];
-
-        return connectionData;
+        
+        var withoutHostSplitStringWithoutBrackets = connectionFullData.Split(".");
+        connectionDataWithoutBrackets.DbName = withoutHostSplitStringWithoutBrackets[0];
+        connectionDataWithoutBrackets.Schema = withoutHostSplitStringWithoutBrackets[1];
+        connectionDataWithoutBrackets.BusinessUnitNameWithUnderscore = withoutHostSplitStringWithoutBrackets[2];
+                    
+        return connectionDataWithoutBrackets;
     }
 
     // EXEC [DB_HOST].DB_NAME.DB_SCHEMA.PROCEDURE_NAME ..variables
     public string BuildQueryForIntegration(int businessUnitId, string queryWithoutExec)
     {
         var connectionData = GetConnectionData(businessUnitId).Result;
+        if (connectionData.HostWithBrackets == null)
+        {
+            return $"EXEC SolaERPIntegration.dbo.{queryWithoutExec}";
+        }
+        
         return $"EXEC {connectionData.HostWithBrackets}.SolaERPIntegration.dbo.{queryWithoutExec}";
     }
 
