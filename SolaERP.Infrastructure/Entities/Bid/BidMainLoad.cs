@@ -30,5 +30,6 @@ namespace SolaERP.Application.Entities.Bid
         public int ApproveStageMainId { get; set; }
         public bool Discualified { get; set; }
         public string DiscualificationReason { get; set; }
+        public string RfqComment { get; set; }
     }
 }

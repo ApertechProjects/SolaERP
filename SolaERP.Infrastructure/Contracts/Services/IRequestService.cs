@@ -29,7 +29,6 @@ namespace SolaERP.Application.Contracts.Services
 
 		Task<ApiResponse<RequestCardMainDto>> GetByMainId(string name, int requestMainId, int businessUnitId);
 		Task<ApiResponse<List<RequestApprovalInfoDto>>> GetApprovalInfoAsync(string name, int requestMainId);
-		Task<ApiResponse<RequestMainDto>> GetHeaderAsync(string name, int requestMainId);
 		Task<ApiResponse<List<RequestDetailsWithAnalysisCodeDto>>> GetDetails(int requestmainId, int businessUnitId);
 
 		Task<ApiResponse<RequestSaveResultModel>> AddOrUpdateAsync(string name, HttpResponse response,
@@ -50,5 +49,6 @@ namespace SolaERP.Application.Contracts.Services
 		Task<ApiResponse<List<RequestCategory>>> CategoryList(int businessUnitId, string keyCode);
 		Task<ApiResponse<List<BuyersAssignmentDto>>> GetBuyersAssignment(RequestWFAGetModel model, string userName);
 		Task<ApiResponse<bool>> Retrieve(RequestRetrieveDto data, string name);
+		Task<ApiResponse<List<WarehouseInfoDto>>> GetWarehouseList(int businessUnitId);
 	}
 }

@@ -267,6 +267,7 @@ public class SqlOrderRepository : IOrderRepository
                                 @DestinationPoint,
                                 @StartDate,
                                 @EndDate,
+                                @LCType,
                                 @NewOrderMainId = @NewOrderMainId OUTPUT,
 		                        @NewOrderNo = @NewOrderNo OUTPUT
                                         
@@ -299,6 +300,7 @@ public class SqlOrderRepository : IOrderRepository
         command.Parameters.AddWithValue(command, "@DestinationPoint", orderMainDto.DestinationPoint);
         command.Parameters.AddWithValue(command, "@StartDate", orderMainDto.StartDate);
         command.Parameters.AddWithValue(command, "@EndDate", orderMainDto.EndDate);
+        command.Parameters.AddWithValue(command, "@LCType", orderMainDto.LCType);
 
         await using var reader = await command.ExecuteReaderAsync();
         if (await reader.ReadAsync())
@@ -310,9 +312,9 @@ public class SqlOrderRepository : IOrderRepository
     public async Task<bool> SaveOrderDetailsAsync(List<OrderDetailDto> orderDetails)
     {
         await using var command = _unitOfWork.CreateCommand() as DbCommand;
-        command.CommandText = @"SET NOCOUNT OFF EXEC dbo.SP_OrderDetails_IUD @OrderMainId, @Data";
+        command.CommandText = @"SET NOCOUNT OFF EXEC dbo.SP_OrderDetails_IUD2 @OrderMainId, @Data";
         command.Parameters.AddWithValue(command, "@OrderMainId", orderDetails[0].OrderMainId);
-        command.Parameters.AddTableValue(command, "@Data", "OrderDetailsType", orderDetails.ConvertToDataTable());
+        command.Parameters.AddTableValue(command, "@Data", "OrderDetailsType2", orderDetails.ConvertToDataTable());
 
         return await command.ExecuteNonQueryAsync() > 0;
     }
@@ -572,6 +574,7 @@ public class SqlOrderRepository : IOrderRepository
             ApproveStatusName = reader.Get<string>("ApproveStatusName"),
             RequestLineNo = reader.Get<string>("RequestLineNo"),
             RequestNo = reader.Get<string>("RequestNo"),
+            Warehouse = reader.Get<string>("Warehouse")
         };
     }
 
@@ -628,7 +631,8 @@ public class SqlOrderRepository : IOrderRepository
             AnalysisCode9Id = reader.Get<int>("AnalysisCode9Id"),
             AnalysisCode10Id = reader.Get<int>("AnalysisCode10Id"),
             CatId = reader.Get<int>("CatId"),
-            Requester = reader.Get<int>("Requester")
+            Requester = reader.Get<int>("Requester"),
+            Warehouse = reader.Get<string>("Warehouse")
         };
     }
 
@@ -689,6 +693,10 @@ public class SqlOrderRepository : IOrderRepository
             RequestedDate = reader.Get<DateTime>("RequestedDate"),
             RequestType = reader.Get<string>("RequestType"),
             RequestTypeId = reader.Get<int>("RequestTypeId"),
+            Location = reader.Get<string>("Location"),
+            Warehouse = reader.Get<string>("Warehouse"),
+            Ordertype = reader.Get<string>("Ordertype"),
+            OrderTypeId = reader.Get<int>("OrderTypeId")
         };
         return dto;
     }
@@ -748,6 +756,7 @@ public class SqlOrderRepository : IOrderRepository
             DestinationPoint = reader.Get<string>("DestinationPoint"),
             OrderNotes = reader.Get<string>("OrderNotes"),
             KeyCode = reader.Get<string>("KeyCode"),
+            LCType =  reader.Get<string>("LCType")
 
         };
     }
@@ -784,7 +793,7 @@ public class SqlOrderRepository : IOrderRepository
         };
     }
 
-    private static OrderTab MapFromReaderForOrderAllDto(IDataReader reader)
+    private static OrderTab MapFromReaderForOrderAllDto(DbDataReader reader)
     {
         return new OrderTab
         {

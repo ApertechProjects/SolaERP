@@ -1,4 +1,4 @@
-﻿namespace SolaERP.Application.Entities.BusinessUnits
+namespace SolaERP.Application.Entities.BusinessUnits
 {
     public class BaseBusinessUnit : BaseEntity
     {
@@ -7,7 +7,8 @@
         public string BusinessUnitName { get; set; }
         public string BankChargeAccount { get; set; }
         public string ConnectionData { get; set; }
-		public bool? UseOrderForInvoice { get; set; }
-		public string VATAccount { get; set; }
-	}
+		    public bool? UseOrderForInvoice { get; set; }
+		    public string VATAccount { get; set; }
+        public decimal ExportOilPercent { get; set; }
+    }
 }

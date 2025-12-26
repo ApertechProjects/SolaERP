@@ -271,9 +271,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     RFQDetailId = reader.Get<int>("RFQDetailId"),
                     BaseTotalWithRate = reader.Get<decimal>("BaseTotalWithRate"),
                     ConvertedGross = reader.Get<decimal>("ConvertedGross"),
-                    Margins = reader.Get<decimal>("Margins")
+                    Margins = reader.Get<decimal>("Margins"),
+                    LastUnitPrice = reader.Get<decimal>("LastUnitPrice"),
+                    LastOrderDate = reader.Get<DateTime>("LastOrderDate"),
+                    LastVendor = reader.Get<string>("LastVendor"),
                 });
-                ;
+                
             }
 
             return data;
@@ -387,7 +390,11 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     BidDetailId = reader.Get<int>("BidDetailId"),
                     RfqDetailId = reader.Get<int>("RfqDetailid"),
                     BidComparisonBidId = reader.Get<int>("BidComparisonBidId"),
-                    IsSelected = reader.Get<bool>("IsSelected")
+                    IsSelected = reader.Get<bool>("IsSelected"),
+                    LineDescription = reader.Get<string>("LineDescription"),
+                    LastUnitPrice = reader.Get<decimal>("LastUnitPrice"),
+                    LastOrderDate = reader.Get<DateTime>("LastOrderDate"),
+                    LastVendor = reader.Get<string>("LastVendor"),
                 });
             }
 
@@ -753,6 +760,62 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@BidComparisonId", bidComparisonId);
 
             return await command.ExecuteNonQueryAsync() > 0;
+        }
+
+        public async Task<List<BidMainListByRfqMain>> GetBidListByRfqMainId(int rfqMainId)
+        {
+            var data = new List<BidMainListByRfqMain>();
+
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = "select v.VendorCode," +
+                                  "    v.VendorName," +
+                                  "    bm.BidNo,  " +
+                                  "  bm.BidMainId,  " +
+                                  "     sum(bd.DiscountedAmount) as TotalDiscountedAmount,  " +
+                                  "     count(distinct A.AttachmentId) as AttachmentCount,  " +
+                                  "  CASE     WHEN count(distinct A.AttachmentId) = 0 THEN CAST(0 AS BIT)  " +
+                                  "   ELSE CAST(1 AS BIT)   END AS HasAttachments " +
+                                  "from Procurement.BidMain BM   " +
+                                  "   inner join Procurement.BidDetails BD  " +
+                                  "               on BD.BidMainId = BM.BidMainId " +
+                                  "     inner join Procurement.Vendors V         " +
+                                  "        on v.VendorCode = bm.VendorCode " +
+                                  "     left join Register.Attachments A   " +
+                                  "             on A.SourceId = BM.BidMainId   " +
+                                  "             AND A.SourceTypeId = 17 where RFQMainId = @RfqMainId " +
+                                  "group by v.VendorCode, v.VendorName, bm.BidNo, bm.BidMainId";
+
+            command.Parameters.AddWithValue(command, "@rfqMainId", rfqMainId);
+
+            await using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                data.Add(reader.GetByEntityStructure<BidMainListByRfqMain>());
+            }
+
+            return data;
+        }
+        
+        public async Task<List<BidComparisonInfoDto>> GetById(int bcId)
+        {
+            var data = new List<BidComparisonInfoDto>();
+
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+
+            command.CommandText = "select bc.BidComparisonId, bc.ComparisonNo, rfq.Buyer, rfq.BusinessUnitId, rfq.RFQMainId " +
+                                  " from Procurement.BidComparison bc " +
+                                  " inner join Procurement.RFQMain rfq on bc.RFQMainId = rfq.RFQMainId " +
+                                  " where bc.BidComparisonId = @MainId ";
+
+            command.Parameters.AddWithValue(command, "@MainId", bcId);
+
+            await using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                data.Add(reader.GetByEntityStructure<BidComparisonInfoDto>());
+            }
+
+            return data;
         }
     }
 }

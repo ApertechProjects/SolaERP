@@ -1,22 +1,16 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
-using SolaERP.Application.Entities.AnalysisCode;
 using SolaERP.Application.Entities.Buyer;
-using SolaERP.Application.Entities.Request;
-using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
-using System;
-using System.Collections.Generic;
 using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SolaERP.Application.Dtos.Buyer;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
     public class SqlBuyerRepository : SqlBaseRepository, IBuyerRepository
     {
         private readonly IUnitOfWork _unitOfWork;
+
         public SqlBuyerRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -46,6 +40,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 {
                     status.Add(reader.GetByEntityStructure<Buyer>());
                 }
+
                 return status;
             }
         }
@@ -64,8 +59,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             throw new NotImplementedException();
         }
-        
-        public async Task<string> FindBuyerEmailByBuyerName(string buyerName , int businessUnitId)
+
+        public async Task<string> FindBuyerEmailByBuyerName(string buyerName, int businessUnitId)
         {
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = @"exec dbo.SP_UNI_Buyer_List_FOREMAIL @BusinessUnitId, @BuyerName";
@@ -80,6 +75,50 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
 
             return result;
+        }
+        
+        public async Task<string> FindBusinessUnitNameByBuyerName(string buyerName, int businessUnitId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_UNI_Buyer_List_FOREMAIL @BusinessUnitId, @BuyerName";
+            command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+            command.Parameters.AddWithValue(command, "@BuyerName", buyerName);
+
+            await using DbDataReader reader = await command.ExecuteReaderAsync();
+            string result = null;
+            if (await reader.ReadAsync())
+            {
+                result = reader.Get<string>("BusinessUnitName");
+            }
+
+            return result;
+        }
+        
+        
+
+        public async Task<BuyerDto> FindBuyerDataByBuyerName(string buyerName, int businessUnitId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"exec dbo.SP_UNI_Buyer_List_FOREMAIL @BusinessUnitId, @BuyerName";
+            command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
+            command.Parameters.AddWithValue(command, "@BuyerName", buyerName);
+
+            await using DbDataReader reader = await command.ExecuteReaderAsync();
+            BuyerDto data = new BuyerDto();
+            if (await reader.ReadAsync())
+            {
+                data = new BuyerDto()
+                {
+                    BuyerEmail = reader.Get<string>("BuyerEmail"),
+                    BuyerName = reader.Get<string>("BuyerName"),
+                    BuyerCode = reader.Get<string>("BuyerCode"),
+                    BusinessUnitName = reader.Get<string>("BusinessUnitName"),
+                    BusinessUnitCode = reader.Get<string>("BusinessUnitCode"),
+                    BusinessUnitId = reader.Get<int>("BusinessUnitId")
+                };
+            }
+
+            return data;
         }
     }
 }

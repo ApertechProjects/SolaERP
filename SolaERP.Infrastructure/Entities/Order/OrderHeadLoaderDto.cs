@@ -69,6 +69,7 @@ public class OrderHeadLoaderDto : BaseEntity
     public int BudgetYear { get; set; }
     public string DestinationPoint { get; set; }
     public string KeyCode { get; set; }
+    public string LCType { get; set; }
 
     public List<OrderDetailLoadDto> OrderDetails { get; set; }
     public List<AttachmentDto> Attachments { get; set; }

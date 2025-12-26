@@ -55,4 +55,8 @@ public class OrderCreateBidListDto
     public string Priority { get; set; }
     public string RequestType { get; set; }
     public int RequestTypeId { get; set; }
+    public string Location { get; set; }
+    public string Warehouse { get; set; }
+    public string Ordertype { get; set; }
+    public int OrderTypeId { get; set; }
 }

@@ -51,6 +51,12 @@ namespace SolaERP.API.Controllers
             comparison.UserId = Convert.ToInt32(User.Identity.Name);
             return CreateActionResult(await _bidComparisonService.SaveBidComparisonAsync(comparison));
         }
+        
+        [HttpPost("[action]")]
+        public async Task<IActionResult> AddAttachment(BidComparisonAttachmentCardDto comparison)
+        {
+            return CreateActionResult(await _bidComparisonService.AddAttachment(comparison));
+        }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> SaveComparisonBids(BidComparisonBidsCreateRequestDto comparison)
@@ -138,6 +144,13 @@ namespace SolaERP.API.Controllers
             return CreateActionResult(
                 await _bidComparisonService.BidApproveAsync(approve, User.Identity.Name));
         }
+        
+        [HttpPost("[action]")]
+        public async Task<IActionResult> BidApproveForMail(BidComparisonBidApproveDto approve)
+        {
+            return CreateActionResult(
+                await _bidComparisonService.BidApproveAsyncForMail(approve, User.Identity.Name));
+        }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> BidReject(BidComparisonBidRejectDto reject)
@@ -164,5 +177,12 @@ namespace SolaERP.API.Controllers
         {
             return CreateActionResult(await _bidComparisonService.Delete(bidComparisonId));
         }
+
+        [HttpGet("[action]/{rfqMainId}")]
+        public async Task<IActionResult> GetBidListByRfqMainId(int rfqMainId)
+        {
+            return CreateActionResult(await _bidComparisonService.GetBidListByRfqMainId(rfqMainId));
+        }
+
     }
 }
