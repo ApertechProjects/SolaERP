@@ -99,6 +99,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<ISend, Send>();
             builder.Services.AddScoped<BusinessUnitHelper>();
             builder.Services.AddScoped<IFixedAssetService, FixedAssetService>();
+            builder.Services.AddScoped<IGNRLConfigService, GNRLConfigService>();
             builder.Services.AddScoped<IBarrelFlowService, BarrelFlowService>();
             builder.Services.AddScoped<IEntitlementService, EntitlementService>();
             builder.Services.AddScoped<IWellRepairService, WellRepairService>();
@@ -147,6 +148,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IUserReportRepository, SqlUserReportRepository>();
             builder.Services.AddScoped<ISupportRepository, SqlSupportRepository>();
             builder.Services.AddScoped<IFixedAssetRepository, SqlFixedAssetRepository>();
+            builder.Services.AddScoped<IGNRLConfigRepository, SqlGNRLConfigRepository>();
             builder.Services.AddScoped<IBarrelFlowRepository, SqlBarrelFlowRepository>();
             builder.Services.AddScoped<IEntitlementRepository, SqlEntitlementRepository>();
             builder.Services.AddScoped<IWellRepairRepository, SqlWellRepairRepository>();
