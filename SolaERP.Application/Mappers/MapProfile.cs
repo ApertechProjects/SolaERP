@@ -18,6 +18,7 @@ using SolaERP.Application.Dtos.Currency;
 using SolaERP.Application.Dtos.DeliveryTerm;
 using SolaERP.Application.Dtos.Email;
 using SolaERP.Application.Dtos.General;
+using SolaERP.Application.Dtos.GNRLConfig;
 using SolaERP.Application.Dtos.GridLayout;
 using SolaERP.Application.Dtos.Group;
 using SolaERP.Application.Dtos.Invoice;
@@ -89,6 +90,7 @@ using UOMDto = SolaERP.Application.Dtos.UOM.UOMDto;
 using SolaERP.Job;
 using SolaERP.Application.Entities.UserReport;
 using SolaERP.Application.Dtos.UserReport;
+using SolaERP.Application.Entities;
 using SolaERP.Application.Entities.FixedAsset;
 using VendorUserDto = SolaERP.Application.Dtos.Vendors.VendorUserDto;
 using InvoiceRegisterDetails = SolaERP.Application.Entities.Invoice.InvoiceRegisterDetails;
@@ -109,7 +111,9 @@ namespace SolaERP.Persistence.Mappers
                 .ReverseMap();
             CreateMap<BusinessUnits, BusinessUnitsAllDto>().ReverseMap();
             CreateMap<BusinessUnits, BusinessUnitsDto>().ReverseMap();
-            CreateMap<BaseBusinessUnit, BaseBusinessUnitDto>().ReverseMap();
+            CreateMap<BaseBusinessUnit, BaseBusinessUnitDto>()
+                .ForMember(dest => dest.HasVATAccount, opt => opt.MapFrom(src => src.VATAccount != null))
+                .ReverseMap();
             CreateMap<BusinessUnits, BusinessUnitConnectionDto>().ReverseMap();
             CreateMap<Groups, GroupsDto>().ReverseMap();
             CreateMap<GroupUser, GroupUserDto>().ReverseMap();
@@ -627,7 +631,11 @@ namespace SolaERP.Persistence.Mappers
 
             CreateMap<RequestHeld, RequestHeldDto>().ReverseMap();
 
-            CreateMap<CreateAdvance, CreateAdvanceDto>().ReverseMap();
+            CreateMap<CreateAdvance, CreateAdvanceDto>()
+                .ForMember(
+                    dest => dest.LINK_REF_1,
+                    opt => opt.MapFrom(src => Convert.ToString(src.LINK_REF_1)))
+                .ReverseMap();
             CreateMap<CreateOrder, CreateOrderDto>().ReverseMap();
             CreateMap<CreateBalance, CreateBalanceDto>().ReverseMap();
             CreateMap<InfoHeader, InfoHeaderDto>().ReverseMap();
@@ -655,6 +663,8 @@ namespace SolaERP.Persistence.Mappers
                 .ReverseMap();
             CreateMap<PaymentOrderDetail, PaymentOrderDetailDto>().ReverseMap();
             CreateMap<PaymentOrderTransaction, PaymentOrderTransactionDto>().ReverseMap();
+            CreateMap<PaymentDocumentPost, PaymentOrderPostDataDto>()
+                .ForMember(x => x.PaymentOrderMainId, opt => opt.Ignore());
             CreateMap<BankAccountList, BankAccountListDto>().ReverseMap();
             CreateMap<ASalfldgDto, ASalfldg>()
                 .ForMember(x => x.InvoiceNo, y => y.Ignore())
@@ -708,7 +718,6 @@ namespace SolaERP.Persistence.Mappers
             CreateMap<InvoiceMatchingMainGRN, InvoiceMatchingMainGRNDto>().ReverseMap();
 
             CreateMap<InvoicesMatchingDetailsTypeDto, InvoicesMatchingDetailsType>()
-                .ForMember(x => x.AdvanceTotal, y => y.MapFrom(x => x.AdvanceAmount))
                 .ForMember(x => x.Quantity, y => y.MapFrom(x => x.ServiceAmount))
                 .ForMember(x => x.Total, y => y.MapFrom(x => x.InvoiceAmount))
                 .ReverseMap();
@@ -766,7 +775,19 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.FixedAssetCode, opt => opt.MapFrom(src => src.AssetCode))
                 .ForMember(dest => dest.FixedAssetDescription, opt => opt.MapFrom(src => src.Description))
                 .ReverseMap();
+            
+            CreateMap<GNRLConfig, GNRLConfigDto>().ReverseMap();
 
+            CreateMap<InvoiceRegisterAdvance, InvoiceRegisterAdvanceDto>().ReverseMap();
+            
+            CreateMap<InvoiceRegisterAdvanceClosingList, InvoiceRegisterAdvanceClosingListDto>().ReverseMap();
+            
+            CreateMap<InvoiceRegisterInvoiceDetailsForCreditNote, InvoiceRegisterInvoiceDetailsForCreditNoteDto>().ReverseMap();
+
+            CreateMap<InvoiceRegister, InvoiceRegisterDto>().ReverseMap();
+
+            CreateMap<InvoiceTransactionTypeEntity, InvoiceTransactionTypeEntityDto>().ReverseMap();
+            
             CreateMap<WarehouseInfo, WarehouseInfoDto>().ReverseMap();
             
             CreateMap<BidMainListByRfqMain, BidMainListByRfqMainDto>().ReverseMap();

@@ -73,6 +73,16 @@ namespace SolaERP.Persistence.Services
 
             return ApiResponse<BidComparisonCreateResponseDto>.Success(bidComparisonCreateResponseDto, 200);
         }
+        
+        public async Task<ApiResponse<BidComparisonAttachmentCardDto>> AddAttachment(
+            BidComparisonAttachmentCardDto bidComparison)
+        {
+            await _attachmentService.SaveAttachmentAsync(bidComparison.Attachments,
+                SourceType.BID_COMP,
+                bidComparison.BidComparisonMainId);
+
+            return ApiResponse<BidComparisonAttachmentCardDto>.Success(bidComparison, 200);;
+        }
 
         public async Task<ApiResponse<bool>> SaveBidsAsync(
             BidComparisonBidsCreateRequestDto comparison)

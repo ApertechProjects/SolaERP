@@ -25,17 +25,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
         public async Task<List<CreateAdvance>> CreateAdvanceAsync(CreateAdvanceModel createBalance)
         {
-            using var command = _unitOfWork.CreateCommand() as DbCommand;
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = @"exec dbo.SP_PaymentDocumentCreateAdvance @vendorCode,@currencyCode,@businessUnitId";
             command.Parameters.AddWithValue(command, "@vendorCode", createBalance.VendorCode);
             command.Parameters.AddWithValue(command, "@currencyCode", createBalance.CurrencyCode);
             command.Parameters.AddWithValue(command, "@businessUnitId", createBalance.BusinessUnitId);
 
-            using var reader = await command.ExecuteReaderAsync();
+            await using var reader = await command.ExecuteReaderAsync();
 
             List<CreateAdvance> createAdvances = new List<CreateAdvance>();
-            while (reader.Read())
-                createAdvances.Add(GetCreateAdvance(reader));
+            while (await reader.ReadAsync())
+                createAdvances.Add(reader.GetByEntityStructure<CreateAdvance>());
 
             return createAdvances;
         }
@@ -87,29 +87,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             };
         }
 
-        private CreateAdvance GetCreateAdvance(DbDataReader reader)
-        {
-            return new CreateAdvance
-            {
-                AccountCode = reader.Get<string>("AccountCode"),
-                AccountName = reader.Get<string>("AccountName"),
-                AmountToPay = reader.Get<decimal>("AmountToPay"),
-                Budget = reader.Get<string>("Budget"),
-                CurrencyCode = reader.Get<string>("CurrencyCode"),
-                InvoiceNo = reader.Get<string>("InvoiceNo"),
-                TransactionReference = reader.Get<string>("TransactionReference"),
-                OrderTotal = reader.Get<decimal>("OrderTotal"),
-                PayableAmount = reader.Get<decimal>("PayableAmount"),
-                PaymentRequestAmount = reader.Get<decimal>("PaymentRequestAmount"),
-                PaymentTerms = reader.Get<string>("PaymentTerms"),
-                PaymentTermsName = reader.Get<string>("PaymentTermsName"),
-                SystemInvoiceNo = reader.Get<string>("SystemInvoiceNo"),
-                Department = reader.Get<string>("Department"),
-                Employee = reader.Get<string>("Employee"),
-                WellNo = reader.Get<string>("WellNo")
-            };
-        }
-
         private CreateOrder GetCreateOrder(DbDataReader reader)
         {
             return new CreateOrder
@@ -134,7 +111,48 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 PaymentTermsName = reader.Get<string>("PaymenttermsName"),
                 AgingDays = reader.Get<int>("AgingDays"),
                 PaidAmount = reader.Get<decimal>("PaidAmount"),
-                Department = reader.Get<string>("Department")
+                Department = reader.Get<string>("Department"),
+                AnalysisCode1 = reader.Get<string>("AnalysisCode1"),
+                AnalysisCode2 = reader.Get<string>("AnalysisCode2"),
+                AnalysisCode3 = reader.Get<string>("AnalysisCode3"),
+                AnalysisCode4 = reader.Get<string>("AnalysisCode4"),
+                AnalysisCode5 = reader.Get<string>("AnalysisCode5"),
+                AnalysisCode6 = reader.Get<string>("AnalysisCode6"),
+                AnalysisCode7 = reader.Get<string>("AnalysisCode7"),
+                AnalysisCode8 = reader.Get<string>("AnalysisCode8"),
+                AnalysisCode9 = reader.Get<string>("AnalysisCode9"),
+                AnalysisCode10 = reader.Get<string>("AnalysisCode10"),
+                GNRL_DESCR_01 = reader.Get<string>("GNRL_DESCR_01"),
+                GNRL_DESCR_02 = reader.Get<string>("GNRL_DESCR_02"),
+                GNRL_DESCR_03 = reader.Get<string>("GNRL_DESCR_03"),
+                GNRL_DESCR_04 = reader.Get<string>("GNRL_DESCR_04"),
+                GNRL_DESCR_05 = reader.Get<string>("GNRL_DESCR_05"),
+                GNRL_DESCR_06 = reader.Get<string>("GNRL_DESCR_06"),
+                GNRL_DESCR_07 = reader.Get<string>("GNRL_DESCR_07"),
+                GNRL_DESCR_08 = reader.Get<string>("GNRL_DESCR_08"),
+                GNRL_DESCR_09 = reader.Get<string>("GNRL_DESCR_09"),
+                GNRL_DESCR_10 = reader.Get<string>("GNRL_DESCR_10"),
+                GNRL_DESCR_11 = reader.Get<string>("GNRL_DESCR_11"),
+                GNRL_DESCR_12 = reader.Get<string>("GNRL_DESCR_12"),
+                GNRL_DESCR_13 = reader.Get<string>("GNRL_DESCR_13"),
+                GNRL_DESCR_14 = reader.Get<string>("GNRL_DESCR_14"),
+                GNRL_DESCR_15 = reader.Get<string>("GNRL_DESCR_15"),
+                GNRL_DESCR_16 = reader.Get<string>("GNRL_DESCR_16"),
+                GNRL_DESCR_17 = reader.Get<string>("GNRL_DESCR_17"),
+                GNRL_DESCR_18 = reader.Get<string>("GNRL_DESCR_18"),
+                GNRL_DESCR_19 = reader.Get<string>("GNRL_DESCR_19"),
+                GNRL_DESCR_20 = reader.Get<string>("GNRL_DESCR_20"),
+                GNRL_DESCR_21 = reader.Get<string>("GNRL_DESCR_21"),
+                GNRL_DESCR_22 = reader.Get<string>("GNRL_DESCR_22"),
+                GNRL_DESCR_23 = reader.Get<string>("GNRL_DESCR_23"),
+                GNRL_DESCR_24 = reader.Get<string>("GNRL_DESCR_24"),
+                GNRL_DESCR_25 = reader.Get<string>("GNRL_DESCR_25"),
+                GNRL_1_DATETIME = reader.Get<DateTime?>("GNRL_1_DATETIME"),
+                GNRL_2_DATETIME = reader.Get<DateTime?>("GNRL_2_DATETIME"),
+                GNRL_3_DATETIME = reader.Get<DateTime?>("GNRL_3_DATETIME"),
+                GNRL_4_DATETIME = reader.Get<DateTime?>("GNRL_4_DATETIME"),
+                GNRL_5_DATETIME = reader.Get<DateTime?>("GNRL_5_DATETIME"),
+                LINK_REF_1 = reader.Get<string>("LINK_REF_1")
             };
         }
 
@@ -160,7 +178,49 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 PaymentDocumentDetailId = reader.Get<int>("PaymentDocumentDetailId"),
                 PaymentDocumentMainId = reader.Get<int>("PaymentDocumentMainId"),
                 PaymentTermName = reader.Get<string>("PaymentTermName"),
-                AgingDays = reader.Get<int>("AgingDays")
+                AgingDays = reader.Get<int>("AgingDays"),
+                AnalysisCode1 = reader.Get<string>("AnalysisCode1"),
+                AnalysisCode2 = reader.Get<string>("AnalysisCode2"),
+                AnalysisCode3 = reader.Get<string>("AnalysisCode3"),
+                AnalysisCode4 = reader.Get<string>("AnalysisCode4"),
+                AnalysisCode5 = reader.Get<string>("AnalysisCode5"),
+                AnalysisCode6 = reader.Get<string>("AnalysisCode6"),
+                AnalysisCode7 = reader.Get<string>("AnalysisCode7"),
+                AnalysisCode8 = reader.Get<string>("AnalysisCode8"),
+                AnalysisCode9 = reader.Get<string>("AnalysisCode9"),
+                AnalysisCode10 = reader.Get<string>("AnalysisCode10"),
+                GNRL_DESCR_01 = reader.Get<string>("GNRL_DESCR_01"),
+                GNRL_DESCR_02 = reader.Get<string>("GNRL_DESCR_02"),
+                GNRL_DESCR_03 = reader.Get<string>("GNRL_DESCR_03"),
+                GNRL_DESCR_04 = reader.Get<string>("GNRL_DESCR_04"),
+                GNRL_DESCR_05 = reader.Get<string>("GNRL_DESCR_05"),
+                GNRL_DESCR_06 = reader.Get<string>("GNRL_DESCR_06"),
+                GNRL_DESCR_07 = reader.Get<string>("GNRL_DESCR_07"),
+                GNRL_DESCR_08 = reader.Get<string>("GNRL_DESCR_08"),
+                GNRL_DESCR_09 = reader.Get<string>("GNRL_DESCR_09"),
+                GNRL_DESCR_10 = reader.Get<string>("GNRL_DESCR_10"),
+                GNRL_DESCR_11 = reader.Get<string>("GNRL_DESCR_11"),
+                GNRL_DESCR_12 = reader.Get<string>("GNRL_DESCR_12"),
+                GNRL_DESCR_13 = reader.Get<string>("GNRL_DESCR_13"),
+                GNRL_DESCR_14 = reader.Get<string>("GNRL_DESCR_14"),
+                GNRL_DESCR_15 = reader.Get<string>("GNRL_DESCR_15"),
+                GNRL_DESCR_16 = reader.Get<string>("GNRL_DESCR_16"),
+                GNRL_DESCR_17 = reader.Get<string>("GNRL_DESCR_17"),
+                GNRL_DESCR_18 = reader.Get<string>("GNRL_DESCR_18"),
+                GNRL_DESCR_19 = reader.Get<string>("GNRL_DESCR_19"),
+                GNRL_DESCR_20 = reader.Get<string>("GNRL_DESCR_20"),
+                GNRL_DESCR_21 = reader.Get<string>("GNRL_DESCR_21"),
+                GNRL_DESCR_22 = reader.Get<string>("GNRL_DESCR_22"),
+                GNRL_DESCR_23 = reader.Get<string>("GNRL_DESCR_23"),
+                GNRL_DESCR_24 = reader.Get<string>("GNRL_DESCR_24"),
+                GNRL_DESCR_25 = reader.Get<string>("GNRL_DESCR_25"),
+                GNRL_1_DATETIME = reader.Get<DateTime?>("GNRL_1_DATETIME"),
+                GNRL_2_DATETIME = reader.Get<DateTime?>("GNRL_2_DATETIME"),
+                GNRL_3_DATETIME = reader.Get<DateTime?>("GNRL_3_DATETIME"),
+                GNRL_4_DATETIME = reader.Get<DateTime?>("GNRL_4_DATETIME"),
+                GNRL_5_DATETIME = reader.Get<DateTime?>("GNRL_5_DATETIME"),
+                LINK_REF_1 = reader.Get<string>("LINK_REF_1"),
+                InvoiceRegisterDetailId = reader.Get<int?>("InvoiceRegisterDetailId")
             };
         }
 
@@ -596,7 +656,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
                 command.CommandText = "SET NOCOUNT OFF EXEC SP_PaymentDocumentDetails_IUD @Data";
-                command.Parameters.AddTableValue(command, "@Data", "PaymentDocumentDetailsType_2", model);
+                command.Parameters.AddTableValue(command, "@Data", "PaymentDocumentDetailsType", model);
                 var value = await command.ExecuteNonQueryAsync();
                 return value > 0;
             }
@@ -869,8 +929,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         public async Task<List<PaymentRequest>> PaymentRequest(PaymentRequestGetModel model)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText = @"exec dbo.SP_PaymentDocumentCreateDocuments @vendorCode, @currencyCode, @businessUnitId";
-            
+            command.CommandText =
+                @"exec dbo.SP_PaymentDocumentCreateDocuments @vendorCode, @currencyCode, @businessUnitId";
+
             command.Parameters.AddWithValue(command, "@vendorCode", model.VendorCode);
             command.Parameters.AddWithValue(command, "@currencyCode", model.CurrencyCode);
             command.Parameters.AddWithValue(command, "@businessUnitId", model.BusinessUnitId);
@@ -996,147 +1057,34 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<(List<ASalfldg>, int)> PaymentOrderPostData(DataTable table, int paymentOrderMainId,
+        public async Task<int> PaymentOrderPostData(DataTable table, int paymentOrderMainId,
             int allocationReference,
             int journalNo, int userId, int businessUnitId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                command.CommandText =
-                    @"SET NOCOUNT OFF EXEC dbo.SP_PaymentOrderPostData @JournalNo,@AllocationReference,@PaymentOrderMainId,@BusinessUnitId,@UserId,@PaymentOrderTransactions,@NewJournalNo = @NewJournalNo OUTPUT select @NewJournalNo as NewJournalNo";
+                var query = _businessUnitHelper.BuildQueryForIntegration(businessUnitId,
+                    "SP_PaymentOrderPostData @JournalNo,@AllocationReference,@PaymentOrderMainId,@BusinessUnitId,@UserId,@NewJournalNo = @NewJournalNo OUTPUT select @NewJournalNo as [NewJournalNo]");
+                command.CommandText = query;
                 command.Parameters.AddWithValue(command, "@JournalNo", journalNo);
                 command.Parameters.AddWithValue(command, "@AllocationReference", allocationReference);
                 command.Parameters.AddWithValue(command, "@UserId", userId);
                 command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
                 command.Parameters.AddWithValue(command, "@PaymentOrderMainId", paymentOrderMainId);
-                command.Parameters.AddTableValue(command, "@PaymentOrderTransactions", "PaymentDocumentPost", table);
+                // command.Parameters.AddTableValue(command, "@PaymentOrderTransactions", "PaymentDocumentPost2", table);
 
                 command.Parameters.Add("@NewJournalNo", SqlDbType.Int);
                 command.Parameters["@NewJournalNo"].Direction = ParameterDirection.Output;
 
+                await _unitOfWork.SaveChangesAsync();
                 using var reader = await command.ExecuteReaderAsync();
 
-                List<ASalfldg> datas = new List<ASalfldg>();
                 while (await reader.ReadAsync())
                 {
-                    ASalfldg instance = new ASalfldg();
-
-                    instance.ACCNT_CODE = reader.Get<string>("ACCNT_CODE");
-                    instance.PERIOD = reader.Get<int?>("PERIOD");
-                    instance.TRANS_DATETIME = reader.Get<DateTime?>("TRANS_DATETIME");
-                    instance.JRNAL_NO = reader.Get<int?>("JRNAL_NO");
-                    instance.JRNAL_LINE = reader.IsDBNull(reader.GetOrdinal("JRNAL_LINE"))
-                        ? (long?)null
-                        : Convert.ToInt64(reader.GetValue(reader.GetOrdinal("JRNAL_LINE")));
-                    instance.AMOUNT = reader.Get<decimal?>("AMOUNT");
-                    instance.D_C = reader.Get<string>("D_C");
-                    instance.ALLOCATION = reader.Get<string>("ALLOCATION");
-                    instance.JRNAL_TYPE = reader.Get<string>("JRNAL_TYPE");
-                    instance.JRNAL_SRCE = reader.Get<string>("JRNAL_SRCE");
-                    instance.TREFERENCE = reader.Get<string>("TREFERENCE");
-                    instance.DESCRIPTN = reader.Get<string>("DESCRIPTN");
-                    instance.ENTRY_DATETIME = reader.Get<DateTime?>("ENTRY_DATETIME");
-                    instance.ENTRY_PRD = reader.Get<int?>("ENTRY_PRD");
-                    instance.DUE_DATETIME = reader.Get<DateTime?>("DUE_DATETIME");
-                    instance.ALLOC_REF = reader.Get<int?>("ALLOC_REF");
-                    instance.ALLOC_DATETIME = reader.Get<DateTime?>("ALLOC_DATETIME");
-                    instance.ALLOC_PERIOD = reader.Get<int?>("ALLOC_PERIOD");
-                    instance.ASSET_IND = reader.Get<string>("ASSET_IND");
-                    instance.ASSET_CODE = reader.Get<string>("ASSET_CODE");
-                    instance.ASSET_SUB = reader.Get<string>("ASSET_SUB");
-                    instance.CONV_CODE = reader.Get<string>("CONV_CODE");
-                    instance.CONV_RATE = reader.Get<decimal?>("CONV_RATE");
-                    instance.OTHER_AMT = reader.Get<decimal?>("OTHER_AMT");
-                    instance.OTHER_DP = reader.Get<string>("OTHER_DP");
-                    instance.CLEARDOWN = reader.Get<string>("CLEARDOWN");
-                    instance.REVERSAL = reader.Get<string>("REVERSAL");
-                    instance.LOSS_GAIN = reader.Get<string>("LOSS_GAIN");
-                    instance.ROUGH_FLAG = reader.Get<string>("ROUGH_FLAG");
-                    instance.IN_USE_FLAG = reader.Get<string>("IN_USE_FLAG");
-                    instance.ANAL_T0 = reader.Get<string>("ANAL_T0");
-                    instance.ANAL_T1 = reader.Get<string>("ANAL_T1");
-                    instance.ANAL_T2 = reader.Get<string>("ANAL_T2");
-                    instance.ANAL_T3 = reader.Get<string>("ANAL_T3");
-                    instance.ANAL_T4 = reader.Get<string>("ANAL_T4");
-                    instance.ANAL_T5 = reader.Get<string>("ANAL_T5");
-                    instance.ANAL_T6 = reader.Get<string>("ANAL_T6");
-                    instance.ANAL_T7 = reader.Get<string>("ANAL_T7");
-                    instance.ANAL_T8 = reader.Get<string>("ANAL_T8");
-                    instance.ANAL_T9 = reader.Get<string>("ANAL_T9");
-                    instance.POSTING_DATETIME = reader.Get<DateTime?>("POSTING_DATETIME");
-                    instance.ALLOC_IN_PROGRESS = reader.Get<string>("ALLOC_IN_PROGRESS");
-                    instance.HOLD_REF = reader.Get<int?>("HOLD_REF");
-                    instance.HOLD_OP_ID = reader.Get<string>("HOLD_OP_ID");
-                    instance.BASE_RATE = reader.Get<decimal?>("BASE_RATE");
-                    instance.BASE_OPERATOR = reader.Get<string>("BASE_OPERATOR");
-                    instance.CONV_OPERATOR = reader.Get<string>("CONV_OPERATOR");
-                    instance.REPORT_RATE = reader.Get<decimal?>("REPORT_RATE");
-                    instance.REPORT_OPERATOR = reader.Get<string>("REPORT_OPERATOR");
-                    instance.REPORT_AMT = reader.Get<decimal?>("REPORT_AMT");
-                    instance.MEMO_AMT = reader.Get<decimal?>("MEMO_AMT");
-                    instance.EXCLUDE_BAL = reader.Get<string>("EXCLUDE_BAL");
-                    instance.LE_DETAILS_IND = reader.Get<string>("LE_DETAILS_IND");
-                    instance.CONSUMED_BDGT_ID = reader.Get<int?>("CONSUMED_BDGT_ID");
-                    instance.CV4_CONV_CODE = reader.Get<string>("CV4_CONV_CODE");
-                    instance.CV4_AMT = reader.Get<decimal?>("CV4_AMT");
-                    instance.CV4_CONV_RATE = reader.Get<decimal?>("CV4_CONV_RATE");
-                    instance.CV4_OPERATOR = reader.Get<string>("CV4_OPERATOR");
-                    instance.CV4_DP = reader.Get<string>("CV4_DP");
-                    instance.CV5_CONV_CODE = reader.Get<string>("CV5_CONV_CODE");
-                    instance.CV5_AMT = reader.Get<decimal?>("CV5_AMT");
-                    instance.CV5_CONV_RATE = reader.Get<decimal?>("CV5_CONV_RATE");
-                    instance.CV5_OPERATOR = reader.Get<string>("CV5_OPERATOR");
-                    instance.CV5_DP = reader.Get<string>("CV5_DP");
-                    instance.LINK_REF_1 = reader.Get<string>("LINK_REF_1");
-                    instance.LINK_REF_2 = reader.Get<string>("LINK_REF_2");
-                    instance.LINK_REF_3 = reader.Get<string>("LINK_REF_3");
-                    instance.ALLOCN_CODE = reader.Get<string>("ALLOCN_CODE");
-                    instance.ALLOCN_STMNTS = reader.Get<int?>("ALLOCN_STMNTS");
-                    instance.OPR_CODE = reader.Get<string>("OPR_CODE");
-                    instance.SPLIT_ORIG_LINE = reader.Get<int?>("SPLIT_ORIG_LINE");
-                    instance.VAL_DATETIME = reader.Get<DateTime?>("VAL_DATETIME");
-                    instance.SIGNING_DETAILS = reader.Get<string>("SIGNING_DETAILS");
-                    instance.INSTLMT_DATETIME = reader.Get<DateTime?>("INSTLMT_DATETIME");
-                    instance.PRINCIPAL_REQD = reader.Get<int?>("PRINCIPAL_REQD");
-                    instance.BINDER_STATUS = reader.Get<string>("BINDER_STATUS");
-                    instance.AGREED_STATUS = reader.Get<int?>("AGREED_STATUS");
-                    instance.SPLIT_LINK_REF = reader.Get<string>("SPLIT_LINK_REF");
-                    instance.PSTG_REF = reader.Get<string>("PSTG_REF");
-                    instance.TRUE_RATED = reader.Get<int?>("TRUE_RATED");
-                    instance.HOLD_DATETIME = reader.Get<DateTime?>("HOLD_DATETIME");
-                    instance.HOLD_TEXT = reader.Get<string>("HOLD_TEXT");
-                    instance.INSTLMT_NUM = reader.Get<int?>("INSTLMT_NUM");
-                    instance.SUPPLMNTRY_EXTSN = reader.Get<int?>("SUPPLMNTRY_EXTSN");
-                    instance.APRVLS_EXTSN = reader.Get<int?>("APRVLS_EXTSN");
-                    instance.REVAL_LINK_REF = reader.Get<int?>("REVAL_LINK_REF");
-                    instance.SAVED_SET_NUM = reader.Get<decimal?>("SAVED_SET_NUM");
-                    instance.AUTHORISTN_SET_REF = reader.Get<int?>("AUTHORISTN_SET_REF");
-                    instance.PYMT_AUTHORISTN_SET_REF = reader.Get<int?>("PYMT_AUTHORISTN_SET_REF");
-                    instance.MAN_PAY_OVER = reader.Get<int?>("MAN_PAY_OVER");
-                    instance.PYMT_STAMP = reader.Get<string>("PYMT_STAMP");
-                    instance.AUTHORISTN_IN_PROGRESS = reader.Get<int?>("AUTHORISTN_IN_PROGRESS");
-                    instance.SPLIT_IN_PROGRESS = reader.Get<int?>("SPLIT_IN_PROGRESS");
-                    instance.VCHR_NUM = reader.Get<string>("VCHR_NUM");
-                    instance.JNL_CLASS_CODE = reader.Get<string>("JNL_CLASS_CODE");
-                    instance.ORIGINATOR_ID = reader.Get<string>("ORIGINATOR_ID");
-                    instance.ORIGINATED_DATETIME = reader.Get<DateTime?>("ORIGINATED_DATETIME");
-                    instance.LAST_CHANGE_USER_ID = reader.Get<string>("LAST_CHANGE_USER_ID");
-                    instance.LAST_CHANGE_DATETIME = reader.Get<DateTime?>("LAST_CHANGE_DATETIME");
-                    instance.AFTER_PSTG_ID = reader.Get<string>("AFTER_PSTG_ID");
-                    instance.AFTER_PSTG_DATETIME = reader.Get<DateTime?>("AFTER_PSTG_DATETIME");
-                    instance.POSTER_ID = reader.Get<string>("POSTER_ID");
-                    instance.ALLOC_ID = reader.Get<string>("ALLOC_ID");
-                    instance.JNL_REVERSAL_TYPE = reader.Get<int?>("JNL_REVERSAL_TYPE");
-                    instance.InvoiceNo = reader.Get<string>("InvoiceNo");
-                    instance.Reference = reader.Get<string>("Reference");
-                    datas.Add(instance);
+                    journalNo = reader.Get<int>("@NewJournalNo");
                 }
 
-                int newJournalNo = 0;
-                if (datas.Count > 0)
-                    newJournalNo = datas[0].JRNAL_NO ?? 0;
-
-                return (datas, newJournalNo);
+                return journalNo;
             }
         }
 
@@ -1254,181 +1202,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<List<AllocationData>> PaymentOrderAllocationData(int paymentOrderMainId, int userId)
+        public async Task PaymentOrderAllocationData(int businessUnitId, int paymentOrderMainId, int userId)
         {
             using var command = _unitOfWork.CreateCommand() as DbCommand;
-            command.CommandText =
-                @"exec dbo.SP_PaymentOrderAllocationData @paymentOrderMainId,@userId";
+            var query =
+                _businessUnitHelper.BuildQueryForIntegration(businessUnitId,
+                    "SP_PaymentOrderPostAllocation @paymentOrderMainId,@userId");
+
+            command.CommandText = query;
             command.Parameters.AddWithValue(command, "@paymentOrderMainId", paymentOrderMainId);
             command.Parameters.AddWithValue(command, "@userId", userId);
-
-            using var reader = await command.ExecuteReaderAsync();
-
-            List<AllocationData> list = new List<AllocationData>();
-            while (reader.Read())
-            {
-                AllocationData instance = new AllocationData();
-
-                instance.ACCNT_CODE = reader.Get<string>("ACCNT_CODE");
-                instance.PERIOD = reader.Get<int?>("PERIOD");
-                instance.TRANS_DATETIME = reader.Get<DateTime?>("TRANS_DATETIME");
-                instance.JRNAL_NO = reader.Get<int?>("JRNAL_NO");
-                instance.JRNAL_LINE = reader.IsDBNull(reader.GetOrdinal("JRNAL_LINE"))
-                    ? null
-                    : Convert.ToInt64(reader.GetValue(reader.GetOrdinal("JRNAL_LINE")));
-                instance.AMOUNT = reader.Get<decimal?>("AMOUNT");
-                instance.D_C = reader.Get<string>("D_C");
-                instance.ALLOCATION = reader.Get<string>("ALLOCATION");
-                instance.JRNAL_TYPE = reader.Get<string>("JRNAL_TYPE");
-                instance.JRNAL_SRCE = reader.Get<string>("JRNAL_SRCE");
-                instance.TREFERENCE = reader.Get<string>("TREFERENCE");
-                instance.DESCRIPTN = reader.Get<string>("DESCRIPTN");
-                instance.ENTRY_DATETIME = reader.Get<DateTime?>("ENTRY_DATETIME");
-                instance.ENTRY_PRD = reader.Get<int?>("ENTRY_PRD");
-                instance.DUE_DATETIME = reader.Get<DateTime?>("DUE_DATETIME");
-                instance.ALLOC_REF = reader.Get<int?>("ALLOC_REF");
-                instance.ALLOC_DATETIME = reader.Get<DateTime?>("ALLOC_DATETIME");
-                instance.ALLOC_PERIOD = reader.Get<int?>("ALLOC_PERIOD");
-                instance.ASSET_IND = reader.Get<string>("ASSET_IND");
-                instance.ASSET_CODE = reader.Get<string>("ASSET_CODE");
-                instance.ASSET_SUB = reader.Get<string>("ASSET_SUB");
-                instance.CONV_CODE = reader.Get<string>("CONV_CODE");
-                instance.CONV_RATE = reader.Get<decimal?>("CONV_RATE");
-                instance.OTHER_AMT = reader.Get<decimal?>("OTHER_AMT");
-                instance.OTHER_DP = reader.Get<string>("OTHER_DP");
-                instance.CLEARDOWN = reader.Get<string>("CLEARDOWN");
-                instance.REVERSAL = reader.Get<string>("REVERSAL");
-                instance.LOSS_GAIN = reader.Get<string>("LOSS_GAIN");
-                instance.ROUGH_FLAG = reader.Get<string>("ROUGH_FLAG");
-                instance.IN_USE_FLAG = reader.Get<string>("IN_USE_FLAG");
-                instance.ANAL_T0 = reader.Get<string>("ANAL_T0");
-                instance.ANAL_T1 = reader.Get<string>("ANAL_T1");
-                instance.ANAL_T2 = reader.Get<string>("ANAL_T2");
-                instance.ANAL_T3 = reader.Get<string>("ANAL_T3");
-                instance.ANAL_T4 = reader.Get<string>("ANAL_T4");
-                instance.ANAL_T5 = reader.Get<string>("ANAL_T5");
-                instance.ANAL_T6 = reader.Get<string>("ANAL_T6");
-                instance.ANAL_T7 = reader.Get<string>("ANAL_T7");
-                instance.ANAL_T8 = reader.Get<string>("ANAL_T8");
-                instance.ANAL_T9 = reader.Get<string>("ANAL_T9");
-                instance.POSTING_DATETIME = reader.Get<DateTime?>("POSTING_DATETIME");
-                instance.ALLOC_IN_PROGRESS = reader.Get<string>("ALLOC_IN_PROGRESS");
-                instance.HOLD_REF = reader.Get<int?>("HOLD_REF");
-                instance.HOLD_OP_ID = reader.Get<string>("HOLD_OP_ID");
-                instance.BASE_RATE = reader.Get<decimal?>("BASE_RATE");
-                instance.BASE_OPERATOR = reader.Get<string>("BASE_OPERATOR");
-                instance.CONV_OPERATOR = reader.Get<string>("CONV_OPERATOR");
-                instance.REPORT_RATE = reader.Get<decimal?>("REPORT_RATE");
-                instance.REPORT_OPERATOR = reader.Get<string>("REPORT_OPERATOR");
-                instance.REPORT_AMT = reader.Get<decimal?>("REPORT_AMT");
-                instance.MEMO_AMT = reader.Get<decimal?>("MEMO_AMT");
-                instance.EXCLUDE_BAL = reader.Get<string>("EXCLUDE_BAL");
-                instance.LE_DETAILS_IND = reader.Get<string>("LE_DETAILS_IND");
-                instance.CONSUMED_BDGT_ID = reader.Get<int?>("CONSUMED_BDGT_ID");
-                instance.CV4_CONV_CODE = reader.Get<string>("CV4_CONV_CODE");
-                instance.CV4_AMT = reader.Get<decimal?>("CV4_AMT");
-                instance.CV4_CONV_RATE = reader.Get<decimal?>("CV4_CONV_RATE");
-                instance.CV4_OPERATOR = reader.Get<string>("CV4_OPERATOR");
-                instance.CV4_DP = reader.Get<string>("CV4_DP");
-                instance.CV5_CONV_CODE = reader.Get<string>("CV5_CONV_CODE");
-                instance.CV5_AMT = reader.Get<decimal?>("CV5_AMT");
-                instance.CV5_CONV_RATE = reader.Get<decimal?>("CV5_CONV_RATE");
-                instance.CV5_OPERATOR = reader.Get<string>("CV5_OPERATOR");
-                instance.CV5_DP = reader.Get<string>("CV5_DP");
-                instance.LINK_REF_1 = reader.Get<string>("LINK_REF_1");
-                instance.LINK_REF_2 = reader.Get<string>("LINK_REF_2");
-                instance.LINK_REF_3 = reader.Get<string>("LINK_REF_3");
-                instance.ALLOCN_CODE = reader.Get<string>("ALLOCN_CODE");
-                instance.ALLOCN_STMNTS = reader.Get<int?>("ALLOCN_STMNTS");
-                instance.OPR_CODE = reader.Get<string>("OPR_CODE");
-                instance.SPLIT_ORIG_LINE = reader.Get<int?>("SPLIT_ORIG_LINE");
-                instance.VAL_DATETIME = reader.Get<DateTime?>("VAL_DATETIME");
-                instance.SIGNING_DETAILS = reader.Get<string>("SIGNING_DETAILS");
-                instance.INSTLMT_DATETIME = reader.Get<DateTime?>("INSTLMT_DATETIME");
-                instance.PRINCIPAL_REQD =
-                    reader.IsDBNull(reader.GetOrdinal("PRINCIPAL_REQD"))
-                        ? null
-                        : Convert.ToInt16(reader.GetValue(reader.GetOrdinal("PRINCIPAL_REQD")));
-
-
-                // reader.Get<int?>("PRINCIPAL_REQD");
-                instance.BINDER_STATUS = reader.Get<string>("BINDER_STATUS");
-                instance.AGREED_STATUS = // reader.Get<int?>("AGREED_STATUS");
-                    reader.IsDBNull(reader.GetOrdinal("AGREED_STATUS"))
-                        ? null
-                        : Convert.ToInt16(reader.GetValue(reader.GetOrdinal("AGREED_STATUS")));
-
-
-                instance.SPLIT_LINK_REF = reader.Get<string>("SPLIT_LINK_REF");
-                instance.PSTG_REF = reader.Get<string>("PSTG_REF");
-                instance.TRUE_RATED = //reader.Get<int?>("TRUE_RATED");
-                    reader.IsDBNull(reader.GetOrdinal("TRUE_RATED"))
-                        ? null
-                        : Convert.ToInt16(reader.GetValue(reader.GetOrdinal("TRUE_RATED")));
-
-
-                instance.HOLD_DATETIME = reader.Get<DateTime?>("HOLD_DATETIME");
-                instance.HOLD_TEXT = reader.Get<string>("HOLD_TEXT");
-                instance.INSTLMT_NUM = reader.Get<int?>("INSTLMT_NUM");
-                instance.SUPPLMNTRY_EXTSN = // reader.Get<int?>("SUPPLMNTRY_EXTSN");
-                    reader.IsDBNull(reader.GetOrdinal("SUPPLMNTRY_EXTSN"))
-                        ? null
-                        : Convert.ToInt16(reader.GetValue(reader.GetOrdinal("SUPPLMNTRY_EXTSN")));
-
-
-                instance.APRVLS_EXTSN = // reader.Get<int?>("APRVLS_EXTSN");
-                    reader.IsDBNull(reader.GetOrdinal("APRVLS_EXTSN"))
-                        ? null
-                        : Convert.ToInt16(reader.GetValue(reader.GetOrdinal("APRVLS_EXTSN")));
-
-
-                instance.REVAL_LINK_REF = reader.Get<int?>("REVAL_LINK_REF");
-                instance.SAVED_SET_NUM = reader.Get<decimal?>("SAVED_SET_NUM");
-                instance.AUTHORISTN_SET_REF = reader.Get<int?>("AUTHORISTN_SET_REF");
-                instance.PYMT_AUTHORISTN_SET_REF = reader.Get<int?>("PYMT_AUTHORISTN_SET_REF");
-                instance.MAN_PAY_OVER = //reader.Get<int?>("MAN_PAY_OVER");
-                    reader.IsDBNull(reader.GetOrdinal("MAN_PAY_OVER"))
-                        ? null
-                        : Convert.ToInt16(reader.GetValue(reader.GetOrdinal("MAN_PAY_OVER")));
-
-
-                instance.PYMT_STAMP = reader.Get<string>("PYMT_STAMP");
-                instance.AUTHORISTN_IN_PROGRESS = //reader.Get<int?>("AUTHORISTN_IN_PROGRESS");
-                    reader.IsDBNull(reader.GetOrdinal("AUTHORISTN_IN_PROGRESS"))
-                        ? null
-                        : Convert.ToInt16(reader.GetValue(reader.GetOrdinal("AUTHORISTN_IN_PROGRESS")));
-
-
-                instance.SPLIT_IN_PROGRESS = //reader.Get<int?>("SPLIT_IN_PROGRESS");
-                    reader.IsDBNull(reader.GetOrdinal("SPLIT_IN_PROGRESS"))
-                        ? null
-                        : Convert.ToInt16(reader.GetValue(reader.GetOrdinal("SPLIT_IN_PROGRESS")));
-
-
-                instance.VCHR_NUM = reader.Get<string>("VCHR_NUM");
-                instance.JNL_CLASS_CODE = reader.Get<string>("JNL_CLASS_CODE");
-                instance.ORIGINATOR_ID = reader.Get<string>("ORIGINATOR_ID");
-                instance.ORIGINATED_DATETIME = reader.Get<DateTime?>("ORIGINATED_DATETIME");
-                instance.LAST_CHANGE_USER_ID = reader.Get<string>("LAST_CHANGE_USER_ID");
-                instance.LAST_CHANGE_DATETIME = reader.Get<DateTime?>("LAST_CHANGE_DATETIME");
-                instance.AFTER_PSTG_ID = reader.Get<string>("AFTER_PSTG_ID");
-                instance.AFTER_PSTG_DATETIME = reader.Get<DateTime?>("AFTER_PSTG_DATETIME");
-                instance.POSTER_ID = reader.Get<string>("POSTER_ID");
-                instance.ALLOC_ID = reader.Get<string>("ALLOC_ID");
-                instance.JNL_REVERSAL_TYPE = //reader.Get<int?>("JNL_REVERSAL_TYPE");
-                    reader.IsDBNull(reader.GetOrdinal("JNL_REVERSAL_TYPE"))
-                        ? null
-                        : Convert.ToInt16(reader.GetValue(reader.GetOrdinal("JNL_REVERSAL_TYPE")));
-
-
-                instance.Action = reader.Get<int>("Action");
-                instance.GNRL_DESCR_24 = reader.Get<string>("GNRL_DESCR_24");
-                instance.GNRL_DESCR_25 = reader.Get<string>("GNRL_DESCR_25");
-
-                list.Add(instance);
-            }
-
-            return list;
+            await _unitOfWork.SaveChangesAsync();
+            await command.ExecuteNonQueryAsync();
         }
 
         public async Task<List<PaymentOrder>> PaymentOrders(PaymentOrderGetModel payment)

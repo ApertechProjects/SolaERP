@@ -45,7 +45,7 @@ namespace SolaERP.Application.Contracts.Repositories
 		Task<List<RegisterDraft>> RegisterDraft(InvoiceRegisterGetModel model, int userId);
 		Task<List<RegisterHeld>> RegisterHeld(InvoiceRegisterGetModel model, int userId);
 		Task<List<InvoiceMatchingMainGRN>> MatchingMainGRNList(InvoiceMatchingMainModel model);
-		Task InvoiceIUDIntegration(int businessUnitId, int invoiceMatchingMainId, int userId);
+		Task<int> InvoiceIUDIntegration(int businessUnitId, int invoiceMatchingMainId, int userId);
 		Task<InvoiceMatchResultModel> GetInvoiceMatchData(int invoiceMatchingMainId, int businessUnitId);
 		Task<bool> InvoiceRegisterDetailsSave(int invoiceRegisterMainId, DataTable dataTable);
 		Task<InvoiceRegisterLoad> GetInvoiceRegisterMainLoad(int invoiceRegisterId);
@@ -56,5 +56,16 @@ namespace SolaERP.Application.Contracts.Repositories
 		Task<InvoicePeriod> GetPeriod(int businessUnitId);
 		Task<List<InvoiceRegisterOrderDetail>> GetRegisterOrderDetails(int orderMainId);
 		Task<bool> InvoiceApproveIntegration(int invoiceRegisterId, int userId, int businessUnitId);
+		Task<List<InvoiceRegisterAdvance>> GetInvoiceRegisterAdvance(int businessUnitId, DateTime dateFrom, DateTime dateTo, int userId);
+		Task<List<InvoiceRegisterAdvanceClosingList>> GetInvoiceRegisterAdvanceClosingList(int invoiceRegisterId);
+		Task<List<InvoiceRegisterInvoiceDetailsForCreditNote>> GetInvoiceRegisterInvoiceDetailsForCreditNote(int invoiceRegisterId);
+		Task<int> SaveAdvanceClosing(InvoiceClosingRequest model);
+		Task<bool> SaveAdvanceClosingWOOrderCN(int businessUnitId, int advanceClosingId, int userId);
+		Task<List<InvoiceRegister>> GetInvoiceRegisterList(int businessUnitId);
+		Task<List<InvoiceTransactionTypeEntity>> GetInvoiceTransactionTypes();
+		Task<List<int>> GetCreditNoteInvoiceRegisters(List<int> modelInvoiceRegisterIds);
+		Task<bool> SaveInvoiceRegisterWOOrderCN(int businessUnitId, int invoiceRegisterId, int userId);
+		Task<bool> DeleteAllByMainId(int invoiceRegisterId);
+		Task RetrieveInvoiceRegister(int invoiceRegisterId, int userId);
 	}
 }

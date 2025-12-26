@@ -34,5 +34,9 @@
         public string ReasonAdditionalDescription { get; set; }
         public string Comment { get; set; }
         public bool HasAttachments { get; set; }
+        public decimal TaxAmount { get; set; }
+        public decimal WithHoldingTaxAmount { get; set; }
+        public string InvoiceTransactionType { get; set; }
+        public bool FullPrepaid { get; set; }
     }
 }

@@ -26,6 +26,7 @@ namespace SolaERP.Application.Dtos.Invoice
         public decimal WithHoldingTaxAmount { get; set; }
 		public decimal BaseWithHoldingTaxAmount { get; set; }
 		public decimal ReportingWithHoldingTaxAmount { get; set; }
+		public int CatId { get; set; }
 		public int AnalysisCode1Id { get; set; }
 		public int AnalysisCode2Id { get; set; }
 		public int AnalysisCode3Id { get; set; }
@@ -39,5 +40,11 @@ namespace SolaERP.Application.Dtos.Invoice
 		public string ItemCode { get; set; }
 		public decimal? OrderAmount { get; set; }
 		public string FixedAssetCode { get; set; }
+		public DateTime PrepaymentDateFrom { get; set; }
+		public DateTime PrepaymentDateTo { get; set; }
+		public int PrepaymentPeriods { get; set; }
+		public int OrderDetailId { get; set; }
+		public decimal? MatchedLineAmount { get; set; }
+		public decimal? MatchedOrderTotal { get; set; }
 	}
 }

@@ -37,5 +37,9 @@
         public bool HasAttachments { get; set; }
         public string AccountCode { get; set; }
         public string AccountName { get; set; }
+        public decimal TaxAmount { get; set; }
+        public decimal WithHoldingTaxAmount { get; set; }
+        public string InvoiceTransactionType { get; set; }
+        public bool FullPrepaid { get; set; }
     }
 }

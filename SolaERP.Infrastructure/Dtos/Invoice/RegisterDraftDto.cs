@@ -33,6 +33,10 @@ namespace SolaERP.Application.Dtos.Invoice
         public DateTime DueDate { get; set; }
         public int AgingDays { get; set; }
         public bool HasAttachments { get; set; }
+        public decimal TaxAmount { get; set; }
+        public decimal WithHoldingTaxAmount { get; set; }
+        public string InvoiceTransactionType { get; set; }
+        public bool FullPrepaid { get; set; }
         public List<Attachment.AttachmentDto> Attachments { get; set; }
     }
 }

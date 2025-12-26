@@ -39,6 +39,11 @@ namespace SolaERP.Application.Entities.Invoice
         public string? AccountCode { get; set; }
         public int? WithHoldingTaxId { get; set; }
         public int? TaxId { get; set; }
+        public int InvoiceTransactionTypeId { get; set; }
+        public bool FullPrepaid { get; set; }
+        public int? LinkedInvoiceRegisterId { get; set; }
+        public bool WHTGrossUp { get; set; } = false;
+        
         public decimal? TaxAmount
         {
             get => _taxAmount ?? 0;
@@ -54,6 +59,7 @@ namespace SolaERP.Application.Entities.Invoice
         public int? InvoicePeriod { get; set; }
         public string? VendorAccount { get; set; }
         public bool UseOrderForInvoice { get; set; }
+        public bool HasVATAccount { get; set; }
         List<InvoiceRegisterGetDetails> InvoiceRegisterDetails { get; set; }
         public List<Vendors.WithHoldingTaxData> WithHoldingTaxDatas { get; set; }
         public List<Vendors.TaxData> TaxDatas { get; set; }
