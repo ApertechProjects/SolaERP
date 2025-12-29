@@ -12,5 +12,6 @@
         public int? InvoicePeriod { get; set; }
         public bool WHTGrossUp { get; set; }
         public int? WithHoldingTaxId { get; set; }
+        public DateTime? TransactionDate { get; set; }
     }
 }
