@@ -208,6 +208,20 @@ namespace SolaERP.Persistence.Services
 
                 DataTable data = model.Details.ConvertListOfCLassToDataTable();
                 var detailResult = await _paymentRepository.DetailSave(data);
+                
+                model.Details.ForEach(x=>
+                {
+                    x.AnalysisCode1 ??= "";
+                    x.AnalysisCode2 ??= "";
+                    x.AnalysisCode3 ??= "";
+                    x.AnalysisCode4 ??= "";
+                    x.AnalysisCode5 ??= "";
+                    x.AnalysisCode6 ??= "";
+                    x.AnalysisCode7 ??= "";
+                    x.AnalysisCode8 ??= "";
+                    x.AnalysisCode9 ??= "";
+                    x.AnalysisCode10 ??= "";
+                });
             }
 
             await _attachmentService.SaveAttachmentAsync(model.Attachments, SourceType.PYMDC,
