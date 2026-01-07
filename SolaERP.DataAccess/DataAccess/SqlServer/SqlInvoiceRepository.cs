@@ -769,6 +769,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             command.Parameters.AddWithValue(command, "@InvoiceMatchingMainId", invoiceMatchingMainId);
             command.Parameters.AddWithValue(command, "@UserId", userId);
 
+            await _unitOfWork.SaveChangesAsync();
+            
             await using var reader = await command.ExecuteReaderAsync();
 
             int newJournalNo = 0;
