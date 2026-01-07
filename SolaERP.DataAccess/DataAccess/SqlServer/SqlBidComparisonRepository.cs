@@ -144,10 +144,12 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 using (var command = _unitOfWork.CreateCommand() as SqlCommand)
                 {
-                    command.CommandText = "EXEC SP_BidComparisonBidsReject @BidComparisonBidId, @UserId";
+                    command.CommandText = "EXEC SP_BidComparisonBidsReject @BidComparisonBidId, @UserId, @Comment, @RejectReasonId";
 
                     command.Parameters.AddWithValue(command, "@BidComparisonBidId", BidComparisonBidId);
                     command.Parameters.AddWithValue(command, "@UserId", UserId);
+                    command.Parameters.AddWithValue(command, "@Comment", dto.Comment);
+                    command.Parameters.AddWithValue(command, "@RejectReasonId", dto.RejectReasonId);
 
                     await command.ExecuteNonQueryAsync();
                 }

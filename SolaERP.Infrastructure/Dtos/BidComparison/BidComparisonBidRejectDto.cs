@@ -9,5 +9,7 @@ namespace SolaERP.Application.Dtos.BidComparison
     public class BidComparisonBidRejectDto
     {
         public List<int> BidComparisonBidIds { get; set; }
+        public int RejectReasonId { get; set; }
+        public string Comment { get; set; }
     }
 }
