@@ -756,7 +756,8 @@ public class SqlOrderRepository : IOrderRepository
             DestinationPoint = reader.Get<string>("DestinationPoint"),
             OrderNotes = reader.Get<string>("OrderNotes"),
             KeyCode = reader.Get<string>("KeyCode"),
-            LCType =  reader.Get<string>("LCType")
+            LCType =  reader.Get<string>("LCType"),
+            BidComparisonId = reader.Get<int>("BidComparisonId"),
 
         };
     }
