@@ -38,10 +38,10 @@ public class WellRepairController : CustomBaseController
     
     
     [HttpGet("[action]")]
-    public async Task<IActionResult> GetAnalysisListFromSun (int businessUnitId, int anlCatId)
+    public async Task<IActionResult> GetAnalysisListFromSun (int businessUnitId, int aniCatId)
     {
         return CreateActionResult(
-            await _wellRepairService.GetAnalysisListFromSun(businessUnitId, anlCatId));
+            await _wellRepairService.GetAnalysisListFromSun(businessUnitId, aniCatId));
     }
     
     
