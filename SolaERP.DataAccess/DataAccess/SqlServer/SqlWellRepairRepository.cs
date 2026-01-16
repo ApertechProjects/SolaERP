@@ -76,7 +76,7 @@ public async Task<List<WellCostListDto>> GetWellCostList(int businessUnitId, Dat
         data.Add(new WellCostListDto
         {
             WellCostId = reader.Get<int>("WellCostId"),
-            WellRepairId = reader.Get<int>("WellRepairId"),
+            WellRepairId = reader.Get<int?>("WellRepairId"),
             StartDate = reader.Get<DateTime>("StartDate"),
             EndDate = reader.Get<DateTime>("EndDate"),
             NumberOfStomp = reader.Get<int>("NumberOfStomp"),

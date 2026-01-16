@@ -12,7 +12,7 @@ public class WellCostListDto
 
     public int? NumberOfStomp { get; set; }
 
-    public int WellRepairId { get; set; }
+    public int? WellRepairId { get; set; }
 
     public string RepairNameAz { get; set; }
 
