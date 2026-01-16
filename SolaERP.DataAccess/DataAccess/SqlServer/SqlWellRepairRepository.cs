@@ -176,6 +176,7 @@ public async Task<bool> SaveWellCostAsync(List<WellCostRequest> dtoList,  int us
                 @NumberOfStomp,
                 @WellRepairId,
                 @Description,
+                @RepairNameAz,
                 @ProductionWay,
                 @ProductionTon,
                 @Subject,
@@ -192,7 +193,8 @@ public async Task<bool> SaveWellCostAsync(List<WellCostRequest> dtoList,  int us
             command.Parameters.AddWithValue(command, "@EndDate", dto.EndDate);
             command.Parameters.AddWithValue(command, "@NumberOfStomp", dto.NumberOfStomp);
             command.Parameters.AddWithValue(command, "@WellRepairId", dto.WellRepairId);
-            command.Parameters.AddWithValue(command, "@Description", dto.Description);
+            command.Parameters.AddWithValue(command, "@Description", dto.Description);            
+            command.Parameters.AddWithValue(command, "@RepairNameAz", dto.RepairNameAz);
             command.Parameters.AddWithValue(command, "@ProductionWay", dto.ProductionWay);
             command.Parameters.AddWithValue(command, "@ProductionTon", dto.ProductionTon);
             command.Parameters.AddWithValue(command, "@Subject", dto.Subject);
