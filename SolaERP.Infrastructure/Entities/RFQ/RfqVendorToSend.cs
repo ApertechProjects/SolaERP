@@ -9,6 +9,7 @@
         public string Language { get; set; }
         public int RFQMainId { get; set; }
         public DateTime? RFQDeadline { get; set; }
+        public string HasApproval { get; set; }
         public string RFQNo { get; set; }
     }
 }

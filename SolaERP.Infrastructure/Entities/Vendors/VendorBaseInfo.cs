@@ -14,5 +14,6 @@ namespace SolaERP.Application.Entities.Vendors
         public int TaxesId { get; set; }
         public int WithHoldingTaxId { get; set; }
         public decimal Tax { get; set; }
+        public Boolean HasApproval { get; set; }
     }
 }
