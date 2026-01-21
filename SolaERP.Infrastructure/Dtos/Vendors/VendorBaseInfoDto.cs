@@ -10,6 +10,7 @@ namespace SolaERP.Application.Dtos.Vendors
     {
         public int VendorId { get; set; }
         public string VendorCode { get; set; }
+        public string Email { get; set; }
         public string VendorName { get; set; }
         public int TaxesId { get; set; }
         public int WithHoldingTaxId { get; set; }
