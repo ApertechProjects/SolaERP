@@ -931,6 +931,29 @@ namespace SolaERP.Infrastructure.Services
                 throw;
             }
         }
+        
+        public async Task SendRFQLastDayMailForBuyers(List<RFQUserData> rfqUserData)
+        {
+            try
+            {
+                foreach (var data in rfqUserData)
+                {
+                    VM_RFQLastDayForBuyers emailVM = new VM_RFQLastDayForBuyers("en", data.Buyer, data.RFQNo, data.RFQDeadline,
+                        data.RFQMainId, data.BusinessUnitName)
+                    {
+                        Language = (Language)Enum.Parse(typeof(Language), "en")
+                    };
+
+                    await SendQueueUsingTemplate(emailVM.Subject, emailVM, emailVM.TemplateName(), null,
+                        new List<string> { data.BuyerEmail });
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
 
         public async Task SendRFQVendorApproveMail(List<RfqVendorToSend> users)
         {

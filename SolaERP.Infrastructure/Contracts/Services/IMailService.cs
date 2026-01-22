@@ -45,18 +45,14 @@ namespace SolaERP.Application.Contracts.Services
         Task SendMailToAdminstrationForApproveVendor(int vendorId);
         Task SendRFQDeadLineMail(List<RFQUserData> rfqUserData);
         Task SendRequestBuyerMail(RequestBuyerData data);
-        
         Task SendBidComparisonForBuyer(RequestBuyerData data);
         Task SendRFQLastDayMail(List<RFQUserData> rfqUserData);
+        Task SendRFQLastDayMailForBuyers(List<RFQUserData> rfqUserData);
         Task SendSupportMail(int userId, string subject, string body, List<AttachmentSaveModel> attachments);
-        
         Task SendQueueUsingTemplate<T>(string subject, T viewModel, string templateName, string imageName, List<string> tos);
-
         Task SendRFQVendorApproveMail(List<RfqVendorToSend> users);
-        
 
         Task SendNewVendorApproveGroupEmail(List<string> emails, string vendorName);
-
         Task SendRFQDeadlineFinishedMailForBuyer(List<RFQDeadlineFinishedMailForBuyerDto> datas);
         Task BuyerPurchaseOrderApproveEmail(BuyerPurchaseOrderApproveEmailDto datas);
         Task RFQCloseSendVendorEmail(List<RFQVendorEmailDto> datas);
