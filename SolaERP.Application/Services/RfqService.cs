@@ -151,8 +151,8 @@ namespace SolaERP.Persistence.Services
                 if (postedRFQDetails[i].DeletedRequestDetailIds is null)
                     continue;
 
-                deletedRequestDetails.AddRange(postedRFQDetails[i].DeletedRequestDetailIds.Select(
-                    deletedRequestDetailId => new RfqRequestDetailSaveModel
+                deletedRequestDetails.AddRange(postedRFQDetails[i].DeletedRequestDetailIds
+                    .Select(deletedRequestDetailId => new RfqRequestDetailSaveModel
                     {
                         Id = deletedRequestDetailId
                     }));
@@ -334,12 +334,13 @@ namespace SolaERP.Persistence.Services
         {
             var mainRFQ = await _repository.GetRFQMainAsync(dto.Id);
 
-            if (mainRFQ.BiddingType == BiddingType.Automatic && dto.VendorCodes.Count < 2 && mainRFQ.ProcurementType == ProcurementType.Bidding)
+            if (mainRFQ.BiddingType == BiddingType.Automatic && dto.VendorCodes.Count < 2 &&
+                mainRFQ.ProcurementType == ProcurementType.Bidding)
                 return ApiResponse<int>.Fail("Vendor must be greater than 1", 400);
 
             if (mainRFQ.BiddingType == BiddingType.Manual && dto.VendorCodes?.Any() == true)
                 return ApiResponse<int>.Fail("Vendor Code must be empty", 400);
-            
+
             var data = _mapper.Map<RFQVendorIUD>(dto);
             var result = await _repository.RFQVendorIUDAsync(data, Convert.ToInt32(userIdentity));
 
@@ -349,7 +350,7 @@ namespace SolaERP.Persistence.Services
             {
                 await _repository.UpdateRFQSendManualBiddingType(dto.Id);
             }
-            
+
             if (dto.VendorCodes?.Any() == true)
             {
                 List<RfqVendorToSend> mailData = new List<RfqVendorToSend>();
@@ -483,6 +484,13 @@ namespace SolaERP.Persistence.Services
             if (rfqs.Count > 0)
             {
                 _taskQueue.QueueBackgroundWorkItem(async token => { await _mailService.SendRFQLastDayMail(rfqs); });
+
+                rfqs.ForEach(x =>
+                {
+                    x.BuyerEmail = _buyerService.FindBuyerEmailByBuyerName(x.Buyer, x.BusinessUnitId).Result;
+                });
+
+                _taskQueue.QueueBackgroundWorkItem(async token => { await _mailService.SendRFQLastDayMailForBuyers(rfqs); });
 
                 await methods.UpdateMailIsSentLastDay(rfqs.Select(x => x.RFQVendorResponseId).Distinct().ToList());
             }
