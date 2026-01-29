@@ -485,14 +485,22 @@ namespace SolaERP.Persistence.Services
             {
                 _taskQueue.QueueBackgroundWorkItem(async token => { await _mailService.SendRFQLastDayMail(rfqs); });
 
-                rfqs.ForEach(x =>
+                var distinctList = rfqs
+                    .DistinctBy(x => new { x.RFQNo, x.Buyer })
+                    .ToList();
+
+                distinctList.ForEach(x =>
                 {
                     x.BuyerEmail = _buyerService.FindBuyerEmailByBuyerName(x.Buyer, x.BusinessUnitId).Result;
                 });
 
-                _taskQueue.QueueBackgroundWorkItem(async token => { await _mailService.SendRFQLastDayMailForBuyers(rfqs); });
+                _taskQueue.QueueBackgroundWorkItem(async token =>
+                {
+                    await _mailService.SendRFQLastDayMailForBuyers(distinctList);
+                });
 
-                await methods.UpdateMailIsSentLastDay(rfqs.Select(x => x.RFQVendorResponseId).Distinct().ToList());
+                await methods.UpdateMailIsSentLastDay(rfqs.Select(x => x.RFQVendorResponseId)
+                    .Distinct().ToList());
             }
         }
 

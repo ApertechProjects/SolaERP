@@ -36,7 +36,7 @@ public class VM_RFQLastDayForBuyers : VM_EmailTemplateBase
 
     public string TemplateName()
     {
-        return @"RFQLastDay.cshtml";
+        return @"RFQLastDayForBuyers.cshtml";
     }
 
     public string GetHeaderOfMailAz
