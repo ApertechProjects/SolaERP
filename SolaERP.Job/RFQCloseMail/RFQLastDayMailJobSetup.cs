@@ -19,7 +19,7 @@ namespace SolaERP.Job.RFQCloseMail
 			options.AddJob<RFQLastDayMailJob>(jobBuilder => jobBuilder.WithIdentity(jobKey))
 				 .AddTrigger(trigger => trigger
 				   .ForJob(jobKey)
-				   .WithCronSchedule("0 0/55 9-18 * * ?")
+				   .WithCronSchedule("0 0/25 9-18 * * ?")
 				   .Build());
 
 		}
