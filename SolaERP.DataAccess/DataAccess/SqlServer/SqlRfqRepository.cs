@@ -769,7 +769,9 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 			    au.Id as UserId,
 			    rm.RFQNo,
 			    bu.BusinessUnitName,
-			    rm.RFQDeadline
+			    rm.RFQDeadline,
+			    rm.Buyer,
+			    rm.BusinessUnitId
 				from Procurement.RFQVendorResponse vr
 				INNER JOIN Procurement.Vendors v ON vr.VendorCode = v.VendorCode 
 				INNER JOIN Config.AppUser au ON v.VendorId = au.VendorId 
@@ -798,6 +800,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     RFQNo = reader.Get<string>("RFQNo"),
                     BusinessUnitName = reader.Get<string>("BusinessUnitName"),
                     RFQDeadline = reader.Get<DateTime>("RFQDeadline"),
+                    Buyer = reader.Get<string>("Buyer"),
+                    BusinessUnitId = reader.Get<int>("BusinessUnitId")
                 });
             }
 
