@@ -39,6 +39,17 @@ namespace SolaERP.DataAccess.Extensions
 
             return table;
         }
+        
+        public static DataTable ConvertIntListToDataTable(this List<int> list)
+        {
+            var table = new DataTable();
+            table.Columns.Add("Id", typeof(int));
+
+            foreach (var item in list)
+                table.Rows.Add(item);
+
+            return table;
+        }
 
         public static DataTable ConvertListToDataTable<T>(this List<T> list)
         {
