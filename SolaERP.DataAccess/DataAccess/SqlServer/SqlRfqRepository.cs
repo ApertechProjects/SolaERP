@@ -319,12 +319,18 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<bool> RFQRequestDetailsIUDAsync(List<RfqRequestDetailSaveModel> details)
+        public async Task<bool> RFQRequestDetailsIUDAsync(List<RfqRequestDetailSaveModel> details, List<int> deletedRequestIds)
         {
             using (var command = _unitOfWork.CreateCommand() as DbCommand)
             {
-                command.CommandText = "SET NOCOUNT OFF EXEC SP_RFQRequestDetails_IUD @Data";
-                command.Parameters.AddTableValue(command, "@Data", "RFQRequestDetailsType2",
+                command.CommandText = "SET NOCOUNT OFF EXEC SP_RFQRequestDetails_IUD @DeletedRequestDetailIds = @DeletedRequestDetailIds, @Data = @Data";                
+                command.Parameters.AddTableValue(
+                    command,
+                    "@DeletedRequestDetailIds",
+                    "dbo.IntListType",
+                    deletedRequestIds?.ConvertListToDataTable());
+                
+                command.Parameters.AddTableValue(command, "@Data", "dbo.RFQRequestDetailsType2",
                     details?.ConvertToDataTable());
 
                 return await command.ExecuteNonQueryAsync() > 0;

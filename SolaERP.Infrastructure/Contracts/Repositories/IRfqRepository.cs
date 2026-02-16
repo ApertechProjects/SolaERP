@@ -24,7 +24,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<SingleSourceReasonModel>> GetRFQSingeSourceReasons(int rfqMainId);
 
         Task<bool> DetailsIUDAsync(List<RfqDetailSaveModel> Details, int mainId);
-        Task<bool> RFQRequestDetailsIUDAsync(List<RfqRequestDetailSaveModel> details);
+        Task<bool> RFQRequestDetailsIUDAsync(List<RfqRequestDetailSaveModel> details, List<int> deletedRequestIds);
         Task<List<RequestForRFQ>> GetRequestsForRfq(RFQRequestModel model);
         Task<bool> ChangeRFQStatusAsync(RfqChangeStatusModel model, int userId);
         Task<Entities.UOM.Conversion> GetConversionAsync(int bussinessUnit, string itemCode);

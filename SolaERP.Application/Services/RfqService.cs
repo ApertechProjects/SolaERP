@@ -12,7 +12,9 @@ using SolaERP.Application.UnitOfWork;
 using Microsoft.Extensions.Logging;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Dtos.Bid;
+using SolaERP.DataAccess.Extensions;
 using SolaERP.Job;
+using SolaERP.Persistence.Utils;
 
 namespace SolaERP.Persistence.Services
 {
@@ -69,6 +71,7 @@ namespace SolaERP.Persistence.Services
         public async Task<ApiResponse<RfqSaveCommandResponse>> SaveRfqAsync(RfqSaveCommandRequest request,
             string useridentity)
         {
+            var deletedRequestIds = GetRequestDetailIdsByRFQDetailId((request.DeletedDetailIds));
             request.UserId = Convert.ToInt32(useridentity);
             RfqSaveCommandResponse response = null;
 
@@ -113,10 +116,36 @@ namespace SolaERP.Persistence.Services
             }
 
             if (combinedRequestDetails is not null && combinedRequestDetails.Count > 0)
-                await _repository.RFQRequestDetailsIUDAsync(combinedRequestDetails);
+                await _repository.RFQRequestDetailsIUDAsync(combinedRequestDetails, deletedRequestIds);
 
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<RfqSaveCommandResponse>.Success(response, 200);
+        }
+        
+        public List<int> GetRequestDetailIdsByRFQDetailId(List<int> deletedRfqDetailIds)
+        {
+            var result = new List<int>();
+
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = "EXEC dbo.SP_GetRequestDetailIdsByRFQDetailId @DeletedRfqDetailIds";
+
+                command.Parameters.AddTableValue(
+                    command,
+                    "@DeletedRfqDetailIds",
+                    "IntListType",
+                    deletedRfqDetailIds?.ConvertListToDataTable());
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        result.Add(reader.GetInt32(0));
+                    }
+                }
+            }
+
+            return result;
         }
 
         private List<RfqDetailSaveModel> GenerateModelBasedPostedDeletedIds(List<int> postedDeletedIds)
