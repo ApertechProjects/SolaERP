@@ -4,15 +4,15 @@ public class GNRLConfig : BaseEntity
 {
     public int Id { get; set; }
     public int BusinessUnitId { get; set; }
-    public int GNRL_DESCR_1 { get; set; }
-    public int GNRL_DESCR_2 { get; set; }
-    public int GNRL_DESCR_3 { get; set; }
-    public int GNRL_DESCR_4 { get; set; }
-    public int GNRL_DESCR_5 { get; set; }
-    public int GNRL_DESCR_6 { get; set; }
-    public int GNRL_DESCR_7 { get; set; }
-    public int GNRL_DESCR_8 { get; set; }
-    public int GNRL_DESCR_9 { get; set; }
+    public int GNRL_DESCR_01 { get; set; }
+    public int GNRL_DESCR_02 { get; set; }
+    public int GNRL_DESCR_03 { get; set; }
+    public int GNRL_DESCR_04 { get; set; }
+    public int GNRL_DESCR_05 { get; set; }
+    public int GNRL_DESCR_06 { get; set; }
+    public int GNRL_DESCR_07 { get; set; }
+    public int GNRL_DESCR_08 { get; set; }
+    public int GNRL_DESCR_09 { get; set; }
     public int GNRL_DESCR_10 { get; set; }
     public int GNRL_DESCR_11 { get; set; }
     public int GNRL_DESCR_12 { get; set; }
