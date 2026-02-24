@@ -31,6 +31,9 @@ namespace SolaERP.Application.ViewModels
             switch (TemplateKey)
             {
                 case EmailTemplateKey.REQP:
+                case EmailTemplateKey.REQ_R7:
+                case EmailTemplateKey.REQ_W14:
+                case EmailTemplateKey.REQ_F15:
                     return "RequestPending.cshtml";
                 case EmailTemplateKey.REQA:
                     return "RequestApproved.cshtml";

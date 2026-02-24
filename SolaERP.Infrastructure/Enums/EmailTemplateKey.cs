@@ -13,7 +13,11 @@
 		UA, //User Approved
 		UR, //User Reject
 		UH, //User Held
-		AAI //Auto Approve Information
+		AAI, //Auto Approve Information
+		
+		REQ_R7, // Request idle reminder (Day 7)
+		REQ_W14, // Request idle warning (Day 14)
+		REQ_F15, // Request idle final notice (Day 15, auto-reject)
 	}
 
 

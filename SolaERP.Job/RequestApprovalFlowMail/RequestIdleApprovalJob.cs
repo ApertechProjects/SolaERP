@@ -1,0 +1,211 @@
+using System.Data;
+using System.Data.SqlClient;
+using Microsoft.AspNetCore.Html;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Quartz;
+using SolaERP.Application.Contracts.Repositories;
+using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Enums;
+using SolaERP.Application.ViewModels;
+
+namespace SolaERP.Job.RequestApprovalFlowMail
+{
+    public sealed class RequestIdleApprovalJob : IJob
+    {
+        private const int RejectReasonId = 1;
+
+        private readonly IServiceScopeFactory _scopeFactory;
+        private readonly IConfiguration _configuration;
+        private readonly ILogger<RequestIdleApprovalJob> _logger;
+
+        public RequestIdleApprovalJob(
+            IServiceScopeFactory scopeFactory,
+            IConfiguration configuration,
+            ILogger<RequestIdleApprovalJob> logger)
+        {
+            _scopeFactory = scopeFactory;
+            _configuration = configuration;
+            _logger = logger;
+        }
+
+        public async Task Execute(IJobExecutionContext context)
+        {
+
+            using var scope = _scopeFactory.CreateScope();
+
+            var userRepo = scope.ServiceProvider.GetRequiredService<IUserRepository>();
+            var requestService = scope.ServiceProvider.GetRequiredService<IRequestService>();
+            var emailNotificationService = scope.ServiceProvider.GetRequiredService<IEmailNotificationService>();
+            var mailService = scope.ServiceProvider.GetRequiredService<IMailService>();
+            
+
+            var candidates = await LoadCandidates(context.CancellationToken);
+
+            _logger.LogInformation("Found {Count} idle approval candidates", candidates.Count);
+
+            foreach (var c in candidates)
+            {
+                try
+                {
+                    var (templateKey, notificationType) = c.IdleDays switch
+                    {
+                        7 => (EmailTemplateKey.REQ_R7, "REMINDER7"),
+                        14 => (EmailTemplateKey.REQ_W14, "WARNING14"),
+                        >= 15 => (EmailTemplateKey.REQ_F15, "FINAL15"),
+                        _ => (default(EmailTemplateKey), null)
+                    };
+
+                    if (notificationType is null)
+                        continue;
+
+                    var inserted = await TryInsertNotificationLog(
+                        c.RequestApprovalId,
+                        notificationType,
+                        context.CancellationToken);
+
+                    if (!inserted)
+                        continue;
+                    
+                    var templates = await emailNotificationService.GetEmailTemplateData(templateKey);
+
+                    var vm = new VM_RequestPending
+                    {
+                        Language = Language.en,
+                        TemplateKey = templateKey,
+                        RequestNo = c.RequestNo,
+                        Sequence = c.Sequence,
+                        FullName = c.ApproverFullName
+                    };
+
+                    var template = templates.FirstOrDefault();
+                    if (template != null)
+                    {
+                        vm.Header = template.Header;
+                        vm.Subject = template.Subject;
+                        vm.Body = new HtmlString(template.Body ?? string.Empty);
+                    }
+
+                    var recipients = new List<string> { c.ApproverEmail };
+
+                    if (!string.IsNullOrWhiteSpace(c.RequesterEmail))
+                        recipients.Add(c.RequesterEmail);
+
+                    await mailService.SendQueueUsingTemplate(
+                        subject: vm.GenerateSubject()?.ToString() ?? "Request notification",
+                        viewModel: vm,
+                        templateName: vm.TemplateName(),
+                        imageName: null,
+                        tos: recipients);
+
+                    _logger.LogInformation(
+                        "Notification sent. RequestNo={RequestNo}, IdleDays={IdleDays}",
+                        c.RequestNo,
+                        c.IdleDays);
+                    
+                    var approverUser = await userRepo.GetByIdAsync(c.ApproverUserId);
+                    var approverUserName = approverUser?.UserName;
+                    
+                    if (c.IdleDays >= 15)
+                    {
+                        await requestService.ChangeDetailStatusAsync(
+                            approverUserName,
+                            c.RequestDetailId,
+                            approveStatusId: 2,
+                            comment: "Auto rejected due to inactivity (15 days without approval).",
+                            sequence: c.Sequence,
+                            rejectReasonId: RejectReasonId);
+
+                        _logger.LogWarning(
+                            "Request auto rejected. RequestNo={RequestNo}",
+                            c.RequestNo);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex,
+                        "Error processing RequestNo={RequestNo}",
+                        c.RequestNo);
+                }
+            }
+
+            _logger.LogInformation("RequestIdleApprovalJob finished at {Time}", DateTime.UtcNow);
+        }
+
+        private async Task<List<CandidateRow>> LoadCandidates(CancellationToken ct)
+        {
+            var connStr = _configuration.GetConnectionString("DevelopmentConnectionString");
+            var list = new List<CandidateRow>();
+
+            await using var conn = new SqlConnection(connStr);
+            await conn.OpenAsync(ct);
+
+            await using var cmd = conn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "Procurement.SP_RequestApprovalIdleCandidates";
+
+            await using var reader = await cmd.ExecuteReaderAsync(ct);
+            while (await reader.ReadAsync(ct))
+            {
+                list.Add(new CandidateRow
+                {
+                    RequestDetailId = reader.GetInt32(reader.GetOrdinal("RequestDetailId")),
+                    RequestApprovalId = reader.GetInt32(reader.GetOrdinal("RequestApprovalId")),
+                    Sequence = reader.GetInt32(reader.GetOrdinal("Sequence")),
+                    IdleDays = reader.GetInt32(reader.GetOrdinal("IdleDays")),
+                    RequestNo = reader.GetString(reader.GetOrdinal("RequestNo")),
+                    ApproverFullName = reader.GetString(reader.GetOrdinal("ApproverFullName")),
+                    ApproverEmail = reader.GetString(reader.GetOrdinal("ApproverEmail")),
+                    ApproverUserId = reader.GetInt32(reader.GetOrdinal("ApproverUserId")),
+                    RequesterEmail = reader.GetString(reader.GetOrdinal("RequesterEmail")),
+                });
+            }
+
+            return list;
+        }
+
+        private async Task<bool> TryInsertNotificationLog(
+            int requestApprovalId,
+            string type,
+            CancellationToken ct)
+        {
+            var connStr = _configuration.GetConnectionString("DevelopmentConnectionString");
+
+            await using var conn = new SqlConnection(connStr);
+            await conn.OpenAsync(ct);
+
+            await using var cmd = conn.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = @"
+BEGIN TRY
+    INSERT INTO Procurement.RequestApprovalNotificationLog
+        (RequestApprovalId, NotificationType)
+    VALUES (@RequestApprovalId, @NotificationType);
+    SELECT 1;
+END TRY
+BEGIN CATCH
+    SELECT 0;
+END CATCH";
+
+            cmd.Parameters.Add(new SqlParameter("@RequestApprovalId", SqlDbType.Int) { Value = requestApprovalId });
+            cmd.Parameters.Add(new SqlParameter("@NotificationType", SqlDbType.NVarChar, 30) { Value = type });
+
+            var result = (int)await cmd.ExecuteScalarAsync(ct);
+            return result == 1;
+        }
+
+        private sealed class CandidateRow
+        {
+            public int RequestDetailId { get; set; }
+            public int RequestApprovalId { get; set; }
+            public int Sequence { get; set; }
+            public int IdleDays { get; set; }
+            public string RequestNo { get; set; } = "";
+            public string ApproverFullName { get; set; } = "";
+            public string ApproverEmail { get; set; } = "";
+            public int ApproverUserId { get; set; }
+            public string RequesterEmail { get; set; } = "";
+        }
+    }
+}
