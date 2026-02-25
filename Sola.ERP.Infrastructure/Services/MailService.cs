@@ -412,6 +412,7 @@ namespace SolaERP.Infrastructure.Services
                     try
                     {
                         await smtpClient.SendMailAsync(message);
+                        Console.WriteLine("RAF Message sent successfully...." + message.To.ToString());
                     }
                     catch (SmtpFailedRecipientException ex)
                     {

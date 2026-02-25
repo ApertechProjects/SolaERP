@@ -51,9 +51,9 @@ namespace SolaERP.Job.RequestApprovalFlowMail
                 {
                     var (templateKey, notificationType) = c.IdleDays switch
                     {
-                        7 => (EmailTemplateKey.REQ_R7, "REMINDER7"),
-                        14 => (EmailTemplateKey.REQ_W14, "WARNING14"),
-                        >= 15 => (EmailTemplateKey.REQ_F15, "FINAL15"),
+                        0 => (EmailTemplateKey.R_R7, "REMINDER7"),
+                        14 => (EmailTemplateKey.R_W14, "WARNING14"),
+                        >= 15 => (EmailTemplateKey.R_F15, "FINAL15"),
                         _ => (default(EmailTemplateKey), null)
                     };
 
@@ -70,7 +70,7 @@ namespace SolaERP.Job.RequestApprovalFlowMail
                     
                     var templates = await emailNotificationService.GetEmailTemplateData(templateKey);
 
-                    var vm = new VM_RequestPending
+                    var vm = new VM_RequestApprovalFlow()
                     {
                         Language = Language.en,
                         TemplateKey = templateKey,
@@ -89,7 +89,7 @@ namespace SolaERP.Job.RequestApprovalFlowMail
 
                     var recipients = new List<string> { c.ApproverEmail };
 
-                    if (!string.IsNullOrWhiteSpace(c.RequesterEmail))
+                    if (c.IdleDays >= 15 && !string.IsNullOrWhiteSpace(c.RequesterEmail))
                         recipients.Add(c.RequesterEmail);
 
                     await mailService.SendQueueUsingTemplate(
@@ -159,6 +159,7 @@ namespace SolaERP.Job.RequestApprovalFlowMail
                     ApproverEmail = reader.GetString(reader.GetOrdinal("ApproverEmail")),
                     ApproverUserId = reader.GetInt32(reader.GetOrdinal("ApproverUserId")),
                     RequesterEmail = reader.GetString(reader.GetOrdinal("RequesterEmail")),
+                    RequesterFullName = reader.GetString(reader.GetOrdinal("RequesterFullName")),
                 });
             }
 
@@ -206,6 +207,7 @@ END CATCH";
             public string ApproverEmail { get; set; } = "";
             public int ApproverUserId { get; set; }
             public string RequesterEmail { get; set; } = "";
+            public string RequesterFullName { get; set; } = "";
         }
     }
 }

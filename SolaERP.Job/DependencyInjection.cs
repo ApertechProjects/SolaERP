@@ -29,7 +29,7 @@ namespace SolaERP.Job
 				options.AddTrigger(opts => opts
 					.ForJob(jobKey)
 					.WithIdentity("RequestIdleApprovalJob-trigger")
-					.WithCronSchedule("0 0 2 * * ?", x => x.InTimeZone(timeZone)));
+					.WithCronSchedule("0/10 * * ? * *", x => x.InTimeZone(timeZone)));
 			});
 
 			services.AddQuartzHostedService(options =>
