@@ -416,13 +416,15 @@ namespace SolaERP.Infrastructure.Services
                     }
                     catch (SmtpFailedRecipientException ex)
                     {
-                        // Handle other exceptions or logging if necessary
-                        // ...
+                        Console.WriteLine($"SMTP failed recipient: {ex.FailedRecipient}");
+                        Console.WriteLine(ex.ToString()); // full stack trace
+                        throw;
                     }
                     catch (SmtpException ex)
                     {
-                        // Handle other exceptions or logging if necessary
-                        // ...
+                        Console.WriteLine($"SMTP error: {ex.StatusCode} - {ex.Message}");
+                        Console.WriteLine(ex.ToString()); // full stack trace
+                        throw;
                     }
                 }
             }

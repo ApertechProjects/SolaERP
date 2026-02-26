@@ -60,6 +60,7 @@ namespace SolaERP.Application.ViewModels
                 Language.en => new HtmlString(string.Format(Subject?.ToString(), RequestNo, Sequence)),
             };
         }
+        
 
         public HtmlString? GenerateBody()
         {
