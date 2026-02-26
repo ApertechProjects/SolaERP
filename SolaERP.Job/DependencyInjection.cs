@@ -16,30 +16,31 @@ namespace SolaERP.Job
 		[Obsolete]
 		public static void AddRequestMailsForIsSent(this IServiceCollection services)
 		{
-			services.AddQuartz(options =>
-			{
-				options.UseMicrosoftDependencyInjectionJobFactory();
-				var jobKey = new JobKey("RequestIdleApprovalJob");
-
-				options.AddJob<RequestIdleApprovalJob>(opts =>
-					opts.WithIdentity(jobKey));
-
-				var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Azerbaijan Standard Time");
-
-				options.AddTrigger(opts => opts
-					.ForJob(jobKey)
-					.WithIdentity("RequestIdleApprovalJob-trigger")
-					.WithCronSchedule("0/10 * * ? * *", x => x.InTimeZone(timeZone)));
-			});
-
-			services.AddQuartzHostedService(options =>
-			{
-				options.WaitForJobsToComplete = true;
-			});
-
-			services.ConfigureOptions<EmailSetupIsSent>();
-			
 		}
+		// 	services.AddQuartz(options =>
+		// 	{
+		// 		options.UseMicrosoftDependencyInjectionJobFactory();
+		// 		var jobKey = new JobKey("RequestIdleApprovalJob");
+		//
+		// 		options.AddJob<RequestIdleApprovalJob>(opts =>
+		// 			opts.WithIdentity(jobKey));
+		//
+		// 		var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Azerbaijan Standard Time");
+		//
+		// 		options.AddTrigger(opts => opts
+		// 			.ForJob(jobKey)
+		// 			.WithIdentity("RequestIdleApprovalJob-trigger")
+		// 			.WithCronSchedule("0/10 * * ? * *", x => x.InTimeZone(timeZone)));
+		// 	});
+		//
+		// 	services.AddQuartzHostedService(options =>
+		// 	{
+		// 		options.WaitForJobsToComplete = true;
+		// 	});
+		//
+		// 	services.ConfigureOptions<EmailSetupIsSent>();
+		// 	
+		// }
 
 		[Obsolete]
 		public static void AddRequestMailsForIsSentForAssignedBuyer(this IServiceCollection services)
