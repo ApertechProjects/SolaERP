@@ -54,8 +54,8 @@ namespace SolaERP.Job.RequestApprovalFlowMail
                     var (templateKey, notificationType) = c.IdleDays switch
                     {
                         7 => (EmailTemplateKey.R_R7, "REMINDER7"),
-                        0 => (EmailTemplateKey.R_W14, "WARNING14"),
-                        >= 10 => (EmailTemplateKey.R_F15, "FINAL15"),
+                        14 => (EmailTemplateKey.R_W14, "WARNING14"),
+                        >= 15 => (EmailTemplateKey.R_F15, "FINAL15"),
                         _ => (default(EmailTemplateKey), null)
                     };
 
