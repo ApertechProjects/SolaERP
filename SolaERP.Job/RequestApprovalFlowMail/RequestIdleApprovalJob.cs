@@ -118,9 +118,6 @@ namespace SolaERP.Job.RequestApprovalFlowMail
                         c.RequestNo,
                         c.IdleDays);
                     
-                    var approverUser = await userRepo.GetByIdAsync(620);
-                    var approverUserName = approverUser?.UserName;
-                    
                     if (c.IdleDays >= 15)
                     {
                         var requesterInserted = await TryInsertNotificationLog(
@@ -169,9 +166,9 @@ namespace SolaERP.Job.RequestApprovalFlowMail
                         }
 
                         await requestService.ChangeDetailStatusAsync(
-                            approverUserName,
+                            "619",
                             c.RequestDetailId,
-                            approveStatusId: 4,
+                            approveStatusId: 2,
                             comment: "Auto rejected due to inactivity (15 days without approval).",
                             sequence: c.Sequence,
                             rejectReasonId: RejectReasonId);
