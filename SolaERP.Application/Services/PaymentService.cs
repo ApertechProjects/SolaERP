@@ -26,10 +26,11 @@ namespace SolaERP.Persistence.Services
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private readonly IBusinessUnitService _businessUnitService;
+        private readonly IEmailNotificationService _emailNotificationService;
 
         public PaymentService(IPaymentRepository paymentRepository, IUserRepository userRepository,
             IFileUploadService fileUploadService, IAttachmentService attachmentService, IUnitOfWork unitOfWork,
-            IMapper mapper, IConfiguration configuration, IBusinessUnitService businessUnitService)
+            IMapper mapper, IConfiguration configuration, IBusinessUnitService businessUnitService, IEmailNotificationService emailNotificationService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -39,6 +40,7 @@ namespace SolaERP.Persistence.Services
             _fileUploadService = fileUploadService;
             _configuration = configuration;
             _businessUnitService = businessUnitService;
+            _emailNotificationService = emailNotificationService;
         }
 
         public async Task<ApiResponse<List<AllDto>>> All(string name, PaymentGetModel payment)
@@ -428,6 +430,27 @@ namespace SolaERP.Persistence.Services
                 Console.WriteLine("Step5 - SP_PaymentOrderPostAllocation done!");
 
                 await _unitOfWork.SaveChangesAsync();
+                
+                // var percentage = 100;
+                //
+                // if (percentage >= 80)
+                // {
+                //     var templates = await _emailNotificationService
+                //         .GetEmailTemplateData(EmailTemplateKey.SOPAYMENTTHRESHOLD);
+                //
+                //     var mailUsers = await _paymentRepository.GetSOMailUsers(serviceOrderId);
+                //
+                //     response.OnCompleted(async () =>
+                //     {
+                //         await _mailService.SendMailForServiceOrder(
+                //             response,
+                //             templates,
+                //             mailUsers,
+                //             EmailTemplateKey.SOPAYMENTTHRESHOLD,
+                //             percentage,
+                //             serviceOrderNo);
+                //     });
+                //
 
                 return ApiResponse<PaymentOrderPostDataResult>.Success(new PaymentOrderPostDataResult
                 {

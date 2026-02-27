@@ -62,7 +62,7 @@ namespace SolaERP.Job.RequestApprovalFlowMail
                     if (notificationType is null)
                         continue;
                     
-
+ 
                     var approverInserted = await TryInsertNotificationLog(
                         c.RequestApprovalId,
                         c.ApproverUserId,
