@@ -3,6 +3,7 @@ using SolaERP.Application.Entities.Payment;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Models;
 using System.Data;
+using SolaERP.Application.Dtos.User;
 
 namespace SolaERP.Application.Contracts.Repositories
 {
@@ -49,5 +50,11 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> PaymentOrderDetailsCheckNonAllocated(DataTable detailData);
         Task PaymentOrderAllocationData(int businessUnitId, int paymentOrderMainId, int userId);
         Task<List<PaymentOrder>> PaymentOrders(PaymentOrderGetModel payment);
+
+        Task<PaymentOrderSummaryDto> GetPaymentOrderSummaryAsync(
+            string transactionReference,
+            int businessUnitId);
+
+        Task<List<UserList>> GetSOMailUsersAsync(string transactionReference, int businessUnitId);
     }
 }

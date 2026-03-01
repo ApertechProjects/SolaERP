@@ -27,10 +27,12 @@ namespace SolaERP.Persistence.Services
         private readonly IConfiguration _configuration;
         private readonly IBusinessUnitService _businessUnitService;
         private readonly IEmailNotificationService _emailNotificationService;
+        private readonly IMailService _mailService;
 
         public PaymentService(IPaymentRepository paymentRepository, IUserRepository userRepository,
             IFileUploadService fileUploadService, IAttachmentService attachmentService, IUnitOfWork unitOfWork,
-            IMapper mapper, IConfiguration configuration, IBusinessUnitService businessUnitService, IEmailNotificationService emailNotificationService)
+            IMapper mapper, IConfiguration configuration, IBusinessUnitService businessUnitService, IEmailNotificationService emailNotificationService, 
+            IMailService mailService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -41,6 +43,7 @@ namespace SolaERP.Persistence.Services
             _configuration = configuration;
             _businessUnitService = businessUnitService;
             _emailNotificationService = emailNotificationService;
+            _mailService = mailService;
         }
 
         public async Task<ApiResponse<List<AllDto>>> All(string name, PaymentGetModel payment)
@@ -431,26 +434,39 @@ namespace SolaERP.Persistence.Services
 
                 await _unitOfWork.SaveChangesAsync();
                 
-                // var percentage = 100;
-                //
-                // if (percentage >= 80)
+                var summary = await  _paymentRepository.GetPaymentOrderSummaryAsync(model.PaymentOrderMain.PaymentOrderNo, model.BusinessUnitId);
+                
+                // if (summary.PaymentPercent >= 80)
                 // {
                 //     var templates = await _emailNotificationService
-                //         .GetEmailTemplateData(EmailTemplateKey.SOPAYMENTTHRESHOLD);
+                //         .GetEmailTemplateData(EmailTemplateKey.SOPT);
                 //
-                //     var mailUsers = await _paymentRepository.GetSOMailUsers(serviceOrderId);
+                //     var mailUsers = await _paymentRepository.GetSOMailUsersAsync(model.PaymentOrderMain.PaymentOrderNo, model.BusinessUnitId);
                 //
-                //     response.OnCompleted(async () =>
+                //     _ = Task.Run(async () =>
                 //     {
-                //         await _mailService.SendMailForServiceOrder(
-                //             response,
-                //             templates,
-                //             mailUsers,
-                //             EmailTemplateKey.SOPAYMENTTHRESHOLD,
-                //             percentage,
-                //             serviceOrderNo);
+                //         try
+                //         {
+                //             await _mailService.SendMailForServiceOrder(
+                //                 null,
+                //                 templates,
+                //                 mailUsers,
+                //                 EmailTemplateKey.SOPT,
+                //                 summary.PaymentPercent,
+                //                 model.PaymentOrderMain.PaymentOrderNo,
+                //                 summary.TotalPaid,
+                //                 summary.OrderAmount,
+                //                 summary.Currency,
+                //                 ""
+                //                 );
+                //         }
+                //         catch (Exception ex)
+                //         {
+                //             // log error
+                //         }
                 //     });
-                //
+                // }
+                
 
                 return ApiResponse<PaymentOrderPostDataResult>.Success(new PaymentOrderPostDataResult
                 {
