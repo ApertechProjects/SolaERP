@@ -9,6 +9,7 @@ using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using SolaERP.Application.Dtos.User;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -1236,6 +1237,81 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                 paymentOrders.Add(reader.GetByEntityStructure<PaymentOrder>());
 
             return paymentOrders;
+        }
+        
+        public async Task<PaymentOrderSummaryDto> GetPaymentOrderSummaryAsync(
+            string transactionReference, 
+            int businessUnitId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                var query = _businessUnitHelper.BuildQueryForIntegration(
+                    businessUnitId,
+                    "Finance.SP_GetPaymentOrderSummary @TransactionReference,@BusinessUnitId"
+                );
+
+                command.CommandText = query;
+
+                command.Parameters.Add("@TransactionReference", SqlDbType.NVarChar, 50)
+                    .Value = transactionReference;
+
+                command.Parameters.Add("@BusinessUnitId", SqlDbType.Int)
+                    .Value = businessUnitId;
+
+                await _unitOfWork.SaveChangesAsync();
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                if (await reader.ReadAsync())
+                {
+                    return new PaymentOrderSummaryDto
+                    {
+                        OrderAmount = reader["OrderAmount"] == DBNull.Value ? null : Convert.ToDecimal(reader["OrderAmount"]),
+                        TotalPaid = reader["TotalPaid"] == DBNull.Value ? null : Convert.ToDecimal(reader["TotalPaid"]),
+                        Currency = reader["Currency"]?.ToString(),
+                        PaymentPercent = Convert.ToInt32(reader["PaymentPercent"])
+                    };
+                }
+
+                return null;
+            }
+        }
+        
+        public async Task<List<UserList>> GetSOMailUsersAsync(string transactionReference, int businessUnitId)
+        {
+            var users = new List<UserList>();
+
+            using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                // Stored procedure call
+                command.CommandText = "dbo.GetSOMailUsers";
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@TransactionReference", SqlDbType.NVarChar, 50)
+                    .Value = transactionReference;
+
+                command.Parameters.Add("@BusinessUnitId", SqlDbType.Int)
+                    .Value = businessUnitId;
+
+                await _unitOfWork.SaveChangesAsync();
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (await reader.ReadAsync())
+                {
+                    users.Add(new UserList
+                    {
+                        UserId = Convert.ToInt32(reader["UserId"]),
+                        FullName = reader["FullName"]?.ToString(),
+                        Email = reader["Email"]?.ToString(),
+                        Language = reader["Language"]?.ToString(),
+                        TemplateKey = reader["TemplateKey"] == DBNull.Value ? null : reader["TemplateKey"].ToString(),
+                        RequestNo = reader["RequestNo"]?.ToString()
+                    });
+                }
+            }
+
+            return users;
         }
     }
 }

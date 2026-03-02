@@ -5,6 +5,7 @@ using SolaERP.Job.EmailIsSent;
 using SolaERP.Job.EmailIsSent1;
 using SolaERP.Job.EmailIsSent2;
 using SolaERP.Job.EmailIsSent3;
+using SolaERP.Job.RequestApprovalFlowMail;
 using SolaERP.Job.RFQClose;
 using SolaERP.Job.RFQCloseMail;
 
@@ -18,14 +19,26 @@ namespace SolaERP.Job
 			services.AddQuartz(options =>
 			{
 				options.UseMicrosoftDependencyInjectionJobFactory();
+				var jobKey = new JobKey("RequestIdleApprovalJob");
+		
+				options.AddJob<RequestIdleApprovalJob>(opts =>
+					opts.WithIdentity(jobKey));
+		
+				var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Azerbaijan Standard Time");
+		
+				options.AddTrigger(opts => opts
+					.ForJob(jobKey)
+					.WithIdentity("RequestIdleApprovalJob-trigger")
+					.WithCronSchedule("0/10 * * ? * *", x => x.InTimeZone(timeZone)));
 			});
-
+		
 			services.AddQuartzHostedService(options =>
 			{
 				options.WaitForJobsToComplete = true;
 			});
-
+		
 			services.ConfigureOptions<EmailSetupIsSent>();
+			
 		}
 
 		[Obsolete]

@@ -26,10 +26,13 @@ namespace SolaERP.Persistence.Services
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private readonly IBusinessUnitService _businessUnitService;
+        private readonly IEmailNotificationService _emailNotificationService;
+        private readonly IMailService _mailService;
 
         public PaymentService(IPaymentRepository paymentRepository, IUserRepository userRepository,
             IFileUploadService fileUploadService, IAttachmentService attachmentService, IUnitOfWork unitOfWork,
-            IMapper mapper, IConfiguration configuration, IBusinessUnitService businessUnitService)
+            IMapper mapper, IConfiguration configuration, IBusinessUnitService businessUnitService, IEmailNotificationService emailNotificationService, 
+            IMailService mailService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -39,6 +42,8 @@ namespace SolaERP.Persistence.Services
             _fileUploadService = fileUploadService;
             _configuration = configuration;
             _businessUnitService = businessUnitService;
+            _emailNotificationService = emailNotificationService;
+            _mailService = mailService;
         }
 
         public async Task<ApiResponse<List<AllDto>>> All(string name, PaymentGetModel payment)
@@ -428,6 +433,40 @@ namespace SolaERP.Persistence.Services
                 Console.WriteLine("Step5 - SP_PaymentOrderPostAllocation done!");
 
                 await _unitOfWork.SaveChangesAsync();
+                
+                // var summary = await  _paymentRepository.GetPaymentOrderSummaryAsync(model.PaymentOrderMain.PaymentOrderNo, model.BusinessUnitId);
+                //
+                // if (summary.PaymentPercent >= 80)
+                // {
+                //     var templates = await _emailNotificationService
+                //         .GetEmailTemplateData(EmailTemplateKey.SOPT);
+                //
+                //     var mailUsers = await _paymentRepository.GetSOMailUsersAsync(model.PaymentOrderMain.PaymentOrderNo, model.BusinessUnitId);
+                //
+                //     _ = Task.Run((Func<Task>)(async () =>
+                //     {
+                //         try
+                //         {
+                //             await _mailService.SendMailForServiceOrder(
+                //                 null,
+                //                 templates,
+                //                 mailUsers,
+                //                 EmailTemplateKey.SOPT,
+                //                 summary.PaymentPercent,
+                //                 model.PaymentOrderMain.,
+                //                 summary.TotalPaid?? 0m,
+                //                 summary.OrderAmount?? 0m,
+                //                 summary.Currency,
+                //                 ""
+                //                 );
+                //         }
+                //         catch (Exception ex)
+                //         {
+                //             // log error
+                //         }
+                //     }));
+                // }
+                
 
                 return ApiResponse<PaymentOrderPostDataResult>.Success(new PaymentOrderPostDataResult
                 {

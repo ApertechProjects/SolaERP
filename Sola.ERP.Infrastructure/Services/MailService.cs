@@ -412,16 +412,19 @@ namespace SolaERP.Infrastructure.Services
                     try
                     {
                         await smtpClient.SendMailAsync(message);
+                        Console.WriteLine("RAF Message sent successfully...." + message.To.ToString());
                     }
                     catch (SmtpFailedRecipientException ex)
                     {
-                        // Handle other exceptions or logging if necessary
-                        // ...
+                        Console.WriteLine($"SMTP failed recipient: {ex.FailedRecipient}");
+                        Console.WriteLine(ex.ToString()); // full stack trace
+                        throw;
                     }
                     catch (SmtpException ex)
                     {
-                        // Handle other exceptions or logging if necessary
-                        // ...
+                        Console.WriteLine($"SMTP error: {ex.StatusCode} - {ex.Message}");
+                        Console.WriteLine(ex.ToString()); // full stack trace
+                        throw;
                     }
                 }
             }
@@ -1080,6 +1083,50 @@ namespace SolaERP.Infrastructure.Services
             {
                 Console.WriteLine(e);
                 throw;
+            }
+        }
+        
+        public async Task SendMailForServiceOrder(HttpResponse response,
+            List<EmailTemplateData> templates,
+            List<UserList> users,
+            EmailTemplateKey key,
+            decimal percentage,
+            string serviceOrderNo,
+            decimal totalAmount,
+            decimal paidAmount,
+            string currency,
+            string url)
+        {
+            for (int i = 0; i < users.Count; i++)
+            {
+                var temp = templates.First(x => x.Language == users[i].Language.ToString());
+
+                VM_ServiceOrderThreshold vm = new VM_ServiceOrderThreshold
+                {
+                    Body = new HtmlString(temp.Body),
+                    FullName = users[i].FullName,
+                    Header = temp.Header,
+                    Subject = string.Format(temp.Subject, serviceOrderNo, percentage),
+                    ServiceOrderNo = serviceOrderNo,
+                    Percentage = percentage,
+                    TotalAmount = totalAmount,
+                    PaidAmount = paidAmount,
+                    Currency = currency,
+                    Url = url,
+                    TemplateKey = key
+                };
+
+                string to = users[i].Email;
+
+                response.OnCompleted(async () =>
+                {
+                    await SendUsingTemplate(
+                        vm.Subject,
+                        vm,
+                        vm.TemplateName(),
+                        null,
+                        new List<string> { to });
+                });
             }
         }
     }
