@@ -245,7 +245,7 @@ namespace SolaERP.Job.RequestApprovalFlowMail
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = @"
 BEGIN TRY
-    INSERT INTO  
+    INSERT INTO Procurement.RequestApprovalNotificationLog
         (RequestApprovalId, RecipientUserId, RecipientEmail, NotificationType)
     VALUES (@RequestApprovalId, @RecipientUserId, @RecipientEmail, @NotificationType);
 
