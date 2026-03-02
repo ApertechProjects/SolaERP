@@ -118,7 +118,7 @@ namespace SolaERP.Job.RequestApprovalFlowMail
                         c.RequestNo,
                         c.IdleDays);
                     
-                    if (c.IdleDays >= 15)
+                    if (c.IdleDays == 15)
                     {
                         var requesterInserted = await TryInsertNotificationLog(
                             c.RequestApprovalId,
@@ -166,7 +166,7 @@ namespace SolaERP.Job.RequestApprovalFlowMail
                         }
 
                         await requestService.ChangeDetailStatusAsync(
-                            "619",
+                            "669",
                             c.RequestDetailId,
                             approveStatusId: 2,
                             comment: "Auto rejected due to inactivity (15 days without approval).",

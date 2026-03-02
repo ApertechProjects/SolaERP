@@ -434,39 +434,49 @@ namespace SolaERP.Persistence.Services
 
                 await _unitOfWork.SaveChangesAsync();
                 
-                // var summary = await  _paymentRepository.GetPaymentOrderSummaryAsync(model.PaymentOrderMain.PaymentOrderNo, model.BusinessUnitId);
-                //
-                // if (summary.PaymentPercent >= 80)
+                // if (model.PaymentDocumentPosts != null)
                 // {
-                //     var templates = await _emailNotificationService
-                //         .GetEmailTemplateData(EmailTemplateKey.SOPT);
-                //
-                //     var mailUsers = await _paymentRepository.GetSOMailUsersAsync(model.PaymentOrderMain.PaymentOrderNo, model.BusinessUnitId);
-                //
-                //     _ = Task.Run((Func<Task>)(async () =>
+                //     foreach (var document in model.PaymentDocumentPosts)
                 //     {
-                //         try
+                //         var summary =
+                //             await _paymentRepository.GetPaymentOrderSummaryAsync(document.TransactionReference,
+                //                 model.BusinessUnitId);
+                //
+                //         if (summary.PaymentPercent >= 80)
                 //         {
-                //             await _mailService.SendMailForServiceOrder(
-                //                 null,
-                //                 templates,
-                //                 mailUsers,
-                //                 EmailTemplateKey.SOPT,
-                //                 summary.PaymentPercent,
-                //                 model.PaymentOrderMain.,
-                //                 summary.TotalPaid?? 0m,
-                //                 summary.OrderAmount?? 0m,
-                //                 summary.Currency,
-                //                 ""
-                //                 );
+                //             var templates = await _emailNotificationService
+                //                 .GetEmailTemplateData(EmailTemplateKey.SOPT);
+                //
+                //             var mailUsers =
+                //                 await _paymentRepository.GetSOMailUsersAsync(model.PaymentOrderMain.PaymentOrderNo,
+                //                     model.BusinessUnitId);
+                //
+                //             _ = Task.Run((Func<Task>)(async () =>
+                //             {
+                //                 try
+                //                 {
+                //                     await _mailService.SendMailForServiceOrder(
+                //                         null,
+                //                         templates,
+                //                         mailUsers,
+                //                         EmailTemplateKey.SOPT,
+                //                         summary.PaymentPercent,
+                //                         document.TransactionReference,
+                //                         summary.TotalPaid ?? 0m,
+                //                         summary.OrderAmount ?? 0m,
+                //                         summary.Currency,
+                //                         ""
+                //                     );
+                //                 }
+                //                 catch (Exception ex)
+                //                 {
+                //                     // log error
+                //                 }
+                //             }));
                 //         }
-                //         catch (Exception ex)
-                //         {
-                //             // log error
-                //         }
-                //     }));
+                //
+                //     }
                 // }
-                
 
                 return ApiResponse<PaymentOrderPostDataResult>.Success(new PaymentOrderPostDataResult
                 {
