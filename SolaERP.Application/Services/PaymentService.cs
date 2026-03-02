@@ -434,8 +434,8 @@ namespace SolaERP.Persistence.Services
 
                 await _unitOfWork.SaveChangesAsync();
                 
-                var summary = await  _paymentRepository.GetPaymentOrderSummaryAsync(model.PaymentOrderMain.PaymentOrderNo, model.BusinessUnitId);
-                
+                // var summary = await  _paymentRepository.GetPaymentOrderSummaryAsync(model.PaymentOrderMain.PaymentOrderNo, model.BusinessUnitId);
+                //
                 // if (summary.PaymentPercent >= 80)
                 // {
                 //     var templates = await _emailNotificationService
@@ -443,7 +443,7 @@ namespace SolaERP.Persistence.Services
                 //
                 //     var mailUsers = await _paymentRepository.GetSOMailUsersAsync(model.PaymentOrderMain.PaymentOrderNo, model.BusinessUnitId);
                 //
-                //     _ = Task.Run(async () =>
+                //     _ = Task.Run((Func<Task>)(async () =>
                 //     {
                 //         try
                 //         {
@@ -453,9 +453,9 @@ namespace SolaERP.Persistence.Services
                 //                 mailUsers,
                 //                 EmailTemplateKey.SOPT,
                 //                 summary.PaymentPercent,
-                //                 model.PaymentOrderMain.PaymentOrderNo,
-                //                 summary.TotalPaid,
-                //                 summary.OrderAmount,
+                //                 model.PaymentOrderMain.,
+                //                 summary.TotalPaid?? 0m,
+                //                 summary.OrderAmount?? 0m,
                 //                 summary.Currency,
                 //                 ""
                 //                 );
@@ -464,7 +464,7 @@ namespace SolaERP.Persistence.Services
                 //         {
                 //             // log error
                 //         }
-                //     });
+                //     }));
                 // }
                 
 

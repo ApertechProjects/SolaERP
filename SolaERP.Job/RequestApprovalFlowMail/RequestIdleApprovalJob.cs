@@ -135,7 +135,7 @@ namespace SolaERP.Job.RequestApprovalFlowMail
                                 TemplateKey = EmailTemplateKey.R_F15, // ayrıca key olmalıdır
                                 RequestNo = c.RequestNo,
                                 Sequence = c.Sequence,
-                                FullName = c.RequesterFullName,
+                                FullName = c.ApproverFullName,
                                 AwaitingReviewSince = c.EnteredAt,
                                 RequestUrl = requestUrl,
                                 RequesterFullName = c.RequesterFullName,
@@ -245,7 +245,7 @@ namespace SolaERP.Job.RequestApprovalFlowMail
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = @"
 BEGIN TRY
-    INSERT INTO Procurement.RequestApprovalNotificationLog
+    INSERT INTO  
         (RequestApprovalId, RecipientUserId, RecipientEmail, NotificationType)
     VALUES (@RequestApprovalId, @RecipientUserId, @RecipientEmail, @NotificationType);
 
