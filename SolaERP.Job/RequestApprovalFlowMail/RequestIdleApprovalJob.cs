@@ -55,7 +55,7 @@ namespace SolaERP.Job.RequestApprovalFlowMail
                     {
                         7 => (EmailTemplateKey.R_R7, "REMINDER7"),
                         14 => (EmailTemplateKey.R_W14, "WARNING14"),
-                        >= 15 => (EmailTemplateKey.R_F15, "FINAL15"),
+                        15 => (EmailTemplateKey.R_F15, "FINAL15"),
                         _ => (default(EmailTemplateKey), null)
                     };
 
