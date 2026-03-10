@@ -1240,25 +1240,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
         
         public async Task<PaymentOrderSummaryDto> GetPaymentOrderSummaryAsync(
-            string transactionReference, 
+            string transactionReference,
             int businessUnitId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                var query = _businessUnitHelper.BuildQueryForIntegration(
-                    businessUnitId,
-                    "Finance.SP_GetPaymentOrderSummary @TransactionReference,@BusinessUnitId"
-                );
-
-                command.CommandText = query;
+                command.CommandText = "Finance.SP_GetPaymentOrderSummary";
+                command.CommandType = CommandType.StoredProcedure;
 
                 command.Parameters.Add("@TransactionReference", SqlDbType.NVarChar, 50)
                     .Value = transactionReference;
 
                 command.Parameters.Add("@BusinessUnitId", SqlDbType.Int)
                     .Value = businessUnitId;
-
-                await _unitOfWork.SaveChangesAsync();
 
                 using var reader = await command.ExecuteReaderAsync();
 
@@ -1269,7 +1263,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                         OrderAmount = reader["OrderAmount"] == DBNull.Value ? null : Convert.ToDecimal(reader["OrderAmount"]),
                         TotalPaid = reader["TotalPaid"] == DBNull.Value ? null : Convert.ToDecimal(reader["TotalPaid"]),
                         Currency = reader["Currency"]?.ToString(),
-                        PaymentPercent = Convert.ToInt32(reader["PaymentPercent"])
+                        PaymentPercent = reader["PaymentPercent"] == DBNull.Value ? 0 : Convert.ToInt32(reader["PaymentPercent"])
                     };
                 }
 

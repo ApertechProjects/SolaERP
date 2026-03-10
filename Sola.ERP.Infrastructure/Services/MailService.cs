@@ -1086,7 +1086,7 @@ namespace SolaERP.Infrastructure.Services
             }
         }
         
-        public async Task SendMailForServiceOrder(HttpResponse response,
+        public async Task SendMailForServiceOrder(
             List<EmailTemplateData> templates,
             List<UserList> users,
             EmailTemplateKey key,
@@ -1099,6 +1099,7 @@ namespace SolaERP.Infrastructure.Services
         {
             for (int i = 0; i < users.Count; i++)
             {
+                Console.WriteLine(users[i].Language.ToString());
                 var temp = templates.First(x => x.Language == users[i].Language.ToString());
 
                 VM_ServiceOrderThreshold vm = new VM_ServiceOrderThreshold
@@ -1106,10 +1107,11 @@ namespace SolaERP.Infrastructure.Services
                     Body = new HtmlString(temp.Body),
                     FullName = users[i].FullName,
                     Header = temp.Header,
-                    Subject = string.Format(temp.Subject, serviceOrderNo, percentage),
+                    Subject = string.Format(temp.Subject, serviceOrderNo),
                     ServiceOrderNo = serviceOrderNo,
                     Percentage = percentage,
                     TotalAmount = totalAmount,
+                    Language = users[i].Language.GetLanguageEnumValue(),
                     PaidAmount = paidAmount,
                     Currency = currency,
                     Url = url,
@@ -1117,16 +1119,13 @@ namespace SolaERP.Infrastructure.Services
                 };
 
                 string to = users[i].Email;
-
-                response.OnCompleted(async () =>
-                {
+                
                     await SendUsingTemplate(
                         vm.Subject,
                         vm,
                         vm.TemplateName(),
                         null,
                         new List<string> { to });
-                });
             }
         }
     }

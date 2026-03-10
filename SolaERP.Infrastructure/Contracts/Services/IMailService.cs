@@ -58,7 +58,7 @@ namespace SolaERP.Application.Contracts.Services
         Task RFQCloseSendVendorEmail(List<RFQVendorEmailDto> datas);
         Task RFQCloseSendVendorEmailForBCC(List<RFQVendorEmailDto> datas);
 
-        Task SendMailForServiceOrder(HttpResponse response,
+        Task SendMailForServiceOrder(
             List<EmailTemplateData> templates,
             List<UserList> users,
             EmailTemplateKey key,
