@@ -1097,6 +1097,7 @@ namespace SolaERP.Infrastructure.Services
             string currency,
             string url)
         {
+            string allUserNames = string.Join(", ", users.Select(u => u.FullName));
             for (int i = 0; i < users.Count; i++)
             {
                 Console.WriteLine(users[i].Language.ToString());
@@ -1105,7 +1106,7 @@ namespace SolaERP.Infrastructure.Services
                 VM_ServiceOrderThreshold vm = new VM_ServiceOrderThreshold
                 {
                     Body = new HtmlString(temp.Body),
-                    FullName = users[i].FullName,
+                    FullName = allUserNames,
                     Header = temp.Header,
                     Subject = string.Format(temp.Subject, serviceOrderNo),
                     ServiceOrderNo = serviceOrderNo,

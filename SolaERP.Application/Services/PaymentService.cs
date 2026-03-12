@@ -466,7 +466,16 @@ namespace SolaERP.Persistence.Services
                             //         TemplateKey = "SOPT",
                             //         Language = "en",
                             //         RequestNo = "REQ-0001"
-                            //     }
+                            //     },
+                            //     new UserList
+                            //     {
+                            //     UserId = 1,
+                            //     FullName = "Subhan Mansimov",
+                            //     Email = "iqbal.qasimov.2000@mail.ru",
+                            //     TemplateKey = "SOPT",
+                            //     Language = "en",
+                            //     RequestNo = "REQ-0001"
+                            // }
                             // };
                             
                             _ = Task.Run((Func<Task>)(async () =>
