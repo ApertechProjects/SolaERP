@@ -376,6 +376,9 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(true);
         }
 
+        
+        
+
         public async Task<ApiResponse<PaymentOrderPostDataResult>> PaymentOrderPostData(PaymentOrderPostModel model,
             string name)
         {
@@ -388,7 +391,7 @@ namespace SolaERP.Persistence.Services
                 var userId = await _userRepository.ConvertIdentity(name);
                 DataTable detailData = model.PaymentOrderDetails.ConvertListOfCLassToDataTable();
                 var checkNonAllocated = await _paymentRepository.PaymentOrderDetailsCheckNonAllocated(detailData);
-
+                
                 if (checkNonAllocated)
                     return ApiResponse<PaymentOrderPostDataResult>.Success(
                         "Post to SS already created for this data");
@@ -397,87 +400,81 @@ namespace SolaERP.Persistence.Services
 
                 var paymentOrderSaveMain = await _paymentRepository.PaymentOrderPostSaveMain(model.PaymentOrderMain,
                     model.AllocationReference, model.JournalNo, userId);
-
-                Console.WriteLine("Step1 - PaymentOrderMain IUD done!");
                 
                 await _paymentRepository.PaymentOrderPostDetailSave(paymentOrderSaveMain.PaymentOrderMainId,
                     detailData);
                 
-                Console.WriteLine("Step2 - PaymentOrderDetails IUD done!");
-
                 var paymentOrderTransaction = _mapper.Map<List<PaymentTransaction>>(model.PaymentDocumentPosts);
 
                 DataTable transactionData = paymentOrderTransaction.ConvertListOfCLassToDataTable();
                 await _paymentRepository.PaymentOrderPostTransactionSave(
                     paymentOrderSaveMain.PaymentOrderMainId,
                     transactionData);
-
-                Console.WriteLine("Step3 - PaymentOrderTransaction IUD done!");
+                
 
                 #endregion
 
                 var table = _mapper.Map<List<PaymentOrderPostDataDto>>(model.PaymentDocumentPosts);
-
+                
                 table.ForEach(x => x.PaymentOrderMainId = paymentOrderSaveMain.PaymentOrderMainId);
-
-                var data = await _paymentRepository.PaymentOrderPostData(table.ConvertListOfCLassToDataTable(),
+                
+                var data = await _paymentRepository.PaymentOrderPostData(null,
                     paymentOrderSaveMain.PaymentOrderMainId,
                     model.AllocationReference, model.JournalNo,
                     userId, model.BusinessUnitId);
                 
-                Console.WriteLine("Step4 - SP_PaymentOrderPostData done!");
-
                 await _paymentRepository.PaymentOrderAllocationData(model.BusinessUnitId,
                     paymentOrderSaveMain.PaymentOrderMainId,
                     userId);
                 
-                Console.WriteLine("Step5 - SP_PaymentOrderPostAllocation done!");
-
                 await _unitOfWork.SaveChangesAsync();
                 
-                // if (model.PaymentDocumentPosts != null)
-                // {
-                //     foreach (var document in model.PaymentDocumentPosts)
-                //     {
-                //         var summary =
-                //             await _paymentRepository.GetPaymentOrderSummaryAsync(document.TransactionReference,
-                //                 model.BusinessUnitId);
-                //
-                //         if (summary.PaymentPercent >= 80)
-                //         {
-                //             var templates = await _emailNotificationService
-                //                 .GetEmailTemplateData(EmailTemplateKey.SOPT);
-                //
-                //             var mailUsers =
-                //                 await _paymentRepository.GetSOMailUsersAsync(model.PaymentOrderMain.PaymentOrderNo,
-                //                     model.BusinessUnitId);
-                //
-                //             _ = Task.Run((Func<Task>)(async () =>
-                //             {
-                //                 try
-                //                 {
-                //                     await _mailService.SendMailForServiceOrder(
-                //                         null,
-                //                         templates,
-                //                         mailUsers,
-                //                         EmailTemplateKey.SOPT,
-                //                         summary.PaymentPercent,
-                //                         document.TransactionReference,
-                //                         summary.TotalPaid ?? 0m,
-                //                         summary.OrderAmount ?? 0m,
-                //                         summary.Currency,
-                //                         ""
-                //                     );
-                //                 }
-                //                 catch (Exception ex)
-                //                 {
-                //                     // log error
-                //                 }
-                //             }));
-                //         }
-                //
-                //     }
-                // }
+                if (model.PaymentDocumentPosts != null)
+                {
+                    foreach (var document in model.PaymentDocumentPosts
+                                 .GroupBy(x => x.TransactionReference)
+                                 .Select(g => g.First()))
+                    {
+                        var summary =
+                            await _paymentRepository.GetPaymentOrderSummaryAsync(document.TransactionReference,
+                                model.BusinessUnitId);
+                        
+                        if(summary==null)continue;
+                        Console.WriteLine(summary.PaymentPercent);
+                        if (summary.PaymentPercent >= 80)
+                        {
+                            var templates = await _emailNotificationService
+                                .GetEmailTemplateData(EmailTemplateKey.SOPT);
+                
+                            var mailUsers =
+                                await _paymentRepository.GetSOMailUsersAsync(document.TransactionReference,
+                                    model.BusinessUnitId);
+                            
+                            _ = Task.Run((Func<Task>)(async () =>
+                            {
+                                try
+                                {
+                                    await _mailService.SendMailForServiceOrder(
+                                        templates,
+                                        mailUsers,
+                                        EmailTemplateKey.SOPT,
+                                        summary.PaymentPercent,
+                                        document.TransactionReference,
+                                        summary.TotalPaid ?? 0m,
+                                        summary.OrderAmount ?? 0m,
+                                        summary.Currency,
+                                        ""
+                                    );
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"Error: {ex.Message}");
+                                }
+                            }));
+                        }
+                
+                    }
+                }
 
                 return ApiResponse<PaymentOrderPostDataResult>.Success(new PaymentOrderPostDataResult
                 {
