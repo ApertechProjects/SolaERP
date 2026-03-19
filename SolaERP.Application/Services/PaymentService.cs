@@ -376,6 +376,8 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<bool>.Success(true);
         }
 
+        
+        
 
         public async Task<ApiResponse<PaymentOrderPostDataResult>> PaymentOrderPostData(PaymentOrderPostModel model,
             string name)
@@ -466,7 +468,7 @@ namespace SolaERP.Persistence.Services
                                 }
                                 catch (Exception ex)
                                 {
-                                    // log error
+                                    Console.WriteLine($"Error: {ex.Message}");
                                 }
                             }));
                         }
