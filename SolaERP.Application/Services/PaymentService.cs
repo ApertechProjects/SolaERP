@@ -388,32 +388,27 @@ namespace SolaERP.Persistence.Services
 
                 var userId = await _userRepository.ConvertIdentity(name);
                 DataTable detailData = model.PaymentOrderDetails.ConvertListOfCLassToDataTable();
-                // var checkNonAllocated = await _paymentRepository.PaymentOrderDetailsCheckNonAllocated(detailData);
-                //
-                // if (checkNonAllocated)
-                //     return ApiResponse<PaymentOrderPostDataResult>.Success(
-                //         "Post to SS already created for this data");
+                var checkNonAllocated = await _paymentRepository.PaymentOrderDetailsCheckNonAllocated(detailData);
+                
+                if (checkNonAllocated)
+                    return ApiResponse<PaymentOrderPostDataResult>.Success(
+                        "Post to SS already created for this data");
 
                 #region Save
 
                 var paymentOrderSaveMain = await _paymentRepository.PaymentOrderPostSaveMain(model.PaymentOrderMain,
                     model.AllocationReference, model.JournalNo, userId);
-
-                Console.WriteLine("Step1 - PaymentOrderMain IUD done!");
                 
                 await _paymentRepository.PaymentOrderPostDetailSave(paymentOrderSaveMain.PaymentOrderMainId,
                     detailData);
                 
-                Console.WriteLine("Step2 - PaymentOrderDetails IUD done!");
-
                 var paymentOrderTransaction = _mapper.Map<List<PaymentTransaction>>(model.PaymentDocumentPosts);
 
                 DataTable transactionData = paymentOrderTransaction.ConvertListOfCLassToDataTable();
                 await _paymentRepository.PaymentOrderPostTransactionSave(
                     paymentOrderSaveMain.PaymentOrderMainId,
                     transactionData);
-
-                Console.WriteLine("Step3 - PaymentOrderTransaction IUD done!");
+                
 
                 #endregion
 
@@ -421,26 +416,15 @@ namespace SolaERP.Persistence.Services
                 
                 table.ForEach(x => x.PaymentOrderMainId = paymentOrderSaveMain.PaymentOrderMainId);
                 
-                // Console.WriteLine("PaymentOrderPostData params:");
-                // Console.WriteLine($"PaymentOrderMainId: {paymentOrderSaveMain.PaymentOrderMainId}");
-                // Console.WriteLine($"AllocationReference: {model.AllocationReference}");
-                // Console.WriteLine($"JournalNo: {model.JournalNo}");
-                // Console.WriteLine($"UserId: {userId}");
-                // Console.WriteLine($"BusinessUnitId: {model.BusinessUnitId}");
+                var data = await _paymentRepository.PaymentOrderPostData(null,
+                    paymentOrderSaveMain.PaymentOrderMainId,
+                    model.AllocationReference, model.JournalNo,
+                    userId, model.BusinessUnitId);
                 
-                // var data = await _paymentRepository.PaymentOrderPostData(null,
-                //     paymentOrderSaveMain.PaymentOrderMainId,
-                //     model.AllocationReference, model.JournalNo,
-                //     userId, model.BusinessUnitId);
+                await _paymentRepository.PaymentOrderAllocationData(model.BusinessUnitId,
+                    paymentOrderSaveMain.PaymentOrderMainId,
+                    userId);
                 
-                Console.WriteLine("Step4 - SP_PaymentOrderPostData done!");
-
-                // await _paymentRepository.PaymentOrderAllocationData(model.BusinessUnitId,
-                //     paymentOrderSaveMain.PaymentOrderMainId,
-                //     userId);
-                
-                Console.WriteLine("Step5 - SP_PaymentOrderPostAllocation done!");
-
                 await _unitOfWork.SaveChangesAsync();
                 
                 if (model.PaymentDocumentPosts != null)
@@ -463,28 +447,6 @@ namespace SolaERP.Persistence.Services
                             var mailUsers =
                                 await _paymentRepository.GetSOMailUsersAsync(document.TransactionReference,
                                     model.BusinessUnitId);
-                            
-                            // var mailUsers = new List<UserList>
-                            // {
-                            //     new UserList
-                            //     {
-                            //         UserId = 1,
-                            //         FullName = "Iqbal Qasimov",
-                            //         Email = "iqbal.qasimov.2000@mail.ru",
-                            //         TemplateKey = "SOPT",
-                            //         Language = "en",
-                            //         RequestNo = "REQ-0001"
-                            //     },
-                            //     new UserList
-                            //     {
-                            //     UserId = 1,
-                            //     FullName = "Subhan Mansimov",
-                            //     Email = "iqbal.qasimov.2000@mail.ru",
-                            //     TemplateKey = "SOPT",
-                            //     Language = "en",
-                            //     RequestNo = "REQ-0001"
-                            // }
-                            // };
                             
                             _ = Task.Run((Func<Task>)(async () =>
                             {
@@ -514,7 +476,7 @@ namespace SolaERP.Persistence.Services
 
                 return ApiResponse<PaymentOrderPostDataResult>.Success(new PaymentOrderPostDataResult
                 {
-                    JournalNo = 1,
+                    JournalNo = data,
                     PaymentOrderNo = paymentOrderSaveMain.PaymentOrderNo,
                     PaymentOrderMainId = paymentOrderSaveMain.PaymentOrderMainId,
                 }, 200);
