@@ -1058,36 +1058,43 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
-        public async Task<int> PaymentOrderPostData(DataTable table, int paymentOrderMainId,
+        public async Task<int> PaymentOrderPostData(
+            DataTable table,
+            int paymentOrderMainId,
             int allocationReference,
-            int journalNo, int userId, int businessUnitId)
+            int journalNo,
+            int userId,
+            int businessUnitId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                var query = _businessUnitHelper.BuildQueryForIntegration(businessUnitId,
-                    "SP_PaymentOrderPostData @JournalNo,@AllocationReference,@PaymentOrderMainId,@BusinessUnitId,@UserId,@NewJournalNo = @NewJournalNo OUTPUT select @NewJournalNo as [NewJournalNo]");
-                command.CommandText = query;
-                command.Parameters.AddWithValue(command, "@JournalNo", journalNo);
-                command.Parameters.AddWithValue(command, "@AllocationReference", allocationReference);
-                command.Parameters.AddWithValue(command, "@UserId", userId);
-                command.Parameters.AddWithValue(command, "@BusinessUnitId", businessUnitId);
-                command.Parameters.AddWithValue(command, "@PaymentOrderMainId", paymentOrderMainId);
-                // command.Parameters.AddTableValue(command, "@PaymentOrderTransactions", "PaymentDocumentPost2", table);
+                var query = _businessUnitHelper.BuildQueryForIntegration(
+                    businessUnitId,
+                    "SP_PaymentOrderPostData @JRNAL_NO,@AllocationReference,@PaymentOrderMainId,@BusinessUnitId,@UserId,@NewJournalNo = @NewJournalNo OUTPUT");
 
-                command.Parameters.Add("@NewJournalNo", SqlDbType.Int);
-                command.Parameters["@NewJournalNo"].Direction = ParameterDirection.Output;
+                command.CommandText = query;
+
+                command.Parameters.AddWithValue("@JRNAL_NO", journalNo);
+                command.Parameters.AddWithValue("@AllocationReference", allocationReference);
+                command.Parameters.AddWithValue("@UserId", userId);
+                command.Parameters.AddWithValue("@BusinessUnitId", businessUnitId);
+                command.Parameters.AddWithValue("@PaymentOrderMainId", paymentOrderMainId);
+
+                // IMPORTANT: Uncomment if SP needs it
+                // command.Parameters.AddTableValue("@PaymentOrderTransactions", "PaymentDocumentPost2", table);
+
+                var outputParam = new SqlParameter("@NewJournalNo", SqlDbType.Int)
+                {
+                    Direction = ParameterDirection.Output
+                };
+                command.Parameters.Add(outputParam);
 
                 await _unitOfWork.SaveChangesAsync();
-                using var reader = await command.ExecuteReaderAsync();
+                await command.ExecuteNonQueryAsync();
 
-                while (await reader.ReadAsync())
-                {
-                    journalNo = reader.Get<int>("@NewJournalNo");
-                }
-
-                return journalNo;
+                return (int)(outputParam.Value ?? 0);
             }
-        }
+        } 
 
         public ASalfldg GetSalfldg(DbDataReader reader)
         {
@@ -1240,25 +1247,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         }
         
         public async Task<PaymentOrderSummaryDto> GetPaymentOrderSummaryAsync(
-            string transactionReference, 
+            string transactionReference,
             int businessUnitId)
         {
             using (var command = _unitOfWork.CreateCommand() as SqlCommand)
             {
-                var query = _businessUnitHelper.BuildQueryForIntegration(
-                    businessUnitId,
-                    "Finance.SP_GetPaymentOrderSummary @TransactionReference,@BusinessUnitId"
-                );
-
-                command.CommandText = query;
+                command.CommandText = "Finance.SP_GetPaymentOrderSummary";
+                command.CommandType = CommandType.StoredProcedure;
 
                 command.Parameters.Add("@TransactionReference", SqlDbType.NVarChar, 50)
                     .Value = transactionReference;
 
                 command.Parameters.Add("@BusinessUnitId", SqlDbType.Int)
                     .Value = businessUnitId;
-
-                await _unitOfWork.SaveChangesAsync();
 
                 using var reader = await command.ExecuteReaderAsync();
 
@@ -1269,7 +1270,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                         OrderAmount = reader["OrderAmount"] == DBNull.Value ? null : Convert.ToDecimal(reader["OrderAmount"]),
                         TotalPaid = reader["TotalPaid"] == DBNull.Value ? null : Convert.ToDecimal(reader["TotalPaid"]),
                         Currency = reader["Currency"]?.ToString(),
-                        PaymentPercent = Convert.ToInt32(reader["PaymentPercent"])
+                        PaymentPercent = reader["PaymentPercent"] == DBNull.Value ? 0 : Convert.ToInt32(reader["PaymentPercent"])
                     };
                 }
 

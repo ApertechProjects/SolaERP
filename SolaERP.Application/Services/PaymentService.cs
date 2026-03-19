@@ -13,6 +13,7 @@ using SolaERP.Persistence.Utils;
 using System.Data;
 using System.Text;
 using System.Text.Json;
+using SolaERP.Application.Dtos.User;
 
 namespace SolaERP.Persistence.Services
 {
