@@ -325,5 +325,10 @@ namespace SolaERP.Persistence.Services
 
 			return ApiResponse<List<RFQVendorsDto>>.Success(dto, 200);
 		}
+        
+        public async Task UpdateRfqStatusAsync(int rfqMainId)
+        {
+            await _repository.UpdateRfqStatusAsync(rfqMainId);
+        }
 	}
 }

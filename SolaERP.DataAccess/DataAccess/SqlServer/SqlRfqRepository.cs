@@ -667,5 +667,19 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 			return datas;
 		}
 		#endregion
+        
+        
+        public async Task UpdateRfqStatusAsync(int rfqMainId)
+        {
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"EXEC Procurement.SP_UpdateRFQStatus @RFQMainId";
+
+                command.Parameters.AddWithValue(command, "@RFQMainId", rfqMainId);
+
+                await command.ExecuteNonQueryAsync();
+            }
+        }
 	}
+    
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.RFQ;
+using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Models;
 using SolaERP.Controllers;
 
@@ -27,6 +28,16 @@ namespace SolaERP.API.Controllers
 		[HttpGet("[action]/{rfqMainId}")]
 		public async Task<IActionResult> GetRfqVendors(int rfqMainId)
 	   => CreateActionResult(await _service.GetRfqVendors(rfqMainId));
+		
+		[HttpPut("{rfqMainId}")]
+		public async Task<IActionResult> UpdateStatus(int rfqMainId)
+		{
+			await _service.UpdateRfqStatusAsync(rfqMainId);
 
+			return CreateActionResult(
+				ApiResponse<bool>.Success(true, 200)
+			);
+		}
+		
 	}
 }
