@@ -29,7 +29,7 @@ namespace SolaERP.API.Controllers
 		public async Task<IActionResult> GetRfqVendors(int rfqMainId)
 	   => CreateActionResult(await _service.GetRfqVendors(rfqMainId));
 		
-		[HttpPut("{rfqMainId}")]
+		[HttpPost("{rfqMainId}")]
 		public async Task<IActionResult> UpdateStatus(int rfqMainId)
 		{
 			await _service.UpdateRfqStatusAsync(rfqMainId);
