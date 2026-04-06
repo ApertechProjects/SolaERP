@@ -671,14 +671,17 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         
         public async Task UpdateRfqStatusAsync(int rfqMainId)
         {
-            using (var command = _unitOfWork.CreateCommand() as DbCommand)
-            {
-                command.CommandText = @"EXEC Procurement.SP_UpdateRFQStatus @RFQMainId";
+            using var command = (DbCommand)_unitOfWork.CreateCommand();
 
-                command.Parameters.AddWithValue(command, "@RFQMainId", rfqMainId);
+            command.CommandText = "EXEC Procurement.SP_UpdateRFQStatus @RFQMainId";
 
-                await command.ExecuteNonQueryAsync();
-            }
+            var param = command.CreateParameter();
+            param.ParameterName = "@RFQMainId";
+            param.Value = rfqMainId;
+            command.Parameters.Add(param);
+
+            await command.ExecuteNonQueryAsync();
+            await _unitOfWork.SaveChangesAsync(); // ← MÜTLƏQ lazımdır
         }
 	}
     
