@@ -1073,7 +1073,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     "SP_PaymentOrderPostData @JRNAL_NO,@AllocationReference,@PaymentOrderMainId,@BusinessUnitId,@UserId,@NewJournalNo = @NewJournalNo OUTPUT");
 
                 command.CommandText = query;
-                command.CommandTimeout = 60;
+                command.CommandTimeout = 120;
                 command.Parameters.AddWithValue("@JRNAL_NO", journalNo);
                 command.Parameters.AddWithValue("@AllocationReference", allocationReference);
                 command.Parameters.AddWithValue("@UserId", userId);
@@ -1218,7 +1218,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     "SP_PaymentOrderPostAllocation @paymentOrderMainId,@userId");
 
             command.CommandText = query;
-            command.CommandTimeout = 60;
+            command.CommandTimeout = 120;
             command.Parameters.AddWithValue(command, "@paymentOrderMainId", paymentOrderMainId);
             command.Parameters.AddWithValue(command, "@userId", userId);
             await _unitOfWork.SaveChangesAsync();
