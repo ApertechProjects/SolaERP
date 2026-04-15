@@ -9,6 +9,7 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
 using SolaERP.Application.Enums;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using SolaERP.Application.Dtos.Request;
 using SolaERP.Application.Entities.Payment;
 using SolaERP.Application.Models;
@@ -29,6 +30,9 @@ namespace SolaERP.Persistence.Services
         private readonly IBuyerService _buyerService;
         private readonly IBackgroundTaskQueue _taskQueue;
         private readonly IMailService _mailService;
+        private readonly IRfqService _rfqService;
+        private readonly IBidComparisonExportService _bidComparisonExportService;
+        private readonly IBidService _bidService;
 
 
         public BidComparisonService(IUnitOfWork unitOfWork, IMapper mapper,
@@ -40,7 +44,10 @@ namespace SolaERP.Persistence.Services
             IAttachmentService attachmentService,
             IBuyerService buyerService,
             IBackgroundTaskQueue taskQueue,
-            IMailService mailService)
+            IMailService mailService,
+            IRfqService rfqService,
+            IBidComparisonExportService bidComparisonExportService,
+            IBidService bidService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -53,6 +60,9 @@ namespace SolaERP.Persistence.Services
             _buyerService = buyerService;
             _taskQueue = taskQueue;
             _mailService = mailService;
+            _rfqService = rfqService;
+            _bidComparisonExportService = bidComparisonExportService;
+            _bidService = bidService;
 
         }
 
@@ -435,6 +445,79 @@ namespace SolaERP.Persistence.Services
             var data = await _bidComparisonRepository.GetBidListByRfqMainId(rfqMainId);
             var dtos = _mapper.Map<List<BidMainListByRfqMainDto>>(data);
             return ApiResponse<List<BidMainListByRfqMainDto>>.Success(dtos, 200);
+        }
+        
+        public async Task GetCardExportByRfqMainId(int rfqMainId, HttpResponse response)
+        {
+            var rfqCardResult = await GetCardRfqByRfqMainIdAsync(rfqMainId);
+            var rfqDetails = rfqCardResult.RfqDetails ?? new List<BidComparisonRFQDetailsDto>();
+
+            var bidCardResult = await GetCardByRfqMainIdAsync(rfqMainId);
+            var bids = bidCardResult?? new List<BidComparisonBidHeaderDto>();
+
+            var bcc = await GetHeaderByRFQMainIdAsync(rfqMainId);
+
+            var rfqDetailIds = rfqDetails != null && rfqDetails.Any()
+                ? rfqDetails.Select(x => x.RfqDetailId).ToList()
+                : new List<int?>();
+
+            var requestDepartmentCodes = await _rfqService.GetRequestDepartmentCodesByRfqDetailIdsAsync(rfqDetailIds);
+
+            // var logo = await _attachmentService.GetBySourceIdAndSourceTypeId(
+            //     "appLogo",
+            //     SourceTypes.APPLICATION_LOGO
+            // );
+            //
+            // var logoLink = logo != null ? logo.PreviewLink : null;
+
+            var approvedUsers = await GetApprovedUsersApprovalInformationByRfqMainIdAsync(rfqMainId);
+
+            var requestNumbers = await _rfqService.GetRequestNumbersAsync(rfqMainId);
+
+            await _bidComparisonExportService.GetCardExportByRfqMainIdAsync(
+                rfqMainId,
+                response,
+                bids,
+                rfqDetails,
+                bcc,
+                requestDepartmentCodes,
+                approvedUsers,
+                requestNumbers
+            );
+        }
+        
+        private async Task<BIDComparisonChartRfqDto> GetCardRfqByRfqMainIdAsync(int rfqMainId)
+        {
+            var comparisonChart = new BIDComparisonChartRfqDto();
+
+            var rfqDetailsTask = _rfqService
+                .GetBidComparisonRfqDetailsByRfqMainIdAsync(rfqMainId);
+
+            comparisonChart.RfqDetails = await rfqDetailsTask;
+            
+            return comparisonChart;
+        }
+        
+        
+        private async Task<List<BidComparisonBidHeaderDto>> GetCardByRfqMainIdAsync(int rfqMainId)
+        {
+            var comparisonChart = await _bidService.GetBidHeaderByRFQMainIdAsync(rfqMainId);
+            
+            return comparisonChart;
+        }
+        
+        public async Task<BidComparisonHeaderDto> GetHeaderByRFQMainIdAsync(int rfqMainId)
+        {
+            var header = await _rfqService
+                .GetBidComparisonHeaderByRFQMainIdIdAsync(rfqMainId);
+
+            return header;
+        }
+        
+        private async Task<List<BidComparisonApprovedUsersApprovalInformationDto>> GetApprovedUsersApprovalInformationByRfqMainIdAsync(int rfqMainId)
+        {
+            return await _rfqRepository
+                .FindApprovedUsersInBidComparisonApprovalInformationByRfqMainIdAsync(rfqMainId);
         }
     }
 }

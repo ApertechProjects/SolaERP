@@ -1,28 +1,11 @@
-﻿using FluentValidation.Validators;
-using MediatR;
-using SolaERP.Application.Contracts.Repositories;
+﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.BidComparison;
-using SolaERP.Application.Entities.ApproveStages;
-using SolaERP.Application.Entities.Auth;
-using SolaERP.Application.Entities.Bid;
 using SolaERP.Application.Entities.BidComparison;
-using SolaERP.Application.Entities.BusinessUnits;
-using SolaERP.Application.Entities.Item_Code;
-using SolaERP.Application.Entities.RFQ;
-using SolaERP.Application.Entities.SupplierEvaluation;
-using SolaERP.Application.Enums;
-using SolaERP.Application.Models;
 using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
 {
@@ -819,5 +802,6 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
 
             return data;
         }
+        
     }
 }

@@ -1,5 +1,6 @@
 ﻿using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Dtos.Bid;
+using SolaERP.Application.Dtos.BidComparison;
 using SolaERP.Application.Entities.Bid;
 using SolaERP.Application.Entities.Request;
 using SolaERP.Application.UnitOfWork;
@@ -420,6 +421,118 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                 });
 
             return datas;
+        }
+
+        public async Task<List<BidComparisonBidHeaderDto>> GetBidHeaderByRfqMainIdAsync(int rfqMainId)
+        {
+            var data = new List<BidComparisonBidHeaderDto>();
+
+            await using var headerCommand = _unitOfWork.CreateCommand() as DbCommand;
+            headerCommand.CommandText = @"
+                SELECT
+                    BM.BidMainId,
+                    BM.DeliveryTime,
+                    DT.DeliverytermName,
+                    PT.PaymentTermName,
+                    BM.OperatorComment,
+                    SUMS.total,
+                    
+                    SUMS.discount,
+                    SUMS.discountedAmount
+                FROM Procurement.BidMain BM
+
+                         LEFT JOIN Register.DeliveryTerms DT
+                                   ON DT.DeliveryTermCode = BM.DeliveryTerms
+
+                         LEFT JOIN Register.PaymentTerms PT
+                                   ON PT.PaymentTermCode = BM.PaymentTerms
+
+                         LEFT JOIN (
+                    SELECT
+                        BD.BidMainId,
+                        SUM(ISNULL(BD.totalAmount, 0)) AS total,
+                        SUM(ISNULL(BD.totalAmount, 0) - ISNULL(BD.discountedAmount, 0)) AS discount,
+                        SUM(ISNULL(BD.discountedAmount, 0)) AS discountedAmount
+                    FROM Procurement.BidDetails BD
+                    GROUP BY BD.BidMainId
+                ) SUMS
+                                   ON SUMS.BidMainId = BM.BidMainId
+                                   where BM.RFQMainId = @RFQMainId";
+            headerCommand.Parameters.AddWithValue(headerCommand, "@RFQMainId", rfqMainId);
+
+            await using (DbDataReader reader = await headerCommand.ExecuteReaderAsync())
+            {
+                while (await reader.ReadAsync())
+                {
+                    data.Add(new BidComparisonBidHeaderDto
+                    {
+                        bidMainId = reader.Get<int>("BidMainId"),
+                        deliveryTime = reader.Get<string>("DeliveryTime"),
+                        deliveryTermName = reader.Get<string>("DeliverytermName"),
+                        paymentTermName = reader.Get<string>("PaymentTermName"),
+                        operatorComment = reader.Get<string>("OperatorComment"),
+                        total = reader.Get<decimal>("total"),
+                        discount = reader.Get<decimal>("discount"),
+                        discountedAmount = reader.Get<decimal>("discountedAmount"),
+                        BidDetails = new List<BidComparisonBidDetailsDto>()
+                    });
+                }
+            }
+
+            await using var detailCommand = _unitOfWork.CreateCommand() as DbCommand;
+            detailCommand.CommandText = @"
+                                   Select BD.BidMainId,
+                                          BD.AlternativeItemName,
+                                          BD.DiscountValue,
+                                          BD.ItemCode,
+                                            BD.LineDescription AS AlternativeDescription,
+                                            BD.UnitPrice,
+                                            BD.TotalAmount,
+                                            BD.Quantity,
+                                            BD.PUOM,
+                                            BD.ApproveStatus,
+                                            BD.RFQDetailId
+                                   from Procurement.BidDetails BD 
+                                   inner join Procurement.BidMain BM on BD.BidMainId = BM.BidMainId
+                                   where BM.RFQMainId = @RFQMainId";
+            detailCommand.Parameters.AddWithValue(detailCommand, "@RFQMainId", rfqMainId);
+
+            var detailsByBidMainId = new Dictionary<int, List<BidComparisonBidDetailsDto>>();
+            await using (DbDataReader reader = await detailCommand.ExecuteReaderAsync())
+            {
+                while (await reader.ReadAsync())
+                {
+                    var bidMainId = reader.Get<int>("BidMainId");
+                    if (!detailsByBidMainId.TryGetValue(bidMainId, out var list))
+                    {
+                        list = new List<BidComparisonBidDetailsDto>();
+                        detailsByBidMainId[bidMainId] = list;
+                    }
+
+                    list.Add(new BidComparisonBidDetailsDto
+                    {
+                        BidMainId = bidMainId,
+                        AlternativeDescription = reader.Get<string>("AlternativeItemName"),
+                        DiscountValue = reader.Get<decimal>("DiscountValue"),
+                        ItemId = reader.Get<string>("ItemCode"),
+                        UnitPrice = reader.Get<decimal>("UnitPrice"),
+                        TotalAmount = reader.Get<decimal>("TotalAmount"),
+                        Quantity = reader.Get<decimal>("Quantity"),
+                        PUOMName = reader.Get<string>("PUOM"),
+                        ApproveStatusId = reader.Get<int>("ApproveStatus"),
+                        RFQDetailId = reader.Get<int>("RFQDetailId")
+                    });
+                }
+            }
+
+            foreach (var header in data)
+            {
+                header.BidDetails = detailsByBidMainId.TryGetValue(header.bidMainId, out var list)
+                    ? list
+                    : new List<BidComparisonBidDetailsDto>();
+            }
+
+            return data;
         }
 
         public async Task<BidRFQDto?> GetVendorCodeForBidAsync(int rfqMainId, int businessUnitId, string vendorCode)

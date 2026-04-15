@@ -12,6 +12,8 @@ using SolaERP.Application.UnitOfWork;
 using Microsoft.Extensions.Logging;
 using SolaERP.Application.Enums;
 using SolaERP.Application.Dtos.Bid;
+using SolaERP.Application.Dtos.BidComparison;
+using SolaERP.Application.Entities.BidComparison;
 using SolaERP.DataAccess.Extensions;
 using SolaERP.Job;
 using SolaERP.Persistence.Utils;
@@ -537,5 +539,59 @@ namespace SolaERP.Persistence.Services
         {
             return await _repository.GetRfqVendors(rfqMainIds);
         }
+        
+        public async Task<List<string>> GetRequestDepartmentCodesByRfqDetailIdsAsync(List<int?> rfqDetailIds)
+        {
+            return await _repository.GetRequestDepartmentCodeByRfqDetailIdsAsync(rfqDetailIds);
+        }
+        
+        public async Task<List<string>> GetRequestNumbersAsync(int rfqMainId)
+        {
+            return await _repository.GetRequestNumbersByRfqMainIdAsync(rfqMainId);
+        }
+        
+        
+        public async Task<List<BidComparisonRFQDetailsDto>> GetBidComparisonRfqDetailsByRfqMainIdAsync(int rfqMainId)
+        {
+            var resultList = await _repository.GetBidComparisonRFQDetailsByRfqMainIdAsync(rfqMainId);
+
+            var idList = resultList
+                .Select(x => x.RfqDetailId)
+                .ToList();
+
+            // SetHasAttachmentBidComparisonRFQDetailsProjectionDto(idList, resultList);
+
+            return resultList;
+        }
+
+        public async Task<BidComparisonHeaderDto> GetBidComparisonHeaderByRFQMainIdIdAsync(int rfqMainId)
+        {
+            return await _repository.GetBidComparisonHeaderByRFQMainIdIdAsync(rfqMainId);
+        }
+        
+        
+        // private void SetHasAttachmentBidComparisonRFQDetailsProjectionDto(
+        //     List<string> idList,
+        //     List<BidComparisonRFQDetailsProjectionDto> details)
+        // {
+        //     var hasAttachments = _attachmentService
+        //         .GetHasAttachmentsBySourceIdsAndSourceTypeId(idList, SourceTypes.RFQ_DETAIL);
+        //
+        //     foreach (var detail in details)
+        //     {
+        //         foreach (var hasAttachment in hasAttachments)
+        //         {
+        //             if (detail.RfqDetailId == hasAttachment)
+        //             {
+        //                 detail.HasAttachments = true;
+        //                 break;
+        //             }
+        //         }
+        //     }
+        // }
+        
+        
+
+        
     }
 }

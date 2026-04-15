@@ -1,15 +1,7 @@
-﻿using SolaERP.Application.Dtos.Bid;
-using SolaERP.Application.Dtos.BidComparison;
+﻿using SolaERP.Application.Dtos.BidComparison;
 using SolaERP.Application.Dtos.Shared;
-using SolaERP.Application.Entities.Bid;
 using SolaERP.Application.Entities.BidComparison;
-using SolaERP.Application.Models;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace SolaERP.Application.Contracts.Services
 {
@@ -53,5 +45,8 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<bool>> Retrieve(int bidComparisonId, int userId);
         Task<ApiResponse<bool>> Delete(int bidComparisonId);
         Task<ApiResponse<List<BidMainListByRfqMainDto>>> GetBidListByRfqMainId(int rfqMainId);
+
+
+        Task GetCardExportByRfqMainId(int rfqMainId, HttpResponse response);
     }
 }

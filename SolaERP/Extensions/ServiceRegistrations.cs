@@ -88,6 +88,7 @@ namespace SolaERP.Extensions
             builder.Services.AddScoped<IGeneralService, GeneralService>();
             builder.Services.AddScoped<IBidService, BidService>();
             builder.Services.AddScoped<IBidComparisonService, BidComparisonService>();
+            builder.Services.AddScoped<IBidComparisonExportService, BidComparisonExportService>();
             builder.Services.AddScoped<IFileUploadService, FileUploadService>();
             builder.Services.AddScoped<HeaderReaderService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
