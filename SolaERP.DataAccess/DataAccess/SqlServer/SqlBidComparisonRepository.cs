@@ -417,7 +417,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             {
                 return new BidComparisonHeaderLoad
                 {
-                    ApproveStageMain = reader.Get<int>("ApproveStageMain"),
+                    ApproveStageMain = reader.Get<int?>("ApproveStageMain"),
                     ApproveStatus = reader.Get<int>("ApproveStatus"),
                     BidComparisonId = reader.Get<int>("BidComparisonId"),
                     BiddingType = reader.Get<int>("BiddingType"),
