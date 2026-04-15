@@ -183,6 +183,12 @@ namespace SolaERP.API.Controllers
         {
             return CreateActionResult(await _bidComparisonService.GetBidListByRfqMainId(rfqMainId));
         }
+        
+        [HttpGet("chart/export/{rfqMainId}")]
+        public async Task ExcelExportByRfqMainId(int rfqMainId)
+        {
+            await _bidComparisonService.GetCardExportByRfqMainId(rfqMainId, Response);
+        }
 
     }
 }

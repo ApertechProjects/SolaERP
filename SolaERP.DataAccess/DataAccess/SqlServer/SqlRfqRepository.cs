@@ -8,6 +8,9 @@ using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using AutoMapper;
+using SolaERP.Application.Dtos.BidComparison;
+using SolaERP.Application.Entities.BidComparison;
 
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
@@ -15,7 +18,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
     public class SqlRfqRepository : IRfqRepository
     {
         private readonly IUnitOfWork _unitOfWork;
-        public SqlRfqRepository(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+        private readonly IMapper _mapper;
+        
+        public SqlRfqRepository(IUnitOfWork unitOfWork,
+            IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
 
         public async Task<List<RfqDraft>> GetDraftsAsync(RfqFilter filter, int userId)
         {
@@ -890,6 +900,165 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
 
             await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<List<string>> GetRequestDepartmentCodeByRfqDetailIdsAsync(List<int?> rfqDetailIds)
+        {
+            List<string> requestDepartmentCodes = new();
+            return requestDepartmentCodes;
+        }
+
+        public async Task<List<string>> GetRequestNumbersByRfqMainIdAsync(int rfqMainId)
+        {
+            var requestNumbers = new List<string>();
+
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"
+                SELECT rm.RequestNo
+                FROM Procurement.RFQDetails AS rfqd
+                    JOIN Procurement.RFQRequestDetails AS rfqrd ON rfqrd.RFQDetailId = rfqd.RFQDetailId
+                    JOIN Procurement.RequestDetails AS rd ON rd.RequestDetailId = rfqrd.RequestDetailsId
+                    JOIN Procurement.RequestMain AS rm ON rm.RequestMainId = rd.RequestMainId
+                WHERE rfqd.RFQMainId = @RFQMainId
+                GROUP BY rm.RequestNo";
+
+            command.Parameters.AddWithValue(command, "@RFQMainId", rfqMainId);
+
+            await using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+                requestNumbers.Add(reader.Get<string>("RequestNo"));
+
+            return requestNumbers;
+        }
+        
+        public async Task<List<BidComparisonRFQDetailsDto>> GetBidComparisonRFQDetailsByRfqMainIdAsync(int rfqMainId)
+        {
+            var data = new List<BidComparisonRFQDetailsDto>();
+
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"
+                SELECT
+                    RD.RFQDetailId AS Id,
+                    RD.[LineNo] AS LineNumber,
+                    RD.Description,
+                    RD.UOM AS UomName,
+                    RD.Quantity,
+                    RD.RFQDetailId AS RfqDetailId,
+                    RD.AlternativeItems,
+                    RD.Description AS RfqDetailDescription,
+                    RD.ItemCode AS ItemName
+                FROM Procurement.RFQDetails RD
+                WHERE RD.RFQMainId = @RFQMainId";
+
+            command.Parameters.AddWithValue(command, "@RFQMainId", rfqMainId);
+
+            await using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                var entity = new BidComparisonRFQDetails
+                {
+                    Id = reader.Get<int>("Id"),
+                    LineNumber = reader.Get<int?>("LineNumber"),
+                    Description = reader.Get<string>("Description"),
+                    UomName = reader.Get<string>("UomName"),
+                    Quantity = reader.Get<decimal>("Quantity"),
+                    Budget = reader.Get<decimal>("Budget"),
+                    RemainingBudget = reader.Get<decimal>("RemainingBudget"),
+                    RfqDetailId = reader.Get<int?>("RfqDetailId"),
+                    AlternativeItem = reader.Get<bool?>("AlternativeItem"),
+                    RfqDetailDescription = reader.Get<string>("RfqDetailDescription"),
+                    ItemId = reader.Get<int>("ItemId"),
+                    ItemName = reader.Get<string>("ItemName"),
+                    TechnicalQuality = reader.Get<string>("TechnicalQuality")
+                };
+
+                data.Add(_mapper.Map<BidComparisonRFQDetailsDto>(entity));
+            }
+
+            return data;
+        }
+
+        public async Task<BidComparisonHeaderDto> GetBidComparisonHeaderByRFQMainIdIdAsync(int rfqMainId)
+        {
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"
+                Select BC.ComparisonDate,
+                       RM.RFQDate,
+                       RM.Buyer,
+                       BC.ComparisonNo,
+                       RM.Comment,
+                       BC.ApproveStatus
+                from Procurement.RFQMain RM
+                         Left Join Procurement.BidComparison BC on RM.RFQMainId = BC.RFQMainId
+                where RM.RFQMainId = @RFQMainId";
+
+            command.Parameters.AddWithValue(command, "@RFQMainId", rfqMainId);
+
+            await using var reader = await command.ExecuteReaderAsync();
+            if (await reader.ReadAsync())
+            {
+                return new BidComparisonHeaderDto
+                {
+                    RFQMainId = rfqMainId,
+                    ComparisonDate = reader.Get<DateTime?>("ComparisonDate"),
+                    RFQDate = reader.Get<DateTime?>("RFQDate"),
+                    BuyerName = reader.Get<string>("Buyer"),
+                    ComparisonNo = reader.Get<string>("ComparisonNo"),
+                    RFQComment = reader.Get<string>("Comment"),
+                    approveStatusId = reader.Get<int?>("ApproveStatus") ?? 0
+                };
+            }
+
+            return new BidComparisonHeaderDto { RFQMainId = rfqMainId };
+        }
+
+        public async Task<List<BidComparisonApprovedUsersApprovalInformationDto>> FindApprovedUsersInBidComparisonApprovalInformationByRfqMainIdAsync(int rfqMainId)
+        {
+            var data = new List<BidComparisonApprovedUsersApprovalInformationDto>();
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+            command.CommandText = @"
+                SELECT
+                      au.Id UserId
+                     ,au.FullName
+                     ,CAST(pa.ApproveDate as date) as approveDate
+                     ,pa.Comment
+                     ,pa.Sequence
+                FROM Procurement.BidComparison bc
+                         INNER JOIN Config.ApproveStagesMain asm
+                                    ON asm.ApproveStageMainId = bc.ApproveStageMain
+                         INNER JOIN Config.ApproveStagesDetails asd
+                                    ON asm.ApproveStageMainId = asd.ApproveStageMainId
+                         INNER JOIN Procurement.BidMain bm
+                                    ON bc.RFQMainId = bm.RFQMainId
+                         INNER JOIN Procurement.BidDetails bd
+                                    ON bm.BidMainId = bd.BidMainId
+                         INNER JOIN Procurement.BidApprovals pa
+                                    ON bd.BidDetailId = pa.BidDetailId
+                                        AND asd.Sequence = pa.Sequence
+                                        AND pa.ApproveStatus > 2
+                         LEFT JOIN Register.ApprovalStatus [as]
+                                   ON pa.ApproveStatus = [as].ApprovalStatusId
+                         LEFT JOIN Config.AppUser au
+                                   ON pa.UserId = au.Id
+                WHERE bc.RFQMainId = @RFQMainId
+                  and pa.ApproveStatus = 3
+                GROUP BY au.Id, au.FullName, CAST(pa.ApproveDate as date), pa.Comment, pa.Sequence
+                ORDER BY pa.Sequence";
+            command.Parameters.AddWithValue(command, "@RFQMainId", rfqMainId);
+
+            await using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                data.Add(new BidComparisonApprovedUsersApprovalInformationDto
+                {
+                    userId = reader.Get<int?>("UserId"),
+                    fullName = reader.Get<string>("FullName"),
+                    approveDate = reader.Get<DateTime?>("approveDate"),
+                    comment = reader.Get<string>("Comment")
+                });
+            }
+
+            return data;
         }
     }
 }

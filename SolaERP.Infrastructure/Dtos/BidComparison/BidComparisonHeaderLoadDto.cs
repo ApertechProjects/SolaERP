@@ -29,7 +29,7 @@ namespace SolaERP.Application.Entities.BidComparison
         public DateTime? RequiredOnSiteDate { get; set; }
         public DateTime? DesiredDeliveryDate { get; set; }
         public string Buyer { get; set; }
-        public int ApproveStageMain { get; set; }
+        public int? ApproveStageMain { get; set; }
         public int Status { get; set; }
         public int ApproveStatus { get; set; }
         public string SpecialistComment { get; set; }

@@ -2,6 +2,7 @@
 using SolaERP.Application.Contracts.Repositories;
 using SolaERP.Application.Contracts.Services;
 using SolaERP.Application.Dtos.Bid;
+using SolaERP.Application.Dtos.BidComparison;
 using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Entities.Bid;
@@ -207,6 +208,11 @@ namespace SolaERP.Persistence.Services
         public async Task<List<RFQVendorEmailDto>> GetBidsByRFQMainIdAsync(List<int> rfqMainIds)
         {
             return await _bidRepository.GetBidsByRFQMainIdAsync(rfqMainIds);
+        }
+
+        public async Task<List<BidComparisonBidHeaderDto>> GetBidHeaderByRFQMainIdAsync(int rfqMainId)
+        {
+            return await _bidRepository.GetBidHeaderByRfqMainIdAsync(rfqMainId);
         }
     }
 }

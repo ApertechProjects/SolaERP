@@ -1,4 +1,5 @@
-﻿using SolaERP.Application.Dtos.RFQ;
+﻿using SolaERP.Application.Dtos.BidComparison;
+using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Entities.RFQ;
 using SolaERP.Application.Models;
 
@@ -41,5 +42,12 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> UpdateNonBidRFQMainAndRequestDetails();
 
         Task UpdateRFQSendManualBiddingType(int rfqMainId);
+        
+        Task<List<string>> GetRequestDepartmentCodeByRfqDetailIdsAsync(List<int?> rfqDetailIds);
+        
+        Task<List<string>> GetRequestNumbersByRfqMainIdAsync(int rfqMainId);
+        Task<List<BidComparisonRFQDetailsDto>> GetBidComparisonRFQDetailsByRfqMainIdAsync(int rfqMainId);
+        Task<BidComparisonHeaderDto> GetBidComparisonHeaderByRFQMainIdIdAsync(int rfqMainId);
+        Task<List<BidComparisonApprovedUsersApprovalInformationDto>> FindApprovedUsersInBidComparisonApprovalInformationByRfqMainIdAsync(int rfqMainId);
     }
 }

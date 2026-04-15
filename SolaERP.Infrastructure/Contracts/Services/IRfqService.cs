@@ -1,4 +1,5 @@
 ﻿using SolaERP.Application.Dtos.Bid;
+using SolaERP.Application.Dtos.BidComparison;
 using SolaERP.Application.Dtos.RFQ;
 using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.UOM;
@@ -34,5 +35,10 @@ namespace SolaERP.Application.Contracts.Services
 		Task SendRFQDeadLineMail();
 		Task SendRFQLastDayMail();
 		Task<List<RFQVendorEmailDto>> GetRfqVendors(string rfqMainIds);
+		Task<List<string>> GetRequestDepartmentCodesByRfqDetailIdsAsync(List<int?> rfqDetailIds);
+		Task<List<string>> GetRequestNumbersAsync(int rfqMainId);
+
+		Task<List<BidComparisonRFQDetailsDto>> GetBidComparisonRfqDetailsByRfqMainIdAsync(int rfqMainId);
+		Task<BidComparisonHeaderDto> GetBidComparisonHeaderByRFQMainIdIdAsync(int rfqMainId);
 	}
 }
