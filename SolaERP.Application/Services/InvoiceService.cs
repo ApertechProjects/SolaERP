@@ -208,6 +208,10 @@ namespace SolaERP.Persistence.Services
                     if (model[i].UseOrderForInvoice)
                     {
                         await _invoiceRepository.DeleteAllByMainId(model[i].InvoiceRegisterId);
+                        foreach (var invoiceRegisterDetails in model[i].Details)
+                        {
+                            invoiceRegisterDetails.InvoiceRegisterDetailId = 0;
+                        }
                     }
                     await InvoiceRegisterDetailsSave(data, model[i].Details);
                 }
