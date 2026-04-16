@@ -6,8 +6,8 @@ public class BidComparisonBidHeaderDto
         public string bidNo { get; set; }
         public string vendorId { get; set; }
         public string vendorName { get; set; }
-        public string vendorWHTRate { get; set; }
-        public string vendorTaxRate { get; set; }
+        public decimal vendorWHTRate { get; set; }
+        public decimal taxRate { get; set; }
         public string disqualified { get; set; }
         public string disqualificationReason { get; set; }
         public string deliveryTermId { get; set; }
@@ -19,7 +19,7 @@ public class BidComparisonBidHeaderDto
         public string paymentTermCode { get; set; }
         public string paymentTermName { get; set; }
         public string paymentTermScore { get; set; }
-        public string expectedCost { get; set; }
+        public decimal expectedCost { get; set; }
         public string budgetBalance { get; set; }
         public string currencyId { get; set; }
         public string currencyName { get; set; }
@@ -34,9 +34,9 @@ public class BidComparisonBidHeaderDto
         public string reportingCurrencyId { get; set; }
         public string sentDate { get; set; }
         public string vendorCode { get; set; }
-        public string whtRate { get; set; }
+        public decimal whtRate { get; set; }
         public string totalWithWHT { get; set; }
-        public string taxValue { get; set; }
+        public decimal taxValue { get; set; }
         public string grantTotal { get; set; }
         public string grantTotalAZN { get; set; }
         public string createdDate { get; set; }

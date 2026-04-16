@@ -7,6 +7,7 @@ using SolaERP.Application.UnitOfWork;
 using SolaERP.DataAccess.Extensions;
 using System.Data;
 using System.Data.Common;
+using System.Globalization;
 using SolaERP.Application.Dtos.RFQ;
 
 namespace SolaERP.DataAccess.DataAccess.SqlServer
@@ -430,34 +431,48 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
             await using var headerCommand = _unitOfWork.CreateCommand() as DbCommand;
             headerCommand.CommandText = @"
                 SELECT
-                    BM.BidMainId,
-                    BM.DeliveryTime,
-                    DT.DeliverytermName,
-                    PT.PaymentTermName,
-                    BM.OperatorComment,
-                    SUMS.total,
-                    
-                    SUMS.discount,
-                    SUMS.discountedAmount
-                FROM Procurement.BidMain BM
+                        BM.BidMainId,
+                        BM.DeliveryTime,
+                        DT.DeliverytermName,
+                        PT.PaymentTermName,
+                        BM.OperatorComment,
+                        SUMS.total,
+                        SUMS.discount,
+                        SUMS.discountedAmount,
+                        TAX.WithHoldingTax AS VendorWHTRate,
+                        TAX.Tax AS taxRate,
+                        BM.ExpectedCost,
+                        BM.CurrencyCode AS currencyKey
+                    FROM Procurement.BidMain BM
 
-                         LEFT JOIN Register.DeliveryTerms DT
-                                   ON DT.DeliveryTermCode = BM.DeliveryTerms
+                             LEFT JOIN Register.DeliveryTerms DT
+                                       ON DT.DeliveryTermCode = BM.DeliveryTerms
 
-                         LEFT JOIN Register.PaymentTerms PT
-                                   ON PT.PaymentTermCode = BM.PaymentTerms
+                             LEFT JOIN Register.PaymentTerms PT
+                                       ON PT.PaymentTermCode = BM.PaymentTerms
 
-                         LEFT JOIN (
-                    SELECT
-                        BD.BidMainId,
-                        SUM(ISNULL(BD.totalAmount, 0)) AS total,
-                        SUM(ISNULL(BD.totalAmount, 0) - ISNULL(BD.discountedAmount, 0)) AS discount,
-                        SUM(ISNULL(BD.discountedAmount, 0)) AS discountedAmount
-                    FROM Procurement.BidDetails BD
-                    GROUP BY BD.BidMainId
-                ) SUMS
-                                   ON SUMS.BidMainId = BM.BidMainId
-                                   where BM.RFQMainId = @RFQMainId";
+                             LEFT JOIN (
+                        SELECT
+                            BD.BidMainId,
+                            SUM(ISNULL(BD.totalAmount, 0)) AS total,
+                            SUM(ISNULL(BD.totalAmount, 0) - ISNULL(BD.discountedAmount, 0)) AS discount,
+                            SUM(ISNULL(BD.discountedAmount, 0)) AS discountedAmount
+                        FROM Procurement.BidDetails BD
+                        GROUP BY BD.BidMainId
+                    ) SUMS
+                                       ON SUMS.BidMainId = BM.BidMainId
+                            Left Join (Select BM.BidMainId, 
+                                              WHT.WithHoldingTax, 
+                                              T.Tax
+                                       from Procurement.BidMain BM
+                                                left join Procurement.Vendors V on BM.VendorCode = V.VendorCode
+                                                Left join Register.Taxes T on T.TaxId = V.TaxId
+                                                Left join Register.WithHoldingTax WHT on V.WithHoldingTaxId = WHT.WithHoldingTaxId
+                                                Left Join Config.BusinessUnits BU on BU.BusinessUnitId = BM.BusinessUnitId
+                                       where BM.RFQMainId = @RFQMainId and BU.VATAccount is not null)
+                    TAX
+                    ON TAX.BidMainId = BM.BidMainId
+                    where BM.RFQMainId = @RFQMainId";
             headerCommand.Parameters.AddWithValue(headerCommand, "@RFQMainId", rfqMainId);
 
             await using (DbDataReader reader = await headerCommand.ExecuteReaderAsync())
@@ -474,26 +489,37 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                         total = reader.Get<decimal>("total"),
                         discount = reader.Get<decimal>("discount"),
                         discountedAmount = reader.Get<decimal>("discountedAmount"),
+                        vendorWHTRate = reader.Get<decimal>("vendorWHTRate"),
+                        taxRate = reader.Get<decimal>("taxRate"),
+                        expectedCost = reader.Get<decimal>("expectedCost"),
+                        whtRate = reader.Get<decimal>("vendorWHTRate"),
+                        currencyKey = reader.Get<string>("currencyKey"),
                         BidDetails = new List<BidComparisonBidDetailsDto>()
                     });
                 }
             }
-
+            
+            
+            
+            
             await using var detailCommand = _unitOfWork.CreateCommand() as DbCommand;
             detailCommand.CommandText = @"
                                    Select BD.BidMainId,
-                                          BD.AlternativeItemName,
-                                          BD.DiscountValue,
-                                          BD.ItemCode,
-                                            BD.LineDescription AS AlternativeDescription,
-                                            BD.UnitPrice,
-                                            BD.TotalAmount,
-                                            BD.Quantity,
-                                            BD.PUOM,
-                                            BD.ApproveStatus,
-                                            BD.RFQDetailId
-                                   from Procurement.BidDetails BD 
-                                   inner join Procurement.BidMain BM on BD.BidMainId = BM.BidMainId
+                                   BD.AlternativeItemName,
+                                   BD.DiscountValue,
+                                   BD.ItemCode,
+                                   BD.LineDescription AS AlternativeDescription,
+                                   BD.UnitPrice,
+                                   BD.TotalAmount,
+                                   BD.Quantity,
+                                   BD.PUOM,
+                                   BD.ApproveStatus,
+                                   BD.RFQDetailId,
+                                   BCB.IsSelected AS Selected
+                            from Procurement.BidDetails BD
+                                     inner join Procurement.BidMain BM on BD.BidMainId = BM.BidMainId
+                                     Left Join Procurement.BidComparison BC on BC.RFQMainId = BM.RFQMainId
+                                     Left Join Procurement.BidComparisonBids BCB on BC.BidComparisonId = BCB.BidComparisonId
                                    where BM.RFQMainId = @RFQMainId";
             detailCommand.Parameters.AddWithValue(detailCommand, "@RFQMainId", rfqMainId);
 
@@ -520,16 +546,61 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                         Quantity = reader.Get<decimal>("Quantity"),
                         PUOMName = reader.Get<string>("PUOM"),
                         ApproveStatusId = reader.Get<int>("ApproveStatus"),
-                        RFQDetailId = reader.Get<int>("RFQDetailId")
+                        RFQDetailId = reader.Get<int>("RFQDetailId"),
+                        Selected = reader.Get<bool?>("Selected") ?? false
                     });
                 }
             }
+
+            var rateByCurrency = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
+            var localDateNow = DateTime.Now.Date;
 
             foreach (var header in data)
             {
                 header.BidDetails = detailsByBidMainId.TryGetValue(header.bidMainId, out var list)
                     ? list
                     : new List<BidComparisonBidDetailsDto>();
+
+                header.whtRate = header.vendorWHTRate;
+
+                var totalWithWht = header.discountedAmount +
+                                   (header.discountedAmount * header.whtRate / 100m);
+                header.totalWithWHT = totalWithWht.ToString(CultureInfo.InvariantCulture);
+
+                header.taxValue = totalWithWht * header.taxRate / 100m;
+
+                var grandTotal = totalWithWht + header.taxValue + header.expectedCost;
+                var grandTotalText = grandTotal.ToString(CultureInfo.InvariantCulture);
+                header.grantTotal = grandTotalText;
+
+                var currencyCode = header.currencyKey?.Trim();
+                var rate = 1m;
+
+                if (!string.IsNullOrWhiteSpace(currencyCode))
+                {
+                    if (!rateByCurrency.TryGetValue(currencyCode, out rate))
+                    {
+                        await using var rateCommand = _unitOfWork.CreateCommand() as DbCommand;
+                        rateCommand.CommandText = @"
+                            Select DT.Rate from Register.DailyRates DT
+                            where DT.Date = @Now and Dt.CurrencyCode = @CurrencyCode";
+                        rateCommand.Parameters.AddWithValue(rateCommand, "@Now", localDateNow);
+                        rateCommand.Parameters.AddWithValue(rateCommand, "@CurrencyCode", currencyCode);
+
+                        var rateResult = await rateCommand.ExecuteScalarAsync();
+                        if (rateResult != null &&
+                            rateResult != DBNull.Value &&
+                            decimal.TryParse(rateResult.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var parsedRate))
+                        {
+                            rate = parsedRate;
+                        }
+
+                        rateByCurrency[currencyCode] = rate;
+                    }
+                }
+
+                var grandTotalAzn = grandTotal * rate;
+                header.grantTotalAZN = grandTotalAzn.ToString(CultureInfo.InvariantCulture);
             }
 
             return data;

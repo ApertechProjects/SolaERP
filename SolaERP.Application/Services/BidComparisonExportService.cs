@@ -476,7 +476,8 @@ public class BidComparisonExportService : IBidComparisonExportService
     List<BidComparisonBidHeaderDto> bids,
     List<BidComparisonRFQDetailsDto> rfqDetails,
     IWorkbook workbook,
-    ICellStyle centeredBoldBorderGreenStyle)
+    ICellStyle centeredBoldBorderGreenStyle
+    )
 {
     int startRow = 8;
 
@@ -579,9 +580,8 @@ public class BidComparisonExportService : IBidComparisonExportService
 
             if (bidDetail == null)
                 continue;
-
-            // bool isWon = bidDetail.ApproveStatusId == ApproveStatuses.WON.GetId();
-            bool isWon = bidDetail.ApproveStatusId == 1;
+            
+            bool isWon = bidDetail.Selected;
 
             string unitPrice = bidDetail.UnitPrice == null
                 ? "-"
@@ -835,8 +835,7 @@ public class BidComparisonExportService : IBidComparisonExportService
         foreach (var bid in bids)
         {
             var bidDetails = bid.BidDetails?
-                // .Where(x => x.ApproveStatusId == ApproveStatuses.WON.GetId())
-                .Where(x => x.ApproveStatusId == 5)
+                .Where(x => x.Selected)
                 .ToList();
 
             if (bidDetails == null || !bidDetails.Any())

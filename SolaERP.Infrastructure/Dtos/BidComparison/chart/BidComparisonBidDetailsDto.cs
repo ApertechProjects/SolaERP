@@ -22,5 +22,6 @@ public class BidComparisonBidDetailsDto
     public int ApproveStatusId { get; set; }
     public string PUOMName { get; set; }
     public bool HaveOffer { get; set; }
+    public bool Selected { get; set; }
     
 }
