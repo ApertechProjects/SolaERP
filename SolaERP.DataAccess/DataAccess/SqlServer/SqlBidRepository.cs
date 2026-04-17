@@ -443,7 +443,7 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                                 TAX.Tax AS taxRate,
                                 BM.ExpectedCost,
                                 BM.CurrencyCode AS currencyKey,
-                                TAX.VendorName
+                                V.VendorName
                             FROM Procurement.BidMain BM
 
                                      LEFT JOIN Register.DeliveryTerms DT
@@ -452,6 +452,7 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                                      LEFT JOIN Register.PaymentTerms PT
                                                ON PT.PaymentTermCode = BM.PaymentTerms
 
+                                     left join Procurement.Vendors V on BM.VendorCode = V.VendorCode
                                      LEFT JOIN (
                                 SELECT
                                     BD.BidMainId,
@@ -464,8 +465,7 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                                                ON SUMS.BidMainId = BM.BidMainId
                                      Left Join (Select BM.BidMainId,
                                                        WHT.WithHoldingTax,
-                                                       T.Tax,
-                                                       V.VendorName
+                                                       T.Tax
                                                 from Procurement.BidMain BM
                                                          left join Procurement.Vendors V on BM.VendorCode = V.VendorCode
                                                          Left join Register.Taxes T on T.TaxId = V.TaxId
