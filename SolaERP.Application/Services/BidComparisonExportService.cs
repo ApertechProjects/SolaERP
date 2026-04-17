@@ -274,7 +274,7 @@ public class BidComparisonExportService : IBidComparisonExportService
         var row2 = sheet.CreateRow(1);
 
         var cellB2 = row2.CreateCell(1);
-        cellB2.SetCellValue("ADY-TD-SŞ-FR1-00");
+        cellB2.SetCellValue("GL-TD");
         cellB2.CellStyle = centeredBoldBorderStyle;
 
         // Merge cells from B2 to F2
