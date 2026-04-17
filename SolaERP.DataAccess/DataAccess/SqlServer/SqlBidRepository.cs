@@ -430,49 +430,51 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
 
             await using var headerCommand = _unitOfWork.CreateCommand() as DbCommand;
             headerCommand.CommandText = @"
-                SELECT
-                        BM.BidMainId,
-                        BM.DeliveryTime,
-                        DT.DeliverytermName,
-                        PT.PaymentTermName,
-                        BM.OperatorComment,
-                        SUMS.total,
-                        SUMS.discount,
-                        SUMS.discountedAmount,
-                        TAX.WithHoldingTax AS VendorWHTRate,
-                        TAX.Tax AS taxRate,
-                        BM.ExpectedCost,
-                        BM.CurrencyCode AS currencyKey
-                    FROM Procurement.BidMain BM
+                            SELECT
+                                BM.BidMainId,
+                                BM.DeliveryTime,
+                                DT.DeliverytermName,
+                                PT.PaymentTermName,
+                                BM.OperatorComment,
+                                SUMS.total,
+                                SUMS.discount,
+                                SUMS.discountedAmount,
+                                TAX.WithHoldingTax AS VendorWHTRate,
+                                TAX.Tax AS taxRate,
+                                BM.ExpectedCost,
+                                BM.CurrencyCode AS currencyKey,
+                                TAX.VendorName
+                            FROM Procurement.BidMain BM
 
-                             LEFT JOIN Register.DeliveryTerms DT
-                                       ON DT.DeliveryTermCode = BM.DeliveryTerms
+                                     LEFT JOIN Register.DeliveryTerms DT
+                                               ON DT.DeliveryTermCode = BM.DeliveryTerms
 
-                             LEFT JOIN Register.PaymentTerms PT
-                                       ON PT.PaymentTermCode = BM.PaymentTerms
+                                     LEFT JOIN Register.PaymentTerms PT
+                                               ON PT.PaymentTermCode = BM.PaymentTerms
 
-                             LEFT JOIN (
-                        SELECT
-                            BD.BidMainId,
-                            SUM(ISNULL(BD.totalAmount, 0)) AS total,
-                            SUM(ISNULL(BD.totalAmount, 0) - ISNULL(BD.discountedAmount, 0)) AS discount,
-                            SUM(ISNULL(BD.discountedAmount, 0)) AS discountedAmount
-                        FROM Procurement.BidDetails BD
-                        GROUP BY BD.BidMainId
-                    ) SUMS
-                                       ON SUMS.BidMainId = BM.BidMainId
-                            Left Join (Select BM.BidMainId, 
-                                              WHT.WithHoldingTax, 
-                                              T.Tax
-                                       from Procurement.BidMain BM
-                                                left join Procurement.Vendors V on BM.VendorCode = V.VendorCode
-                                                Left join Register.Taxes T on T.TaxId = V.TaxId
-                                                Left join Register.WithHoldingTax WHT on V.WithHoldingTaxId = WHT.WithHoldingTaxId
-                                                Left Join Config.BusinessUnits BU on BU.BusinessUnitId = BM.BusinessUnitId
-                                       where BM.RFQMainId = @RFQMainId and BU.VATAccount is not null)
-                    TAX
-                    ON TAX.BidMainId = BM.BidMainId
-                    where BM.RFQMainId = @RFQMainId";
+                                     LEFT JOIN (
+                                SELECT
+                                    BD.BidMainId,
+                                    SUM(ISNULL(BD.totalAmount, 0)) AS total,
+                                    SUM(ISNULL(BD.totalAmount, 0) - ISNULL(BD.discountedAmount, 0)) AS discount,
+                                    SUM(ISNULL(BD.discountedAmount, 0)) AS discountedAmount
+                                FROM Procurement.BidDetails BD
+                                GROUP BY BD.BidMainId
+                            ) SUMS
+                                               ON SUMS.BidMainId = BM.BidMainId
+                                     Left Join (Select BM.BidMainId,
+                                                       WHT.WithHoldingTax,
+                                                       T.Tax,
+                                                       V.VendorName
+                                                from Procurement.BidMain BM
+                                                         left join Procurement.Vendors V on BM.VendorCode = V.VendorCode
+                                                         Left join Register.Taxes T on T.TaxId = V.TaxId
+                                                         Left join Register.WithHoldingTax WHT on V.WithHoldingTaxId = WHT.WithHoldingTaxId
+                                                         Left Join Config.BusinessUnits BU on BU.BusinessUnitId = BM.BusinessUnitId
+                                                where BM.RFQMainId = @RFQMainId and BU.VATAccount is not null)
+                                TAX
+                                               ON TAX.BidMainId = BM.BidMainId
+                            where BM.RFQMainId = @RFQMainId";
             headerCommand.Parameters.AddWithValue(headerCommand, "@RFQMainId", rfqMainId);
 
             await using (DbDataReader reader = await headerCommand.ExecuteReaderAsync())
@@ -494,6 +496,7 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                         expectedCost = reader.Get<decimal>("expectedCost"),
                         whtRate = reader.Get<decimal>("vendorWHTRate"),
                         currencyKey = reader.Get<string>("currencyKey"),
+                        vendorName = reader.Get<string>("vendorName"),
                         BidDetails = new List<BidComparisonBidDetailsDto>()
                     });
                 }
