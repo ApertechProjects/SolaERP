@@ -189,6 +189,7 @@ namespace SolaERP.API.Controllers
         {
             await _bidComparisonService.GetCardExportByRfqMainId(rfqMainId, Response);
         }
+        
 
     }
 }

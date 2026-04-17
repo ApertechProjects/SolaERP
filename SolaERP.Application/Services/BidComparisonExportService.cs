@@ -30,6 +30,7 @@ public class BidComparisonExportService : IBidComparisonExportService
     public async Task GetCardExportByRfqMainIdAsync(
     int rfqMainId,
     HttpResponse response,
+    string logoLink,
     List<BidComparisonBidHeaderDto> bids,
     List<BidComparisonRFQDetailsDto> rfqDetails,
     BidComparisonHeaderDto bcc,
@@ -66,7 +67,7 @@ public class BidComparisonExportService : IBidComparisonExportService
 
         PrepareColumnWidth(sheet);
 
-        // await SetLogoToB2Async(workbook, sheet, logoLink);
+        await SetLogoToB2Async(workbook, sheet, logoLink);
 
         PrepareRow1(sheet, centeredBoldBigStyle);
 
@@ -109,9 +110,9 @@ public class BidComparisonExportService : IBidComparisonExportService
         // lastRow = PrepareRowUnder(sheet, lastRow, centeredBorderStyle, centeredBoldBorderPaleBlueStyle);
 
         // if (bcc.approveStatusId != null && bcc.approveStatusId == ApproveStatuses.APPROVED.GetId())
-        if (bcc.approveStatusId != null && bcc.approveStatusId == 3)
+        if (bcc.approveStatusId != null && bcc.approveStatusId == 2)
         {
-            await GenerateQrCodeAsync(workbook, sheet, rfqMainId);
+            await GenerateQrCodeAsync(workbook, sheet, rfqMainId, bcc.BidComparisonId);
         }
 
         var fallbackFilename = "Muqayise_cedveli.xlsx";
@@ -133,6 +134,47 @@ public class BidComparisonExportService : IBidComparisonExportService
         workbook.Close();
     }
 }
+
+    private async Task SetLogoToB2Async(IWorkbook workbook, ISheet sheet, string logoLink)
+    {
+        if (string.IsNullOrWhiteSpace(logoLink))
+            return;
+
+        byte[] imageBytes;
+
+        if (Uri.TryCreate(logoLink, UriKind.Absolute, out var uri) &&
+            (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+        {
+            using var httpClient = new HttpClient();
+            imageBytes = await httpClient.GetByteArrayAsync(uri);
+        }
+        else
+        {
+            var normalizedPath = logoLink.Trim();
+
+            if (!Path.IsPathRooted(normalizedPath))
+            {
+                normalizedPath = normalizedPath.TrimStart('~', '/', '\\');
+                normalizedPath = Path.Combine(Directory.GetCurrentDirectory(), normalizedPath);
+            }
+
+            if (!File.Exists(normalizedPath))
+                return;
+
+            imageBytes = await File.ReadAllBytesAsync(normalizedPath);
+        }
+
+        var pictureIdx = workbook.AddPicture(imageBytes, PictureType.PNG);
+        var drawing = sheet.CreateDrawingPatriarch();
+        var anchor = workbook.GetCreationHelper().CreateClientAnchor();
+
+        anchor.Col1 = 1;
+        anchor.Row1 = 0;
+        anchor.Col2 = 3;
+        anchor.Row2 = 1;
+
+        drawing.CreatePicture(anchor, pictureIdx);
+    }
     
     
     private ICellStyle CreateStyle(
@@ -970,14 +1012,11 @@ public class BidComparisonExportService : IBidComparisonExportService
         return lastRow;
     }
 
-    private Task GenerateQrCodeAsync(IWorkbook workbook, ISheet sheet, int rfqMainId)
+    private Task GenerateQrCodeAsync(IWorkbook workbook, ISheet sheet, int rfqMainId, int bidcomparisonId)
     {
-        var baseUrl = Environment.GetEnvironmentVariable("Mail__ServerUrlUI")
-                      ?? Environment.GetEnvironmentVariable("MAIL__SERVERURLUI")
-                      ?? string.Empty;
-        baseUrl = baseUrl.TrimEnd('/');
+        var baseUrl = "http://94.20.153.234:3000";
 
-        var qrText = $"{baseUrl}/procurement/bid-comparison/card/{rfqMainId}";
+        var qrText = $"{baseUrl}/bid-comparison/{rfqMainId}?bidComparisonId={bidcomparisonId}";
 
         using var qrGenerator = new QRCodeGenerator();
         using var qrCodeData = qrGenerator.CreateQrCode(qrText, QRCodeGenerator.ECCLevel.Q);

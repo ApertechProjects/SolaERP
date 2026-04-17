@@ -8,6 +8,7 @@ public interface IBidComparisonExportService
     Task GetCardExportByRfqMainIdAsync(
         int rfqMainId,
         HttpResponse response,
+        string logoLink,
         List<BidComparisonBidHeaderDto> bids,
         List<BidComparisonRFQDetailsDto> rfqDetails,
         BidComparisonHeaderDto bcc,

@@ -462,13 +462,8 @@ namespace SolaERP.Persistence.Services
                 : new List<int?>();
 
             var requestDepartmentCodes = await _rfqService.GetRequestDepartmentCodesByRfqDetailIdsAsync(rfqDetailIds);
-
-            // var logo = await _attachmentService.GetBySourceIdAndSourceTypeId(
-            //     "appLogo",
-            //     SourceTypes.APPLICATION_LOGO
-            // );
-            //
-            // var logoLink = logo != null ? logo.PreviewLink : null;
+            
+            var logoLink = Path.GetFullPath(@"wwwroot/sources/images/logo.png");
 
             var approvedUsers = await GetApprovedUsersApprovalInformationByRfqMainIdAsync(rfqMainId);
 
@@ -477,6 +472,7 @@ namespace SolaERP.Persistence.Services
             await _bidComparisonExportService.GetCardExportByRfqMainIdAsync(
                 rfqMainId,
                 response,
+                logoLink,
                 bids,
                 rfqDetails,
                 bcc,

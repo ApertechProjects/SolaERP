@@ -987,7 +987,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                        RM.Buyer,
                        BC.ComparisonNo,
                        RM.Comment,
-                       BC.ApproveStatus
+                       BC.ApproveStatus,
+                       BC.BidComparisonId
                 from Procurement.RFQMain RM
                          Left Join Procurement.BidComparison BC on RM.RFQMainId = BC.RFQMainId
                 where RM.RFQMainId = @RFQMainId";
@@ -1005,7 +1006,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     BuyerName = reader.Get<string>("Buyer"),
                     ComparisonNo = reader.Get<string>("ComparisonNo"),
                     RFQComment = reader.Get<string>("Comment"),
-                    approveStatusId = reader.Get<int?>("ApproveStatus") ?? 0
+                    approveStatusId = reader.Get<int?>("ApproveStatus") ?? 0,
+                    BidComparisonId = reader.Get<int?>("BidComparisonId") ?? 0
                 };
             }
 
