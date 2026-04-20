@@ -540,9 +540,9 @@ namespace SolaERP.Persistence.Services
             return await _repository.GetRfqVendors(rfqMainIds);
         }
         
-        public async Task<List<string>> GetRequestDepartmentCodesByRfqDetailIdsAsync(List<int?> rfqDetailIds)
+        public async Task<string> GetRequestDepartmentCodesByRfqDetailIdsAsync(int rfqMainId)
         {
-            return await _repository.GetRequestDepartmentCodeByRfqDetailIdsAsync(rfqDetailIds);
+            return await _repository.GetRequestDepartmentCodeByRfqDetailIdsAsync(rfqMainId);
         }
         
         public async Task<List<string>> GetRequestNumbersAsync(int rfqMainId)

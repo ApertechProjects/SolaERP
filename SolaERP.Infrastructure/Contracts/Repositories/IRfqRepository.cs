@@ -42,8 +42,8 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> UpdateNonBidRFQMainAndRequestDetails();
 
         Task UpdateRFQSendManualBiddingType(int rfqMainId);
-        
-        Task<List<string>> GetRequestDepartmentCodeByRfqDetailIdsAsync(List<int?> rfqDetailIds);
+
+        Task<string> GetRequestDepartmentCodeByRfqDetailIdsAsync(int rfqMainId);
         
         Task<List<string>> GetRequestNumbersByRfqMainIdAsync(int rfqMainId);
         Task<List<BidComparisonRFQDetailsDto>> GetBidComparisonRFQDetailsByRfqMainIdAsync(int rfqMainId);

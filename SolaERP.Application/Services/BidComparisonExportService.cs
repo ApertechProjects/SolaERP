@@ -34,7 +34,7 @@ public class BidComparisonExportService : IBidComparisonExportService
     List<BidComparisonBidHeaderDto> bids,
     List<BidComparisonRFQDetailsDto> rfqDetails,
     BidComparisonHeaderDto bcc,
-    List<string> requestDepartmentCodes,
+    string requestDepartmentCodes,
     List<BidComparisonApprovedUsersApprovalInformationDto> approvedUsers,
     List<string> requestNumbers)
 {
@@ -369,7 +369,7 @@ public class BidComparisonExportService : IBidComparisonExportService
         ICellStyle centeredBoldBorderStyle,
         ICellStyle centeredBoldBorderPaleBlueStyle,
         BidComparisonHeaderDto bcc,
-        List<string> requestDepartmentCodes)
+        string requestDepartmentCodes)
     {
         var row5 = sheet.CreateRow(4);
         row5.HeightInPoints = 60;
@@ -410,7 +410,7 @@ public class BidComparisonExportService : IBidComparisonExportService
         cellJ5.CellStyle = centeredBoldBorderPaleBlueStyle;
 
         var cellK5 = row5.CreateCell(10);
-        cellK5.SetCellValue(bcc.ProcurementMethodName);
+        cellK5.SetCellValue(bcc.BiddingType);
         cellK5.CellStyle = centeredBoldBorderStyle;
 
         var cellL5 = row5.CreateCell(11);
@@ -532,7 +532,7 @@ public class BidComparisonExportService : IBidComparisonExportService
             var rejected = bid.BidDetails?
                 .Where(x =>
                     x.RFQDetailId == rfqDetail.RfqDetailId &&
-                    x.ApproveStatusId == 4)
+                    x.Selected == false)
                 .ToList();
 
             if (rejected != null && rejected.Any())
@@ -878,16 +878,21 @@ public class BidComparisonExportService : IBidComparisonExportService
         {
             var bidDetails = bid.BidDetails?
                 .Where(x => x.Selected)
+                .Select(x => x.VendorName)
+                .Distinct()
                 .ToList();
 
             if (bidDetails == null || !bidDetails.Any())
                 continue;
 
-            if (haveAdded)
-                winnersBuilder.Append(", ");
+            foreach (var vendorName in bidDetails)
+            {
+                if (haveAdded)
+                    winnersBuilder.Append(", ");
 
-            winnersBuilder.Append(bid.vendorName);
-            haveAdded = true;
+                winnersBuilder.Append(vendorName);
+                haveAdded = true;
+            }
         }
 
         var winners = winnersBuilder.ToString();

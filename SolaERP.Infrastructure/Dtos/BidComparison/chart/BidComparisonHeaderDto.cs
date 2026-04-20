@@ -6,7 +6,7 @@ public class BidComparisonHeaderDto
     public int RFQMainId { get; set; }
     public int BusinessUnitId { get; set; }
     public string RFQNo { get; set; }
-    public int BiddingTypeId { get; set; }
+    public string BiddingType { get; set; }
     public string ProcurementType { get; set; }
     public DateTime? RFQDate { get; set; }
     public DateTime? SentDate { get; set; }

@@ -457,11 +457,7 @@ namespace SolaERP.Persistence.Services
 
             var bcc = await GetHeaderByRFQMainIdAsync(rfqMainId);
 
-            var rfqDetailIds = rfqDetails != null && rfqDetails.Any()
-                ? rfqDetails.Select(x => x.RfqDetailId).ToList()
-                : new List<int?>();
-
-            var requestDepartmentCodes = await _rfqService.GetRequestDepartmentCodesByRfqDetailIdsAsync(rfqDetailIds);
+            var requestDepartmentCodes = await _rfqService.GetRequestDepartmentCodesByRfqDetailIdsAsync(rfqMainId);
             
             var logoLink = Path.GetFullPath(@"wwwroot/sources/images/logo.png");
 

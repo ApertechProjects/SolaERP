@@ -23,5 +23,6 @@ public class BidComparisonBidDetailsDto
     public string PUOMName { get; set; }
     public bool HaveOffer { get; set; }
     public bool Selected { get; set; }
+    public string VendorName { get; set; }
     
 }

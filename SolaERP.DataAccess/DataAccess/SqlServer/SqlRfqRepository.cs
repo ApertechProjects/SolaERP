@@ -902,10 +902,29 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<List<string>> GetRequestDepartmentCodeByRfqDetailIdsAsync(List<int?> rfqDetailIds)
+        public async Task<string> GetRequestDepartmentCodeByRfqDetailIdsAsync(int rfqMainId)
         {
-            List<string> requestDepartmentCodes = new();
-            return requestDepartmentCodes;
+            await using var command = _unitOfWork.CreateCommand() as DbCommand;
+
+            command.CommandText = @"
+                    SELECT TOP 1 BU.BusinessUnitName
+                    FROM Procurement.RFQMain RM
+                    LEFT JOIN Procurement.BidComparison BC 
+                        ON RM.RFQMainId = BC.RFQMainId
+                    LEFT JOIN Config.BusinessUnits BU 
+                        ON RM.BusinessUnitId = BU.BusinessUnitId
+                    WHERE RM.RFQMainId = @RFQMainId";
+
+            command.Parameters.Add(new SqlParameter("@RFQMainId", rfqMainId));
+
+            await using var reader = await command.ExecuteReaderAsync();
+
+            if (await reader.ReadAsync())
+            {
+                return reader.Get<string>("BusinessUnitName");
+            }
+
+            return null;
         }
 
         public async Task<List<string>> GetRequestNumbersByRfqMainIdAsync(int rfqMainId)
@@ -982,16 +1001,21 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = @"
-                Select BC.ComparisonDate,
-                       RM.RFQDate,
-                       RM.Buyer,
-                       BC.ComparisonNo,
-                       RM.Comment,
-                       BC.ApproveStatus,
-                       BC.BidComparisonId
-                from Procurement.RFQMain RM
-                         Left Join Procurement.BidComparison BC on RM.RFQMainId = BC.RFQMainId
-                where RM.RFQMainId = @RFQMainId";
+                                    Select BC.ComparisonDate,
+                                           RM.RFQDate,
+                                           RM.Buyer,
+                                           BC.ComparisonNo,
+                                           RM.Comment,
+                                           BC.ApproveStatus,
+                                           BC.BidComparisonId,
+                                           CASE
+                                               WHEN RM.BiddingType = 1 THEN 'Automatic'
+                                               WHEN RM.BiddingType = 2 THEN 'Manual'
+                                               ELSE 'Unknown'
+                                               END AS BiddingType
+                                    from Procurement.RFQMain RM
+                                             Left Join Procurement.BidComparison BC on RM.RFQMainId = BC.RFQMainId
+                                    where RM.RFQMainId = @RFQMainId";
 
             command.Parameters.AddWithValue(command, "@RFQMainId", rfqMainId);
 
@@ -1007,7 +1031,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     ComparisonNo = reader.Get<string>("ComparisonNo"),
                     RFQComment = reader.Get<string>("Comment"),
                     approveStatusId = reader.Get<int?>("ApproveStatus") ?? 0,
-                    BidComparisonId = reader.Get<int?>("BidComparisonId") ?? 0
+                    BidComparisonId = reader.Get<int?>("BidComparisonId") ?? 0,
+                    BiddingType = reader.Get<string>("BiddingType")
                 };
             }
 
@@ -1019,33 +1044,14 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             var data = new List<BidComparisonApprovedUsersApprovalInformationDto>();
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = @"
-                SELECT
-                      au.Id UserId
-                     ,au.FullName
-                     ,CAST(pa.ApproveDate as date) as approveDate
-                     ,pa.Comment
-                     ,pa.Sequence
-                FROM Procurement.BidComparison bc
-                         INNER JOIN Config.ApproveStagesMain asm
-                                    ON asm.ApproveStageMainId = bc.ApproveStageMain
-                         INNER JOIN Config.ApproveStagesDetails asd
-                                    ON asm.ApproveStageMainId = asd.ApproveStageMainId
-                         INNER JOIN Procurement.BidMain bm
-                                    ON bc.RFQMainId = bm.RFQMainId
-                         INNER JOIN Procurement.BidDetails bd
-                                    ON bm.BidMainId = bd.BidMainId
-                         INNER JOIN Procurement.BidApprovals pa
-                                    ON bd.BidDetailId = pa.BidDetailId
-                                        AND asd.Sequence = pa.Sequence
-                                        AND pa.ApproveStatus > 2
-                         LEFT JOIN Register.ApprovalStatus [as]
-                                   ON pa.ApproveStatus = [as].ApprovalStatusId
-                         LEFT JOIN Config.AppUser au
-                                   ON pa.UserId = au.Id
-                WHERE bc.RFQMainId = @RFQMainId
-                  and pa.ApproveStatus = 3
-                GROUP BY au.Id, au.FullName, CAST(pa.ApproveDate as date), pa.Comment, pa.Sequence
-                ORDER BY pa.Sequence";
+                select distinct au.FullName,
+                bcba.Comment,
+                bcba.ApproveDate
+                from Config.AppUser as au
+                                     left join Procurement.BidComparisonBidApprovals as bcba on au.Id = bcba.UserId
+                                     left join Procurement.BidComparisonBids as bcb on bcba.BidComparisonBidId = bcb.BidComparisonBidId
+                                     left join Procurement.BidComparison as bc on bc.BidComparisonId = bcb.BidComparisonId
+                where bc.RFQMainId = @RfqMainId";
             command.Parameters.AddWithValue(command, "@RFQMainId", rfqMainId);
 
             await using var reader = await command.ExecuteReaderAsync();

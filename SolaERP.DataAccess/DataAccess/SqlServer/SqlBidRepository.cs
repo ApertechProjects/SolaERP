@@ -448,11 +448,9 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
 
                                      LEFT JOIN Register.DeliveryTerms DT
                                                ON DT.DeliveryTermCode = BM.DeliveryTerms
-
+                                     LEFT JOIN Procurement.Vendors V ON V.VendorCode = BM.VendorCode
                                      LEFT JOIN Register.PaymentTerms PT
                                                ON PT.PaymentTermCode = BM.PaymentTerms
-
-                                     left join Procurement.Vendors V on BM.VendorCode = V.VendorCode
                                      LEFT JOIN (
                                 SELECT
                                     BD.BidMainId,
@@ -518,11 +516,13 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                                    BD.PUOM,
                                    BD.ApproveStatus,
                                    BD.RFQDetailId,
-                                   BCB.IsSelected AS Selected
+                                   BCB.IsSelected AS Selected,
+                                   V.VendorName
                             from Procurement.BidDetails BD
                                      inner join Procurement.BidMain BM on BD.BidMainId = BM.BidMainId
                                      Left Join Procurement.BidComparison BC on BC.RFQMainId = BM.RFQMainId
-                                     Left Join Procurement.BidComparisonBids BCB on BC.BidComparisonId = BCB.BidComparisonId
+                                     left join Procurement.BidComparisonBids as bcb on bcb.BidDetailId = bd.BidDetailId
+                                     left join Procurement.Vendors V on BM.VendorCode = V.VendorCode
                                    where BM.RFQMainId = @RFQMainId";
             detailCommand.Parameters.AddWithValue(detailCommand, "@RFQMainId", rfqMainId);
 
@@ -550,7 +550,8 @@ SELECT	@NewBidMainId as N'@NewBidMainId',@NewBidNo as N'@NewBidNo'";
                         PUOMName = reader.Get<string>("PUOM"),
                         ApproveStatusId = reader.Get<int>("ApproveStatus"),
                         RFQDetailId = reader.Get<int>("RFQDetailId"),
-                        Selected = reader.Get<bool?>("Selected") ?? false
+                        Selected = reader.Get<bool?>("Selected") ?? false,
+                        VendorName = reader.Get<string>("VendorName"),
                     });
                 }
             }

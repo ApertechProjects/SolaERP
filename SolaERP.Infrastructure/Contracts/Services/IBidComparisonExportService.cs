@@ -12,7 +12,7 @@ public interface IBidComparisonExportService
         List<BidComparisonBidHeaderDto> bids,
         List<BidComparisonRFQDetailsDto> rfqDetails,
         BidComparisonHeaderDto bcc,
-        List<string> requestDepartmentCodes,
+        string requestDepartmentCodes,
         List<BidComparisonApprovedUsersApprovalInformationDto> approvedUsers,
         List<string> requestNumbers);
 }
