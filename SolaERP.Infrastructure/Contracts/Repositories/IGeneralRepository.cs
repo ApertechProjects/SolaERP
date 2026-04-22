@@ -12,7 +12,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<List<RejectReason>> RejectReasonsForInvoice();
         Task<List<RejectReason>> RejectReasons();
         Task<List<CancelReason>> CancelReasonsForBidComparison();
-        Task<bool> SaveCancelReasonForBidComparison(CancelReason reason);
+        Task<bool> SaveCancelReasonForBidComparison(List<CancelReason> reasons);
         Task<List<ConvRateDto>> GetConvRateList(int businessUnitId);
         Task<RejectReason> GetRejectReasonByCode(string code);
         Task<string> ReasonCode(int rejectReasonId);

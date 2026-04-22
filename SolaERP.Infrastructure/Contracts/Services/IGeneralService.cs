@@ -12,7 +12,7 @@ namespace SolaERP.Application.Contracts.Services
         Task<ApiResponse<List<RejectReasonDto>>> RejectReasonsForInvoice();
         Task<ApiResponse<List<RejectReasonDto>>> RejectReasons();
         Task<ApiResponse<List<CancelReasonDto>>> CancelReasonsForBidComparison();
-        Task<ApiResponse<bool>> SaveCancelReasonForBidComparison(CancelReasonDto reasonDto);
+        Task<ApiResponse<bool>> SaveCancelReasonForBidComparison(List<CancelReasonDto> reasonDtos);
         Task<string> ReasonCode(int rejectReasonId);
         Task<ApiResponse<BaseAndReportCurrencyRate>> GetBaseAndReportCurrencyRateAsync(
             DateTime date,

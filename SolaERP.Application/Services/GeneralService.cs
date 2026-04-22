@@ -76,10 +76,10 @@ namespace SolaERP.Persistence.Services
             return ApiResponse<List<CancelReasonDto>>.Fail("Data not found", 404);
         }
 
-        public async Task<ApiResponse<bool>> SaveCancelReasonForBidComparison(CancelReasonDto reasonDto)
+        public async Task<ApiResponse<bool>> SaveCancelReasonForBidComparison(List<CancelReasonDto> reasonDtos)
         {
-            var reason = _mapper.Map<CancelReason>(reasonDto);
-            var saveResult = await _generalRepository.SaveCancelReasonForBidComparison(reason);
+            var reasons = _mapper.Map<List<CancelReason>>(reasonDtos);
+            var saveResult = await _generalRepository.SaveCancelReasonForBidComparison(reasons);
             await _unitOfWork.SaveChangesAsync();
             return ApiResponse<bool>.Success(saveResult, 200);
         }

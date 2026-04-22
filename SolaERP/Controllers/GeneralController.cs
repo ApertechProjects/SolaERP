@@ -37,8 +37,8 @@ namespace SolaERP.API.Controllers
           => CreateActionResult(await _generalService.CancelReasonsForBidComparison());
 
         [HttpPost]
-        public async Task<IActionResult> SaveCancelReasonForBidComparisonAsync(CancelReasonDto reasonDto)
-          => CreateActionResult(await _generalService.SaveCancelReasonForBidComparison(reasonDto));
+        public async Task<IActionResult> SaveCancelReasonForBidComparisonAsync(List<CancelReasonDto> reasonDtos)
+          => CreateActionResult(await _generalService.SaveCancelReasonForBidComparison(reasonDtos));
 
 
         [HttpGet]
