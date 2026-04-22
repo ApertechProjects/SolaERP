@@ -33,6 +33,7 @@ namespace SolaERP.Application.Entities.BidComparison
         public int Status { get; set; }
         public int ApproveStatus { get; set; }
         public string SpecialistComment { get; set; }
+        public string CancelReasonName { get; set; }
 
         public List<BidComparisonSingleSourceReasonsLoadDto> SingleSourceReasons { get; set; }
         public List<RFQSingleSourceReasonsLoadDto> RFQSingleSourceReasons { get; set; }

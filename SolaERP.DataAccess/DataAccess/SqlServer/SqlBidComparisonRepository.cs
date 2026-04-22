@@ -459,7 +459,8 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
                     RFQNo = reader.Get<string>("RFQNo"),
                     SpecialistComment = reader.Get<string>("SpecialistComment"),
                     Status = reader.Get<int>("Status"),
-                    SentDate = reader.Get<DateTime>("SentDate")
+                    SentDate = reader.Get<DateTime>("SentDate"),
+                    CancelReasonName = reader.Get<string>("CancelReasonName"),
                 };
             }
 
