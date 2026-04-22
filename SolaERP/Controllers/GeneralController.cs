@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SolaERP.Application.Contracts.Services;
+using SolaERP.Application.Dtos.General;
 using SolaERP.Application.Dtos.Shared;
+using SolaERP.Controllers;
 
-namespace SolaERP.Controllers
+namespace SolaERP.API.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -29,6 +31,14 @@ namespace SolaERP.Controllers
         [HttpGet]
         public async Task<IActionResult> RejectReasonsForInvoiceAsync()
           => CreateActionResult(await _generalService.RejectReasonsForInvoice());
+
+        [HttpGet]
+        public async Task<IActionResult> CancelReasonsForBidComparisonAsync()
+          => CreateActionResult(await _generalService.CancelReasonsForBidComparison());
+
+        [HttpPost]
+        public async Task<IActionResult> SaveCancelReasonForBidComparisonAsync(CancelReasonDto reasonDto)
+          => CreateActionResult(await _generalService.SaveCancelReasonForBidComparison(reasonDto));
 
 
         [HttpGet]

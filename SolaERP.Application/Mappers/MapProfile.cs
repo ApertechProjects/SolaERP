@@ -518,6 +518,7 @@ namespace SolaERP.Persistence.Mappers
                 .ForMember(dest => dest.Conversion, opt => opt.MapFrom(src => src.CONV_ID)).ReverseMap();
             CreateMap<RFQRequestDetail, RFQRequestDetailDto>().ReverseMap();
             CreateMap<RejectReason, RejectReasonDto>().ReverseMap();
+            CreateMap<CancelReason, CancelReasonDto>().ReverseMap();
             CreateMap<RFQInProgress, RFQInProgressDto>().ReverseMap();
             CreateMap<RFQSingleSourceReasonsLoad, RFQSingleSourceReasonsLoadDto>().ReverseMap();
 

@@ -21,6 +21,7 @@ namespace SolaERP.Application.Contracts.Repositories
         Task<bool> SendComparisonToApprove(BidComparisonSendToApprove filter);
         Task<bool> BidApprove(BidComparisonBidApproveDto dto, int UserId);
         Task BidReject(BidComparisonBidRejectDto dto, int UserId);
+        Task BidCancel(BidComparisonCancelDto dto, int UserId);
         Task<List<BidComparisonAll>> GetComparisonAll(BidComparisonAllFilter filter);
         Task<List<BidComparisonBidApprovalsLoad>> GetComparisonBidApprovals(BidComparisonBidApprovalsFilter filter);
 

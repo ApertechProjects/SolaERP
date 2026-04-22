@@ -139,6 +139,44 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task BidCancel(BidComparisonCancelDto dto, int UserId)
+        {
+            using (var checkCommand = _unitOfWork.CreateCommand() as SqlCommand)
+            {
+                var ids = string.Join(",", dto.BidComparisonIds);
+
+                checkCommand.CommandText = $@"
+                        Select top 1 Bcb.BidComparisonId
+                        from Procurement.BidComparisonBids Bcb
+                             inner join Procurement.BidDetails Bd on Bd.BidDetailId = Bcb.BidDetailId
+                             inner join Procurement.OrderMain OM on Om.BidMainId = Bd.BidMainId and OM.Status <> 2
+                        where Bcb.BidComparisonId in ({ids})";
+
+                var hasOrder = await checkCommand.ExecuteScalarAsync();
+
+                if (hasOrder != null)
+                {
+                    throw new Exception("Qeyd olunan BidComparison əsasında Order yaradılıb və Comparison Cancel oluna bilməz.");
+                }
+            }
+            foreach (var BidComparisonId in dto.BidComparisonIds)
+            {
+
+                using (var command = _unitOfWork.CreateCommand() as SqlCommand)
+                {
+                    command.CommandText = "EXEC SP_BidComparisonBidsCancel @BidComparisonId, @UserId, @Comment, @CancelReasonId, @BusinessUnitId";
+
+                    command.Parameters.AddWithValue(command, "@BidComparisonId", BidComparisonId);
+                    command.Parameters.AddWithValue(command, "@UserId", UserId);
+                    command.Parameters.AddWithValue(command, "@Comment", dto.Comment);
+                    command.Parameters.AddWithValue(command, "@CancelReasonId", dto.CancelReasonId);
+                    command.Parameters.AddWithValue(command, "@BusinessUnitId", dto.BusinessUnitId);
+
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
+
         public async Task<List<BidComparisonAll>> GetComparisonAll(BidComparisonAllFilter filter)
         {
             var data = new List<BidComparisonAll>();

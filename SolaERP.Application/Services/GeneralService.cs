@@ -6,7 +6,9 @@ using SolaERP.Application.Dtos.Shared;
 using SolaERP.Application.Dtos.Status;
 using SolaERP.Application.Entities.BusinessUnits;
 using SolaERP.Application.Entities.Currency;
+using SolaERP.Application.Entities.General;
 using SolaERP.Application.Entities.SupplierEvaluation;
+using SolaERP.Application.UnitOfWork;
 using SolaERP.Persistence.Utils;
 using System.Collections.Generic;
 
@@ -17,13 +19,16 @@ namespace SolaERP.Persistence.Services
         private readonly IGeneralRepository _generalRepository;
         private readonly IMapper _mapper;
         private readonly IBusinessUnitRepository _businessUnitRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public GeneralService(IGeneralRepository generalRepository, IMapper mapper,
-            IBusinessUnitRepository businessUnitRepository)
+            IBusinessUnitRepository businessUnitRepository,
+            IUnitOfWork unitOfWork)
         {
             _generalRepository = generalRepository;
             _mapper = mapper;
             _businessUnitRepository = businessUnitRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<ApiResponse<List<BusinessCategory>>> BusinessCategories()
@@ -59,6 +64,24 @@ namespace SolaERP.Persistence.Services
             if (dto.Count > 0)
                 return ApiResponse<List<RejectReasonDto>>.Success(dto, 200);
             return ApiResponse<List<RejectReasonDto>>.Fail("Data not found", 404);
+        }
+
+        public async Task<ApiResponse<List<CancelReasonDto>>> CancelReasonsForBidComparison()
+        {
+            var data = await _generalRepository.CancelReasonsForBidComparison();
+            var dto = _mapper.Map<List<CancelReasonDto>>(data);
+
+            if (dto.Count > 0)
+                return ApiResponse<List<CancelReasonDto>>.Success(dto, 200);
+            return ApiResponse<List<CancelReasonDto>>.Fail("Data not found", 404);
+        }
+
+        public async Task<ApiResponse<bool>> SaveCancelReasonForBidComparison(CancelReasonDto reasonDto)
+        {
+            var reason = _mapper.Map<CancelReason>(reasonDto);
+            var saveResult = await _generalRepository.SaveCancelReasonForBidComparison(reason);
+            await _unitOfWork.SaveChangesAsync();
+            return ApiResponse<bool>.Success(saveResult, 200);
         }
 
         public async Task<ApiResponse<BaseAndReportCurrencyRate>> GetBaseAndReportCurrencyRateAsync(DateTime date,

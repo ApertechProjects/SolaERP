@@ -110,6 +110,55 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             }
         }
 
+        public async Task<List<CancelReason>> CancelReasonsForBidComparison()
+        {
+            List<CancelReason> cancelReasons = new();
+            using (var command = _unitOfWork.CreateCommand() as DbCommand)
+            {
+                command.CommandText = @"select CancelReasonId,
+                                               ReasonCode,
+                                               ReasonName,
+                                               BackToInitiator
+                                        from Register.CancelReasons";
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                {
+                    cancelReasons.Add(reader.GetByEntityStructure<CancelReason>());
+                }
+
+                return cancelReasons;
+            }
+        }
+
+        public async Task<bool> SaveCancelReasonForBidComparison(CancelReason reason)
+        {
+            using var command = _unitOfWork.CreateCommand() as DbCommand;
+
+            if (reason.CancelReasonId == 0)
+            {
+                command.CommandText = @"INSERT INTO Register.CancelReasons
+                                        (ReasonCode, ReasonName, BackToInitiator)
+                                        VALUES
+                                        (@ReasonCode, @ReasonName, @BackToInitiator)";
+            }
+            else
+            {
+                command.CommandText = @"UPDATE Register.CancelReasons
+                                        SET ReasonCode = @ReasonCode,
+                                            ReasonName = @ReasonName,
+                                            BackToInitiator = @BackToInitiator
+                                        WHERE CancelReasonId = @CancelReasonId";
+                command.Parameters.AddWithValue(command, "@CancelReasonId", reason.CancelReasonId);
+            }
+
+            command.Parameters.AddWithValue(command, "@ReasonCode", reason.ReasonCode);
+            command.Parameters.AddWithValue(command, "@ReasonName", reason.ReasonName);
+            command.Parameters.AddWithValue(command, "@BackToInitiator", reason.BackToInitiator);
+
+            return await command.ExecuteNonQueryAsync() > 0;
+        }
+
         public async Task<List<ConvRateDto>> GetConvRateList(int businessUnitId)
         {
             List<ConvRateDto> resultList = new();
