@@ -138,27 +138,41 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
             foreach (var reason in reasons)
             {
                 using var command = _unitOfWork.CreateCommand() as DbCommand;
+                
+                if (reason.CancelReasonId > 0 &&
+                    string.IsNullOrWhiteSpace(reason.ReasonCode) &&
+                    string.IsNullOrWhiteSpace(reason.ReasonName) &&
+                    reason.BackToInitiator == null)
+                {
+                    command.CommandText = @"DELETE FROM Register.CancelReasons
+                                            WHERE CancelReasonId = @CancelReasonId";
 
-                if (reason.CancelReasonId == 0)
+                    command.Parameters.AddWithValue(command, "@CancelReasonId", reason.CancelReasonId);
+                }
+                else if (reason.CancelReasonId <= 0)
                 {
                     command.CommandText = @"INSERT INTO Register.CancelReasons
-                                        (ReasonCode, ReasonName, BackToInitiator)
-                                        VALUES
-                                        (@ReasonCode, @ReasonName, @BackToInitiator)";
+                                            (ReasonCode, ReasonName, BackToInitiator)
+                                           VALUES
+                                            (@ReasonCode, @ReasonName, @BackToInitiator)";
+
+                    command.Parameters.AddWithValue(command, "@ReasonCode", reason.ReasonCode);
+                    command.Parameters.AddWithValue(command, "@ReasonName", reason.ReasonName);
+                    command.Parameters.AddWithValue(command, "@BackToInitiator", reason.BackToInitiator);
                 }
                 else
                 {
                     command.CommandText = @"UPDATE Register.CancelReasons
-                                        SET ReasonCode = @ReasonCode,
-                                            ReasonName = @ReasonName,
-                                            BackToInitiator = @BackToInitiator
-                                        WHERE CancelReasonId = @CancelReasonId";
-                    command.Parameters.AddWithValue(command, "@CancelReasonId", reason.CancelReasonId);
-                }
+                                           SET ReasonCode = @ReasonCode,
+                                               ReasonName = @ReasonName,
+                                               BackToInitiator = @BackToInitiator
+                                           WHERE CancelReasonId = @CancelReasonId";
 
-                command.Parameters.AddWithValue(command, "@ReasonCode", reason.ReasonCode);
-                command.Parameters.AddWithValue(command, "@ReasonName", reason.ReasonName);
-                command.Parameters.AddWithValue(command, "@BackToInitiator", reason.BackToInitiator);
+                    command.Parameters.AddWithValue(command, "@CancelReasonId", reason.CancelReasonId);
+                    command.Parameters.AddWithValue(command, "@ReasonCode", reason.ReasonCode);
+                    command.Parameters.AddWithValue(command, "@ReasonName", reason.ReasonName);
+                    command.Parameters.AddWithValue(command, "@BackToInitiator", reason.BackToInitiator);
+                }
 
                 saveResult &= await command.ExecuteNonQueryAsync() > 0;
             }
