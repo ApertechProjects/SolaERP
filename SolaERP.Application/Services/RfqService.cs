@@ -448,6 +448,93 @@ namespace SolaERP.Persistence.Services
                     await command.ExecuteNonQueryAsync();
                 }
 
+                foreach (var rfqMainId in rfqMainIds)
+                {
+                    using var requestDetailStatusCommand = _unitOfWork.CreateCommand() as DbCommand;
+                    requestDetailStatusCommand.CommandText = @"
+                        ;WITH withLowRows AS (
+                            SELECT
+                                rm.RFQMainId,
+                                COUNT(rvr.RFQVendorResponseId) AS rrvrRows
+                            FROM Procurement.RFQMain rm
+                            LEFT JOIN Procurement.RFQVendorResponse rvr
+                                ON rvr.RFQMainId = rm.RFQMainId
+                                AND rvr.Status = 6
+                            WHERE rm.ProcurementType <> 2
+                                AND rm.RFQMainId = @RfqMainId
+                            GROUP BY rm.RFQMainId
+                        ),
+                        TargetDetails AS (
+                            SELECT DISTINCT
+                                rd.RequestDetailId,
+                                rd.Quantity
+                            FROM Procurement.RequestDetails rd
+                            LEFT JOIN Procurement.RFQRequestDetails rrd
+                                ON rrd.RequestDetailsId = rd.RequestDetailId
+                            LEFT JOIN Procurement.RFQDetails rfd
+                                ON rfd.RFQDetailId = rrd.RFQDetailId
+                            LEFT JOIN Procurement.RFQMain rm
+                                ON rm.RFQMainId = rfd.RFQMainId
+                            INNER JOIN withLowRows wlr
+                                ON wlr.RFQMainId = rm.RFQMainId and wlr.rrvrRows < 2
+                            WHERE rm.RFQMainId = @RfqMainId
+                                AND rm.RFQDeadline < GETDATE()
+                        ),
+                        OrderQty AS (
+                            SELECT
+                                od.RequestDetailId,
+                                SUM(od.Quantity) AS orderQty
+                            FROM Procurement.OrderDetails od
+                            INNER JOIN TargetDetails td
+                                ON td.RequestDetailId = od.RequestDetailId
+                            WHERE od.ApproveStatus <> 2
+                            GROUP BY od.RequestDetailId
+                        ),
+                        RfqReqQty AS (
+                            SELECT
+                                rrd.RequestDetailsId,
+                                SUM(rrd.Quantity) AS RfqReqQty
+                            FROM Procurement.RFQRequestDetails rrd
+                            INNER JOIN TargetDetails td
+                                ON td.RequestDetailId = rrd.RequestDetailsId
+                            WHERE rrd.RFQRequestDetailId NOT IN (
+                                SELECT rfrd.RFQRequestDetailId
+                                FROM Procurement.RFQMain rm
+                                LEFT JOIN Procurement.RFQDetails rd
+                                    ON rm.RFQMainId = rd.RFQMainId
+                                LEFT JOIN Procurement.RFQRequestDetails rfrd
+                                    ON rd.RFQDetailId = rfrd.RFQDetailId
+                                WHERE rm.RFQMainId = @RfqMainId
+                            )
+                            GROUP BY rrd.RequestDetailsId
+                        ),
+                        Remaining AS (
+                            SELECT
+                                td.RequestDetailId,
+                                td.Quantity,
+                                td.Quantity - ISNULL(oq.orderQty, 0) + ISNULL(rrq.RfqReqQty, 0) AS RemainingQty
+                            FROM TargetDetails td
+                            LEFT JOIN OrderQty oq
+                                ON oq.RequestDetailId = td.RequestDetailId
+                            LEFT JOIN RfqReqQty rrq
+                                ON rrq.RequestDetailsId = td.RequestDetailId
+                        )
+                        UPDATE rd
+                        SET rd.Status = CASE
+                                WHEN r.RemainingQty > 0 AND r.RemainingQty < r.Quantity THEN 5
+                                WHEN r.RemainingQty = 0 THEN 2
+                                ELSE rd.Status
+                            END
+                        FROM Procurement.RequestDetails rd
+                        INNER JOIN Remaining r
+                            ON r.RequestDetailId = rd.RequestDetailId
+                        WHERE (r.RemainingQty > 0 AND r.RemainingQty < r.Quantity)
+                            OR r.RemainingQty = 0;";
+
+                    requestDetailStatusCommand.Parameters.AddWithValue(requestDetailStatusCommand, "@RfqMainId", rfqMainId);
+                    await requestDetailStatusCommand.ExecuteNonQueryAsync();
+                }
+
                 await _unitOfWork.SaveChangesAsync();
 
                 foreach (var rfq in rfqs.ToList())

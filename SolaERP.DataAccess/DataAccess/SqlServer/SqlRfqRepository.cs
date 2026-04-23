@@ -656,7 +656,7 @@ namespace SolaERP.DataAccess.DataAccess.SqlServer
         {
             await using var command = _unitOfWork.CreateCommand() as DbCommand;
             command.CommandText = @$"select 
-                										rfqm.RFQMainId,
+                							rfqm.RFQMainId,
     										rfqm.Buyer,
     										rfqm.RFQNo,
     										rfqm.RFQDeadline,
