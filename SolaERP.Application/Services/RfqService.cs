@@ -500,7 +500,7 @@ namespace SolaERP.Persistence.Services
                             WHERE rrd.RFQDetailId NOT IN (
                                  SELECT RFQDetailId
                                  FROM Procurement.RFQDetails
-                                 WHERE RFQMainId = 844
+                                 WHERE RFQMainId = @RfqMainId
                              )
                             GROUP BY rrd.RequestDetailsId
                         ),
