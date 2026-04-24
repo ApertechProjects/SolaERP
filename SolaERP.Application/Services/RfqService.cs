@@ -497,15 +497,11 @@ namespace SolaERP.Persistence.Services
                             FROM Procurement.RFQRequestDetails rrd
                             INNER JOIN TargetDetails td
                                 ON td.RequestDetailId = rrd.RequestDetailsId
-                            WHERE rrd.RFQRequestDetailId NOT IN (
-                                SELECT rfrd.RFQRequestDetailId
-                                FROM Procurement.RFQMain rm
-                                LEFT JOIN Procurement.RFQDetails rd
-                                    ON rm.RFQMainId = rd.RFQMainId
-                                LEFT JOIN Procurement.RFQRequestDetails rfrd
-                                    ON rd.RFQDetailId = rfrd.RFQDetailId
-                                WHERE rm.RFQMainId = @RfqMainId
-                            )
+                            WHERE rrd.RFQDetailId NOT IN (
+                                 SELECT RFQDetailId
+                                 FROM Procurement.RFQDetails
+                                 WHERE RFQMainId = 844
+                             )
                             GROUP BY rrd.RequestDetailsId
                         ),
                         Remaining AS (
