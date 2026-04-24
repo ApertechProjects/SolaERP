@@ -512,7 +512,7 @@ namespace SolaERP.Persistence.Services
                             SELECT
                                 td.RequestDetailId,
                                 td.Quantity,
-                                td.Quantity - ISNULL(oq.orderQty, 0) + ISNULL(rrq.RfqReqQty, 0) AS RemainingQty
+                                td.Quantity - ISNULL(oq.orderQty, 0) - ISNULL(rrq.RfqReqQty, 0) AS RemainingQty
                             FROM TargetDetails td
                             LEFT JOIN OrderQty oq
                                 ON oq.RequestDetailId = td.RequestDetailId
