@@ -497,7 +497,7 @@ namespace SolaERP.Persistence.Services
                             FROM Procurement.RFQRequestDetails rrd
                             INNER JOIN TargetDetails td
                                 ON td.RequestDetailId = rrd.RequestDetailsId
-                            WHERE rrd.RFQDetailId NOT IN (
+                            WHERE rrd.RFQDetailId IN (
                                  SELECT RFQDetailId
                                  FROM Procurement.RFQDetails
                                  WHERE RFQMainId = @RfqMainId
